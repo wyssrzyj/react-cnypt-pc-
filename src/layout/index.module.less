@@ -1,0 +1,62 @@
+@import '@/css/common.less';
+
+.container {
+  height: 100%;
+  margin: 0 auto;
+  overflow: auto;
+  color: @baseColor;
+  background: @white;
+}
+
+.header {
+  width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  // border-bottom: 1px solid @borderColor;
+  box-sizing: border-box;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  height: calc(100% - 40px);
+}
+
+.menu {
+  // width: 200px;
+  // border-right: 1px solid @borderColor;
+}
+
+.headerSelect {
+  margin: 0 16px 0 0 !important;
+  min-width: 80px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.tips {
+  cursor: pointer;
+
+  &:hover {
+    color: @hoverColor;
+  }
+}
+
+.center {
+  flex: 1;
+}
+
+.link {
+  margin-right: 12px;
+  color: @baseColor;
+
+  &:hover {
+    color: @hoverColor;
+  }
+}

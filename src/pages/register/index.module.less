@@ -1,0 +1,71 @@
+@import '@/css/common.less';
+
+.registerContainer {
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  background: @white;
+  height: calc(100vh - 50px - 120px);
+
+  :global {
+    .ant-input {
+      height: 40px;
+    }
+
+    .nc_scale {
+      height: 40px !important;
+      width: 320px !important;
+    }
+
+    .btn_slide {
+      height: 40px !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nc-lang-cnt {
+      height: 40px !important;
+      line-height: 40px !important;
+    }
+
+    .nc-container .nc_scale .btn_ok {
+      height: 40px !important;
+      line-height: 40px !important;
+    }
+
+    .nc-container .nc_scale .btn_ok {
+      color: @blueBg !important;
+    }
+
+    .nc_bg {
+      background: @blueBg !important;
+    }
+  }
+}
+
+.form {
+  width: 320px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  font-size: 28px;
+  color: @66gray;
+}
+
+.agreeBtn {
+  margin-top: 24px;
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+}
+
+.blueBtn {
+  background: @blueBg !important;
+  border-color: @blueBg !important;
+}

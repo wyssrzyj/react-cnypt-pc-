@@ -1,0 +1,159 @@
+@import '@/css/common.less';
+
+.loginContainer {
+  width: 100%;
+}
+
+.logo {
+  display: inline-block;
+  width: 120px;
+  height: 32px;
+}
+
+.loginHeader {
+  padding: 0 24px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  align-items: center;
+  box-shadow: 0px 4px 6px -4px @borderColor;
+}
+
+.link {
+  color: @baseColor;
+  margin: 0 16px;
+}
+
+.loginContent {
+  background: #cccccc;
+  height: calc(100vh - 50px - 120px);
+}
+
+.content {
+  height: 100%;
+  //   width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.img {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  border: 1px solid @borderColor;
+  box-sizing: border-box;
+}
+
+.leftText {
+  display: flex;
+  flex-direction: column;
+  padding-left: 24px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 28px;
+  color: @white;
+}
+
+.desc {
+  font-size: 20px;
+  color: @white;
+}
+
+.right {
+  height: fit-content;
+  width: 410px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  background: @white;
+}
+
+.rTitle {
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+.icon {
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+.input {
+  margin-bottom: 20px;
+  height: 44px;
+  padding-left: 8px;
+
+  :global {
+    .ant-input {
+      color: @99gray;
+    }
+  }
+}
+
+.btn {
+  height: 44px;
+}
+
+.errorText {
+  margin-top: 16px;
+  height: 30px;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  background: #fefcee;
+  border: 1px solid #ff934c;
+}
+
+.showError {
+  visibility: visible;
+}
+
+.todoList {
+  padding-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.todoLink {
+  color: @99gray;
+  font-size: 12px;
+  margin-left: 12px;
+}
+
+.footer {
+  height: 120px;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 28px;
+}
+
+.footerlink {
+  color: @99gray;
+  margin-right: 16px;
+
+  &:nth-last-child(1) {
+    margin-right: 0;
+  }
+}
+
+.footerInfo {
+  color: @ccGray;
+
+  &:nth-child(1) {
+    margin-right: 60px;
+  }
+}

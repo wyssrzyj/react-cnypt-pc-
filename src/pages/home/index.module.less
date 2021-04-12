@@ -1,0 +1,160 @@
+@import '@/css/common.less';
+
+.home {
+  width: 100%;
+  background: @containerBg;
+}
+
+.homeContainer {
+  width: 1200px;
+  margin: 0 auto;
+  padding-top: 24px;
+  display: flex;
+}
+
+.menu {
+  position: relative;
+  width: 240px;
+  background: @white;
+}
+
+.menuTitle {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: @white;
+  background: @blueBg;
+}
+
+.menuItemTitle {
+  padding-bottom: 8px;
+  color: @baseColor;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 26px;
+}
+
+.menuItem {
+  padding: 8px;
+  border-bottom: 1px solid @borderColor;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0px 1px 5px 2px #e7e7e7;
+
+    .child {
+      color: @hoverColor;
+    }
+  }
+}
+
+.menuContent {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: @grayText;
+}
+
+.child {
+  margin-bottom: 4px;
+  display: flex;
+  line-height: 14px;
+
+  &:nth-child(1) {
+    padding-left: 0;
+  }
+}
+
+.menuLine {
+  margin: 0 8px;
+  width: 1px;
+  height: 14px;
+  background: @grayLine;
+}
+
+.seeAll {
+  height: 40px;
+  line-height: 40px;
+  color: @blueBg;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    color: @hoverColor;
+  }
+}
+
+.modalCard {
+  position: absolute;
+  z-index: 16;
+  top: 0;
+  left: 240px;
+  width: 0;
+  height: 425px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 24px;
+  opacity: 0;
+  background: @white;
+  transition: all ease 0.3s;
+}
+
+.modalCardShow {
+  opacity: 1;
+  width: 960px;
+}
+
+.modalItem {
+  width: 49%;
+  height: 160px;
+}
+
+.modalTitle {
+  margin-right: 60px;
+  font-size: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid @hoverColor;
+}
+
+.itemContent {
+  padding-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.itemChild {
+  margin-right: 12px;
+  line-height: 24px;
+  cursor: pointer;
+
+  &:hover {
+    color: @hoverColor;
+  }
+}
+
+.carousel {
+  width: 940px;
+}
+
+.bannerContainer {
+  padding-left: 16px;
+
+  :global {
+    .ant-carousel .slick-dots li.slick-active {
+      width: 28px;
+    }
+
+    .ant-carousel .slick-dots li {
+      width: 20px;
+    }
+    // .ant-carousel .slick-dots li.slick-active button {
+    //   background: @blueBg !important;
+    // }
+
+    // .ant-carousel .slick-dots li button {
+    //   background: @blueBg !important;
+    // }
+  }
+}

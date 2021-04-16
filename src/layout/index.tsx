@@ -10,11 +10,11 @@ interface LayoutProps extends RouteComponentProps {
 const Layout = (props: LayoutProps) => {
   const { location } = props
   const { pathname } = location
-  const nouseHeaders = ['/login', '/register'] // 不展示首页header的路由列表
+  const noUseHeaders = ['/login', '/register'] // 不展示首页header的路由列表
 
   return (
     <div className={styles.container}>
-      {!nouseHeaders.includes(pathname) && <Header />}
+      {!noUseHeaders.includes(pathname) && <Header />}
       <div className={styles.content}>{props.children}</div>
     </div>
   )

@@ -4,6 +4,8 @@ import { Input, Button } from 'antd'
 import Icon from '@/components/Icon'
 import { Link } from 'react-router-dom'
 import classNamess from 'classnames'
+import { useStores, observer } from '@/utils/mobx'
+import { useHistory } from 'react-router'
 
 const UserIcon = () => <Icon type="jack-yonghu" className={styles.icon} />
 const PwdIcon = () => <Icon type="jack-suo" className={styles.icon} />
@@ -15,6 +17,10 @@ const LoginContent = () => {
   const desc = '全场两季7折，最高满赠2万元代金券！'
   const userPlaceholder = '手机号/用户名'
   const pwdPlaceholder = '请输入登录密码'
+
+  const { loginStore } = useStores()
+  const { login } = loginStore
+  const history = useHistory()
 
   const todoList = [
     { label: '忘记密码', url: '/register' },
@@ -42,13 +48,16 @@ const LoginContent = () => {
     setDisabled(flag)
   }, [user, pwd])
 
-  const submit = () => {
+  const submit = async () => {
     const params = {
-      username: user,
+      mobilePhone: user,
       password: pwd,
     }
-    console.log(params)
-    setError(true)
+    const res = await login(params)
+    setError(!res.success)
+    if (res.success) {
+      history.push('/home')
+    }
   }
 
   return (
@@ -103,4 +112,4 @@ const LoginContent = () => {
   )
 }
 
-export default LoginContent
+export default observer(LoginContent)

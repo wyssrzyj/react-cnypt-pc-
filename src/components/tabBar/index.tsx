@@ -24,10 +24,10 @@ const TabBar = () => {
   ]
 
   const searchTabs: Array<OptionType> = [
-    { label: '订单', key: 'order' },
-    { label: '面料', key: 'fabric' },
-    { label: '服装', key: 'cloth' },
     { label: '工厂', key: 'factory' },
+    { label: '订单', key: 'order' },
+    // { label: '面料', key: 'fabric' },
+    // { label: '服装', key: 'cloth' },
   ]
 
   const [searchKey, setSearchKey] = useState<string>('order')
@@ -36,7 +36,7 @@ const TabBar = () => {
     order: '请输入订单编号',
     fabric: '请输入需要的面料',
     cloth: '请输入想要的服装类型',
-    work: '请输入公司名',
+    factory: '请输入工厂名称',
   }
 
   const searchTypeChange = (activeKey: string) => {

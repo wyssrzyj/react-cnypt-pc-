@@ -1,8 +1,8 @@
-const common = require("./webpack.common.js")
-const { merge } = require("webpack-merge")
-const path = require("path")
-require("@babel/polyfill")
-const getCSSModuleLocalIdent = require("./getCSSModuleLocalIdent.js")
+const common = require('./webpack.common.js')
+const { merge } = require('webpack-merge')
+const path = require('path')
+require('@babel/polyfill')
+const getCSSModuleLocalIdent = require('./getCSSModuleLocalIdent.js')
 
 const cssRegex = /\.css$/
 const cssModuleRegex = /\.module\.css$/
@@ -10,32 +10,32 @@ const lessRegex = /\.less$/
 const lessModuleRegex = /\.module\.less$/
 
 const config = merge(common, {
-  mode: "development",
-  devtool: "inline-cheap-source-map",
-  target: "web",
+  mode: 'development',
+  devtool: 'eval',
+  target: 'web',
   module: {
     rules: [
       {
         test: cssRegex,
         exclude: cssModuleRegex,
         use: [
-          "style-loader",
+          'style-loader',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               importLoaders: 1,
               sourceMap: true,
             },
           },
-          "postcss-loader",
+          'postcss-loader',
         ],
       },
       {
         test: cssModuleRegex,
         use: [
-          "style-loader",
+          'style-loader',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               importLoaders: 1,
               sourceMap: true,
@@ -45,24 +45,24 @@ const config = merge(common, {
               },
             },
           },
-          "postcss-loader",
+          'postcss-loader',
         ],
       },
       {
         test: lessRegex,
         exclude: lessModuleRegex,
         use: [
-          "style-loader",
+          'style-loader',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               importLoaders: 3,
               sourceMap: true,
             },
           },
-          "postcss-loader",
+          'postcss-loader',
           {
-            loader: "less-loader",
+            loader: 'less-loader',
             options: {
               lessOptions: {
                 javascriptEnabled: true,
@@ -74,9 +74,9 @@ const config = merge(common, {
       {
         test: lessModuleRegex,
         use: [
-          "style-loader",
+          'style-loader',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               importLoaders: 3,
               sourceMap: true,
@@ -86,9 +86,9 @@ const config = merge(common, {
               },
             },
           },
-          "postcss-loader",
+          'postcss-loader',
           {
-            loader: "less-loader",
+            loader: 'less-loader',
             options: {
               lessOptions: {
                 javascriptEnabled: true,

@@ -1,15 +1,15 @@
-const path = require("path")
-const HtmlWebpackPlugin = require("html-webpack-plugin")
-require("@babel/polyfill")
-const friendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin")
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+require('@babel/polyfill')
+const friendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 
 module.exports = {
   entry: {
-    main: path.resolve(__dirname, "../src/index.tsx"),
+    main: path.resolve(__dirname, '../src/index.tsx'),
   },
   output: {
-    path: path.resolve(__dirname, "../dist"),
-    filename: "js/[name].bundle.js",
+    path: path.resolve(__dirname, '../dist'),
+    filename: 'js/[name].bundle.js',
   },
   // cache: {
   //   type: 'memory' // 开发环境 默认 memory 不允许额外配置
@@ -31,9 +31,9 @@ module.exports = {
     new friendlyErrorsWebpackPlugin(),
     // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: "檃",
-      template: path.resolve(__dirname, "../public/index.html"),
-      filename: "index.html",
+      title: '檃',
+      template: path.resolve(__dirname, '../public/index.html'),
+      filename: 'index.html',
     }),
   ],
   module: {
@@ -42,33 +42,34 @@ module.exports = {
       {
         test: /jsx?$/,
         exclude: /node_modules/,
-        use: ["babel-loader?cacheDirectory=true"],
+        use: ['babel-loader?cacheDirectory=true'],
       },
       {
         test: /tsx?$/,
         exclude: /node_modules/,
-        use: "ts-loader",
+        use: 'ts-loader',
       },
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
-        type: "asset/resource",
+        type: 'asset/resource',
       },
       {
         test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
-        type: "asset/inline",
+        type: 'asset/inline',
       },
     ],
   },
   devServer: {
     writeToDisk: false, // 将打包目录写入到硬盘 false为内存
     historyApiFallback: true, // 404 重定向到index.html
-    contentBase: path.resolve(__dirname, "../dist"), // 指定静态资源的根目录
+    contentBase: path.resolve(__dirname, '../dist'), // 指定静态资源的根目录
     open: true, // 打开浏览器
     compress: true, // 压缩
     hot: true, // 热更新
     port: 8002, // 端口号
     proxy: {
-      "/api": "http://8.136.212.136:8080/",
+      // '/api': 'http://8.136.225.110:8888/',
+      '/api/v1': 'http://localhost:5000/',
     },
   },
   externals: {
@@ -79,9 +80,9 @@ module.exports = {
     // antd: "antd",
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".jsx", ".json"], //这几个后缀名的文件后缀可以省略不写
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'], //这几个后缀名的文件后缀可以省略不写
     alias: {
-      "@": path.join(__dirname, "../src"), //这样 @就表示根目录src这个路径
+      '@': path.join(__dirname, '../src'), //这样 @就表示根目录src这个路径
     },
   },
 }

@@ -1,20 +1,21 @@
-import axios from "axios"
-import NProgress from "nprogress"
-import { message } from "antd"
-import { getToken } from "../tool"
-import { dFn, Params, ResponseProps } from "./types"
+import axios from 'axios'
+import NProgress from 'nprogress'
+import { message } from 'antd'
+import { getToken } from '../tool'
+import { dFn, Params, ResponseProps } from './types'
 
 // TODO token是放在headers 还是在请求体中添加
 // TODO 通过setupProxy 设置代理
-const AUTH_TOKEN = "xxx"
+const AUTH_TOKEN = 'xxx'
 
 const CancelToken = axios.CancelToken
 let cancels = []
 
 const instance = axios.create({})
 
-instance.defaults.headers.common["Authorization"] = AUTH_TOKEN
-instance.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded"
+instance.defaults.headers.common['Authorization'] = AUTH_TOKEN
+instance.defaults.headers.post['Content-Type'] =
+  'application/x-www-form-urlencoded'
 instance.defaults.timeout = 10000
 
 const toType = (obj) => {
@@ -33,20 +34,20 @@ const filterNull = (o: O) => {
     if (o[k] === null || o[k] === undefined) {
       delete o[k]
     }
-    o[k] = toType(o[k]) === "string" ? o[k].trim() : o[k]
-    o[k] = ["object", "array"].includes(toType(o[k])) ? filterNull(o[k]) : o[k]
+    o[k] = toType(o[k]) === 'string' ? o[k].trim() : o[k]
+    o[k] = ['object', 'array'].includes(toType(o[k])) ? filterNull(o[k]) : o[k]
   }
   return o
 }
 
 axios.interceptors.request.use(
   function (request) {
-    const userToken = localStorage.getItem("_usertoken") || undefined
-    if (userToken && request.method === "post") {
+    const userToken = localStorage.getItem('_usertoken') || undefined
+    if (userToken && request.method === 'post') {
       if (!request.data) request.data = {}
       request.data.token = userToken
     }
-    if (userToken && request.method === "get") {
+    if (userToken && request.method === 'get') {
       if (!request.params) request.params = {}
       request.params.token = userToken
     }
@@ -71,7 +72,13 @@ axios.interceptors.response.use(
   }
 )
 
-const apiAxios = async (method, url, params: Params = {}, success?: dFn, failure?: dFn) => {
+const apiAxios = async (
+  method,
+  url,
+  params: Params = {},
+  success?: dFn,
+  failure?: dFn
+) => {
   const token = getToken()
   params = filterNull(params)
   if (token) {
@@ -81,8 +88,8 @@ const apiAxios = async (method, url, params: Params = {}, success?: dFn, failure
     const responseData: ResponseProps = await axios({
       method: method,
       url: url,
-      data: method === "POST" || method === "PUT" ? params : null,
-      params: method === "GET" || method === "DELETE" ? params : null,
+      data: method === 'POST' || method === 'PUT' ? params : null,
+      params: method === 'GET' || method === 'DELETE' ? params : null,
       // baseURL: root,
       withCredentials: true,
       cancelToken: new CancelToken(function executor(c) {
@@ -109,17 +116,22 @@ const apiAxios = async (method, url, params: Params = {}, success?: dFn, failure
 }
 
 export default {
-  get: function (url: string, params: any, success?: () => {}, failure?: () => {}) {
-    return apiAxios("GET", url, params, success, failure)
+  get: function (
+    url: string,
+    params?: any,
+    success?: () => {},
+    failure?: () => {}
+  ) {
+    return apiAxios('GET', url, params, success, failure)
   },
-  post: function (url, params, success?, failure?) {
-    return apiAxios("POST", url, params, success, failure)
+  post: function (url, params?, success?, failure?) {
+    return apiAxios('POST', url, params, success, failure)
   },
-  put: function (url, params, success?, failure?) {
-    return apiAxios("PUT", url, params, success, failure)
+  put: function (url, params?, success?, failure?) {
+    return apiAxios('PUT', url, params, success, failure)
   },
-  delete: function (url, params, success?, failure?) {
-    return apiAxios("DELETE", url, params, success, failure)
+  delete: function (url, params?, success?, failure?) {
+    return apiAxios('DELETE', url, params, success, failure)
   },
   cancels, // 切换路由之前 遍历cancels 执行方法 取消之前的请求
 }

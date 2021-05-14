@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import Header from './header'
+import Header from './newHeader'
 import styles from './index.module.less'
 import { withRouter, RouteComponentProps } from 'react-router'
 

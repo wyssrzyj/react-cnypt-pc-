@@ -27,6 +27,18 @@ const Register = Loadable({
   loading: () => null,
 })
 
+// 工厂
+const Factory = Loadable({
+  loader: () => import('@/pages/factory'),
+  loading: () => null,
+})
+
+// 订单
+const Order = Loadable({
+  loader: () => import('@/pages/order'),
+  loading: () => null,
+})
+
 const RouteList = () => {
   return (
     <Switch>
@@ -34,6 +46,8 @@ const RouteList = () => {
       <Route path="/note" component={Note} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
+      <Route path="/order" component={Order} />
+      <Route path="/factory" component={Factory} />
       <Redirect to="/home" />
     </Switch>
   )

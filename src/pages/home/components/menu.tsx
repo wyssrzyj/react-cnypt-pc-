@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react'
-import styles from './index.module.less'
+import styles from '../index.module.less'
 import { observer } from '@/utils/mobx'
 import classNames from 'classnames'
 
@@ -159,22 +159,22 @@ const Menu = () => {
         },
       ],
     },
-    {
-      title: '样板服务',
-      children: [{ label: '暂时不考虑，涉及到报价相关', id: null }],
-    },
-    {
-      title: '面辅料采购',
-      children: [{ label: '暂不考虑，涉及到供应链解决方案', id: null }],
-    },
-    {
-      title: '快速下单',
-      children: [{ label: '暂不考虑，涉及报价，产品类，工艺等', id: null }],
-    },
-    {
-      title: '生产与大数据',
-      children: [{ label: '展示杰克物联网数据', id: null }],
-    },
+    // {
+    //   title: '样板服务',
+    //   children: [{ label: '暂时不考虑，涉及到报价相关', id: null }],
+    // },
+    // {
+    //   title: '面辅料采购',
+    //   children: [{ label: '暂不考虑，涉及到供应链解决方案', id: null }],
+    // },
+    // {
+    //   title: '快速下单',
+    //   children: [{ label: '暂不考虑，涉及报价，产品类，工艺等', id: null }],
+    // },
+    // {
+    //   title: '生产与大数据',
+    //   children: [{ label: '展示杰克物联网数据', id: null }],
+    // },
   ]
 
   const [cardVisible, setCardVisible] = useState<boolean>(false)

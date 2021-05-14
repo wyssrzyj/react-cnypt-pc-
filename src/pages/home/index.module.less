@@ -8,13 +8,19 @@
 .homeContainer {
   width: 1200px;
   margin: 0 auto;
+}
+
+.bannerContainer {
+  width: 1200px;
+  margin: 0 auto;
   padding-top: 24px;
   display: flex;
+  justify-content: space-between;
 }
 
 .menu {
   position: relative;
-  width: 240px;
+  width: 212px;
   background: @white;
 }
 
@@ -135,10 +141,11 @@
 }
 
 .carousel {
-  width: 940px;
+  width: 668px;
+  height: 300px;
 }
 
-.bannerContainer {
+.bannerBox {
   padding-left: 16px;
 
   :global {
@@ -156,5 +163,103 @@
     // .ant-carousel .slick-dots li button {
     //   background: @blueBg !important;
     // }
+  }
+}
+
+.bannerItem {
+  height: 300px;
+}
+
+.userCard {
+  width: 290px;
+  background: #fff;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .avatar {
+    display: block;
+    margin: 0 auto 24px;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 1px solid #999999;
+    box-sizing: border-box;
+  }
+
+  .greeting {
+  }
+
+  .btnBox {
+    width: 100%;
+    text-align: center;
+    padding: 16px 0;
+    border-bottom: 1px solid @d7Gray;
+  }
+
+  .loginBtn {
+    margin-right: 24px;
+    width: 98px;
+    height: 28px;
+    line-height: 28px;
+    background: #4fc1b0;
+    border-radius: 4px 4px 0 0;
+    color: @white;
+    border: none;
+    box-shadow: 0px 5px 0px #3bb19c;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .registerBtn {
+    width: 98px;
+    height: 28px;
+    line-height: 28px;
+    background: #e74c3c;
+    border-radius: 4px 4px 0 0;
+    color: @white;
+    border: none;
+    box-shadow: 0px 5px 0px #c0392b;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .orderInfoBox {
+    width: 100%;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .orderInfo {
+    text-align: center;
+  }
+
+  .orderCount {
+    color: @baseColor;
+    font-size: 32px;
+  }
+
+  .orderLabel {
+  }
+}
+
+.orderAndFactory {
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+
+  .showImg {
+    display: block;
+    width: 212px;
+    height: 200px;
+    background: @white;
+    border: 1px solid #eeeeee;
+    box-sizing: border-box;
+  }
+
+  .innerBox {
+    display: flex;
   }
 }

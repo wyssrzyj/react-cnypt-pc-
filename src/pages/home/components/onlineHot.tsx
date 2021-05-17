@@ -2,28 +2,28 @@ import React from 'react'
 import styles from '../index.module.less'
 
 const OnlineHot = () => {
-  const list = [
-    {
-      img: '',
-      url: '',
-    },
-    {
-      img: '',
-      url: '',
-    },
-    {
-      img: '',
-      url: '',
-    },
-    {
-      img: '',
-      url: '',
-    },
-    {
-      img: '',
-      url: '',
-    },
-  ]
+  // const list = [
+  //   {
+  //     img: '',
+  //     url: '',
+  //   },
+  //   {
+  //     img: '',
+  //     url: '',
+  //   },
+  //   {
+  //     img: '',
+  //     url: '',
+  //   },
+  //   {
+  //     img: '',
+  //     url: '',
+  //   },
+  //   {
+  //     img: '',
+  //     url: '',
+  //   },
+  // ]
 
   return (
     <div className={styles.onlineHot}>

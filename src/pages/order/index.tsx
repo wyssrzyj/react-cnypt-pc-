@@ -3,8 +3,7 @@ import { Pagination } from 'antd';
 import { ArrowDownOutlined } from '@ant-design/icons';
 import classNames from 'classnames'
 import Icon from '@/components/Icon'
-import {Search, FilterList} from '@/components'
-import {Card} from './components'
+import {Search, FilterList, OrderCard} from '@/components'
 import styles from './index.module.less'
 
 const orderLists = [1,1,1,1,1,1,1,1,1,1];
@@ -26,6 +25,24 @@ const dressTypes = [{
 	icon: <Icon type="jack-fushi" className={styles.dressIcon}/>
 }];
 
+const descLits = [{
+  label: "发布时间",
+  value: "2021-05-13"
+},{
+  label: "订单类型",
+  value: "经销单，来图/来样加工"
+},{
+  label: "销售市场",
+  value: "内销"
+},{
+  label: "销售件数",
+  value: "1500件"
+},{
+  label: "单价",
+  value: "10"
+}]
+const describe = "油画少女纯棉小吊带背心外搭"
+
 const OrderSearch = () => {
   const [sort, setSort] = useState("综合排序")
   return (
@@ -39,7 +56,7 @@ const OrderSearch = () => {
             <div onClick={()=>setSort("最新发布")} className={classNames(styles.titleItem, sort==="最新发布"?styles.active:null)}><span>最新发布</span><ArrowDownOutlined /></div>
           </div>
           <div className={styles.orderLists}>
-            {orderLists.map((item,index)=><Card key={index} {...item} />)}
+            {orderLists.map((item,index)=><OrderCard key={index} describe={describe} list={descLits} {...item} />)}
           </div>
           <div className={styles.paging}>
             <Pagination className={styles.paging} defaultCurrent={1} total={50} />

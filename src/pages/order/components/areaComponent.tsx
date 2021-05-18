@@ -20,17 +20,17 @@ const MapTemp = () => {
 
     console.log(data)
 
-    const scene = new Scene({
-      id: 'mapTemp',
-      map: new Mapbox({
-        center: [116.2825, 39.9],
-        pitch: 0,
-        style: 'blank',
-        zoom: 3,
-        minZoom: 3,
-        maxZoom: 10,
-      }),
-    })
+    // const scene = new Scene({
+    //   id: 'mapTemp',
+    //   map: new Mapbox({
+    //     center: [116.2825, 39.9],
+    //     pitch: 0,
+    //     style: 'blank',
+    //     zoom: 3,
+    //     minZoom: 3,
+    //     maxZoom: 10,
+    //   }),
+    // })
 
     // scene.on('loaded', () => {
     //   new ProvinceLayer(scene, {

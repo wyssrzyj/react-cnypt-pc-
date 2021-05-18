@@ -1,6 +1,6 @@
-import { Scene } from '@antv/l7'
-import { ProvinceLayer } from '@antv/l7-district'
-import { Mapbox } from '@antv/l7-maps'
+// import { Scene } from '@antv/l7'
+// import { ProvinceLayer } from '@antv/l7-district'
+// import { Mapbox } from '@antv/l7-maps'
 import React, { useEffect } from 'react'
 
 const MapTemp = () => {

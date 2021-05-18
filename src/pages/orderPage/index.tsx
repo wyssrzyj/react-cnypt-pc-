@@ -4,7 +4,7 @@ import styles from './index.module.less'
 import OrderTypes from './components/orderTypes'
 import AreaSearch from './components/areaSearch'
 
-const Order = () => {
+const OrderSearch = () => {
   return (
     <div className={styles.orderContainer}>
       <Search></Search>
@@ -14,4 +14,4 @@ const Order = () => {
   )
 }
 
-export default Order
+export default OrderSearch

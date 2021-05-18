@@ -35,7 +35,7 @@ const Factory = Loadable({
 
 // 订单
 const Order = Loadable({
-  loader: () => import('@/pages/order'),
+  loader: () => import('@/pages/orderPage'),
   loading: () => null,
 })
 

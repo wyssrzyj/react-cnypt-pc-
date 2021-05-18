@@ -11,7 +11,7 @@ const lessModuleRegex = /\.module\.less$/
 
 const config = merge(common, {
   mode: 'development',
-  devtool: 'eval',
+  devtool: 'source-map',
   target: 'web',
   module: {
     rules: [

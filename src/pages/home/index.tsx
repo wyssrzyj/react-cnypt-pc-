@@ -7,6 +7,9 @@ import Banners from './components/banner'
 import UserCard from './components/userCard'
 import Order from './components/order'
 import Factory from './components/factory'
+import OnlineHot from './components/onlineHot'
+import ExcellentFactory from './components/excellentFactory'
+import ExcellentOrder from './components/excellentOrder'
 
 const Home = () => {
   const { homeStore } = useStores()
@@ -32,6 +35,9 @@ const Home = () => {
             <Factory></Factory>
           </div>
         </div>
+        <OnlineHot></OnlineHot>
+        <ExcellentFactory></ExcellentFactory>
+        <ExcellentOrder></ExcellentOrder>
       </div>
     </div>
   )

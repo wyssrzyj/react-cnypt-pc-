@@ -6,6 +6,7 @@
 }
 
 .homeContainer {
+  padding-bottom: 16px;
   width: 1200px;
   margin: 0 auto;
 }
@@ -246,6 +247,7 @@
 }
 
 .orderAndFactory {
+  margin-bottom: 12px;
   padding-top: 24px;
   display: flex;
   justify-content: space-between;
@@ -261,5 +263,123 @@
 
   .innerBox {
     display: flex;
+  }
+}
+
+.homeTitle {
+  color: @baseColor;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px 0;
+}
+
+.onlineHot {
+  background: #fff;
+  padding: 0px 12px 8px;
+  margin-bottom: 12px;
+
+  .hotContent {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 12px;
+
+    .hotItem {
+      width: 220px;
+      height: 162px;
+      position: relative;
+    }
+
+    .hotBtn {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 128px;
+      height: 41px;
+      background: inherit;
+      box-sizing: border-box;
+      border: 1px solid #ffffff;
+      border-radius: 0px 30px 0px 0px;
+      font-size: 16px;
+      color: #ffffff;
+      text-align: left;
+      outline: none;
+    }
+  }
+}
+
+.excellentFactory {
+  margin-bottom: 12px;
+  padding: 0px 12px 8px;
+  background: #fff;
+
+  .factoryContent {
+    display: flex;
+    justify-content: space-between;
+  }
+  .factoryItem {
+    .factoryImg {
+      display: flex;
+      width: 240px;
+      height: 170px;
+    }
+
+    .factoryTitle {
+      color: @baseColor;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .factoryAddress,
+    .factoryProduct {
+      color: @baseColor;
+      font-size: 12px;
+    }
+  }
+}
+
+.excellentOrder {
+  padding: 0px 12px 8px;
+  background: #fff;
+
+  .orderContent {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .orderItem {
+    display: flex;
+    width: 375px;
+    border: 1px solid #f2f2f2;
+
+    .orderImg {
+      display: block;
+      width: 146px;
+      height: 122px;
+      margin-right: 12px;
+    }
+
+    .orderTitle {
+      color: @baseColor;
+      font-size: 14px;
+      font-weight: bold;
+      width: 152px;
+    }
+
+    .orderAddress {
+      color: @baseColor;
+      font-size: 12px;
+    }
+
+    .orderTotal {
+      span {
+        color: #f59a23;
+      }
+    }
+
+    .orderUnit {
+      span {
+        color: #ec808d;
+      }
+    }
   }
 }

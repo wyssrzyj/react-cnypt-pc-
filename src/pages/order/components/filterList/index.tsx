@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { Tabs, Select, Tag, Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
+import Icon from '@/components/Icon'
 import classNames from 'classnames'
 import {isEmpty} from 'lodash'
 import styles from './index.module.less'
@@ -10,16 +11,20 @@ const { Option } = Select;
 
 const dressTypes = [{
 	type: '男装',
-	key: 'man'
+	key: 'man',
+	icon: <Icon type="jack-xizhuang" className={styles.dressIcon}/>
 },{
 	type: '女装',
-	key: 'woman'
+	key: 'woman',
+	icon: <Icon type="jack-qunzi" className={styles.dressIcon}/>
 },{
 	type: '童装',
-	key: 'kids'
+	key: 'kids',
+	icon: <Icon type="jack-tongzhuang" className={styles.dressIcon}/>
 },{
 	type: '服饰',
-	key: 'dress'
+	key: 'dress',
+	icon: <Icon type="jack-fushi" className={styles.dressIcon}/>
 }];
 
 const productCategory = ["全部", "裤子", "半身裙", "套装/学生校服/工作制服", "大码女装", "毛衣", "蕾丝衫", "其他男装"];
@@ -45,8 +50,8 @@ const FliterList = () => {
 	}, [activeProduct,activeArea,activeOrder,activeProcessing])
 	return (
 		<div className={styles.filterList}>
-			<Tabs defaultActiveKey="man" type="card">
-				{dressTypes.map(dressType=><TabPane tab={dressType.type} key={dressType.key}>
+			<Tabs defaultActiveKey="man" type="card" size="large">
+				{dressTypes.map(dressType=><TabPane tab={<span>{dressType.icon}{dressType.type}</span>}  key={dressType.key}>
 					<div className={styles.classification}>
 						<div className={styles.classificationLabel}>产品类别</div>
 						<div className={styles.classificationItem}>

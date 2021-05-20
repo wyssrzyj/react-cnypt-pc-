@@ -20,7 +20,6 @@ const Search = () => {
   const tabs: Array<OptionType> = [
     { label: '首页', url: '/home', key: 'home' },
     { label: '订单', url: '/order', key: 'order' },
-    { label: '订单', url: '/order-search', key: 'order-search' },
     { label: '找工厂', url: '/factory', key: 'factory' },
   ]
 
@@ -34,16 +33,20 @@ const Search = () => {
   const [companyType, setCompanyType] = useState<number>(1)
 
   useEffect(() => {
-    try {
-      let target = tabs.find((item) => item.url === location.pathname)
-      let targetKey =
-        location.pathname === '/home' ? 'factory' : (target.key as string)
-      setSearchKey(targetKey)
-      setActivityKey(target.key as string)
-    } catch (e) {
-      console.log(e)
+    let target = tabs.find((item) => item.url === location.pathname)
+
+    if (location.pathname === '/order-search') {
+      target = { label: '订单', url: '/order-search', key: 'order' }
     }
-   
+
+    if (location.pathname === '/factory-search') {
+      target = { label: '工厂', url: '/factory-search', key: 'factory' }
+    }
+
+    let targetKey =
+      location.pathname === '/home' ? 'factory' : (target.key as string)
+    setSearchKey(targetKey)
+    setActivityKey(target.key as string)
   }, [location])
 
   const placeholders = {

@@ -1,10 +1,47 @@
 @import '@/css/common.less';
 
-.factory{
+.factory {
   width: 100%;
   background: @containerBg;
 }
-.factoryContainer{
+.factoryContainer {
   width: 1200px;
   margin: 0 auto;
+}
+.factoryContent {
+  overflow: hidden;
+  margin-top: 20px;
+}
+.contentLeft {
+  width: 70%;
+  float: left;
+  background-color: @white;
+  padding: 12px 20px;
+}
+.contentRight {
+  width: 29%;
+  margin-left: 1%;
+  float: left;
+}
+.factoryPage {
+  text-align: center;
+  padding-top: 12px;
+}
+.newFactory {
+  position: relative;
+}
+.newFactoryImg {
+  width: 100%;
+}
+.newFactoryTitle {
+  position: absolute;
+  bottom: 0;
+  padding: 12px 0;
+  background-color: #6300bf;
+  width: 100%;
+  text-align: center;
+  color: @white;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 8px;
 }

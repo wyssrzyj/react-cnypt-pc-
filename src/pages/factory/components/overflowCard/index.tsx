@@ -20,6 +20,7 @@ const OverflowCard = () => {
   useEffect(() => {
     new Swiper('.mySwiper', {
       slidesPerView: 3,
+      spaceBetween: 20,
       centeredSlides: true,
       centeredSlidesBounds: true,
       navigation: {
@@ -89,30 +90,32 @@ const OverflowCard = () => {
           </ul>
         </div>
       </div>
-      <div className="swiper-container mySwiper">
-        <div className="swiper-wrapper">
-          <div className={'swiper-slide'}>
-            <img
-              className="swiper-img"
-              src={require('@/static/images/u1495.png')}
-            />
+      <div className={styles.swiperBox}>
+        <div className="swiper-container mySwiper">
+          <div className="swiper-wrapper">
+            <div className={'swiper-slide'}>
+              <img
+                className="swiper-img"
+                src={require('@/static/images/u1495.png')}
+              />
+            </div>
+            <div className={'swiper-slide'}>
+              <img
+                className="swiper-img"
+                src={require('@/static/images/u1496.png')}
+              />
+            </div>
+            <div className={'swiper-slide'}>
+              <img
+                className="swiper-img"
+                src={require('@/static/images/u1497.png')}
+              />
+            </div>
           </div>
-          <div className={'swiper-slide'}>
-            <img
-              className="swiper-img"
-              src={require('@/static/images/u1496.png')}
-            />
-          </div>
-          <div className={'swiper-slide'}>
-            <img
-              className="swiper-img"
-              src={require('@/static/images/u1497.png')}
-            />
-          </div>
+          <div className="swiper-button-next"></div>
+          <div className="swiper-button-prev"></div>
+          <div className="swiper-pagination"></div>
         </div>
-        <div className="swiper-button-next"></div>
-        <div className="swiper-button-prev"></div>
-        <div className="swiper-pagination"></div>
       </div>
     </div>
   )

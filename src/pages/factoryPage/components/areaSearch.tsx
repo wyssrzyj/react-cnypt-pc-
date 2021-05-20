@@ -3,6 +3,7 @@ import MapTemp from './areaComponent'
 import styles from './areaSearch.module.less'
 import classNames from 'classnames'
 import Icon from '@/components/Icon'
+import { Button } from 'antd'
 
 type AreaItem = {
   area: string
@@ -218,7 +219,13 @@ const AreaSearch = () => {
 
   return (
     <div className={styles.searchContainer}>
-      <div className={styles.searchTitle}>按地区查订单</div>
+      <div className={styles.searchTitle}>
+        <div className={styles.searchTitleL}>
+          <div className={styles.searchTitleText}>按地区找工厂</div>
+          <Button type={'primary'}>工厂入驻</Button>
+        </div>
+        <Button>{'更多 >'}</Button>
+      </div>
       <div className={styles.searchContent}>
         <div className={styles.leftContent}>
           <div className={styles.areaKeys}>

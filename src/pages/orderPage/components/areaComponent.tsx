@@ -6,9 +6,6 @@ import styles from './areaComponent.module.less'
 
 const MapTemp = () => {
   const [map, setMap] = useState(null)
-  const [init, setInit] = useState(false)
-
-  const start = Date.now()
 
   const initMap = async () => {
     const response = await fetch(
@@ -91,11 +88,8 @@ const MapTemp = () => {
   }, [])
 
   useEffect(() => {
-    if (!map || !init) return
+    if (!map) return
 
-    console.log(map)
-
-    map.zoomOut()
     setTimeout(() => {
       map.setZoomAndCenter(4.930243767520109, {
         lat: 30.70327460663428,

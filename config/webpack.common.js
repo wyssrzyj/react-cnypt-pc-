@@ -2,6 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 require('@babel/polyfill')
 const friendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
   entry: {
@@ -28,12 +29,18 @@ module.exports = {
   //   store: 'pack', // 当编译器闲置时 将缓存数据存放在一个文件中
   // },
   plugins: [
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
     new friendlyErrorsWebpackPlugin(),
     // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: '檃',
       template: path.resolve(__dirname, '../public/index.html'),
       filename: 'index.html',
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
     }),
   ],
   module: {
@@ -83,6 +90,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'], //这几个后缀名的文件后缀可以省略不写
     alias: {
       '@': path.join(__dirname, '../src'), //这样 @就表示根目录src这个路径
+      process: 'process/browser',
     },
     fallback: {
       assert: require.resolve('assert/'),

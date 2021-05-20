@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Switch, Redirect, withRouter } from 'react-router'
 import { compose } from 'redux'
 import Loadable from '@/utils/loadable'
+import Order from '@/pages/orderPage'
 
 // home
 const Home = Loadable({
@@ -27,6 +28,12 @@ const Register = Loadable({
   loading: () => null,
 })
 
+// 工厂首页
+const FactoryPage = Loadable({
+  loader: () => import('@/pages/factoryPage'),
+  loading: () => null,
+})
+
 // 工厂
 const Factory = Loadable({
   loader: () => import('@/pages/factory'),
@@ -34,10 +41,10 @@ const Factory = Loadable({
 })
 
 // 订单
-const Order = Loadable({
-  loader: () => import('@/pages/orderPage'),
-  loading: () => null,
-})
+// const Order = Loadable({
+//   loader: () => import('@/pages/orderPage'),
+//   loading: () => null,
+// })
 
 // 订单搜索
 const OrderSearch = Loadable({
@@ -53,8 +60,9 @@ const RouteList = () => {
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/order" component={Order} />
-      <Route path="/factory" component={Factory} />
+      <Route path="/factory-search" component={Factory} />
       <Route path="/order-search" component={OrderSearch} />
+      <Route path="/factory" component={FactoryPage} />
       <Redirect to="/home" />
     </Switch>
   )

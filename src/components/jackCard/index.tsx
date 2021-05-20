@@ -1,8 +1,9 @@
 import React from 'react'
+import { isNil } from 'lodash'
 import styles from './index.module.less'
 
 const JackCard = (props) => {
-  const { header, content, footer } = props
+  const { header, content = [], footer } = props
   return (
     <div className={styles.jackCard}>
       <header className={styles.cardHeader}>{header}</header>
@@ -16,7 +17,9 @@ const JackCard = (props) => {
           </li>
         ))}
       </ul>
-      <footer className={styles.cardFooter}>{footer}</footer>
+      {!isNil(footer) && (
+        <footer className={styles.cardFooter}>{footer}</footer>
+      )}
     </div>
   )
 }

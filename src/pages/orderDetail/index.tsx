@@ -106,7 +106,7 @@ const OrderDetail = () => {
             footer={clothingFooter}
           />
           <JackCard header={ourHeader} content={ourList} footer={ourFooter} />
-          {/* <JackCard header="sss" /> */}
+          <JackCard header="工厂样品展示" />
         </div>
         <div className={styles.contentRight}>
           <div className={styles.orderOverview}></div>

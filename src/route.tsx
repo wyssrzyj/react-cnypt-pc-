@@ -68,11 +68,8 @@ const RouteList = () => {
       <Route path="/order" component={Order} />
       <Route path="/factory-search" component={Factory} />
       <Route path="/order-search" component={OrderSearch} />
-<<<<<<< HEAD
       <Route path="/order-detail" component={OrderDetail} />
-=======
       <Route path="/factory" component={FactoryPage} />
->>>>>>> 7401794c708ab49d4d82604fe0bdda43fbbe185f
       <Redirect to="/home" />
     </Switch>
   )

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useHistory } from 'react-router'
 import { Pagination } from 'antd';
 import { ArrowDownOutlined } from '@ant-design/icons';
 import classNames from 'classnames'
@@ -44,7 +45,11 @@ const descLits = [{
 const describe = "油画少女纯棉小吊带背心外搭"
 
 const OrderSearch = () => {
-  const [sort, setSort] = useState("综合排序")
+  const history = useHistory()
+  const [sort, setSort] = useState("综合排序");
+  const handleCard = () => {
+    history.push('./order-detail')
+  }
   return (
     <div className={styles.order}>
        <div className={styles.orderContainer}>
@@ -56,7 +61,7 @@ const OrderSearch = () => {
             <div onClick={()=>setSort("最新发布")} className={classNames(styles.titleItem, sort==="最新发布"?styles.active:null)}><span>最新发布</span><ArrowDownOutlined /></div>
           </div>
           <div className={styles.orderLists}>
-            {orderLists.map((item,index)=><OrderCard key={index} describe={describe} list={descLits} {...item} />)}
+            {orderLists.map((item,index)=><OrderCard key={index} handleCard={handleCard} describe={describe} list={descLits} {...item} />)}
           </div>
           <div className={styles.paging}>
             <Pagination className={styles.paging} defaultCurrent={1} total={50} />

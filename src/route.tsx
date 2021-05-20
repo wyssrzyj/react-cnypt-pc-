@@ -52,6 +52,12 @@ const OrderSearch = Loadable({
   loading: () => null,
 })
 
+// 订单详情
+const OrderDetail = Loadable({
+  loader: () => import('@/pages/orderDetail'),
+  loading: () => null,
+})
+
 const RouteList = () => {
   return (
     <Switch>
@@ -62,6 +68,7 @@ const RouteList = () => {
       <Route path="/order" component={Order} />
       <Route path="/factory-search" component={Factory} />
       <Route path="/order-search" component={OrderSearch} />
+      <Route path="/order-detail" component={OrderDetail} />
       <Route path="/factory" component={FactoryPage} />
       <Redirect to="/home" />
     </Switch>

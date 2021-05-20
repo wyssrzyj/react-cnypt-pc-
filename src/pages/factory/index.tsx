@@ -1,6 +1,5 @@
 import React from 'react'
-import {Search, FilterList} from '@/components'
-import Icon from '@/components/Icon'
+import {Search, FilterList, Icon} from '@/components'
 import styles from './index.module.less'
 
 const factoryTypes = [{

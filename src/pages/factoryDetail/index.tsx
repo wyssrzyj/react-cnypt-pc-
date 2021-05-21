@@ -1,6 +1,11 @@
 import React from 'react'
 import { DetailHeader } from '@/components'
-import { FactoryInfo, FactoryIntroduce, EnterpriseHonesty } from './components'
+import {
+  FactoryInfo,
+  FactoryIntroduce,
+  EnterpriseHonesty,
+  SamplesShow,
+} from './components'
 import styles from './index.module.less'
 
 const FactoryDetail = () => {
@@ -11,6 +16,7 @@ const FactoryDetail = () => {
         <FactoryInfo />
         <FactoryIntroduce />
         <EnterpriseHonesty />
+        <SamplesShow />
       </div>
     </div>
   )

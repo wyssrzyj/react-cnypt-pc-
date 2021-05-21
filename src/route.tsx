@@ -34,9 +34,15 @@ const FactoryPage = Loadable({
   loading: () => null,
 })
 
-// 工厂
+// 工厂查询
 const Factory = Loadable({
   loader: () => import('@/pages/factory'),
+  loading: () => null,
+})
+
+// 工厂详情
+const FactoryDetail = Loadable({
+  loader: () => import('@/pages/factoryDetail'),
   loading: () => null,
 })
 
@@ -66,10 +72,11 @@ const RouteList = () => {
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/order" component={Order} />
-      <Route path="/factory-search" component={Factory} />
       <Route path="/order-search" component={OrderSearch} />
       <Route path="/order-detail" component={OrderDetail} />
       <Route path="/factory" component={FactoryPage} />
+      <Route path="/factory-search" component={Factory} />
+      <Route path="/factory-detail" component={FactoryDetail} />
       <Redirect to="/home" />
     </Switch>
   )

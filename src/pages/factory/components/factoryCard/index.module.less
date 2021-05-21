@@ -1,0 +1,33 @@
+@import '@/css/common.less';
+
+.factoryCard {
+  margin-top: 20px;
+}
+.cardHeader {
+  background-color: @grayLine;
+  color: @66gray;
+  padding: 8px;
+  font-weight: bold;
+}
+.factoryCardContent {
+  background-color: @white;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  :global {
+    li {
+      border-bottom: 1px solid @borderColor;
+      padding: 8px 12px;
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}
+.factoryName {
+  color: @hoverColor;
+  padding: 8px 0;
+}
+.factoryInfo {
+  padding: 4px 0;
+}

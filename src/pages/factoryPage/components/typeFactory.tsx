@@ -41,14 +41,14 @@ const FactoryTypes = (props: FactoryTypesProps) => {
             }
             if (item.border) {
               return (
-                <>
+                <div key={idx} className={styles.cardConcat}>
                   <div style={style} key={idx}>
                     {item.title}
                     &nbsp;&nbsp;
                     {`(${item.count})`}
                   </div>
                   <div className={styles.cardLine} />
-                </>
+                </div>
               )
             }
             return (

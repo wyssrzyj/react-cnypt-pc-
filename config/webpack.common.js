@@ -95,5 +95,6 @@ module.exports = {
     fallback: {
       assert: require.resolve('assert/'),
     },
+    fallback: { assert: require.resolve('assert/') },
   },
 }

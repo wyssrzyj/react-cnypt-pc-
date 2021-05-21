@@ -84,5 +84,6 @@ module.exports = {
     alias: {
       '@': path.join(__dirname, '../src'), //这样 @就表示根目录src这个路径
     },
+    fallback: { assert: require.resolve('assert/') },
   },
 }

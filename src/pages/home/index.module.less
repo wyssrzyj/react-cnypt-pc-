@@ -6,15 +6,22 @@
 }
 
 .homeContainer {
+  padding-bottom: 16px;
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.bannerContainer {
   width: 1200px;
   margin: 0 auto;
   padding-top: 24px;
   display: flex;
+  justify-content: space-between;
 }
 
 .menu {
   position: relative;
-  width: 240px;
+  width: 212px;
   background: @white;
 }
 
@@ -135,10 +142,11 @@
 }
 
 .carousel {
-  width: 940px;
+  width: 668px;
+  height: 300px;
 }
 
-.bannerContainer {
+.bannerBox {
   padding-left: 16px;
 
   :global {
@@ -156,5 +164,222 @@
     // .ant-carousel .slick-dots li button {
     //   background: @blueBg !important;
     // }
+  }
+}
+
+.bannerItem {
+  height: 300px;
+}
+
+.userCard {
+  width: 290px;
+  background: #fff;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .avatar {
+    display: block;
+    margin: 0 auto 24px;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 1px solid #999999;
+    box-sizing: border-box;
+  }
+
+  .greeting {
+  }
+
+  .btnBox {
+    width: 100%;
+    text-align: center;
+    padding: 16px 0;
+    border-bottom: 1px solid @d7Gray;
+  }
+
+  .loginBtn {
+    margin-right: 24px;
+    width: 98px;
+    height: 28px;
+    line-height: 28px;
+    background: #4fc1b0;
+    border-radius: 4px 4px 0 0;
+    color: @white;
+    border: none;
+    box-shadow: 0px 5px 0px #3bb19c;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .registerBtn {
+    width: 98px;
+    height: 28px;
+    line-height: 28px;
+    background: #e74c3c;
+    border-radius: 4px 4px 0 0;
+    color: @white;
+    border: none;
+    box-shadow: 0px 5px 0px #c0392b;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .orderInfoBox {
+    width: 100%;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .orderInfo {
+    text-align: center;
+  }
+
+  .orderCount {
+    color: @baseColor;
+    font-size: 32px;
+  }
+
+  .orderLabel {
+  }
+}
+
+.orderAndFactory {
+  margin-bottom: 12px;
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+
+  .showImg {
+    display: block;
+    width: 212px;
+    height: 200px;
+    background: @white;
+    border: 1px solid #eeeeee;
+    box-sizing: border-box;
+  }
+
+  .innerBox {
+    display: flex;
+  }
+}
+
+.homeTitle {
+  color: @baseColor;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px 0;
+}
+
+.onlineHot {
+  background: #fff;
+  padding: 0px 12px 8px;
+  margin-bottom: 12px;
+
+  .hotContent {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 12px;
+
+    .hotItem {
+      width: 220px;
+      height: 162px;
+      position: relative;
+    }
+
+    .hotBtn {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 128px;
+      height: 41px;
+      background: inherit;
+      box-sizing: border-box;
+      border: 1px solid #ffffff;
+      border-radius: 0px 30px 0px 0px;
+      font-size: 16px;
+      color: #ffffff;
+      text-align: left;
+      outline: none;
+    }
+  }
+}
+
+.excellentFactory {
+  margin-bottom: 12px;
+  padding: 0px 12px 8px;
+  background: #fff;
+
+  .factoryContent {
+    display: flex;
+    justify-content: space-between;
+  }
+  .factoryItem {
+    .factoryImg {
+      display: flex;
+      width: 240px;
+      height: 170px;
+    }
+
+    .factoryTitle {
+      color: @baseColor;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .factoryAddress,
+    .factoryProduct {
+      color: @baseColor;
+      font-size: 12px;
+    }
+  }
+}
+
+.excellentOrder {
+  padding: 0px 12px 8px;
+  background: #fff;
+
+  .orderContent {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .orderItem {
+    display: flex;
+    width: 375px;
+    border: 1px solid #f2f2f2;
+
+    .orderImg {
+      display: block;
+      width: 146px;
+      height: 122px;
+      margin-right: 12px;
+    }
+
+    .orderTitle {
+      color: @baseColor;
+      font-size: 14px;
+      font-weight: bold;
+      width: 152px;
+    }
+
+    .orderAddress {
+      color: @baseColor;
+      font-size: 12px;
+    }
+
+    .orderTotal {
+      span {
+        color: #f59a23;
+      }
+    }
+
+    .orderUnit {
+      span {
+        color: #ec808d;
+      }
+    }
   }
 }

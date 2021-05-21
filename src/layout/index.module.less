@@ -22,7 +22,7 @@
 .content {
   display: flex;
   width: 100%;
-  height: calc(100% - 40px);
+  min-height: calc(100% - 40px);
 }
 
 .menu {
@@ -59,4 +59,30 @@
   &:hover {
     color: @hoverColor;
   }
+}
+
+.footerBox {
+  background: #f4f4f4;
+}
+
+.footer {
+  width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #848485;
+  height: 120px;
+  background: #efeff0;
+}
+
+.footerItems {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.footerItem {
+  margin-right: 40px;
 }

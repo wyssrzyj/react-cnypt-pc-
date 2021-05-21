@@ -26,8 +26,11 @@
 }
 
 .loginContent {
-  background: #cccccc;
+  background: rgba(204, 204, 204, 0.2);
   height: calc(100vh - 50px - 120px);
+}
+.carousel {
+  width: 940px;
 }
 
 .content {
@@ -72,10 +75,12 @@
 .right {
   height: fit-content;
   width: 410px;
-  padding: 24px;
+  padding: 16px 24px 0;
   display: flex;
   flex-direction: column;
   background: @white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px -4px @borderColor;
 }
 
 .rTitle {
@@ -99,14 +104,34 @@
     }
   }
 }
+.verificationBox {
+  margin-bottom: 16px;
+}
+.verification {
+  margin-right: 20px;
+  width: 66%;
+  height: 44px;
+}
+.getVerification {
+  float: right;
+  height: 44px;
+  border-radius: 6px;
+}
+.loginOperation {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
 
 .btn {
   height: 44px;
 }
-
+.rightContent {
+  margin-top: 12px;
+}
 .errorText {
-  margin-top: 16px;
-  height: 30px;
+  margin-top: 2px;
+  height: 20px;
   visibility: hidden;
   display: flex;
   align-items: center;

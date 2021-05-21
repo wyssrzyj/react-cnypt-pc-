@@ -179,9 +179,6 @@ const Register = () => {
     <div className={styles.content}>
       <div>
         <div className={styles.title}>欢迎新用户注册</div>
-        <div className={styles.fastLogin}>
-          已有账号？<span onClick={toLogin}>{'快速登录>>'}</span>
-        </div>
       </div>
       <Form
         form={form}
@@ -247,6 +244,9 @@ const Register = () => {
           同意条款并注册
         </Button>
       </Form>
+        <div className={styles.fastLogin}>
+          已有账号？<span onClick={toLogin}>{'快速登录>>'}</span>
+        </div>
     </div>
   )
 }

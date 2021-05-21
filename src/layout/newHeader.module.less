@@ -1,0 +1,25 @@
+.header {
+  padding: 8px 0;
+  width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.orangeText {
+  color: #f59a23;
+  cursor: pointer;
+}
+
+.chunks {
+  .headerChunk {
+    padding: 0 16px;
+    color: #7f7f7f;
+    border-right: 1px solid #7f7f7f;
+    cursor: pointer;
+
+    &:nth-last-child(1) {
+      border-right: none;
+    }
+  }
+}

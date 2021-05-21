@@ -1,11 +1,17 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import styles from './index.module.less'
-import { Input, Button } from 'antd'
+import { Input, Button, Carousel, Tabs, Checkbox } from 'antd'
 import Icon from '@/components/Icon'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import classNamess from 'classnames'
 import { useStores, observer } from '@/utils/mobx'
 import { useHistory } from 'react-router'
+import BANNER0 from './images/u104.png'
+import BANNER1 from './images/u105.png'
+import BANNER2 from './images/u106.png'
+import BANNER3 from './images/u107.png'
+
+const { TabPane } = Tabs
 
 const UserIcon = () => <Icon type="jack-yonghu" className={styles.icon} />
 const PwdIcon = () => <Icon type="jack-suo" className={styles.icon} />
@@ -13,8 +19,8 @@ const PwdIcon = () => <Icon type="jack-suo" className={styles.icon} />
 type InputEvent = ChangeEvent<HTMLInputElement>
 
 const LoginContent = () => {
-  const title = '春秋季服装订单大促'
-  const desc = '全场两季7折，最高满赠2万元代金券！'
+  // const title = '春秋季服装订单大促'
+  // const desc = '全场两季7折，最高满赠2万元代金券！'
   const userPlaceholder = '手机号/用户名'
   const pwdPlaceholder = '请输入登录密码'
 
@@ -22,17 +28,14 @@ const LoginContent = () => {
   const { login } = loginStore
   const history = useHistory()
 
-  const todoList = [
-    { label: '忘记密码', url: '/register' },
-    { label: '忘记用户名', url: '/register' },
-    { label: '免费注册', url: '/register' },
-  ]
-
   const errorTexts = new Map()
   errorTexts.set(0, '登录名或登录密码不正确')
 
   const [user, setUser] = useState<string>()
   const [pwd, setPwd] = useState<string>()
+  const [activeTab, setActiveTab] = useState<string>()
+  const [phoneNumer, setPhoneNumber] = useState<string>()
+  const [verification, setVerification] = useState<string>()
   const [error, setError] = useState<boolean>(false)
   const [disabled, setDisabled] = useState<boolean>(true)
 
@@ -40,13 +43,32 @@ const LoginContent = () => {
     const { value } = event.target
     type === 'user' && setUser(value)
     type === 'pwd' && setPwd(value)
+    type === 'phoneNumer' && setPhoneNumber(value)
+    type === 'verification' && setVerification(value)
   }
+
+  const callback = (activeKey) => {
+    setActiveTab(activeKey)
+    if (activeKey === '1') {
+      const flag = user && pwd ? false : true
+      setDisabled(flag)
+    } else {
+      const flag = phoneNumer && verification ? false : true
+      setDisabled(flag)
+    }
+  }
+
+  const automaticLogin = () => {}
 
   useEffect(() => {
     const flag = user && pwd ? false : true
-    console.log(flag)
     setDisabled(flag)
   }, [user, pwd])
+
+  useEffect(() => {
+    const flag = phoneNumer && verification ? false : true
+    setDisabled(flag)
+  }, [phoneNumer, verification])
 
   const submit = async () => {
     const params = {
@@ -64,28 +86,59 @@ const LoginContent = () => {
     <div className={styles.loginContent}>
       <div className={styles.content}>
         <div className={styles.left}>
-          <img src="" alt="" className={styles.img} />
-          <div className={styles.leftText}>
-            <div className={styles.title}>{title}</div>
-            <div className={styles.desc}>{desc}</div>
-          </div>
+          <Carousel autoplay className={styles.carousel} autoplaySpeed={2000}>
+            <img src={BANNER0} alt="" />
+            <img src={BANNER1} alt="" />
+            <img src={BANNER2} alt="" />
+            <img src={BANNER3} alt="" />
+          </Carousel>
         </div>
 
         <div className={styles.right}>
-          <div className={styles.rTitle}>密码登录</div>
-          <Input
-            prefix={<UserIcon />}
-            className={styles.input}
-            placeholder={userPlaceholder}
-            onChange={(event: InputEvent) => valueChange(event, 'user')}
-          />
-          <Input
-            prefix={<PwdIcon />}
-            className={styles.input}
-            placeholder={pwdPlaceholder}
-            type="password"
-            onChange={(event: InputEvent) => valueChange(event, 'pwd')}
-          />
+          <Tabs activeKey={activeTab} onChange={callback} centered>
+            <TabPane className={styles.rightContent} tab="帐户密码登录" key="1">
+              <Input
+                prefix={<UserIcon />}
+                className={styles.input}
+                placeholder={userPlaceholder}
+                onChange={(event: InputEvent) => valueChange(event, 'user')}
+              />
+              <Input
+                prefix={<PwdIcon />}
+                className={styles.input}
+                placeholder={pwdPlaceholder}
+                type="password"
+                onChange={(event: InputEvent) => valueChange(event, 'pwd')}
+              />
+            </TabPane>
+            <TabPane className={styles.rightContent} tab="手机号登录" key="2">
+              <Input
+                prefix={<UserIcon />}
+                className={styles.input}
+                placeholder="手机号"
+                onChange={(event: InputEvent) =>
+                  valueChange(event, 'phoneNumer')
+                }
+              />
+              <div className={styles.verificationBox}>
+                <Input
+                  prefix={<PwdIcon />}
+                  className={styles.verification}
+                  placeholder="验证码"
+                  onChange={(event: InputEvent) =>
+                    valueChange(event, 'verification')
+                  }
+                />
+                <Button className={styles.getVerification}>获取验证码</Button>
+              </div>
+            </TabPane>
+          </Tabs>
+
+          <div className={styles.loginOperation}>
+            <Checkbox onChange={automaticLogin}>自动登录</Checkbox>
+            <a>忘记密码</a>
+          </div>
+
           <Button
             disabled={disabled}
             type={'primary'}
@@ -98,13 +151,6 @@ const LoginContent = () => {
             className={classNamess(styles.errorText, error && styles.showError)}
           >
             {errorTexts.get(0)}
-          </div>
-          <div className={styles.todoList}>
-            {todoList.map((item, idx) => (
-              <Link to={item.url} key={idx} className={styles.todoLink}>
-                {item.label}
-              </Link>
-            ))}
           </div>
         </div>
       </div>

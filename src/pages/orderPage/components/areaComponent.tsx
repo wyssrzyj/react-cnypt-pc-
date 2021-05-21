@@ -6,10 +6,6 @@ import styles from './areaComponent.module.less'
 
 const MapTemp = () => {
   const [map, setMap] = useState(null)
-<<<<<<< HEAD
-=======
-  const [init, _setInit] = useState(false)
->>>>>>> 7c011b6642d1fc607930596e732513333969454c
 
   const initMap = async () => {
     const response = await fetch(

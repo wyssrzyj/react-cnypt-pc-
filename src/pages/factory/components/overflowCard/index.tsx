@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useHistory } from 'react-router'
 import { Tag } from 'antd'
 import { EnvironmentFilled } from '@ant-design/icons'
 import SwiperCore, {
@@ -17,6 +18,10 @@ import './style.less'
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
 const OverflowCard = () => {
+  const history = useHistory()
+  const goToDetail = () => {
+    history.push('/factory-detail')
+  }
   useEffect(() => {
     new Swiper('.mySwiper', {
       slidesPerView: 3,
@@ -43,9 +48,9 @@ const OverflowCard = () => {
         />
         <div>
           <div>
-            <span className={styles.factoryName}>
+            <a className={styles.factoryName} onClick={goToDetail}>
               石狮市一叶知秋服饰有限公司
-            </span>
+            </a>
             <Tag className={styles.factoryTag} color="#f50">
               实名
             </Tag>

@@ -18,9 +18,9 @@ const Search = () => {
   const history = useHistory()
 
   const tabs: Array<OptionType> = [
-    { label: '首页', url: '/home', key: 'home' },
-    { label: '订单', url: '/order', key: 'order' },
-    { label: '找工厂', url: '/factory', key: 'factory' },
+    { label: '首页', url: '/platform/home', key: 'home' },
+    { label: '订单', url: '/platform/order', key: 'order' },
+    { label: '找工厂', url: '/platform/factory', key: 'factory' },
   ]
 
   const searchTabs: Array<OptionType> = [
@@ -33,18 +33,24 @@ const Search = () => {
   const [companyType, setCompanyType] = useState<number>(1)
 
   useEffect(() => {
-    let target = tabs.find((item) => item.url === location.pathname)
+    const init = { label: '首页', url: '/platform/home', key: 'home' }
+    let target = tabs.find((item) => item.url === location.pathname) || init
 
-    if (location.pathname === '/order-search') {
-      target = { label: '订单', url: '/order-search', key: 'order' }
+    if (location.pathname.includes('/platform/order-search')) {
+      target = { label: '订单', url: '/platform/order-search', key: 'order' }
     }
 
-    if (location.pathname === '/factory-search') {
-      target = { label: '工厂', url: '/factory-search', key: 'factory' }
+    if (location.pathname.includes('/platform/factory-search')) {
+      target = {
+        label: '工厂',
+        url: '/platform/factory-search',
+        key: 'factory',
+      }
     }
 
-    let targetKey =
-      location.pathname === '/home' ? 'factory' : (target.key as string)
+    let targetKey = ['/platform/home', '/platform'].includes(location.pathname)
+      ? 'factory'
+      : (target.key as string)
     setSearchKey(targetKey)
     setActivityKey(target.key as string)
   }, [location])
@@ -79,7 +85,7 @@ const Search = () => {
       <img src={BG_LOGO} alt="" className={styles.bgLogo} />
       <div className={styles.searchBox}>
         <div className={styles.searchTabsBox}>
-          {location.pathname === '/home' && (
+          {location.pathname === '/platform/home' && (
             <Tabs
               activeKey={searchKey}
               onChange={searchTypeChange}

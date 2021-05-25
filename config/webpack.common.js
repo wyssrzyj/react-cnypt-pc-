@@ -11,6 +11,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'js/[name].bundle.js',
+    publicPath: '/',
   },
   // cache: {
   //   type: 'memory' // 开发环境 默认 memory 不允许额外配置
@@ -67,6 +68,7 @@ module.exports = {
     ],
   },
   devServer: {
+    publicPath: '/',
     writeToDisk: false, // 将打包目录写入到硬盘 false为内存
     historyApiFallback: true, // 404 重定向到index.html
     contentBase: path.resolve(__dirname, '../dist'), // 指定静态资源的根目录
@@ -91,9 +93,6 @@ module.exports = {
     alias: {
       '@': path.join(__dirname, '../src'), //这样 @就表示根目录src这个路径
       process: 'process/browser',
-    },
-    fallback: {
-      assert: require.resolve('assert/'),
     },
     fallback: { assert: require.resolve('assert/') },
   },

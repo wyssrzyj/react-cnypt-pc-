@@ -1,8 +1,7 @@
 import React from 'react'
-import { Route, Switch, Redirect, withRouter } from 'react-router'
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 import Loadable from '@/utils/loadable'
-import Order from '@/pages/orderPage'
 
 // home
 const Home = Loadable({
@@ -47,10 +46,9 @@ const FactoryDetail = Loadable({
 })
 
 // 订单
-// const Order = Loadable({
-//   loader: () => import('@/pages/orderPage'),
-//   loading: () => null,
-// })
+const Order = Loadable({
+  loader: () => import('@/pages/orderPage'),
+})
 
 // 订单搜索
 const OrderSearch = Loadable({
@@ -64,20 +62,27 @@ const OrderDetail = Loadable({
   loading: () => null,
 })
 
+// 订单详情
+const Platform = Loadable({
+  loader: () => import('@/pages/platform'),
+  loading: () => null,
+})
+
 const RouteList = () => {
   return (
     <Switch>
+      <Route path="/platform" component={Platform} />
       <Route path="/home" component={Home} />
       <Route path="/note" component={Note} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/order" component={Order} />
-      <Route path="/order-search" component={OrderSearch} />
+      <Route path="/platform/order-search" component={OrderSearch} />
       <Route path="/order-detail" component={OrderDetail} />
       <Route path="/factory" component={FactoryPage} />
-      <Route path="/factory-search" component={Factory} />
+      <Route path="/platform/factory-search" component={Factory} />
       <Route path="/factory-detail" component={FactoryDetail} />
-      <Redirect to="/home" />
+      <Redirect to="/platform/home" />
     </Switch>
   )
 }

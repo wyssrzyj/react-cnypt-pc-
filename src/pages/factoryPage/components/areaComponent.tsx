@@ -90,15 +90,12 @@ const MapTemp = () => {
   useEffect(() => {
     if (!map) return
 
-    console.log(map)
-
-    map.zoomOut()
     setTimeout(() => {
-      map.setZoomAndCenter(4.930243767520109, {
-        lat: 30.70327460663428,
-        lng: 118.65658099960251,
-      })
-    }, 1000)
+      map.setZoomAndCenter(
+        4.930243767520109,
+        [119.08328522656248, 31.51586053989721]
+      )
+    }, 1500)
   }, [map])
 
   return (

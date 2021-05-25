@@ -8,8 +8,6 @@ const cssRegex = /\.css$/
 const cssModuleRegex = /\.module\.css$/
 const lessRegex = /\.less$/
 const lessModuleRegex = /\.module\.less$/
-const scssRegex = /\.scss$/
-const scssModuleRegex = /\.module\.scss$/
 
 const config = merge(common, {
   mode: 'development',

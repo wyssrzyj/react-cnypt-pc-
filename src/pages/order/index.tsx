@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router'
 import { Pagination } from 'antd'
-import { Search, FilterList, OrderCard, Icon, HeaderFilter } from '@/components'
+import { FilterList, OrderCard, Icon, HeaderFilter } from '@/components'
 import styles from './index.module.less'
 
 const orderLists = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -61,12 +61,11 @@ const OrderSearch = () => {
     setSort(value)
   }
   const handleCard = () => {
-    history.push('./order-detail')
+    history.push('/order-detail')
   }
   return (
     <div className={styles.order}>
       <div className={styles.orderContainer}>
-        <Search></Search>
         <FilterList types={dressTypes} />
         <div className={styles.orderContent}>
           <HeaderFilter

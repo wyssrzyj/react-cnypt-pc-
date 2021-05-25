@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Pagination } from 'antd'
-import { Search, FilterList, Icon, HeaderFilter } from '@/components'
+import { FilterList, Icon, HeaderFilter } from '@/components'
 import { OverflowCard, FactoryCard } from './components'
 import styles from './index.module.less'
 
@@ -41,7 +41,6 @@ const Factory = () => {
   return (
     <div className={styles.factory}>
       <div className={styles.factoryContainer}>
-        <Search></Search>
         <FilterList types={factoryTypes} />
         <div className={styles.factoryContent}>
           <div className={styles.contentLeft}>

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import SwiperCore, {
   Navigation,
   Pagination,
   Scrollbar,
   A11y,
   Autoplay,
+  Thumbs,
 } from 'swiper'
-
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
 import './orderOverview.less'
@@ -15,18 +15,16 @@ import u1495 from '@/static/images/u1495.png'
 import u1496 from '@/static/images/u1496.png'
 import styles from './index.module.less'
 
-SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
+SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs])
 
 const OrderOverview = () => {
-  const [demo, setDemo] = useState(null)
   useEffect(() => {
     const galleryThumbs = new Swiper('#gallery-thumbs', {
       spaceBetween: 10,
       slidesPerView: 4,
       watchSlidesVisibility: true, //防止不可点击
     })
-    console.log(galleryThumbs)
-    const s = new Swiper('#gallery-top', {
+    new Swiper('#gallery-top', {
       spaceBetween: 10,
       navigation: {
         nextEl: '.swiper-button-next',
@@ -36,13 +34,7 @@ const OrderOverview = () => {
         swiper: galleryThumbs,
       },
     })
-
-    setDemo(s)
   }, [])
-
-  const click = () => {
-    demo.slideNext()
-  }
 
   return (
     <div className={styles.orderOverview}>
@@ -64,10 +56,10 @@ const OrderOverview = () => {
         </div>
         <div className="swiper-container" id="gallery-thumbs">
           <div className="swiper-wrapper">
-            <div className="swiper-slide" onClick={click}>
+            <div className="swiper-slide">
               <img src={u912} />
             </div>
-            <div className="swiper-slide" onClick={click}>
+            <div className="swiper-slide">
               <img src={u1495} />
             </div>
             <div className="swiper-slide">

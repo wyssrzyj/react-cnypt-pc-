@@ -1,35 +1,40 @@
 @import '@/css/common.less';
 
 .factoryIntroduce {
-  width: 100%;
-  background-color: @white;
-  padding: 12px 20px;
-  margin-top: 20px;
+    width: 100%;
+    padding: 12px 20px;
+    margin-top: 20px;
+    background-color: @white;
 }
+
 .introduceBox {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex: 1;
-  :global {
-    li {
-      display: flex;
+    flex: 1;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    :global {
+        li {
+            display: flex;
+        }
     }
-  }
 }
+
 .boxLabel {
-  background-color: @borderColor;
-  border: 1px solid #d7d7d7;
-  padding: 12px 20px;
-  flex: 2;
+    flex: 2;
+    padding: 12px 20px;
+    background-color: @borderColor;
+    border: 1px solid #d7d7d7;
 }
+
 .boxValue {
-  border: 1px solid #d7d7d7;
-  padding: 12px 20px;
-  flex: 3;
+    flex: 3;
+    padding: 12px 20px;
+    border: 1px solid #d7d7d7;
 }
+
 .introduceInfo {
-  margin: 20px 0;
-  display: flex;
-  border: 1px solid #d7d7d7;
+    display: flex;
+    margin: 20px 0;
+    border: 1px solid #d7d7d7;
 }

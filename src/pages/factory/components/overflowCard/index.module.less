@@ -1,61 +1,72 @@
 @import '@/css/common.less';
 
 .overflowCard {
-  margin-top: 20px;
-  color: rgba(0, 0, 0, 0.6);
-  border-bottom: 1px solid @borderColor;
+    margin-top: 20px;
+    color: rgba(0, 0, 0, 0.6);
+    border-bottom: 1px solid @borderColor;
 }
+
 .factoryInfo {
-  overflow: hidden;
-  margin-bottom: 20px;
+    margin-bottom: 20px;
+    overflow: hidden;
 }
+
 .factoryImg {
-  display: block;
-  float: left;
-  margin-right: 12px;
-  width: 200px;
+    display: block;
+    float: left;
+    width: 200px;
+    margin-right: 12px;
 }
+
 .factoryName {
-  padding-right: 8px;
+    padding-right: 8px;
 }
+
 .factoryTag {
-  margin-right: 8px;
+    margin-right: 8px;
 }
+
 .factoryIcon {
-  margin: 0 8px;
+    margin: 0 8px;
 }
+
 .factoryScore {
-  font-size: 20px;
-  margin-left: 12px;
-  color: #000;
+    margin-left: 12px;
+    font-size: 20px;
+    color: #000;
 }
+
 .factoryInfoList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  :global {
-    li {
-      width: 50%;
-      float: left;
-      padding: 8px 0;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    :global {
+        li {
+            float: left;
+            width: 50%;
+            padding: 8px 0;
+        }
     }
-  }
 }
+
 .swiperBox {
-  width: 70%;
-  margin: 0 auto 20px;
-}
-.mySwiper {
-  height: 200px;
-}
-.swiperItem {
-  // width: 1200px;
-  height: 200px;
-  background: greenyellow;
+    width: 70%;
+    margin: 0 auto 20px;
 }
 
 .mySwiper {
-  cursor: pointer;
+    height: 200px;
+}
+
+.swiperItem {
+    // width: 1200px;
+    height: 200px;
+    background: greenyellow;
+}
+
+.mySwiper {
+    cursor: pointer;
 }

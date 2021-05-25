@@ -11,12 +11,12 @@ const FactoryPage = () => {
   return (
     <div className={styles.orderContainer}>
       <div className={styles.orderInner}>
-        <Banners></Banners>
-        <AreaSearch></AreaSearch>
-        <Cluster></Cluster>
-        <FactoryChunk></FactoryChunk>
-        <RecommendFactory></RecommendFactory>
-        <Qualifications></Qualifications>
+        <Banners />
+        <AreaSearch />
+        <Cluster />
+        <FactoryChunk />
+        <RecommendFactory />
+        <Qualifications />
       </div>
     </div>
   )

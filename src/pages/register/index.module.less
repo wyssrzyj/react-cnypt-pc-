@@ -1,93 +1,94 @@
 @import '@/css/common.less';
 
 .registerContainer {
-  width: 100%;
+    width: 100%;
 }
 
 .content {
-  width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  background: @white;
-  height: calc(100vh - 50px - 120px);
-  background-image: url(./images/u168.jpg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-repeat: round;
-  :global {
-    .ant-input {
-      height: 40px;
-    }
+    display: flex;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 1200px;
+    height: calc(100vh - 50px - 120px);
+    margin: 0 auto;
+    background: @white;
+    background-image: url(./images/u168.jpg);
+    background-repeat: round;
 
-    .nc_scale {
-      height: 40px !important;
-      width: 320px !important;
-    }
+    :global {
+        .ant-input {
+            height: 40px;
+        }
 
-    .btn_slide {
-      height: 40px !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .nc_scale {
+            width: 320px !important;
+            height: 40px !important;
+        }
 
-    .nc-lang-cnt {
-      height: 40px !important;
-      line-height: 40px !important;
-    }
+        .btn_slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px !important;
+        }
 
-    .nc-container .nc_scale .btn_ok {
-      height: 40px !important;
-      line-height: 40px !important;
-    }
+        .nc-lang-cnt {
+            height: 40px !important;
+            line-height: 40px !important;
+        }
 
-    .nc-container .nc_scale .btn_ok {
-      color: @blueBg !important;
-    }
+        .nc-container .nc_scale .btn_ok {
+            height: 40px !important;
+            line-height: 40px !important;
+        }
 
-    .nc_bg {
-      background: @blueBg !important;
+        .nc-container .nc_scale .btn_ok {
+            color: @blueBg !important;
+        }
+
+        .nc_bg {
+            background: @blueBg !important;
+        }
     }
-  }
 }
 
 .form {
-  width: 320px;
-  margin: 0 auto;
+    width: 320px;
+    margin: 0 auto;
 }
 
 .title {
-  text-align: center;
-  font-size: 28px;
-  color: @66gray;
-  margin-bottom: 12px;
+    margin-bottom: 12px;
+    font-size: 28px;
+    color: @66gray;
+    text-align: center;
 }
 
 .agreeBtn {
-  margin-top: 24px;
-  width: 100%;
-  height: 40px;
-  font-size: 16px;
+    width: 100%;
+    height: 40px;
+    margin-top: 24px;
+    font-size: 16px;
 }
 
 .blueBtn {
-  background: @blueBg !important;
-  border-color: @blueBg !important;
+    background: @blueBg !important;
+    border-color: @blueBg !important;
 }
 
 .fastLogin {
-  padding: 16px;
-  text-align: right;
+    padding: 16px;
+    text-align: right;
 
-  span {
-    color: @blueBg;
-    cursor: pointer;
-  }
+    span {
+        color: @blueBg;
+        cursor: pointer;
+    }
 }
 
 .verifyBtn {
-  height: inherit;
-  width: 102px;
+    width: 102px;
+    height: inherit;
 }

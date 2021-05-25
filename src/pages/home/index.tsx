@@ -15,7 +15,7 @@ const Home = () => {
   const {} = homeStore
 
   useEffect(() => {
-    ;(async () => {})         ()
+    ;(async () => {})     ()
   }, [])
 
   return (

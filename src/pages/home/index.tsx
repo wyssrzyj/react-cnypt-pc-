@@ -15,22 +15,22 @@ const Home = () => {
   const {} = homeStore
 
   useEffect(() => {
-    ;(async () => {})     ()
+    ;(async () => {})()
   }, [])
 
   return (
     <div className={styles.home}>
       <div className={styles.homeContainer}>
         <div className={styles.bannerContainer}>
-          <Menu></Menu>
-          <Banners></Banners>
-          <UserCard></UserCard>
+          <Menu />
+          <Banners />
+          <UserCard />
         </div>
         <div className={styles.orderAndFactory}>
           <img src={''} className={styles.showImg} alt="" />
           <div className={styles.innerBox}>
-            <Order></Order>
-            <Factory></Factory>
+            <Order />
+            <Factory />
           </div>
         </div>
         <OnlineHot></OnlineHot>

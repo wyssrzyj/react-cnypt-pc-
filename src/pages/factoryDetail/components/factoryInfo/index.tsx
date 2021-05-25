@@ -1,19 +1,73 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Tag } from 'antd'
-// import { LoginOutlined, StarOutlined, EditOutlined } from '@ant-design/icons'
 import { Icon } from '@/components'
+import SwiperCore, {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+  Thumbs,
+} from 'swiper'
+import Swiper from 'swiper'
+import 'swiper/swiper-bundle.min.css'
+import './factoryDetail.less'
 import styles from './index.module.less'
+import u1653 from '@/static/images/u1653.png'
+
+SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs])
 
 const FactoryInfo = () => {
+  useEffect(() => {
+    const galleryThumbs = new Swiper('#gallery-thumbs', {
+      spaceBetween: 10,
+      slidesPerView: 4,
+      watchSlidesVisibility: true, //防止不可点击
+    })
+    new Swiper('#gallery-top', {
+      spaceBetween: 10,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      thumbs: {
+        swiper: galleryThumbs,
+      },
+    })
+  }, [])
+
   return (
     <div className={styles.factoryInfo}>
       <div className={styles.factoryInfoContent}>
         <div className={styles.slideshow}>
-          <img
-            className={styles.infoImg}
-            src={require('@/static/images/u1653.png')}
-            alt=""
-          />
+          <div className="swiper-container" id="gallery-top">
+            <div className="swiper-wrapper">
+              <div className="swiper-slide">
+                <img src={u1653} />
+              </div>
+              <div className="swiper-slide">
+                <img src={u1653} />
+              </div>
+              <div className="swiper-slide">
+                <img src={u1653} />
+              </div>
+            </div>
+            <div className="swiper-button-next swiper-button-white"></div>
+            <div className="swiper-button-prev swiper-button-white"></div>
+          </div>
+          <div className="swiper-container" id="gallery-thumbs">
+            <div className="swiper-wrapper">
+              <div className="swiper-slide">
+                <img src={u1653} />
+              </div>
+              <div className="swiper-slide">
+                <img src={u1653} />
+              </div>
+              <div className="swiper-slide">
+                <img src={u1653} />
+              </div>
+            </div>
+          </div>
         </div>
         <div className={styles.infoRight}>
           <div className={styles.infoTitle}>

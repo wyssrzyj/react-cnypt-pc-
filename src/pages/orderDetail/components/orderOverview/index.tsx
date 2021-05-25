@@ -7,7 +7,6 @@ import SwiperCore, {
   Autoplay,
   Thumbs,
 } from 'swiper'
-
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
 import './orderOverview.less'

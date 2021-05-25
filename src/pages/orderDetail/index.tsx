@@ -9,7 +9,7 @@ import {
   CommentOutlined,
 } from '@ant-design/icons'
 import { DetailHeader, JackCard, Icon } from '@/components'
-import { FactorySample, OrderOverview } from './components'
+import { FactorySample, OrderOverview, OrderTab } from './components'
 import styles from './index.module.less'
 
 const clothingHeader = (
@@ -111,6 +111,7 @@ const OrderDetail = () => {
         </div>
         <div className={styles.contentRight}>
           <OrderOverview />
+          <OrderTab />
         </div>
       </div>
     </div>

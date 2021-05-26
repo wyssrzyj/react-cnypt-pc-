@@ -5,7 +5,7 @@ import SwiperCore, {
   Scrollbar,
   A11y,
   Autoplay,
-  Thumbs,
+  Thumbs
 } from 'swiper'
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
@@ -22,17 +22,17 @@ const OrderOverview = () => {
     const galleryThumbs = new Swiper('#gallery-thumbs', {
       spaceBetween: 10,
       slidesPerView: 4,
-      watchSlidesVisibility: true, //防止不可点击
+      watchSlidesVisibility: true //防止不可点击
     })
     new Swiper('#gallery-top', {
       spaceBetween: 10,
       navigation: {
         nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        prevEl: '.swiper-button-prev'
       },
       thumbs: {
-        swiper: galleryThumbs,
-      },
+        swiper: galleryThumbs
+      }
     })
   }, [])
 

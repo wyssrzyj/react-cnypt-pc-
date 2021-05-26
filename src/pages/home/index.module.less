@@ -1,385 +1,386 @@
 @import '@/css/common.less';
 
 .home {
-  width: 100%;
-  background: @containerBg;
+    width: 100%;
+    background: @containerBg;
 }
 
 .homeContainer {
-  padding-bottom: 16px;
-  width: 1200px;
-  margin: 0 auto;
+    width: 1200px;
+    padding-bottom: 16px;
+    margin: 0 auto;
 }
 
 .bannerContainer {
-  width: 1200px;
-  margin: 0 auto;
-  padding-top: 24px;
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+    width: 1200px;
+    padding-top: 24px;
+    margin: 0 auto;
 }
 
 .menu {
-  position: relative;
-  width: 212px;
-  background: @white;
+    position: relative;
+    width: 212px;
+    background: @white;
 }
 
 .menuTitle {
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  color: @white;
-  background: @blueBg;
+    height: 40px;
+    line-height: 40px;
+    color: @white;
+    text-align: center;
+    background: @blueBg;
 }
 
 .menuItemTitle {
-  padding-bottom: 8px;
-  color: @baseColor;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 26px;
+    padding-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 26px;
+    color: @baseColor;
 }
 
 .menuItem {
-  padding: 8px;
-  border-bottom: 1px solid @borderColor;
-  cursor: pointer;
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid @borderColor;
 
-  &:hover {
-    box-shadow: 0px 1px 5px 2px #e7e7e7;
+    &:hover {
+        box-shadow: 0 1px 5px 2px #e7e7e7;
 
-    .child {
-      color: @hoverColor;
+        .child {
+            color: @hoverColor;
+        }
     }
-  }
 }
 
 .menuContent {
-  display: flex;
-  flex-wrap: wrap;
-  font-size: 12px;
-  color: @grayText;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: @grayText;
 }
 
 .child {
-  margin-bottom: 4px;
-  display: flex;
-  line-height: 14px;
+    display: flex;
+    margin-bottom: 4px;
+    line-height: 14px;
 
-  &:nth-child(1) {
-    padding-left: 0;
-  }
+    &:nth-child(1) {
+        padding-left: 0;
+    }
 }
 
 .menuLine {
-  margin: 0 8px;
-  width: 1px;
-  height: 14px;
-  background: @grayLine;
+    width: 1px;
+    height: 14px;
+    margin: 0 8px;
+    background: @grayLine;
 }
 
 .seeAll {
-  height: 40px;
-  line-height: 40px;
-  color: @blueBg;
-  font-size: 14px;
-  text-align: center;
-  cursor: pointer;
+    height: 40px;
+    font-size: 14px;
+    line-height: 40px;
+    color: @blueBg;
+    text-align: center;
+    cursor: pointer;
 
-  &:hover {
-    color: @hoverColor;
-  }
+    &:hover {
+        color: @hoverColor;
+    }
 }
 
 .modalCard {
-  position: absolute;
-  z-index: 16;
-  top: 0;
-  left: 240px;
-  width: 0;
-  height: 425px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 24px;
-  opacity: 0;
-  background: @white;
-  transition: all ease 0.3s;
+    position: absolute;
+    top: 0;
+    left: 240px;
+    z-index: 16;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 0;
+    height: 425px;
+    padding: 24px;
+    background: @white;
+    opacity: 0;
+    transition: all ease 0.3s;
 }
 
 .modalCardShow {
-  opacity: 1;
-  width: 960px;
+    width: 960px;
+    opacity: 1;
 }
 
 .modalItem {
-  width: 49%;
-  height: 160px;
+    width: 49%;
+    height: 160px;
 }
 
 .modalTitle {
-  margin-right: 60px;
-  font-size: 14px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid @hoverColor;
+    padding-bottom: 8px;
+    margin-right: 60px;
+    font-size: 14px;
+    border-bottom: 1px solid @hoverColor;
 }
 
 .itemContent {
-  padding-top: 8px;
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 8px;
 }
 
 .itemChild {
-  margin-right: 12px;
-  line-height: 24px;
-  cursor: pointer;
+    margin-right: 12px;
+    line-height: 24px;
+    cursor: pointer;
 
-  &:hover {
-    color: @hoverColor;
-  }
+    &:hover {
+        color: @hoverColor;
+    }
 }
 
 .carousel {
-  width: 668px;
-  height: 300px;
+    width: 668px;
+    height: 300px;
 }
 
 .bannerBox {
-  padding-left: 16px;
+    padding-left: 16px;
 
-  :global {
-    .ant-carousel .slick-dots li.slick-active {
-      width: 28px;
+    :global {
+        .ant-carousel .slick-dots li.slick-active {
+            width: 28px;
+        }
+
+        .ant-carousel .slick-dots li {
+            width: 20px;
+        }
+        // .ant-carousel .slick-dots li.slick-active button {
+        //   background: @blueBg !important;
+        // }
+
+        // .ant-carousel .slick-dots li button {
+        //   background: @blueBg !important;
+        // }
     }
-
-    .ant-carousel .slick-dots li {
-      width: 20px;
-    }
-    // .ant-carousel .slick-dots li.slick-active button {
-    //   background: @blueBg !important;
-    // }
-
-    // .ant-carousel .slick-dots li button {
-    //   background: @blueBg !important;
-    // }
-  }
 }
 
 .bannerItem {
-  height: 300px;
+    height: 300px;
 }
 
 .userCard {
-  width: 290px;
-  background: #fff;
-  padding-top: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .avatar {
-    display: block;
-    margin: 0 auto 24px;
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    border: 1px solid #999999;
-    box-sizing: border-box;
-  }
-
-  .greeting {
-  }
-
-  .btnBox {
-    width: 100%;
-    text-align: center;
-    padding: 16px 0;
-    border-bottom: 1px solid @d7Gray;
-  }
-
-  .loginBtn {
-    margin-right: 24px;
-    width: 98px;
-    height: 28px;
-    line-height: 28px;
-    background: #4fc1b0;
-    border-radius: 4px 4px 0 0;
-    color: @white;
-    border: none;
-    box-shadow: 0px 5px 0px #3bb19c;
-    outline: none;
-    cursor: pointer;
-  }
-
-  .registerBtn {
-    width: 98px;
-    height: 28px;
-    line-height: 28px;
-    background: #e74c3c;
-    border-radius: 4px 4px 0 0;
-    color: @white;
-    border: none;
-    box-shadow: 0px 5px 0px #c0392b;
-    outline: none;
-    cursor: pointer;
-  }
-
-  .orderInfoBox {
-    width: 100%;
-    padding: 0 24px;
     display: flex;
-    justify-content: space-between;
-  }
+    flex-direction: column;
+    align-items: center;
+    width: 290px;
+    padding-top: 16px;
+    background: #fff;
 
-  .orderInfo {
-    text-align: center;
-  }
+    .avatar {
+        box-sizing: border-box;
+        display: block;
+        width: 54px;
+        height: 54px;
+        margin: 0 auto 24px;
+        border: 1px solid #999;
+        border-radius: 50%;
+    }
 
-  .orderCount {
-    color: @baseColor;
-    font-size: 32px;
-  }
+    .greeting {
+    }
 
-  .orderLabel {
-  }
+    .btnBox {
+        width: 100%;
+        padding: 16px 0;
+        text-align: center;
+        border-bottom: 1px solid @d7Gray;
+    }
+
+    .loginBtn {
+        width: 98px;
+        height: 28px;
+        margin-right: 24px;
+        line-height: 28px;
+        color: @white;
+        cursor: pointer;
+        background: #4fc1b0;
+        border: none;
+        border-radius: 4px 4px 0 0;
+        outline: none;
+        box-shadow: 0 5px 0 #3bb19c;
+    }
+
+    .registerBtn {
+        width: 98px;
+        height: 28px;
+        line-height: 28px;
+        color: @white;
+        cursor: pointer;
+        background: #e74c3c;
+        border: none;
+        border-radius: 4px 4px 0 0;
+        outline: none;
+        box-shadow: 0 5px 0 #c0392b;
+    }
+
+    .orderInfoBox {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 24px;
+    }
+
+    .orderInfo {
+        text-align: center;
+    }
+
+    .orderCount {
+        font-size: 32px;
+        color: @baseColor;
+    }
+
+    .orderLabel {
+    }
 }
 
 .orderAndFactory {
-  margin-bottom: 12px;
-  padding-top: 24px;
-  display: flex;
-  justify-content: space-between;
-
-  .showImg {
-    display: block;
-    width: 212px;
-    height: 200px;
-    background: @white;
-    border: 1px solid #eeeeee;
-    box-sizing: border-box;
-  }
-
-  .innerBox {
     display: flex;
-  }
+    justify-content: space-between;
+    padding-top: 24px;
+    margin-bottom: 12px;
+
+    .showImg {
+        box-sizing: border-box;
+        display: block;
+        width: 212px;
+        height: 200px;
+        background: @white;
+        border: 1px solid #eee;
+    }
+
+    .innerBox {
+        display: flex;
+    }
 }
 
 .homeTitle {
-  color: @baseColor;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 8px 0;
+    padding: 8px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: @baseColor;
 }
 
 .onlineHot {
-  background: #fff;
-  padding: 0px 12px 8px;
-  margin-bottom: 12px;
+    padding: 0 12px 8px;
+    margin-bottom: 12px;
+    background: #fff;
 
-  .hotContent {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 12px;
+    .hotContent {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 12px;
 
-    .hotItem {
-      width: 220px;
-      height: 162px;
-      position: relative;
+        .hotItem {
+            position: relative;
+            width: 220px;
+            height: 162px;
+        }
+
+        .hotBtn {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            box-sizing: border-box;
+            width: 128px;
+            height: 41px;
+            font-size: 16px;
+            color: #fff;
+            text-align: left;
+            background: inherit;
+            border: 1px solid #fff;
+            border-radius: 0 30px 0 0;
+            outline: none;
+        }
     }
-
-    .hotBtn {
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 128px;
-      height: 41px;
-      background: inherit;
-      box-sizing: border-box;
-      border: 1px solid #ffffff;
-      border-radius: 0px 30px 0px 0px;
-      font-size: 16px;
-      color: #ffffff;
-      text-align: left;
-      outline: none;
-    }
-  }
 }
 
 .excellentFactory {
-  margin-bottom: 12px;
-  padding: 0px 12px 8px;
-  background: #fff;
+    padding: 0 12px 8px;
+    margin-bottom: 12px;
+    background: #fff;
 
-  .factoryContent {
-    display: flex;
-    justify-content: space-between;
-  }
-  .factoryItem {
-    .factoryImg {
-      display: flex;
-      width: 240px;
-      height: 170px;
+    .factoryContent {
+        display: flex;
+        justify-content: space-between;
     }
 
-    .factoryTitle {
-      color: @baseColor;
-      font-size: 14px;
-      font-weight: bold;
-    }
+    .factoryItem {
+        .factoryImg {
+            display: flex;
+            width: 240px;
+            height: 170px;
+        }
 
-    .factoryAddress,
-    .factoryProduct {
-      color: @baseColor;
-      font-size: 12px;
+        .factoryTitle {
+            font-size: 14px;
+            font-weight: bold;
+            color: @baseColor;
+        }
+
+        .factoryAddress,
+        .factoryProduct {
+            font-size: 12px;
+            color: @baseColor;
+        }
     }
-  }
 }
 
 .excellentOrder {
-  padding: 0px 12px 8px;
-  background: #fff;
+    padding: 0 12px 8px;
+    background: #fff;
 
-  .orderContent {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .orderItem {
-    display: flex;
-    width: 375px;
-    border: 1px solid #f2f2f2;
-
-    .orderImg {
-      display: block;
-      width: 146px;
-      height: 122px;
-      margin-right: 12px;
+    .orderContent {
+        display: flex;
+        justify-content: space-between;
     }
 
-    .orderTitle {
-      color: @baseColor;
-      font-size: 14px;
-      font-weight: bold;
-      width: 152px;
-    }
+    .orderItem {
+        display: flex;
+        width: 375px;
+        border: 1px solid #f2f2f2;
 
-    .orderAddress {
-      color: @baseColor;
-      font-size: 12px;
-    }
+        .orderImg {
+            display: block;
+            width: 146px;
+            height: 122px;
+            margin-right: 12px;
+        }
 
-    .orderTotal {
-      span {
-        color: #f59a23;
-      }
-    }
+        .orderTitle {
+            width: 152px;
+            font-size: 14px;
+            font-weight: bold;
+            color: @baseColor;
+        }
 
-    .orderUnit {
-      span {
-        color: #ec808d;
-      }
+        .orderAddress {
+            font-size: 12px;
+            color: @baseColor;
+        }
+
+        .orderTotal {
+            span {
+                color: #f59a23;
+            }
+        }
+
+        .orderUnit {
+            span {
+                color: #ec808d;
+            }
+        }
     }
-  }
 }

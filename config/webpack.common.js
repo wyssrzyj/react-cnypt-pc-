@@ -2,14 +2,17 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 require('@babel/polyfill')
 const friendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
   entry: {
-    main: path.resolve(__dirname, '../src/index.tsx'),
+    main: path.resolve(__dirname, '../src/index.tsx')
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'js/[name].bundle.js',
+    publicPath: '/',
+    assetModuleFilename: 'images/[hash][ext][query]'
   },
   // cache: {
   //   type: 'memory' // 开发环境 默认 memory 不允许额外配置
@@ -28,13 +31,19 @@ module.exports = {
   //   store: 'pack', // 当编译器闲置时 将缓存数据存放在一个文件中
   // },
   plugins: [
+    new webpack.ProvidePlugin({
+      process: 'process/browser'
+    }),
     new friendlyErrorsWebpackPlugin(),
     // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: '檃',
       template: path.resolve(__dirname, '../public/index.html'),
-      filename: 'index.html',
+      filename: 'index.html'
     }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer']
+    })
   ],
   module: {
     unsafeCache: true,
@@ -42,24 +51,25 @@ module.exports = {
       {
         test: /jsx?$/,
         exclude: /node_modules/,
-        use: ['babel-loader?cacheDirectory=true'],
+        use: ['babel-loader?cacheDirectory=true']
       },
       {
         test: /tsx?$/,
         exclude: /node_modules/,
-        use: 'ts-loader',
+        use: 'ts-loader'
       },
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
-        type: 'asset/resource',
+        type: 'asset/resource'
       },
       {
         test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
-        type: 'asset/inline',
-      },
-    ],
+        type: 'asset/inline'
+      }
+    ]
   },
   devServer: {
+    publicPath: '/',
     writeToDisk: false, // 将打包目录写入到硬盘 false为内存
     historyApiFallback: true, // 404 重定向到index.html
     contentBase: path.resolve(__dirname, '../dist'), // 指定静态资源的根目录
@@ -69,8 +79,8 @@ module.exports = {
     port: 8002, // 端口号
     proxy: {
       // '/api': 'http://8.136.225.110:8888/',
-      '/api/v1': 'http://localhost:5000/',
-    },
+      '/api/v1': 'http://localhost:5000/'
+    }
   },
   externals: {
     // react: "React",
@@ -83,7 +93,8 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'], //这几个后缀名的文件后缀可以省略不写
     alias: {
       '@': path.join(__dirname, '../src'), //这样 @就表示根目录src这个路径
+      process: 'process/browser'
     },
-    fallback: { assert: require.resolve('assert/') },
-  },
+    fallback: { assert: require.resolve('assert/') }
+  }
 }

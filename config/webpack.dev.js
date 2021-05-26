@@ -11,7 +11,7 @@ const lessModuleRegex = /\.module\.less$/
 
 const config = merge(common, {
   mode: 'development',
-  devtool: 'eval',
+  devtool: 'cheap-source-map',
   target: 'web',
   module: {
     rules: [
@@ -96,6 +96,10 @@ const config = merge(common, {
             },
           },
         ],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },

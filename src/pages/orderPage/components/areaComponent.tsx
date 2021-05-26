@@ -12,7 +12,7 @@ const MapTemp = () => {
       'https://gw.alipayobjects.com/os/bmw-prod/149b599d-21ef-4c24-812c-20deaee90e20.json'
     )
     const provinceData = await response.json()
-    const data = Object.keys(provinceData).map((key) => {
+    const data = Object.keys(provinceData).map(key => {
       return {
         code: key,
         name: provinceData[key][0],
@@ -20,7 +20,7 @@ const MapTemp = () => {
       }
     })
 
-    // console.log(data)
+    console.log(data)
     // {code: "330282", name: "慈溪市", pop: 104}
 
     const scene = new Scene({
@@ -73,7 +73,7 @@ const MapTemp = () => {
         },
         popup: {
           enable: true,
-          Html: (props) => {
+          Html: props => {
             return `<span>${props.NAME_CHN}:</span><span>${props.pop}</span>`
           },
         },

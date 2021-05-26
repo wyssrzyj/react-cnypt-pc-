@@ -1,0 +1,46 @@
+@import '@/css/common.less';
+
+.factorySample {
+    height: 1000px;
+    padding: 12px;
+    overflow-y: auto;
+}
+
+.factorySample::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+
+    /*  */
+}
+
+.factorySample::-webkit-scrollbar-track {
+    background: rgb(239, 239, 239);
+    border-radius: 2px;
+}
+
+.factorySample::-webkit-scrollbar-thumb {
+    background: #cfcfcf;
+    border-radius: 10px;
+}
+
+.factorySample::-webkit-scrollbar-thumb:hover {
+    background: #333;
+}
+
+.sampleBox {
+    width: 100%;
+    margin-bottom: 16px;
+    border: 1px solid @grayLine;
+}
+
+.sampleImg {
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.sampleDes {
+    margin: 8px 8px 12px;
+    font-size: 16px;
+    font-weight: bold;
+}

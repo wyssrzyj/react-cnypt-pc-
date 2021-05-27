@@ -35,7 +35,7 @@ const Register = () => {
   const { validateFields, getFieldValue } = form
   const history = useHistory()
   const { registerStore } = useStores()
-  const { vrifyCode, register } = registerStore
+  const { vrifyCode, register, checkUser } = registerStore
 
   // const { getFieldValue, validateFields, setFieldsValue } = form
   const [disabled, setDisabled] = useState<boolean>(false)
@@ -61,7 +61,7 @@ const Register = () => {
 
       const verifyParams = {
         mobile: values.telInfo.mobilePhone,
-        code: values.code,
+        code: values.code
       }
       const verifyRef = await vrifyCode(verifyParams)
       console.log(verifyRef, 'verifyRef')
@@ -70,7 +70,7 @@ const Register = () => {
       const params = {
         code: values.code,
         mobilePhone: values.telInfo.mobilePhone,
-        password: values.pwd,
+        password: values.pwd
       }
       const registerRes = await register(params)
       if (registerRes.success) {
@@ -82,9 +82,14 @@ const Register = () => {
     }
   }
 
-  const onValuesChange = (_changedValues: any, allValues: CommonObj) => {
+  const onValuesChange = async (_changedValues: any, allValues: CommonObj) => {
     const flag = hasEmpty(allValues)
-    console.log(allValues)
+    const { userName, telInfo } = allValues
+    const { mobilePhone } = telInfo
+    const nameCheck = await checkUser(userName, 'userName')
+    const phoneCheck = await checkUser(mobilePhone, 'mobilePhone')
+    console.log(nameCheck, 'nameCheck')
+    console.log(phoneCheck, 'phoneCheck')
     setTelInfo(allValues.telInfo)
 
     setDisabled(flag)
@@ -102,7 +107,7 @@ const Register = () => {
         return Promise.resolve()
       }
       return Promise.reject(new Error('手机号码格式不正确'))
-    },
+    }
   })
 
   const pwdValidate = ({}) => ({
@@ -119,7 +124,7 @@ const Register = () => {
       }
 
       return Promise.reject(new Error('两次密码输入不一致'))
-    },
+    }
   })
 
   // useEffect(() => {
@@ -186,15 +191,15 @@ const Register = () => {
         className={styles.form}
         onValuesChange={onValuesChange}
       >
-        {/* <Form.Item
-          name="vipName"
+        <Form.Item
+          name="userName"
           label=""
-          rules={[{ required: true, message: '会员名格式不正确' }]}
+          rules={[{ required: true, message: '用户名格式不正确' }]}
           // normalize={normalizeAll}
           getValueFromEvent={getValueFromEvent}
         >
-          <Input placeholder="设置会员名"></Input>
-        </Form.Item> */}
+          <Input placeholder="设置用户名"></Input>
+        </Form.Item>
         <Form.Item
           name="pwd"
           label=""
@@ -217,10 +222,10 @@ const Register = () => {
           trigger={'onChange'}
           rules={[
             { required: true, message: '手机号码格式不正确' },
-            phoneInfoValidate,
+            phoneInfoValidate
           ]}
           initialValue={{ code: '+86', mobilePhone: null }}
-          getValueFromEvent={(event) => getValueFromEvent(event, 'telConcat')}
+          getValueFromEvent={event => getValueFromEvent(event, 'telConcat')}
         >
           <ConcatInput />
         </Form.Item>
@@ -228,7 +233,7 @@ const Register = () => {
           name="code"
           label=""
           trigger={'onChange'}
-          getValueFromEvent={(event) => getValueFromEvent(event, 'verifyCode')}
+          getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}
         >
           <VerifyCodeInput tel={telInfo.mobilePhone} />
         </Form.Item>
@@ -244,9 +249,9 @@ const Register = () => {
           同意条款并注册
         </Button>
       </Form>
-        <div className={styles.fastLogin}>
-          已有账号？<span onClick={toLogin}>{'快速登录>>'}</span>
-        </div>
+      <div className={styles.fastLogin}>
+        已有账号？<span onClick={toLogin}>{'快速登录>>'}</span>
+      </div>
     </div>
   )
 }

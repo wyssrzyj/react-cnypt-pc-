@@ -27,6 +27,24 @@ export default class LoginStore {
       // message.error('')
     }
   }
+
+  @action verifyCode = async mobile => {
+    try {
+      const res: ResponseProps = await axios.get(`/api/sms/send-code/${mobile}`)
+
+      if (res.success) {
+        message.success(res.msg)
+      }
+      if (!res.success) {
+        message.error(res.msg)
+      }
+      // message.success('登录成功')
+      return res
+    } catch (e) {
+      console.log(e)
+      // message.error('')
+    }
+  }
 }
 
 export const loginStore = new LoginStore()

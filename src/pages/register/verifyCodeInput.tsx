@@ -5,12 +5,12 @@ import { useStores } from '@/utils/mobx'
 
 type InputEvent = ChangeEvent<HTMLInputElement>
 
-const VerifyCodeInput = (props) => {
+const VerifyCodeInput = props => {
   const { onChange, value, tel } = props
 
   const { registerStore } = useStores()
   const { sendVerifyCode } = registerStore
-  const verifyTime = 10
+  const verifyTime = 60
 
   const [val, setVal] = useState<string>(value)
   const [lastTime, setLastTime] = useState<number>(verifyTime)
@@ -37,7 +37,7 @@ const VerifyCodeInput = (props) => {
 
   const timerRun = () => {
     const t = setInterval(() => {
-      setLastTime((t) => {
+      setLastTime(t => {
         const n = t - 1
         localStorage.setItem('verifyTime', `${n}`)
         return n

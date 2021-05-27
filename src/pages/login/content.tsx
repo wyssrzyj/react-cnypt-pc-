@@ -25,7 +25,7 @@ const LoginContent = () => {
   const pwdPlaceholder = '请输入登录密码'
 
   const { loginStore } = useStores()
-  const { login } = loginStore
+  const { login, verifyCode } = loginStore
   const history = useHistory()
 
   const errorTexts = new Map()
@@ -71,17 +71,27 @@ const LoginContent = () => {
   }, [phoneNumer, verification])
 
   const submit = async () => {
-    console.log(activeTab, 'activeTab')
-    const params = {
-      userName: user,
-      passWord: pwd,
-      loginType: +activeTab - 1 ? 'sms_code' : 'password'
-    }
+    const params =
+      +activeTab - 1
+        ? {
+            mobilePhone: phoneNumer,
+            code: verification,
+            loginType: 'sms_code'
+          }
+        : {
+            userName: user,
+            passWord: pwd,
+            loginType: 'password'
+          }
     const res = await login(params)
     setError(!res.success)
     if (res.success) {
-      history.push('/home')
+      history.push('/platform/home')
     }
+  }
+
+  const getVerification = async () => {
+    await verifyCode(phoneNumer)
   }
 
   return (
@@ -131,13 +141,18 @@ const LoginContent = () => {
                     valueChange(event, 'verification')
                   }
                 />
-                <Button className={styles.getVerification}>获取验证码</Button>
+                <Button
+                  className={styles.getVerification}
+                  onClick={getVerification}
+                >
+                  获取验证码
+                </Button>
               </div>
             </TabPane>
           </Tabs>
 
           <div className={styles.loginOperation}>
-            <Checkbox onChange={automaticLogin}>自动登录</Checkbox>
+            {/* <Checkbox onChange={automaticLogin}>自动登录</Checkbox> */}
             <a>忘记密码</a>
           </div>
 

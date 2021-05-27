@@ -82,6 +82,12 @@
     background: @white;
     border-radius: 8px;
     box-shadow: 0 4px 6px -4px @borderColor;
+
+    :global {
+      .ant-tabs {
+        height: 202px;
+      }
+    }
 }
 
 .rTitle {
@@ -124,7 +130,7 @@
 
 .loginOperation {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin-bottom: 16px;
 }
 

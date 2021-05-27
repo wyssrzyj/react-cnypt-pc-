@@ -1,15 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './newHeader.module.less'
 import { useHistory } from 'react-router'
 import { getCurrentUser } from '@/utils/tool'
 
 const Header = () => {
-  const history = useHistory()
+  const currentUser = getCurrentUser() || {}
 
-  useEffect(() => {
-    const currentUser = getCurrentUser()
-    console.log(currentUser)
-  }, [])
+  const history = useHistory()
 
   const toLogin = () => {
     history.push('/login')
@@ -18,11 +15,19 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <div>
-        欢迎来到Jack产能云平台，请
-        <span className={styles.orangeText} onClick={toLogin}>
-          登录
-        </span>
-        或<span className={styles.orangeText}>免费注册</span>
+        欢迎来到Jack产能云平台，
+        {currentUser.nickName ? (
+          <span>{currentUser.nickName}</span>
+        ) : (
+          <>
+            <span>请</span>
+            <span className={styles.orangeText} onClick={toLogin}>
+              登录
+            </span>
+            <span>或</span>
+            <span className={styles.orangeText}>免费注册</span>
+          </>
+        )}
       </div>
 
       <div className={styles.chunks}>

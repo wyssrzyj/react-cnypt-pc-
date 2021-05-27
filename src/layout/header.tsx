@@ -18,7 +18,7 @@ const Header = (props: HeaderProps) => {
     { label: '江西省', id: 3 },
     { label: '安徽省', id: 4 },
     { label: '湖南省', id: 5 },
-    { label: '湖北省', id: 6 },
+    { label: '湖北省', id: 6 }
   ]
 
   const [province, setProvince] = useState<number>(1)
@@ -31,7 +31,7 @@ const Header = (props: HeaderProps) => {
     { label: '会员中心', url: '' },
     { label: '我的订单信息', url: '' },
     { label: '请登录', url: '/login' },
-    { label: '免费注册', url: '/register' },
+    { label: '免费注册', url: '/register' }
   ]
 
   return (
@@ -40,7 +40,7 @@ const Header = (props: HeaderProps) => {
         <Select
           className={styles.headerSelect}
           size={'small'}
-          onChange={(value) => provinceSelect(value)}
+          onChange={value => provinceSelect(value)}
           value={province}
         >
           {options.map((item, idx: number) => {

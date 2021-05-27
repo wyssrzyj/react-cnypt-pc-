@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './index.module.less'
 
-const FactoryCard = (props) => {
+const FactoryCard = props => {
   const { title } = props
   return (
     <div className={styles.factoryCard}>

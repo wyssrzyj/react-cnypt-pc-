@@ -17,8 +17,9 @@ instance.defaults.headers.common['Authorization'] = AUTH_TOKEN
 instance.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded'
 instance.defaults.timeout = 10000
+instance.defaults.withCredentials = true
 
-const toType = (obj) => {
+const toType = obj => {
   return {}.toString
     .call(obj)
     .match(/\s([a-zA-Z]+)/)[1]
@@ -62,11 +63,11 @@ axios.interceptors.request.use(
 )
 
 axios.interceptors.response.use(
-  (response) => {
+  response => {
     NProgress.done()
     return response.data
   },
-  (error) => {
+  error => {
     NProgress.done()
     return Promise.reject(error)
   }
@@ -95,7 +96,7 @@ const apiAxios = async (
       cancelToken: new CancelToken(function executor(c) {
         // executor 函数接收一个 cancel 函数作为参数
         cancels.push(c)
-      }),
+      })
     })
     if (responseData.code === 200) {
       // responseData.message && message.success({
@@ -133,5 +134,5 @@ export default {
   delete: function (url, params?, success?, failure?) {
     return apiAxios('DELETE', url, params, success, failure)
   },
-  cancels, // 切换路由之前 遍历cancels 执行方法 取消之前的请求
+  cancels // 切换路由之前 遍历cancels 执行方法 取消之前的请求
 }

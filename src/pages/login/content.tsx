@@ -33,7 +33,7 @@ const LoginContent = () => {
 
   const [user, setUser] = useState<string>()
   const [pwd, setPwd] = useState<string>()
-  const [activeTab, setActiveTab] = useState<string>()
+  const [activeTab, setActiveTab] = useState<string>('1')
   const [phoneNumer, setPhoneNumber] = useState<string>()
   const [verification, setVerification] = useState<string>()
   const [error, setError] = useState<boolean>(false)
@@ -47,7 +47,7 @@ const LoginContent = () => {
     type === 'verification' && setVerification(value)
   }
 
-  const callback = (activeKey) => {
+  const callback = activeKey => {
     setActiveTab(activeKey)
     if (activeKey === '1') {
       const flag = user && pwd ? false : true
@@ -71,9 +71,11 @@ const LoginContent = () => {
   }, [phoneNumer, verification])
 
   const submit = async () => {
+    console.log(activeTab, 'activeTab')
     const params = {
-      mobilePhone: user,
-      password: pwd,
+      userName: user,
+      passWord: pwd,
+      loginType: +activeTab - 1 ? 'sms_code' : 'password'
     }
     const res = await login(params)
     setError(!res.success)

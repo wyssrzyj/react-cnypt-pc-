@@ -65,171 +65,173 @@ const FactoryTypes = (props: FactoryTypesProps) => {
   )
 }
 
-const FactorySearch = () => {
+export const FactorySearch = props => {
+  const { title = '按品类找工厂' } = props
+
   const femaleLists: Array<FactoryType> = [
     {
       title: '裤子',
       count: '221',
-      border: true,
+      border: true
     },
     {
       title: '半身裙',
       count: '212',
-      border: false,
+      border: false
     },
     {
       title: '套装/学生校服/工作支付',
       count: '189',
-      border: false,
+      border: false
     },
     {
       title: '大码女装',
       count: '145',
-      border: true,
+      border: true
     },
     {
       title: '毛衣',
       count: '132',
-      border: false,
+      border: false
     },
     {
       title: '蕾丝衫',
       count: '89',
-      border: true,
+      border: true
     },
     {
       title: '其他',
       count: '132',
       border: false,
-      color: '#ec808d',
-    },
+      color: '#ec808d'
+    }
   ]
 
   const maleLists: Array<FactoryType> = [
     {
       title: '休闲裤',
       count: '221',
-      border: true,
+      border: true
     },
     {
       title: 'T恤',
       count: '212',
-      border: false,
+      border: false
     },
     {
       title: '针织衫/毛衣',
       count: '189',
-      border: false,
+      border: false
     },
     {
       title: '民族服装',
       count: '145',
-      border: true,
+      border: true
     },
     {
       title: '夹克',
       count: '132',
-      border: false,
+      border: false
     },
     {
       title: '卫衣',
       count: '132',
-      border: true,
+      border: true
     },
     {
       title: '其他',
       count: '132',
       border: false,
-      color: '#02A7F0',
-    },
+      color: '#02A7F0'
+    }
   ]
 
   const childLists: Array<FactoryType> = [
     {
       title: '卫衣',
       count: '221',
-      border: true,
+      border: true
     },
     {
       title: '绒衫',
       count: '212',
-      border: false,
+      border: false
     },
     {
       title: '连身衣/爬服/哈衣',
       count: '189',
-      border: false,
+      border: false
     },
     {
       title: '亲子服装',
       count: '145',
-      border: true,
+      border: true
     },
     {
       title: '毛衣',
       count: '132',
-      border: false,
+      border: false
     },
     {
       title: '棉袄/棉服',
       count: '132',
-      border: true,
+      border: true
     },
     {
       title: '其他',
       count: '132',
       border: false,
-      color: '#CAF982',
-    },
+      color: '#CAF982'
+    }
   ]
 
   const clothLists: Array<FactoryType> = [
     {
       title: '帽子',
       count: '221',
-      border: true,
+      border: true
     },
     {
       title: '领带',
       count: '212',
-      border: false,
+      border: false
     },
     {
       title: '围巾类',
       count: '189',
-      border: true,
+      border: true
     },
     {
       title: '手套',
       count: '189',
-      border: false,
+      border: false
     },
     {
       title: '袜子',
       count: '145',
-      border: true,
+      border: true
     },
     {
       title: '鞋类',
       count: '132',
-      border: false,
+      border: false
     },
     {
       title: '皮带',
       count: '132',
-      border: true,
+      border: true
     },
     {
       title: '其他',
       count: '132',
       border: false,
-      color: '#FACD91',
-    },
+      color: '#FACD91'
+    }
   ]
 
   return (
     <div className={styles.factoryModule}>
-      <div className={styles.title}>按品类找工厂</div>
+      <div className={styles.title}>{title}</div>
       <div className={styles.moduleContent}>
         <div className={styles.menAndWomen}>
           <FactoryTypes
@@ -280,29 +282,29 @@ const NewFactorys = () => {
   const list = [
     {
       name: '中山市沙溪镇倩菲尔制衣厂',
-      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包',
+      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
     },
     {
       name: '中山市沙溪镇倩菲尔制衣厂',
-      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包',
+      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
     },
     {
       name: '中山市沙溪镇倩菲尔制衣厂',
-      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包',
+      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
     },
     {
       name: '中山市沙溪镇倩菲尔制衣厂',
-      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包',
+      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
     },
 
     {
       name: '中山市沙溪镇倩菲尔制衣厂',
-      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包',
+      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
     },
     {
       name: '中山市沙溪镇倩菲尔制衣厂',
-      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包',
-    },
+      info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
+    }
   ]
 
   return (

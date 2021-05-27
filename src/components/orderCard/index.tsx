@@ -18,19 +18,10 @@ const OrderCard = props => {
                 </span>
               </li>
             )
-          } else if (item.label === '总价') {
-            return (
-              <li key={index}>
-                <span>总价：</span>
-                <span>
-                  ￥ <b className={styles.amount}>{item.value}</b>
-                </span>
-              </li>
-            )
           } else {
             return (
               <li key={index}>
-                <span>{item.label && `${item.label}：`}</span>
+                <span>{item.label}：</span>
                 <span>{item.value}</span>
               </li>
             )

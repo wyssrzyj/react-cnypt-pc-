@@ -58,6 +58,22 @@ export default class RegisterStore {
       console.log(e)
     }
   }
+
+  //
+  // 用户注册 /user/register
+  @action checkUser = async (queryParam, queryType) => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/user/getUserByMobilePhone/${queryParam}/${queryType}`
+      )
+      if (res) {
+        console.log(res)
+      }
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 
 export const registerStore = new RegisterStore()

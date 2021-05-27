@@ -6,14 +6,14 @@ import { dFn, Params, ResponseProps } from './types'
 
 // TODO token是放在headers 还是在请求体中添加
 // TODO 通过setupProxy 设置代理
-const AUTH_TOKEN = 'xxx'
+const AUTH_TOKEN = getToken()
 
 const CancelToken = axios.CancelToken
 let cancels = []
 
 const instance = axios.create({})
 
-instance.defaults.headers.common['Authorization'] = AUTH_TOKEN
+instance.defaults.headers['Authorization'] = AUTH_TOKEN
 instance.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded'
 instance.defaults.timeout = 10000
@@ -80,11 +80,11 @@ const apiAxios = async (
   success?: dFn,
   failure?: dFn
 ) => {
-  const token = getToken()
+  // const token = getToken()
   params = filterNull(params)
-  if (token) {
-    params.token = token
-  }
+  // if (token) {
+  //   params.token = token
+  // }
   try {
     const responseData: ResponseProps = await axios({
       method: method,

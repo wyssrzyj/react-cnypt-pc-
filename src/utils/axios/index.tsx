@@ -93,11 +93,11 @@ const apiAxios = async (
       params: method === 'GET' || method === 'DELETE' ? params : null,
       // baseURL: root,
       withCredentials: true,
-      // headers: {
-      //   common: {
-      //     Authorization: AUTH_TOKEN
-      //   }
-      // },
+      headers: {
+        common: {
+          authorization: AUTH_TOKEN
+        }
+      },
       cancelToken: new CancelToken(function executor(c) {
         // executor 函数接收一个 cancel 函数作为参数
         cancels.push(c)

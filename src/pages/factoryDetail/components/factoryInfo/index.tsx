@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
 import { Tag } from 'antd'
 import { Icon } from '@/components'
+import axios from '@/utils/axios'
+import { getCurrentUser } from '@/utils/tool'
 import SwiperCore, {
   Navigation,
   Pagination,
   Scrollbar,
   A11y,
   Autoplay,
-  Thumbs,
+  Thumbs
 } from 'swiper'
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
@@ -18,22 +20,42 @@ import u1653 from '@/static/images/u1653.png'
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs])
 
 const FactoryInfo = () => {
+  const getFactoryDetails = async () => {
+    const currentUser = getCurrentUser()
+    console.log(
+      '🚀 ~ file: index.tsx ~ line 25 ~ getFactoryDetails ~ currentUser',
+      currentUser
+    )
+    const response = await axios.post('/api/factory/info/factory/details', {
+      dictCode: 'factory_tag',
+      factoryId: 1,
+      userId: ''
+    })
+    console.log(
+      '🚀 ~ file: index.tsx ~ line 24 ~ getFactoryDetails ~ response',
+      response
+    )
+
+    // const { data = {} } = res
+  }
+
   useEffect(() => {
     const galleryThumbs = new Swiper('#gallery-thumbs', {
       spaceBetween: 10,
       slidesPerView: 4,
-      watchSlidesVisibility: true, //防止不可点击
+      watchSlidesVisibility: true //防止不可点击
     })
     new Swiper('#gallery-top', {
       spaceBetween: 10,
       navigation: {
         nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        prevEl: '.swiper-button-prev'
       },
       thumbs: {
-        swiper: galleryThumbs,
-      },
+        swiper: galleryThumbs
+      }
     })
+    getFactoryDetails()
   }, [])
 
   return (

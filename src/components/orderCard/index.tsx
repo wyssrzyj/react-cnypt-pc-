@@ -1,27 +1,48 @@
 import React from 'react'
 import styles from './index.module.less'
 
-const OrderCard = (props) => {
-  const {list, describe, handleCard} = props;
-  return (<div className={styles.cardContainer} onClick={handleCard}>
-    <img className={styles.orderImg} src={require("./images/u787.png")} />
-    <h5 className={styles.orderTitle}>{describe}</h5>   
-    <ul className={styles.orderList}>
-      {list.map((item,index)=>{
-        if(item.label === "单价"){
-          return <li key={index}><span>单价：</span><span>￥ <b className={styles.amount}>{item.value}</b></span></li>
-        }else{
-          return <li key={index}><span>{item.label}：</span><span>{item.value}</span></li>
-        }
-      })}
-    </ul>
-    <div className={styles.orderFooter}>
-      <span>杭州高酷电子商务...</span>
-      <span>浙江 杭州市</span>
+const OrderCard = props => {
+  const { list, describe, handleCard } = props
+  return (
+    <div className={styles.cardContainer} onClick={handleCard}>
+      <img className={styles.orderImg} src={require('./images/u787.png')} />
+      <h5 className={styles.orderTitle}>{describe}</h5>
+      <ul className={styles.orderList}>
+        {list.map((item, index) => {
+          if (item.label === '单价') {
+            return (
+              <li key={index}>
+                <span>单价：</span>
+                <span>
+                  ￥ <b className={styles.amount}>{item.value}</b>
+                </span>
+              </li>
+            )
+          } else if (item.label === '总价') {
+            return (
+              <li key={index}>
+                <span>总价：</span>
+                <span>
+                  ￥ <b className={styles.amount}>{item.value}</b>
+                </span>
+              </li>
+            )
+          } else {
+            return (
+              <li key={index}>
+                <span>{item.label && `${item.label}：`}</span>
+                <span>{item.value}</span>
+              </li>
+            )
+          }
+        })}
+      </ul>
+      <div className={styles.orderFooter}>
+        <span>杭州高酷电子商务...</span>
+        <span>浙江 杭州市</span>
+      </div>
     </div>
-      
-  </div>)
+  )
 }
 
 export default OrderCard
-

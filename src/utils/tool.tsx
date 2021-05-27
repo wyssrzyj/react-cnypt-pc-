@@ -1,15 +1,15 @@
-import { useRef, useEffect, useCallback } from "react"
+import { useRef, useEffect, useCallback } from 'react'
 
 export const getToken = () => {
-  return localStorage.getItem("token")
+  return localStorage.getItem('token')
 }
 
 export const getLastUrl = () => {
-  return localStorage.getItem("lastUrl")
+  return localStorage.getItem('lastUrl')
 }
 
 export const getCurrentUser = () => {
-  const user = JSON.parse(JSON.stringify(localStorage.getItem("currentUser")))
+  const user = JSON.parse(JSON.stringify(localStorage.getItem('currentUser')))
   if (user) {
     return JSON.parse(user)
   }

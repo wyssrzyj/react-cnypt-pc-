@@ -78,8 +78,7 @@ module.exports = {
     hot: true, // 热更新
     port: 8002, // 端口号
     proxy: {
-      // '/api': 'http://8.136.225.110:8888/',
-      '/api/v1': 'http://localhost:5000/'
+      '/api': 'http://8.136.225.110:8888/'
     }
   },
   externals: {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styles from './newHeader.module.less'
 import { useHistory } from 'react-router'
 import { getCurrentUser } from '@/utils/tool'

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import styles from './index.module.less'
-import { Input, Button, Carousel, Tabs, Checkbox } from 'antd'
+import { Input, Button, Carousel, Tabs } from 'antd'
 import Icon from '@/components/Icon'
 // import { Link } from 'react-router-dom'
 import classNamess from 'classnames'
@@ -57,8 +57,6 @@ const LoginContent = () => {
       setDisabled(flag)
     }
   }
-
-  const automaticLogin = () => {}
 
   useEffect(() => {
     const flag = user && pwd ? false : true

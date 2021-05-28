@@ -1,94 +1,101 @@
 @import '@/css/common.less';
 
 .registerContainer {
-    width: 100%;
+  width: 100%;
+
+  :global {
+    .ant-form-item {
+      height: 64px !important;
+      margin-bottom: 0 !important;
+    }
+  }
 }
 
 .content {
-    display: flex;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 1200px;
-    height: calc(100vh - 50px - 120px);
-    margin: 0 auto;
-    background: @white;
-    background-image: url(./images/u168.jpg);
-    background-repeat: round;
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 1200px;
+  height: calc(100vh - 50px - 120px);
+  margin: 0 auto;
+  background: @white;
+  background-image: url(./images/u168.jpg);
+  background-repeat: round;
 
-    :global {
-        .ant-input {
-            height: 40px;
-        }
-
-        .nc_scale {
-            width: 320px !important;
-            height: 40px !important;
-        }
-
-        .btn_slide {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 40px !important;
-        }
-
-        .nc-lang-cnt {
-            height: 40px !important;
-            line-height: 40px !important;
-        }
-
-        .nc-container .nc_scale .btn_ok {
-            height: 40px !important;
-            line-height: 40px !important;
-        }
-
-        .nc-container .nc_scale .btn_ok {
-            color: @blueBg !important;
-        }
-
-        .nc_bg {
-            background: @blueBg !important;
-        }
+  :global {
+    .ant-input {
+      height: 40px;
     }
+
+    .nc_scale {
+      width: 320px !important;
+      height: 40px !important;
+    }
+
+    .btn_slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px !important;
+    }
+
+    .nc-lang-cnt {
+      height: 40px !important;
+      line-height: 40px !important;
+    }
+
+    .nc-container .nc_scale .btn_ok {
+      height: 40px !important;
+      line-height: 40px !important;
+    }
+
+    .nc-container .nc_scale .btn_ok {
+      color: @blueBg !important;
+    }
+
+    .nc_bg {
+      background: @blueBg !important;
+    }
+  }
 }
 
 .form {
-    width: 320px;
-    margin: 0 auto;
+  width: 320px;
+  margin: 0 auto;
 }
 
 .title {
-    margin-bottom: 12px;
-    font-size: 28px;
-    color: @66gray;
-    text-align: center;
+  margin-bottom: 12px;
+  color: @66gray;
+  font-size: 28px;
+  text-align: center;
 }
 
 .agreeBtn {
-    width: 100%;
-    height: 40px;
-    margin-top: 24px;
-    font-size: 16px;
+  width: 100%;
+  height: 40px;
+  margin-top: 24px;
+  font-size: 16px;
 }
 
 .blueBtn {
-    background: @blueBg !important;
-    border-color: @blueBg !important;
+  background: @blueBg !important;
+  border-color: @blueBg !important;
 }
 
 .fastLogin {
-    padding: 16px;
-    text-align: right;
+  padding: 16px;
+  text-align: right;
 
-    span {
-        color: @blueBg;
-        cursor: pointer;
-    }
+  span {
+    color: @blueBg;
+    cursor: pointer;
+  }
 }
 
 .verifyBtn {
-    width: 102px;
-    height: inherit;
+  width: 102px;
+  height: inherit;
 }

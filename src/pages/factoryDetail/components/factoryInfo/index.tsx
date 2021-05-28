@@ -1,4 +1,5 @@
 import React, { useState, useEffect, memo } from 'react'
+import { useHistory } from 'react-router'
 import { Tag } from 'antd'
 import { HeartFilled } from '@ant-design/icons'
 import classNames from 'classnames'
@@ -24,6 +25,7 @@ import u1653 from '@/static/images/u1653.png'
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs])
 
 const FactoryInfo = memo(() => {
+  const history = useHistory()
   const [factoryInfo, setFactoryInfo] = useState<any>({})
   const currentUser = getCurrentUser() || {}
 
@@ -55,6 +57,10 @@ const FactoryInfo = memo(() => {
         return str
       }
     }
+  }
+
+  const goLogin = () => {
+    history.push('/login')
   }
 
   useEffect(() => {
@@ -198,7 +204,7 @@ const FactoryInfo = memo(() => {
             className={classNames(styles.firstLineItem, styles.firstLineRight)}
           >
             {isEmpty(currentUser) && (
-              <span className={styles.firstLineIcon}>
+              <span className={styles.firstLineIcon} onClick={goLogin}>
                 <Icon className={styles.icon} type="jack-login-settings" />
                 登录查看完整联系方式
               </span>

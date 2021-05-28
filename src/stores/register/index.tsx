@@ -21,9 +21,6 @@ export default class RegisterStore {
   @action sendVerifyCode = async (mobile: string | number) => {
     try {
       const res: ResponseProps = await axios.get(`/api/sms/send-code/${mobile}`)
-      if (res) {
-        console.log(res)
-      }
       return res
     } catch (e) {
       console.log(e)
@@ -50,26 +47,22 @@ export default class RegisterStore {
   @action register = async (params: RegisterParams) => {
     try {
       const res: ResponseProps = await axios.post(`/api/user/register`, params)
-      if (res) {
-        console.log(res)
-      }
+      console.log(res, '======')
       return res
     } catch (e) {
-      console.log(e)
+      console.log(e, '------')
+      // message.error()
     }
   }
 
-  //
   // 用户注册 /user/register
   @action checkUser = async (queryParam, queryType) => {
     try {
-      const res: ResponseProps = await axios.post(
+      const res: ResponseProps = await axios.get(
         `/api/user/getUserByMobilePhone/${queryParam}/${queryType}`
       )
-      if (res) {
-        console.log(res)
-      }
-      return res
+
+      return res.data
     } catch (e) {
       console.log(e)
     }

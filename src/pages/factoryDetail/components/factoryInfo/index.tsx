@@ -1,5 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import { Tag } from 'antd'
+import { HeartFilled } from '@ant-design/icons'
+import classNames from 'classnames'
+import { isArray, isEmpty, isNil } from 'lodash'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
@@ -15,28 +18,43 @@ import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
 import './factoryDetail.less'
 import styles from './index.module.less'
+import './style.less'
 import u1653 from '@/static/images/u1653.png'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs])
 
-const FactoryInfo = () => {
+const FactoryInfo = memo(() => {
+  const [factoryInfo, setFactoryInfo] = useState<any>({})
+  const currentUser = getCurrentUser() || {}
+
   const getFactoryDetails = async () => {
-    const currentUser = getCurrentUser()
-    console.log(
-      '🚀 ~ file: index.tsx ~ line 25 ~ getFactoryDetails ~ currentUser',
-      currentUser
-    )
-    const response = await axios.post('/api/factory/info/factory/details', {
+    const { userId } = currentUser
+    const response = await axios.post('/api/factory/info/details', {
       dictCode: 'factory_tag',
       factoryId: 1,
-      userId: ''
+      userId
     })
-    console.log(
-      '🚀 ~ file: index.tsx ~ line 24 ~ getFactoryDetails ~ response',
-      response
-    )
+    const { success, data = {} } = response
+    if (success) {
+      setFactoryInfo({ ...data })
+    }
+  }
 
-    // const { data = {} } = res
+  const notLoggedIn = (str, frontLen, endLen) => {
+    if (!isNil(str)) {
+      if (isEmpty(currentUser)) {
+        var len = str.length - frontLen - endLen
+        var xing = ''
+        for (var i = 0; i < len; i++) {
+          xing += '*'
+        }
+        return (
+          str.substring(0, frontLen) + xing + str.substring(str.length - endLen)
+        )
+      } else {
+        return str
+      }
+    }
   }
 
   useEffect(() => {
@@ -93,8 +111,8 @@ const FactoryInfo = () => {
         </div>
         <div className={styles.infoRight}>
           <div className={styles.infoTitle}>
-            <b className={styles.factoryName}>广州市嵘峥服饰有限公司</b>
-            <span className={styles.realName}>
+            <b className={styles.factoryName}>{factoryInfo.factoryName}</b>
+            {/* <span className={styles.realName}>
               <Icon className={styles.infoIcon} type="jack-shiming" />
               实名
             </span>
@@ -104,121 +122,122 @@ const FactoryInfo = () => {
             </span>
             <span>
               <b className={styles.score}>4.7</b>分
-            </span>
+            </span> */}
           </div>
           <ul className={styles.factoryInfoList}>
             <li>
               <span>工厂地区：</span>
-              <span>广东省广州市白云区</span>
+              <span>{factoryInfo.factoryDistrict}</span>
             </li>
-            <li>
+            {/* <li>
               <span>加工行业：</span>
               <span>生产企业或加工个体户</span>
-            </li>
+            </li> */}
             <li>
               <span>生产人数：</span>
-              <span>101~200人</span>
+              <span>{factoryInfo.staffNumber}人</span>
             </li>
             <li>
-              <span>接单类型：</span>
-              <span>主要承接经销订单，另外也做清加工订单</span>
+              <span>加工类型：</span>
+              <span>
+                {isArray(factoryInfo.prodTypeRemarksList) &&
+                  factoryInfo.prodTypeRemarksList.join(',')}
+              </span>
             </li>
             <li>
               <span>主营类别：</span>
               <span>
-                <Tag className={styles.factoryInfoTag} color="#f2f2f2">
-                  衬衫
-                </Tag>
-                <Tag className={styles.factoryInfoTag} color="#f2f2f2">
-                  衬衫
-                </Tag>
-                <Tag className={styles.factoryInfoTag} color="#f2f2f2">
-                  衬衫
-                </Tag>
-                <Tag className={styles.factoryInfoTag} color="#f2f2f2">
-                  衬衫
-                </Tag>
+                {factoryInfo.factoryCatalogList &&
+                  factoryInfo.factoryCatalogList.map(item => (
+                    <Tag
+                      key={item.name}
+                      className={styles.factoryInfoTag}
+                      color="#f2f2f2"
+                    >
+                      {item.name}
+                    </Tag>
+                  ))}
               </span>
             </li>
             <li>
               <span>企业标签：</span>
               <span>
-                <Tag className={styles.factoryInfoTag} color="#f2f2f2">
-                  衬衫
-                </Tag>
-                <Tag className={styles.factoryInfoTag} color="#f2f2f2">
-                  衬衫
-                </Tag>
-                <Tag className={styles.factoryInfoTag} color="#f2f2f2">
-                  衬衫
-                </Tag>
-                <Tag className={styles.factoryInfoTag} color="#f2f2f2">
-                  衬衫
-                </Tag>
+                {factoryInfo.tagDictItemList &&
+                  factoryInfo.tagDictItemList.map(item => (
+                    <Tag
+                      key={item.value}
+                      className={styles.factoryInfoTag}
+                      color="#f2f2f2"
+                    >
+                      {item.label}
+                    </Tag>
+                  ))}
               </span>
             </li>
             <li>
               <span>空档期：</span>
-              <span>2021.11.17 - 2022.01.15</span>
+              <span>
+                {factoryInfo.gapStartDate} - {factoryInfo.gapEndDate}
+              </span>
             </li>
-            <li>
-              <span className={styles.label}>300件起订</span>
-              <span className={styles.label}>支持贴牌</span>
-              <span className={styles.label}>可接外贸单</span>
-              <span className={styles.label}>来样加工</span>
-              <span className={styles.label}>来图加工</span>
-            </li>
+            <li>{factoryInfo.factoryServiceTag}</li>
           </ul>
         </div>
       </div>
       <div className={styles.factoryInfoMan}>
         <div className={styles.firstLine}>
-          <div>
+          <div className={styles.firstLineItem}>
             <span>联系人：</span>
-            <span>廖洪莲</span>
+            <span>{factoryInfo.realName}</span>
           </div>
-          <div>
+          <div className={styles.firstLineItem}>
             <span>手机号码：</span>
-            <span>133****5529</span>
+            <span>{notLoggedIn(factoryInfo.mobilePhone, 3, 4)}</span>
           </div>
-          <div>
+          <div
+            className={classNames(styles.firstLineItem, styles.firstLineRight)}
+          >
+            {isEmpty(currentUser) && (
+              <span className={styles.firstLineIcon}>
+                <Icon className={styles.icon} type="jack-login-settings" />
+                登录查看完整联系方式
+              </span>
+            )}
+
             <span className={styles.firstLineIcon}>
-              <Icon className={styles.icon} type="jack-login-settings" />
-              登录查看完整联系方式
-            </span>
-            <span className={styles.firstLineIcon}>
-              <Icon className={styles.icon} type="jack-guanzhu" />
+              {factoryInfo.followStatus ? (
+                <HeartFilled style={{ color: 'gold', marginRight: 12 }} />
+              ) : (
+                <Icon className={styles.icon} type="jack-guanzhu" />
+              )}
               关注
             </span>
-            <span className={styles.firstLineIcon}>
+            {/* <span className={styles.firstLineIcon}>
               <Icon className={styles.icon} type="jack-liuyan" />
               留言
-            </span>
+            </span> */}
           </div>
         </div>
         <div className={styles.secondLine}>
           <div className={styles.secondLineItem}>
             <span>电子邮箱：</span>
-            <span>28019*****qq.com</span>
+            <span>{notLoggedIn(factoryInfo.email, 1, 7)}</span>
           </div>
           <div className={styles.secondLineItem}>
             <span>联系电话：</span>
-            <span>020-6****286</span>
+            <span>{notLoggedIn(factoryInfo.contactPhone, 5, 1)}</span>
           </div>
         </div>
         <div className={styles.secondLine}>
           <div>
             <span>工厂地址：</span>
-            <span>
-              广东省广州市白云区 广州市白云区广州市佳吉服装有限公司
-            </span>{' '}
-            &nbsp;&nbsp;&nbsp;
+            <span>{factoryInfo.address}</span> &nbsp;&nbsp;&nbsp;
             <a>地图查看 {'>'}</a>
           </div>
         </div>
       </div>
     </div>
   )
-}
+})
 
 export default FactoryInfo

@@ -1,3 +1,4 @@
+/* eslint-disable */
 const common = require('./webpack.common.js')
 const { merge } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -40,7 +41,7 @@ function getCSSModuleLocalIdent(context, localIdentName, localName, options) {
 const config = merge(common, {
   mode: 'production',
   stats: {
-    children: true, // false 不输出子模块的打包信息
+    children: true // false 不输出子模块的打包信息
   },
   // devtool: 'cheap-module-source-map',
   module: {
@@ -48,7 +49,7 @@ const config = merge(common, {
       {
         test: /\.css$/,
         exclude: /\.module\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
       },
       {
         test: /\.module\.css$/,
@@ -59,12 +60,12 @@ const config = merge(common, {
             options: {
               modules: {
                 // localIdentName: '[name]_[local]_[hash:base64:5]',
-                getLocalIdent: getCSSModuleLocalIdent,
-              },
-            },
+                getLocalIdent: getCSSModuleLocalIdent
+              }
+            }
           },
-          'postcss-loader',
-        ],
+          'postcss-loader'
+        ]
       },
       {
         test: /\.less$/,
@@ -77,11 +78,11 @@ const config = merge(common, {
             loader: 'less-loader',
             options: {
               lessOptions: {
-                javascriptEnabled: true,
-              },
-            },
-          },
-        ],
+                javascriptEnabled: true
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.module\.less$/,
@@ -91,39 +92,39 @@ const config = merge(common, {
             loader: 'css-loader',
             options: {
               modules: {
-                getLocalIdent: getCSSModuleLocalIdent,
-              },
-            },
+                getLocalIdent: getCSSModuleLocalIdent
+              }
+            }
           },
           'postcss-loader',
           {
             loader: 'less-loader',
             options: {
               lessOptions: {
-                javascriptEnabled: true,
-              },
-            },
-          },
-        ],
+                javascriptEnabled: true
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.s[ac]ss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-      },
-    ],
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
   },
   plugins: [
     new CleanWebpackPlugin(),
     new webpackbar(), // 打包时美化进度条
     new MiniCssExtractPlugin({
       filename: 'css/[name].[chunkhash:8].css', // 生成的文件名
-      chunkFilename: 'css/[id].[hash].css',
+      chunkFilename: 'css/[id].[hash].css'
     }),
     // new BundleAnalyzerPlugin({
     //     analyzerMode: "disable", // 不启用展示打包报告的web服务器
     //     generateStatsFile: true // 生成报告文件
     // }),
-    new CompressionPlugin(),
+    new CompressionPlugin()
   ],
   optimization: {
     minimize: true,
@@ -134,13 +135,13 @@ const config = merge(common, {
           // https://github.com/terser/terser#minify-options
           compress: {
             warnings: false, // 删除无用代码时是否给出警告
-            drop_debugger: true, // 删除所有的debugger
+            drop_debugger: true // 删除所有的debugger
             // drop_console: true, // 删除所有的console.*
             // pure_funcs: ["console.log"], // 删除所有的console.log
-          },
-        },
+          }
+        }
       }),
-      new CssMinimizerPlugin(),
+      new CssMinimizerPlugin()
     ],
     moduleIds: 'deterministic',
     chunkIds: 'deterministic',
@@ -159,20 +160,20 @@ const config = merge(common, {
         defaultVendors: {
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-          reuseExistingChunk: true,
+          reuseExistingChunk: true
         },
         default: {
           minChunks: 2,
           priority: -20,
-          reuseExistingChunk: true,
-        },
-      },
+          reuseExistingChunk: true
+        }
+      }
     },
     runtimeChunk: {
-      name: (entrypoint) => `runtime-${entrypoint.name}`,
+      name: entrypoint => `runtime-${entrypoint.name}`
     },
-    usedExports: true,
-  },
+    usedExports: true
+  }
 })
 
 module.exports = config

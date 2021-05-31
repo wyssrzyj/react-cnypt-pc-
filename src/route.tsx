@@ -38,6 +38,11 @@ const Platform = Loadable({
   loader: () => import('@/pages/platform')
 })
 
+// 控制台
+const ControlPanel = Loadable({
+  loader: () => import('@/pages/controlPanel')
+})
+
 const RouteList = () => {
   return (
     <Switch>
@@ -48,6 +53,7 @@ const RouteList = () => {
       <Route path="/register" component={Register} />
       <Route path="/order-detail" component={OrderDetail} />
       <Route path="/factory-detail" component={FactoryDetail} />
+      <Route path="/control-panel" component={ControlPanel} />
       <Redirect to="/platform" />
     </Switch>
   )

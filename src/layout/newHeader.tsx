@@ -1,7 +1,9 @@
 import React from 'react'
-import styles from './newHeader.module.less'
+import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
+import { Menu, Dropdown } from 'antd'
 import { getCurrentUser } from '@/utils/tool'
+import styles from './newHeader.module.less'
 
 const Header = () => {
   const currentUser = getCurrentUser() || {}
@@ -11,6 +13,13 @@ const Header = () => {
   const toLogin = () => {
     history.push('/login')
   }
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <Link to="/control-panel">控制台</Link>
+      </Menu.Item>
+    </Menu>
+  )
 
   return (
     <header className={styles.header}>
@@ -32,7 +41,9 @@ const Header = () => {
 
       <div className={styles.chunks}>
         <span className={styles.headerChunk}>帮助中心</span>
-        <span className={styles.headerChunk}>会员中心</span>
+        <Dropdown overlay={menu}>
+          <span className={styles.headerChunk}>会员中心</span>
+        </Dropdown>
       </div>
     </header>
   )

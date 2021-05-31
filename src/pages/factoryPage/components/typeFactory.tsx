@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './typeFactory.module.less'
 import CHILD from '../img/child.png'
 import FEMALE from '../img/female.png'
 import MALE from '../img/male.png'
 import CLOTH from '../img/cloth.png'
+import { useStores } from '@/utils/mobx'
 
 type FactoryType = {
   title: string
@@ -279,7 +280,19 @@ export const FactorySearch = props => {
 }
 
 const NewFactorys = () => {
-  const list = [
+  const { factoryPageStore } = useStores()
+  const { getNewFactorys } = factoryPageStore
+
+  const [list, setList] = useState<Array<any>>([])
+
+  useEffect(() => {
+    ;(async () => {
+      const data = await getNewFactorys(7)
+      setList(data)
+    })()
+  }, [])
+
+  const _list = [
     {
       name: '中山市沙溪镇倩菲尔制衣厂',
       info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
@@ -312,10 +325,13 @@ const NewFactorys = () => {
       <div className={styles.newTitle}>最新工厂</div>
       <div>
         {list.map((item, idx) => {
+          item.factoryCategoryList = item.factoryCategoryList || []
           return (
             <div key={idx} className={styles.newFactoryItem}>
-              <div className={styles.factoryName}>{item.name}</div>
-              <div className={styles.factoryInfo}>{item.info}</div>
+              <div className={styles.factoryName}>{item.factoryName}</div>
+              <div className={styles.factoryInfo}>
+                {item.factoryCategoryList.join(',')}
+              </div>
             </div>
           )
         })}

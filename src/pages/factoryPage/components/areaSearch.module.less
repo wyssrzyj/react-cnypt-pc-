@@ -60,7 +60,7 @@
 .areaTab {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   box-sizing: border-box;
   width: 180px;
   height: 64px;
@@ -123,9 +123,14 @@
 }
 
 .province {
+  min-width: 68px;
   padding-right: 8px;
   font-weight: bold;
   font-size: 20px;
+}
+
+.count {
+  padding-top: 4px;
 }
 
 .city {
@@ -140,7 +145,7 @@
     border-right: none;
   }
 
-  &:nth-last-child(1) {
+  &:nth-child(8) {
     color: #c280ff;
     border-right: none;
   }
@@ -149,6 +154,10 @@
     margin-bottom: 16px;
     color: #333;
   }
+
+  &:nth-last-child(1) {
+    border-right: none;
+  }
 }
 
 .areaChunkR {
@@ -156,4 +165,13 @@
   flex-wrap: wrap;
   width: 460px;
   padding-left: 48px;
+}
+
+.allFactorys {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  color: #333;
+  font-size: 14px;
+  line-height: 24px;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable */
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 require('@babel/polyfill')
@@ -89,9 +90,9 @@ module.exports = {
     // antd: "antd",
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'], //这几个后缀名的文件后缀可以省略不写
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'], // 这几个后缀名的文件后缀可以省略不写
     alias: {
-      '@': path.join(__dirname, '../src'), //这样 @就表示根目录src这个路径
+      '@': path.join(__dirname, '../src'), // 这样 @就表示根目录src这个路径
       process: 'process/browser'
     },
     fallback: { assert: require.resolve('assert/') }

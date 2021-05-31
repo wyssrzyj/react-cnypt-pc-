@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Tabs, Table } from 'antd'
 import classNames from 'classnames'
-import { find } from 'lodash'
+import { find, isNil, isArray } from 'lodash'
 import SwiperCore, {
   Navigation,
   Pagination,
@@ -11,6 +11,7 @@ import SwiperCore, {
 } from 'swiper'
 
 import Swiper from 'swiper'
+import axios from '@/utils/axios'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
@@ -26,86 +27,93 @@ const tabList = [
   { value: '车间设备', key: 'equipment' },
   { value: '资质证书', key: 'certificate' }
 ]
+const introductionMap = [
+  { value: 'yearOutputValue', label: '年交易额' },
+  { value: 'staffNumber', label: '员工总数' },
+  { value: 'productLineNum', label: '生产流水线' },
+  { value: 'factoryArea', label: '厂房面积' },
+  { value: 'supportDesign', label: '支持打样' },
+  { value: 'totalLocation', label: '加工设备' },
+  { value: 'manufactureBrand', label: '代工品牌' },
+  { value: 'factoryBrand', label: '商标/品牌' },
+  { value: 'factoryCertificateLabels', label: '资质证书' }
+]
+
+const abilityMap = [
+  { value: 'staffNumber', label: '生产人数' },
+  { value: 'qcPersonNumber', label: '检验人数' },
+  { value: 'yearOutputProd', label: '年产值' },
+  { value: 'designPersonNumber', label: '打样人员数' },
+  { value: 'qcGroupType', label: '检验小组' },
+  { value: 'materialSupplyTime', label: '原材料供应时间' },
+  { value: 'craft', label: '特殊工艺' }
+]
+const conditionMap = [
+  { value: 'customMoq', label: '定制起订量' },
+  { value: 'hasVatInvoice', label: '增值税发票' },
+  { value: 'deliveryType', label: '交货方式' },
+  { value: 'factoryInspectType', label: '验厂方式' },
+  { value: 'oemMoq', label: '贴牌起订量' },
+  { value: 'invoicePoint', label: '发票点数' },
+  { value: 'payType', label: '付款方式' },
+  { value: 'shortestDeliveryTime', label: '最短交货期' }
+]
+
 const TableComponent = props => {
-  const { activeKey } = props
+  const { activeKey, current } = props
+  const currentMap =
+    activeKey === 'introduction'
+      ? introductionMap
+      : activeKey === 'ability'
+      ? abilityMap
+      : conditionMap
   return (
     <>
-      {activeKey === 'introduction' && (
-        <div>
-          我们是在广州白云区的女装源头生产厂家，专业做中高端女装产品的，现货，贴牌生产，有设计，打样，车间，后整，成品仓一系列服务。主要生产中高端女装连衣裙，时尚套装，半身裙的一个源头工厂。
-        </div>
-      )}
+      {activeKey === 'introduction' && <div>{current.enterpriseDesc}</div>}
       <div className={styles.introduceInfo}>
         <ul
           className={classNames(styles.introduceBox, styles.introduceBoxLeft)}
         >
-          <li>
-            <div className={styles.boxLabel}>年交易额</div>
-            <div className={styles.boxValue}>1000万~2000万</div>
-          </li>
-          <li>
-            <div className={styles.boxLabel}>员工总数</div>
-            <div className={styles.boxValue}>101人~200人</div>
-          </li>
-          <li>
-            <div className={styles.boxLabel}>生产流水线</div>
-            <div className={styles.boxValue}>2条</div>
-          </li>
+          {currentMap.map((item, index) => {
+            const name = isNil(current[item.value]) ? undefined : item.label
+            let newValue
+            if (
+              item.value === 'supportDesign' ||
+              item.value === 'hasVatInvoice'
+            ) {
+              newValue = current[item.value] ? '是' : '否'
+            } else if (item.value === 'factoryCertificateLabels') {
+              newValue = isArray(current[item.value])
+                ? current[item.value].join('、')
+                : current[item.value]
+            } else {
+              newValue = current[item.value]
+            }
+            return (
+              <li key={index}>
+                <div className={styles.boxLabel}>{name}</div>
+                <div className={styles.boxValue}>{newValue}</div>
+              </li>
+            )
+          })}
         </ul>
-        <ul
+        {/* <ul
           className={classNames(styles.introduceBox, styles.introduceBoxRight)}
         >
-          <li>
-            <div className={styles.boxLabel}>厂房面积</div>
-            <div className={styles.boxValue}>1000平米</div>
-          </li>
-          <li>
-            <div className={styles.boxLabel}>支持打样</div>
-            <div className={styles.boxValue}>是</div>
-          </li>
-          <li>
-            <div className={styles.boxLabel}>加工设备</div>
-            <div className={styles.boxValue}>150台</div>
-          </li>
-        </ul>
-        <ul
+        </ul> */}
+        {/* <ul
           className={classNames(styles.introduceBox, styles.introduceBoxBottom)}
         >
-          <li>
-            <div className={styles.boxLabelBottom}>代工品牌(1)</div>
-            <div className={styles.boxValueBottom}>TAM*S糖力</div>
-          </li>
-          <li>
-            <div className={styles.boxLabelBottom}>商标/品牌(1)</div>
-            <div className={styles.boxValueBottom}>AISHANG MEYZIS</div>
-          </li>
-          <li>
-            <div className={styles.boxLabelBottom}>资质证书(1)</div>
-            <div className={styles.boxValueBottom}>质检报告</div>
-          </li>
-        </ul>
+        </ul> */}
       </div>
     </>
   )
 }
-const WorkshopEquipment = () => {
-  const rowKey = 'key'
-  const dataSource = [
-    {
-      key: '1',
-      name: '胡彦斌',
-      number: 32,
-      brand: '西湖区湖底公园1号',
-      model: 'XC-3020G'
-    },
-    {
-      key: '2',
-      name: '胡彦斌',
-      number: 32,
-      brand: '西湖区湖底公园1号',
-      model: 'XC-3020G'
-    }
-  ]
+const WorkshopEquipment = props => {
+  const {
+    current: { equipment }
+  } = props
+  const rowKey = 'id'
 
   const columns = [
     {
@@ -140,17 +148,13 @@ const WorkshopEquipment = () => {
         prevEl: '.swiper-button-prev'
       },
       loop: true
-      // autoplay: {
-      //   delay: 2000,
-      //   disableOnInteraction: true,
-      // },
     })
   }, [])
   return (
     <div>
       <Table
         rowKey={rowKey}
-        dataSource={dataSource}
+        dataSource={equipment}
         columns={columns}
         pagination={false}
       />
@@ -191,25 +195,128 @@ const WorkshopEquipment = () => {
   )
 }
 
-const QualificationCertificate = () => {
+const QualificationCertificate = props => {
+  const {
+    current: { certificate = [] }
+  } = props
+  console.log(
+    '🚀 ~ file: index.tsx ~ line 202 ~ QualificationCertificate ~ current',
+    certificate
+  )
   return (
     <div className={styles.qualificationCertificate}>
-      <div className={styles.certificateBox}>
-        <img
-          className={styles.certificateImg}
-          src={require('@/static/images/u994.png')}
-        />
-        <span>生产资质</span>
-      </div>
+      {certificate.map(item => (
+        <div key={item.certificationName} className={styles.certificateBox}>
+          <img
+            className={styles.certificateImg}
+            src={require('@/static/images/u994.png')}
+          />
+          <span>{item.certificationLabel}</span>
+        </div>
+      ))}
     </div>
   )
 }
 
 const FactoryIntroduce = () => {
   const [activeTab, setActiveTab] = useState('introduction')
+  const [introductions, setIntroductions] = useState<any>({})
+  const [ability, setAbility] = useState<any>({})
+  const [conditions, setConditions] = useState<any>({})
+  const [equipments, setEquipments] = useState<any>([])
+  const [certificate, setCertificate] = useState<any>([])
+  const [currentObj, setCurrentObj] = useState<any>({})
+
   const onTabChange = activeKey => {
+    const newCurrent = {
+      introduction: { ...introductions },
+      ability: { ...ability },
+      condition: { ...conditions },
+      equipment: [...equipments],
+      certificate: { ...certificate }
+    }
     setActiveTab(activeKey)
+    if (activeKey === 'equipment') {
+      const equipment = { equipment: [...equipments] }
+      setCurrentObj({ ...equipment })
+    } else if (activeKey === 'certificate') {
+      const newCertificate = { certificate: [...certificate] }
+      setCurrentObj({ ...newCertificate })
+    } else {
+      setCurrentObj({ ...newCurrent[activeKey] })
+    }
   }
+
+  // 企业简介
+  const getIntroduction = async () => {
+    const response = await axios.get(
+      '/api/factory/enterprise/get-by-factory-id',
+      {
+        factoryId: 1
+      }
+    )
+    const { success, data = {} } = response
+    if (success) {
+      setIntroductions({ ...data })
+      setCurrentObj({ ...data })
+    }
+  }
+  //生产能力
+  const getAbility = async () => {
+    const response = await axios.get(
+      '/api/factory/info/get-capacity-factory-id',
+      {
+        factoryId: 1
+      }
+    )
+    const { success, data = {} } = response
+    if (success) {
+      setAbility({ ...data })
+    }
+  }
+
+  // 合作条件
+  const getCooperation = async () => {
+    const response = await axios.get('/api/factory/cooperation-condition/get', {
+      id: '1398111476140589058'
+    })
+    const { success, data = {} } = response
+    if (success) {
+      setConditions({ ...data })
+    }
+  }
+  // 车间设备
+  const getEquipment = async () => {
+    const response = await axios.post('/api/factory/equipment/list', {
+      factoryId: 1
+    })
+    const { success, data = {} } = response
+    if (success) {
+      const { records } = data
+      setEquipments([...records])
+    }
+  }
+  // 资质证书
+  const getCertificate = async () => {
+    const response = await axios.get(
+      '/api/factory/factory-certificate/list-factory-id',
+      {
+        factoryId: 1
+      }
+    )
+    const { success, data = {} } = response
+    if (success) {
+      setCertificate([...data])
+    }
+  }
+
+  useEffect(() => {
+    getIntroduction()
+    getCooperation()
+    getAbility()
+    getEquipment()
+    getCertificate()
+  }, [])
   return (
     <div className={styles.factoryIntroduce}>
       <Tabs activeKey={activeTab} tabBarGutter={20} onChange={onTabChange}>
@@ -223,12 +330,16 @@ const FactoryIntroduce = () => {
               {(activeTab === 'introduction' ||
                 activeTab === 'ability' ||
                 activeTab === 'condition') && (
-                <TableComponent activeKey={activeTab} />
+                <TableComponent activeKey={activeTab} current={currentObj} />
               )}
               {/* 车间设备 */}
-              {activeTab === 'equipment' && <WorkshopEquipment />}
+              {activeTab === 'equipment' && (
+                <WorkshopEquipment current={currentObj} />
+              )}
               {/* 资质证书 */}
-              {activeTab === 'certificate' && <QualificationCertificate />}
+              {activeTab === 'certificate' && (
+                <QualificationCertificate current={currentObj} />
+              )}
             </div>
           </TabPane>
         ))}

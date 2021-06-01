@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import styles from './customTable.module.less'
-import type { ActionType, ProColumns } from '@ant-design/pro-table'
+import type { ProColumns } from '@ant-design/pro-table'
 import { EditableProTable } from '@ant-design/pro-table'
 import { Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
@@ -25,8 +25,6 @@ const defaultData: DataSourceType[] = new Array(2).fill(1).map((_, index) => {
 })
 
 const CustomTable = () => {
-  const actionRef = useRef<ActionType>()
-
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     defaultData.map(item => item.id)
   )
@@ -108,10 +106,10 @@ const CustomTable = () => {
         editable={{
           type: 'multiple', // single multiple
           editableKeys, // 编辑的行的id集合
-          actionRender: (row, config, defaultDoms) => {
+          actionRender: (_row, _config, defaultDoms) => {
             return [defaultDoms.delete]
           },
-          onValuesChange: (record, recordList) => {
+          onValuesChange: (_record, recordList) => {
             setDataSource(recordList)
           },
           onChange: setEditableRowKeys

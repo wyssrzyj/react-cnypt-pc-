@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Form,
   Input,
@@ -15,6 +15,7 @@ import { get } from 'lodash'
 import { getCurrentUser } from '@/utils/tool'
 import cityData from '@/static/cityData'
 import ProcessingTypeCom from '../processingTypeCom'
+import MainCategoriesCom from '../mainCategoriesCom'
 import styles from './index.module.less'
 
 const { Option } = Select
@@ -62,10 +63,9 @@ const EnterpriseInfo = () => {
   const { mobilePhone } = currentUser
   const [enterpriseType, setEnterpriseType] = useState<string>('process')
   const [loading, setLoading] = useState(false)
-  const [imageUrl, setmageUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
 
-  const onValuesChange = (changedValues, allValues) => {
-    console.log({ changedValues, allValues })
+  const onValuesChange = changedValues => {
     if (get(changedValues, 'enterpriseType')) {
       setEnterpriseType(changedValues.enterpriseType)
     }
@@ -77,6 +77,10 @@ const EnterpriseInfo = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   )
+  useEffect(() => {
+    setLoading(false)
+    setImageUrl('')
+  }, [])
   return (
     <div className={styles.enterpriseInfo}>
       <Form
@@ -130,7 +134,7 @@ const EnterpriseInfo = () => {
         {enterpriseType === 'process' && (
           <>
             <Form.Item
-              label="生产类型"
+              label="工厂类型"
               name="productionType"
               rules={[{ required: true, message: '请选择生产类型！' }]}
             >
@@ -142,7 +146,7 @@ const EnterpriseInfo = () => {
               name="mainCategories"
               rules={[{ required: true, message: '请选择主营类别！' }]}
             >
-              <Checkbox.Group options={typeOptions} />
+              <MainCategoriesCom />
             </Form.Item>
 
             <Form.Item
@@ -150,7 +154,7 @@ const EnterpriseInfo = () => {
               name="processingType"
               rules={[{ required: true, message: '请选择加工类型！' }]}
             >
-              <ProcessingTypeCom/>
+              <ProcessingTypeCom />
             </Form.Item>
 
             <Form.Item
@@ -177,7 +181,7 @@ const EnterpriseInfo = () => {
                 placeholder="示例：300件起订  支持贴牌  可接外贸订单  来样加工"
               />
             </Form.Item>
-          </ProcessingTypeCom>
+          </>
         )}
 
         <Form.Item

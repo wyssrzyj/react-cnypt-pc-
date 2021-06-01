@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styles from './index.module.less'
-import { Form, Col, Upload, Button } from 'antd'
+import { Form, Col, Upload } from 'antd'
 import { useForm } from '_antd@4.15.4@antd/es/form/Form'
 import FormNode from '@/components/FormNode'
 import CustomTable from './customTable'
@@ -333,45 +333,6 @@ const FactoryInformation = () => {
 
   const list = [basis, product, cooperation]
   const titleList = ['基本资料', '生产能力', '合作方式']
-
-  const columns = [
-    {
-      title: '设备名',
-      dataIndex: 'name',
-      key: 'name',
-      editable: true
-    },
-    {
-      title: '数量(台)',
-      dataIndex: 'count',
-      key: 'count'
-    },
-    {
-      title: '品牌',
-      dataIndex: 'brand',
-      key: 'brand'
-    },
-    {
-      title: '型号',
-      dataIndex: 'model',
-      key: 'model'
-    },
-    {
-      title: '操作',
-      dataIndex: 'edit',
-      key: 'edit',
-      render: (_, row, idx) => {
-        return (
-          <div key={idx}>
-            <div className={styles.btnBox}>
-              <Button>+</Button>
-              <Button>-</Button>
-            </div>
-          </div>
-        )
-      }
-    }
-  ]
 
   function getBase64(img, callback) {
     const reader = new FileReader()

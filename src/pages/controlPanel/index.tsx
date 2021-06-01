@@ -8,19 +8,19 @@ import {
   TagsOutlined,
   BookOutlined
 } from '@ant-design/icons'
-import { get } from 'lodash'
+// import { get } from 'lodash'
 import { EnterpriseInfo } from './components'
 import styles from './index.module.less'
 import { Route, Switch } from 'react-router'
 import FactoryInformation from './factoryInformation'
 
 const { SubMenu } = Menu
-const menuMap = {
-  enterprise: '企业信息',
-  factory: '工厂资料',
-  workshop: '厂房现场照',
-  qualification: '资质认证'
-}
+// const menuMap = {
+//   enterprise: '企业信息',
+//   factory: '工厂资料',
+//   workshop: '厂房现场照',
+//   qualification: '资质认证'
+// }
 
 const ControlPanel = () => {
   const [currentMenu, setCurrentMenu] = useState<String>('enterprise')
@@ -59,7 +59,7 @@ const ControlPanel = () => {
         </div>
         <div className={styles.controlPanelRight}>
           <header className={styles.contentTitle}>
-            {get(menuMap, currentMenu)}
+            {/* {get(menuMap, currentMenu as string)} */}
           </header>
           {currentMenu === 'enterprise' && <EnterpriseInfo />}
           <Switch>

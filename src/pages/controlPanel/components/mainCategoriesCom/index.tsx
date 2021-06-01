@@ -22,7 +22,6 @@ const MainCategoriesCom = props => {
     checkedObject[label] = [...checkedValue]
     setCheckedObject({ ...checkedObject })
     const newArray = Object.values(checkedObject)
-    console.log(newArray, 'newArray')
     const flat = newArray.reduce((prev, next) => {
       return [...(prev as Array<string>), ...(next as Array<string>)]
     }, [])

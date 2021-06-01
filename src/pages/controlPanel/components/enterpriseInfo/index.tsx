@@ -15,6 +15,7 @@ import { get } from 'lodash'
 import { getCurrentUser } from '@/utils/tool'
 import cityData from '@/static/cityData'
 import ProcessingTypeCom from '../processingTypeCom'
+import MainCategoriesCom from '../mainCategoriesCom'
 import styles from './index.module.less'
 
 const { Option } = Select
@@ -64,8 +65,7 @@ const EnterpriseInfo = () => {
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
 
-  const onValuesChange = (changedValues, allValues) => {
-    console.log({ changedValues, allValues })
+  const onValuesChange = changedValues => {
     if (get(changedValues, 'enterpriseType')) {
       setEnterpriseType(changedValues.enterpriseType)
     }
@@ -134,7 +134,7 @@ const EnterpriseInfo = () => {
         {enterpriseType === 'process' && (
           <>
             <Form.Item
-              label="生产类型"
+              label="工厂类型"
               name="productionType"
               rules={[{ required: true, message: '请选择生产类型！' }]}
             >
@@ -146,7 +146,7 @@ const EnterpriseInfo = () => {
               name="mainCategories"
               rules={[{ required: true, message: '请选择主营类别！' }]}
             >
-              <Checkbox.Group options={typeOptions} />
+              <MainCategoriesCom />
             </Form.Item>
 
             <Form.Item

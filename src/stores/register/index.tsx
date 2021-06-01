@@ -46,8 +46,10 @@ export default class RegisterStore {
   // 用户注册 /user/register
   @action register = async (params: RegisterParams) => {
     try {
-      const res: ResponseProps = await axios.post(`/api/user/register`, params)
-      console.log(res, '======')
+      const res: ResponseProps = await axios.post(
+        `/api/user/account/register`,
+        params
+      )
       return res
     } catch (e) {
       console.log(e, '------')

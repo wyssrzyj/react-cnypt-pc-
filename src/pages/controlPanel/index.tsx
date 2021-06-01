@@ -11,6 +11,8 @@ import {
 import { get } from 'lodash'
 import { EnterpriseInfo } from './components'
 import styles from './index.module.less'
+import { Route, Switch } from 'react-router'
+import FactoryInformation from './factoryInformation'
 
 const { SubMenu } = Menu
 const menuMap = {
@@ -60,6 +62,12 @@ const ControlPanel = () => {
             {get(menuMap, currentMenu)}
           </header>
           {currentMenu === 'enterprise' && <EnterpriseInfo />}
+          <Switch>
+            <Route
+              path="/control-panel/information"
+              component={FactoryInformation}
+            />
+          </Switch>
         </div>
       </div>
     </div>

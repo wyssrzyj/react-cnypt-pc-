@@ -21,14 +21,14 @@ const MainCategoriesCom = props => {
   const onGroupChange = (checkedValue, label) => {
     checkedObject[label] = [...checkedValue]
     setCheckedObject({ ...checkedObject })
-    const newArray = Object.values(checkedObject)
+    const newArray = Object.values(checkedObject) as Array<Array<string>>
     const flat = newArray.reduce((prev, next) => {
-      return [...(prev as Array<string>), ...(next as Array<string>)]
+      return [...prev, ...next]
     }, [])
-    if ((flat as Array<string>).length > 5) {
+    if (flat.length > 5) {
       message.warning('最多可选5个')
     } else {
-      setCheckedCategories([...(flat as Array<string>)])
+      setCheckedCategories([...flat])
     }
   }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Radio, Dropdown, Space, Checkbox } from 'antd'
+import { Radio, Dropdown, Space, Checkbox, Button } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import styles from './index.module.less'
 
@@ -24,9 +24,10 @@ const ProcessingTypeCom = () => {
       </div>
 
       <div>
-        <label>可接：</label>
+        <span>可接：</span>
         <Checkbox.Group options={plainOptions} />
       </div>
+      <Button type="primary">确定</Button>
     </div>
   )
 

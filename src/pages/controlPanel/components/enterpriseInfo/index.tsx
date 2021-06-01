@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Form,
   Input,
@@ -62,7 +62,7 @@ const EnterpriseInfo = () => {
   const { mobilePhone } = currentUser
   const [enterpriseType, setEnterpriseType] = useState<string>('process')
   const [loading, setLoading] = useState(false)
-  const [imageUrl, setmageUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
 
   const onValuesChange = (changedValues, allValues) => {
     console.log({ changedValues, allValues })
@@ -77,6 +77,10 @@ const EnterpriseInfo = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   )
+  useEffect(() => {
+    setLoading(false)
+    setImageUrl('')
+  }, [])
   return (
     <div className={styles.enterpriseInfo}>
       <Form
@@ -150,7 +154,7 @@ const EnterpriseInfo = () => {
               name="processingType"
               rules={[{ required: true, message: '请选择加工类型！' }]}
             >
-              <ProcessingTypeCom/>
+              <ProcessingTypeCom />
             </Form.Item>
 
             <Form.Item
@@ -177,7 +181,7 @@ const EnterpriseInfo = () => {
                 placeholder="示例：300件起订  支持贴牌  可接外贸订单  来样加工"
               />
             </Form.Item>
-          </ProcessingTypeCom>
+          </>
         )}
 
         <Form.Item

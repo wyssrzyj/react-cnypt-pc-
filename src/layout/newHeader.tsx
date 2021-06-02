@@ -16,7 +16,7 @@ const Header = () => {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Link to="/control-panel">控制台</Link>
+        <Link to="/control-panel/enterprise">控制台</Link>
       </Menu.Item>
     </Menu>
   )

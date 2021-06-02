@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { Redirect, Route, Switch } from 'react-router'
+import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 import {
   BankOutlined,
@@ -9,7 +11,11 @@ import {
   BookOutlined
 } from '@ant-design/icons'
 import { get } from 'lodash'
-import { EnterpriseInfo } from './components'
+import {
+  EnterpriseInfo,
+  PlantSitePhoto,
+  QualificationCertification
+} from './components'
 import styles from './index.module.less'
 
 const { SubMenu } = Menu
@@ -31,7 +37,7 @@ const ControlPanel = () => {
       <div className={styles.controlPanelContainer}>
         <div className={styles.controlPanelLeft}>
           <Menu
-            defaultSelectedKeys={['1']}
+            defaultSelectedKeys={['enterprise']}
             defaultOpenKeys={['sub1']}
             mode="inline"
             theme="dark"
@@ -39,17 +45,17 @@ const ControlPanel = () => {
           >
             <SubMenu key="sub1" icon={<BookOutlined />} title="企业管理">
               <Menu.Item key="enterprise" icon={<ContainerOutlined />}>
-                企业信息
+                <Link to="/control-panel/enterprise">企业信息</Link>
               </Menu.Item>
               <Menu.Item key="factory" icon={<FileSearchOutlined />}>
-                工厂资料
+                <Link to="/control-panel/enterprise">工厂资料</Link>
               </Menu.Item>
               <Menu.Item key="workshop" icon={<BankOutlined />}>
-                厂房现场照
+                <Link to="/control-panel/photo">厂房现场照</Link>
               </Menu.Item>
               <SubMenu key="sub2" title="认证管理" icon={<VerifiedOutlined />}>
                 <Menu.Item key="qualification" icon={<TagsOutlined />}>
-                  资质认证
+                  <Link to="/control-panel/qualification">资质认证</Link>
                 </Menu.Item>
               </SubMenu>
             </SubMenu>
@@ -59,7 +65,18 @@ const ControlPanel = () => {
           <header className={styles.contentTitle}>
             {get(menuMap, currentMenu)}
           </header>
-          {currentMenu === 'enterprise' && <EnterpriseInfo />}
+          <Switch>
+            <Route
+              path="/control-panel/enterprise"
+              component={EnterpriseInfo}
+            />
+            <Route path="/control-panel/photo" component={PlantSitePhoto} />
+            <Route
+              path="/control-panel/qualification"
+              component={QualificationCertification}
+            />
+            <Redirect to="/platform" />
+          </Switch>
         </div>
       </div>
     </div>

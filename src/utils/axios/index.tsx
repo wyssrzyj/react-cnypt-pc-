@@ -12,7 +12,7 @@ const REFRESH_TOKEN = getRefresh()
 const CancelToken = axios.CancelToken
 let cancels = []
 
-let lastRequest = {}
+// let lastRequest = {}
 
 // const instance = axios.create({})
 
@@ -58,7 +58,7 @@ axios.interceptors.request.use(
 
     console.log(request)
 
-    lastRequest = request
+    // lastRequest = request
 
     NProgress.start()
     return request

@@ -10,11 +10,14 @@ export default class LoginStore {
 
   @action login = async params => {
     try {
-      const res: ResponseProps = await axios.post('/api/user/login', params)
+      const res: ResponseProps = await axios.post(
+        '/api/user/account/login',
+        params
+      )
       const { data = {} } = res
-      console.log(data, '=====')
       if (data) {
         localStorage.setItem('token', data.access_token)
+        localStorage.setItem('refresh', data.refresh_token)
         localStorage.setItem('currentUser', JSON.stringify(data))
       }
       if (!res.success) {

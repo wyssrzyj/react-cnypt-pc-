@@ -17,8 +17,10 @@ import {
   QualificationCertification
 } from './components'
 import styles from './index.module.less'
+import FactoryInformation from './factoryInformation'
 
 const { SubMenu } = Menu
+
 const menuMap = {
   enterprise: '企业信息',
   factory: '工厂资料',
@@ -63,12 +65,16 @@ const ControlPanel = () => {
         </div>
         <div className={styles.controlPanelRight}>
           <header className={styles.contentTitle}>
-            {get(menuMap, currentMenu)}
+            {get(menuMap, currentMenu as string)}
           </header>
           <Switch>
             <Route
               path="/control-panel/enterprise"
               component={EnterpriseInfo}
+            />
+            <Route
+              path="/control-panel/information"
+              component={FactoryInformation}
             />
             <Route path="/control-panel/photo" component={PlantSitePhoto} />
             <Route

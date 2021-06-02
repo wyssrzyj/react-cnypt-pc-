@@ -1,15 +1,18 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
 import { message } from 'antd'
-import { getToken } from '../tool'
+import { getRefresh, getToken } from '../tool'
 import { dFn, Params, ResponseProps } from './types'
 
 // TODO token是放在headers 还是在请求体中添加
 // TODO 通过setupProxy 设置代理
 const AUTH_TOKEN = getToken()
+const REFRESH_TOKEN = getRefresh()
 
 const CancelToken = axios.CancelToken
 let cancels = []
+
+let lastRequest = {}
 
 // const instance = axios.create({})
 
@@ -53,6 +56,10 @@ axios.interceptors.request.use(
     //   request.params.token = userToken
     // }
 
+    console.log(request)
+
+    lastRequest = request
+
     NProgress.start()
     return request
   },
@@ -67,8 +74,15 @@ axios.interceptors.response.use(
     NProgress.done()
     return response.data
   },
-  error => {
+  async error => {
     NProgress.done()
+    console.log(error.response)
+    const { response } = error
+    if (response.status === 401) {
+      console.log('xxxxx')
+
+      // const data = await axios(response.config)
+    }
     return Promise.reject(error)
   }
 )
@@ -98,7 +112,8 @@ const apiAxios = async (
     withCredentials: true,
     headers: {
       common: {
-        authorization: AUTH_TOKEN
+        authorization: AUTH_TOKEN,
+        refresh_token: REFRESH_TOKEN
       }
     },
     cancelToken: new CancelToken(function executor(c) {
@@ -109,7 +124,9 @@ const apiAxios = async (
 
   const flag = noTokenList.some(i => url.includes(i))
   if (flag) {
+    // 不需要携带token的接口  去除 token
     delete instanceParams.headers.common.authorization
+    delete instanceParams.headers.common.refresh_token
   }
   try {
     const responseData: ResponseProps = await axios(instanceParams)

@@ -292,49 +292,23 @@ const NewFactorys = () => {
     })()
   }, [])
 
-  // const _list = [
-  //   {
-  //     name: '中山市沙溪镇倩菲尔制衣厂',
-  //     info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
-  //   },
-  //   {
-  //     name: '中山市沙溪镇倩菲尔制衣厂',
-  //     info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
-  //   },
-  //   {
-  //     name: '中山市沙溪镇倩菲尔制衣厂',
-  //     info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
-  //   },
-  //   {
-  //     name: '中山市沙溪镇倩菲尔制衣厂',
-  //     info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
-  //   },
-
-  //   {
-  //     name: '中山市沙溪镇倩菲尔制衣厂',
-  //     info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
-  //   },
-  //   {
-  //     name: '中山市沙溪镇倩菲尔制衣厂',
-  //     info: '主要生产:普通梭织薄料服装，真丝/雪纺服/箱包'
-  //   }
-  // ]
-
   return (
     <div className={styles.newFactory}>
       <div className={styles.newTitle}>最新工厂</div>
       <div>
-        {list.map((item, idx) => {
-          item.factoryCategoryList = item.factoryCategoryList || []
-          return (
-            <div key={idx} className={styles.newFactoryItem}>
-              <div className={styles.factoryName}>{item.factoryName}</div>
-              <div className={styles.factoryInfo}>
-                {item.factoryCategoryList.join(',')}
+        {list &&
+          list.length &&
+          list.map((item, idx) => {
+            item.factoryCategoryList = item.factoryCategoryList || []
+            return (
+              <div key={idx} className={styles.newFactoryItem}>
+                <div className={styles.factoryName}>{item.factoryName}</div>
+                <div className={styles.factoryInfo}>
+                  {item.factoryCategoryList.join(',')}
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
       </div>
     </div>
   )

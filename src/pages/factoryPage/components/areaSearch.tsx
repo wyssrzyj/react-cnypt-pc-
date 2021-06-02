@@ -45,9 +45,9 @@ areaMap.set(1, 'zjDelta')
 areaMap.set(2, 'bhRim')
 
 const initKeys = [
-  { label: '长三角', count: '3431' },
-  { label: '珠三角', count: '3431' },
-  { label: '环渤海', count: '3431' }
+  { label: '长三角', count: '0' },
+  { label: '珠三角', count: '0' },
+  { label: '环渤海', count: '0' }
 ]
 
 const AreaSearch = () => {
@@ -64,7 +64,7 @@ const AreaSearch = () => {
   useEffect(() => {
     ;(async () => {
       await getData(0)
-      const data = await getAreaConut()
+      const data = (await getAreaConut()) || {}
       const k = cloneDeep(keys)
       k.forEach((item, idx) => {
         item.count = data[areaMap.get(idx)]
@@ -79,7 +79,7 @@ const AreaSearch = () => {
     const params = {
       provinceIds: ids.get(key)
     }
-    const data = await getFactorys(params)
+    const data = (await getFactorys(params)) || []
 
     await setDataSource(data)
   }
@@ -102,67 +102,75 @@ const AreaSearch = () => {
       <div className={styles.searchContent}>
         <div className={styles.leftContent}>
           <div className={styles.areaKeys}>
-            {keys.map((item, idx) => (
-              <div
-                key={idx}
-                className={classNames(
-                  styles.areaTab,
-                  activityKey === idx && styles.areaActiveTab
-                )}
-                onClick={() => tabChange(idx)}
-              >
-                <span className={styles.areaTabL}>{item.label}</span>
-                <span className={styles.areaTabC}>({item.count}家工厂)</span>
-              </div>
-            ))}
+            {keys &&
+              keys.length &&
+              keys.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={classNames(
+                    styles.areaTab,
+                    activityKey === idx && styles.areaActiveTab
+                  )}
+                  onClick={() => tabChange(idx)}
+                >
+                  <span className={styles.areaTabL}>{item.label}</span>
+                  <span className={styles.areaTabC}>({item.count}家工厂)</span>
+                </div>
+              ))}
           </div>
           <div>
-            {dataSource.map((item, idx) => {
-              item.children = item.children || []
-              const childs = item.children.slice(0, 7) || []
+            {dataSource &&
+              dataSource.length &&
+              dataSource.map((item, idx) => {
+                if (!item) return
+                item.children = item.children || []
+                const childs = item.children.slice(0, 7) || []
 
-              item.children.length > 7 &&
-                childs.push({
-                  cityName: '更多'
-                })
+                item.children &&
+                  item.children.length > 7 &&
+                  childs.push({
+                    cityName: '更多'
+                  })
 
-              return (
-                <div className={styles.areaChunk} key={idx}>
-                  <div className={styles.areaChunkL}>
-                    <Icon
-                      type={icons.get(item.provinceAdCode)}
-                      className={styles.areaIcon}
-                    />
-                    <span
-                      style={{ color: colors.get(item.provinceAdCode) }}
-                      className={styles.province}
-                    >
-                      {item.provinceName}
-                    </span>
-                    <span className={styles.count}>
-                      ({item.statFactory}家工厂)
-                    </span>
+                return (
+                  <div className={styles.areaChunk} key={idx}>
+                    <div className={styles.areaChunkL}>
+                      <Icon
+                        type={icons.get(item.provinceAdCode)}
+                        className={styles.areaIcon}
+                      />
+                      <span
+                        style={{ color: colors.get(item.provinceAdCode) }}
+                        className={styles.province}
+                      >
+                        {item.provinceName}
+                      </span>
+                      <span className={styles.count}>
+                        ({item.statFactory}家工厂)
+                      </span>
+                    </div>
+                    <div className={styles.areaChunkR}>
+                      {childs &&
+                        childs.length &&
+                        childs.map((i, t) => {
+                          if (t < 7) {
+                            return (
+                              <span className={styles.city} key={t}>
+                                {i.cityName}
+                                &nbsp; ({i.statFactory || 0})
+                              </span>
+                            )
+                          }
+                          return (
+                            <span className={styles.city} key={t}>
+                              {i.cityName}
+                            </span>
+                          )
+                        })}
+                    </div>
                   </div>
-                  <div className={styles.areaChunkR}>
-                    {childs.map((i, t) => {
-                      if (t < 7) {
-                        return (
-                          <span className={styles.city} key={t}>
-                            {i.cityName}
-                            &nbsp; ({i.statFactory || 0})
-                          </span>
-                        )
-                      }
-                      return (
-                        <span className={styles.city} key={t}>
-                          {i.cityName}
-                        </span>
-                      )
-                    })}
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })}
           </div>
         </div>
         <div className={styles.rightContent} key={activityKey}>
@@ -177,12 +185,13 @@ const AreaSearch = () => {
       </div>
       <div className={styles.allFactorys}>
         {allFactorys &&
+          allFactorys.length &&
           allFactorys.map((item, idx) => {
             return (
               <div key={idx}>
                 {item.cityName}
                 &nbsp;
-                {item.statFactory}
+                {item.statFactory || 0}
                 &nbsp;&nbsp;
               </div>
             )

@@ -1,6 +1,7 @@
 import { makeAutoObservable, action } from 'mobx'
 import axios from '@/utils/axios'
 import { ResponseProps } from '@/utils/axios/types'
+import { message } from '_antd@4.15.4@antd'
 
 export default class FactoryPageStore {
   constructor() {
@@ -14,7 +15,12 @@ export default class FactoryPageStore {
         `/api/factory/unauth/statistic`,
         params
       )
-      return res.data || []
+
+      if (res) {
+        return res.data || []
+      } else {
+        message.error('获取数据失败~')
+      }
     } catch (e) {
       console.log(e)
     }
@@ -26,7 +32,11 @@ export default class FactoryPageStore {
       const res: ResponseProps = await axios.get(
         `/api/factory/unauth/region/statistic`
       )
-      return res.data
+      if (res) {
+        return res.data || {}
+      } else {
+        message.error('获取数据失败~')
+      }
     } catch (e) {
       console.log(e)
     }
@@ -38,7 +48,11 @@ export default class FactoryPageStore {
       const res: ResponseProps = await axios.get(
         `/api/factory/unauth/allCity/statistic`
       )
-      return res.data || []
+      if (res) {
+        return res.data || []
+      } else {
+        message.error('获取数据失败~')
+      }
     } catch (e) {
       console.log(e)
     }
@@ -52,7 +66,11 @@ export default class FactoryPageStore {
         `/api/factory/info/list-newest-factories`,
         { pageSize }
       )
-      return res.data || []
+      if (res) {
+        return res.data || []
+      } else {
+        message.error('获取数据失败~')
+      }
     } catch (e) {
       console.log(e)
     }

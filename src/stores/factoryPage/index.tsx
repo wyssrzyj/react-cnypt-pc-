@@ -1,7 +1,7 @@
 import { makeAutoObservable, action } from 'mobx'
 import axios from '@/utils/axios'
 import { ResponseProps } from '@/utils/axios/types'
-import { message } from '_antd@4.15.4@antd'
+import { message } from 'antd'
 
 export default class FactoryPageStore {
   constructor() {

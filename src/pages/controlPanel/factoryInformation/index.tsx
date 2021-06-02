@@ -1,7 +1,6 @@
 import React from 'react'
 import styles from './index.module.less'
 import { Form, Col, Upload, Button } from 'antd'
-import { useForm } from '_antd@4.15.4@antd/es/form/Form'
 import FormNode from '@/components/FormNode'
 import CustomTable from './customTable'
 import { getToken } from '@/utils/tool'
@@ -13,7 +12,7 @@ const FormTitle = ({ title }) => {
 const FormItem = Form.Item
 
 const FactoryInformation = () => {
-  const [form] = useForm()
+  const [form] = Form.useForm()
   const { validateFields } = form
 
   const basis = [
@@ -32,7 +31,7 @@ const FactoryInformation = () => {
       label: '年交易额',
       required: true,
       placeholder: '请选择',
-      name: 'turnover',
+      name: 'annual',
       type: 'select',
       initValue: true,
       message: '请选择年交易额~',
@@ -78,7 +77,7 @@ const FactoryInformation = () => {
     {
       label: '加工设备(台)',
       required: true,
-      name: 'productionLine',
+      name: 'equipment',
       type: 'number',
       initValue: 0,
       message: '请输入加工设备数~',
@@ -88,7 +87,7 @@ const FactoryInformation = () => {
     {
       label: '支持打样',
       required: true,
-      name: 'productionLine',
+      name: 'proofing',
       type: 'radio',
       initValue: true,
       message: '请选择是否支持打样~',
@@ -286,7 +285,7 @@ const FactoryInformation = () => {
       label: '付款方式',
       required: true,
       placeholder: '请选择',
-      name: 'turnover',
+      name: 'payover',
       type: 'select',
       initValue: true,
       message: '请选择付款方式~',
@@ -302,7 +301,7 @@ const FactoryInformation = () => {
       label: '验厂方式',
       required: true,
       placeholder: '请选择',
-      name: 'turnover',
+      name: 'check',
       type: 'select',
       initValue: true,
       message: '请选择验厂方式~',

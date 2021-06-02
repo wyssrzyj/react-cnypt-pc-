@@ -50,7 +50,7 @@ const ControlPanel = () => {
                 <Link to="/control-panel/enterprise">企业信息</Link>
               </Menu.Item>
               <Menu.Item key="factory" icon={<FileSearchOutlined />}>
-                <Link to="/control-panel/enterprise">工厂资料</Link>
+                <Link to="/control-panel/information">工厂资料</Link>
               </Menu.Item>
               <Menu.Item key="workshop" icon={<BankOutlined />}>
                 <Link to="/control-panel/photo">厂房现场照</Link>

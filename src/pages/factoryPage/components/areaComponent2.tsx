@@ -6,7 +6,7 @@ import React, {
   useRef
 } from 'react'
 import { Scene } from '@antv/l7'
-import { ProvinceLayer, CountryLayer } from '@antv/l7-district'
+import { ProvinceLayer } from '@antv/l7-district'
 import { Mapbox } from '@antv/l7-maps'
 import { AMapScene, PointLayer } from '@antv/l7-react'
 import styles from './areaComponent.module.less'

@@ -129,7 +129,12 @@ const QualificationCertification = () => {
           </TabPane>
         ))}
       </Tabs>
-      {isModalVisible && <QualificationModal visible={isModalVisible} />}
+      {isModalVisible && (
+        <QualificationModal
+          visible={isModalVisible}
+          handleCancel={() => setIsModalVisible(false)}
+        />
+      )}
     </div>
   )
 }

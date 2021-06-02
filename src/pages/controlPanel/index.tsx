@@ -61,7 +61,7 @@ const ControlPanel = () => {
           <header className={styles.contentTitle}>
             {/* {get(menuMap, currentMenu as string)} */}
           </header>
-          {currentMenu === 'enterprise' && <EnterpriseInfo />}
+          {/* {currentMenu === 'enterprise' && <EnterpriseInfo />} */}
           <Switch>
             <Route
               path="/control-panel/information"

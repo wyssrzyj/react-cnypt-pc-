@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './index.module.less'
-import { Form, Col, Upload } from 'antd'
+import { Form, Col, Upload, Button } from 'antd'
 import { useForm } from '_antd@4.15.4@antd/es/form/Form'
 import FormNode from '@/components/FormNode'
 import CustomTable from './customTable'
@@ -14,6 +14,7 @@ const FormItem = Form.Item
 
 const FactoryInformation = () => {
   const [form] = useForm()
+  const { validateFields } = form
 
   const basis = [
     {
@@ -358,6 +359,15 @@ const FactoryInformation = () => {
     </div>
   )
 
+  const submit = async () => {
+    try {
+      const res = await validateFields()
+      console.log(res)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
     <div>
       <Form form={form} className={styles.form}>
@@ -419,6 +429,7 @@ const FactoryInformation = () => {
             {uploadButton}
           </Upload>
         </div>
+        <Button onClick={submit}>提交</Button>
       </Form>
     </div>
   )

@@ -75,6 +75,22 @@ export default class FactoryPageStore {
       console.log(e)
     }
   }
+
+  @action uploadFiles = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/oss/file/upload`,
+        params
+      )
+      if (res) {
+        return `http://${res.data}`
+      } else {
+        message.error('获取数据失败~')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 
 export const factoryPageStore = new FactoryPageStore()

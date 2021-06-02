@@ -57,6 +57,7 @@ const InputConcatSelect = (props: Props) => {
         onChange={event => valueChange(event, 'input')}
       ></Input>
       <Select
+        className={styles.select}
         value={data[keys[1]]}
         onChange={event => valueChange(event, 'select')}
       >

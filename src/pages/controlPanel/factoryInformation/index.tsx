@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './index.module.less'
 import { Form, Col, Upload, Button } from 'antd'
 import FormNode from '@/components/FormNode'
 import CustomTable from './customTable'
-import { getToken } from '@/utils/tool'
+import { cloneDeep } from 'lodash'
+import { useStores } from '@/utils/mobx'
+
+type FileList = Array<any>
 
 const FormTitle = ({ title }) => {
   return <div className={styles.title}>{title}</div>
@@ -14,6 +17,11 @@ const FormItem = Form.Item
 const FactoryInformation = () => {
   const [form] = Form.useForm()
   const { validateFields } = form
+
+  const { factoryPageStore } = useStores()
+  const { uploadFiles } = factoryPageStore
+
+  const [fileList, setFileList] = useState<FileList>([])
 
   const basis = [
     {
@@ -334,37 +342,37 @@ const FactoryInformation = () => {
   const list = [basis, product, cooperation]
   const titleList = ['基本资料', '生产能力', '合作方式']
 
-  function getBase64(img, callback) {
-    const reader = new FileReader()
-    reader.addEventListener('load', () => callback(reader.result))
-    reader.readAsDataURL(img)
-  }
-
-  const handleChange = info => {
-    if (info.file.status === 'uploading') {
-      console.log('uploading')
-      return
-    }
-    if (info.file.status === 'done') {
-      console.log(info)
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl => console.log(imageUrl))
-    }
-  }
-
   const uploadButton = (
     <div>
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>上传</div>
     </div>
   )
 
-  const submit = async () => {
+  const submit = async flag => {
+    console.log(flag)
     try {
       const res = await validateFields()
       console.log(res)
     } catch (e) {
       console.log(e)
     }
+  }
+
+  const customRequest = async ({ file }) => {
+    const list = cloneDeep(fileList)
+    const formData = new FormData()
+
+    formData.append('file', file)
+    formData.append('module', 'factory')
+    const res = await uploadFiles(formData)
+    list.push({ thumbUrl: res })
+    setFileList(list)
+  }
+
+  const fileRemove = file => {
+    const arrList = cloneDeep(fileList)
+    const target = arrList.filter(item => item.thumbUrl !== file.thumbUrl)
+    setFileList(target)
   }
 
   return (
@@ -411,24 +419,45 @@ const FactoryInformation = () => {
           )
         })}
         <FormTitle title={'车间设备'} />
-        {/* <div className={styles.tableTitle}>设备列表</div> */}
-        {/* <Table columns={columns} pagination={false} dataSource={[{}]}></Table> */}
         <CustomTable></CustomTable>
-        <div>
-          <Upload
-            headers={{
-              authorization: getToken()
-            }}
-            listType="picture-card"
-            name="file"
-            action={'/api/oss/file/upload'}
-            onChange={handleChange}
-            data={{ module: 'factory' }}
-          >
-            {uploadButton}
-          </Upload>
+        <div className={styles.photos}>
+          <FormItem name={'imgs'} label={'车间照片'}>
+            <Upload
+              fileList={fileList}
+              listType="picture-card"
+              accept={'.jpg,.png,.jpeg'}
+              name="file"
+              onRemove={fileRemove}
+              data={{ module: 'factory' }}
+              maxCount={10}
+              customRequest={customRequest}
+            >
+              {fileList.length <= 10 && uploadButton}
+            </Upload>
+            <div>
+              上传车间照片，只能上传jpg/png格式文件，文件不能超过2M，最多上传10个文件
+            </div>
+          </FormItem>
         </div>
-        <Button onClick={submit}>提交</Button>
+
+        <div className={styles.btnBox}>
+          <Button
+            onClick={() => {
+              submit(true)
+            }}
+            type={'primary'}
+            className={styles.submitBtn}
+          >
+            确认提交
+          </Button>
+          <Button
+            onClick={() => {
+              submit(false)
+            }}
+          >
+            保存
+          </Button>
+        </div>
       </Form>
     </div>
   )

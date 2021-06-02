@@ -86,6 +86,7 @@ const CustomTable = () => {
         value={dataSource}
         onChange={setDataSource}
         recordCreatorProps={false}
+        bordered
         toolBarRender={() => {
           return [
             <Button

@@ -1,7 +1,6 @@
 import React from 'react'
 import styles from './index.module.less'
 import { Form, Col, Upload, Button } from 'antd'
-import { useForm } from '_antd@4.15.4@antd/es/form/Form'
 import FormNode from '@/components/FormNode'
 import CustomTable from './customTable'
 import { getToken } from '@/utils/tool'
@@ -13,7 +12,7 @@ const FormTitle = ({ title }) => {
 const FormItem = Form.Item
 
 const FactoryInformation = () => {
-  const [form] = useForm()
+  const [form] = Form.useForm()
   const { validateFields } = form
 
   const basis = [

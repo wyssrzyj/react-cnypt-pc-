@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
@@ -10,7 +10,6 @@ import {
   TagsOutlined,
   BookOutlined
 } from '@ant-design/icons'
-import { get } from 'lodash'
 import {
   EnterpriseInfo,
   PlantSitePhoto,
@@ -18,41 +17,69 @@ import {
 } from './components'
 import styles from './index.module.less'
 import FactoryInformation from './factoryInformation'
+import { useLocation } from 'react-router'
 
 const { SubMenu } = Menu
 
-const menuMap = {
-  enterprise: '企业信息',
-  factory: '工厂资料',
-  workshop: '厂房现场照',
-  qualification: '资质认证'
-}
+const menusName = new Map()
+menusName.set('/control-panel/qualification', '资质认证')
+menusName.set('/control-panel/photo', '厂房现场照')
+menusName.set('/control-panel/information', '工厂资料')
+menusName.set('/control-panel/enterprise', '企业信息')
+
+const menuKeys = new Map()
+menuKeys.set('/control-panel/qualification', ['qualification', 'sub2', 'sub1'])
+menuKeys.set('/control-panel/photo', ['photo', 'sub1'])
+menuKeys.set('/control-panel/information', ['information', 'sub1'])
+menuKeys.set('/control-panel/enterprise', ['enterprise', 'sub1'])
+
+const subsMap = new Map()
+subsMap.set('/control-panel/qualification', ['sub2', 'sub1'])
+subsMap.set('/control-panel/photo', ['sub1'])
+subsMap.set('/control-panel/information', ['sub1'])
+subsMap.set('/control-panel/enterprise', ['sub1'])
 
 const ControlPanel = () => {
-  const [currentMenu, setCurrentMenu] = useState<String>('enterprise')
-  const handleMenu = ({ item, key, keyPath, domEvent }) => {
-    console.log({ item, key, keyPath, domEvent })
-    setCurrentMenu(key)
+  const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
+
+  const [openKeys, setOpenKeys] = useState<Array<string>>([])
+
+  const location = useLocation()
+
+  useEffect(() => {
+    setCurrentMenu(menuKeys.get(location.pathname))
+    setOpenKeys(subsMap.get(location.pathname))
+  }, [])
+
+  const handleMenu = ({ keyPath }) => {
+    setCurrentMenu(keyPath)
   }
+
+  const onOpenChange = keys => {
+    setOpenKeys(keys)
+  }
+
   return (
     <div className={styles.controlPanel}>
       <div className={styles.controlPanelContainer}>
         <div className={styles.controlPanelLeft}>
           <Menu
-            defaultSelectedKeys={['enterprise']}
-            defaultOpenKeys={['sub1']}
+            // defaultSelectedKeys={['enterprise']}
+            openKeys={openKeys}
+            selectedKeys={currentMenu}
             mode="inline"
             theme="dark"
             onClick={handleMenu}
+            onOpenChange={onOpenChange}
           >
             <SubMenu key="sub1" icon={<BookOutlined />} title="企业管理">
               <Menu.Item key="enterprise" icon={<ContainerOutlined />}>
                 <Link to="/control-panel/enterprise">企业信息</Link>
               </Menu.Item>
-              <Menu.Item key="factory" icon={<FileSearchOutlined />}>
+              <Menu.Item key="information" icon={<FileSearchOutlined />}>
                 <Link to="/control-panel/information">工厂资料</Link>
               </Menu.Item>
-              <Menu.Item key="workshop" icon={<BankOutlined />}>
+              <Menu.Item key="photo" icon={<BankOutlined />}>
                 <Link to="/control-panel/photo">厂房现场照</Link>
               </Menu.Item>
               <SubMenu key="sub2" title="认证管理" icon={<VerifiedOutlined />}>
@@ -65,7 +92,7 @@ const ControlPanel = () => {
         </div>
         <div className={styles.controlPanelRight}>
           <header className={styles.contentTitle}>
-            {get(menuMap, currentMenu as string)}
+            {menusName.get(location.pathname)}
           </header>
           <Switch>
             <Route

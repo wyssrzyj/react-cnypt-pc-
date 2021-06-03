@@ -37,11 +37,10 @@ const PeriodValidity = () => {
 }
 
 const QualificationModal = props => {
-  const { visible } = props
+  const { visible, handleCancel } = props
   const [imageUrl, setImageUrl] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const handleOk = () => {}
-  const handleCancel = () => {}
 
   const uploadButton = (
     <div>

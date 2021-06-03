@@ -421,7 +421,7 @@ const FactoryInformation = () => {
         <FormTitle title={'车间设备'} />
         <CustomTable></CustomTable>
         <div className={styles.photos}>
-          <FormItem name={'imgs'} label={'车间照片'}>
+          <FormItem label={'车间照片'}>
             <Upload
               fileList={fileList}
               listType="picture-card"

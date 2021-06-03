@@ -59,7 +59,6 @@ export default class FactoryPageStore {
   }
 
   // 获取最新工厂 /api/factory/info/list-newest-factories
-
   @action getNewFactorys = async (pageSize = 7) => {
     try {
       const res: ResponseProps = await axios.get(
@@ -84,6 +83,22 @@ export default class FactoryPageStore {
       )
       if (res) {
         return `http://${res.data}`
+      } else {
+        message.error('获取数据失败~')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 按品类找工厂 /api/factory/unauth/statistic/category
+  @action getTypeFactorys = async () => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/unauth/statistic/category`
+      )
+      if (res) {
+        return res.data || []
       } else {
         message.error('获取数据失败~')
       }

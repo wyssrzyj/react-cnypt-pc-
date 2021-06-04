@@ -1,26 +1,16 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
 import { message } from 'antd'
-import { getRefresh, getToken } from '../tool'
+import { getRefresh, getToken, getCurrentUser } from '../tool'
 import { dFn, Params, ResponseProps } from './types'
 
+const customAxios = axios.create({})
+
+let rToken = ''
 // TODO token是放在headers 还是在请求体中添加
 // TODO 通过setupProxy 设置代理
-const AUTH_TOKEN = getToken()
-const REFRESH_TOKEN = getRefresh()
-
 const CancelToken = axios.CancelToken
 let cancels = []
-
-// let lastRequest = {}
-
-// const instance = axios.create({})
-
-// instance.defaults.headers.common['Authorization'] = AUTH_TOKEN
-// instance.defaults.headers.post['Content-Type'] =
-//   'application/x-www-form-urlencoded'
-// instance.defaults.timeout = 10000
-// instance.defaults.withCredentials = true
 
 const toType = obj => {
   return {}.toString
@@ -44,22 +34,37 @@ const filterNull = (o: O) => {
   return o
 }
 
-axios.interceptors.request.use(
-  function (request) {
-    // const userToken = localStorage.getItem('_usertoken') || undefined
-    // if (userToken && request.method === 'post') {
-    //   if (!request.data) request.data = {}
-    //   request.data.token = userToken
-    // }
-    // if (userToken && request.method === 'get') {
-    //   if (!request.params) request.params = {}
-    //   request.params.token = userToken
-    // }
+customAxios.interceptors.request.use(
+  async function (request) {
+    const { expire } = getCurrentUser()
 
-    console.log(request)
+    const refreshAxios = axios.create({
+      headers: {
+        authorization: getToken(),
+        refresh_token: getRefresh()
+      }
+    })
 
-    // lastRequest = request
+    const whiteList = [
+      '/api/user/account/login',
+      '/api/user/account/refresh-token'
+    ]
 
+    const flag = whiteList.some(item => request.url.includes(item))
+
+    if (expire - Date.now() < 10 && !flag) {
+      const url = `/api/user/account/refresh-token?accessToken=${getToken()}`
+
+      const refresData = await refreshAxios.post(url)
+      rToken = refresData.data.data.access_token
+      const expiresTime = refresData.data.data.expires_in
+      request.headers.authorization = rToken
+      const updateUser = JSON.parse(localStorage.getItem('currentUser'))
+      updateUser.expire = expiresTime
+      updateUser.access_token = rToken
+      localStorage.setItem('token', rToken)
+      localStorage.setItem('currentUser', JSON.stringify(updateUser))
+    }
     NProgress.start()
     return request
   },
@@ -69,20 +74,13 @@ axios.interceptors.request.use(
   }
 )
 
-axios.interceptors.response.use(
+customAxios.interceptors.response.use(
   response => {
     NProgress.done()
     return response.data
   },
-  async error => {
+  error => {
     NProgress.done()
-    console.log(error.response)
-    const { response } = error
-    if (response.status === 401) {
-      console.log('xxxxx')
-
-      // const data = await axios(response.config)
-    }
     return Promise.reject(error)
   }
 )
@@ -94,7 +92,6 @@ const apiAxios = async (
   success?: dFn,
   failure?: dFn
 ) => {
-  // const token = getToken()
   params = filterNull(params)
   const noTokenList = [
     '/api/sms/send-code',
@@ -112,8 +109,8 @@ const apiAxios = async (
     withCredentials: true,
     headers: {
       common: {
-        authorization: AUTH_TOKEN,
-        refresh_token: REFRESH_TOKEN
+        authorization: getToken(),
+        refresh_token: getRefresh()
       }
     },
     cancelToken: new CancelToken(function executor(c) {
@@ -129,17 +126,15 @@ const apiAxios = async (
     delete instanceParams.headers.common.refresh_token
   }
   try {
-    const responseData: ResponseProps = await axios(instanceParams)
+    const responseData: ResponseProps = await customAxios(instanceParams)
     if (responseData.code === 200) {
-      // responseData.message && message.success({
-      //     content: responseData.message,
-      //     duration: 0.5
-      // })
       success && success()
       return responseData
     } else {
       failure && failure()
-      responseData.msg && message.error(responseData.msg)
+      responseData.code !== 40101 &&
+        responseData.msg &&
+        message.error(responseData.msg)
       return Promise.reject(responseData)
     }
   } catch (error) {

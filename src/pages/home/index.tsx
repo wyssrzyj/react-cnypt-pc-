@@ -9,13 +9,16 @@ import Factory from './components/factory'
 import OnlineHot from './components/onlineHot'
 import ExcellentFactory from './components/excellentFactory'
 import ExcellentOrder from './components/excellentOrder'
+// import { refreshToken } from '@/stores/login/loginStore'
 
 const Home = () => {
   const { homeStore } = useStores()
   const {} = homeStore
 
   useEffect(() => {
-    ;(async () => {})()
+    ;(async () => {
+      // await refreshToken()
+    })()
   }, [])
 
   return (

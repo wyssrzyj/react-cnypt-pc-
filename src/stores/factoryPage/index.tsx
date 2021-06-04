@@ -19,7 +19,7 @@ export default class FactoryPageStore {
       if (res) {
         return res.data || []
       } else {
-        message.error('获取数据失败~')
+        res.code !== 40101 && message.error('获取数据失败~')
       }
     } catch (e) {
       console.log(e)
@@ -35,7 +35,7 @@ export default class FactoryPageStore {
       if (res) {
         return res.data || {}
       } else {
-        message.error('获取数据失败~')
+        res.code !== 40101 && message.error('获取数据失败~')
       }
     } catch (e) {
       console.log(e)
@@ -51,7 +51,7 @@ export default class FactoryPageStore {
       if (res) {
         return res.data || []
       } else {
-        message.error('获取数据失败~')
+        res.code !== 40101 && message.error('获取数据失败~')
       }
     } catch (e) {
       console.log(e)
@@ -68,7 +68,7 @@ export default class FactoryPageStore {
       if (res) {
         return res.data || []
       } else {
-        message.error('获取数据失败~')
+        res.code !== 40101 && message.error('获取数据失败~')
       }
     } catch (e) {
       console.log(e)
@@ -84,7 +84,7 @@ export default class FactoryPageStore {
       if (res) {
         return `http://${res.data}`
       } else {
-        message.error('获取数据失败~')
+        res.code !== 40101 && message.error('获取数据失败~')
       }
     } catch (e) {
       console.log(e)
@@ -100,7 +100,7 @@ export default class FactoryPageStore {
       if (res) {
         return res.data || []
       } else {
-        message.error('获取数据失败~')
+        res.code !== 40101 && message.error('获取数据失败~')
       }
     } catch (e) {
       console.log(e)

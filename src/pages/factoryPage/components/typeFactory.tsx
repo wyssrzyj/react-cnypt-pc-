@@ -76,7 +76,7 @@ export const FactorySearch = props => {
 
   useEffect(() => {
     ;(async () => {
-      const res = await getTypeFactorys()
+      const res = (await getTypeFactorys()) || []
       console.log(res, 'res')
       setData(res)
     })()

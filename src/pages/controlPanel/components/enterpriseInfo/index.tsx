@@ -5,8 +5,8 @@ import {
   Button,
   Radio,
   Checkbox,
-  Select,
-  DatePicker,
+  // Select,
+  // DatePicker,
   Cascader,
   Upload
 } from 'antd'
@@ -14,12 +14,12 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { get } from 'lodash'
 import { getCurrentUser } from '@/utils/tool'
 import cityData from '@/static/cityData'
-import ProcessingTypeCom from '../processingTypeCom'
-import MainCategoriesCom from '../mainCategoriesCom'
+// import ProcessingTypeCom from '../processingTypeCom'
+// import MainCategoriesCom from '../mainCategoriesCom'
 import styles from './index.module.less'
 
-const { Option } = Select
-const { RangePicker } = DatePicker
+// const { Option } = Select
+// const { RangePicker } = DatePicker
 const { TextArea } = Input
 
 const layout = {
@@ -27,21 +27,21 @@ const layout = {
   wrapperCol: { span: 12 }
 }
 
-const typeOptions = [
-  { label: '小单快反', value: 'Apple' },
-  { label: '外贸工厂', value: 'Pear' },
-  { label: '清加工工厂', value: 'Orange' },
-  { label: '贴牌工厂', value: 'banana' }
-]
-const productionOptions = [
-  { label: '20人以内', value: '20' },
-  { label: '20~50人', value: '50' },
-  { label: '50~100人', value: '100' },
-  { label: '101~500人', value: '500' },
-  { label: '501~1000人', value: '1000' },
-  { label: '1001~10000人', value: '10000' },
-  { label: '10000以上', value: '10001' }
-]
+// const typeOptions = [
+//   { label: '小单快反', value: 'Apple' },
+//   { label: '外贸工厂', value: 'Pear' },
+//   { label: '清加工工厂', value: 'Orange' },
+//   { label: '贴牌工厂', value: 'banana' }
+// ]
+// const productionOptions = [
+//   { label: '20人以内', value: '20' },
+//   { label: '20~50人', value: '50' },
+//   { label: '50~100人', value: '100' },
+//   { label: '101~500人', value: '500' },
+//   { label: '501~1000人', value: '1000' },
+//   { label: '1001~10000人', value: '10000' },
+//   { label: '10000以上', value: '10001' }
+// ]
 
 const InputComponent = props => {
   const { text, disable = false, value } = props
@@ -131,7 +131,47 @@ const EnterpriseInfo = () => {
           </Radio.Group>
         </Form.Item>
 
-        {enterpriseType === 'process' && (
+        <Form.Item
+          label="联系人"
+          name="contact"
+          rules={[{ required: true, message: '请填写联系人姓名' }]}
+        >
+          <InputComponent text="请填写联系人姓名" />
+        </Form.Item>
+
+        <Form.Item
+          label="手机号"
+          name="mobileNumber"
+          rules={[{ required: true, message: '请填写手机号' }]}
+        >
+          <InputComponent text="请填写手机号" disable={true} />
+        </Form.Item>
+
+        <Form.Item
+          label="电话号码"
+          name="phoneNumber"
+          rules={[{ required: true, message: '请填写电话号码' }]}
+        >
+          <InputComponent text="请填写电话号码" />
+        </Form.Item>
+
+        <Form.Item
+          label="电子邮箱"
+          name="email"
+          rules={[{ required: true, message: '请填写电子邮箱' }]}
+        >
+          <InputComponent text="请填写电子邮箱" />
+        </Form.Item>
+
+        <Form.Item
+          label="所在地区"
+          name="area"
+          rules={[{ required: true, message: '请选择所在地' }]}
+        >
+          <Cascader options={cityData} placeholder="请选择所在地" />
+        </Form.Item>
+
+        {/* {enterpriseType === 'process' && (
           <>
             <Form.Item
               label="工厂类型"
@@ -182,7 +222,7 @@ const EnterpriseInfo = () => {
               />
             </Form.Item>
           </>
-        )}
+        )} */}
 
         <Form.Item
           label="企业简介"
@@ -197,46 +237,7 @@ const EnterpriseInfo = () => {
             placeholder="填写自主品牌名称、市场定位、销售网络和规模等信息，不要填写电话/邮箱等联系方式，字数在100-700之间"
           />
         </Form.Item>
-        <div className={styles.enterpriseTitle}>联系方式</div>
-        <Form.Item
-          label="联系人"
-          name="contact"
-          rules={[{ required: true, message: '请填写联系人姓名' }]}
-        >
-          <InputComponent text="请填写联系人姓名" />
-        </Form.Item>
-
-        <Form.Item
-          label="手机号"
-          name="mobileNumber"
-          rules={[{ required: true, message: '请填写手机号' }]}
-        >
-          <InputComponent text="请填写手机号" disable={true} />
-        </Form.Item>
-
-        <Form.Item
-          label="电话号码"
-          name="phoneNumber"
-          rules={[{ required: true, message: '请填写电话号码' }]}
-        >
-          <InputComponent text="请填写电话号码" />
-        </Form.Item>
-
-        <Form.Item
-          label="电子邮箱"
-          name="email"
-          rules={[{ required: true, message: '请填写电子邮箱' }]}
-        >
-          <InputComponent text="请填写电子邮箱" />
-        </Form.Item>
-
-        <Form.Item
-          label="所在地区"
-          name="area"
-          rules={[{ required: true, message: '请选择所在地' }]}
-        >
-          <Cascader options={cityData} placeholder="请选择所在地" />
-        </Form.Item>
+        {/* <div className={styles.enterpriseTitle}>联系方式</div> */}
       </Form>
 
       <div className={styles.enterpriseFooter}>

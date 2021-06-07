@@ -13,7 +13,7 @@ import styles from './areaComponent.module.less'
 import * as _ from 'lodash'
 
 const MapTemp = forwardRef((props: any, ref) => {
-  const _AMap = window.AMap
+  const _AMap = window.AMap as any
 
   const mRef: any = useRef()
   const { dataSource = [], center = [], zoom, activityKey = 0 } = props
@@ -94,6 +94,14 @@ const MapTemp = forwardRef((props: any, ref) => {
       map: mRef.current
     }
   })
+
+  useEffect(() => {
+    return () => {
+      // map && map.destroy()
+      // mRef.current = null
+      // setMap(null)
+    }
+  }, [])
 
   useEffect(() => {
     initMap() // 初始化地图

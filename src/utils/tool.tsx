@@ -83,3 +83,16 @@ export const isEven = (num: number) => {
 export const isNaN = (num: number) => {
   return !(num > 0) && !(num <= 0)
 }
+
+export const transformProduceNumber = (value: string) => {
+  if (value) {
+    const newValue = value.split(',')
+    if (newValue[0] === '0') {
+      return '20人以内'
+    } else if (newValue[0] === '10000') {
+      return '10000以上'
+    } else {
+      return `${newValue[0]}人~${newValue[1]}人`
+    }
+  }
+}

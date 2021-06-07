@@ -1,0 +1,63 @@
+@import '@/css/common.less';
+
+.hasChosen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.areaList {
+  display: flex;
+  margin-top: 20px;
+  border: 1px solid @borderColor;
+}
+.areaLeft {
+  width: 114px;
+  height: 500px;
+  padding: 8px;
+  overflow-y: auto;
+}
+.areaLeft::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.areaLeft::-webkit-scrollbar-track {
+  background: rgb(239, 239, 239);
+  border-radius: 2px;
+}
+
+.areaLeft::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 10px;
+}
+
+.areaLeft::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+.areaRight {
+  flex: 1;
+  padding: 20px;
+}
+.provinces {
+  padding: 8px 12px;
+  text-align: center;
+  &:hover {
+    background-color: rgba(24, 144, 255, 0.1);
+  }
+}
+.cityBox {
+  display: inline-block;
+  padding: 8px;
+  font-weight: bold;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.active {
+  color: #fff;
+  background-color: rgba(24, 144, 255, 0.8);
+}
+.cityActive {
+  color: #5f8dc9;
+}
+.selectedTag {
+  margin-bottom: 8px;
+}

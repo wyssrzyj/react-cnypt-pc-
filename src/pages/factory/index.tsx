@@ -1,47 +1,141 @@
-import React, { useState } from 'react'
-import { Pagination } from 'antd'
+import React, { useState, useEffect } from 'react'
+// import { toJS } from 'mobx'
+import { Pagination, Empty } from 'antd'
+import { isEmpty } from 'lodash'
+import axios from '@/utils/axios'
+import { useStores } from '@/utils/mobx'
 import { FilterList, Icon, HeaderFilter } from '@/components'
 import { OverflowCard, FactoryCard } from './components'
+import { getCurrentUser } from '@/utils/tool'
 import styles from './index.module.less'
 
 const factoryTypes = [
   {
     type: '所有工厂',
-    key: 'man',
-    icon: <Icon type="jack-quanbu" className={styles.dressIcon} />,
+    key: 'all',
+    icon: <Icon type="jack-quanbu" className={styles.dressIcon} />
   },
   {
     type: '小单快返',
-    key: 'woman',
-    icon: <Icon type="jack-dingdan" className={styles.dressIcon} />,
+    key: 'XD',
+    icon: <Icon type="jack-dingdan" className={styles.dressIcon} />
   },
   {
     type: '外贸工厂',
-    key: 'kids',
-    icon: <Icon type="jack-diqiu" className={styles.dressIcon} />,
+    key: 'WM',
+    icon: <Icon type="jack-diqiu" className={styles.dressIcon} />
   },
   {
     type: '清加工工厂',
-    key: 'dress',
-    icon: <Icon type="jack-ziyuan" className={styles.dressIcon} />,
+    key: 'QJG',
+    icon: <Icon type="jack-ziyuan" className={styles.dressIcon} />
   },
   {
     type: '贴牌工厂',
-    key: 'OEM',
-    icon: <Icon type="jack-biaoqian" className={styles.dressIcon} />,
-  },
+    key: 'TP',
+    icon: <Icon type="jack-biaoqian" className={styles.dressIcon} />
+  }
 ]
 const sortList = ['综合排序', '有档期', '已认证', '最新发布']
 
 const Factory = () => {
-  const [sort, setSort] = useState('综合排序')
-  const handleFilter = (value) => {
+  const currentUser = getCurrentUser() || {}
+  const { userId } = currentUser
+  const { factoryStore } = useStores()
+  const { getFactoryList, productCategory } = factoryStore
+  const [sort, setSort] = useState<string>('综合排序')
+  const [factoryList, setFactoryList] = useState<any>([])
+  const [browsingList, setBrowsingList] = useState<any>([])
+  const [factoryArray, setFactoryArray] = useState<any>([])
+  const [total, setTotal] = useState<number>(0)
+  const [pageNum, setPageNum] = useState<number>(1)
+  const [factoryParams, setFactoryParams] = useState<any>({})
+  const [defaultMainId, setDefaultMainId] = useState<string>('')
+
+  const handleFilter = value => {
     setSort(value)
   }
+  const getRecommendFactory = async () => {
+    const response = await axios.get(
+      '/api/factory/info/list-newest-factories',
+      { pageSize: 3 }
+    )
+    const { success, data = [] } = response
+    if (success) {
+      setFactoryList([...data])
+    }
+  }
+  const getBrowsingHistory = async () => {
+    const response = await axios.post('/api/factory/info/reactBrowsing', {
+      pageSize: 5,
+      userId
+    })
+    const { success, data } = response
+    if (success) {
+      const { records } = data
+      setBrowsingList([...records])
+    }
+  }
+
+  const getFactoryListFn = async () => {
+    for (var key in factoryParams) {
+      if (isEmpty(factoryParams[key])) {
+        delete factoryParams[key]
+      }
+    }
+    const params = {
+      pageNum,
+      pageSize: 3,
+      mainCategoryParentId: defaultMainId,
+      ...factoryParams
+    }
+    const data = (await getFactoryList(params)) || {}
+    if (isEmpty(data)) {
+      setTotal(0)
+      setFactoryArray([])
+    } else {
+      const { total, records } = data
+      setTotal(total)
+      setFactoryArray([...records])
+    }
+  }
+
+  const onPaginationChange = page => {
+    setPageNum(page)
+  }
+
+  const onFilterChange = params => {
+    const newFactoryParams = { ...factoryParams, ...params }
+    console.log(
+      '🚀 ~ file: index.tsx ~ line 96 ~ Factory ~ newFactoryParams',
+      newFactoryParams
+    )
+    setFactoryParams({ ...newFactoryParams })
+  }
+
+  const getProductCategory = async () => {
+    const data = (await productCategory()) || {}
+    setDefaultMainId(data[0].id)
+  }
+
+  useEffect(() => {
+    if (defaultMainId) {
+      getFactoryListFn()
+    }
+  }, [pageNum, factoryParams, defaultMainId])
+
+  useEffect(() => {
+    ;(async () => {
+      await getProductCategory()
+    })()
+    getRecommendFactory()
+    getBrowsingHistory()
+  }, [])
+
   return (
     <div className={styles.factory}>
       <div className={styles.factoryContainer}>
-        <FilterList types={factoryTypes} />
+        <FilterList types={factoryTypes} onFilterChange={onFilterChange} />
         <div className={styles.factoryContent}>
           <div className={styles.contentLeft}>
             <HeaderFilter
@@ -49,10 +143,20 @@ const Factory = () => {
               current={sort}
               handleFilter={handleFilter}
             />
-            <OverflowCard />
-            <OverflowCard />
+            {isEmpty(factoryArray) ? (
+              <Empty className={styles.nodata} />
+            ) : (
+              factoryArray.map((item, index) => (
+                <OverflowCard key={index} {...item} />
+              ))
+            )}
             <div className={styles.factoryPage}>
-              <Pagination defaultCurrent={1} total={50} />
+              <Pagination
+                current={pageNum}
+                pageSize={3}
+                total={total}
+                onChange={onPaginationChange}
+              />
             </div>
           </div>
           <div className={styles.contentRight}>
@@ -63,8 +167,8 @@ const Factory = () => {
               />
               <div className={styles.newFactoryTitle}>工厂入驻</div>
             </div>
-            <FactoryCard title="推荐好工厂" />
-            <FactoryCard title="最近浏览记录" />
+            <FactoryCard title="推荐好工厂" list={factoryList} />
+            <FactoryCard title="最近浏览记录" list={browsingList} />
           </div>
         </div>
       </div>

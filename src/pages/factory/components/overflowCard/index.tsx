@@ -1,27 +1,43 @@
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
-import { Tag } from 'antd'
+import { toJS } from 'mobx'
+// import { Tag } from 'antd'
 import { EnvironmentFilled } from '@ant-design/icons'
+import { isArray, findIndex } from 'lodash'
+import { useStores, observer } from '@/utils/mobx'
 import SwiperCore, {
   Navigation,
   Pagination,
   Scrollbar,
   A11y,
-  Autoplay,
+  Autoplay
 } from 'swiper'
 
 import Swiper from 'swiper'
+import { transformProduceNumber } from '@/utils/tool'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
-const OverflowCard = () => {
+const OverflowCard = props => {
+  const {
+    factoryName,
+    factoryDistrict,
+    staffNumber,
+    factoryCategoryList = [],
+    prodTypeList = []
+  } = props
+
   const history = useHistory()
   const goToDetail = () => {
     history.push('/factory-detail')
   }
+  const { commonStore } = useStores()
+  const { dictionary } = commonStore
+  const allProdTypeList = toJS(dictionary).prodType
+
   useEffect(() => {
     new Swiper('.mySwiper', {
       slidesPerView: 3,
@@ -30,9 +46,9 @@ const OverflowCard = () => {
       centeredSlidesBounds: true,
       navigation: {
         nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        prevEl: '.swiper-button-prev'
       },
-      loop: true,
+      loop: true
       // autoplay: {
       //   delay: 2000,
       //   disableOnInteraction: true,
@@ -49,48 +65,47 @@ const OverflowCard = () => {
         <div>
           <div>
             <a className={styles.factoryName} onClick={goToDetail}>
-              石狮市一叶知秋服饰有限公司
+              {factoryName}
             </a>
-            <Tag className={styles.factoryTag} color="#f50">
+            {/* <Tag className={styles.factoryTag} color="#f50">
               实名
             </Tag>
             <Tag className={styles.factoryTag} color="#f59a23">
               验厂
-            </Tag>
+            </Tag> */}
             <EnvironmentFilled className={styles.factoryIcon} />
-            <span>福建省 泉州市 石狮市</span>
-            <span>
+            <span>{factoryDistrict}</span>
+            {/* <span>
               <b className={styles.factoryScore}>4.7</b>分
-            </span>
+            </span> */}
           </div>
           <ul className={styles.factoryInfoList}>
             <li>
-              <span>企业类型：</span>
-              <span>生产企业或加工个体户</span>
-            </li>
-            <li>
               <span>生产人数：</span>
-              <span>10000人以上</span>
+              <span>{transformProduceNumber(staffNumber)}</span>
             </li>
             <li>
               <span>主要生产：</span>
-              <span>服饰</span>
+              <span>
+                {isArray(factoryCategoryList) && factoryCategoryList.join('、')}
+              </span>
             </li>
             <li>
-              <span>接单类型：</span>
-              <span>主要承接清加工订单</span>
-            </li>
-            <li>
-              <span>加工方式：</span>
-              <span>主要做OEM来图来样加工</span>
-            </li>
-            <li>
-              <span>工厂地址：</span>
-              <span>石狮市</span>
-            </li>
-            <li>
-              <span>联系人：</span>
-              <span>黄泽华</span>
+              <span>加工类型：</span>
+              <span>
+                {isArray(prodTypeList) &&
+                  allProdTypeList
+                    .filter(function (val) {
+                      return (
+                        findIndex(prodTypeList, function (o) {
+                          return o.processType == val.value
+                        }) > -1
+                      )
+                    })
+                    .map(item => item.label)
+                    .join('、')}
+              </span>
+              {}
             </li>
           </ul>
         </div>
@@ -126,4 +141,4 @@ const OverflowCard = () => {
   )
 }
 
-export default OverflowCard
+export default observer(OverflowCard)

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useStores, observer } from '@/utils/mobx'
 import styles from './index.module.less'
 import BG_LOGO from './bgLogo.png'
 import { Tabs, Input, Button, Select } from 'antd'
@@ -16,16 +17,22 @@ type OptionType = {
 const Search = () => {
   const location = useLocation()
   const history = useHistory()
+  const { commonStore } = useStores()
+  const { factoryName } = commonStore
+  console.log(
+    '🚀 ~ file: index.tsx ~ line 22 ~ Search ~ factoryName',
+    factoryName
+  )
 
   const tabs: Array<OptionType> = [
     { label: '首页', url: '/platform/home', key: 'home' },
     { label: '订单', url: '/platform/order', key: 'order' },
-    { label: '找工厂', url: '/platform/factory', key: 'factory' },
+    { label: '找工厂', url: '/platform/factory', key: 'factory' }
   ]
 
   const searchTabs: Array<OptionType> = [
     { label: '工厂', key: 'factory' },
-    { label: '订单', key: 'order' },
+    { label: '订单', key: 'order' }
   ]
 
   const [activityKey, setActivityKey] = useState<string>('home')
@@ -34,7 +41,7 @@ const Search = () => {
 
   useEffect(() => {
     const init = { label: '首页', url: '/platform/home', key: 'home' }
-    let target = tabs.find((item) => item.url === location.pathname) || init
+    let target = tabs.find(item => item.url === location.pathname) || init
 
     if (location.pathname.includes('/platform/order-search')) {
       target = { label: '订单', url: '/platform/order-search', key: 'order' }
@@ -44,7 +51,7 @@ const Search = () => {
       target = {
         label: '工厂',
         url: '/platform/factory-search',
-        key: 'factory',
+        key: 'factory'
       }
     }
 
@@ -57,7 +64,7 @@ const Search = () => {
 
   const placeholders = {
     order: '请输入订单编号',
-    factory: '请输入工厂名称',
+    factory: '请输入工厂名称'
   }
 
   const searchTypeChange = (activeKey: string) => {
@@ -67,7 +74,7 @@ const Search = () => {
   const companyTypes: Array<OptionType> = [
     { label: '有限公司', key: 1 },
     { label: '股份有限公司', key: 2 },
-    { label: '集团公司', key: 3 },
+    { label: '集团公司', key: 3 }
   ]
 
   const companyTypeChange = (val: string | number) => {
@@ -75,7 +82,7 @@ const Search = () => {
   }
 
   const tabClick = (key: string) => {
-    const target = tabs.find((item) => item.key === key)
+    const target = tabs.find(item => item.key === key)
     if (target.url === location.pathname) return
     history.push(target.url)
   }
@@ -101,6 +108,7 @@ const Search = () => {
 
         <div className={styles.search}>
           <Input
+            defaultValue={factoryName}
             className={styles.input}
             placeholder={placeholders[searchKey]}
           />
@@ -140,4 +148,4 @@ const Search = () => {
   )
 }
 
-export default Search
+export default observer(Search)

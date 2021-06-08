@@ -23,6 +23,7 @@ SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
 const OverflowCard = props => {
   const {
+    factoryId,
     factoryName,
     factoryDistrict,
     staffNumber,
@@ -32,7 +33,7 @@ const OverflowCard = props => {
 
   const history = useHistory()
   const goToDetail = () => {
-    history.push('/factory-detail')
+    history.push(`/factory-detail/${factoryId}`)
   }
   const { commonStore } = useStores()
   const { dictionary } = commonStore

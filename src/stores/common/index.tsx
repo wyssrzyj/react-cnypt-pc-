@@ -8,6 +8,8 @@ export default class CommonStore {
     makeAutoObservable(this)
   }
 
+  @observable factoryName = undefined
+
   @observable dictionary = {}
   // 获取全部字典
   @action allDictionary = async params => {
@@ -26,6 +28,9 @@ export default class CommonStore {
     } catch (e) {
       console.log(e)
     }
+  }
+  @action updateName = name => {
+    this.factoryName = name
   }
 }
 

@@ -1,39 +1,44 @@
 @import '@/css/common.less';
 
 .factoryCard {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .cardHeader {
-    padding: 8px;
-    font-weight: bold;
-    color: @66gray;
-    background-color: @grayLine;
+  padding: 8px;
+  color: @66gray;
+  font-weight: bold;
+  background-color: @grayLine;
 }
 
 .factoryCardContent {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    background-color: @white;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: @white;
 
-    :global {
-        li {
-            padding: 8px 12px;
-            border-bottom: 1px solid @borderColor;
+  :global {
+    li {
+      padding: 8px 12px;
+      border-bottom: 1px solid @borderColor;
 
-            &:last-child {
-                border-bottom: none;
-            }
-        }
+      &:last-child {
+        border-bottom: none;
+      }
     }
+  }
 }
 
 .factoryName {
-    padding: 8px 0;
-    color: @hoverColor;
+  padding: 8px 0;
+  color: @hoverColor;
 }
 
 .factoryInfo {
-    padding: 4px 0;
+  padding: 4px 0;
+}
+.noDate {
+  margin: 0;
+  padding: 40px 0;
+  background-color: #fff;
 }

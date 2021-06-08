@@ -218,7 +218,8 @@ const QualificationCertificate = props => {
   )
 }
 
-const FactoryIntroduce = () => {
+const FactoryIntroduce = props => {
+  const { factoryId } = props
   const [activeTab, setActiveTab] = useState('introduction')
   const [introductions, setIntroductions] = useState<any>({})
   const [ability, setAbility] = useState<any>({})
@@ -252,7 +253,7 @@ const FactoryIntroduce = () => {
     const response = await axios.get(
       '/api/factory/enterprise/get-by-factory-id',
       {
-        factoryId: 1
+        factoryId
       }
     )
     const { success, data = {} } = response
@@ -266,7 +267,7 @@ const FactoryIntroduce = () => {
     const response = await axios.get(
       '/api/factory/info/get-capacity-factory-id',
       {
-        factoryId: 1
+        factoryId
       }
     )
     const { success, data = {} } = response
@@ -288,7 +289,7 @@ const FactoryIntroduce = () => {
   // 车间设备
   const getEquipment = async () => {
     const response = await axios.post('/api/factory/equipment/list', {
-      factoryId: 1
+      factoryId
     })
     const { success, data = {} } = response
     if (success) {
@@ -301,7 +302,7 @@ const FactoryIntroduce = () => {
     const response = await axios.get(
       '/api/factory/factory-certificate/list-factory-id',
       {
-        factoryId: 1
+        factoryId
       }
     )
     const { success, data = {} } = response

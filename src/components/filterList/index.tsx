@@ -45,7 +45,6 @@ const FilterList = props => {
   const { types, onFilterChange } = props
   const { factoryStore, commonStore } = useStores()
   const { dictionary } = commonStore
-  console.log('🚀 ~ file: index.tsx ~ line 48 ~ dictionary', dictionary)
   const { prodType = [], factoryStaffNumber = [] } = toJS(dictionary)
   const { productCategoryList } = factoryStore
   const [factoryType, setFactoryType] = useState('all')

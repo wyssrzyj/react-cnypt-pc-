@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 // import { toJS } from 'mobx'
-import { Pagination, Empty } from 'antd'
+import { Pagination, Empty, Spin } from 'antd'
 import { isEmpty } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
@@ -51,6 +51,7 @@ const Factory = () => {
   const [pageNum, setPageNum] = useState<number>(1)
   const [factoryParams, setFactoryParams] = useState<any>({})
   const [defaultMainId, setDefaultMainId] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(true)
 
   const handleFilter = value => {
     setSort(value)
@@ -78,6 +79,7 @@ const Factory = () => {
   }
 
   const getFactoryListFn = async () => {
+    setIsLoading(true)
     for (var key in factoryParams) {
       if (isEmpty(factoryParams[key])) {
         delete factoryParams[key]
@@ -98,6 +100,7 @@ const Factory = () => {
       setTotal(total)
       setFactoryArray([...records])
     }
+    setIsLoading(false)
   }
 
   const onPaginationChange = page => {
@@ -106,10 +109,6 @@ const Factory = () => {
 
   const onFilterChange = params => {
     const newFactoryParams = { ...factoryParams, ...params }
-    console.log(
-      '🚀 ~ file: index.tsx ~ line 96 ~ Factory ~ newFactoryParams',
-      newFactoryParams
-    )
     setFactoryParams({ ...newFactoryParams })
   }
 
@@ -143,13 +142,15 @@ const Factory = () => {
               current={sort}
               handleFilter={handleFilter}
             />
-            {isEmpty(factoryArray) ? (
-              <Empty className={styles.nodata} />
-            ) : (
-              factoryArray.map((item, index) => (
-                <OverflowCard key={index} {...item} />
-              ))
-            )}
+            <Spin size="large" spinning={isLoading}>
+              {isEmpty(factoryArray) ? (
+                <Empty className={styles.nodata} />
+              ) : (
+                factoryArray.map((item, index) => (
+                  <OverflowCard key={index} {...item} />
+                ))
+              )}
+            </Spin>
             <div className={styles.factoryPage}>
               <Pagination
                 current={pageNum}

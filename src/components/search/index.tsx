@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useStores, observer } from '@/utils/mobx'
 import styles from './index.module.less'
 import BG_LOGO from './bgLogo.png'
-import { Tabs, Input, Button, Select } from 'antd'
+import { Tabs, Input, Button } from 'antd'
 import { useLocation, useHistory } from 'react-router'
 
 const { TabPane } = Tabs
-const { Option } = Select
+// const { Option } = Select
 
 type OptionType = {
   label: string
@@ -18,11 +18,7 @@ const Search = () => {
   const location = useLocation()
   const history = useHistory()
   const { commonStore } = useStores()
-  const { factoryName } = commonStore
-  console.log(
-    '🚀 ~ file: index.tsx ~ line 22 ~ Search ~ factoryName',
-    factoryName
-  )
+  const { factoryName, updateName } = commonStore
 
   const tabs: Array<OptionType> = [
     { label: '首页', url: '/platform/home', key: 'home' },
@@ -37,7 +33,8 @@ const Search = () => {
 
   const [activityKey, setActivityKey] = useState<string>('home')
   const [searchKey, setSearchKey] = useState<string>('factory')
-  const [companyType, setCompanyType] = useState<number>(1)
+  // const [companyType, setCompanyType] = useState<number>(1)
+  const [searchWord, setSearchWord] = useState<string>(factoryName)
 
   useEffect(() => {
     const init = { label: '首页', url: '/platform/home', key: 'home' }
@@ -71,20 +68,24 @@ const Search = () => {
     setSearchKey(activeKey)
   }
 
-  const companyTypes: Array<OptionType> = [
-    { label: '有限公司', key: 1 },
-    { label: '股份有限公司', key: 2 },
-    { label: '集团公司', key: 3 }
-  ]
+  // const companyTypes: Array<OptionType> = [
+  //   { label: '有限公司', key: 1 },
+  //   { label: '股份有限公司', key: 2 },
+  //   { label: '集团公司', key: 3 }
+  // ]
 
-  const companyTypeChange = (val: string | number) => {
-    setCompanyType(+val)
-  }
+  // const companyTypeChange = (val: string | number) => {
+  //   setCompanyType(+val)
+  // }
 
   const tabClick = (key: string) => {
     const target = tabs.find(item => item.key === key)
     if (target.url === location.pathname) return
     history.push(target.url)
+  }
+
+  const searchFunction = () => {
+    updateName(searchWord)
   }
 
   return (
@@ -109,10 +110,12 @@ const Search = () => {
         <div className={styles.search}>
           <Input
             defaultValue={factoryName}
+            value={searchWord}
+            onChange={e => setSearchWord(e.target.value)}
             className={styles.input}
             placeholder={placeholders[searchKey]}
           />
-          {searchKey === 'factory' && (
+          {/* {searchKey === 'factory' && (
             <Select
               className={styles.inputSelect}
               value={companyType}
@@ -124,8 +127,12 @@ const Search = () => {
                 </Option>
               ))}
             </Select>
-          )}
-          <Button className={styles.btn} type={'primary'}>
+          )} */}
+          <Button
+            className={styles.btn}
+            type={'primary'}
+            onClick={searchFunction}
+          >
             搜索
           </Button>
         </div>

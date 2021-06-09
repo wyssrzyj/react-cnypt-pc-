@@ -3,7 +3,8 @@ import { toJS } from 'mobx'
 import { Tabs, Select, Tag, Button, message } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
-import { isEmpty, find } from 'lodash'
+import { isEmpty, find, isNil } from 'lodash'
+import moment from 'moment'
 import { useStores, observer } from '@/utils/mobx'
 import { AreaModal } from './components'
 import styles from './index.module.less'
@@ -24,21 +25,21 @@ const areaCategory = [
   { id: '822', name: '南京市' }
 ]
 
-const setUpTime = [
-  { label: '1年内', value: '1年内' },
-  { label: '1~3年', value: '1~3年' },
-  { label: '3~5年', value: '3~5年' },
-  { label: '5~10年', value: '5~10年' },
-  { label: '10年以上', value: '10年以上' }
+const setUpTimeMap = [
+  { label: '1年内', value: '0,1' },
+  { label: '1~3年', value: '1,3' },
+  { label: '3~5年', value: '3,5' },
+  { label: '5~10年', value: '5,10' },
+  { label: '10年以上', value: '10' }
 ]
 
-const updateTime = [
-  { label: '1天内', value: '1天内' },
-  { label: '7天内', value: '7天内' },
-  { label: '30天内', value: '30天内' },
-  { label: '90天内', value: '0天内' },
-  { label: '180天内', value: '180天内' },
-  { label: '1年内', value: '1年内' }
+const updateTimeMap = [
+  { label: '1天内', value: 0 },
+  { label: '7天内', value: 6 },
+  { label: '30天内', value: 29 },
+  { label: '90天内', value: 89 },
+  { label: '180天内', value: 179 },
+  { label: '1年内', value: 364 }
 ]
 
 const FilterList = props => {
@@ -62,6 +63,8 @@ const FilterList = props => {
     name: '全部'
   })
   const [factorySize, setFactorySize] = useState<string>(null)
+  const [setUpTime, setSetUpTime] = useState<string>(null)
+  const [updateTime, setUpdateTime] = useState<string>(null)
 
   const emptyFn = () => {
     const newData = toJS(productCategoryList)
@@ -147,6 +150,43 @@ const FilterList = props => {
       onFilterChange({
         staffNumberStart: '',
         staffNumberEnd: ''
+      })
+    }
+  }
+
+  //成立时间
+  const onSetUpTimeChange = value => {
+    setSetUpTime(value)
+    let start
+    let end
+    if (value) {
+      const newValue = value.split(',')
+      if (newValue.length > 1) {
+        start = moment().add(-Number(newValue[1]), 'y').format('x')
+        end = moment().add(-Number(newValue[0]), 'y').format('x')
+      } else {
+        start = moment().add(-Number(newValue[0]), 'y').format('x')
+        end = ''
+      }
+    }
+    onFilterChange({
+      factoryCreateTimeStart: start,
+      factoryCreateTimeEnd: end
+    })
+  }
+
+  //更新时间
+  const onUpdateTimeChange = value => {
+    setUpdateTime(value)
+    if (!isNil(value)) {
+      onFilterChange({
+        updateTimeStart: moment().subtract('days', value).format('x'),
+        updateTimeEnd: moment().format('x')
+      })
+    } else {
+      onFilterChange({
+        updateTimeStart: undefined,
+        updateTimeEnd: undefined
       })
     }
   }
@@ -295,9 +335,11 @@ const FilterList = props => {
                 <Select
                   allowClear
                   placeholder="成立时间"
+                  value={setUpTime}
                   className={styles.moreSelect}
+                  onChange={onSetUpTimeChange}
                 >
-                  {setUpTime.map(item => (
+                  {setUpTimeMap.map(item => (
                     <Option key={item.value} value={item.value}>
                       {item.label}
                     </Option>
@@ -318,10 +360,12 @@ const FilterList = props => {
                 </Select>
                 <Select
                   allowClear
+                  value={updateTime}
+                  onChange={onUpdateTimeChange}
                   placeholder="更新时间"
                   className={styles.moreSelect}
                 >
-                  {updateTime.map(item => (
+                  {updateTimeMap.map(item => (
                     <Option key={item.value} value={item.value}>
                       {item.label}
                     </Option>

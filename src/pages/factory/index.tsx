@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Pagination, Empty, Spin } from 'antd'
 import { isEmpty } from 'lodash'
 import axios from '@/utils/axios'
-import { useStores } from '@/utils/mobx'
+import { useStores, observer } from '@/utils/mobx'
 import { FilterList, Icon, HeaderFilter } from '@/components'
 import { OverflowCard, FactoryCard } from './components'
 import { getCurrentUser } from '@/utils/tool'
@@ -41,8 +41,9 @@ const sortList = ['综合排序', '有档期', '已认证', '最新发布']
 const Factory = () => {
   const currentUser = getCurrentUser() || {}
   const { userId } = currentUser
-  const { factoryStore } = useStores()
+  const { factoryStore, commonStore } = useStores()
   const { getFactoryList, productCategory } = factoryStore
+  const { factoryName } = commonStore
   const [sort, setSort] = useState<string>('综合排序')
   const [factoryList, setFactoryList] = useState<any>([])
   const [browsingList, setBrowsingList] = useState<any>([])
@@ -89,6 +90,7 @@ const Factory = () => {
       pageNum,
       pageSize: 3,
       mainCategoryParentId: defaultMainId,
+      factoryName,
       ...factoryParams
     }
     const data = (await getFactoryList(params)) || {}
@@ -109,6 +111,10 @@ const Factory = () => {
 
   const onFilterChange = params => {
     const newFactoryParams = { ...factoryParams, ...params }
+    console.log(
+      '🚀 ~ file: index.tsx ~ line 114 ~ Factory ~ newFactoryParams',
+      newFactoryParams
+    )
     setFactoryParams({ ...newFactoryParams })
   }
 
@@ -121,7 +127,7 @@ const Factory = () => {
     if (defaultMainId) {
       getFactoryListFn()
     }
-  }, [pageNum, factoryParams, defaultMainId])
+  }, [pageNum, factoryParams, defaultMainId, factoryName])
 
   useEffect(() => {
     ;(async () => {
@@ -177,4 +183,4 @@ const Factory = () => {
   )
 }
 
-export default Factory
+export default observer(Factory)

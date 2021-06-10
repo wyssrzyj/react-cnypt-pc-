@@ -125,6 +125,7 @@ const ControlPanel = () => {
               component={FactoryInformation}
             />
             <Route path="/control-panel/photo" component={PlantSitePhoto} />
+            {/* 资质认证 */}
             <Route
               path="/control-panel/qualification"
               component={QualificationCertification}

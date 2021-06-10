@@ -10,6 +10,11 @@ import {
   message
 } from 'antd'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { toJS } from 'mobx'
+import moment from 'moment'
+import { isFunction, get } from 'lodash'
+import axios from '@/utils/axios'
+import { useStores } from '@/utils/mobx'
 import styles from './index.module.less'
 
 const { Option } = Select
@@ -19,28 +24,66 @@ const layout = {
   wrapperCol: { span: 16 }
 }
 
-const PeriodValidity = () => {
-  const [timeType, setTimeType] = useState<string>('')
+const typeMap = { add: '新增', edit: '编辑', check: '查看' }
+
+const PeriodValidity = props => {
+  const { onChange, value, type } = props
+  const [timeType, setTimeType] = useState<string>(value ? 'short' : '')
   const onTimeChange = e => {
     setTimeType(e.target.value)
+    e.target.value === 'long' &&
+      isFunction(onChange) &&
+      onChange(Number.MAX_SAFE_INTEGER)
   }
-  const onDateChange = () => {}
+  const onDateChange = data => {
+    isFunction(onChange) && onChange(moment(data).format('x'))
+  }
   return (
     <div>
-      <Radio.Group onChange={onTimeChange} value={timeType}>
+      <Radio.Group
+        onChange={onTimeChange}
+        value={timeType}
+        disabled={type === 'check'}
+      >
         <Radio value="short">选择截止时间</Radio>
         <Radio value="long">长期有效</Radio>
       </Radio.Group>
-      {timeType === 'short' && <DatePicker onChange={onDateChange} />}
+      {timeType === 'short' && (
+        <DatePicker
+          value={moment(value)}
+          onChange={onDateChange}
+          disabled={type === 'check'}
+        />
+      )}
     </div>
   )
 }
 
 const QualificationModal = props => {
-  const { visible, handleCancel } = props
+  const [form] = Form.useForm()
+  const { validateFields } = form
+  const { visible, handleCancel, handleOk, type, current = {} } = props
+  const { certificationCode, certificationName, expiryDate } = current
+  const initialValues = { certificationCode, certificationName, expiryDate }
+  const { commonStore } = useStores()
+  const { dictionary } = commonStore
+  const { factoryCertificate = [] } = toJS(dictionary)
   const [imageUrl, setImageUrl] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
-  const handleOk = () => {}
+
+  const handleSelfOk = () => {
+    validateFields().then(values => {
+      axios
+        .post(' /api/factory/factory-certificate/save', { ...values })
+        .then(response => {
+          console.log(
+            '🚀 ~ file: index.tsx ~ line 67 ~ axios.post ~ response',
+            response
+          )
+          handleOk()
+        })
+    })
+  }
 
   const uploadButton = (
     <div>
@@ -83,47 +126,53 @@ const QualificationModal = props => {
 
   return (
     <Modal
-      title="新增资质"
+      title={`${get(typeMap, type)}资质`}
       visible={visible}
       width={632}
-      onOk={handleOk}
+      onOk={handleSelfOk}
       onCancel={handleCancel}
     >
       <Form
         {...layout}
-        name="basic"
-        // initialValues={{ remember: true }}
+        form={form}
+        key={type === 'add' ? null : current.factoryId}
+        name="certification"
+        initialValues={initialValues}
       >
         <Form.Item
           label="资质名称"
-          name="qualificationName"
+          name="certificationName"
           rules={[{ required: true, message: '请选择资质名称！' }]}
         >
-          <Select placeholder="请选择资质名称">
-            <Option value="jack">Jack</Option>
+          <Select placeholder="请选择资质名称" disabled={type === 'check'}>
+            {factoryCertificate.map(item => (
+              <Option key={item.id} value={item.value}>
+                {item.label}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
 
         <Form.Item
           label="证书编号"
-          name="certificateNumber"
+          name="certificationCode"
           rules={[{ required: true, message: '请输入证书编号!' }]}
         >
-          <Input placeholder="请输入证书编号" />
+          <Input disabled={type === 'check'} placeholder="请输入证书编号" />
         </Form.Item>
 
         <Form.Item
           label="有效期"
-          name="periodValidity"
+          name="expiryDate"
           rules={[{ required: true, message: '请输入证书编号!' }]}
         >
-          <PeriodValidity />
+          <PeriodValidity type={type} />
         </Form.Item>
 
         <Form.Item
           label="资质上传"
           name="qualification"
-          rules={[{ required: true, message: '请输长传资质证书!' }]}
+          rules={[{ message: '请输长传资质证书!' }]}
         >
           <Upload
             name="avatar"

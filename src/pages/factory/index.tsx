@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
-// import { toJS } from 'mobx'
 import { Pagination, Empty, Spin } from 'antd'
 import { isEmpty } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores, observer } from '@/utils/mobx'
-import { FilterList, Icon, HeaderFilter } from '@/components'
+import { FilterList, Icon } from '@/components'
 import { OverflowCard, FactoryCard } from './components'
 import { getCurrentUser } from '@/utils/tool'
 import styles from './index.module.less'
@@ -36,7 +35,7 @@ const factoryTypes = [
     icon: <Icon type="jack-biaoqian" className={styles.dressIcon} />
   }
 ]
-const sortList = ['综合排序', '有档期', '已认证', '最新发布']
+// const sortList = ['综合排序', '有档期', '已认证', '最新发布']
 
 const Factory = () => {
   const currentUser = getCurrentUser() || {}
@@ -44,7 +43,7 @@ const Factory = () => {
   const { factoryStore, commonStore } = useStores()
   const { getFactoryList, productCategory } = factoryStore
   const { factoryName } = commonStore
-  const [sort, setSort] = useState<string>('综合排序')
+  // const [sort, setSort] = useState<string>('综合排序')
   const [factoryList, setFactoryList] = useState<any>([])
   const [browsingList, setBrowsingList] = useState<any>([])
   const [factoryArray, setFactoryArray] = useState<any>([])
@@ -54,9 +53,9 @@ const Factory = () => {
   const [defaultMainId, setDefaultMainId] = useState<string>('')
   const [isLoading, setIsLoading] = useState(true)
 
-  const handleFilter = value => {
-    setSort(value)
-  }
+  // const handleFilter = value => {
+  //   setSort(value)
+  // }
   const getRecommendFactory = async () => {
     const response = await axios.get(
       '/api/factory/info/list-newest-factories',
@@ -111,10 +110,6 @@ const Factory = () => {
 
   const onFilterChange = params => {
     const newFactoryParams = { ...factoryParams, ...params }
-    console.log(
-      '🚀 ~ file: index.tsx ~ line 114 ~ Factory ~ newFactoryParams',
-      newFactoryParams
-    )
     setFactoryParams({ ...newFactoryParams })
   }
 
@@ -143,11 +138,11 @@ const Factory = () => {
         <FilterList types={factoryTypes} onFilterChange={onFilterChange} />
         <div className={styles.factoryContent}>
           <div className={styles.contentLeft}>
-            <HeaderFilter
+            {/* <HeaderFilter
               sortList={sortList}
               current={sort}
               handleFilter={handleFilter}
-            />
+            /> */}
             <Spin size="large" spinning={isLoading}>
               {isEmpty(factoryArray) ? (
                 <Empty className={styles.nodata} />

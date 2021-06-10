@@ -8,6 +8,11 @@ const Home = Loadable({
   loader: () => import('@/pages/home')
 })
 
+// homePage 地图
+const HomePage = Loadable({
+  loader: () => import('@/pages/homePage')
+})
+
 // note
 const Note = Loadable({
   loader: () => import('@/pages/note')
@@ -43,17 +48,30 @@ const ControlPanel = Loadable({
   loader: () => import('@/pages/controlPanel')
 })
 
+// 控制台
+const GDMap = Loadable({
+  loader: () => import('@/pages/homePage/GDMap')
+})
+
+// Excel
+const Excel = Loadable({
+  loader: () => import('@/pages/homePage/excel')
+})
+
 const RouteList = () => {
   return (
     <Switch>
       <Route path="/platform" component={Platform} />
       <Route path="/home" component={Home} />
+      <Route path="/home-page" component={HomePage} />
       <Route path="/note" component={Note} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/order-detail" component={OrderDetail} />
       <Route path="/factory-detail" component={FactoryDetail} />
       <Route path="/control-panel" component={ControlPanel} />
+      <Route path="/GDMap" component={GDMap} />
+      <Route path="/excel" component={Excel} />
       <Redirect to="/platform" />
     </Switch>
   )

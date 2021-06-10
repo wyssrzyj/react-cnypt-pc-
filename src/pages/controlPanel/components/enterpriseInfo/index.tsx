@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   Form,
   Input,
   Button,
   Radio,
-  Checkbox,
   // Select,
   // DatePicker,
   Cascader,
-  Upload
+  Upload,
+  message
 } from 'antd'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import { get } from 'lodash'
+import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
 import cityData from '@/static/cityData'
 // import ProcessingTypeCom from '../processingTypeCom'
@@ -43,33 +43,35 @@ const layout = {
 //   { label: '10000以上', value: '10001' }
 // ]
 
-const InputComponent = props => {
-  const { text, disable = false, value } = props
-  return (
-    <div className={styles.inputComponent}>
-      <Input
-        style={{ width: 370 }}
-        value={value}
-        disabled={disable}
-        placeholder={text}
-      />
-      <Checkbox>不公开</Checkbox>
-    </div>
-  )
-}
+// const InputComponent = props => {
+//   const { text, disable = false, value } = props
+//   return (
+//     <div className={styles.inputComponent}>
+//       <Input
+//         style={{ width: 370 }}
+//         value={value}
+//         disabled={disable}
+//         placeholder={text}
+//       />
+//       <Checkbox>不公开</Checkbox>
+//     </div>
+//   )
+// }
 
 const EnterpriseInfo = () => {
+  const [form] = Form.useForm()
+  const { validateFields } = form
   const currentUser = getCurrentUser() || {}
   const { mobilePhone } = currentUser
-  const [enterpriseType, setEnterpriseType] = useState<string>('process')
+  // const [enterpriseType, setEnterpriseType] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
 
-  const onValuesChange = changedValues => {
-    if (get(changedValues, 'enterpriseType')) {
-      setEnterpriseType(changedValues.enterpriseType)
-    }
-  }
+  // const onValuesChange = changedValues => {
+  //   if (get(changedValues, 'enterpriseType')) {
+  //     setEnterpriseType(changedValues.enterpriseType)
+  //   }
+  // }
 
   const uploadButton = (
     <div>
@@ -77,25 +79,72 @@ const EnterpriseInfo = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   )
-  useEffect(() => {
-    setLoading(false)
-    setImageUrl('')
-  }, [])
+
+  const beforeUpload = file => {
+    const isJpgOrPng = file.type === 'image/jpg' || file.type === 'image/png'
+    if (!isJpgOrPng) {
+      message.error('只能上传jpg/png格式文件!')
+    }
+    const isLt2M = file.size / 1024 < 500
+    if (!isLt2M) {
+      message.error('文件不能超过500kb!')
+    }
+    return isJpgOrPng && isLt2M
+  }
+
+  const handleChange = info => {
+    if (info.file.status === 'uploading') {
+      setLoading(true)
+      return
+    }
+    if (info.file.status === 'done' || info.file.status === 'error') {
+      getBase64(info.file.originFileObj, imageUrl => {
+        setImageUrl(imageUrl)
+        setLoading(false)
+      })
+    }
+  }
+
+  const getBase64 = (img, callback) => {
+    const reader = new FileReader()
+    reader.addEventListener('load', () => callback(reader.result))
+    reader.readAsDataURL(img)
+  }
+
+  const confirmSubmit = () => {
+    validateFields().then(values => {
+      const { area = [] } = values
+      delete values.area
+      axios
+        .post('/api/factory/enterprise/enterprise-info-save', {
+          ...values,
+          enterpriseLogoUrl: imageUrl,
+          provinceId: area[0],
+          cityId: area[1],
+          districtId: area[2]
+        })
+        .then(response => {
+          const { success, msg } = response
+          message[success ? 'success' : 'error'](msg)
+        })
+    })
+  }
+
   return (
     <div className={styles.enterpriseInfo}>
       <Form
         {...layout}
+        form={form}
         name="enterprise"
         initialValues={{
-          enterpriseType: enterpriseType,
-          mobileNumber: mobilePhone
+          mobilePhone: mobilePhone
         }}
-        onValuesChange={onValuesChange}
+        // onValuesChange={onValuesChange}
       >
         <div className={styles.enterpriseTitle}>基本信息</div>
         <Form.Item
           label="企业Logo"
-          name="logo"
+          name="enterpriseLogoUrl"
           rules={[{ required: true, message: '请上传企业logo' }]}
         >
           <Upload
@@ -103,6 +152,8 @@ const EnterpriseInfo = () => {
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
+            beforeUpload={beforeUpload}
+            onChange={handleChange}
           >
             {imageUrl ? (
               <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
@@ -126,33 +177,33 @@ const EnterpriseInfo = () => {
           rules={[{ required: true, message: '请输入企业名称！' }]}
         >
           <Radio.Group>
-            <Radio value="process">加工商</Radio>
-            <Radio value="bill">发单商</Radio>
+            <Radio value="0">加工商</Radio>
+            <Radio value="1">发单商</Radio>
           </Radio.Group>
         </Form.Item>
 
         <Form.Item
           label="联系人"
-          name="contact"
+          name="realName"
           rules={[{ required: true, message: '请填写联系人姓名' }]}
         >
-          <InputComponent text="请填写联系人姓名" />
+          <Input placeholder="请填写联系人姓名" />
         </Form.Item>
 
         <Form.Item
           label="手机号"
-          name="mobileNumber"
+          name="mobilePhone"
           rules={[{ required: true, message: '请填写手机号' }]}
         >
-          <InputComponent text="请填写手机号" disable={true} />
+          <Input placeholder="请填写手机号" disabled />
         </Form.Item>
 
         <Form.Item
           label="电话号码"
-          name="phoneNumber"
+          name="contactPhone"
           rules={[{ required: true, message: '请填写电话号码' }]}
         >
-          <InputComponent text="请填写电话号码" />
+          <Input placeholder="请输入座机号码  如：0571-8******" />
         </Form.Item>
 
         <Form.Item
@@ -160,7 +211,7 @@ const EnterpriseInfo = () => {
           name="email"
           rules={[{ required: true, message: '请填写电子邮箱' }]}
         >
-          <InputComponent text="请填写电子邮箱" />
+          <Input placeholder="请填写电子邮箱" />
         </Form.Item>
 
         <Form.Item
@@ -241,8 +292,9 @@ const EnterpriseInfo = () => {
       </Form>
 
       <div className={styles.enterpriseFooter}>
-        <Button type="primary">确认提交</Button>
-        <Button className={styles.cancelButton}>取消</Button>
+        <Button type="primary" onClick={confirmSubmit}>
+          确认提交
+        </Button>
       </div>
     </div>
   )

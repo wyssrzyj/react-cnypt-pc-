@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router'
 import { Tag } from 'antd'
 import { HeartFilled } from '@ant-design/icons'
@@ -24,7 +24,8 @@ import u1653 from '@/static/images/u1653.png'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs])
 
-const FactoryInfo = memo(() => {
+const FactoryInfo = props => {
+  const { factoryId } = props
   const history = useHistory()
   const [factoryInfo, setFactoryInfo] = useState<any>({})
   const currentUser = getCurrentUser() || {}
@@ -33,7 +34,7 @@ const FactoryInfo = memo(() => {
     const { userId } = currentUser
     const response = await axios.post('/api/factory/info/details', {
       dictCode: 'factory_tag',
-      factoryId: 1,
+      factoryId,
       userId
     })
     const { success, data = {} } = response
@@ -244,6 +245,6 @@ const FactoryInfo = memo(() => {
       </div>
     </div>
   )
-})
+}
 
 export default FactoryInfo

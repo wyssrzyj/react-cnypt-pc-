@@ -68,7 +68,7 @@ const RouteList = () => {
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/order-detail" component={OrderDetail} />
-      <Route path="/factory-detail" component={FactoryDetail} />
+      <Route path="/factory-detail/:id" component={FactoryDetail} />
       <Route path="/control-panel" component={ControlPanel} />
       <Route path="/GDMap" component={GDMap} />
       <Route path="/excel" component={Excel} />

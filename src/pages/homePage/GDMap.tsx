@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { Scene, PointLayer } from '@antv/l7'
-import { DrillDownLayer } from '@antv/l7-district'
+import { DrillDownLayer, CountryLayer, ProvinceLayer } from '@antv/l7-district'
 import { GaodeMap } from '@antv/l7-maps'
 import styles from './index.module.less'
 import * as _ from 'lodash'
@@ -244,7 +244,7 @@ const GDMap = (props: any) => {
     const { feature } = ev
     const { properties } = feature
     if (adcodeRef.current === properties.adcode) return
-    console.log(properties)
+    // console.log(properties)
     setAddCode(properties.adcode)
     setPopShow(true)
     setPopUpShow(true)
@@ -269,14 +269,14 @@ const GDMap = (props: any) => {
       center: [116.2825, 39.9],
       pitch: 0,
       style: 'blank',
-      // zoom: 2,
-      // minZoom: 2,
-      // maxZoom: 20,
-      zoomEnable: false,
+      zoom: 3,
+      minZoom: 3,
+      maxZoom: 20,
+      zoomEnable: true,
       scrollZoom: false,
       pitchWithRotate: false,
       rotateEnable: false,
-      dragEnable: false
+      dragEnable: true
     })
 
     const scene: any = new Scene({
@@ -310,7 +310,71 @@ const GDMap = (props: any) => {
     scene.addLayer(pointLayer)
     pointLayer.hide()
 
+    // 显示地图右下角的南海诸岛
+    const scene2 = new Scene({
+      id: 'attach',
+      logoVisible: false,
+      map: new GaodeMap({
+        center: [113.60540108435657, 12.833692637803168],
+        pitch: 0,
+        style: 'blank',
+        zoom: 1.93,
+        interactive: false,
+        zoomEnable: false,
+        scrollZoom: false,
+        pitchWithRotate: false,
+        rotateEnable: false,
+        dragEnable: false
+      })
+    })
+
+    scene2.on('loaded', () => {
+      new CountryLayer(scene2, {
+        data: [],
+        label: {
+          enable: false
+        },
+        popup: {
+          enable: false
+        },
+        autoFit: false,
+        provinceStroke: '#aaa',
+        depth: 1,
+        fill: {
+          color: '#A3d7FF'
+        }
+      })
+      new ProvinceLayer(scene2, {
+        data: [],
+        autoFit: false,
+        adcode: ['460000'],
+        depth: 2,
+        zIndex: 2,
+        stroke: '#aaa',
+        strokeWidth: 0.1,
+        label: {
+          enable: false,
+          field: 'NAME_CHN',
+          textAllowOverlap: false
+        },
+        fill: {
+          color: '#A3d7ff'
+        },
+        popup: {
+          enable: false,
+          Html: props => {
+            return `<span>${props.NAME_CHN}:</span><span>${props.pop}</span>`
+          }
+        }
+      })
+    })
+
     scene.on('loaded', async () => {
+      scene.on('zoomchange', () => {
+        // console.log(scene.getZoom(), 'scene.getZoom()')
+        // console.log(scene.getCenter(), 'scene.getCenter()')
+        initInfo()
+      })
       // updateDistrict
       const dLayer: any = new DrillDownLayer(scene, {
         data: [],
@@ -326,9 +390,13 @@ const GDMap = (props: any) => {
             values: colors
           }
         },
+        popup: {
+          enable: false
+        },
         drillDownEvent: ev => {
           setPopShow(false)
           setPopUpShow(false)
+
           if (ev.level === 'city') {
             pointLayer.show()
           } else {
@@ -337,7 +405,7 @@ const GDMap = (props: any) => {
         },
         drillUpEvent: ev => {
           if (ev.to.toLowerCase() === 'country') {
-            scene.setZoomAndCenter(3.6, [108.751391, 31.048527], true)
+            scene.setZoomAndCenter(4, [104.307546, 37.766084], true)
           }
 
           if (ev.level === 'city') {
@@ -345,17 +413,11 @@ const GDMap = (props: any) => {
           } else {
             pointLayer.hide()
           }
-        },
-        popup: {
-          enable: false,
-          Html: props => {
-            return `<span style='opacity: 0'>${props.NAME_CHN}${props.value}</span>`
-          }
         }
       })
 
       setTimeout(() => {
-        scene.setZoomAndCenter(3.6, [108.751391, 31.048527], true)
+        scene.setZoomAndCenter(4, [104.307546, 37.766084], true)
       }, 1000)
 
       setMap(scene)
@@ -375,7 +437,6 @@ const GDMap = (props: any) => {
 
   useEffect(() => {
     if (map && drillLayer) {
-      console.log(map, 'map')
       drillLayer.provinceLayer.on('mousemove', ev => {
         setPopLocation(map, ev)
       })
@@ -463,6 +524,7 @@ const GDMap = (props: any) => {
 
   return (
     <div id={`homeMap`} className={styles.mapTemp}>
+      <div id={'attach'} className={styles.attach}></div>
       {popShow && (
         <div ref={customRef} className={styles.customBox}>
           {popUpShow && (

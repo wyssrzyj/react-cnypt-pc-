@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import MapTemp from './areaComponent'
+import MapTemp from './areaComponent2'
 import styles from './areaSearch.module.less'
 import classNames from 'classnames'
 import Icon from '@/components/Icon'
@@ -173,12 +173,11 @@ const AreaSearch = () => {
               })}
           </div>
         </div>
-        <div className={styles.rightContent} key={activityKey}>
+        <div className={styles.rightContent}>
           <MapTemp
             zoom={zooms.get(activityKey)}
             center={centers.get(activityKey)}
             dataSource={dataSource}
-            activityKey={activityKey}
             ref={mapRef}
           ></MapTemp>
         </div>

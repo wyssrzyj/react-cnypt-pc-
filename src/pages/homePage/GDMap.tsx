@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { Scene, PointLayer } from '@antv/l7'
+import { Scene, PointLayer, Marker } from '@antv/l7'
 import { DrillDownLayer, CountryLayer, ProvinceLayer } from '@antv/l7-district'
 import { GaodeMap } from '@antv/l7-maps'
 import styles from './index.module.less'
@@ -215,6 +215,7 @@ const colors = [
 
 const GDMap = (props: any) => {
   const mRef: any = useRef()
+  const markerRef: any = useRef()
   const customRef = useRef<HTMLDivElement>()
   const canvasRef = useRef<any>()
   const ctxRef = useRef<any>()
@@ -309,6 +310,13 @@ const GDMap = (props: any) => {
       })
     scene.addLayer(pointLayer)
     pointLayer.hide()
+
+    const marker = new Marker({
+      element: markerRef.current
+    })
+    marker.setLnglat({ lng: 120.2, lat: 30.3 })
+    console.log(marker, 'marker')
+    scene.addMarker(marker)
 
     // 显示地图右下角的南海诸岛
     const scene2 = new Scene({
@@ -527,6 +535,7 @@ const GDMap = (props: any) => {
       <div id={'attach'} className={styles.attach}></div>
       {popShow && (
         <div ref={customRef} className={styles.customBox}>
+          <div id="marker" ref={markerRef} />
           {popUpShow && (
             <div className={styles.custom}>
               {curTarget.NAME_CHN}

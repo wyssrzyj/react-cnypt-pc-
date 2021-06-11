@@ -1,3 +1,6 @@
 {
-    "workbench.colorTheme": "Snazzy Operator"
+    "workbench.colorTheme": "Snazzy Operator",
+    "cSpell.words": [
+        "Lnglat"
+    ]
 }

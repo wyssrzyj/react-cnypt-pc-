@@ -14,6 +14,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
 import cityData from '@/static/cityData'
+import BusinessAddressCom from '../businessAddressCom'
 // import ProcessingTypeCom from '../processingTypeCom'
 // import MainCategoriesCom from '../mainCategoriesCom'
 import styles from './index.module.less'
@@ -274,6 +275,14 @@ const EnterpriseInfo = () => {
             </Form.Item>
           </>
         )} */}
+
+        <Form.Item
+          label="企业地址"
+          name="businessAddress"
+          rules={[{ required: true, message: '请选择企业地址！' }]}
+        >
+          <BusinessAddressCom />
+        </Form.Item>
 
         <Form.Item
           label="企业简介"

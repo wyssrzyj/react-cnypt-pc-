@@ -8,6 +8,10 @@ const { Search } = Input
 
 const BusinessAddressCom = () => {
   const markerRef = useRef()
+  console.log(
+    '🚀 ~ file: index.tsx ~ line 11 ~ BusinessAddressCom ~ markerRef',
+    markerRef
+  )
 
   useEffect(() => {
     const mapBox: any = new GaodeMap({
@@ -37,8 +41,6 @@ const BusinessAddressCom = () => {
       markerLayer.addMarker(marker)
 
       scene.addMarkerLayer(markerLayer)
-
-      console.log('~~~~~')
     })
   }, [])
 

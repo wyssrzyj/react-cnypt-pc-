@@ -26,7 +26,6 @@ const MapTemp = forwardRef((props: any, ref) => {
   const [map, setMap] = useState(null)
 
   const initMap = async () => {
-    console.log(2222)
     const scene = new Scene({
       id: `mapTemp`,
       map: new GaodeMap({

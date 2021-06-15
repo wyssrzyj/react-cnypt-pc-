@@ -114,15 +114,18 @@ const EnterpriseInfo = () => {
 
   const confirmSubmit = () => {
     validateFields().then(values => {
-      const { area = [] } = values
+      const { area = [], businessAddress = '' } = values
       delete values.area
+      delete values.businessAddress
       axios
         .post('/api/factory/enterprise/enterprise-info-save', {
           ...values,
           enterpriseLogoUrl: imageUrl,
           provinceId: area[0],
           cityId: area[1],
-          districtId: area[2]
+          districtId: area[2],
+          latitude: businessAddress.split(',')[1],
+          longitude: businessAddress.split(',')[0]
         })
         .then(response => {
           const { success, msg } = response
@@ -143,11 +146,7 @@ const EnterpriseInfo = () => {
         // onValuesChange={onValuesChange}
       >
         <div className={styles.enterpriseTitle}>基本信息</div>
-        <Form.Item
-          label="企业Logo"
-          name="enterpriseLogoUrl"
-          rules={[{ required: true, message: '请上传企业logo' }]}
-        >
+        <Form.Item label="企业Logo" name="enterpriseLogoUrl">
           <Upload
             name="avatar"
             listType="picture-card"

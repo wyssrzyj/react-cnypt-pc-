@@ -152,6 +152,7 @@ const QualificationModal = props => {
       onOk={handleSelfOk}
       onCancel={handleCancel}
     >
+      <img src="http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210616/ae892fd2754c4c6da0f55a11ce29526b.png" />
       <Form
         {...layout}
         form={form}
@@ -203,7 +204,11 @@ const QualificationModal = props => {
             customRequest={customRequest}
           >
             {imageUrl ? (
-              <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+              <img
+                src={certificateImageURI}
+                alt="avatar"
+                style={{ width: '100%' }}
+              />
             ) : (
               uploadButton
             )}

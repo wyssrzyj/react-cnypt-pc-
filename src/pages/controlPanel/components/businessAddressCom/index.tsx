@@ -3,6 +3,7 @@ import { Input } from 'antd'
 import { Scene, Marker, MarkerLayer } from '@antv/l7'
 import { GaodeMap } from '@antv/l7-maps'
 import axios from 'axios'
+import { isFunction } from 'lodash'
 import styles from './index.module.less'
 
 const { Search } = Input
@@ -20,7 +21,7 @@ const BusinessAddressCom = props => {
     const res = await axios.get(url)
     if (res.status === 200) {
       const location = res.data.geocodes[0].location
-      onChange(location)
+      isFunction(isFunction) && onChange({ location: location, address: value })
       setMapLocation(location.split(','))
     }
   }
@@ -59,7 +60,7 @@ const BusinessAddressCom = props => {
         const { lnglat } = ev
         PMarker.setLnglat({ lng: lnglat.lng, lat: lnglat.lat })
         const strArr = `${lnglat.lng},${lnglat.lat}`
-        onChange(strArr)
+
         const url = `https://restapi.amap.com/v3/geocode/regeo?key=6d7e0822e5ed232cf706c42ff08cb66f&location=${strArr}`
         const res = await axios.get(url)
         const { status, data } = res
@@ -68,6 +69,8 @@ const BusinessAddressCom = props => {
             regeocode: { formatted_address }
           } = data
           setLocationName(formatted_address)
+          isFunction(onChange) &&
+            onChange({ location: strArr, address: formatted_address })
         }
       })
     }

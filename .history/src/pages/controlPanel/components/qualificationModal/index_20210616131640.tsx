@@ -203,7 +203,11 @@ const QualificationModal = props => {
             customRequest={customRequest}
           >
             {imageUrl ? (
-              <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+              <img
+                src={certificateImageURI}
+                alt="avatar"
+                style={{ width: '100%' }}
+              />
             ) : (
               uploadButton
             )}

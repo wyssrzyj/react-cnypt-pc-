@@ -14,6 +14,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
 import cityData from '@/static/cityData'
+import { useStores } from '@/utils/mobx'
 import BusinessAddressCom from '../businessAddressCom'
 // import ProcessingTypeCom from '../processingTypeCom'
 // import MainCategoriesCom from '../mainCategoriesCom'
@@ -64,6 +65,8 @@ const EnterpriseInfo = () => {
   const { validateFields } = form
   const currentUser = getCurrentUser() || {}
   const { mobilePhone } = currentUser
+  const { factoryPageStore } = useStores()
+  const { uploadFiles } = factoryPageStore
   // const [enterpriseType, setEnterpriseType] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
@@ -82,7 +85,10 @@ const EnterpriseInfo = () => {
   )
 
   const beforeUpload = file => {
-    const isJpgOrPng = file.type === 'image/jpg' || file.type === 'image/png'
+    const isJpgOrPng =
+      file.type === 'image/jpg' ||
+      file.type === 'image/png' ||
+      file.type === 'image/jpeg'
     if (!isJpgOrPng) {
       message.error('只能上传jpg/png格式文件!')
     }
@@ -93,28 +99,22 @@ const EnterpriseInfo = () => {
     return isJpgOrPng && isLt2M
   }
 
-  const handleChange = info => {
-    if (info.file.status === 'uploading') {
-      setLoading(true)
-      return
-    }
-    if (info.file.status === 'done' || info.file.status === 'error') {
-      getBase64(info.file.originFileObj, imageUrl => {
-        setImageUrl(imageUrl)
-        setLoading(false)
-      })
-    }
-  }
+  const customRequest = async ({ file }) => {
+    // const list = cloneDeep(fileList)
+    setLoading(true)
+    const formData = new FormData()
 
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader()
-    reader.addEventListener('load', () => callback(reader.result))
-    reader.readAsDataURL(img)
+    formData.append('file', file)
+    formData.append('module', 'factory')
+    const res = await uploadFiles(formData)
+    setImageUrl(res)
+    setLoading(false)
   }
 
   const confirmSubmit = () => {
     validateFields().then(values => {
-      const { area = [], businessAddress = '' } = values
+      const { area = [], businessAddress = {} } = values
+      const { address, location } = businessAddress
       delete values.area
       delete values.businessAddress
       axios
@@ -124,8 +124,9 @@ const EnterpriseInfo = () => {
           provinceId: area[0],
           cityId: area[1],
           districtId: area[2],
-          latitude: businessAddress.split(',')[1],
-          longitude: businessAddress.split(',')[0]
+          address,
+          latitude: location.split(',')[1],
+          longitude: location.split(',')[0]
         })
         .then(response => {
           const { success, msg } = response
@@ -153,7 +154,7 @@ const EnterpriseInfo = () => {
             className="avatar-uploader"
             showUploadList={false}
             beforeUpload={beforeUpload}
-            onChange={handleChange}
+            customRequest={customRequest}
           >
             {imageUrl ? (
               <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />

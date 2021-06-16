@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Tabs, Table, Button, message, Modal } from 'antd'
+import { Tabs, Table, Button, message, Modal, Image } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { toJS } from 'mobx'
 import moment from 'moment'
 import { useStores } from '@/utils/mobx'
 import axios from '@/utils/axios'
-import { get, find } from 'lodash'
+import { get, find, isEmpty } from 'lodash'
 import QualificationModal from '../qualificationModal'
 import styles from './index.module.less'
 
@@ -35,17 +35,21 @@ const QualificationCertification = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [operationType, setOperationType] = useState<string>('add')
   const [currentData, setCurrentData] = useState<any>({})
+  const [sortField, setSortField] = useState<string>('')
+  const [sortType, setSortType] = useState<string>('')
 
   const columns = [
     {
       title: '资质名称',
       dataIndex: 'certificationName',
-      key: 'certificationName',
+      key: 'certification_name',
       sorter: true,
       render: value => {
-        return find(factoryCertificate, function (o) {
-          return o.value === value
-        }).label
+        const name =
+          find(factoryCertificate, function (o) {
+            return o.value === value
+          }) || {}
+        return name.label
       }
     },
     {
@@ -56,10 +60,14 @@ const QualificationCertification = () => {
     {
       title: '失效时间',
       dataIndex: 'expiryDate',
-      key: 'expiryDate',
+      key: 'expiry_date',
       sorter: true,
-      render: value => {
-        return moment(value).format('YYYY-MM-DD')
+      render: (value, row) => {
+        const { neverExpire } = row
+        const date = neverExpire
+          ? '永久有效'
+          : moment(value).format('YYYY年MM月DD日')
+        return date
       }
     },
     {
@@ -73,16 +81,10 @@ const QualificationCertification = () => {
     },
     {
       title: '资质照片',
-      dataIndex: 'photo',
-      key: 'photo',
-      render: () => {
-        return (
-          <img
-            className={styles.photo}
-            src={require('@/static/images/u1874.png')}
-            alt=""
-          />
-        )
+      dataIndex: 'certificateImageURI',
+      key: 'certificateImageURI',
+      render: value => {
+        return <Image width={100} src={value} />
       }
     },
     {
@@ -91,30 +93,24 @@ const QualificationCertification = () => {
       key: 'operation',
       render: (value, row) => {
         console.log(value)
-        const { status, factoryId, certificationName } = row
-        const name = find(factoryCertificate, function (o) {
-          return o.value === certificationName
-        }).label
+        const { status, id, certificationName } = row
+        const newName =
+          find(factoryCertificate, function (o) {
+            return o.value === certificationName
+          }) || {}
+        const name = newName.label
         return (
           <div className={styles.operationBox}>
-            {status !== 3 && (
-              <a
-                className={styles.boxItem}
-                onClick={() => operationCertificate(factoryId, 'check')}
-              >
-                查看
-              </a>
-            )}
             <a
               className={styles.boxItem}
-              onClick={() => operationCertificate(factoryId, 'edit')}
+              onClick={() => operationCertificate(id, 'edit')}
             >
               编辑
             </a>
             {(status == 3 || status === 2) && (
               <a
                 className={styles.boxItem}
-                onClick={() => deleteCertificate(factoryId, name)}
+                onClick={() => deleteCertificate(id, name)}
               >
                 删除
               </a>
@@ -125,20 +121,28 @@ const QualificationCertification = () => {
     }
   ]
 
-  const getQualificationList = async () => {
+  const getQualificationList = () => {
     setLoading(true)
-    const response = await axios.post('/api/factory/factory-certificate/list', {
-      pageNum,
-      pageSize,
-      status: activeTab
-    })
-    const { success, data = [] } = response
-    if (success) {
-      const { records, total } = data
-      setTotal(total)
-      setDataSource([...records])
-    }
-    setLoading(false)
+    axios
+      .post('/api/factory/factory-certificate/list', {
+        pageNum,
+        pageSize,
+        status: activeTab,
+        factoryId: 1,
+        sortField,
+        sortType
+      })
+      .then(response => {
+        const { success, data = [] } = response
+        if (success) {
+          const { records, total } = data
+          setTotal(total)
+          setDataSource([...records])
+        }
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   const addQualification = () => {
@@ -149,21 +153,24 @@ const QualificationCertification = () => {
     console.log({ pagination, filters, sorter })
     const { current } = pagination
     setPageNum(current)
+    if (!isEmpty(sorter)) {
+      const { columnKey, order } = sorter
+      setSortField(columnKey)
+      setSortType(order === 'ascend' ? 'asc' : 'desc')
+    }
   }
   const onTabChange = activeKey => {
     setActiveTab(activeKey)
   }
-  const operationCertificate = (factoryId, type) => {
+  const operationCertificate = (id, type) => {
     setOperationType(type)
-    axios
-      .get('/api/factory/factory-certificate/list-factory-id', { factoryId })
-      .then(response => {
-        const { success, data } = response
-        if (success) {
-          setCurrentData({ ...data[0] })
-          setIsModalVisible(true)
-        }
-      })
+    axios.get('/api/factory/factory-certificate/get', { id }).then(response => {
+      const { success, data } = response
+      if (success) {
+        setCurrentData({ ...data })
+        setIsModalVisible(true)
+      }
+    })
   }
   const deleteCertificate = (id, name) => {
     Modal.confirm({
@@ -185,7 +192,7 @@ const QualificationCertification = () => {
 
   useEffect(() => {
     getQualificationList()
-  }, [pageNum, activeTab])
+  }, [pageNum, activeTab, sortField])
 
   return (
     <div className={styles.qualificationCertification}>

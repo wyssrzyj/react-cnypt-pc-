@@ -12,7 +12,7 @@ import {
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { toJS } from 'mobx'
 import moment from 'moment'
-import { isFunction, get, cloneDeep } from 'lodash'
+import { isFunction, get } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
 import styles from './index.module.less'
@@ -84,6 +84,8 @@ const QualificationModal = props => {
   const [loading, setLoading] = useState<boolean>(false)
   const [fileList, setFileList] = useState<any[]>([])
 
+  console.log(certificateImageURI, '~~~~')
+
   useEffect(() => {
     if (certificateImageURI) {
       setFileList([{ thumbUrl: certificateImageURI }])
@@ -142,17 +144,14 @@ const QualificationModal = props => {
   const customRequest = async ({ file }) => {
     setLoading(true)
     const formData = new FormData()
+
     formData.append('file', file)
     formData.append('module', 'factory')
     const res = await uploadFiles(formData)
+    console.log('🚀!!!!!', res)
     setImageUrl(res)
     setLoading(false)
     setFileList([{ thumbUrl: res }])
-  }
-  const fileRemove = file => {
-    const arrList = cloneDeep(fileList)
-    const target = arrList.filter(item => item.thumbUrl !== file.thumbUrl)
-    setFileList(target)
   }
 
   return (
@@ -214,7 +213,6 @@ const QualificationModal = props => {
             customRequest={customRequest}
             fileList={fileList}
             maxCount={1}
-            onRemove={fileRemove}
           >
             {/* {imageUrl ? (
               <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />

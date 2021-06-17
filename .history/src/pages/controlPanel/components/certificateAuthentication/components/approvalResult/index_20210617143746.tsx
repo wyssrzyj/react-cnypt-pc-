@@ -23,6 +23,7 @@ const ApprovalResult = props => {
   const [start, setStart] = useState(0)
   const [end, setEnd] = useState(2)
   const [subTitleMap, setSubTitleMap] = useState<any>({})
+  // const [failDes, setFailDes] = useState('')
 
   const enterpriseInfo =
     JSON.parse(localStorage.getItem('enterpriseInfo')) || {}

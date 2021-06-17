@@ -49,8 +49,7 @@ const CertificateInformation = props => {
 
   const initialValues = {
     enterpriseName: enterpriseInfo.enterpriseName,
-    legalPersonIdType: '中国大陆居民身份证',
-    certificateType: 'businessLicense'
+    legalPersonIdType: '中国大陆居民身份证'
   }
   const uploadButton = (
     <div>
@@ -111,11 +110,10 @@ const CertificateInformation = props => {
 
   const handleConfirm = () => {
     validateFields().then(values => {
-      delete values.enterpriseAdjunct
-      delete values.positive
-      delete values.reverse
-      delete values.certificateType
-      delete values.enterpriseName
+      console.log(
+        '🚀 ~ file: index.tsx ~ line 113 ~ validateFields ~ values',
+        values
+      )
       const enterpriseCredentialList = [
         {
           businessId: enterpriseInfo.enterpriseId,
@@ -136,7 +134,6 @@ const CertificateInformation = props => {
       axios
         .post('/api/factory/enterprise/submit-enterprise-credential', {
           ...values,
-          enterpriseId: enterpriseInfo.enterpriseId,
           enterpriseCredentialList
         })
         .then(response => {
@@ -160,7 +157,11 @@ const CertificateInformation = props => {
             name="certificateType"
             rules={[{ required: true, message: '请选择企业证件类型！' }]}
           >
-            <Select placeholder="请选择企业证件类型" disabled>
+            <Select
+              defaultValue="businessLicense"
+              placeholder="请选择企业证件类型"
+              disabled
+            >
               {certificateTypeMap.map(type => (
                 <Option key={type.value} value={type.value}>
                   {type.label}
@@ -271,7 +272,7 @@ const CertificateInformation = props => {
 
           <Form.Item
             label="中国大陆居民身份证国徽面"
-            name="reverse"
+            name="positive"
             rules={[
               { required: true, message: '请上传中国大陆居民身份证国徽面！' }
             ]}

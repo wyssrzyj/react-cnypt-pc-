@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   Modal,
   Form,
@@ -12,7 +12,7 @@ import {
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { toJS } from 'mobx'
 import moment from 'moment'
-import { isFunction, get, cloneDeep } from 'lodash'
+import { isFunction, get } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
 import styles from './index.module.less'
@@ -84,12 +84,6 @@ const QualificationModal = props => {
   const [loading, setLoading] = useState<boolean>(false)
   const [fileList, setFileList] = useState<any[]>([])
 
-  useEffect(() => {
-    if (certificateImageURI) {
-      setFileList([{ thumbUrl: certificateImageURI }])
-    }
-  }, [certificateImageURI])
-
   const handleSelfOk = () => {
     validateFields().then(values => {
       let neverExpire
@@ -142,17 +136,14 @@ const QualificationModal = props => {
   const customRequest = async ({ file }) => {
     setLoading(true)
     const formData = new FormData()
+
     formData.append('file', file)
     formData.append('module', 'factory')
     const res = await uploadFiles(formData)
+    console.log('🚀 ~ file: index.tsx ~ line 142 ~ customRequest ~ res', res)
     setImageUrl(res)
     setLoading(false)
     setFileList([{ thumbUrl: res }])
-  }
-  const fileRemove = file => {
-    const arrList = cloneDeep(fileList)
-    const target = arrList.filter(item => item.thumbUrl !== file.thumbUrl)
-    setFileList(target)
   }
 
   return (
@@ -209,12 +200,10 @@ const QualificationModal = props => {
             name="avatar"
             listType="picture-card"
             className="avatar-uploader"
-            showUploadList={true}
+            showUploadList={false}
             beforeUpload={beforeUpload}
             customRequest={customRequest}
             fileList={fileList}
-            maxCount={1}
-            onRemove={fileRemove}
           >
             {/* {imageUrl ? (
               <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
@@ -222,7 +211,7 @@ const QualificationModal = props => {
               uploadButton
             )} */}
 
-            {fileList.length < 1 ? uploadButton : null}
+            {uploadButton}
           </Upload>
         </Form.Item>
       </Form>

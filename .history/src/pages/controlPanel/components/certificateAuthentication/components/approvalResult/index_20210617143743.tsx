@@ -23,6 +23,7 @@ const ApprovalResult = props => {
   const [start, setStart] = useState(0)
   const [end, setEnd] = useState(2)
   const [subTitleMap, setSubTitleMap] = useState<any>({})
+  // const [failDes, setFailDes] = useState('')
 
   const enterpriseInfo =
     JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
@@ -38,6 +39,7 @@ const ApprovalResult = props => {
           const { approvalStatus, approvalDesc } = data
           const newStatus = get(statusMap, approvalStatus)
           setStatus(newStatus)
+          // setFailDes(approvalDesc)
           setStart(newStatus === 'approval' ? 1 : 0)
           setEnd(newStatus === 'noPass' ? 1 : 2)
           setSubTitleMap({

@@ -21,7 +21,9 @@ const CertificateAuthentication = () => {
         </Steps>
       </div>
       {currentStep === 0 && <CertificateInformation submit={handleSubmit} />}
-      {currentStep === 1 && <ApprovalResult submit={handleSubmit} />}
+      {currentStep === 1 && (
+        <ApprovalResult status="noPass" submit={handleSubmit} />
+      )}
     </div>
   )
 }

@@ -49,8 +49,7 @@ const CertificateInformation = props => {
 
   const initialValues = {
     enterpriseName: enterpriseInfo.enterpriseName,
-    legalPersonIdType: '中国大陆居民身份证',
-    certificateType: 'businessLicense'
+    legalPersonIdType: '中国大陆居民身份证'
   }
   const uploadButton = (
     <div>
@@ -111,11 +110,11 @@ const CertificateInformation = props => {
 
   const handleConfirm = () => {
     validateFields().then(values => {
-      delete values.enterpriseAdjunct
-      delete values.positive
-      delete values.reverse
-      delete values.certificateType
-      delete values.enterpriseName
+      const { area = [], businessAddress = {} } = values
+
+      const { address, location } = businessAddress
+      delete values.area
+      delete values.businessAddress
       const enterpriseCredentialList = [
         {
           businessId: enterpriseInfo.enterpriseId,
@@ -124,20 +123,25 @@ const CertificateInformation = props => {
         },
         {
           businessId: enterpriseInfo.enterpriseId,
-          businessItemId: 'legalPersonIdPhotoNational',
-          fileUrl: positiveImageUrl
+          businessItemId: 'businessLicense',
+          fileUrl: cardImageUrl
         },
         {
           businessId: enterpriseInfo.enterpriseId,
-          businessItemId: 'legalPersonIdPhotoHand',
-          fileUrl: reverseImageUrl
+          businessItemId: 'businessLicense',
+          fileUrl: cardImageUrl
         }
       ]
       axios
         .post('/api/factory/enterprise/submit-enterprise-credential', {
           ...values,
-          enterpriseId: enterpriseInfo.enterpriseId,
-          enterpriseCredentialList
+          enterpriseLogoUrl: cardImageUrl,
+          provinceId: area[0],
+          cityId: area[1],
+          districtId: area[2],
+          address,
+          latitude: location.split(',')[1],
+          longitude: location.split(',')[0]
         })
         .then(response => {
           const { success, msg } = response
@@ -152,7 +156,7 @@ const CertificateInformation = props => {
   return (
     <div className={styles.certificateInformation}>
       <Alert message={messageTip} type="info" showIcon />
-      <Form {...layout} name="basic" form={form} initialValues={initialValues}>
+      <Form {...layout} name="basic" initialValues={initialValues}>
         <div className={styles.enterprise}>
           <h3>请上传企业证件</h3>
           <Form.Item
@@ -160,7 +164,11 @@ const CertificateInformation = props => {
             name="certificateType"
             rules={[{ required: true, message: '请选择企业证件类型！' }]}
           >
-            <Select placeholder="请选择企业证件类型" disabled>
+            <Select
+              defaultValue="businessLicense"
+              placeholder="请选择企业证件类型"
+              disabled
+            >
               {certificateTypeMap.map(type => (
                 <Option key={type.value} value={type.value}>
                   {type.label}
@@ -261,7 +269,7 @@ const CertificateInformation = props => {
               showUploadList={true}
               beforeUpload={beforeUpload}
               customRequest={customRequestPositive}
-              fileList={positiveFileList}
+              fileList={cardFileList}
               maxCount={1}
               onRemove={() => setPositiveFileList([])}
             >
@@ -271,7 +279,7 @@ const CertificateInformation = props => {
 
           <Form.Item
             label="中国大陆居民身份证国徽面"
-            name="reverse"
+            name="positive"
             rules={[
               { required: true, message: '请上传中国大陆居民身份证国徽面！' }
             ]}
@@ -283,7 +291,7 @@ const CertificateInformation = props => {
               showUploadList={true}
               beforeUpload={beforeUpload}
               customRequest={customRequestReverse}
-              fileList={reverseFileList}
+              fileList={cardFileList}
               maxCount={1}
               onRemove={() => setReverseFileList([])}
             >

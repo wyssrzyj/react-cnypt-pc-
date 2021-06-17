@@ -114,8 +114,6 @@ const CertificateInformation = props => {
       delete values.enterpriseAdjunct
       delete values.positive
       delete values.reverse
-      delete values.certificateType
-      delete values.enterpriseName
       const enterpriseCredentialList = [
         {
           businessId: enterpriseInfo.enterpriseId,
@@ -136,7 +134,6 @@ const CertificateInformation = props => {
       axios
         .post('/api/factory/enterprise/submit-enterprise-credential', {
           ...values,
-          enterpriseId: enterpriseInfo.enterpriseId,
           enterpriseCredentialList
         })
         .then(response => {

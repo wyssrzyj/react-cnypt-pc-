@@ -49,7 +49,7 @@ const ApprovalResult = props => {
                 <div>
                   您的企业信息审核不通过，请根据错误原因重新上传对应信息。原因如下：
                 </div>
-                <div>{approvalDesc}</div>
+                <div>{approvalDesc}1、XXXXXXXXXXXXXXXX</div>
               </div>
             )
           })

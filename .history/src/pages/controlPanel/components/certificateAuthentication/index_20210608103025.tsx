@@ -9,6 +9,10 @@ const CertificateAuthentication = () => {
   const [currentStep, setCurrentStep] = useState<number>(0)
 
   const handleSubmit = step => {
+    console.log(
+      '🚀 ~ file: index.tsx ~ line 12 ~ CertificateAuthentication ~ step',
+      step
+    )
     setCurrentStep(step)
   }
 
@@ -21,7 +25,9 @@ const CertificateAuthentication = () => {
         </Steps>
       </div>
       {currentStep === 0 && <CertificateInformation submit={handleSubmit} />}
-      {currentStep === 1 && <ApprovalResult submit={handleSubmit} />}
+      {currentStep === 1 && (
+        <ApprovalResult status="noPass" submit={handleSubmit} />
+      )}
     </div>
   )
 }

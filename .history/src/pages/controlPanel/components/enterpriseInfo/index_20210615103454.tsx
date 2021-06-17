@@ -80,7 +80,7 @@ const EnterpriseInfo = () => {
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>上传</div>
+      <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   )
 
@@ -129,9 +129,8 @@ const EnterpriseInfo = () => {
           longitude: location.split(',')[0]
         })
         .then(response => {
-          const { success, msg, data = {} } = response
+          const { success, msg } = response
           message[success ? 'success' : 'error'](msg)
-          localStorage.setItem('enterpriseInfo', JSON.stringify(data))
         })
     })
   }

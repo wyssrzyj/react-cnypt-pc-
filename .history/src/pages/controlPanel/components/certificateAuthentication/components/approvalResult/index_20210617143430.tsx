@@ -23,6 +23,7 @@ const ApprovalResult = props => {
   const [start, setStart] = useState(0)
   const [end, setEnd] = useState(2)
   const [subTitleMap, setSubTitleMap] = useState<any>({})
+  // const [failDes, setFailDes] = useState('')
 
   const enterpriseInfo =
     JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
@@ -36,10 +37,10 @@ const ApprovalResult = props => {
         const { success, data } = response
         if (success) {
           const { approvalStatus, approvalDesc } = data
-          const newStatus = get(statusMap, approvalStatus)
-          setStatus(newStatus)
-          setStart(newStatus === 'approval' ? 1 : 0)
-          setEnd(newStatus === 'noPass' ? 1 : 2)
+          setStatus(get(statusMap, approvalStatus))
+          // setFailDes(approvalDesc)
+          setStart(status === 'approval' ? 1 : 0)
+          setEnd(status === 'noPass' ? 1 : 2)
           setSubTitleMap({
             pending:
               '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',

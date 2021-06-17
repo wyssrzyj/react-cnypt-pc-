@@ -80,7 +80,7 @@ const EnterpriseInfo = () => {
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>上传</div>
+      <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   )
 

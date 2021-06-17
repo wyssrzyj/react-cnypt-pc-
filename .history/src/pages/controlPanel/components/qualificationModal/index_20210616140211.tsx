@@ -12,7 +12,7 @@ import {
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { toJS } from 'mobx'
 import moment from 'moment'
-import { isFunction, get, cloneDeep } from 'lodash'
+import { isFunction, get } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
 import styles from './index.module.less'
@@ -149,11 +149,6 @@ const QualificationModal = props => {
     setLoading(false)
     setFileList([{ thumbUrl: res }])
   }
-  const fileRemove = file => {
-    const arrList = cloneDeep(fileList)
-    const target = arrList.filter(item => item.thumbUrl !== file.thumbUrl)
-    setFileList(target)
-  }
 
   return (
     <Modal
@@ -214,7 +209,6 @@ const QualificationModal = props => {
             customRequest={customRequest}
             fileList={fileList}
             maxCount={1}
-            onRemove={fileRemove}
           >
             {/* {imageUrl ? (
               <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />

@@ -9,7 +9,7 @@ import {
   Checkbox,
   Button
 } from 'antd'
-import { isFunction, isEmpty } from 'lodash'
+import { isFunction, cloneDeep } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
 import styles from './index.module.less'
@@ -37,21 +37,14 @@ const CertificateInformation = props => {
   const { validateFields } = form
   const { factoryPageStore } = useStores()
   const { uploadFiles } = factoryPageStore
-  const enterpriseInfo =
-    JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
   const [isCheck, setIsCheck] = useState<boolean>(false)
-  const [cardImageUrl, setCardImageUrl] = useState<string>('')
-  const [cardFileList, setCardFileList] = useState<any[]>([])
-  const [positiveImageUrl, setPositiveImageUrl] = useState<string>('')
-  const [positiveFileList, setPositiveFileList] = useState<any[]>([])
-  const [reverseImageUrl, setReverseImageUrl] = useState<string>('')
-  const [reverseFileList, setReverseFileList] = useState<any[]>([])
-
-  const initialValues = {
-    enterpriseName: enterpriseInfo.enterpriseName,
-    legalPersonIdType: '中国大陆居民身份证',
-    certificateType: 'businessLicense'
-  }
+  const [fileList, setFileList] = useState<any[]>([])
+  console.log(
+    '🚀 ~ file: index.tsx ~ line 27 ~ CertificateAuthentication ~ loading',
+    loading
+  )
   const uploadButton = (
     <div>
       <div className={styles.attachmentTip}>
@@ -65,6 +58,25 @@ const CertificateInformation = props => {
 
   const reverseDom = <div className={styles.reverseDom}></div>
 
+  const getBase64 = (img, callback) => {
+    const reader = new FileReader()
+    reader.addEventListener('load', () => callback(reader.result))
+    reader.readAsDataURL(img)
+  }
+
+  const handleChange = info => {
+    if (info.file.status === 'uploading') {
+      setLoading(true)
+      return
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, imageUrl => {
+        setImageUrl(imageUrl)
+        setLoading(false)
+      })
+    }
+  }
   const onBoxChange = e => {
     setIsCheck(e.target.checked)
   }
@@ -76,83 +88,61 @@ const CertificateInformation = props => {
     if (!isJpgOrPng) {
       message.error('只能上传jpg/png格式文件!')
     }
-    const isLt10M = file.size / 1024 / 1024 < 10
-    if (!isLt10M) {
+    const isLt2M = file.size / 1024 / 1024 < 10
+    if (!isLt2M) {
       message.error('文件不能超过10M!')
     }
-    return isJpgOrPng && isLt10M
+    return isJpgOrPng && isLt2M
   }
-  const customRequestCard = async ({ file }) => {
+  const customRequest = async ({ file }) => {
+    console.log('🚀 ~ file: index.tsx ~ line 98 ~ customRequest ~ file', file)
+    setLoading(true)
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('module', 'factory-service')
+    formData.append('module', 'factory')
     const res = await uploadFiles(formData)
-    setCardImageUrl(res)
-    setCardFileList([{ thumbUrl: res }])
+    setImageUrl(res)
+    setLoading(false)
+    setFileList([{ thumbUrl: res }])
   }
-  // 中国大陆居民身份证人像面
-  const customRequestPositive = async ({ file }) => {
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('module', 'factory-service')
-    const res = await uploadFiles(formData)
-    setPositiveImageUrl(res)
-    setPositiveFileList([{ thumbUrl: res }])
+  const fileRemove = file => {
+    const arrList = cloneDeep(fileList)
+    const target = arrList.filter(item => item.thumbUrl !== file.thumbUrl)
+    setFileList(target)
   }
-  //中国大陆居民身份证国徽面
-  const customRequestReverse = async ({ file }) => {
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('module', 'factory-service')
-    const res = await uploadFiles(formData)
-    setReverseImageUrl(res)
-    setReverseFileList([{ thumbUrl: res }])
-  }
-
   const handleConfirm = () => {
     validateFields().then(values => {
-      delete values.enterpriseAdjunct
-      delete values.positive
-      delete values.reverse
-      delete values.certificateType
-      delete values.enterpriseName
-      const enterpriseCredentialList = [
-        {
-          businessId: enterpriseInfo.enterpriseId,
-          businessItemId: 'businessLicense',
-          fileUrl: cardImageUrl
-        },
-        {
-          businessId: enterpriseInfo.enterpriseId,
-          businessItemId: 'legalPersonIdPhotoNational',
-          fileUrl: positiveImageUrl
-        },
-        {
-          businessId: enterpriseInfo.enterpriseId,
-          businessItemId: 'legalPersonIdPhotoHand',
-          fileUrl: reverseImageUrl
-        }
-      ]
+      const { area = [], businessAddress = {} } = values
+      const { address, location } = businessAddress
+      delete values.area
+      delete values.businessAddress
       axios
         .post('/api/factory/enterprise/submit-enterprise-credential', {
           ...values,
-          enterpriseId: enterpriseInfo.enterpriseId,
-          enterpriseCredentialList
+          enterpriseLogoUrl: imageUrl,
+          provinceId: area[0],
+          cityId: area[1],
+          districtId: area[2],
+          address,
+          latitude: location.split(',')[1],
+          longitude: location.split(',')[0]
         })
         .then(response => {
           const { success, msg } = response
           message[success ? 'success' : 'error'](msg)
-          if (success) {
-            isFunction(submit) && submit(1)
-          }
         })
     })
+    isFunction(submit) && submit(1)
   }
 
   return (
     <div className={styles.certificateInformation}>
       <Alert message={messageTip} type="info" showIcon />
-      <Form {...layout} name="basic" form={form} initialValues={initialValues}>
+      <Form
+        {...layout}
+        name="basic"
+        initialValues={{ documentType: '中国大陆居民身份证' }}
+      >
         <div className={styles.enterprise}>
           <h3>请上传企业证件</h3>
           <Form.Item
@@ -160,7 +150,11 @@ const CertificateInformation = props => {
             name="certificateType"
             rules={[{ required: true, message: '请选择企业证件类型！' }]}
           >
-            <Select placeholder="请选择企业证件类型" disabled>
+            <Select
+              defaultValue="businessLicense"
+              placeholder="请选择企业证件类型"
+              disabled
+            >
               {certificateTypeMap.map(type => (
                 <Option key={type.value} value={type.value}>
                   {type.label}
@@ -180,12 +174,18 @@ const CertificateInformation = props => {
               className="avatar-uploader"
               showUploadList={true}
               beforeUpload={beforeUpload}
-              customRequest={customRequestCard}
-              fileList={cardFileList}
+              customRequest={customRequest}
+              fileList={fileList}
               maxCount={1}
-              onRemove={() => setCardFileList([])}
+              onRemove={fileRemove}
             >
-              {isEmpty(cardFileList) ? uploadButton : null}
+              {/* {imageUrl ? (
+              <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+            ) : (
+              uploadButton
+            )} */}
+
+              {fileList.length < 1 ? uploadButton : null}
             </Upload>
           </Form.Item>
 
@@ -194,7 +194,7 @@ const CertificateInformation = props => {
             name="enterpriseName"
             rules={[{ required: true, message: '请输入企业名称！' }]}
           >
-            <Input disabled />
+            <Input />
           </Form.Item>
 
           <Form.Item
@@ -258,20 +258,22 @@ const CertificateInformation = props => {
               name="avatar"
               listType="picture-card"
               className="avatar-uploader"
-              showUploadList={true}
+              showUploadList={false}
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
               beforeUpload={beforeUpload}
-              customRequest={customRequestPositive}
-              fileList={positiveFileList}
-              maxCount={1}
-              onRemove={() => setPositiveFileList([])}
+              onChange={handleChange}
             >
-              {isEmpty(positiveFileList) ? positiveDom : null}
+              {imageUrl ? (
+                <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+              ) : (
+                positiveDom
+              )}
             </Upload>
           </Form.Item>
 
           <Form.Item
             label="中国大陆居民身份证国徽面"
-            name="reverse"
+            name="positive"
             rules={[
               { required: true, message: '请上传中国大陆居民身份证国徽面！' }
             ]}
@@ -280,14 +282,16 @@ const CertificateInformation = props => {
               name="avatar"
               listType="picture-card"
               className="avatar-uploader"
-              showUploadList={true}
+              showUploadList={false}
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
               beforeUpload={beforeUpload}
-              customRequest={customRequestReverse}
-              fileList={reverseFileList}
-              maxCount={1}
-              onRemove={() => setReverseFileList([])}
+              onChange={handleChange}
             >
-              {isEmpty(reverseFileList) ? reverseDom : null}
+              {imageUrl ? (
+                <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+              ) : (
+                reverseDom
+              )}
             </Upload>
           </Form.Item>
         </div>

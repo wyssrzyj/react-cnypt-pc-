@@ -8,21 +8,21 @@ const titleMap = {
   approval: '审批通过',
   noPass: '审批不通过'
 }
-// const subTitleMap = {
-//   pending:
-//     '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',
-//   approval: '恭喜您，企业信息审核通过，已为您开通企业权限。',
-//   noPass: <div></div>
-// }
+const subTitleMap = {
+  pending:
+    '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',
+  approval: '恭喜您，企业信息审核通过，已为您开通企业权限。',
+  noPass: <div></div>
+}
 
 const statusMap = { '0': 'noPass', '1': 'approval', '2': 'pending' }
 
 const ApprovalResult = props => {
   const { submit } = props
-  const [status, setStatus] = useState('pending')
+  const [status, setStatus] = useState('0')
   const [start, setStart] = useState(0)
   const [end, setEnd] = useState(2)
-  const [subTitleMap, setSubTitleMap] = useState<any>({})
+  // const [failDes, setFailDes] = useState('')
 
   const enterpriseInfo =
     JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
@@ -36,23 +36,18 @@ const ApprovalResult = props => {
         const { success, data } = response
         if (success) {
           const { approvalStatus, approvalDesc } = data
-          const newStatus = get(statusMap, approvalStatus)
-          setStatus(newStatus)
-          setStart(newStatus === 'approval' ? 1 : 0)
-          setEnd(newStatus === 'noPass' ? 1 : 2)
-          setSubTitleMap({
-            pending:
-              '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',
-            approval: '恭喜您，企业信息审核通过，已为您开通企业权限。',
-            noPass: (
+          setStatus(get(statusMap, approvalStatus))
+          // setFailDes(approvalDesc)
+          setStart(status === 'approval' ? 1 : 0)
+          setEnd(status === 'noPass' ? 1 : 2)
+          subTitleMap.noPass = (
+            <div>
               <div>
-                <div>
-                  您的企业信息审核不通过，请根据错误原因重新上传对应信息。原因如下：
-                </div>
-                <div>{approvalDesc}</div>
+                您的企业信息审核不通过，请根据错误原因重新上传对应信息。原因如下：
               </div>
-            )
-          })
+              <div>{approvalDesc}</div>
+            </div>
+          )
         }
       })
   }
@@ -63,7 +58,7 @@ const ApprovalResult = props => {
   return (
     <div>
       <Result
-        status={status === 'noPass' ? 'error' : 'success'}
+        status={status === '2' ? 'error' : 'success'}
         title={get(titleMap, status)}
         subTitle={get(subTitleMap, status)}
         extra={[

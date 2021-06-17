@@ -6,7 +6,7 @@ import styles from './index.module.less'
 const { Step } = Steps
 
 const CertificateAuthentication = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0)
+  const [currentStep, setCurrentStep] = useState<number>(1)
 
   const handleSubmit = step => {
     setCurrentStep(step)
@@ -21,7 +21,9 @@ const CertificateAuthentication = () => {
         </Steps>
       </div>
       {currentStep === 0 && <CertificateInformation submit={handleSubmit} />}
-      {currentStep === 1 && <ApprovalResult submit={handleSubmit} />}
+      {currentStep === 1 && (
+        <ApprovalResult status="noPass" submit={handleSubmit} />
+      )}
     </div>
   )
 }

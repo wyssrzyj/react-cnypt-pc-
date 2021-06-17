@@ -8,12 +8,6 @@ const titleMap = {
   approval: '审批通过',
   noPass: '审批不通过'
 }
-// const subTitleMap = {
-//   pending:
-//     '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',
-//   approval: '恭喜您，企业信息审核通过，已为您开通企业权限。',
-//   noPass: <div></div>
-// }
 
 const statusMap = { '0': 'noPass', '1': 'approval', '2': 'pending' }
 
@@ -24,8 +18,7 @@ const ApprovalResult = props => {
   const [end, setEnd] = useState(2)
   const [subTitleMap, setSubTitleMap] = useState<any>({})
 
-  const enterpriseInfo =
-    JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
+  const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
 
   const getApprovalResult = () => {
     axios
@@ -45,10 +38,8 @@ const ApprovalResult = props => {
               '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',
             approval: '恭喜您，企业信息审核通过，已为您开通企业权限。',
             noPass: (
-              <div>
-                <div>
-                  您的企业信息审核不通过，请根据错误原因重新上传对应信息。原因如下：
-                </div>
+              <div style={{ width: 464, margin: 'auto', textAlign: 'left' }}>
+                <div>您的企业信息审核不通过，请根据错误原因重新上传对应信息。原因如下：</div>
                 <div>{approvalDesc}</div>
               </div>
             )

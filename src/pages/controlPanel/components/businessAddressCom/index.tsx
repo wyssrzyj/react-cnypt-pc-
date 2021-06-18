@@ -9,11 +9,12 @@ import styles from './index.module.less'
 const { Search } = Input
 
 const BusinessAddressCom = props => {
-  const { onChange } = props
+  const { onChange, value = {} } = props
+  const { address, location } = value
   const [mapLocation, setMapLocation] = useState<any[]>([])
   const [PMarker, setPMarker] = useState<Marker>()
   const [mapScene, setMapScene] = useState<Scene>()
-  const [locationName, setLocationName] = useState<string>('')
+  const [locationName, setLocationName] = useState<string>(address)
 
   const onSearch = async value => {
     setLocationName(value)
@@ -43,11 +44,10 @@ const BusinessAddressCom = props => {
       const markerLayer = new MarkerLayer()
       const el = document.createElement('label')
       el.className = 'labelclass'
-      el.style.background =
-        'url(https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ)'
+      el.style.background = 'url(https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ)'
       const marker: any = new Marker({
         element: el
-      }).setLnglat({ lng: 120.311123, lat: 30.404645 })
+      }).setLnglat({ lng: 120.300402, lat: 30.395863 })
       setPMarker(marker)
       markerLayer.addMarker(marker)
       scene.addMarkerLayer(markerLayer)
@@ -69,8 +69,7 @@ const BusinessAddressCom = props => {
             regeocode: { formatted_address }
           } = data
           setLocationName(formatted_address)
-          isFunction(onChange) &&
-            onChange({ location: strArr, address: formatted_address })
+          isFunction(onChange) && onChange({ location: strArr, address: formatted_address })
         }
       })
     }
@@ -82,6 +81,13 @@ const BusinessAddressCom = props => {
       mapScene.panTo([mapLocation[0], mapLocation[1]])
     }
   }, [mapLocation, PMarker, mapScene])
+
+  useEffect(() => {
+    if (address && location) {
+      setLocationName(address)
+      setMapLocation(location.split(','))
+    }
+  }, [address, location])
 
   return (
     <div>

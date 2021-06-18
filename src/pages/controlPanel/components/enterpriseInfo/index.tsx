@@ -1,20 +1,12 @@
-import React, { useState } from 'react'
-import {
-  Form,
-  Input,
-  Button,
-  Radio,
-  // Select,
-  // DatePicker,
-  Cascader,
-  Upload,
-  message
-} from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Form, Input, Button, Radio, Cascader, Upload, message } from 'antd'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { isEmpty } from 'lodash'
+import { toJS } from 'mobx'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
-import cityData from '@/static/cityData'
-import { useStores } from '@/utils/mobx'
+// import cityData from '@/static/cityData'
+import { useStores, observer } from '@/utils/mobx'
 import BusinessAddressCom from '../businessAddressCom'
 // import ProcessingTypeCom from '../processingTypeCom'
 // import MainCategoriesCom from '../mainCategoriesCom'
@@ -62,14 +54,17 @@ const layout = {
 
 const EnterpriseInfo = () => {
   const [form] = Form.useForm()
-  const { validateFields } = form
+  const { validateFields, setFieldsValue } = form
   const currentUser = getCurrentUser() || {}
-  const { mobilePhone } = currentUser
-  const { factoryPageStore } = useStores()
+  const { mobilePhone, userId } = currentUser
+  const { factoryPageStore, commonStore } = useStores()
   const { uploadFiles } = factoryPageStore
+  const { allArea } = commonStore
   // const [enterpriseType, setEnterpriseType] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
+  const [enterpriseId, setEnterpriseId] = useState(undefined)
+  const [factoryId, setFactoryId] = useState(undefined)
 
   // const onValuesChange = changedValues => {
   //   if (get(changedValues, 'enterpriseType')) {
@@ -85,10 +80,7 @@ const EnterpriseInfo = () => {
   )
 
   const beforeUpload = file => {
-    const isJpgOrPng =
-      file.type === 'image/jpg' ||
-      file.type === 'image/png' ||
-      file.type === 'image/jpeg'
+    const isJpgOrPng = file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/jpeg'
     if (!isJpgOrPng) {
       message.error('只能上传jpg/png格式文件!')
     }
@@ -126,15 +118,59 @@ const EnterpriseInfo = () => {
           districtId: area[2],
           address,
           latitude: location.split(',')[1],
-          longitude: location.split(',')[0]
+          longitude: location.split(',')[0],
+          enterpriseId,
+          factoryId
         })
         .then(response => {
-          const { success, msg, data = {} } = response
-          message[success ? 'success' : 'error'](msg)
+          const { success, data = {} } = response
+          message[success ? 'success' : 'error']('请完善企业证件认证，平台将在1~3个工作日与您取得联系，请注意接听来电。')
           localStorage.setItem('enterpriseInfo', JSON.stringify(data))
+          window.location.reload()
         })
     })
   }
+  const getEnterpriseInfo = () => {
+    axios.get('/api/factory/enterprise/get-enterprise-info-user-id', { userId }).then(response => {
+      const { success, data = {} } = response
+      if (success && !isEmpty(data)) {
+        const {
+          enterpriseLogoUrl,
+          enterpriseName,
+          enterpriseType,
+          realName,
+          contactPhone,
+          email,
+          enterpriseDesc,
+          factoryId,
+          enterpriseId,
+          provinceId,
+          cityId,
+          districtId,
+          address,
+          latitude,
+          longitude
+        } = data
+        setImageUrl(enterpriseLogoUrl)
+        setFactoryId(factoryId)
+        setEnterpriseId(enterpriseId)
+        setFieldsValue({
+          enterpriseLogoUrl,
+          enterpriseName,
+          enterpriseType,
+          realName,
+          contactPhone,
+          email,
+          enterpriseAbstract: enterpriseDesc,
+          area: [provinceId.toString(), cityId.toString(), districtId.toString()],
+          businessAddress: { location: `${longitude},${latitude}`, address }
+        })
+      }
+    })
+  }
+  useEffect(() => {
+    getEnterpriseInfo()
+  }, [])
 
   return (
     <div className={styles.enterpriseInfo}>
@@ -157,71 +193,39 @@ const EnterpriseInfo = () => {
             beforeUpload={beforeUpload}
             customRequest={customRequest}
           >
-            {imageUrl ? (
-              <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
-            ) : (
-              uploadButton
-            )}
+            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
           </Upload>
         </Form.Item>
 
-        <Form.Item
-          label="企业名称"
-          name="enterpriseName"
-          rules={[{ required: true, message: '请输入企业名称！' }]}
-        >
+        <Form.Item label="企业名称" name="enterpriseName" rules={[{ required: true, message: '请输入企业名称！' }]}>
           <Input placeholder="请输入企业名称" />
         </Form.Item>
 
-        <Form.Item
-          label="企业类型"
-          name="enterpriseType"
-          rules={[{ required: true, message: '请输入企业名称！' }]}
-        >
+        <Form.Item label="企业类型" name="enterpriseType" rules={[{ required: true, message: '请输入企业名称！' }]}>
           <Radio.Group>
             <Radio value="0">加工商</Radio>
             <Radio value="1">发单商</Radio>
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item
-          label="联系人"
-          name="realName"
-          rules={[{ required: true, message: '请填写联系人姓名' }]}
-        >
+        <Form.Item label="联系人" name="realName" rules={[{ required: true, message: '请填写联系人姓名' }]}>
           <Input placeholder="请填写联系人姓名" />
         </Form.Item>
 
-        <Form.Item
-          label="手机号"
-          name="mobilePhone"
-          rules={[{ required: true, message: '请填写手机号' }]}
-        >
+        <Form.Item label="手机号" name="mobilePhone" rules={[{ required: true, message: '请填写手机号' }]}>
           <Input placeholder="请填写手机号" disabled />
         </Form.Item>
 
-        <Form.Item
-          label="电话号码"
-          name="contactPhone"
-          rules={[{ required: true, message: '请填写电话号码' }]}
-        >
+        <Form.Item label="电话号码" name="contactPhone" rules={[{ required: true, message: '请填写电话号码' }]}>
           <Input placeholder="请输入座机号码  如：0571-8******" />
         </Form.Item>
 
-        <Form.Item
-          label="电子邮箱"
-          name="email"
-          rules={[{ required: true, message: '请填写电子邮箱' }]}
-        >
+        <Form.Item label="电子邮箱" name="email" rules={[{ required: true, message: '请填写电子邮箱' }]}>
           <Input placeholder="请填写电子邮箱" />
         </Form.Item>
 
-        <Form.Item
-          label="所在地区"
-          name="area"
-          rules={[{ required: true, message: '请选择所在地' }]}
-        >
-          <Cascader options={cityData} placeholder="请选择所在地" />
+        <Form.Item label="所在地区" name="area" rules={[{ required: true, message: '请选择所在地' }]}>
+          <Cascader options={toJS(allArea)} placeholder="请选择所在地" />
         </Form.Item>
 
         {/* {enterpriseType === 'process' && (
@@ -277,11 +281,7 @@ const EnterpriseInfo = () => {
           </>
         )} */}
 
-        <Form.Item
-          label="企业地址"
-          name="businessAddress"
-          rules={[{ required: true, message: '请选择企业地址！' }]}
-        >
+        <Form.Item label="企业地址" name="businessAddress" rules={[{ required: true, message: '请选择企业地址！' }]}>
           <BusinessAddressCom />
         </Form.Item>
 
@@ -303,11 +303,11 @@ const EnterpriseInfo = () => {
 
       <div className={styles.enterpriseFooter}>
         <Button type="primary" onClick={confirmSubmit}>
-          确认提交
+          确认{enterpriseId ? '修改' : '提交'}
         </Button>
       </div>
     </div>
   )
 }
 
-export default EnterpriseInfo
+export default observer(EnterpriseInfo)

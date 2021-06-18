@@ -1,39 +1,32 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Modal, Button, Tag, message } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import { isFunction } from 'lodash'
-import axios from '@/utils/axios'
+import { toJS } from 'mobx'
+import { useStores, observer } from '@/utils/mobx'
 import classNames from 'classnames'
 import styles from './index.module.less'
 
 const AreaModal = props => {
+  const { commonStore } = useStores()
+  const { allArea } = commonStore
+  const newAllArea = toJS(allArea)
   const { visible, handleOk, handleCancel, selectedCity = [] } = props
-  console.log('🚀 ~ file: index.tsx ~ line 10 ~ selectedCity', selectedCity)
-  const [areaTree, setAreaTree] = useState<any>([])
-  const [cityTree, setCityTree] = useState<any>([])
+  const [cityTree, setCityTree] = useState<any>([...newAllArea[0].children])
   const [activeCity, setActiveCity] = useState<any>([...selectedCity])
-  const [activeProvince, setActiveProvince] = useState<string>('')
-  const getAllArea = async () => {
-    const response = await axios.get('/api/factory/district/list-city-tree')
-    const { success, data } = response
-    if (success) {
-      setAreaTree([...data])
-      setActiveProvince(data[0].id)
-      setCityTree([...data[0].childCityList])
-    }
-  }
+  const [activeProvince, setActiveProvince] = useState<string>(newAllArea[0].value)
 
   const selectProvince = id => {
     setActiveProvince(id)
-    const currentCity = areaTree.find(tree => tree.id === id) || {}
-    setCityTree([...currentCity.childCityList])
+    const currentCity = newAllArea.find(tree => tree.value === id) || {}
+    setCityTree([...currentCity.children])
   }
 
   const selectCity = params => {
     if (activeCity.length >= 8) {
       message.error('最多可选8个地区')
     } else {
-      const index = activeCity.findIndex(city => city.id === params.id)
+      const index = activeCity.findIndex(city => city.value === params.id)
       if (index < 0) {
         activeCity.push(params)
       } else {
@@ -57,28 +50,13 @@ const AreaModal = props => {
     isFunction(handleOk) && handleOk(activeCity)
   }
 
-  useEffect(() => {
-    getAllArea()
-  }, [])
-
   return (
-    <Modal
-      title="请选择地区（最多选择8个）"
-      visible={visible}
-      onOk={confirmFn}
-      onCancel={handleCancel}
-      width={660}
-    >
+    <Modal title="请选择地区（最多选择8个）" visible={visible} onOk={confirmFn} onCancel={handleCancel} width={660}>
       <div className={styles.hasChosen}>
         <div>
           <span>已选择：</span>
           {activeCity.map(city => (
-            <Tag
-              key={city.id}
-              className={styles.selectedTag}
-              closable
-              onClose={() => closeTag(city.id)}
-            >
+            <Tag key={city.id} className={styles.selectedTag} closable onClose={() => closeTag(city.id)}>
               {city.name}
             </Tag>
           ))}
@@ -89,32 +67,24 @@ const AreaModal = props => {
       </div>
       <div className={styles.areaList}>
         <div className={styles.areaLeft}>
-          {areaTree.map(item => (
+          {newAllArea.map(item => (
             <div
-              key={item.id}
-              className={classNames(
-                styles.provinces,
-                item.id === activeProvince ? styles.active : null
-              )}
-              onClick={() => selectProvince(item.id)}
+              key={item.value}
+              className={classNames(styles.provinces, item.value === activeProvince ? styles.active : null)}
+              onClick={() => selectProvince(item.value)}
             >
-              {item.name}
+              {item.label}
             </div>
           ))}
         </div>
         <div className={styles.areaRight}>
           {cityTree.map(city => (
             <span
-              key={city.id}
-              className={classNames(
-                styles.cityBox,
-                activeCity.findIndex(val => val.id === city.id) > -1
-                  ? styles.cityActive
-                  : null
-              )}
-              onClick={() => selectCity({ id: city.id, name: city.name })}
+              key={city.value}
+              className={classNames(styles.cityBox, activeCity.findIndex(val => val.value === city.value) > -1 ? styles.cityActive : null)}
+              onClick={() => selectCity({ id: city.value, name: city.label })}
             >
-              {city.name}
+              {city.label}
             </span>
           ))}
         </div>
@@ -123,4 +93,4 @@ const AreaModal = props => {
   )
 }
 
-export default AreaModal
+export default observer(AreaModal)

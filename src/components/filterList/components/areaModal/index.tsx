@@ -44,7 +44,7 @@ const AreaModal = props => {
 
   const emptyCity = () => {
     setActiveCity([])
-    isFunction(handleOk) && handleOk([])
+    // isFunction(handleOk) && handleOk([])
   }
   const confirmFn = () => {
     isFunction(handleOk) && handleOk(activeCity)

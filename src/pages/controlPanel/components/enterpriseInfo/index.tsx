@@ -123,10 +123,16 @@ const EnterpriseInfo = () => {
           factoryId
         })
         .then(response => {
-          const { success, data = {} } = response
-          message[success ? 'success' : 'error']('请完善企业证件认证，平台将在1~3个工作日与您取得联系，请注意接听来电。')
-          localStorage.setItem('enterpriseInfo', JSON.stringify(data))
-          window.location.reload()
+          const { success, msg, data = {} } = response
+          if (success) {
+            message.success('请完善企业证件认证，平台将在1~3个工作日与您取得联系，请注意接听来电。')
+            localStorage.setItem('enterpriseInfo', JSON.stringify(data))
+            setTimeout(() => {
+              window.location.reload()
+            }, 1000)
+          } else {
+            message.error(msg)
+          }
         })
     })
   }

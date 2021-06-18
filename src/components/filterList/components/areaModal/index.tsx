@@ -81,7 +81,7 @@ const AreaModal = props => {
           {cityTree.map(city => (
             <span
               key={city.value}
-              className={classNames(styles.cityBox, activeCity.findIndex(val => val.value === city.value) > -1 ? styles.cityActive : null)}
+              className={classNames(styles.cityBox, activeCity.findIndex(val => val.id === city.value) > -1 ? styles.cityActive : null)}
               onClick={() => selectCity({ id: city.value, name: city.label })}
             >
               {city.label}

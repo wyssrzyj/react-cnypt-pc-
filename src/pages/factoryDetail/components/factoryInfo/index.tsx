@@ -7,14 +7,7 @@ import { isArray, isEmpty, isNil } from 'lodash'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
-import SwiperCore, {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay,
-  Thumbs
-} from 'swiper'
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs } from 'swiper'
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
 import './factoryDetail.less'
@@ -28,6 +21,7 @@ const FactoryInfo = props => {
   const { factoryId } = props
   const history = useHistory()
   const [factoryInfo, setFactoryInfo] = useState<any>({})
+  const [contactInfo, setContactInfo] = useState<any>({})
   const currentUser = getCurrentUser() || {}
 
   const getFactoryDetails = async () => {
@@ -43,6 +37,19 @@ const FactoryInfo = props => {
     }
   }
 
+  const getContactInfo = () => {
+    axios
+      .get('/api/user/get-user-info-factory-id', {
+        factoryId
+      })
+      .then(response => {
+        const { success, data } = response
+        if (success) {
+          setContactInfo({ ...data })
+        }
+      })
+  }
+
   const notLoggedIn = (str, frontLen, endLen) => {
     if (!isNil(str)) {
       if (isEmpty(currentUser)) {
@@ -51,9 +58,7 @@ const FactoryInfo = props => {
         for (var i = 0; i < len; i++) {
           xing += '*'
         }
-        return (
-          str.substring(0, frontLen) + xing + str.substring(str.length - endLen)
-        )
+        return str.substring(0, frontLen) + xing + str.substring(str.length - endLen)
       } else {
         return str
       }
@@ -81,6 +86,7 @@ const FactoryInfo = props => {
       }
     })
     getFactoryDetails()
+    getContactInfo()
   }, [])
 
   return (
@@ -146,21 +152,14 @@ const FactoryInfo = props => {
             </li>
             <li>
               <span>加工类型：</span>
-              <span>
-                {isArray(factoryInfo.prodTypeRemarksList) &&
-                  factoryInfo.prodTypeRemarksList.join(',')}
-              </span>
+              <span>{isArray(factoryInfo.prodTypeRemarksList) && factoryInfo.prodTypeRemarksList.join(',')}</span>
             </li>
             <li>
               <span>主营类别：</span>
               <span>
                 {factoryInfo.factoryCatalogList &&
                   factoryInfo.factoryCatalogList.map(item => (
-                    <Tag
-                      key={item.name}
-                      className={styles.factoryInfoTag}
-                      color="#f2f2f2"
-                    >
+                    <Tag key={item.name} className={styles.factoryInfoTag} color="#f2f2f2">
                       {item.name}
                     </Tag>
                   ))}
@@ -171,11 +170,7 @@ const FactoryInfo = props => {
               <span>
                 {factoryInfo.tagDictItemList &&
                   factoryInfo.tagDictItemList.map(item => (
-                    <Tag
-                      key={item.value}
-                      className={styles.factoryInfoTag}
-                      color="#f2f2f2"
-                    >
+                    <Tag key={item.value} className={styles.factoryInfoTag} color="#f2f2f2">
                       {item.label}
                     </Tag>
                   ))}
@@ -195,15 +190,13 @@ const FactoryInfo = props => {
         <div className={styles.firstLine}>
           <div className={styles.firstLineItem}>
             <span>联系人：</span>
-            <span>{factoryInfo.realName}</span>
+            <span>{contactInfo.realName}</span>
           </div>
           <div className={styles.firstLineItem}>
             <span>手机号码：</span>
-            <span>{notLoggedIn(factoryInfo.mobilePhone, 3, 4)}</span>
+            <span>{notLoggedIn(contactInfo.mobilePhone, 3, 4)}</span>
           </div>
-          <div
-            className={classNames(styles.firstLineItem, styles.firstLineRight)}
-          >
+          <div className={classNames(styles.firstLineItem, styles.firstLineRight)}>
             {isEmpty(currentUser) && (
               <span className={styles.firstLineIcon} onClick={goLogin}>
                 <Icon className={styles.icon} type="jack-login-settings" />
@@ -228,11 +221,11 @@ const FactoryInfo = props => {
         <div className={styles.secondLine}>
           <div className={styles.secondLineItem}>
             <span>电子邮箱：</span>
-            <span>{notLoggedIn(factoryInfo.email, 1, 7)}</span>
+            <span>{notLoggedIn(contactInfo.email, 1, 7)}</span>
           </div>
           <div className={styles.secondLineItem}>
             <span>联系电话：</span>
-            <span>{notLoggedIn(factoryInfo.contactPhone, 5, 1)}</span>
+            <span>{notLoggedIn(contactInfo.contactPhone, 5, 1)}</span>
           </div>
         </div>
         <div className={styles.secondLine}>

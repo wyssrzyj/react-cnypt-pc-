@@ -120,7 +120,8 @@ const EnterpriseInfo = () => {
           latitude: location.split(',')[1],
           longitude: location.split(',')[0],
           enterpriseId,
-          factoryId
+          factoryId,
+          userId
         })
         .then(response => {
           const { success, msg, data = {} } = response
@@ -129,7 +130,7 @@ const EnterpriseInfo = () => {
             localStorage.setItem('enterpriseInfo', JSON.stringify(data))
             setTimeout(() => {
               window.location.reload()
-            }, 1000)
+            }, 2000)
           } else {
             message.error(msg)
           }
@@ -209,7 +210,7 @@ const EnterpriseInfo = () => {
 
         <Form.Item label="企业类型" name="enterpriseType" rules={[{ required: true, message: '请输入企业名称！' }]}>
           <Radio.Group>
-            <Radio value="0">加工商</Radio>
+            <Radio value="0">加工厂</Radio>
             <Radio value="1">发单商</Radio>
           </Radio.Group>
         </Form.Item>

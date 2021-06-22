@@ -188,7 +188,10 @@ const colors = [
 ]
 
 const GDMap = (props: any) => {
+  const { provinceChange } = props
+
   const mRef: any = useRef()
+  const cRef: any = useRef()
   const customRef = useRef<HTMLDivElement>()
   const canvasRef = useRef<any>()
   const ctxRef = useRef<any>()
@@ -208,6 +211,8 @@ const GDMap = (props: any) => {
   const [lineShow, setLineShow] = useState<number>(0) // 线条key
   const [drillLayer, setDrillLayer] = useState<any>(0) // 下钻图层
   const [curTarget, setCurTarget] = useState<any>({}) // 地图对象 省市区
+
+  const [pLayer, setPLayer] = useState<any>({}) // 国家地图
 
   const CityData = JSON.parse(localStorage.getItem('cityInfo'))
   const CountyData = JSON.parse(localStorage.getItem('countyInfo'))
@@ -246,14 +251,14 @@ const GDMap = (props: any) => {
       zoom: 3,
       minZoom: 3,
       maxZoom: 20,
-      zoomEnable: true,
+      zoomEnable: false,
       scrollZoom: false,
       pitchWithRotate: false,
       rotateEnable: false,
-      dragEnable: true
+      dragEnable: false
     })
 
-    const scene: any = new Scene({
+    const scene: any = await new Scene({
       id: `homeMap`,
       logoVisible: false,
       map: mapBox
@@ -261,7 +266,7 @@ const GDMap = (props: any) => {
 
     mRef.current = scene
 
-    const pointLayer = new PointLayer({
+    const pointLayer = await new PointLayer({
       autoFit: true,
       zIndex: 2
     })
@@ -344,58 +349,85 @@ const GDMap = (props: any) => {
     })
 
     scene.on('loaded', async () => {
-      scene.on('zoomchange', () => {
-        // console.log(scene.getZoom(), 'scene.getZoom()')
-        // console.log(scene.getCenter(), 'scene.getCenter()')
-        initInfo()
+      // scene.on('zoomchange', () => {
+      //   console.log(scene.getZoom(), 'scene.getZoom()')
+      //   console.log(scene.getCenter(), 'scene.getCenter()')
+      //   initInfo()
+      // })
+
+      scene.on('click', _ev => {
+        // console.log(ev, 'ev')
       })
-      // updateDistrict
-      const dLayer: any = new DrillDownLayer(scene, {
-        data: [],
-        viewStart: 'Country',
-        viewEnd: 'County', // `Country' | 'Province' | 'City' | 'County`
+
+      const cLayer = new CountryLayer(scene, {
+        data: ProvinceData,
         joinBy: ['NAME_CHN', 'name'],
-        ProvinceData: ProvinceData,
-        CityData: CityData,
-        CountyData: CountyData,
+        label: {
+          // enable: false
+        },
+        popup: {
+          enable: false
+        },
+        autoFit: true,
+        provinceStroke: '#aaa',
+        depth: 1,
         fill: {
           color: {
             field: 'value',
             values: colors
           }
-        },
-        popup: {
-          enable: false
-        },
-        drillDownEvent: ev => {
-          setPopShow(false)
-          setPopUpShow(false)
-
-          if (ev.level === 'city') {
-            pointLayer.show()
-          } else {
-            pointLayer.hide()
-          }
-        },
-        drillUpEvent: ev => {
-          if (ev.to.toLowerCase() === 'country') {
-            scene.setZoomAndCenter(4, [104.307546, 37.766084], true)
-          }
-
-          if (ev.level === 'city') {
-            pointLayer.show()
-          } else {
-            pointLayer.hide()
-          }
         }
       })
+      // updateDistrict
+      // const dLayer: any = new DrillDownLayer(scene, {
+      //   data: [],
+      //   viewStart: 'Country',
+      //   viewEnd: 'County', // `Country' | 'Province' | 'City' | 'County`
+      //   joinBy: ['NAME_CHN', 'name'],
+      //   ProvinceData: ProvinceData,
+      //   CityData: CityData,
+      //   CountyData: CountyData,
+      //   fill: {
+      //     color: {
+      //       field: 'value',
+      //       values: colors
+      //     }
+      //   },
+      //   popup: {
+      //     enable: false
+      //   },
+      //   drillDownEvent: ev => {
+      //     console.log(ev, '~~~~~')
+      //     setPopShow(false)
+      //     setPopUpShow(false)
+
+      //     if (ev.level === 'city') {
+      //       pointLayer.show()
+      //     } else {
+      //       pointLayer.hide()
+      //     }
+      //   },
+      //   drillUpEvent: ev => {
+      //     if (ev.to.toLowerCase() === 'country') {
+      //       scene.setZoomAndCenter(4, [104.307546, 37.766084], true)
+      //     }
+
+      //     if (ev.level === 'city') {
+      //       pointLayer.show()
+      //     } else {
+      //       pointLayer.hide()
+      //     }
+      //   }
+      // })
 
       setTimeout(() => {
-        scene.setZoomAndCenter(4, [104.307546, 37.766084], true)
+        scene.setZoomAndCenter(4.2, [116.303904, 36.820534], true)
       }, 1000)
 
       setMap(scene)
-      setDrillLayer(dLayer)
+      // setDrillLayer(dLayer)
+      cRef.current = cLayer
+      setPLayer(cRef.current)
     })
   }, [])
 
@@ -411,29 +443,40 @@ const GDMap = (props: any) => {
 
   useEffect(() => {
     if (map && drillLayer) {
-      drillLayer.provinceLayer.on('mousemove', ev => {
-        setPopLocation(map, ev)
-      })
-
-      drillLayer.cityLayer.on('mousemove', ev => {
-        setPopLocation(map, ev)
-      })
-
-      drillLayer.countyLayer.on('mousemove', ev => {
-        setPopLocation(map, ev)
-      })
-
-      drillLayer.provinceLayer.on('mouseout', () => {
-        initInfo()
-      })
-      drillLayer.cityLayer.on('mouseout', () => {
-        initInfo()
-      })
-      drillLayer.countyLayer.on('mouseout', () => {
-        initInfo()
-      })
+      // drillLayer.provinceLayer.on('mousemove', ev => {
+      //   setPopLocation(map, ev)
+      // })
+      // drillLayer.cityLayer.on('mousemove', ev => {
+      //   setPopLocation(map, ev)
+      // })
+      // drillLayer.countyLayer.on('mousemove', ev => {
+      //   setPopLocation(map, ev)
+      // })
+      // drillLayer.provinceLayer.on('mouseout', () => {
+      //   initInfo()
+      // })
+      // drillLayer.cityLayer.on('mouseout', () => {
+      //   initInfo()
+      // })
+      // drillLayer.countyLayer.on('mouseout', () => {
+      //   initInfo()
+      // })
     }
   }, [drillLayer, map])
+
+  useEffect(() => {
+    if (map && cRef.current) {
+      cRef.current.on('click', ev => {
+        const { feature } = ev
+        const { properties } = feature
+        provinceChange(properties.name)
+      })
+
+      cRef.current.on('unclick', _ev => {
+        provinceChange(null)
+      })
+    }
+  }, [cRef.current, map, provinceChange])
 
   useEffect(() => {
     console.log(curTarget)

@@ -79,7 +79,15 @@ module.exports = {
     hot: true, // 热更新
     port: 8002, // 端口号
     proxy: {
-      '/api': 'http://8.136.225.110:8888/'
+      '/api': 'http://8.136.225.110:8888/',
+      '/baiduApi': {
+        target: 'https://aip.baidubce.com', //访问地址
+        changeOrigin: true,
+        secure: false, //只有代理https 地址需要次选项
+        pathRewrite: {
+          '^/baiduApi': ''
+        }
+      }
       // '/api': 'http://192.168.83.108:8888'
     }
   },

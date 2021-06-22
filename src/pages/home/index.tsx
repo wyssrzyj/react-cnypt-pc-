@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styles from './index.module.less'
-import { observer, useStores } from '@/utils/mobx'
+import { observer } from '@/utils/mobx'
 import Menu from './components/menu'
 import Banners from './components/banner'
 import UserCard from './components/userCard'
@@ -12,12 +12,14 @@ import ExcellentOrder from './components/excellentOrder'
 // import { refreshToken } from '@/stores/login/loginStore'
 
 const Home = () => {
-  const { homeStore } = useStores()
-  const {} = homeStore
+  // const { homeStore } = useStores()
+  // const { getAccess, getImgWord, getTemImgToWord } = homeStore
 
   useEffect(() => {
     ;(async () => {
-      // await refreshToken()
+      // await getAccess()
+      // await getImgWord()
+      // await getTemImgToWord()
     })()
   }, [])
 

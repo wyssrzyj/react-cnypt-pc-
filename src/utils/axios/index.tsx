@@ -3,10 +3,10 @@ import NProgress from 'nprogress'
 import { message } from 'antd'
 import { getRefresh, getToken, getCurrentUser } from '../tool'
 import { dFn, Params, ResponseProps } from './types'
+// import { dealRefresh } from './refreshAxios'
 
 const customAxios = axios.create({})
 
-let rToken = ''
 // TODO token是放在headers 还是在请求体中添加
 // TODO 通过setupProxy 设置代理
 const CancelToken = axios.CancelToken
@@ -38,32 +38,16 @@ customAxios.interceptors.request.use(
   async function (request) {
     const { expire } = getCurrentUser()
 
-    const refreshAxios = axios.create({
-      headers: {
-        authorization: getToken(),
-        refresh_token: getRefresh()
-      }
-    })
-
     const whiteList = [
       '/api/user/account/login',
-      '/api/user/account/refresh-token'
+      '/api/user/account/refresh-token',
+      '/api/admin/manage/dict-item/list/dict-code'
     ]
 
     const flag = whiteList.some(item => request.url.includes(item))
 
     if (expire - Date.now() < 10 && !flag) {
-      const url = `/api/user/account/refresh-token?accessToken=${getToken()}`
-
-      const refresData = await refreshAxios.post(url)
-      rToken = refresData.data.data.access_token
-      const expiresTime = refresData.data.data.expires_in
-      request.headers.authorization = rToken
-      const updateUser = JSON.parse(localStorage.getItem('currentUser'))
-      updateUser.expire = expiresTime
-      updateUser.access_token = rToken
-      localStorage.setItem('token', rToken)
-      localStorage.setItem('currentUser', JSON.stringify(updateUser))
+      // dealRefresh(request)
     }
     NProgress.start()
     return request

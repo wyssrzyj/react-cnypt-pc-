@@ -362,6 +362,13 @@ const FactoryInformation = () => {
     const list = cloneDeep(fileList)
     const formData = new FormData()
 
+    // 图片资源转换成base64
+    // const reader = new FileReader()
+    // reader.onload = function (res) {
+    //   console.log(res.target.result)
+    // }
+    // reader.readAsDataURL(file)
+
     formData.append('file', file)
     formData.append('module', 'factory')
     const res = await uploadFiles(formData)

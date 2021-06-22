@@ -86,6 +86,7 @@ const Search = () => {
 
   const searchFunction = () => {
     updateName(searchWord)
+    history.push('/platform/factory-search')
   }
 
   return (

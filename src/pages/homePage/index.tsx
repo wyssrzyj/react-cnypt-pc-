@@ -883,7 +883,7 @@ const HomePage = () => {
         </div>
         <SwiperFactorys />
         {/* 智能搜索工厂 */}
-        {/* <div className={styles.intelligenceSearch}>
+        <div className={styles.intelligenceSearch}>
           <div className={styles.intelligenceInner}>
             <div className={styles.intelligenceLeft}>
               <img src={SEARCH} alt="" className={styles.searchImg} />
@@ -905,9 +905,9 @@ const HomePage = () => {
               <img src={FRATORY} className={styles.intellImg} alt="" />
             </div>
           </div>
-        </div> */}
+        </div>
         {/* 地区工厂 */}
-        {/* <div className={styles.areaFactorys}>
+        <div className={styles.areaFactorys}>
           <div className={styles.areaHeader}>
             <div className={styles.headerLeft}>
               <div className={styles.areaTitle}>
@@ -966,9 +966,9 @@ const HomePage = () => {
               })}
             </div>
           </div>
-        </div> */}
+        </div>
         {/* 产业聚集地 */}
-        {/* <div className={styles.focus}>
+        <div className={styles.focus}>
           <div className={styles.focusInner}>
             <div className={styles.focusLeft}>
               <div>产业聚集地</div>
@@ -992,17 +992,17 @@ const HomePage = () => {
               )}
             </div>
           </div>
-        </div> */}
+        </div>
         {/* 加盟工厂 */}
-        {/* <JoinFactorys /> */}
+        <JoinFactorys />
         {/* 运营团队 */}
-        {/* <Operate /> */}
+        <Operate />
         {/* 工票软件 */}
-        {/* <Software /> */}
+        <Software />
         {/* 最新物联设备 */}
-        {/* <Equipment /> */}
+        <Equipment />
         {/* 合作品牌 */}
-        {/* <Cooperation /> */}
+        <Cooperation />
       </div>
     </div>
   )

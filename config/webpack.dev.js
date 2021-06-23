@@ -1,6 +1,7 @@
-const common = require('./webpack.common.js')
+/* eslint-disable */
 const { merge } = require('webpack-merge')
 const path = require('path')
+const common = require('./webpack.common.js')
 require('@babel/polyfill')
 const getCSSModuleLocalIdent = require('./getCSSModuleLocalIdent.js')
 
@@ -24,11 +25,11 @@ const config = merge(common, {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              sourceMap: true,
-            },
+              sourceMap: true
+            }
           },
-          'postcss-loader',
-        ],
+          'postcss-loader'
+        ]
       },
       {
         test: cssModuleRegex,
@@ -41,12 +42,12 @@ const config = merge(common, {
               sourceMap: true,
               modules: {
                 // localIdentName: '[name]_[local]_[hash:base64:5]',
-                getLocalIdent: getCSSModuleLocalIdent,
-              },
-            },
+                getLocalIdent: getCSSModuleLocalIdent
+              }
+            }
           },
-          'postcss-loader',
-        ],
+          'postcss-loader'
+        ]
       },
       {
         test: lessRegex,
@@ -57,19 +58,19 @@ const config = merge(common, {
             loader: 'css-loader',
             options: {
               importLoaders: 3,
-              sourceMap: true,
-            },
+              sourceMap: true
+            }
           },
           'postcss-loader',
           {
             loader: 'less-loader',
             options: {
               lessOptions: {
-                javascriptEnabled: true,
-              },
-            },
-          },
-        ],
+                javascriptEnabled: true
+              }
+            }
+          }
+        ]
       },
       {
         test: lessModuleRegex,
@@ -82,31 +83,31 @@ const config = merge(common, {
               sourceMap: true,
               modules: {
                 // localIdentName: '[name]_[local]_[hash:base64:5]',
-                getLocalIdent: getCSSModuleLocalIdent,
-              },
-            },
+                getLocalIdent: getCSSModuleLocalIdent
+              }
+            }
           },
           'postcss-loader',
           {
             loader: 'less-loader',
             options: {
               lessOptions: {
-                javascriptEnabled: true,
-              },
-            },
-          },
-        ],
+                javascriptEnabled: true
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.s[ac]ss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-      },
-    ],
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
   },
   plugins: [],
   optimization: {
-    usedExports: true,
-  },
+    usedExports: true
+  }
 })
 
 module.exports = config

@@ -6,6 +6,7 @@ import { useHistory } from 'react-router'
 import ConcatInput from './concatInput'
 import VerifyCodeInput from './verifyCodeInput'
 import { useStores } from '@/utils/mobx'
+import * as _ from 'lodash'
 
 type InputEvent = ChangeEvent<HTMLInputElement>
 type CommonObj = {
@@ -25,26 +26,43 @@ const hasEmpty = (obj: CommonObj) => {
   })
 }
 
-type TelInfo = Partial<{
-  code?: string
-  mobilePhone?: string
-}>
+// type TelInfo = Partial<{
+//   code?: string
+//   mobilePhone?: string
+// }>
+
+const initErrors = {
+  userName: false,
+  pwd: false,
+  pwd2: false,
+  telInfo: false,
+  code: false
+}
+
+const initHelps = {
+  userName: '',
+  pwd: '',
+  pwd2: '',
+  telInfo: '',
+  code: ''
+}
 
 const Register = () => {
   const [form] = Form.useForm()
-  const { validateFields, getFieldValue } = form
+  const { validateFields } = form
   const history = useHistory()
   const { registerStore } = useStores()
-  const { vrifyCode, register } = registerStore
+  const { register, checkUser } = registerStore
 
   // const { getFieldValue, validateFields, setFieldsValue } = form
   const [disabled, setDisabled] = useState<boolean>(false)
-  const [init, setInit] = useState<boolean>(false)
-  const [telInfo, setTelInfo] = useState<TelInfo>({})
+  const [init, setInit] = useState<boolean>(true)
+  const [telInfo, setTelInfo] = useState<any>({})
+
+  const [errors, setErrors] = useState(initErrors)
+  const [helps, setHelps] = useState(initHelps)
 
   const getValueFromEvent = (event: InputEvent, type: string) => {
-    console.log(event)
-
     // 可根据需要 通过 setFieldsValue 设置联动效果
     if (type === 'telConcat') {
       return event
@@ -59,117 +77,112 @@ const Register = () => {
     try {
       const values = await validateFields()
 
-      const verifyParams = {
-        mobile: values.telInfo.mobilePhone,
-        code: values.code,
-      }
-      const verifyRef = await vrifyCode(verifyParams)
-      console.log(verifyRef, 'verifyRef')
-
       delete values.pwd2
       const params = {
         code: values.code,
         mobilePhone: values.telInfo.mobilePhone,
         password: values.pwd,
+        userName: values.userName
       }
       const registerRes = await register(params)
-      if (registerRes.success) {
+      if (registerRes && registerRes.success) {
         history.push('/login')
       }
     } catch (err) {
+      console.log(err)
       const { errorFields } = err
       console.log(errorFields, '---')
     }
   }
 
-  const onValuesChange = (_changedValues: any, allValues: CommonObj) => {
-    const flag = hasEmpty(allValues)
-    console.log(allValues)
+  const onValuesChange = async (changedValues: any, allValues: CommonObj) => {
+    const key = Object.keys(changedValues)[0]
+    const value = changedValues[key]
+    const nHelps = _.cloneDeep(helps)
+    const nErrors = _.cloneDeep(errors)
+    switch (key) {
+      case 'userName':
+        const userReg = /^[0-9a-zA-Z\u4e00-\u9fa5]{6,20}$/g
+        let flag
+        if (value) {
+          flag = await checkUser(value, 'userName')
+        }
+        if (!value) {
+          nHelps[key] = '请输入用户名~'
+          nErrors[key] = true
+        } else {
+          const regFlag = userReg.test(value)
+
+          nHelps[key] = !regFlag
+            ? '请输入6-20位中文、英文或数字~'
+            : !flag && '用户名已注册~'
+          nErrors[key] = !regFlag || !flag
+        }
+
+        setErrors(nErrors)
+        setHelps(nHelps)
+        break
+      case 'pwd':
+        const pwdReg = /^[0-9a-zA-Z]{6,20}$/g
+        if (!value) {
+          nHelps[key] = '请输入6-20位数字、英文~'
+          nErrors[key] = true
+        } else {
+          const regFlag = pwdReg.test(value)
+
+          nHelps[key] = !regFlag && '请输入6-20位数字、英文~'
+          nErrors[key] = !regFlag
+        }
+
+        setErrors(nErrors)
+        setHelps(nHelps)
+        break
+      case 'pwd2':
+        if (!value) {
+          nHelps[key] = '请再次输入你的密码~'
+          nErrors[key] = true
+        } else {
+          nHelps[key] = value !== allValues.pwd && '两次密码输入不一致~'
+          nErrors[key] = value !== allValues.pwd
+        }
+        setErrors(nErrors)
+        setHelps(nHelps)
+        break
+      case 'telInfo':
+        const { telInfo } = allValues
+        const { mobilePhone } = telInfo
+        const phoneReg =
+          /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
+        let phoneFlag
+        if (mobilePhone) {
+          phoneFlag = await checkUser(mobilePhone, 'mobilePhone')
+        }
+
+        const pFlag = phoneReg.test(mobilePhone)
+
+        if (!mobilePhone || mobilePhone.length !== 11 || !pFlag) {
+          nHelps[key] = '请输入正确的手机号~'
+          nErrors[key] = true
+        } else {
+          nHelps[key] = !phoneFlag && '手机号已注册~'
+          nErrors[key] = !phoneFlag
+        }
+        if (!init) {
+          setErrors(nErrors)
+          setHelps(nHelps)
+        }
+        setInit(false)
+        break
+    }
+
+    const errorKeys = Reflect.ownKeys(nErrors)
+    const hasError = errorKeys.some(item => nErrors[item])
+
+    const flag = hasEmpty(allValues) || hasError
     setTelInfo(allValues.telInfo)
 
     setDisabled(flag)
   }
-
-  const phoneInfoValidate = ({}) => ({
-    validator(_, value) {
-      const { code, mobilePhone } = value
-      if (!init) {
-        setInit(true)
-        return Promise.resolve()
-      }
-
-      if (code && mobilePhone) {
-        return Promise.resolve()
-      }
-      return Promise.reject(new Error('手机号码格式不正确'))
-    },
-  })
-
-  const pwdValidate = ({}) => ({
-    validator(_, value) {
-      const pwd = getFieldValue('pwd')
-
-      if (!init) {
-        setInit(true)
-        return Promise.resolve()
-      }
-
-      if (value === pwd) {
-        return Promise.resolve()
-      }
-
-      return Promise.reject(new Error('两次密码输入不一致'))
-    },
-  })
-
-  // useEffect(() => {
-  //   // @ts-ignore
-  //   const noCaptcha = window.noCaptcha
-  //   let nc_token = [
-  //     'FFFF0N0000000000884C',
-  //     new Date().getTime(),
-  //     Math.random(),
-  //   ].join(':')
-
-  //   let NC_Opt = {
-  //     renderTo: '#your-dom-id',
-  //     appkey: 'FFFF0N0000000000884C',
-  //     scene: 'nc_login',
-  //     token: nc_token,
-  //     customWidth: 300,
-  //     trans: { key1: 'code0' },
-  //     elementID: ['usernameID'],
-  //     is_Opt: 0,
-  //     language: 'cn',
-  //     isEnabled: true,
-  //     timeout: 3000,
-  //     times: 5,
-  //     apimap: {
-  //       // 'analyze': '//a.com/nocaptcha/analyze.jsonp',
-  //       // 'get_captcha': '//b.com/get_captcha/ver3',
-  //       // 'get_captcha': '//pin3.aliyun.com/get_captcha/ver3'
-  //       // 'get_img': '//c.com/get_img',
-  //       // 'checkcode': '//d.com/captcha/checkcode.jsonp',
-  //       // 'umid_Url': '//e.com/security/umscript/3.2.1/um.js',
-  //       // 'uab_Url': '//aeu.alicdn.com/js/uac/909.js',
-  //       // 'umid_serUrl': 'https://g.com/service/um.json'
-  //     },
-  //     callback: function (data) {
-  //       window.console && console.log(nc_token)
-  //       window.console && console.log(data.csessionid)
-  //       window.console && console.log(data.sig)
-  //     },
-  //   }
-  //   let nc = new noCaptcha(NC_Opt)
-  //   nc.upLang('cn', {
-  //     _startTEXT: '请按住滑块，拖动到最右边',
-  //     _yesTEXT: '验证通过',
-  //     _error300:
-  //       '哎呀，出错了，点击<a href="javascript:__nc.reset()">刷新</a>再来一次',
-  //     _errorNetwork:
-  //       '网络不给力，请<a href="javascript:__nc.reset()">点击刷新</a>',
-  //   })
-  // }, [])
 
   const toLogin = () => {
     history.push('/login')
@@ -186,19 +199,22 @@ const Register = () => {
         className={styles.form}
         onValuesChange={onValuesChange}
       >
-        {/* <Form.Item
-          name="vipName"
+        <Form.Item
+          name="userName"
           label=""
-          rules={[{ required: true, message: '会员名格式不正确' }]}
-          // normalize={normalizeAll}
+          rules={[{ required: true, message: '请输入用户名~' }]}
           getValueFromEvent={getValueFromEvent}
+          validateStatus={errors.userName ? 'error' : 'success'}
+          help={helps.userName}
         >
-          <Input placeholder="设置会员名"></Input>
-        </Form.Item> */}
+          <Input placeholder="设置用户名"></Input>
+        </Form.Item>
         <Form.Item
           name="pwd"
           label=""
-          rules={[{ required: true, message: '登录密码格式不正确' }]}
+          rules={[{ required: true, message: '请输入密码' }]}
+          validateStatus={errors.pwd ? 'error' : 'success'}
+          help={helps.pwd}
           getValueFromEvent={getValueFromEvent}
         >
           <Input placeholder="设置你的登录密码" type="password"></Input>
@@ -206,7 +222,9 @@ const Register = () => {
         <Form.Item
           name="pwd2"
           label=""
-          rules={[{ required: false }, pwdValidate]}
+          rules={[{ required: false }]}
+          validateStatus={errors.pwd2 ? 'error' : 'success'}
+          help={helps.pwd2}
           getValueFromEvent={getValueFromEvent}
         >
           <Input placeholder="请再次输入你的密码" type="password"></Input>
@@ -215,12 +233,11 @@ const Register = () => {
           name="telInfo"
           label=""
           trigger={'onChange'}
-          rules={[
-            { required: true, message: '手机号码格式不正确' },
-            phoneInfoValidate,
-          ]}
+          rules={[{ required: true, message: '请输入正确的手机号~' }]}
+          validateStatus={errors.telInfo ? 'error' : 'success'}
+          help={helps.telInfo}
           initialValue={{ code: '+86', mobilePhone: null }}
-          getValueFromEvent={(event) => getValueFromEvent(event, 'telConcat')}
+          getValueFromEvent={event => getValueFromEvent(event, 'telConcat')}
         >
           <ConcatInput />
         </Form.Item>
@@ -228,7 +245,7 @@ const Register = () => {
           name="code"
           label=""
           trigger={'onChange'}
-          getValueFromEvent={(event) => getValueFromEvent(event, 'verifyCode')}
+          getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}
         >
           <VerifyCodeInput tel={telInfo.mobilePhone} />
         </Form.Item>
@@ -244,9 +261,9 @@ const Register = () => {
           同意条款并注册
         </Button>
       </Form>
-        <div className={styles.fastLogin}>
-          已有账号？<span onClick={toLogin}>{'快速登录>>'}</span>
-        </div>
+      <div className={styles.fastLogin}>
+        已有账号？<span onClick={toLogin}>{'快速登录>>'}</span>
+      </div>
     </div>
   )
 }

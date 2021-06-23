@@ -1,3 +1,4 @@
+/* eslint-disable */
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 require('@babel/polyfill')
@@ -78,7 +79,16 @@ module.exports = {
     hot: true, // 热更新
     port: 8002, // 端口号
     proxy: {
-      '/api': 'http://8.136.225.110:8888/'
+      '/api': 'http://8.136.225.110:8888/',
+      '/baiduApi': {
+        target: 'https://aip.baidubce.com', //访问地址
+        changeOrigin: true,
+        secure: false, //只有代理https 地址需要次选项
+        pathRewrite: {
+          '^/baiduApi': ''
+        }
+      }
+      // '/api': 'http://192.168.83.108:8888'
     }
   },
   externals: {
@@ -89,9 +99,9 @@ module.exports = {
     // antd: "antd",
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'], //这几个后缀名的文件后缀可以省略不写
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'], // 这几个后缀名的文件后缀可以省略不写
     alias: {
-      '@': path.join(__dirname, '../src'), //这样 @就表示根目录src这个路径
+      '@': path.join(__dirname, '../src'), // 这样 @就表示根目录src这个路径
       process: 'process/browser'
     },
     fallback: { assert: require.resolve('assert/') }

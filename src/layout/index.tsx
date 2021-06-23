@@ -1,4 +1,5 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
+import { useStores } from '@/utils/mobx'
 import Header from './newHeader'
 import styles from './index.module.less'
 import { withRouter, RouteComponentProps } from 'react-router'
@@ -9,9 +10,18 @@ interface LayoutProps extends RouteComponentProps {
 }
 
 const Layout = (props: LayoutProps) => {
+  const { commonStore } = useStores()
+  const { allDictionary, getAllArea } = commonStore
   const { location } = props
   const { pathname } = location
   const noUseHeaders = ['/login', '/register'] // 不展示首页header的路由列表
+
+  useEffect(() => {
+    ;(async () => {
+      await allDictionary([])
+      await getAllArea()
+    })()
+  }, [])
 
   return (
     <div className={styles.container}>

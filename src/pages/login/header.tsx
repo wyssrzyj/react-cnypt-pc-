@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 
 const LoginHeader = () => {
   const navs = [
-    { label: '网站首页', url: '/home' },
+    { label: '网站首页', url: '/platform/home' },
     { label: '联系我们', url: '' },
     { label: '最新活动', url: '' },
-    { label: '产品分类', url: '' },
+    { label: '产品分类', url: '' }
   ]
 
   return (

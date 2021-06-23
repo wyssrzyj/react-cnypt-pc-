@@ -1,5 +1,5 @@
 const language = {
-    name: "amin"
+  name: 'amin'
 }
 
 export default language

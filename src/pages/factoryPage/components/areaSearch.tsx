@@ -1,219 +1,92 @@
-import React, { useState, useEffect } from 'react'
-import MapTemp from './areaComponent'
+import React, { useState, useEffect, useRef } from 'react'
+import MapTemp from './areaComponent2'
 import styles from './areaSearch.module.less'
 import classNames from 'classnames'
 import Icon from '@/components/Icon'
 import { Button } from 'antd'
+import { useStores } from '@/utils/mobx'
+import { cloneDeep } from 'lodash'
 
-type AreaItem = {
-  area: string
-  count: number
-  icon?: string
-  color?: string
-  code?: string
-  children?: Array<AreaItem>
-}
+const icons = new Map()
+icons.set('310000', 'jack-shanghai')
+icons.set('330000', 'jack-zhejiang')
+icons.set('320000', 'jack-jiangsu')
+icons.set('340000', 'jack-anhui')
+icons.set('130000', 'jack-zhongguo_-hebeisheng-ji')
+icons.set('370000', 'jack-zhongguo_-shandongsheng-lu')
+icons.set('210000', 'jack-zhongguo_-liaoningsheng-liao')
+icons.set('440000', 'jack-zhongguo_-guangdongsheng-yue')
+icons.set('110000', 'jack-beijing')
 
-const initAreaList: Array<AreaItem> = [
-  {
-    area: '上海市',
-    code: '',
-    count: 1124,
-    color: '#EC808D',
-    icon: 'jack-shanghai',
-    children: [
-      {
-        area: '上海市',
-        code: '',
-        count: 1124,
-      },
-    ],
-  },
-  {
-    area: '浙江省',
-    code: '',
-    count: 924,
-    color: '#70B603',
-    icon: 'jack-zhejiang',
-    children: [
-      {
-        area: '舟山市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '杭州市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '嘉兴市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '衢州市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '宁波市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '绍兴市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '湖州市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '台州市',
-        code: '',
-        count: 112,
-      },
-    ],
-  },
-  {
-    area: '江苏省',
-    code: '',
-    count: 924,
-    color: '#FACD91',
-    icon: 'jack-jiangsu',
-    children: [
-      {
-        area: '南京市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '无锡市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '徐州市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '常州市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '苏州市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '南通市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '淮安市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '镇江市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '镇江市',
-        code: '',
-        count: 112,
-      },
-    ],
-  },
-  {
-    area: '浙江省',
-    code: '',
-    count: 924,
-    color: '#F59A23',
-    icon: 'jack-anhui',
-    children: [
-      {
-        area: '舟山市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '杭州市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '嘉兴市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '衢州市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '宁波市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '绍兴市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '湖州市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '台州市',
-        code: '',
-        count: 112,
-      },
-      {
-        area: '台州市',
-        code: '',
-        count: 112,
-      },
-    ],
-  },
+const colors = new Map()
+colors.set('310000', '#EC808D')
+colors.set('330000', '#70B603')
+colors.set('320000', '#FACD91')
+colors.set('340000', '#F59A23')
+
+const ids = new Map()
+ids.set(0, '802,821,934,1047')
+ids.set(1, '1965')
+ids.set(2, '2,20,38,467,1376')
+
+const centers = new Map()
+centers.set(0, [118.521674, 31.464436])
+centers.set(1, [113.354725, 22.81488])
+centers.set(2, [119.778298, 39.321055])
+
+const zooms = new Map()
+zooms.set(0, 5.93)
+zooms.set(1, 5.94)
+zooms.set(2, 5.48)
+
+const areaMap = new Map()
+areaMap.set(0, 'cjDelta')
+areaMap.set(1, 'zjDelta')
+areaMap.set(2, 'bhRim')
+
+const initKeys = [
+  { label: '长三角', count: '0' },
+  { label: '珠三角', count: '0' },
+  { label: '环渤海', count: '0' }
 ]
 
 const AreaSearch = () => {
+  const mapRef: any = useRef()
   const [activityKey, setActivetyKey] = useState<number>(0)
-  const [areaList, setAreaList] = useState<Array<AreaItem>>([])
 
-  const keys = [
-    { label: '长三角', count: '3431' },
-    { label: '珠三角', count: '3431' },
-    { label: '环渤海', count: '3431' },
-  ]
+  const [dataSource, setDataSource] = useState<Array<any>>([])
+  const [keys, setKeys] = useState<Array<any>>(initKeys)
+  const [allFactorys, setAllFactorys] = useState<Array<any>>([])
+
+  const { factoryPageStore } = useStores()
+  const { getFactorys, getAreaConut, getFactorysCount } = factoryPageStore
 
   useEffect(() => {
-    const target = initAreaList.map((item) => {
-      const len = item.children.length
-      const newChildren: Array<AreaItem> = item.children.slice(0, 7)
-      const useCount = item.children
-        .slice(0, 7)
-        .reduce((prev, i) => prev + i.count, 0)
-      const moreCount = item.count - useCount
-      len > 7 && newChildren.push({ area: '更多', count: moreCount })
-      item.children = newChildren
-      return item
-    })
-    setAreaList(target)
+    ;(async () => {
+      await getData(0)
+      const data = (await getAreaConut()) || {}
+      const k = cloneDeep(keys)
+      k.forEach((item, idx) => {
+        item.count = data[areaMap.get(idx)]
+      })
+      setKeys(k)
+      const total = await getFactorysCount()
+      setAllFactorys(total)
+    })()
   }, [])
 
-  const tabChange = (key: number) => {
+  const getData = async key => {
+    const params = {
+      provinceIds: ids.get(key)
+    }
+    const data = (await getFactorys(params)) || []
+    console.log(data, 'data')
+    await setDataSource(data)
+  }
+
+  const tabChange = async (key: number) => {
+    mapRef.current.map.removeAllLayer()
+    await getData(key)
     setActivetyKey(key)
   }
 
@@ -229,59 +102,99 @@ const AreaSearch = () => {
       <div className={styles.searchContent}>
         <div className={styles.leftContent}>
           <div className={styles.areaKeys}>
-            {keys.map((item, idx) => (
-              <div
-                key={idx}
-                className={classNames(
-                  styles.areaTab,
-                  activityKey === idx && styles.areaActiveTab
-                )}
-                onClick={() => tabChange(idx)}
-              >
-                <span className={styles.areaTabL}>{item.label}</span>
-                <span className={styles.areaTabC}>({item.count}个订单)</span>
-              </div>
-            ))}
+            {keys &&
+              keys.length &&
+              keys.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={classNames(
+                    styles.areaTab,
+                    activityKey === idx && styles.areaActiveTab
+                  )}
+                  onClick={() => tabChange(idx)}
+                >
+                  <span className={styles.areaTabL}>{item.label}</span>
+                  <span className={styles.areaTabC}>({item.count}家工厂)</span>
+                </div>
+              ))}
           </div>
           <div>
-            {areaList.map((item, idx) => {
-              return (
-                <div className={styles.areaChunk} key={idx}>
-                  <div className={styles.areaChunkL}>
-                    <Icon type={item.icon} className={styles.areaIcon} />
-                    <span
-                      style={{ color: item.color }}
-                      className={styles.province}
-                    >
-                      {item.area}
-                    </span>
-                    <span>({item.count}个订单)</span>
+            {dataSource &&
+              dataSource.length &&
+              dataSource.map((item, idx) => {
+                if (!item) return
+                item.children = item.children || []
+                const childs = item.children.slice(0, 7) || []
+
+                item.children &&
+                  item.children.length > 7 &&
+                  childs.push({
+                    cityName: '更多'
+                  })
+
+                return (
+                  <div className={styles.areaChunk} key={idx}>
+                    <div className={styles.areaChunkL}>
+                      <Icon
+                        type={icons.get(item.provinceAdCode)}
+                        className={styles.areaIcon}
+                      />
+                      <span
+                        style={{ color: colors.get(item.provinceAdCode) }}
+                        className={styles.province}
+                      >
+                        {item.provinceName}
+                      </span>
+                      <span className={styles.count}>
+                        ({item.statFactory}家工厂)
+                      </span>
+                    </div>
+                    <div className={styles.areaChunkR}>
+                      {childs &&
+                        childs.length &&
+                        childs.map((i, t) => {
+                          if (t < 7) {
+                            return (
+                              <span className={styles.city} key={t}>
+                                {i.cityName}
+                                &nbsp; ({i.statFactory || 0})
+                              </span>
+                            )
+                          }
+                          return (
+                            <span className={styles.city} key={t}>
+                              {i.cityName}
+                            </span>
+                          )
+                        })}
+                    </div>
                   </div>
-                  <div className={styles.areaChunkR}>
-                    {item.children.map((i, t) => {
-                      if (t < 7) {
-                        return (
-                          <span className={styles.city} key={t}>
-                            {i.area}
-                            &nbsp; ({i.count})
-                          </span>
-                        )
-                      }
-                      return (
-                        <span className={styles.city} key={t}>
-                          {i.area}
-                        </span>
-                      )
-                    })}
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })}
           </div>
         </div>
         <div className={styles.rightContent}>
-          <MapTemp></MapTemp>
+          <MapTemp
+            zoom={zooms.get(activityKey)}
+            center={centers.get(activityKey)}
+            dataSource={dataSource}
+            ref={mapRef}
+          ></MapTemp>
         </div>
+      </div>
+      <div className={styles.allFactorys}>
+        {allFactorys &&
+          allFactorys.length &&
+          allFactorys.map((item, idx) => {
+            return (
+              <div key={idx}>
+                {item.cityName}
+                &nbsp;
+                {item.statFactory || 0}
+                &nbsp;&nbsp;
+              </div>
+            )
+          })}
       </div>
     </div>
   )

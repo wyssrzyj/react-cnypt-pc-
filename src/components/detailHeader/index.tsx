@@ -5,9 +5,12 @@ import styles from './index.module.less'
 
 const { Search } = Input
 
-const DetailHeader = () => {
+const DetailHeader = props => {
+  const { search } = props
   const location = useLocation()
-  const onSearch = () => {}
+  const onSearch = value => {
+    search(value)
+  }
   return (
     <div className={styles.detailHeader}>
       <img
@@ -17,8 +20,8 @@ const DetailHeader = () => {
       <Search
         className={styles.detailSearch}
         placeholder={`请输入${
-          location.pathname === '/factory-detail' ? '工厂' : '订单'
-        }信息`}
+          new RegExp('factory').test(location.pathname) ? '工厂' : '订单'
+        }名称`}
         allowClear
         enterButton="搜索"
         size="large"

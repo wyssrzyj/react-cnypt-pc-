@@ -1,5 +1,23 @@
 .mapTemp {
-    position: relative;
-    width: 400px;
-    height: 484px;
+  position: relative;
+  width: 400px;
+  height: 484px;
+  // opacity: 0;
+  transition: all 0.2s ease;
+
+  :global {
+    .amap-copyright {
+      display: none !important;
+    }
+  }
+}
+
+.mapBox {
+  position: relative;
+  width: 400px;
+  height: 484px;
+}
+
+.show {
+  opacity: 1;
 }

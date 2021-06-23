@@ -1,23 +1,16 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
 import { message } from 'antd'
-import { getToken } from '../tool'
+import { getRefresh, getToken, getCurrentUser } from '../tool'
 import { dFn, Params, ResponseProps } from './types'
+// import { dealRefresh } from './refreshAxios'
+
+const customAxios = axios.create({})
 
 // TODO token是放在headers 还是在请求体中添加
 // TODO 通过setupProxy 设置代理
-const AUTH_TOKEN = 'xxx'
-
 const CancelToken = axios.CancelToken
 let cancels = []
-
-const instance = axios.create({})
-
-instance.defaults.headers.common['Authorization'] = AUTH_TOKEN
-instance.defaults.headers.post['Content-Type'] =
-  'application/x-www-form-urlencoded'
-instance.defaults.timeout = 10000
-instance.defaults.withCredentials = true
 
 const toType = obj => {
   return {}.toString
@@ -41,18 +34,21 @@ const filterNull = (o: O) => {
   return o
 }
 
-axios.interceptors.request.use(
-  function (request) {
-    const userToken = localStorage.getItem('_usertoken') || undefined
-    if (userToken && request.method === 'post') {
-      if (!request.data) request.data = {}
-      request.data.token = userToken
-    }
-    if (userToken && request.method === 'get') {
-      if (!request.params) request.params = {}
-      request.params.token = userToken
-    }
+customAxios.interceptors.request.use(
+  async function (request) {
+    const { expire } = getCurrentUser()
 
+    const whiteList = [
+      '/api/user/account/login',
+      '/api/user/account/refresh-token',
+      '/api/admin/manage/dict-item/list/dict-code'
+    ]
+
+    const flag = whiteList.some(item => request.url.includes(item))
+
+    if (expire - Date.now() < 10 && !flag) {
+      // dealRefresh(request)
+    }
     NProgress.start()
     return request
   },
@@ -62,7 +58,7 @@ axios.interceptors.request.use(
   }
 )
 
-axios.interceptors.response.use(
+customAxios.interceptors.response.use(
   response => {
     NProgress.done()
     return response.data
@@ -80,39 +76,55 @@ const apiAxios = async (
   success?: dFn,
   failure?: dFn
 ) => {
-  const token = getToken()
   params = filterNull(params)
-  if (token) {
-    params.token = token
+  const noTokenList = [
+    '/api/sms/send-code',
+    '/api/user/register',
+    '/api/user/getUserByMobilePhone',
+    '/api/user/login'
+  ]
+
+  const instanceParams = {
+    method: method,
+    url: url,
+    data: method === 'POST' || method === 'PUT' ? params : null,
+    params: method === 'GET' || method === 'DELETE' ? params : null,
+    // baseURL: root,
+    withCredentials: true,
+    headers: {
+      common: {
+        authorization: getToken(),
+        refresh_token: getRefresh()
+      }
+    },
+    cancelToken: new CancelToken(function executor(c) {
+      // executor 函数接收一个 cancel 函数作为参数
+      cancels.push(c)
+    })
+  }
+
+  const flag = noTokenList.some(i => url.includes(i))
+  if (flag) {
+    // 不需要携带token的接口  去除 token
+    delete instanceParams.headers.common.authorization
+    delete instanceParams.headers.common.refresh_token
   }
   try {
-    const responseData: ResponseProps = await axios({
-      method: method,
-      url: url,
-      data: method === 'POST' || method === 'PUT' ? params : null,
-      params: method === 'GET' || method === 'DELETE' ? params : null,
-      // baseURL: root,
-      withCredentials: true,
-      cancelToken: new CancelToken(function executor(c) {
-        // executor 函数接收一个 cancel 函数作为参数
-        cancels.push(c)
-      })
-    })
+    const responseData: ResponseProps = await customAxios(instanceParams)
     if (responseData.code === 200) {
-      // responseData.message && message.success({
-      //     content: responseData.message,
-      //     duration: 0.5
-      // })
       success && success()
       return responseData
     } else {
       failure && failure()
-      responseData.message && message.error(responseData.message)
+      responseData.code !== 40101 &&
+        responseData.msg &&
+        message.error(responseData.msg)
       return Promise.reject(responseData)
     }
   } catch (error) {
     failure && failure()
     console.log(error)
+    message.error(error)
   }
 }
 

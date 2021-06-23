@@ -244,7 +244,8 @@ const GDMap = (props: any) => {
     if (map) {
       map.removeAllLayer()
     }
-    const mapBox: any = new GaodeMap({
+    const startTime = Date.now()
+    const mapBox: any = await new GaodeMap({
       center: [116.2825, 39.9],
       pitch: 0,
       style: 'blank',
@@ -264,89 +265,52 @@ const GDMap = (props: any) => {
       map: mapBox
     })
 
+    console.log(scene, 'scene')
+
+    const cLayer = new CountryLayer(scene, {
+      data: ProvinceData,
+      joinBy: ['NAME_CHN', 'name'],
+      label: {
+        // enable: false
+      },
+      popup: {
+        enable: false
+      },
+      autoFit: true,
+      provinceStroke: '#aaa',
+      depth: 1,
+      fill: {
+        color: {
+          field: 'value',
+          values: colors
+        }
+      }
+    })
+
     mRef.current = scene
 
-    const pointLayer = await new PointLayer({
-      autoFit: true,
-      zIndex: 2
-    })
-      .source(CountyData, {
-        parser: {
-          type: 'json',
-          x: 'x',
-          y: 'y'
-        }
-      })
-      .shape('circle')
-      .active(true)
-      .animate(true)
-      .size(30)
-      .color('#ffa842')
-      .style({
-        opacity: 1
-        // offsets: [40, 40]
-      })
-    scene.addLayer(pointLayer)
-    pointLayer.hide()
-
-    // 显示地图右下角的南海诸岛
-    const scene2 = new Scene({
-      id: 'attach',
-      logoVisible: false,
-      map: new GaodeMap({
-        center: [113.60540108435657, 12.833692637803168],
-        pitch: 0,
-        style: 'blank',
-        zoom: 1.93,
-        interactive: false,
-        zoomEnable: false,
-        scrollZoom: false,
-        pitchWithRotate: false,
-        rotateEnable: false,
-        dragEnable: false
-      })
-    })
-
-    scene2.on('loaded', () => {
-      new CountryLayer(scene2, {
-        data: [],
-        label: {
-          enable: false
-        },
-        popup: {
-          enable: false
-        },
-        autoFit: false,
-        provinceStroke: '#aaa',
-        depth: 1,
-        fill: {
-          color: '#A3d7FF'
-        }
-      })
-      new ProvinceLayer(scene2, {
-        data: [],
-        autoFit: false,
-        adcode: ['460000'],
-        depth: 2,
-        zIndex: 2,
-        stroke: '#aaa',
-        strokeWidth: 0.1,
-        label: {
-          enable: false,
-          field: 'NAME_CHN',
-          textAllowOverlap: false
-        },
-        fill: {
-          color: '#A3d7ff'
-        },
-        popup: {
-          enable: false,
-          Html: props => {
-            return `<span>${props.NAME_CHN}:</span><span>${props.pop}</span>`
-          }
-        }
-      })
-    })
+    // const pointLayer = await new PointLayer({
+    //   autoFit: true,
+    //   zIndex: 2
+    // })
+    //   .source(CountyData, {
+    //     parser: {
+    //       type: 'json',
+    //       x: 'x',
+    //       y: 'y'
+    //     }
+    //   })
+    //   .shape('circle')
+    //   .active(true)
+    //   .animate(true)
+    //   .size(30)
+    //   .color('#ffa842')
+    //   .style({
+    //     opacity: 1
+    //     // offsets: [40, 40]
+    //   })
+    // scene.addLayer(pointLayer)
+    // pointLayer.hide()
 
     scene.on('loaded', async () => {
       // scene.on('zoomchange', () => {
@@ -359,25 +323,26 @@ const GDMap = (props: any) => {
         // console.log(ev, 'ev')
       })
 
-      const cLayer = new CountryLayer(scene, {
-        data: ProvinceData,
-        joinBy: ['NAME_CHN', 'name'],
-        label: {
-          // enable: false
-        },
-        popup: {
-          enable: false
-        },
-        autoFit: true,
-        provinceStroke: '#aaa',
-        depth: 1,
-        fill: {
-          color: {
-            field: 'value',
-            values: colors
-          }
-        }
-      })
+      // const cLayer = new CountryLayer(scene, {
+      //   data: ProvinceData,
+      //   joinBy: ['NAME_CHN', 'name'],
+      //   label: {
+      //     // enable: false
+      //   },
+      //   popup: {
+      //     enable: false
+      //   },
+      //   autoFit: true,
+      //   provinceStroke: '#aaa',
+      //   depth: 1,
+      //   fill: {
+      //     color: {
+      //       field: 'value',
+      //       values: colors
+      //     }
+      //   }
+      // })
+
       // updateDistrict
       // const dLayer: any = new DrillDownLayer(scene, {
       //   data: [],
@@ -428,6 +393,66 @@ const GDMap = (props: any) => {
       // setDrillLayer(dLayer)
       cRef.current = cLayer
       setPLayer(cRef.current)
+      console.log(Date.now() - startTime, '~~~~~~~~~~')
+
+      // 显示地图右下角的南海诸岛
+      const scene2 = new Scene({
+        id: 'attach',
+        logoVisible: false,
+        map: new GaodeMap({
+          center: [113.60540108435657, 12.833692637803168],
+          pitch: 0,
+          style: 'blank',
+          zoom: 1.93,
+          interactive: false,
+          zoomEnable: false,
+          scrollZoom: false,
+          pitchWithRotate: false,
+          rotateEnable: false,
+          dragEnable: false
+        })
+      })
+
+      scene2.on('loaded', () => {
+        new CountryLayer(scene2, {
+          data: [],
+          label: {
+            enable: false
+          },
+          popup: {
+            enable: false
+          },
+          autoFit: false,
+          provinceStroke: '#aaa',
+          depth: 1,
+          fill: {
+            color: '#A3d7FF'
+          }
+        })
+        new ProvinceLayer(scene2, {
+          data: [],
+          autoFit: false,
+          adcode: ['460000'],
+          depth: 2,
+          zIndex: 2,
+          stroke: '#aaa',
+          strokeWidth: 0.1,
+          label: {
+            enable: false,
+            field: 'NAME_CHN',
+            textAllowOverlap: false
+          },
+          fill: {
+            color: '#A3d7ff'
+          },
+          popup: {
+            enable: false,
+            Html: props => {
+              return `<span>${props.NAME_CHN}:</span><span>${props.pop}</span>`
+            }
+          }
+        })
+      })
     })
   }, [])
 

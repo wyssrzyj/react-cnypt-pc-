@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { Scene, LineLayer } from '@antv/l7'
+import React, { useEffect, useCallback } from 'react'
+import { Scene } from '@antv/l7'
 import { ProvinceLayer, CountryLayer } from '@antv/l7-district'
 import { GaodeMap } from '@antv/l7-maps'
 import styles from './index.module.less'

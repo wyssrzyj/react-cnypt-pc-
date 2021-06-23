@@ -199,7 +199,6 @@ const GDMap = (props: any) => {
     if (map) {
       map.removeAllLayer()
     }
-    const startTime = Date.now()
     const mapBox: any = await new GaodeMap({
       center: [116.2825, 39.9],
       pitch: 0,
@@ -251,7 +250,6 @@ const GDMap = (props: any) => {
 
       setMap(scene)
       cRef.current = cLayer
-      console.log(Date.now() - startTime, '~~~~~~~~~~')
 
       // 显示地图右下角的南海诸岛
       const scene2 = new Scene({

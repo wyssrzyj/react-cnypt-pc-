@@ -242,7 +242,6 @@ const GDMap = (props: any) => {
     if (map) {
       map.removeAllLayer()
     }
-    const startTime = Date.now()
     const mapBox: any = await new GaodeMap({
       center: [116.2825, 39.9],
       pitch: 0,

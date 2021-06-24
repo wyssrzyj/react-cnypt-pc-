@@ -11,12 +11,8 @@ import {
   TagsOutlined,
   BookOutlined
 } from '@ant-design/icons'
-import {
-  EnterpriseInfo,
-  PlantSitePhoto,
-  QualificationCertification,
-  CertificateAuthentication
-} from './components'
+import { useStores } from '@/utils/mobx'
+import { EnterpriseInfo, PlantSitePhoto, QualificationCertification, CertificateAuthentication, FactoryReport } from './components'
 import styles from './index.module.less'
 import FactoryInformation from './factoryInformation'
 import { useLocation } from 'react-router'
@@ -29,6 +25,7 @@ menusName.set('/control-panel/photo', '厂房现场照')
 menusName.set('/control-panel/information', '工厂资料')
 menusName.set('/control-panel/enterprise', '企业信息')
 menusName.set('/control-panel/certificate', '企业证件认证')
+menusName.set('/control-panel/report', '验厂报告')
 
 const menuKeys = new Map()
 menuKeys.set('/control-panel/qualification', ['qualification', 'sub2', 'sub1'])
@@ -36,6 +33,7 @@ menuKeys.set('/control-panel/photo', ['photo', 'sub1'])
 menuKeys.set('/control-panel/information', ['information', 'sub1'])
 menuKeys.set('/control-panel/enterprise', ['enterprise', 'sub1'])
 menuKeys.set('/control-panel/certificate', ['certificate', 'sub1'])
+menuKeys.set('/control-panel/report', ['report', 'sub1'])
 
 const subsMap = new Map()
 subsMap.set('/control-panel/qualification', ['sub2', 'sub1'])
@@ -43,8 +41,11 @@ subsMap.set('/control-panel/photo', ['sub1'])
 subsMap.set('/control-panel/information', ['sub1'])
 subsMap.set('/control-panel/enterprise', ['sub1'])
 subsMap.set('/control-panel/certificate', ['sub1'])
+subsMap.set('/control-panel/report', ['sub1'])
 
 const ControlPanel = () => {
+  const { factoryStore } = useStores()
+  const { productCategory } = factoryStore
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
 
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
@@ -52,6 +53,9 @@ const ControlPanel = () => {
   const location = useLocation()
 
   useEffect(() => {
+    ;(async () => {
+      await productCategory()
+    })()
     setCurrentMenu(menuKeys.get(location.pathname))
     setOpenKeys(subsMap.get(location.pathname))
   }, [])
@@ -106,30 +110,18 @@ const ControlPanel = () => {
           </Menu>
         </div>
         <div className={styles.controlPanelRight}>
-          <header className={styles.contentTitle}>
-            {menusName.get(location.pathname)}
-          </header>
+          <header className={styles.contentTitle}>{menusName.get(location.pathname)}</header>
           <Switch>
             {/* 企业信息 */}
-            <Route
-              path="/control-panel/enterprise"
-              component={EnterpriseInfo}
-            />
+            <Route path="/control-panel/enterprise" component={EnterpriseInfo} />
             {/* 企业证件认证 */}
-            <Route
-              path="/control-panel/certificate"
-              component={CertificateAuthentication}
-            />
-            <Route
-              path="/control-panel/information"
-              component={FactoryInformation}
-            />
+            <Route path="/control-panel/certificate" component={CertificateAuthentication} />
+            <Route path="/control-panel/information" component={FactoryInformation} />
             <Route path="/control-panel/photo" component={PlantSitePhoto} />
             {/* 资质认证 */}
-            <Route
-              path="/control-panel/qualification"
-              component={QualificationCertification}
-            />
+            <Route path="/control-panel/qualification" component={QualificationCertification} />
+            {/* 验厂报告*/}
+            <Route path="/control-panel/report" component={FactoryReport} />
             <Redirect to="/platform" />
           </Switch>
         </div>

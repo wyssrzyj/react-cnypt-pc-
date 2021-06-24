@@ -51,35 +51,37 @@ const HomePage = () => {
   const [province, setProvince] = useState()
   const [activeKey, setActiveKey] = useState(0)
 
+  const setMove = event => {
+    const offsetTops = [
+      domRef1.current.offsetTop,
+      domRef2.current.offsetTop,
+      domRef3.current.offsetTop,
+      domRef4.current.offsetTop,
+      domRef5.current.offsetTop,
+      domRef6.current.offsetTop,
+      domRef7.current.offsetTop,
+      domRef8.current.offsetTop
+    ]
+    const { scrollTop } = event.target as any
+    let key
+    offsetTops.forEach((item, idx) => {
+      if (idx === 2 && scrollTop >= item - 150) {
+        key = idx + 1
+      } else if (scrollTop >= item) {
+        key = idx + 1
+      }
+    })
+    if (key !== activeKey) {
+      setActiveKey(key)
+    }
+  }
+
   useEffect(() => {
-    window.addEventListener(
-      'scroll',
-      event => {
-        const offsetTops = [
-          domRef1.current.offsetTop,
-          domRef2.current.offsetTop,
-          domRef3.current.offsetTop,
-          domRef4.current.offsetTop,
-          domRef5.current.offsetTop,
-          domRef6.current.offsetTop,
-          domRef7.current.offsetTop,
-          domRef8.current.offsetTop
-        ]
-        const { scrollTop } = event.target as any
-        let key
-        offsetTops.forEach((item, idx) => {
-          if (idx === 2 && scrollTop >= item - 150) {
-            key = idx + 1
-          } else if (scrollTop >= item) {
-            key = idx + 1
-          }
-        })
-        if (key !== activeKey) {
-          setActiveKey(key)
-        }
-      },
-      true
-    )
+    window.addEventListener('scroll', setMove, true)
+
+    return () => {
+      window.removeEventListener('scroll', setMove)
+    }
   }, [])
 
   const provinceChange = useCallback(provinceInfo => {

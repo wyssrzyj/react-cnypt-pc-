@@ -20,7 +20,7 @@ export default class CommonStore {
         `/api/admin/manage/dict-item/list/dict-code`,
         params
       )
-
+      console.log(res, 'resresresresres')
       if (res) {
         this.dictionary = res.data
         return res.data || []

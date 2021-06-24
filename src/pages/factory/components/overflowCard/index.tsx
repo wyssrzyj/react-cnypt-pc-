@@ -37,7 +37,7 @@ const OverflowCard = props => {
   }
   const { commonStore } = useStores()
   const { dictionary } = commonStore
-  const allProdTypeList = toJS(dictionary).prodType
+  const allProdTypeList = toJS(dictionary).prodType || []
 
   useEffect(() => {
     new Swiper('.mySwiper', {

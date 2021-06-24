@@ -7,6 +7,7 @@ import { FilterList, Icon } from '@/components'
 import { OverflowCard, FactoryCard } from './components'
 import { getCurrentUser } from '@/utils/tool'
 import styles from './index.module.less'
+import { useHistory } from 'react-router'
 
 const factoryTypes = [
   {
@@ -43,6 +44,7 @@ const Factory = () => {
   const { factoryStore, commonStore } = useStores()
   const { getFactoryList, productCategory } = factoryStore
   const { factoryName } = commonStore
+  const history = useHistory()
   // const [sort, setSort] = useState<string>('综合排序')
   const [factoryList, setFactoryList] = useState<any>([])
   const [browsingList, setBrowsingList] = useState<any>([])
@@ -52,6 +54,12 @@ const Factory = () => {
   const [factoryParams, setFactoryParams] = useState<any>({})
   const [defaultMainId, setDefaultMainId] = useState<string>('')
   const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const { location } = history
+    const { state } = location
+    console.log(state, 'state')
+  }, [])
 
   // const handleFilter = value => {
   //   setSort(value)

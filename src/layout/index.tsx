@@ -17,10 +17,10 @@ const Layout = (props: LayoutProps) => {
   const noUseHeaders = ['/login', '/register'] // 不展示首页header的路由列表
 
   useEffect(() => {
-    ;(async () => {
+    ;(window as any).requestIdleCallback(async () => {
       await allDictionary([])
       await getAllArea()
-    })()
+    })
   }, [])
 
   return (

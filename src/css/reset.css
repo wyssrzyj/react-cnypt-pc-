@@ -22,6 +22,10 @@ html {
  * Remove the margin in all browsers.
  */
 
+body {
+  overflow: auto;
+}
+
 #root,
 body {
   width: 100%;

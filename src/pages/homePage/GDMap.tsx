@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import React, { useLayoutEffect, useEffect, useState, useRef } from 'react'
 import { Scene } from '@antv/l7'
 import { CountryLayer, ProvinceLayer } from '@antv/l7-district'
 import { GaodeMap } from '@antv/l7-maps'
 import styles from './index.module.less'
 import * as _ from 'lodash'
+import classNames from 'classnames'
 
 const ProvinceData = [
   {
@@ -192,20 +193,17 @@ const GDMap = (props: any) => {
 
   const mRef: any = useRef()
   const cRef: any = useRef()
-  const {} = props
   const [map, setMap] = useState<any>(null)
+  const [mapLoaded, setMapLoaded] = useState<boolean>(false)
 
-  const initMap = useCallback(async () => {
-    if (map) {
-      map.removeAllLayer()
-    }
+  const initMap = async () => {
     const mapBox: any = await new GaodeMap({
-      center: [116.2825, 39.9],
+      center: [116.303904, 36.820534],
       pitch: 0,
       style: 'blank',
-      zoom: 3,
-      minZoom: 3,
-      maxZoom: 20,
+      zoom: 4.2,
+      minZoom: 2,
+      maxZoom: 19,
       zoomEnable: false,
       scrollZoom: false,
       pitchWithRotate: false,
@@ -219,8 +217,6 @@ const GDMap = (props: any) => {
       map: mapBox
     })
 
-    console.log(scene, 'scene')
-
     const cLayer = new CountryLayer(scene, {
       data: ProvinceData,
       joinBy: ['NAME_CHN', 'name'],
@@ -230,7 +226,7 @@ const GDMap = (props: any) => {
       popup: {
         enable: false
       },
-      autoFit: true,
+      autoFit: false,
       provinceStroke: '#aaa',
       depth: 1,
       fill: {
@@ -244,13 +240,10 @@ const GDMap = (props: any) => {
     mRef.current = scene
 
     scene.on('loaded', async () => {
-      setTimeout(() => {
-        scene.setZoomAndCenter(4.2, [116.303904, 36.820534], true)
-      }, 1000)
-
+      setMapLoaded(true)
       setMap(scene)
-      cRef.current = cLayer
 
+      cRef.current = cLayer
       // 显示地图右下角的南海诸岛
       const scene2 = new Scene({
         id: 'attach',
@@ -268,7 +261,6 @@ const GDMap = (props: any) => {
           dragEnable: false
         })
       })
-
       scene2.on('loaded', () => {
         new CountryLayer(scene2, {
           data: [],
@@ -294,25 +286,20 @@ const GDMap = (props: any) => {
           stroke: '#aaa',
           strokeWidth: 0.1,
           label: {
-            enable: false,
-            field: 'NAME_CHN',
-            textAllowOverlap: false
+            enable: false
           },
           fill: {
             color: '#A3d7ff'
           },
           popup: {
-            enable: false,
-            Html: props => {
-              return `<span>${props.NAME_CHN}:</span><span>${props.pop}</span>`
-            }
+            enable: false
           }
         })
       })
     })
-  }, [])
+  }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     initMap() // 初始化地图
   }, [])
 
@@ -323,7 +310,6 @@ const GDMap = (props: any) => {
         const { properties } = feature
         provinceChange(properties.name)
       })
-
       cRef.current.on('unclick', _ev => {
         provinceChange(null)
       })
@@ -331,7 +317,13 @@ const GDMap = (props: any) => {
   }, [cRef.current, map, provinceChange])
 
   return (
-    <div id={`homeMap`} className={styles.mapTemp}>
+    <div
+      id={`homeMap`}
+      className={classNames(
+        styles.mapTemp,
+        mapLoaded ? styles.mapTempShow : null
+      )}
+    >
       <div id={'attach'} className={styles.attach}></div>
     </div>
   )

@@ -100,7 +100,30 @@ export default class HomeStore {
         '/api/factory/unauth/statistic/map/factory',
         params
       )
-      console.log(res)
+      if (res.success) {
+        return res.data
+      }
+      return {}
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  // /api/factory/unauth/statistic/map/province
+  @action getProvinceCounts = async () => {
+    try {
+      const res = await axios.get('/api/factory/unauth/statistic/map/province')
+      return res.data
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  // /api/factory/unauth/statistic/allCountry
+  @action getStatisticalData = async () => {
+    try {
+      const res = await axios.get('/api/factory/unauth/statistic/allCountry')
+      return res.data
     } catch (err) {
       console.log(err)
     }

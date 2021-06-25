@@ -52,6 +52,7 @@ const HomePage = () => {
   const [activeKey, setActiveKey] = useState(0)
 
   const setMove = event => {
+    if (!domRef1.current) return
     const offsetTops = [
       domRef1.current.offsetTop,
       domRef2.current.offsetTop,
@@ -116,12 +117,10 @@ const HomePage = () => {
         <div ref={domRef4}>
           <JoinFactorys SwiperCore={SwiperCore} />
         </div>
-
         {/* 运营团队 */}
         <div ref={domRef5}>
           <Operate SwiperCore={SwiperCore} />
         </div>
-
         {/* 工票软件 */}
         <div ref={domRef6}>
           <Software />

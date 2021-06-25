@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../index.module.less'
+import styles from './focus.module.less'
 import IMG1 from '../img/focus1.png'
 import IMG2 from '../img/focus2.png'
 import IMG3 from '../img/focus3.png'

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styles from '../index.module.less'
+import styles from './areaFactorys.module.less'
 import classNames from 'classnames'
 import AreaMap from '../areaMap'
 import { Button } from 'antd'
@@ -10,13 +10,50 @@ fileds.set(0, '934')
 fileds.set(1, '821')
 fileds.set(2, '1965')
 
+const adcodes = new Map()
+adcodes.set(0, 330000)
+adcodes.set(1, 320000)
+adcodes.set(2, 440000)
+
+const areaTabs = [
+  {
+    area: '浙江省',
+    filed: 'zj'
+  },
+  {
+    area: '江苏省',
+    filed: 'zj'
+  },
+  {
+    area: '广东省',
+    filed: 'gd'
+  }
+]
+
+const areaBtns = [
+  {
+    label: '针织类',
+    value: 'wc'
+  },
+  {
+    label: '梭织类',
+    value: 'kc'
+  },
+  {
+    label: '其他',
+    value: 'other'
+  }
+]
+
 const AreaFactorys = () => {
   const { homeStore } = useStores()
-  const { getAreaFactorys } = homeStore
+  const { getAreaFactorys, getProvinceCounts } = homeStore
 
   const [areaKey, setAreaKey] = useState(0) // 省份
   const [areaType, setAreaType] = useState('wc') // 工厂类型
-  const [data, setData] = useState({})
+  const [counts, setCounts] = useState({}) // 省级统计数据
+  const [provinceData, setProvinceData] = useState([]) // 市级数据
+  const [mapInit, setMapInit] = useState(false)
 
   useEffect(() => {
     ;(async () => {
@@ -29,85 +66,21 @@ const AreaFactorys = () => {
       provinceIds: fileds.get(+areaKey),
       categoryCode: areaType
     }
-    await getAreaFactorys(params)
+    const res = await getAreaFactorys(params)
+    res.children = res.children || []
+    const province =
+      res.children.reduce((prev, item) => {
+        const target = {
+          name: item.cityName,
+          code: item.cityAdCode,
+          value: item.statFactory
+        }
+        prev.push(target)
+        return prev
+      }, []) || []
+    setProvinceData(province)
+    setMapInit(true)
   }
-
-  const areaTabs = [
-    {
-      area: '浙江省',
-      count: 1242
-    },
-    {
-      area: '江苏省',
-      count: 1242
-    },
-    {
-      area: '广东省',
-      count: 1242
-    }
-  ]
-
-  const areaBtns = [
-    {
-      label: '针织类',
-      value: 'wc'
-    },
-    {
-      label: '梭织类',
-      value: 'kc'
-    },
-    {
-      label: '其他',
-      value: 'other'
-    }
-  ]
-
-  const cityList = [
-    {
-      city: '杭州市',
-      count: '346'
-    },
-    {
-      city: '嘉兴市',
-      count: '346'
-    },
-    {
-      city: '湖州市',
-      count: '346'
-    },
-    {
-      city: '金华市',
-      count: '346'
-    },
-    {
-      city: '台州市',
-      count: '346'
-    },
-    {
-      city: '舟山市',
-      count: '346'
-    },
-    {
-      city: '宁波市',
-      count: '346'
-    },
-    {
-      city: '温州市',
-      count: '346'
-    },
-    {
-      city: '绍兴市',
-      count: '346'
-    },
-    {
-      city: '丽水市',
-      count: '346'
-    },
-    {
-      city: '衢州市',
-      count: '346'
-    }
-  ]
 
   const areaChange = key => {
     setAreaKey(key)
@@ -116,6 +89,13 @@ const AreaFactorys = () => {
   const areaTypeChange = key => {
     setAreaType(key)
   }
+
+  useEffect(() => {
+    ;(async () => {
+      const c = (await getProvinceCounts()) || {}
+      setCounts(c)
+    })()
+  }, [])
 
   return (
     <div>
@@ -138,15 +118,18 @@ const AreaFactorys = () => {
                 onClick={() => areaChange(idx)}
               >
                 <div>{item.area}</div>
-                <div>{`（${item.count}）`}</div>
+                <div>{`（${counts[item.filed] || 0}）`}</div>
               </div>
             )
           })}
         </div>
       </div>
       <div className={styles.areaContent}>
-        <div className={styles.areaMap}>
-          <AreaMap />
+        <div className={styles.areaMapBox}>
+          {mapInit ? (
+            <AreaMap data={provinceData} code={adcodes.get(areaKey)} />
+          ) : null}
+
           <div className={styles.areaBtns}>
             {areaBtns.map(item => {
               return (
@@ -164,12 +147,12 @@ const AreaFactorys = () => {
           </div>
         </div>
         <div className={styles.areaList}>
-          {cityList.map((item, idx) => {
+          {provinceData.map((item, idx) => {
             return (
               <div key={idx} className={styles.areaItem}>
-                <div className={styles.areaCity}>{item.city}</div>
+                <div className={styles.areaCity}>{item.name}</div>
                 <div className={styles.areaCountBox}>
-                  <span className={styles.areaCount}>{item.count}</span>
+                  <span className={styles.areaCount}>{item.value}</span>
                   <span>家</span>
                 </div>
               </div>

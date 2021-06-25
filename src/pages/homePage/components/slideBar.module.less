@@ -1,0 +1,83 @@
+.slideBar {
+  position: fixed;
+  top: 50%;
+  left: 100px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 150px;
+  background: #ffffff;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.slideHerder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  line-height: 60px;
+  background: #3b80ff;
+}
+
+.slideLogo {
+  margin-right: 8px;
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.slideItem {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  color: #666666;
+  font-size: 18px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  line-height: 60px;
+
+  &:hover {
+    color: #3b80ff;
+  }
+}
+
+.slideActive {
+  color: #3b80ff;
+}
+
+.slideIcon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 10px;
+  background: linear-gradient(135deg, #3b80ff 0%, rgba(59, 128, 255, 0) 100%);
+}
+
+.slideText {
+  display: inline-block;
+  flex: 1;
+  margin-right: 10px;
+  border-bottom: 1px dashed #ececec;
+}
+
+.slideBack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  color: #666666;
+  font-size: 18px;
+
+  &:hover {
+    color: #3b80ff;
+  }
+
+  .slideBackText {
+    margin-top: -15px;
+  }
+}
+
+.slideBackLogo {
+  font-size: 32px;
+}

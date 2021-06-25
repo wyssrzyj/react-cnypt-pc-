@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../index.module.less'
+import styles from './cooperation.module.less'
 import COOP1 from '../img/pinpai_1.png'
 import COOP2 from '../img/pinpai_2.png'
 import COOP3 from '../img/pinpai_3.png'

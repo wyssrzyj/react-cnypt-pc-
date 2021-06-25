@@ -1,5 +1,5 @@
 import React, { useRef, useState, useLayoutEffect } from 'react'
-import styles from '../index.module.less'
+import styles from './joinFactorys.module.less'
 import classNames from 'classnames'
 import IMG1 from '../img/focus1.png'
 import IMG2 from '../img/focus2.png'

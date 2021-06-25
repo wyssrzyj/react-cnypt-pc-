@@ -1,6 +1,6 @@
 import { Icon } from '@/components'
 import React from 'react'
-import styles from '../index.module.less'
+import styles from './slideBar.module.less'
 import classNames from 'classnames'
 
 const SlideBars = props => {

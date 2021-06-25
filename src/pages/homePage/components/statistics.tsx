@@ -1,29 +1,42 @@
-import React from 'react'
-import styles from '../index.module.less'
+import React, { useEffect, useState } from 'react'
+import styles from './statistics.module.less'
 import { Icon } from '@/components'
+import { useStores } from '@/utils/mobx'
 
 // 地图右侧工厂统计信息
 const Statistics = props => {
   const { province } = props
+  const { homeStore } = useStores()
+  const { getStatisticalData } = homeStore
+
+  const [data, setData] = useState({})
+
+  useEffect(() => {
+    ;(async () => {
+      const res = await getStatisticalData()
+      setData(res)
+    })()
+  }, [])
+
   const configs = [
     {
       icon: 'jack-gongchang',
-      field: 'a',
+      field: 'factory',
       text: '已入驻工厂数量'
     },
     {
       icon: 'jack-shangjia',
-      field: 'b',
+      field: 'business',
       text: '已入驻商家数量'
     },
     {
       icon: 'jack-shebei',
-      field: 'c',
+      field: 'equipment',
       text: '已物联设备数量'
     },
     {
       icon: 'jack-dingdan1',
-      field: 'd',
+      field: 'order',
       text: '已服务订单数量'
     }
   ]
@@ -37,7 +50,7 @@ const Statistics = props => {
             <Icon type={item.icon} className={styles.icon}></Icon>
             <div className={styles.msg}>
               <div>
-                <span className={styles.count}>{9999} </span>
+                <span className={styles.count}>{data[item.field] || 0}</span>
                 <span>&nbsp;家</span>
               </div>
               <div>{item.text}</div>

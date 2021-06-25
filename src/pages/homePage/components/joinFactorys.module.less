@@ -1,0 +1,109 @@
+.joinImg {
+  display: inline-block;
+  width: 280px;
+  height: 274px;
+}
+
+.joinInfo {
+  display: flex;
+  flex-direction: column;
+  height: 214px;
+  padding: 22px 16px 0;
+  color: #666666;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.joinInfoTitle {
+  padding-bottom: 10px;
+  color: #333333;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.joinCard {
+  width: 280px;
+  background: #ffffff;
+  cursor: pointer;
+
+  &:hover {
+    background: #3b80ff;
+
+    .joinInfo,
+    .joinInfoTitle {
+      color: #ffffff;
+    }
+  }
+}
+
+.joinInfoItem {
+  padding-bottom: 8px;
+}
+
+.joinLabel {
+  display: inline-block;
+  width: 92px;
+  margin-right: 24px;
+}
+
+.joinIcon {
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+.joinSwiper {
+  width: 900px;
+  margin-right: unset !important;
+  margin-left: unset !important;
+}
+
+.joinRight {
+  position: relative;
+  width: 300px;
+  padding: 148px 0 0 36px;
+  background: #3b80ff;
+}
+
+.joinRightTitle {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 32px;
+}
+
+.joinRightText {
+  padding-bottom: 40px;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.joinLeftIcon {
+  margin-right: 24px;
+  color: #ffffff;
+  font-size: 40px;
+}
+
+.joinRightIcon {
+  color: #ffffff;
+  font-size: 40px;
+}
+
+.joinSwaiperContainer {
+  display: flex;
+  width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 128px;
+
+  :global {
+    .swiper-button-next {
+      display: none;
+    }
+    .swiper-button-prev {
+      display: none;
+    }
+  }
+}
+
+.joinDisableIcon {
+  color: #9fc1ff;
+}

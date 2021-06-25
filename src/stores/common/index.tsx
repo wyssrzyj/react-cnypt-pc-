@@ -20,7 +20,6 @@ export default class CommonStore {
         `/api/admin/manage/dict-item/list/dict-code`,
         params
       )
-      console.log(res, 'resresresresres')
       if (res) {
         this.dictionary = res.data
         return res.data || []
@@ -49,7 +48,6 @@ export default class CommonStore {
             children
           }
         })
-        console.log(newArea, '===============')
         this.allArea = newArea
         return res.data || []
       } else {

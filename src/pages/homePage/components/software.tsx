@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../index.module.less'
+import styles from './software.module.less'
 import SOFT1 from '../img/soft1.png'
 import SOFT2 from '../img/soft2.png'
 import SOFT3 from '../img/soft3.png'

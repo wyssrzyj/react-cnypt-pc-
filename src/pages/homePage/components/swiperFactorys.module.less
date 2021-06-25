@@ -1,0 +1,108 @@
+.swaiperContainer {
+  position: relative;
+  width: 1200px;
+  margin: 0 auto;
+  padding: 96px 0 80px !important;
+  background: #f0f0f0;
+
+  :global {
+    .swiper-button-next {
+      display: none;
+    }
+    .swiper-button-prev {
+      display: none;
+    }
+  }
+}
+
+.mySwiper {
+  width: 1032px;
+}
+
+.swaperCard {
+  padding: 12px;
+  width: 328px;
+  height: 150px;
+  display: flex;
+  align-items: flex-start;
+  background: #FFFFFF;
+  cursor: pointer;
+  color: #333333;
+
+  .factoryInfoIcon {
+    color: #3B80FF;
+  }
+
+  &:hover {
+    background: #3B80FF;
+    color: #ffffff;
+
+    .factoryInfoIcon {
+      color: #ffffff;
+    }
+  }
+
+  .swaiperImg {
+    display: inline-block;
+    min-width: 80px;
+    height: 80px;
+    margin-right: 12px;
+  }
+
+  .factoryName {
+    padding-bottom: 12px;
+    width: 207px;
+    font-size: 16px;
+    font-weight: 500;
+    // color: #FFFFFF;
+  }
+
+  .factoryInfo {
+    display: flex;
+    font-size: 14px;
+    font-weight: 400;
+    // color: #FFFFFF;
+    line-height: 32px;
+  }
+
+  .label {
+    min-width: 46px;
+    margin-right: 12px;
+  }
+
+  .factoryInfoIcon {
+    font-size: 14px;
+    // color: #FFFFFF;
+  }
+
+  .text {
+    width: 154px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
+.leftIcon {
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+  font-size: 40px;
+  color: #3B80FF;
+}
+
+.rightIcon {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  font-size: 40px;
+  color: #3B80FF;
+}
+
+.disableIcon {
+  color: #C4C4C4;
+}
+
+

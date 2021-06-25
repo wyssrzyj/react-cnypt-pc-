@@ -1,5 +1,5 @@
 import React, { useRef, useState, useLayoutEffect } from 'react'
-import styles from '../index.module.less'
+import styles from './equipment.module.less'
 import classNames from 'classnames'
 import IMG7 from '../img/focus7.png'
 import IMG8 from '../img/focus8.png'
@@ -33,7 +33,6 @@ const Equipment = props => {
 
   const keyChange = event => {
     const { activeIndex } = event
-    console.log('🚀 ~~~~~~', activeIndex)
     setCurKey(activeIndex)
   }
 

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useLayoutEffect } from 'react'
-import styles from '../index.module.less'
+import styles from './operate.module.less'
 import classNames from 'classnames'
 import { Icon } from '@/components'
 import OIMG from '../img/operateImg.png'

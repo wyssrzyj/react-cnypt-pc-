@@ -1,0 +1,130 @@
+.areaHeader {
+  display: flex;
+  margin-bottom: 44px;
+}
+
+.areaTitle {
+  display: flex;
+  flex-direction: column;
+}
+
+.areaFactory {
+  color: #333333;
+  font-weight: 500;
+  font-size: 32px;
+}
+
+.areaFactoryEn {
+  color: #333333;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.areaTabs {
+  display: flex;
+  padding-left: 228px;
+}
+
+.areaTab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 112px;
+  height: 74px;
+  margin-right: 30px;
+  color: #979797;
+  font-size: 20px;
+  border: 1px solid #979797;
+  cursor: pointer;
+}
+
+.activeAreaTab {
+  color: #fff;
+  background: #3b80ff;
+  border: none;
+
+  &::before {
+    position: absolute;
+    top: 73px;
+    left: 50px;
+    width: 0px;
+    height: 0px;
+    border-top: 6px solid #3b80ff;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    content: '';
+  }
+}
+
+.areaBtns {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 190px;
+}
+
+.areaBtn {
+  width: 120px;
+  height: 50px;
+}
+
+.areaContent {
+  display: flex;
+}
+
+.areaList {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 360px;
+  padding: 48px 0 48px 72px;
+  background: #3b80ff;
+}
+
+.areaItem {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-size: 16px;
+}
+
+.areaCity {
+  width: 96px;
+  margin-right: 40px;
+}
+
+.areaCountBox {
+  display: flex;
+  align-items: center;
+}
+
+.areaCount {
+  font-size: 24px;
+}
+
+.areaMapBox {
+  position: relative;
+  width: 840px;
+  height: 560px;
+  background: #000000;
+  // background-image: linear-gradient(160deg, #191950 0%, #120e25 100%);
+  transition: all 0.2s ease;
+
+  :global {
+    .amap-copyright {
+      display: none !important;
+    }
+
+    .l7-scene {
+      position: unset !important;
+    }
+  }
+}

@@ -14,7 +14,6 @@ export default class LoginStore {
         '/api/user/account/login',
         params
       )
-      console.log(res, '~~~~~~~~~~~')
       const { data = {} } = res
       if (data) {
         localStorage.setItem('token', data.access_token)

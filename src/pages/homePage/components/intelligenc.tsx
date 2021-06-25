@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from 'react'
 import { Icon } from '@/components'
-import styles from '../index.module.less'
-import { Input, Button, Cascader } from 'antd'
+import styles from './intelligenc.module.less'
+import { Button, Cascader } from 'antd'
 import SEARCH from '../img/sousuo.png'
 import FRATORY from '../img/factory.png'
 import { useHistory } from 'react-router'
 import { cloneDeep } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
-import { toJS } from 'mobx'
+// import { toJS } from 'mobx'
 
 const Intelligence = () => {
   const history = useHistory()
-  const { factoryStore, commonStore } = useStores()
-  const { productCategoryList, productCategory } = factoryStore
-  const { allArea } = commonStore
+  const { factoryStore } = useStores()
+  const { productCategoryList, productCategory, init } = factoryStore
+  // const { allArea } = commonStore
+
+  // const newAllArea = cloneDeep(allArea)
+
+  // const areaData = toJS(newAllArea).reduce((prev, item) => {
+  //   if (item.children) {
+  //     item.children.forEach(i => {
+  //       if (i.children) {
+  //         delete i.children
+  //       }
+  //     })
+  //   }
+  //   prev.push(item)
+  //   return prev
+  // }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -41,14 +55,15 @@ const Intelligence = () => {
     }
   ]
 
-  const valueChange = (event, field) => {
-    const newData = cloneDeep(searchData)
-    const { value } = event.target
-    newData[field] = value
-    setSerachData(newData)
-  }
+  // const valueChange = (event, field) => {
+  //   const newData = cloneDeep(searchData)
+  //   const { value } = event.target
+  //   newData[field] = value
+  //   setSerachData(newData)
+  // }
 
   const toSearch = () => {
+    init()
     history.push({
       pathname: '/platform/factory-search',
       state: searchData
@@ -62,11 +77,11 @@ const Intelligence = () => {
     setSerachData(newData)
   }
 
-  const areaChange = value => {
-    const newData = cloneDeep(searchData)
-    newData['cityIds'] = value
-    setSerachData(newData)
-  }
+  // const areaChange = value => {
+  //   const newData = cloneDeep(searchData)
+  //   newData['cityIds'] = value
+  //   setSerachData(newData)
+  // }
 
   return (
     <div className={styles.intelligenceInner}>
@@ -74,26 +89,7 @@ const Intelligence = () => {
         <img src={SEARCH} alt="" className={styles.searchImg} />
         <div className={styles.searchTitle}>智能搜索工厂</div>
         {inputs.map((item, idx) => {
-          if (idx === 1) {
-            const fieldNames = {
-              label: 'name',
-              value: 'id',
-              children: 'childList'
-            }
-            return (
-              <div className={styles.customCascader} key={idx}>
-                {item.icon}
-                <Cascader
-                  options={productCategoryList}
-                  onChange={typeChange}
-                  placeholder="产品类别"
-                  fieldNames={fieldNames}
-                />
-              </div>
-            )
-          }
-
-          if (idx === 2) {
+          if ([1, 2].includes(idx)) {
             const fieldNames = {
               label: 'name',
               value: 'id',
@@ -103,23 +99,24 @@ const Intelligence = () => {
               <div className={styles.customCascader} key={idx}>
                 {item.icon}
                 <Cascader
-                  options={allArea}
-                  onChange={areaChange}
+                  options={productCategoryList}
+                  onChange={typeChange}
+                  placeholder={idx === 1 ? '产品类别' : '区域'}
                   fieldNames={fieldNames}
-                  placeholder="区域"
+                  popupClassName={'cascaderPopup'}
                 />
               </div>
             )
           }
-          return (
-            <Input
-              prefix={item.icon}
-              key={idx}
-              placeholder={item.placeholder}
-              className={styles.input}
-              onChange={event => valueChange(event, item.field)}
-            />
-          )
+
+          return null
+          // <Input
+          //   prefix={item.icon}
+          //   key={idx}
+          //   placeholder={item.placeholder}
+          //   className={styles.input}
+          //   onChange={event => valueChange(event, item.field)}
+          // />
         })}
         <Button className={styles.searchBtn} onClick={toSearch}>
           搜索

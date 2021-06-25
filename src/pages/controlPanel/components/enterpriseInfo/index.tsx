@@ -65,6 +65,8 @@ const EnterpriseInfo = () => {
   const [imageUrl, setImageUrl] = useState('')
   const [enterpriseId, setEnterpriseId] = useState(undefined)
   const [factoryId, setFactoryId] = useState(undefined)
+  const [enterpriseLogoId, setEnterpriseLogoId] = useState(undefined)
+  const [preImageUrl, setPreImageUrl] = useState(undefined)
 
   // const onValuesChange = changedValues => {
   //   if (get(changedValues, 'enterpriseType')) {
@@ -112,7 +114,7 @@ const EnterpriseInfo = () => {
       axios
         .post('/api/factory/enterprise/enterprise-info-save', {
           ...values,
-          enterpriseLogoUrl: imageUrl,
+          enterpriseLogoUrl: imageUrl === preImageUrl ? undefined : imageUrl,
           provinceId: area[0],
           cityId: area[1],
           districtId: area[2],
@@ -121,7 +123,8 @@ const EnterpriseInfo = () => {
           longitude: location.split(',')[0],
           enterpriseId,
           factoryId,
-          userId
+          userId,
+          enterpriseLogoId: imageUrl === preImageUrl ? undefined : enterpriseLogoId
         })
         .then(response => {
           const { success, msg, data = {} } = response
@@ -156,11 +159,14 @@ const EnterpriseInfo = () => {
           districtId,
           address,
           latitude,
-          longitude
+          longitude,
+          enterpriseLogoId
         } = data
         setImageUrl(enterpriseLogoUrl)
+        setPreImageUrl(enterpriseLogoUrl)
         setFactoryId(factoryId)
         setEnterpriseId(enterpriseId)
+        setEnterpriseLogoId(enterpriseLogoId)
         setFieldsValue({
           enterpriseLogoUrl,
           enterpriseName,
@@ -168,7 +174,7 @@ const EnterpriseInfo = () => {
           realName,
           contactPhone,
           email,
-          enterpriseAbstract: enterpriseDesc,
+          enterpriseDesc,
           area: [provinceId.toString(), cityId.toString(), districtId.toString()],
           businessAddress: { location: `${longitude},${latitude}`, address }
         })
@@ -294,7 +300,7 @@ const EnterpriseInfo = () => {
 
         <Form.Item
           label="企业简介"
-          name="enterpriseAbstract"
+          name="enterpriseDesc"
           rules={[
             { required: true, message: '请填写企业简介！' },
             { max: 700, min: 100 }

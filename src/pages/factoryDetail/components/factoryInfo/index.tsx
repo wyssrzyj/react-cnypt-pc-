@@ -108,9 +108,14 @@ const FactoryInfo = props => {
       },
       loop: true
     })
-    getFactoryDetails()
-    getContactInfo()
   }, [])
+
+  useEffect(() => {
+    if (dictionary) {
+      getFactoryDetails()
+      getContactInfo()
+    }
+  }, [dictionary])
 
   return (
     <div className={styles.factoryInfo}>

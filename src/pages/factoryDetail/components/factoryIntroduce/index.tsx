@@ -183,8 +183,6 @@ const FactoryIntroduce = props => {
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const { factoryYearOutputValue = [], factoryYearOutputProd = [], factoryCertificate = [] } = toJS(dictionary)
-  console.log('🚀 ~ file: index.tsx ~ line 186 ~ toJS(dictionary)', toJS(dictionary))
-
   const [activeTab, setActiveTab] = useState('introduction')
   const [introductions, setIntroductions] = useState<any>({})
   const [ability, setAbility] = useState<any>({})

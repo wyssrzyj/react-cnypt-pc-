@@ -2,27 +2,34 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router'
 import { Tag } from 'antd'
 import { HeartFilled } from '@ant-design/icons'
+import { toJS } from 'mobx'
 import classNames from 'classnames'
-import { isArray, isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, filter, find } from 'lodash'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
+import { useStores, observer } from '@/utils/mobx'
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs } from 'swiper'
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
 import './factoryDetail.less'
 import styles from './index.module.less'
 import './style.less'
-import u1653 from '@/static/images/u1653.png'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs])
 
 const FactoryInfo = props => {
   const { factoryId } = props
   const history = useHistory()
+  const { commonStore } = useStores()
+  const { dictionary } = commonStore
+  const { factoryTag = [], prodType } = toJS(dictionary)
+  const currentUser = getCurrentUser() || {}
   const [factoryInfo, setFactoryInfo] = useState<any>({})
   const [contactInfo, setContactInfo] = useState<any>({})
-  const currentUser = getCurrentUser() || {}
+  const [factoryTagList, setFactoryTagList] = useState<any>([])
+  const [orderType, setOrderType] = useState<any>([])
+  const [factoryImg, setFactoryImg] = useState<any>([{}, {}])
 
   const getFactoryDetails = async () => {
     const { userId } = currentUser
@@ -33,7 +40,22 @@ const FactoryInfo = props => {
     })
     const { success, data = {} } = response
     if (success) {
+      const { factoryTagValue, factoryProcessTypeList, pictureUrl = [] } = data
       setFactoryInfo({ ...data })
+      setFactoryImg([...pictureUrl])
+      const newLabel = filter(factoryTag, function (o) {
+        return find(factoryTagValue, function (item) {
+          return item === o.value
+        })
+      }).map(item => item.label)
+      setFactoryTagList([...newLabel])
+
+      const newOrder = filter(prodType, function (o) {
+        return find(factoryProcessTypeList, function (item) {
+          return item.processType === o.value
+        })
+      }).map(item => item.label)
+      setOrderType([...newOrder])
     }
   }
 
@@ -83,7 +105,8 @@ const FactoryInfo = props => {
       },
       thumbs: {
         swiper: galleryThumbs
-      }
+      },
+      loop: true
     })
     getFactoryDetails()
     getContactInfo()
@@ -95,30 +118,22 @@ const FactoryInfo = props => {
         <div className={styles.slideshow}>
           <div className="swiper-container" id="gallery-top">
             <div className="swiper-wrapper">
-              <div className="swiper-slide">
-                <img src={u1653} />
-              </div>
-              <div className="swiper-slide">
-                <img src={u1653} />
-              </div>
-              <div className="swiper-slide">
-                <img src={u1653} />
-              </div>
+              {factoryImg.map((item, index) => (
+                <div key={index} className="swiper-slide">
+                  <img src={item} />
+                </div>
+              ))}
             </div>
             <div className="swiper-button-next swiper-button-white"></div>
             <div className="swiper-button-prev swiper-button-white"></div>
           </div>
           <div className="swiper-container" id="gallery-thumbs">
             <div className="swiper-wrapper">
-              <div className="swiper-slide">
-                <img src={u1653} />
-              </div>
-              <div className="swiper-slide">
-                <img src={u1653} />
-              </div>
-              <div className="swiper-slide">
-                <img src={u1653} />
-              </div>
+              {factoryImg.map((item, index) => (
+                <div key={index} className="swiper-slide factory-small-img">
+                  <img src={item} />
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -148,17 +163,17 @@ const FactoryInfo = props => {
             </li> */}
             <li>
               <span>生产人数：</span>
-              <span>{factoryInfo.staffNumber}人</span>
+              <span>{factoryInfo.staffNumber ? factoryInfo.staffNumber.replace(',', '~') : '--'}人</span>
             </li>
             <li>
               <span>加工类型：</span>
-              <span>{isArray(factoryInfo.prodTypeRemarksList) && factoryInfo.prodTypeRemarksList.join(',')}</span>
+              <span>{orderType.join(',')}</span>
             </li>
             <li>
               <span>主营类别：</span>
               <span>
-                {factoryInfo.factoryCatalogList &&
-                  factoryInfo.factoryCatalogList.map(item => (
+                {factoryInfo.factoryCategoryList &&
+                  factoryInfo.factoryCategoryList.map(item => (
                     <Tag key={item.name} className={styles.factoryInfoTag} color="#f2f2f2">
                       {item.name}
                     </Tag>
@@ -168,20 +183,19 @@ const FactoryInfo = props => {
             <li>
               <span>企业标签：</span>
               <span>
-                {factoryInfo.tagDictItemList &&
-                  factoryInfo.tagDictItemList.map(item => (
-                    <Tag key={item.value} className={styles.factoryInfoTag} color="#f2f2f2">
-                      {item.label}
-                    </Tag>
-                  ))}
+                {factoryTagList.map((item, index) => (
+                  <Tag key={index} className={styles.factoryInfoTag} color="#f2f2f2">
+                    {item}
+                  </Tag>
+                ))}
               </span>
             </li>
-            <li>
+            {/* <li>
               <span>空档期：</span>
               <span>
                 {factoryInfo.gapStartDate} - {factoryInfo.gapEndDate}
               </span>
-            </li>
+            </li> */}
             <li>{factoryInfo.factoryServiceTag}</li>
           </ul>
         </div>
@@ -232,7 +246,7 @@ const FactoryInfo = props => {
           <div>
             <span>工厂地址：</span>
             <span>{factoryInfo.address}</span> &nbsp;&nbsp;&nbsp;
-            <a>地图查看 {'>'}</a>
+            {/* <a>地图查看 {'>'}</a> */}
           </div>
         </div>
       </div>
@@ -240,4 +254,4 @@ const FactoryInfo = props => {
   )
 }
 
-export default FactoryInfo
+export default observer(FactoryInfo)

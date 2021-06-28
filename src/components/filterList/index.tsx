@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { toJS } from 'mobx'
-import { Tabs, Select, Tag, Button, message } from 'antd'
+import { Select, Tag, Button, message } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
 import { isEmpty, find, isNil } from 'lodash'
@@ -10,7 +10,7 @@ import { AreaModal } from './components'
 import styles from './index.module.less'
 import { useHistory } from 'react-router'
 
-const { TabPane } = Tabs
+// const { TabPane } = Tabs
 const { Option } = Select
 
 const areaCategory = [
@@ -35,7 +35,7 @@ const setUpTimeMap = [
 ]
 
 const updateTimeMap = [
-  { label: '1天内', value: 0 },
+  { label: '1天内', value: 1 },
   { label: '7天内', value: 6 },
   { label: '30天内', value: 29 },
   { label: '90天内', value: 89 },
@@ -46,27 +46,23 @@ const updateTimeMap = [
 const FilterList = props => {
   const history = useHistory()
   const { types, onFilterChange } = props
+  console.log('🚀 ~ file: index.tsx ~ line 49 ~ types', types)
   const { factoryStore, commonStore } = useStores()
   const { dictionary, allArea } = commonStore
-  const { prodType = [], factoryStaffNumber = [] } = toJS(dictionary)
+  const { prodType = [], factoryEffectiveLocation = [] } = toJS(dictionary)
   const { productCategoryList } = factoryStore
-  const [factoryType, setFactoryType] = useState('all')
+  // const [factoryType, setFactoryType] = useState('all')
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [activeArea, setActiveArea] = useState<any>([])
   const [activeProcessing, setActiveProcessing] = useState<any>({}) //加工类型
   const [activeTabs, setActiveTabs] = useState<any>([])
   const [mainCategory, setMainCategory] = useState<any>([])
-  const [deputyCategory, setDeputyCategory] = useState<any>([
-    { id: '', name: '全部' }
-  ])
+  const [deputyCategory, setDeputyCategory] = useState<any>([{ id: '', name: '全部' }])
   const [activeMainCategory, setActiveMainCategory] = useState<string>('')
   const [activeDeputyCategory, setActiveDeputyCategory] = useState<any>({
     id: '',
     name: '全部'
   })
-
-  console.log(activeDeputyCategory, ' activeDeputyCategory')
-  console.log(activeMainCategory, ' activeMainCategory')
 
   const [factorySize, setFactorySize] = useState<string>(null)
   const [setUpTime, setSetUpTime] = useState<string>(null)
@@ -114,7 +110,6 @@ const FilterList = props => {
       } else {
         activeArea.splice(index, 1)
       }
-      console.log(activeArea, 'activeArea')
       onFilterChange({ cityIds: activeArea.map(item => item.id) })
       setActiveArea([...activeArea])
     }
@@ -135,10 +130,10 @@ const FilterList = props => {
     onFilterChange({ prodType: '' })
   }
 
-  const onTabChange = activeKey => {
-    setFactoryType(activeKey)
-    onFilterChange({ factoryType: activeKey === 'all' ? '' : activeKey })
-  }
+  // const onTabChange = activeKey => {
+  //   setFactoryType(activeKey)
+  //   onFilterChange({ factoryType: activeKey === 'all' ? '' : activeKey })
+  // }
   const onProductChange = params => {
     setActiveDeputyCategory({ ...params })
     onFilterChange({
@@ -152,18 +147,9 @@ const FilterList = props => {
   }
   const onFactorySizeChange = value => {
     setFactorySize(value)
-    if (value) {
-      const newValue = value.split(',')
-      onFilterChange({
-        staffNumberStart: newValue[0],
-        staffNumberEnd: newValue[1]
-      })
-    } else {
-      onFilterChange({
-        staffNumberStart: '',
-        staffNumberEnd: ''
-      })
-    }
+    onFilterChange({
+      effectiveLocation: value
+    })
   }
 
   //成立时间
@@ -221,14 +207,10 @@ const FilterList = props => {
       if (state && state.mainCategoryChildId && state.mainCategoryParentId) {
         setMainCategory([...newData])
         setActiveMainCategory(state.mainCategoryParentId)
-        const targetCategory = toJS(productCategoryList).find(
-          item => item.id === state.mainCategoryParentId
-        )
+        const targetCategory = toJS(productCategoryList).find(item => item.id === state.mainCategoryParentId)
         if (targetCategory && targetCategory.children) {
           setDeputyCategory([...targetCategory.children])
-          const target = targetCategory.children.find(
-            i => i.id === state.mainCategoryChildId
-          )
+          const target = targetCategory.children.find(i => i.id === state.mainCategoryChildId)
           if (target) {
             setActiveDeputyCategory({ id: target.id, name: target.name })
             onFilterChange({
@@ -267,12 +249,120 @@ const FilterList = props => {
 
   return (
     <div className={styles.filterList}>
-      <Tabs
-        type="card"
-        size="large"
-        activeKey={factoryType}
-        onChange={onTabChange}
-      >
+      <div className={styles.classification}>
+        <div className={styles.classificationLabel}>产品类别</div>
+        <div className={styles.classificationItem}>
+          <div>
+            {mainCategory.map(item => (
+              <span
+                key={item.id}
+                className={classNames(styles.classificationSpan, item.id === activeMainCategory ? styles.active : null)}
+                onClick={() => cutMainCategory(item.id)}
+              >
+                {item.name}
+              </span>
+            ))}
+          </div>
+          <div>
+            {deputyCategory.map(item => (
+              <span
+                key={item.id}
+                className={classNames(styles.classificationSpan, item.id === activeDeputyCategory.id ? styles.active : null)}
+                onClick={() => onProductChange({ id: item.id, name: item.name })}
+              >
+                {item.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className={styles.classification}>
+        <div className={styles.classificationLabel}>地区分类</div>
+        <div className={classNames(styles.classificationItem, styles.areaCategory)}>
+          <div>
+            <span className={classNames(styles.classificationSpan, isEmpty(activeArea) ? styles.active : null)} onClick={selectAllArea}>
+              全部
+            </span>
+            {areaCategory.map(item => (
+              <span
+                key={item.id}
+                className={classNames(
+                  styles.classificationSpan,
+                  activeArea.findIndex(val => val.id === item.id) > -1 ? styles.active : null
+                )}
+                onClick={() => selectActiveArea(item)}
+              >
+                {item.name}
+              </span>
+            ))}
+          </div>
+          <Button disabled={!toJS(allArea).length} onClick={() => setModalVisible(true)}>
+            更多
+          </Button>
+        </div>
+      </div>
+      <div className={styles.classification}>
+        <div className={styles.classificationLabel}>加工类型</div>
+        <div className={styles.classificationItem}>
+          <span
+            className={classNames(styles.classificationSpan, isEmpty(activeProcessing) ? styles.active : null)}
+            onClick={selectAllProcessing}
+          >
+            全部
+          </span>
+          {prodType.map(item => (
+            <span
+              key={item.id}
+              className={classNames(styles.classificationSpan, item.value === activeProcessing.id ? styles.active : null)}
+              onClick={() => onProcessingChange({ id: item.value, name: item.label })}
+            >
+              {item.label}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className={styles.classification}>
+        <div className={styles.classificationLabel}>更多选项</div>
+        <div className={styles.classificationItem}>
+          <Select allowClear placeholder="成立时间" value={setUpTime} className={styles.moreSelect} onChange={onSetUpTimeChange}>
+            {setUpTimeMap.map(item => (
+              <Option key={item.value} value={item.value}>
+                {item.label}
+              </Option>
+            ))}
+          </Select>
+          <Select allowClear placeholder="有效车位" className={styles.moreSelect} value={factorySize} onChange={onFactorySizeChange}>
+            {factoryEffectiveLocation.map(item => (
+              <Option key={item.id} value={item.value}>
+                {item.label}
+              </Option>
+            ))}
+          </Select>
+          <Select allowClear value={updateTime} onChange={onUpdateTimeChange} placeholder="更新时间" className={styles.moreSelect}>
+            {updateTimeMap.map(item => (
+              <Option key={item.value} value={item.value}>
+                {item.label}
+              </Option>
+            ))}
+          </Select>
+        </div>
+      </div>
+      <div className={styles.classification}>
+        <div className={styles.classificationLabel}>已选条件</div>
+        <div className={styles.classificationItem}>
+          {activeTabs.map(item => (
+            <Tag color="orange" className={styles.activeTab} closable key={item.id + 'tag'}>
+              {item.name}
+            </Tag>
+          ))}
+          {!isEmpty(activeTabs) && (
+            <Button icon={<DeleteOutlined />} onClick={emptyFn}>
+              清空
+            </Button>
+          )}
+        </div>
+      </div>
+      {/* <Tabs type="card" size="large" activeKey={factoryType} onChange={onTabChange}>
         {types.map(dressType => (
           <TabPane
             tab={
@@ -283,186 +373,11 @@ const FilterList = props => {
             }
             key={dressType.key}
           >
-            <div className={styles.classification}>
-              <div className={styles.classificationLabel}>产品类别</div>
-              <div className={styles.classificationItem}>
-                <div>
-                  {mainCategory.map(item => (
-                    <span
-                      key={item.id}
-                      className={classNames(
-                        styles.classificationSpan,
-                        item.id === activeMainCategory ? styles.active : null
-                      )}
-                      onClick={() => cutMainCategory(item.id)}
-                    >
-                      {item.name}
-                    </span>
-                  ))}
-                </div>
-                <div>
-                  {deputyCategory.map(item => (
-                    <span
-                      key={item.id}
-                      className={classNames(
-                        styles.classificationSpan,
-                        item.id === activeDeputyCategory.id
-                          ? styles.active
-                          : null
-                      )}
-                      onClick={() =>
-                        onProductChange({ id: item.id, name: item.name })
-                      }
-                    >
-                      {item.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className={styles.classification}>
-              <div className={styles.classificationLabel}>地区分类</div>
-              <div
-                className={classNames(
-                  styles.classificationItem,
-                  styles.areaCategory
-                )}
-              >
-                <div>
-                  <span
-                    className={classNames(
-                      styles.classificationSpan,
-                      isEmpty(activeArea) ? styles.active : null
-                    )}
-                    onClick={selectAllArea}
-                  >
-                    全部
-                  </span>
-                  {areaCategory.map(item => (
-                    <span
-                      key={item.id}
-                      className={classNames(
-                        styles.classificationSpan,
-                        activeArea.findIndex(val => val.id === item.id) > -1
-                          ? styles.active
-                          : null
-                      )}
-                      onClick={() => selectActiveArea(item)}
-                    >
-                      {item.name}
-                    </span>
-                  ))}
-                </div>
-                <Button
-                  disabled={!toJS(allArea).length}
-                  onClick={() => setModalVisible(true)}
-                >
-                  更多
-                </Button>
-              </div>
-            </div>
-            <div className={styles.classification}>
-              <div className={styles.classificationLabel}>加工类型</div>
-              <div className={styles.classificationItem}>
-                <span
-                  className={classNames(
-                    styles.classificationSpan,
-                    isEmpty(activeProcessing) ? styles.active : null
-                  )}
-                  onClick={selectAllProcessing}
-                >
-                  全部
-                </span>
-                {prodType.map(item => (
-                  <span
-                    key={item.id}
-                    className={classNames(
-                      styles.classificationSpan,
-                      item.value === activeProcessing.id ? styles.active : null
-                    )}
-                    onClick={() =>
-                      onProcessingChange({ id: item.value, name: item.label })
-                    }
-                  >
-                    {item.label}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className={styles.classification}>
-              <div className={styles.classificationLabel}>更多选项</div>
-              <div className={styles.classificationItem}>
-                <Select
-                  allowClear
-                  placeholder="成立时间"
-                  value={setUpTime}
-                  className={styles.moreSelect}
-                  onChange={onSetUpTimeChange}
-                >
-                  {setUpTimeMap.map(item => (
-                    <Option key={item.value} value={item.value}>
-                      {item.label}
-                    </Option>
-                  ))}
-                </Select>
-                <Select
-                  allowClear
-                  placeholder="工厂规模"
-                  className={styles.moreSelect}
-                  value={factorySize}
-                  onChange={onFactorySizeChange}
-                >
-                  {factoryStaffNumber.map(item => (
-                    <Option key={item.id} value={item.value}>
-                      {item.label}
-                    </Option>
-                  ))}
-                </Select>
-                <Select
-                  allowClear
-                  value={updateTime}
-                  onChange={onUpdateTimeChange}
-                  placeholder="更新时间"
-                  className={styles.moreSelect}
-                >
-                  {updateTimeMap.map(item => (
-                    <Option key={item.value} value={item.value}>
-                      {item.label}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
-            </div>
-            <div className={styles.classification}>
-              <div className={styles.classificationLabel}>已选条件</div>
-              <div className={styles.classificationItem}>
-                {activeTabs.map(item => (
-                  <Tag
-                    color="orange"
-                    className={styles.activeTab}
-                    closable
-                    key={item.id + 'tag'}
-                  >
-                    {item.name}
-                  </Tag>
-                ))}
-                {!isEmpty(activeTabs) && (
-                  <Button icon={<DeleteOutlined />} onClick={emptyFn}>
-                    清空
-                  </Button>
-                )}
-              </div>
-            </div>
           </TabPane>
         ))}
-      </Tabs>
+      </Tabs> */}
       {modalVisible && (
-        <AreaModal
-          visible={modalVisible}
-          selectedCity={activeArea}
-          handleCancel={() => setModalVisible(false)}
-          handleOk={handleModalOk}
-        />
+        <AreaModal visible={modalVisible} selectedCity={activeArea} handleCancel={() => setModalVisible(false)} handleOk={handleModalOk} />
       )}
     </div>
   )

@@ -5,13 +5,7 @@ import { toJS } from 'mobx'
 import { EnvironmentFilled } from '@ant-design/icons'
 import { isArray, findIndex } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
-import SwiperCore, {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay
-} from 'swiper'
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper'
 
 import Swiper from 'swiper'
 import { transformProduceNumber } from '@/utils/tool'
@@ -22,14 +16,7 @@ import './style.less'
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
 const OverflowCard = props => {
-  const {
-    factoryId,
-    factoryName,
-    factoryDistrict,
-    staffNumber,
-    factoryCategoryList = [],
-    prodTypeList = []
-  } = props
+  const { factoryId, factoryName, factoryDistrict, staffNumber, factoryCategoryList = [], prodTypeList = [] } = props
 
   const history = useHistory()
   const goToDetail = () => {
@@ -59,10 +46,7 @@ const OverflowCard = props => {
   return (
     <div className={styles.overflowCard}>
       <div className={styles.factoryInfo}>
-        <img
-          className={styles.factoryImg}
-          src={require('@/static/images/u1190.png')}
-        />
+        <img className={styles.factoryImg} src={require('@/static/images/u1190.png')} />
         <div>
           <div>
             <a className={styles.factoryName} onClick={goToDetail}>
@@ -87,9 +71,7 @@ const OverflowCard = props => {
             </li>
             <li>
               <span>主要生产：</span>
-              <span>
-                {isArray(factoryCategoryList) && factoryCategoryList.join('、')}
-              </span>
+              <span>{isArray(factoryCategoryList) && factoryCategoryList.join('、')}</span>
             </li>
             <li>
               <span>加工类型：</span>
@@ -111,7 +93,7 @@ const OverflowCard = props => {
           </ul>
         </div>
       </div>
-      <div className={styles.swiperBox}>
+      {/* <div className={styles.swiperBox}>
         <div className="swiper-container mySwiper">
           <div className="swiper-wrapper">
             <div className={'swiper-slide'}>
@@ -137,7 +119,7 @@ const OverflowCard = props => {
           <div className="swiper-button-prev"></div>
           <div className="swiper-pagination"></div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

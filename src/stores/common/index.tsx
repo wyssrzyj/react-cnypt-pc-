@@ -41,7 +41,7 @@ export default class CommonStore {
       )
       if (res) {
         // const newArea = res.data.map(item => {
-        //   const { id, name, children } = item
+        //   const { value, label, children } = item
         //   return {
         //     id,
         //     name,

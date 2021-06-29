@@ -58,13 +58,15 @@ const Factory = () => {
   //   setSort(value)
   // }
   const getRecommendFactory = async () => {
-    const response = await axios.get(
-      '/api/factory/info/list-newest-factories',
-      { pageSize: 3 }
-    )
-    const { success, data = [] } = response
+    const response = await axios.post('/api/factory/info/list-factories', {
+      pageSize: 3,
+      sortField: 'newest',
+      sortType: 'Desc'
+    })
+    const { success, data = {} } = response
     if (success) {
-      setFactoryList([...data])
+      const { records } = data
+      setFactoryList([...records])
     }
   }
   const getBrowsingHistory = async () => {
@@ -89,7 +91,7 @@ const Factory = () => {
     const params = {
       pageNum,
       pageSize: 3,
-      mainCategoryParentId: defaultMainId,
+      // mainCategoryParentId: defaultMainId,
       factoryName,
       ...factoryParams
     }
@@ -158,6 +160,7 @@ const Factory = () => {
                 current={pageNum}
                 pageSize={3}
                 total={total}
+                showSizeChanger={false}
                 onChange={onPaginationChange}
               />
             </div>

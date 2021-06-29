@@ -17,24 +17,6 @@ const Intelligence = () => {
   const { factoryStore, commonStore } = useStores()
   const { productCategoryList, productCategory, init } = factoryStore
   const { allArea } = commonStore
-  console.log(
-    '🚀 ~ file: intelligenc.tsx ~ line 20 ~ Intelligence ~ allArea',
-    toJS(allArea)
-  )
-
-  // const newAllArea = cloneDeep(allArea)
-
-  // const areaData = toJS(newAllArea).reduce((prev, item) => {
-  //   if (item.children) {
-  //     item.children.forEach(i => {
-  //       if (i.children) {
-  //         delete i.children
-  //       }
-  //     })
-  //   }
-  //   prev.push(item)
-  //   return prev
-  // }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -47,7 +29,7 @@ const Intelligence = () => {
   const toSearch = () => {
     init()
     history.push({
-      pathname: '/platform/factory-search',
+      pathname: '/factory-search',
       state: searchData
     })
   }
@@ -66,11 +48,6 @@ const Intelligence = () => {
   }
 
   const inputs = [
-    // {
-    //   icon: <Icon type={'jack-ddsl'} className={styles.inputIcon} />,
-    //   field: 'order',
-    //   placeholder: '订单数量'
-    // },
     {
       icon: <Icon type={'jack-cplb'} className={styles.inputIcon} />,
       field: 'mainCategoryParentId', // mainCategoryChildId
@@ -125,15 +102,7 @@ const Intelligence = () => {
               </div>
             )
           }
-
           return null
-          // <Input
-          //   prefix={item.icon}
-          //   key={idx}
-          //   placeholder={item.placeholder}
-          //   className={styles.input}
-          //   onChange={event => valueChange(event, item.field)}
-          // />
         })}
         <Button className={styles.searchBtn} onClick={toSearch}>
           搜索

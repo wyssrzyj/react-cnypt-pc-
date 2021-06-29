@@ -235,9 +235,12 @@ const FilterList = props => {
 
     const state: any = location.state || {}
     if (state && state.cityIds) {
-      const t = toJS(allArea).find(i => i.id === state.cityIds[0]) //  目标省份
+      console.log(toJS(allArea), 'toJS(allArea)')
+      const t = toJS(allArea).find(i => i.value === state.cityIds[0]) //  目标省份
       if (t && t.children) {
-        const target = t.children.find(i => i.id === state.cityIds[1])
+        const target = t.children.find(i => i.value === state.cityIds[1])
+        target.id = target.value
+        target.name = target.label
         if (target && target.children) {
           delete target.children
           setActiveArea([target])
@@ -246,6 +249,8 @@ const FilterList = props => {
       }
     }
   }, [])
+
+  console.log(activeArea, 'activeArea')
 
   return (
     <div className={styles.filterList}>

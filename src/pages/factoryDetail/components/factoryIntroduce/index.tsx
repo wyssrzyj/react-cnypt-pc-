@@ -4,7 +4,13 @@ import classNames from 'classnames'
 import { find, isNil, isArray, isEmpty } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import { toJS } from 'mobx'
-import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper'
+import SwiperCore, {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay
+} from 'swiper'
 
 import Swiper from 'swiper'
 import axios from '@/utils/axios'
@@ -57,19 +63,31 @@ const conditionMap = [
 
 const TableComponent = props => {
   const { activeKey, current } = props
-  const currentMap = activeKey === 'introduction' ? introductionMap : activeKey === 'ability' ? abilityMap : conditionMap
+  const currentMap =
+    activeKey === 'introduction'
+      ? introductionMap
+      : activeKey === 'ability'
+      ? abilityMap
+      : conditionMap
   return (
     <>
       {activeKey === 'introduction' && <div>{current.enterpriseDesc}</div>}
       <div className={styles.introduceInfo}>
-        <ul className={classNames(styles.introduceBox, styles.introduceBoxLeft)}>
+        <ul
+          className={classNames(styles.introduceBox, styles.introduceBoxLeft)}
+        >
           {currentMap.map((item, index) => {
             const name = isNil(current[item.value]) ? undefined : item.label
             let newValue
-            if (item.value === 'supportDesign' || item.value === 'hasVatInvoice') {
+            if (
+              item.value === 'supportDesign' ||
+              item.value === 'hasVatInvoice'
+            ) {
               newValue = current[item.value] ? '是' : '否'
             } else if (item.value === 'factoryCertificateLabels') {
-              newValue = isArray(current[item.value]) ? current[item.value].join('、') : current[item.value]
+              newValue = isArray(current[item.value])
+                ? current[item.value].join('、')
+                : current[item.value]
             } else {
               newValue = current[item.value]
             }
@@ -140,7 +158,12 @@ const WorkshopEquipment = props => {
   }, [])
   return (
     <div>
-      <Table rowKey={rowKey} dataSource={equipment} columns={columns} pagination={false} />
+      <Table
+        rowKey={rowKey}
+        dataSource={equipment}
+        columns={columns}
+        pagination={false}
+      />
       <div className={styles.swiperBox}>
         <div className="swiper-container equipmentSwiper  mySwiper">
           <div className="swiper-wrapper">
@@ -182,7 +205,10 @@ const QualificationCertificate = props => {
       ) : (
         certificate.map(item => (
           <div key={item.id} className={styles.certificateBox}>
-            <img className={styles.certificateImg} src={require('@/static/images/u994.png')} />
+            <img
+              className={styles.certificateImg}
+              src={require('@/static/images/u994.png')}
+            />
             <span>{item.certificationName.label}</span>
           </div>
         ))
@@ -195,7 +221,12 @@ const FactoryIntroduce = props => {
   const { factoryId } = props
   const { commonStore } = useStores()
   const { dictionary } = commonStore
-  const { factoryYearOutputValue = [], factoryYearOutputProd = [], factoryCertificate = [], factoryEquipmentType = [] } = toJS(dictionary)
+  const {
+    factoryYearOutputValue = [],
+    factoryYearOutputProd = [],
+    factoryCertificate = [],
+    factoryEquipmentType = []
+  } = toJS(dictionary)
   const [activeTab, setActiveTab] = useState('introduction')
   const [introductions, setIntroductions] = useState<any>({})
   const [ability, setAbility] = useState<any>({})
@@ -226,13 +257,24 @@ const FactoryIntroduce = props => {
 
   // 企业简介
   const getIntroduction = async () => {
-    const response = await axios.get('/api/factory/enterprise/get-by-factory-id', {
-      factoryId
-    })
+    const response = await axios.get(
+      '/api/factory/enterprise/get-by-factory-id',
+      {
+        factoryId
+      }
+    )
     const { success, data = {} } = response
     if (success) {
-      const { yearOutputValue, staffNumber = '', factoryArea, productLineNum, totalLocation } = data
-      const newValue = factoryYearOutputValue.find(item => item.value === yearOutputValue) || {}
+      const {
+        yearOutputValue,
+        staffNumber = '',
+        factoryArea,
+        productLineNum,
+        totalLocation
+      } = data
+      const newValue =
+        factoryYearOutputValue.find(item => item.value === yearOutputValue) ||
+        {}
       const newNumber = !isNil(staffNumber) ? staffNumber.split(',') : [0, 0]
       setIntroductions({
         ...data,
@@ -254,14 +296,24 @@ const FactoryIntroduce = props => {
   }
   //生产能力
   const getAbility = async () => {
-    const response = await axios.get('/api/factory/info/get-capacity-factory-id', {
-      factoryId
-    })
+    const response = await axios.get(
+      '/api/factory/info/get-capacity-factory-id',
+      {
+        factoryId
+      }
+    )
     const { success, data = {} } = response
     if (success) {
-      const { staffNumber = '', qcPersonNumber, yearOutputProd, designPersonNumber, materialSupplyTime } = data
+      const {
+        staffNumber = '',
+        qcPersonNumber,
+        yearOutputProd,
+        designPersonNumber,
+        materialSupplyTime
+      } = data
       const newNumber = !isNil(staffNumber) ? staffNumber.split(',') : [0, 0]
-      const newValue = factoryYearOutputProd.find(item => item.value === yearOutputProd) || {}
+      const newValue =
+        factoryYearOutputProd.find(item => item.value === yearOutputProd) || {}
       setAbility({
         ...data,
         staffNumber: `${newNumber[0]}人 ~ ${newNumber[1]}人`,
@@ -315,7 +367,8 @@ const FactoryIntroduce = props => {
       const { records = [] } = data
       const newData = records.map(item => ({
         ...item,
-        certificationName: factoryCertificate.find(o => o.value === item.certificationName) || {}
+        certificationName:
+          factoryCertificate.find(o => o.value === item.certificationName) || {}
       }))
       setCertificate([...newData])
     }
@@ -336,15 +389,23 @@ const FactoryIntroduce = props => {
         {tabList.map(item => (
           <TabPane tab={item.value} key={item.key}>
             <div className={styles.introduceContent}>
-              <h2 className={styles.introduceTitle}>{find(tabList, tab => tab.key === activeTab).value}</h2>
+              <h2 className={styles.introduceTitle}>
+                {find(tabList, tab => tab.key === activeTab).value}
+              </h2>
               {/* 企业简介 生产能力 合作条件 */}
-              {(activeTab === 'introduction' || activeTab === 'ability' || activeTab === 'condition') && (
+              {(activeTab === 'introduction' ||
+                activeTab === 'ability' ||
+                activeTab === 'condition') && (
                 <TableComponent activeKey={activeTab} current={currentObj} />
               )}
               {/* 车间设备 */}
-              {activeTab === 'equipment' && <WorkshopEquipment current={currentObj} />}
+              {activeTab === 'equipment' && (
+                <WorkshopEquipment current={currentObj} />
+              )}
               {/* 资质证书 */}
-              {activeTab === 'certificate' && <QualificationCertificate current={currentObj} />}
+              {activeTab === 'certificate' && (
+                <QualificationCertificate current={currentObj} />
+              )}
             </div>
           </TabPane>
         ))}

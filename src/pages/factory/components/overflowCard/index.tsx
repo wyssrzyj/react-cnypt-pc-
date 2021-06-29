@@ -5,7 +5,13 @@ import { toJS } from 'mobx'
 import { EnvironmentFilled } from '@ant-design/icons'
 import { isArray, findIndex } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
-import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper'
+import SwiperCore, {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay
+} from 'swiper'
 
 import Swiper from 'swiper'
 // import { transformProduceNumber } from '@/utils/tool'
@@ -55,7 +61,10 @@ const OverflowCard = props => {
   return (
     <div className={styles.overflowCard}>
       <div className={styles.factoryInfo}>
-        <img className={styles.factoryImg} src={pictureUrl ? pictureUrl : u1190} />
+        <img
+          className={styles.factoryImg}
+          src={pictureUrl ? pictureUrl : u1190}
+        />
         <div className={styles.detail}>
           <div>
             <a className={styles.factoryName} onClick={goToDetail}>
@@ -80,7 +89,11 @@ const OverflowCard = props => {
             </li>
             <li>
               <span>主要生产：</span>
-              <span>{isArray(factoryCategoryList) ? factoryCategoryList.join('、') : '待完善'}</span>
+              <span>
+                {isArray(factoryCategoryList)
+                  ? factoryCategoryList.join('、')
+                  : '待完善'}
+              </span>
             </li>
             <li>
               <span>加工类型：</span>

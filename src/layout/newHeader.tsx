@@ -4,19 +4,35 @@ import { useHistory } from 'react-router'
 import { Menu, Dropdown } from 'antd'
 import { getCurrentUser } from '@/utils/tool'
 import styles from './newHeader.module.less'
+import { useStores } from '@/utils/mobx'
 
 const Header = () => {
   const currentUser = getCurrentUser() || {}
+  const { loginStore } = useStores()
+  const { logout } = loginStore
 
   const history = useHistory()
 
   const toLogin = () => {
     history.push('/login')
   }
+
+  const toRegister = () => {
+    history.push('/register')
+  }
+
+  const logoutToLogin = async () => {
+    await logout()
+    toLogin()
+  }
+
   const menu = (
     <Menu>
       <Menu.Item>
         <Link to="/control-panel/enterprise">控制台</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <div onClick={logoutToLogin}>退出登录</div>
       </Menu.Item>
     </Menu>
   )
@@ -34,7 +50,9 @@ const Header = () => {
               登录
             </span>
             <span>或</span>
-            <span className={styles.orangeText}>免费注册</span>
+            <span className={styles.orangeText} onClick={toRegister}>
+              免费注册
+            </span>
           </>
         )}
       </div>

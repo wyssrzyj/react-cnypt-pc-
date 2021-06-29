@@ -4,8 +4,8 @@ import { Icon } from '@/components'
 import { useStores } from '@/utils/mobx'
 
 // 地图右侧工厂统计信息
-const Statistics = props => {
-  const { province } = props
+const Statistics = () => {
+  // const { province } = props
   const { homeStore } = useStores()
   const { getStatisticalData } = homeStore
 
@@ -43,7 +43,7 @@ const Statistics = props => {
 
   return (
     <div className={styles.statisticsModal}>
-      <div>{province}</div>
+      {/* <div>{province}</div> */}
       {configs.map(item => {
         return (
           <div className={styles.statisticsItem} key={item.field}>

@@ -1,7 +1,6 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styles from './index.module.less'
 import * as _ from 'lodash'
-import GDMap from './GDMap'
 import SwiperCore, {
   Navigation,
   Pagination,
@@ -23,6 +22,9 @@ import Intelligence from './components/intelligenc'
 import SlideBars from './components/slideBar'
 import AreaFactorys from './components/areaFactorys'
 import Focus from './components/focus'
+
+const HOME_BANNER =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210629/babdd42a2ba5409398861086530c4d64.jpg'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectFade])
 
@@ -48,7 +50,6 @@ const HomePage = () => {
 
   const containerRef = useRef<HTMLDivElement>()
 
-  const [province, setProvince] = useState()
   const [activeKey, setActiveKey] = useState(0)
 
   const setMove = event => {
@@ -63,8 +64,10 @@ const HomePage = () => {
       domRef7.current.offsetTop,
       domRef8.current.offsetTop
     ]
-    const { scrollTop } = event.target as any
-    let key
+
+    const scrollTop = event.target.scrollingElement.scrollTop
+
+    let key = 0
     offsetTops.forEach((item, idx) => {
       if (idx === 2 && scrollTop >= item - 150) {
         key = idx + 1
@@ -85,19 +88,16 @@ const HomePage = () => {
     }
   }, [])
 
-  const provinceChange = useCallback(provinceInfo => {
-    setProvince(provinceInfo)
-  }, [])
-
   return (
     <div className={styles.container} ref={containerRef}>
       <div className={styles.homeContainer}>
         <div className={styles.headerOutBox}>
           <div className={styles.headerBox}>
+            <img src={HOME_BANNER} className={styles.homeBanner} alt="" />
             {/* 加载中蒙层 */}
             {/* {!gdLoaded ? <div className={styles.mask}></div> : null} */}
-            <GDMap provinceChange={provinceChange} />
-            <Statistics province={province} />
+            {/* <GDMap provinceChange={provinceChange} /> */}
+            <Statistics />
           </div>
         </div>
         <SwiperFactorys SwiperCore={SwiperCore} />

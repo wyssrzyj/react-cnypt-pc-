@@ -1,9 +1,10 @@
+import React, { useRef } from 'react'
 import { Icon } from '@/components'
-import React from 'react'
 import styles from './slideBar.module.less'
 import classNames from 'classnames'
 
 const SlideBars = props => {
+  const btnRef = useRef<HTMLDivElement>()
   const { domMap, activeKey } = props
   const slideBars = [
     { label: '智能搜索工厂' },
@@ -17,7 +18,7 @@ const SlideBars = props => {
   ]
 
   const moveTo = index => {
-    const t = document.body
+    const t = window || document.body
     if (index == 0) {
       t.scrollTo(0, 0)
       return
@@ -48,7 +49,7 @@ const SlideBars = props => {
           </div>
         )
       })}
-      <div className={styles.slideBack} onClick={() => moveTo(0)}>
+      <div className={styles.slideBack} ref={btnRef} onClick={() => moveTo(0)}>
         <Icon type={'jack-Icon_up'} className={styles.slideBackLogo} />
         <span className={styles.slideBackText}>top</span>
       </div>

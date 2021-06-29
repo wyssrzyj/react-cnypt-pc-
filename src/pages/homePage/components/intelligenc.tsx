@@ -3,17 +3,24 @@ import { Icon } from '@/components'
 import styles from './intelligenc.module.less'
 import { Button, Cascader } from 'antd'
 import SEARCH from '../img/sousuo.png'
-import FRATORY from '../img/factory.png'
+// import FRATORY from '../img/factory.png'
 import { useHistory } from 'react-router'
 import { cloneDeep } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
-// import { toJS } from 'mobx'
+import { toJS } from 'mobx'
+
+const FRATORY =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210629/9f1f625f42ea46108ff651f2ad78a9ac.jpg?x-oss-process=image/quality,q_90'
 
 const Intelligence = () => {
   const history = useHistory()
-  const { factoryStore } = useStores()
+  const { factoryStore, commonStore } = useStores()
   const { productCategoryList, productCategory, init } = factoryStore
-  // const { allArea } = commonStore
+  const { allArea } = commonStore
+  console.log(
+    '🚀 ~ file: intelligenc.tsx ~ line 20 ~ Intelligence ~ allArea',
+    toJS(allArea)
+  )
 
   // const newAllArea = cloneDeep(allArea)
 
@@ -37,31 +44,6 @@ const Intelligence = () => {
 
   const [searchData, setSerachData] = useState({})
 
-  const inputs = [
-    {
-      icon: <Icon type={'jack-ddsl'} className={styles.inputIcon} />,
-      field: 'order',
-      placeholder: '订单数量'
-    },
-    {
-      icon: <Icon type={'jack-cplb'} className={styles.inputIcon} />,
-      field: 'mainCategoryParentId', // mainCategoryChildId
-      placeholder: '产品类别'
-    },
-    {
-      icon: <Icon type={'jack-quyu'} className={styles.inputIcon} />,
-      field: 'cityIds',
-      placeholder: '区域'
-    }
-  ]
-
-  // const valueChange = (event, field) => {
-  //   const newData = cloneDeep(searchData)
-  //   const { value } = event.target
-  //   newData[field] = value
-  //   setSerachData(newData)
-  // }
-
   const toSearch = () => {
     init()
     history.push({
@@ -77,11 +59,33 @@ const Intelligence = () => {
     setSerachData(newData)
   }
 
-  // const areaChange = value => {
-  //   const newData = cloneDeep(searchData)
-  //   newData['cityIds'] = value
-  //   setSerachData(newData)
-  // }
+  const areaChange = value => {
+    const newData = cloneDeep(searchData)
+    newData['cityIds'] = value
+    setSerachData(newData)
+  }
+
+  const inputs = [
+    // {
+    //   icon: <Icon type={'jack-ddsl'} className={styles.inputIcon} />,
+    //   field: 'order',
+    //   placeholder: '订单数量'
+    // },
+    {
+      icon: <Icon type={'jack-cplb'} className={styles.inputIcon} />,
+      field: 'mainCategoryParentId', // mainCategoryChildId
+      options: productCategoryList,
+      onChange: typeChange,
+      placeholder: '产品类别'
+    },
+    {
+      icon: <Icon type={'jack-quyu'} className={styles.inputIcon} />,
+      field: 'cityIds',
+      options: toJS(allArea),
+      onChange: areaChange,
+      placeholder: '区域'
+    }
+  ]
 
   return (
     <div className={styles.intelligenceInner}>
@@ -89,7 +93,7 @@ const Intelligence = () => {
         <img src={SEARCH} alt="" className={styles.searchImg} />
         <div className={styles.searchTitle}>智能搜索工厂</div>
         {inputs.map((item, idx) => {
-          if ([1, 2].includes(idx)) {
+          if (idx === 0) {
             const fieldNames = {
               label: 'name',
               value: 'id',
@@ -99,10 +103,23 @@ const Intelligence = () => {
               <div className={styles.customCascader} key={idx}>
                 {item.icon}
                 <Cascader
-                  options={productCategoryList}
-                  onChange={typeChange}
-                  placeholder={idx === 1 ? '产品类别' : '区域'}
+                  options={item.options}
+                  onChange={item.onChange}
                   fieldNames={fieldNames}
+                  placeholder={'产品类别'}
+                  popupClassName={'cascaderPopup'}
+                />
+              </div>
+            )
+          }
+          if (idx === 1) {
+            return (
+              <div className={styles.customCascader} key={idx}>
+                {item.icon}
+                <Cascader
+                  options={item.options}
+                  onChange={item.onChange}
+                  placeholder={'区域'}
                   popupClassName={'cascaderPopup'}
                 />
               </div>

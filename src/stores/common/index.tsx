@@ -40,15 +40,15 @@ export default class CommonStore {
         `/api/factory/district/list-tree`
       )
       if (res) {
-        const newArea = res.data.map(item => {
-          const { id, name, children } = item
-          return {
-            id,
-            name,
-            children
-          }
-        })
-        this.allArea = newArea
+        // const newArea = res.data.map(item => {
+        //   const { id, name, children } = item
+        //   return {
+        //     id,
+        //     name,
+        //     children
+        //   }
+        // })
+        this.allArea = res.data
         return res.data || []
       } else {
         message.error('获取数据失败~')

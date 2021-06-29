@@ -12,7 +12,13 @@ import {
   BookOutlined
 } from '@ant-design/icons'
 import { useStores } from '@/utils/mobx'
-import { EnterpriseInfo, PlantSitePhoto, QualificationCertification, CertificateAuthentication, FactoryReport } from './components'
+import {
+  EnterpriseInfo,
+  PlantSitePhoto,
+  QualificationCertification,
+  CertificateAuthentication,
+  FactoryReport
+} from './components'
 import styles from './index.module.less'
 import FactoryInformation from './factoryInformation'
 import { useLocation } from 'react-router'
@@ -94,10 +100,10 @@ const ControlPanel = () => {
                 <Link to="/control-panel/result">审批结果</Link>
               </Menu.Item> */}
 
-              {/* <Menu.Item key="information" icon={<FileSearchOutlined />}>
+              <Menu.Item key="information" icon={<FileSearchOutlined />}>
                 <Link to="/control-panel/information">工厂资料</Link>
               </Menu.Item>
-              <Menu.Item key="photo" icon={<BankOutlined />}>
+              {/* <Menu.Item key="photo" icon={<BankOutlined />}>
                 <Link to="/control-panel/photo">厂房现场照</Link>
               </Menu.Item> */}
             </SubMenu>
@@ -110,16 +116,30 @@ const ControlPanel = () => {
           </Menu>
         </div>
         <div className={styles.controlPanelRight}>
-          <header className={styles.contentTitle}>{menusName.get(location.pathname)}</header>
+          <header className={styles.contentTitle}>
+            {menusName.get(location.pathname)}
+          </header>
           <Switch>
             {/* 企业信息 */}
-            <Route path="/control-panel/enterprise" component={EnterpriseInfo} />
+            <Route
+              path="/control-panel/enterprise"
+              component={EnterpriseInfo}
+            />
             {/* 企业证件认证 */}
-            <Route path="/control-panel/certificate" component={CertificateAuthentication} />
-            <Route path="/control-panel/information" component={FactoryInformation} />
+            <Route
+              path="/control-panel/certificate"
+              component={CertificateAuthentication}
+            />
+            <Route
+              path="/control-panel/information"
+              component={FactoryInformation}
+            />
             <Route path="/control-panel/photo" component={PlantSitePhoto} />
             {/* 资质认证 */}
-            <Route path="/control-panel/qualification" component={QualificationCertification} />
+            <Route
+              path="/control-panel/qualification"
+              component={QualificationCertification}
+            />
             {/* 验厂报告*/}
             <Route path="/control-panel/report" component={FactoryReport} />
             <Redirect to="/platform" />

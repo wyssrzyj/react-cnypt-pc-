@@ -17,7 +17,7 @@ const AreaModal = props => {
   const [activeProvince, setActiveProvince] = useState<string>(newAllArea[0].value)
   const selectProvince = id => {
     setActiveProvince(id)
-    const currentCity = newAllArea.find(tree => tree.id === id) || {}
+    const currentCity = newAllArea.find(tree => tree.value === id) || {}
     setCityTree([...currentCity.children])
   }
 
@@ -68,22 +68,22 @@ const AreaModal = props => {
         <div className={styles.areaLeft}>
           {newAllArea.map(item => (
             <div
-              key={item.id}
-              className={classNames(styles.provinces, item.id === activeProvince ? styles.active : null)}
-              onClick={() => selectProvince(item.id)}
+              key={item.value}
+              className={classNames(styles.provinces, item.value === activeProvince ? styles.active : null)}
+              onClick={() => selectProvince(item.value)}
             >
-              {item.name}
+              {item.label}
             </div>
           ))}
         </div>
         <div className={styles.areaRight}>
           {cityTree.map(city => (
             <span
-              key={city.id}
-              className={classNames(styles.cityBox, activeCity.findIndex(val => val.id === city.id) > -1 ? styles.cityActive : null)}
-              onClick={() => selectCity({ id: city.id, name: city.name })}
+              key={city.value}
+              className={classNames(styles.cityBox, activeCity.findIndex(val => val.id === city.value) > -1 ? styles.cityActive : null)}
+              onClick={() => selectCity({ id: city.value, name: city.label })}
             >
-              {city.name}
+              {city.label}
             </span>
           ))}
         </div>

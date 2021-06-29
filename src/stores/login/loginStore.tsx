@@ -31,6 +31,25 @@ export default class LoginStore {
     }
   }
 
+  @action logout = async () => {
+    try {
+      const res: ResponseProps = await axios.post('/api/user/account/logout')
+      if (res.success) {
+        localStorage.setItem('token', '')
+        localStorage.setItem('refresh', '')
+        localStorage.setItem('currentUser', JSON.stringify({}))
+      }
+      if (!res.success) {
+        message.error(res.msg)
+      }
+      message.success('退出成功')
+      return res
+    } catch (e) {
+      console.log(e)
+      // message.error('')
+    }
+  }
+
   @action verifyCode = async mobile => {
     try {
       const res: ResponseProps = await axios.get(`/api/sms/send-code/${mobile}`)

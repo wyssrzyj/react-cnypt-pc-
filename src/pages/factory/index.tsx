@@ -58,13 +58,11 @@ const Factory = () => {
   //   setSort(value)
   // }
   const getRecommendFactory = async () => {
-    const response = await axios.get(
-      '/api/factory/info/list-newest-factories',
-      { pageSize: 3 }
-    )
-    const { success, data = [] } = response
+    const response = await axios.post('/api/factory/info/list-factories', { pageSize: 3, sortField: 'newest', sortType: 'Desc' })
+    const { success, data = {} } = response
     if (success) {
-      setFactoryList([...data])
+      const { records } = data
+      setFactoryList([...records])
     }
   }
   const getBrowsingHistory = async () => {
@@ -89,7 +87,7 @@ const Factory = () => {
     const params = {
       pageNum,
       pageSize: 3,
-      mainCategoryParentId: defaultMainId,
+      // mainCategoryParentId: defaultMainId,
       factoryName,
       ...factoryParams
     }
@@ -148,26 +146,16 @@ const Factory = () => {
               {isEmpty(factoryArray) ? (
                 <Empty className={styles.nodata} />
               ) : (
-                factoryArray.map((item, index) => (
-                  <OverflowCard key={index} {...item} />
-                ))
+                factoryArray.map((item, index) => <OverflowCard key={index} {...item} />)
               )}
             </Spin>
             <div className={styles.factoryPage}>
-              <Pagination
-                current={pageNum}
-                pageSize={3}
-                total={total}
-                onChange={onPaginationChange}
-              />
+              <Pagination current={pageNum} pageSize={3} total={total} showSizeChanger={false} onChange={onPaginationChange} />
             </div>
           </div>
           <div className={styles.contentRight}>
             <div className={styles.newFactory}>
-              <img
-                className={styles.newFactoryImg}
-                src={require('@/static/images/u1506.png')}
-              />
+              <img className={styles.newFactoryImg} src={require('@/static/images/u1506.png')} />
               <div className={styles.newFactoryTitle}>工厂入驻</div>
             </div>
             <FactoryCard title="推荐好工厂" list={factoryList} />

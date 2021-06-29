@@ -167,7 +167,7 @@ const FactoryInfo = props => {
               <span>生产企业或加工个体户</span>
             </li> */}
             <li>
-              <span>生产人数：</span>
+              <span>有效车位：</span>
               <span>{factoryInfo.staffNumber ? factoryInfo.staffNumber.replace(',', '~') : '--'}人</span>
             </li>
             <li>

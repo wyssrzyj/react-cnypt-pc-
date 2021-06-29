@@ -56,7 +56,7 @@ const FilterList = props => {
   const [activeArea, setActiveArea] = useState<any>([])
   const [activeProcessing, setActiveProcessing] = useState<any>({}) //加工类型
   const [activeTabs, setActiveTabs] = useState<any>([])
-  const [mainCategory, setMainCategory] = useState<any>([])
+  const [mainCategory, setMainCategory] = useState<any>([{ id: '', name: '全部' }])
   const [deputyCategory, setDeputyCategory] = useState<any>([{ id: '', name: '全部' }])
   const [activeMainCategory, setActiveMainCategory] = useState<string>('')
   const [activeDeputyCategory, setActiveDeputyCategory] = useState<any>({
@@ -71,8 +71,8 @@ const FilterList = props => {
   const emptyFn = () => {
     const newData = toJS(productCategoryList)
     // 清空子类
-    setActiveMainCategory('')
-    setActiveDeputyCategory({ id: '', name: '全部' })
+    // setActiveMainCategory('')
+    // setActiveDeputyCategory({ id: '', name: '全部' })
     // setActiveArea([])
     setActiveProcessing({})
     // 清空已选标签
@@ -205,7 +205,7 @@ const FilterList = props => {
       const state: any = location.state || {}
       // 首页跳转初始化类别
       if (state && state.mainCategoryChildId && state.mainCategoryParentId) {
-        setMainCategory([...newData])
+        setMainCategory([{ id: '', name: '全部' }, ...newData])
         setActiveMainCategory(state.mainCategoryParentId)
         const targetCategory = toJS(productCategoryList).find(item => item.id === state.mainCategoryParentId)
         if (targetCategory && targetCategory.children) {
@@ -222,8 +222,8 @@ const FilterList = props => {
         }
       }
 
-      setMainCategory([...newData])
-      setActiveMainCategory(newData[0].id)
+      setMainCategory([{ id: '', name: '全部' }, ...newData])
+      // setActiveMainCategory(newData[0].id)
       const newDeputyCategory = [...deputyCategory, ...newData[0].children]
       setDeputyCategory([...newDeputyCategory])
     }

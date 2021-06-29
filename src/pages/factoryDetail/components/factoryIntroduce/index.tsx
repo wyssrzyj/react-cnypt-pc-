@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Tabs, Table } from 'antd'
+import { Tabs, Table, Empty } from 'antd'
 import classNames from 'classnames'
-import { find, isNil, isArray } from 'lodash'
+import { find, isNil, isArray, isEmpty } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import { toJS } from 'mobx'
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper'
@@ -25,24 +25,24 @@ const tabList = [
 ]
 const introductionMap = [
   { value: 'yearOutputValue', label: '年交易额' },
-  { value: 'staffNumber', label: '员工总数' },
+  // { value: 'staffNumber', label: '员工总数' },
   { value: 'productLineNum', label: '生产流水线' },
-  { value: 'factoryArea', label: '厂房面积' },
-  { value: 'supportDesign', label: '支持打样' },
-  { value: 'totalLocation', label: '加工设备' },
-  { value: 'manufactureBrand', label: '代工品牌' },
-  { value: 'factoryBrand', label: '商标/品牌' },
-  { value: 'factoryCertificateLabels', label: '资质证书' }
+  { value: 'factoryArea', label: '厂房面积' }
+  // { value: 'supportDesign', label: '支持打样' },
+  // { value: 'totalLocation', label: '加工设备' },
+  // { value: 'manufactureBrand', label: '代工品牌' },
+  // { value: 'factoryBrand', label: '商标/品牌' },
+  // { value: 'factoryCertificateLabels', label: '资质证书' }
 ]
 
 const abilityMap = [
-  { value: 'staffNumber', label: '生产人数' },
-  { value: 'qcPersonNumber', label: '检验人数' },
-  { value: 'yearOutputProd', label: '年产值' },
-  { value: 'designPersonNumber', label: '打样人员数' },
-  { value: 'qcGroupType', label: '检验小组' },
-  { value: 'materialSupplyTime', label: '原材料供应时间' },
-  { value: 'craft', label: '特殊工艺' }
+  // { value: 'staffNumber', label: '生产人数' },
+  // { value: 'qcPersonNumber', label: '检验人数' },
+  { value: 'yearOutputProd', label: '年产值' }
+  // { value: 'designPersonNumber', label: '打样人员数' },
+  // { value: 'qcGroupType', label: '检验小组' },
+  // { value: 'materialSupplyTime', label: '原材料供应时间' },
+  // { value: 'craft', label: '特殊工艺' }
 ]
 const conditionMap = [
   { value: 'customMoq', label: '定制起订量' },
@@ -94,16 +94,20 @@ const TableComponent = props => {
   )
 }
 const WorkshopEquipment = props => {
-  const {
-    current: { equipment }
-  } = props
   const rowKey = 'id'
+  const {
+    current: { equipment = [] }
+  } = props
+  const imgList = equipment.map(item => item.imageUrl)
 
   const columns = [
     {
       title: '设备名',
       dataIndex: 'name',
-      key: 'name'
+      key: 'name',
+      render: value => {
+        return value.label
+      }
     },
     {
       title: '数量',
@@ -123,7 +127,7 @@ const WorkshopEquipment = props => {
   ]
   useEffect(() => {
     new Swiper('.mySwiper', {
-      slidesPerView: 3,
+      slidesPerView: imgList.length > 3 ? 3 : imgList.length,
       spaceBetween: 20,
       centeredSlides: true,
       centeredSlidesBounds: true,
@@ -140,7 +144,12 @@ const WorkshopEquipment = props => {
       <div className={styles.swiperBox}>
         <div className="swiper-container equipmentSwiper  mySwiper">
           <div className="swiper-wrapper">
-            <div className={'swiper-slide'}>
+            {imgList.map((item, index) => (
+              <div key={index} className={'swiper-slide'}>
+                <img className="swiper-img" src={item} />
+              </div>
+            ))}
+            {/* <div className={'swiper-slide'}>
               <img className="swiper-img" src={require('@/static/images/u1495.png')} />
             </div>
             <div className={'swiper-slide'}>
@@ -151,7 +160,7 @@ const WorkshopEquipment = props => {
             </div>
             <div className={'swiper-slide'}>
               <img className="swiper-img" src={require('@/static/images/u1497.png')} />
-            </div>
+            </div> */}
           </div>
           <div className="swiper-button-next"></div>
           <div className="swiper-button-prev"></div>
@@ -168,12 +177,16 @@ const QualificationCertificate = props => {
   } = props
   return (
     <div className={styles.qualificationCertificate}>
-      {certificate.map(item => (
-        <div key={item.id} className={styles.certificateBox}>
-          <img className={styles.certificateImg} src={require('@/static/images/u994.png')} />
-          <span>{item.certificationName.label}</span>
-        </div>
-      ))}
+      {isEmpty(certificate) ? (
+        <Empty />
+      ) : (
+        certificate.map(item => (
+          <div key={item.id} className={styles.certificateBox}>
+            <img className={styles.certificateImg} src={require('@/static/images/u994.png')} />
+            <span>{item.certificationName.label}</span>
+          </div>
+        ))
+      )}
     </div>
   )
 }
@@ -182,7 +195,7 @@ const FactoryIntroduce = props => {
   const { factoryId } = props
   const { commonStore } = useStores()
   const { dictionary } = commonStore
-  const { factoryYearOutputValue = [], factoryYearOutputProd = [], factoryCertificate = [] } = toJS(dictionary)
+  const { factoryYearOutputValue = [], factoryYearOutputProd = [], factoryCertificate = [], factoryEquipmentType = [] } = toJS(dictionary)
   const [activeTab, setActiveTab] = useState('introduction')
   const [introductions, setIntroductions] = useState<any>({})
   const [ability, setAbility] = useState<any>({})
@@ -218,9 +231,9 @@ const FactoryIntroduce = props => {
     })
     const { success, data = {} } = response
     if (success) {
-      const { yearOutputValue, staffNumber, factoryArea, productLineNum, totalLocation } = data
+      const { yearOutputValue, staffNumber = '', factoryArea, productLineNum, totalLocation } = data
       const newValue = factoryYearOutputValue.find(item => item.value === yearOutputValue) || {}
-      const newNumber = staffNumber.split(',')
+      const newNumber = !isNil(staffNumber) ? staffNumber.split(',') : [0, 0]
       setIntroductions({
         ...data,
         yearOutputValue: newValue.label,
@@ -246,8 +259,8 @@ const FactoryIntroduce = props => {
     })
     const { success, data = {} } = response
     if (success) {
-      const { staffNumber, qcPersonNumber, yearOutputProd, designPersonNumber, materialSupplyTime } = data
-      const newNumber = staffNumber.split(',')
+      const { staffNumber = '', qcPersonNumber, yearOutputProd, designPersonNumber, materialSupplyTime } = data
+      const newNumber = !isNil(staffNumber) ? staffNumber.split(',') : [0, 0]
       const newValue = factoryYearOutputProd.find(item => item.value === yearOutputProd) || {}
       setAbility({
         ...data,
@@ -285,7 +298,11 @@ const FactoryIntroduce = props => {
     const { success, data = {} } = response
     if (success) {
       const { records } = data
-      setEquipments([...records])
+      const newList = records.map(item => ({
+        ...item,
+        name: factoryEquipmentType.find(o => o.value === item.type) || {}
+      }))
+      setEquipments([...newList])
     }
   }
   // 资质证书

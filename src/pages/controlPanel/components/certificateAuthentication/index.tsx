@@ -6,7 +6,7 @@ import styles from './index.module.less'
 const { Step } = Steps
 
 const CertificateAuthentication = () => {
-  const [currentStep, setCurrentStep] = useState<number>(1)
+  const [currentStep, setCurrentStep] = useState<number>(0)
 
   const handleSubmit = step => {
     setCurrentStep(step)

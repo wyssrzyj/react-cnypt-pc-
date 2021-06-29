@@ -26,14 +26,11 @@ const FactoryCard = props => {
               </a>
               <div className={styles.factoryInfo}>
                 <span>所在地区：</span>
-                <span>{item.location}</span>
+                <span>{item.factoryDistrict ? item.factoryDistrict : '待完善'}</span>
               </div>
               <div className={styles.factoryInfo}>
                 <span>主要生产：</span>
-                <span>
-                  {isArray(item.factoryCategoryList) &&
-                    item.factoryCategoryList.join('，')}
-                </span>
+                <span>{isArray(item.factoryCategoryList) ? item.factoryCategoryList.join('，') : '待完善'}</span>
               </div>
             </li>
           ))}

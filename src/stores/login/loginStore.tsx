@@ -10,15 +10,30 @@ export default class LoginStore {
 
   @action login = async params => {
     try {
-      const res: ResponseProps = await axios.post(
-        '/api/user/account/login',
-        params
-      )
+      const res: ResponseProps = await axios.post('/api/user/account/login', params)
       const { data = {} } = res
       if (data) {
         localStorage.setItem('token', data.access_token)
         localStorage.setItem('refresh', data.refresh_token)
         localStorage.setItem('currentUser', JSON.stringify(data))
+      }
+      if (!res.success) {
+        message.error(res.msg)
+      }
+      // message.success('登录成功')
+      return res
+    } catch (e) {
+      console.log(e)
+      // message.error('')
+    }
+  }
+
+  @action userInfo = async () => {
+    try {
+      const res: ResponseProps = await axios.get('/api/factory/enterprise/get-login-info')
+      const { data = {} } = res
+      if (data) {
+        localStorage.setItem('userInfo', JSON.stringify(data))
       }
       if (!res.success) {
         message.error(res.msg)

@@ -20,6 +20,14 @@ export const getCurrentUser = () => {
   return {}
 }
 
+export const getUserInfo = () => {
+  const user = JSON.parse(JSON.stringify(localStorage.getItem('userInfo')))
+  if (user) {
+    return JSON.parse(user)
+  }
+  return {}
+}
+
 export function useDebounce(fn, delay, dep = []) {
   const { current } = useRef({ fn, timer: null })
   useEffect(

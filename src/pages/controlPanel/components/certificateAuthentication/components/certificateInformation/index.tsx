@@ -3,6 +3,7 @@ import { Alert, Form, Select, Input, Upload, message, Checkbox, Button } from 'a
 import { isFunction, isEmpty } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
+import { getUserInfo } from '@/utils/tool'
 import styles from './index.module.less'
 
 const { Option } = Select
@@ -24,6 +25,8 @@ const certificateTypeMap = [
 
 const CertificateInformation = props => {
   const { submit } = props
+  const currentUser = getUserInfo() || {}
+  const { enterpriseId } = currentUser
   const [form] = Form.useForm()
   const { validateFields, setFieldsValue } = form
   const { factoryPageStore } = useStores()
@@ -108,19 +111,19 @@ const CertificateInformation = props => {
       delete values.enterpriseName
       const enterpriseCredentialList = [
         {
-          businessId: enterpriseInfo.enterpriseId,
+          businessId: enterpriseId,
           businessItemId: 'business_license',
           fileUrl: cardImageUrl,
           id: cardId
         },
         {
-          businessId: enterpriseInfo.enterpriseId,
+          businessId: enterpriseId,
           businessItemId: 'legal_person_id_photo_face',
           fileUrl: positiveImageUrl,
           id: positiveId
         },
         {
-          businessId: enterpriseInfo.enterpriseId,
+          businessId: enterpriseId,
           businessItemId: 'legal_person_id_photo_national',
           fileUrl: reverseImageUrl,
           id: reverseId
@@ -129,7 +132,7 @@ const CertificateInformation = props => {
       axios
         .post('/api/factory/enterprise/submit-enterprise-credential', {
           ...values,
-          enterpriseId: enterpriseInfo.enterpriseId,
+          enterpriseId,
           enterpriseCredentialList
         })
         .then(response => {
@@ -143,10 +146,10 @@ const CertificateInformation = props => {
   }
 
   const getCertificationInfo = () => {
-    const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
+    // const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
     axios
       .get('/api/factory/enterprise/get-enterprise-credential', {
-        enterpriseId: enterpriseInfo.enterpriseId
+        enterpriseId: enterpriseId
       })
       .then(response => {
         const { success, data } = response

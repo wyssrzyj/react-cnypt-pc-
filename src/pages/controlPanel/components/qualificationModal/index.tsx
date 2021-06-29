@@ -43,7 +43,7 @@ const PeriodValidity = props => {
 const QualificationModal = props => {
   const [form] = Form.useForm()
   const { validateFields } = form
-  const { visible, handleCancel, handleOk, type, current = {} } = props
+  const { visible, handleCancel, handleOk, type, current = {}, factoryId } = props
   const { certificationCode, certificationName, expiryDate, neverExpire, certificateImageURI } = current
   const newExpiryDate = neverExpire ? '1' : expiryDate
   const initialValues = {
@@ -79,7 +79,7 @@ const QualificationModal = props => {
         .post(' /api/factory/factory-certificate/save', {
           ...values,
           neverExpire,
-          factoryId: 1,
+          factoryId,
           certificateImageURI: imageUrl,
           status: 1
         })

@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { Steps } from 'antd'
 import { CertificateInformation, ApprovalResult } from './components'
+import { getUserInfo } from '@/utils/tool'
 import styles from './index.module.less'
 
 const { Step } = Steps
 
 const CertificateAuthentication = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0)
+  const currentUser = getUserInfo() || {}
+  const { approvalStatus } = currentUser
+  const [currentStep, setCurrentStep] = useState<number>(approvalStatus ? 1 : 0)
 
   const handleSubmit = step => {
     setCurrentStep(step)

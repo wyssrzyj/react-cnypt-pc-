@@ -27,6 +27,9 @@ const QualificationCertification = () => {
   const pageSize = 5
   const currentUser = getUserInfo() || {}
   const { factoryId } = currentUser
+  const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
+
+  const newFactoryId = isEmpty(enterpriseInfo) ? factoryId : enterpriseInfo.factoryId
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const { factoryCertificate = [] } = toJS(dictionary)
@@ -123,7 +126,7 @@ const QualificationCertification = () => {
         pageNum,
         pageSize,
         status: activeTab,
-        factoryId,
+        factoryId: newFactoryId,
         sortField,
         sortType
       })
@@ -216,7 +219,7 @@ const QualificationCertification = () => {
         <QualificationModal
           visible={isModalVisible}
           type={operationType}
-          factoryId={factoryId}
+          factoryId={newFactoryId}
           current={currentData}
           handleOk={getQualificationList}
           handleCancel={() => setIsModalVisible(false)}

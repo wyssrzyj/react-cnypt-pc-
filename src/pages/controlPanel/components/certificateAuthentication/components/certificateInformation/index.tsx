@@ -32,6 +32,8 @@ const CertificateInformation = props => {
   const { factoryPageStore } = useStores()
   const { uploadFiles } = factoryPageStore
   const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
+
+  const newEnterpriseId = isEmpty(enterpriseInfo) ? enterpriseId : enterpriseInfo.enterpriseId
   const [isCheck, setIsCheck] = useState<boolean>(false)
   const [cardId, setCardId] = useState(undefined)
   const [cardImageUrl, setCardImageUrl] = useState<string>('')
@@ -111,19 +113,19 @@ const CertificateInformation = props => {
       delete values.enterpriseName
       const enterpriseCredentialList = [
         {
-          businessId: enterpriseId,
+          businessId: newEnterpriseId,
           businessItemId: 'business_license',
           fileUrl: cardImageUrl,
           id: cardId
         },
         {
-          businessId: enterpriseId,
+          businessId: newEnterpriseId,
           businessItemId: 'legal_person_id_photo_face',
           fileUrl: positiveImageUrl,
           id: positiveId
         },
         {
-          businessId: enterpriseId,
+          businessId: newEnterpriseId,
           businessItemId: 'legal_person_id_photo_national',
           fileUrl: reverseImageUrl,
           id: reverseId
@@ -132,7 +134,7 @@ const CertificateInformation = props => {
       axios
         .post('/api/factory/enterprise/submit-enterprise-credential', {
           ...values,
-          enterpriseId,
+          enterpriseId: newEnterpriseId,
           enterpriseCredentialList
         })
         .then(response => {
@@ -146,46 +148,53 @@ const CertificateInformation = props => {
   }
 
   const getCertificationInfo = () => {
-    // const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
     axios
       .get('/api/factory/enterprise/get-enterprise-credential', {
-        enterpriseId: enterpriseId
+        enterpriseId: newEnterpriseId
       })
       .then(response => {
         const { success, data } = response
         if (success && !isEmpty(data)) {
           const { legalPersonIdNumber, legalPersonName, orgCode, enterpriseCredentialList } = data
-          let newCardUrl = { id: '', fileUrl: '' }
-          let newPositiveUrl = { id: '', fileUrl: '' }
-          let newReverseUrl = { id: '', fileUrl: '' }
-          if (!isEmpty(enterpriseCredentialList)) {
-            newCardUrl = enterpriseCredentialList.find(item => item.businessItemId === 'business_license') || {}
-            setCardImageUrl(newCardUrl.fileUrl)
-            setCardFileList([{ thumbUrl: newCardUrl.fileUrl }])
-            setCardId(newCardUrl.id)
-            newPositiveUrl = enterpriseCredentialList.find(item => item.businessItemId === 'legal_person_id_photo_face') || {}
-            setPositiveImageUrl(newPositiveUrl.fileUrl)
-            setPositiveFileList([{ thumbUrl: newPositiveUrl.fileUrl }])
-            setPositiveId(newPositiveUrl.id)
-            newReverseUrl = enterpriseCredentialList.find(item => item.businessItemId === 'legal_person_id_photo_national') || {}
-            setReverseImageUrl(newReverseUrl.fileUrl)
-            setReverseFileList([{ thumbUrl: newReverseUrl.fileUrl }])
-            setReverseId(newReverseUrl.id)
+          if (legalPersonIdNumber && legalPersonName && orgCode) {
+            let newCardUrl = { id: '', fileUrl: '' }
+            let newPositiveUrl = { id: '', fileUrl: '' }
+            let newReverseUrl = { id: '', fileUrl: '' }
+            if (!isEmpty(enterpriseCredentialList)) {
+              newCardUrl = enterpriseCredentialList.find(item => item.businessItemId === 'business_license') || {}
+              setCardImageUrl(newCardUrl.fileUrl)
+              setCardFileList([{ thumbUrl: newCardUrl.fileUrl }])
+              setCardId(newCardUrl.id)
+
+              newPositiveUrl = enterpriseCredentialList.find(item => item.businessItemId === 'legal_person_id_photo_face') || {}
+              setPositiveImageUrl(newPositiveUrl.fileUrl)
+              setPositiveFileList([{ thumbUrl: newPositiveUrl.fileUrl }])
+              setPositiveId(newPositiveUrl.id)
+
+              newReverseUrl = enterpriseCredentialList.find(item => item.businessItemId === 'legal_person_id_photo_national') || {}
+              setReverseImageUrl(newReverseUrl.fileUrl)
+              setReverseFileList([{ thumbUrl: newReverseUrl.fileUrl }])
+              setReverseId(newReverseUrl.id)
+            }
+            setFieldsValue({
+              legalPersonIdNumber,
+              legalPersonName,
+              orgCode,
+              enterpriseAdjunct: newCardUrl.fileUrl,
+              positive: newPositiveUrl.fileUrl,
+              reverse: newReverseUrl.fileUrl
+            })
           }
-          setFieldsValue({
-            legalPersonIdNumber,
-            legalPersonName,
-            orgCode,
-            enterpriseAdjunct: newCardUrl.fileUrl,
-            positive: newPositiveUrl.fileUrl,
-            reverse: newReverseUrl.fileUrl
-          })
         }
       })
   }
 
   useEffect(() => {
-    getCertificationInfo()
+    if (newEnterpriseId) {
+      getCertificationInfo()
+    } else {
+      message.warning('请先去完善企业信息！')
+    }
   }, [])
 
   return (

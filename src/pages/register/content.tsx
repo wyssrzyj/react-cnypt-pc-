@@ -78,10 +78,14 @@ const Register = () => {
       const values = await validateFields()
 
       delete values.pwd2
+
+      const encode = encodeURI(values.pwd)
+      // 对编码的字符串转化base64
+      const base64 = btoa(encode)
       const params = {
         code: values.code,
         mobilePhone: values.telInfo.mobilePhone,
-        password: values.pwd,
+        password: base64,
         userName: values.userName
       }
       const registerRes = await register(params)
@@ -113,9 +117,7 @@ const Register = () => {
         } else {
           const regFlag = userReg.test(value)
 
-          nHelps[key] = !regFlag
-            ? '请输入6-20位中文、英文或数字~'
-            : !flag && '用户名已注册~'
+          nHelps[key] = !regFlag ? '请输入6-20位中文、英文或数字~' : !flag && '用户名已注册~'
           nErrors[key] = !regFlag || !flag
         }
 
@@ -151,8 +153,7 @@ const Register = () => {
       case 'telInfo':
         const { telInfo } = allValues
         const { mobilePhone } = telInfo
-        const phoneReg =
-          /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
+        const phoneReg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
         let phoneFlag
         if (mobilePhone) {
           phoneFlag = await checkUser(mobilePhone, 'mobilePhone')
@@ -193,12 +194,7 @@ const Register = () => {
       <div>
         <div className={styles.title}>欢迎新用户注册</div>
       </div>
-      <Form
-        form={form}
-        scrollToFirstError={true}
-        className={styles.form}
-        onValuesChange={onValuesChange}
-      >
+      <Form form={form} scrollToFirstError={true} className={styles.form} onValuesChange={onValuesChange}>
         <Form.Item
           name="userName"
           label=""
@@ -241,12 +237,7 @@ const Register = () => {
         >
           <ConcatInput />
         </Form.Item>
-        <Form.Item
-          name="code"
-          label=""
-          trigger={'onChange'}
-          getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}
-        >
+        <Form.Item name="code" label="" trigger={'onChange'} getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}>
           <VerifyCodeInput tel={telInfo.mobilePhone} />
         </Form.Item>
         {/* 滑动验证 */}

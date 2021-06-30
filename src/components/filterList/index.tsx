@@ -91,14 +91,21 @@ const FilterList = props => {
     setActiveProcessing({})
   }
   const cutMainCategory = id => {
-    const current =
-      find(mainCategory, function (o) {
-        return o.id === id
-      }) || {}
-    setActiveMainCategory(id)
-    const newDeputyCategory = [{ id: '', name: '全部' }, ...current.children]
-    setDeputyCategory([...newDeputyCategory])
-    onFilterChange({ mainCategoryParentId: id, mainCategoryChildId: '' })
+    if (id) {
+      const current =
+        find(mainCategory, function (o) {
+          return o.id === id
+        }) || {}
+      setActiveMainCategory(id)
+      const newDeputyCategory = [{ id: '', name: '全部' }, ...current.children]
+      setDeputyCategory([...newDeputyCategory])
+      onFilterChange({ mainCategoryParentId: id, mainCategoryChildId: '' })
+      setActiveDeputyCategory({ id: '', name: '全部' })
+    } else {
+      setActiveMainCategory(id)
+      setDeputyCategory([])
+      onFilterChange({ mainCategoryParentId: '', mainCategoryChildId: '' })
+    }
   }
   const selectActiveArea = params => {
     if (activeArea.length >= 8) {
@@ -224,8 +231,9 @@ const FilterList = props => {
 
       setMainCategory([{ id: '', name: '全部' }, ...newData])
       // setActiveMainCategory(newData[0].id)
-      const newDeputyCategory = [...deputyCategory, ...newData[0].children]
-      setDeputyCategory([...newDeputyCategory])
+      // const newDeputyCategory = [...deputyCategory, ...newData[0].children]
+      // setDeputyCategory([...newDeputyCategory])
+      setDeputyCategory([])
     }
   }, [productCategoryList])
 
@@ -235,7 +243,6 @@ const FilterList = props => {
 
     const state: any = location.state || {}
     if (state && state.cityIds) {
-      console.log(toJS(allArea), 'toJS(allArea)')
       const t = toJS(allArea).find(i => i.value === state.cityIds[0]) //  目标省份
       if (t && t.children) {
         const target = t.children.find(i => i.value === state.cityIds[1])
@@ -249,8 +256,6 @@ const FilterList = props => {
       }
     }
   }, [])
-
-  console.log(activeArea, 'activeArea')
 
   return (
     <div className={styles.filterList}>

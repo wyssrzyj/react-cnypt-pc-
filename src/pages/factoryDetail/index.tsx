@@ -2,7 +2,7 @@ import React from 'react'
 import { useHistory } from 'react-router'
 import { useStores } from '@/utils/mobx'
 import { DetailHeader } from '@/components'
-import { FactoryInfo, FactoryIntroduce, EnterpriseHonesty } from './components'
+import { FactoryInfo, FactoryIntroduce, EnterpriseHonesty, SamplesShow } from './components'
 import styles from './index.module.less'
 
 const FactoryDetail = props => {
@@ -23,7 +23,7 @@ const FactoryDetail = props => {
         <FactoryInfo factoryId={params.id} />
         <FactoryIntroduce factoryId={params.id} />
         <EnterpriseHonesty />
-        {/* <SamplesShow /> */}
+        <SamplesShow />
       </div>
     </div>
   )

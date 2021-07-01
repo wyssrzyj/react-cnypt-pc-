@@ -25,7 +25,7 @@ const LoginContent = () => {
   const pwdPlaceholder = '请输入登录密码'
 
   const { loginStore } = useStores()
-  const { login, verifyCode } = loginStore
+  const { login, verifyCode, userInfo } = loginStore
   const history = useHistory()
 
   const errorTexts = new Map()
@@ -82,6 +82,8 @@ const LoginContent = () => {
             loginType: 'password'
           }
     const res = await login(params)
+    const info = await userInfo()
+    console.log('🚀 ~ file: content.tsx ~ line 86 ~ submit ~ info', info)
     setError(!res.success)
     if (res.success) {
       history.push('/platform/home')
@@ -126,23 +128,16 @@ const LoginContent = () => {
                 prefix={<UserIcon />}
                 className={styles.input}
                 placeholder="手机号"
-                onChange={(event: InputEvent) =>
-                  valueChange(event, 'phoneNumer')
-                }
+                onChange={(event: InputEvent) => valueChange(event, 'phoneNumer')}
               />
               <div className={styles.verificationBox}>
                 <Input
                   prefix={<PwdIcon />}
                   className={styles.verification}
                   placeholder="验证码"
-                  onChange={(event: InputEvent) =>
-                    valueChange(event, 'verification')
-                  }
+                  onChange={(event: InputEvent) => valueChange(event, 'verification')}
                 />
-                <Button
-                  className={styles.getVerification}
-                  onClick={getVerification}
-                >
+                <Button className={styles.getVerification} onClick={getVerification}>
                   获取验证码
                 </Button>
               </div>
@@ -154,19 +149,10 @@ const LoginContent = () => {
             <a>忘记密码</a>
           </div>
 
-          <Button
-            disabled={disabled}
-            type={'primary'}
-            className={styles.btn}
-            onClick={submit}
-          >
+          <Button disabled={disabled} type={'primary'} className={styles.btn} onClick={submit}>
             登录
           </Button>
-          <div
-            className={classNamess(styles.errorText, error && styles.showError)}
-          >
-            {errorTexts.get(0)}
-          </div>
+          <div className={classNamess(styles.errorText, error && styles.showError)}>{errorTexts.get(0)}</div>
         </div>
       </div>
     </div>

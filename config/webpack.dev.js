@@ -12,7 +12,7 @@ const lessModuleRegex = /\.module\.less$/
 
 const config = merge(common, {
   mode: 'development',
-  devtool: 'cheap-source-map',
+  // devtool: 'cheap-inline-source-map',
   target: 'web',
   module: {
     rules: [

@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Tabs, Table } from 'antd'
+import { Tabs, Table, Empty } from 'antd'
 import classNames from 'classnames'
-import { find, isNil, isArray } from 'lodash'
-import SwiperCore, {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay
-} from 'swiper'
+import { find, isNil, isArray, isEmpty } from 'lodash'
+import { useStores, observer } from '@/utils/mobx'
+import { toJS } from 'mobx'
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper'
 
 import Swiper from 'swiper'
 import axios from '@/utils/axios'
@@ -29,24 +25,24 @@ const tabList = [
 ]
 const introductionMap = [
   { value: 'yearOutputValue', label: '年交易额' },
-  { value: 'staffNumber', label: '员工总数' },
+  // { value: 'staffNumber', label: '员工总数' },
   { value: 'productLineNum', label: '生产流水线' },
-  { value: 'factoryArea', label: '厂房面积' },
-  { value: 'supportDesign', label: '支持打样' },
-  { value: 'totalLocation', label: '加工设备' },
-  { value: 'manufactureBrand', label: '代工品牌' },
-  { value: 'factoryBrand', label: '商标/品牌' },
-  { value: 'factoryCertificateLabels', label: '资质证书' }
+  { value: 'factoryArea', label: '厂房面积' }
+  // { value: 'supportDesign', label: '支持打样' },
+  // { value: 'totalLocation', label: '加工设备' },
+  // { value: 'manufactureBrand', label: '代工品牌' },
+  // { value: 'factoryBrand', label: '商标/品牌' },
+  // { value: 'factoryCertificateLabels', label: '资质证书' }
 ]
 
 const abilityMap = [
-  { value: 'staffNumber', label: '生产人数' },
-  { value: 'qcPersonNumber', label: '检验人数' },
-  { value: 'yearOutputProd', label: '年产值' },
-  { value: 'designPersonNumber', label: '打样人员数' },
-  { value: 'qcGroupType', label: '检验小组' },
-  { value: 'materialSupplyTime', label: '原材料供应时间' },
-  { value: 'craft', label: '特殊工艺' }
+  // { value: 'staffNumber', label: '生产人数' },
+  // { value: 'qcPersonNumber', label: '检验人数' },
+  { value: 'yearOutputProd', label: '年产值' }
+  // { value: 'designPersonNumber', label: '打样人员数' },
+  // { value: 'qcGroupType', label: '检验小组' },
+  // { value: 'materialSupplyTime', label: '原材料供应时间' },
+  // { value: 'craft', label: '特殊工艺' }
 ]
 const conditionMap = [
   { value: 'customMoq', label: '定制起订量' },
@@ -61,31 +57,19 @@ const conditionMap = [
 
 const TableComponent = props => {
   const { activeKey, current } = props
-  const currentMap =
-    activeKey === 'introduction'
-      ? introductionMap
-      : activeKey === 'ability'
-      ? abilityMap
-      : conditionMap
+  const currentMap = activeKey === 'introduction' ? introductionMap : activeKey === 'ability' ? abilityMap : conditionMap
   return (
     <>
       {activeKey === 'introduction' && <div>{current.enterpriseDesc}</div>}
       <div className={styles.introduceInfo}>
-        <ul
-          className={classNames(styles.introduceBox, styles.introduceBoxLeft)}
-        >
+        <ul className={classNames(styles.introduceBox, styles.introduceBoxLeft)}>
           {currentMap.map((item, index) => {
             const name = isNil(current[item.value]) ? undefined : item.label
             let newValue
-            if (
-              item.value === 'supportDesign' ||
-              item.value === 'hasVatInvoice'
-            ) {
+            if (item.value === 'supportDesign' || item.value === 'hasVatInvoice') {
               newValue = current[item.value] ? '是' : '否'
             } else if (item.value === 'factoryCertificateLabels') {
-              newValue = isArray(current[item.value])
-                ? current[item.value].join('、')
-                : current[item.value]
+              newValue = isArray(current[item.value]) ? current[item.value].join('、') : current[item.value]
             } else {
               newValue = current[item.value]
             }
@@ -110,16 +94,20 @@ const TableComponent = props => {
   )
 }
 const WorkshopEquipment = props => {
-  const {
-    current: { equipment }
-  } = props
   const rowKey = 'id'
+  const {
+    current: { equipment = [] }
+  } = props
+  const imgList = equipment.map(item => item.imageUrl)
 
   const columns = [
     {
       title: '设备名',
       dataIndex: 'name',
-      key: 'name'
+      key: 'name',
+      render: value => {
+        return value.label
+      }
     },
     {
       title: '数量',
@@ -139,7 +127,7 @@ const WorkshopEquipment = props => {
   ]
   useEffect(() => {
     new Swiper('.mySwiper', {
-      slidesPerView: 3,
+      slidesPerView: imgList.length > 3 ? 3 : imgList.length,
       spaceBetween: 20,
       centeredSlides: true,
       centeredSlidesBounds: true,
@@ -152,39 +140,27 @@ const WorkshopEquipment = props => {
   }, [])
   return (
     <div>
-      <Table
-        rowKey={rowKey}
-        dataSource={equipment}
-        columns={columns}
-        pagination={false}
-      />
+      <Table rowKey={rowKey} dataSource={equipment} columns={columns} pagination={false} />
       <div className={styles.swiperBox}>
         <div className="swiper-container equipmentSwiper  mySwiper">
           <div className="swiper-wrapper">
-            <div className={'swiper-slide'}>
-              <img
-                className="swiper-img"
-                src={require('@/static/images/u1495.png')}
-              />
+            {imgList.map((item, index) => (
+              <div key={index} className={'swiper-slide'}>
+                <img className="swiper-img" src={item} />
+              </div>
+            ))}
+            {/* <div className={'swiper-slide'}>
+              <img className="swiper-img" src={require('@/static/images/u1495.png')} />
             </div>
             <div className={'swiper-slide'}>
-              <img
-                className="swiper-img"
-                src={require('@/static/images/u1496.png')}
-              />
+              <img className="swiper-img" src={require('@/static/images/u1496.png')} />
             </div>
             <div className={'swiper-slide'}>
-              <img
-                className="swiper-img"
-                src={require('@/static/images/u1497.png')}
-              />
+              <img className="swiper-img" src={require('@/static/images/u1497.png')} />
             </div>
             <div className={'swiper-slide'}>
-              <img
-                className="swiper-img"
-                src={require('@/static/images/u1497.png')}
-              />
-            </div>
+              <img className="swiper-img" src={require('@/static/images/u1497.png')} />
+            </div> */}
           </div>
           <div className="swiper-button-next"></div>
           <div className="swiper-button-prev"></div>
@@ -199,27 +175,27 @@ const QualificationCertificate = props => {
   const {
     current: { certificate = [] }
   } = props
-  console.log(
-    '🚀 ~ file: index.tsx ~ line 202 ~ QualificationCertificate ~ current',
-    certificate
-  )
   return (
     <div className={styles.qualificationCertificate}>
-      {certificate.map(item => (
-        <div key={item.certificationName} className={styles.certificateBox}>
-          <img
-            className={styles.certificateImg}
-            src={require('@/static/images/u994.png')}
-          />
-          <span>{item.certificationLabel}</span>
-        </div>
-      ))}
+      {isEmpty(certificate) ? (
+        <Empty />
+      ) : (
+        certificate.map(item => (
+          <div key={item.id} className={styles.certificateBox}>
+            <img className={styles.certificateImg} src={item.certificateImageURI} />
+            <span>{item.certificationName.label}</span>
+          </div>
+        ))
+      )}
     </div>
   )
 }
 
 const FactoryIntroduce = props => {
   const { factoryId } = props
+  const { commonStore } = useStores()
+  const { dictionary } = commonStore
+  const { factoryYearOutputValue = [], factoryYearOutputProd = [], factoryCertificate = [], factoryEquipmentType = [] } = toJS(dictionary)
   const [activeTab, setActiveTab] = useState('introduction')
   const [introductions, setIntroductions] = useState<any>({})
   const [ability, setAbility] = useState<any>({})
@@ -250,40 +226,68 @@ const FactoryIntroduce = props => {
 
   // 企业简介
   const getIntroduction = async () => {
-    const response = await axios.get(
-      '/api/factory/enterprise/get-by-factory-id',
-      {
-        factoryId
-      }
-    )
+    const response = await axios.get('/api/factory/enterprise/get-by-factory-id', {
+      factoryId
+    })
     const { success, data = {} } = response
     if (success) {
-      setIntroductions({ ...data })
-      setCurrentObj({ ...data })
+      const { yearOutputValue, staffNumber = '', factoryArea, productLineNum, totalLocation } = data
+      const newValue = factoryYearOutputValue.find(item => item.value === yearOutputValue) || {}
+      const newNumber = !isNil(staffNumber) ? staffNumber.split(',') : [0, 0]
+      setIntroductions({
+        ...data,
+        yearOutputValue: newValue.label,
+        staffNumber: `${newNumber[0]}人 ~ ${newNumber[1]}人`,
+        factoryArea: `${factoryArea}平米`,
+        productLineNum: `${productLineNum}条`,
+        totalLocation: `${totalLocation}台`
+      })
+      setCurrentObj({
+        ...data,
+        yearOutputValue: newValue.label,
+        staffNumber: `${newNumber[0]}人 ~ ${newNumber[1]}人`,
+        factoryArea: `${factoryArea}平米`,
+        productLineNum: `${productLineNum}条`,
+        totalLocation: `${totalLocation}台`
+      })
     }
   }
   //生产能力
   const getAbility = async () => {
-    const response = await axios.get(
-      '/api/factory/info/get-capacity-factory-id',
-      {
-        factoryId
-      }
-    )
+    const response = await axios.get('/api/factory/info/get-capacity-factory-id', {
+      factoryId
+    })
     const { success, data = {} } = response
     if (success) {
-      setAbility({ ...data })
+      const { staffNumber = '', qcPersonNumber, yearOutputProd, designPersonNumber, materialSupplyTime } = data
+      const newNumber = !isNil(staffNumber) ? staffNumber.split(',') : [0, 0]
+      const newValue = factoryYearOutputProd.find(item => item.value === yearOutputProd) || {}
+      setAbility({
+        ...data,
+        staffNumber: `${newNumber[0]}人 ~ ${newNumber[1]}人`,
+        qcPersonNumber: `${qcPersonNumber}人`,
+        yearOutputProd: newValue.label,
+        designPersonNumber: `${designPersonNumber}人`,
+        materialSupplyTime: `${materialSupplyTime}天`
+      })
     }
   }
 
   // 合作条件
   const getCooperation = async () => {
     const response = await axios.get('/api/factory/cooperation-condition/get', {
-      id: '1398111476140589058'
+      id: factoryId
     })
     const { success, data = {} } = response
     if (success) {
-      setConditions({ ...data })
+      const { customMoq, oemMoq, invoicePoint, shortestDeliveryTime } = data
+      setConditions({
+        ...data,
+        customMoq: `${customMoq}件`,
+        oemMoq: `${oemMoq}件`,
+        invoicePoint: `${invoicePoint}%`,
+        shortestDeliveryTime: `${shortestDeliveryTime}天`
+      })
     }
   }
   // 车间设备
@@ -294,53 +298,53 @@ const FactoryIntroduce = props => {
     const { success, data = {} } = response
     if (success) {
       const { records } = data
-      setEquipments([...records])
+      const newList = records.map(item => ({
+        ...item,
+        name: factoryEquipmentType.find(o => o.value === item.type) || {}
+      }))
+      setEquipments([...newList])
     }
   }
   // 资质证书
   const getCertificate = async () => {
-    const response = await axios.get(
-      '/api/factory/factory-certificate/list-factory-id',
-      {
-        factoryId
-      }
-    )
+    const response = await axios.post('/api/factory/factory-certificate/list', {
+      factoryId
+    })
     const { success, data = {} } = response
     if (success) {
-      setCertificate([...data])
+      const { records = [] } = data
+      const newData = records.map(item => ({
+        ...item,
+        certificationName: factoryCertificate.find(o => o.value === item.certificationName) || {}
+      }))
+      setCertificate([...newData])
     }
   }
 
   useEffect(() => {
-    getIntroduction()
-    getCooperation()
-    getAbility()
-    getEquipment()
-    getCertificate()
-  }, [])
+    if (dictionary) {
+      getIntroduction()
+      getCooperation()
+      getAbility()
+      getEquipment()
+      getCertificate()
+    }
+  }, [dictionary])
   return (
     <div className={styles.factoryIntroduce}>
       <Tabs activeKey={activeTab} tabBarGutter={20} onChange={onTabChange}>
         {tabList.map(item => (
           <TabPane tab={item.value} key={item.key}>
             <div className={styles.introduceContent}>
-              <h2 className={styles.introduceTitle}>
-                {find(tabList, tab => tab.key === activeTab).value}
-              </h2>
+              <h2 className={styles.introduceTitle}>{find(tabList, tab => tab.key === activeTab).value}</h2>
               {/* 企业简介 生产能力 合作条件 */}
-              {(activeTab === 'introduction' ||
-                activeTab === 'ability' ||
-                activeTab === 'condition') && (
+              {(activeTab === 'introduction' || activeTab === 'ability' || activeTab === 'condition') && (
                 <TableComponent activeKey={activeTab} current={currentObj} />
               )}
               {/* 车间设备 */}
-              {activeTab === 'equipment' && (
-                <WorkshopEquipment current={currentObj} />
-              )}
+              {activeTab === 'equipment' && <WorkshopEquipment current={currentObj} />}
               {/* 资质证书 */}
-              {activeTab === 'certificate' && (
-                <QualificationCertificate current={currentObj} />
-              )}
+              {activeTab === 'certificate' && <QualificationCertificate current={currentObj} />}
             </div>
           </TabPane>
         ))}
@@ -349,4 +353,4 @@ const FactoryIntroduce = props => {
   )
 }
 
-export default FactoryIntroduce
+export default observer(FactoryIntroduce)

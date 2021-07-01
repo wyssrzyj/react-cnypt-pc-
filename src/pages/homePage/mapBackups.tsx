@@ -317,7 +317,6 @@ const GDMap = (props: any) => {
           enable: false
         },
         drillDownEvent: ev => {
-          console.log(ev, '~~~~~')
           setPopShow(false)
           setPopUpShow(false)
 

@@ -15,7 +15,6 @@ const AreaModal = props => {
   const [cityTree, setCityTree] = useState<any>([...newAllArea[0].children])
   const [activeCity, setActiveCity] = useState<any>([...selectedCity])
   const [activeProvince, setActiveProvince] = useState<string>(newAllArea[0].value)
-
   const selectProvince = id => {
     setActiveProvince(id)
     const currentCity = newAllArea.find(tree => tree.value === id) || {}
@@ -26,7 +25,7 @@ const AreaModal = props => {
     if (activeCity.length >= 8) {
       message.error('最多可选8个地区')
     } else {
-      const index = activeCity.findIndex(city => city.value === params.id)
+      const index = activeCity.findIndex(city => city.id === params.id)
       if (index < 0) {
         activeCity.push(params)
       } else {

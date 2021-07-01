@@ -3,11 +3,6 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 import Loadable from '@/utils/loadable'
 
-// home
-const Home = Loadable({
-  loader: () => import('@/pages/home')
-})
-
 // homePage 地图
 const HomePage = Loadable({
   loader: () => import('@/pages/homePage')
@@ -61,9 +56,8 @@ const Excel = Loadable({
 const RouteList = () => {
   return (
     <Switch>
-      <Route path="/platform" component={Platform} />
-      <Route path="/home" component={Home} />
-      <Route path="/home-page" component={HomePage} />
+      <Route path="/home" component={HomePage} />
+      <Route path="/factory-search" component={Platform} />
       <Route path="/note" component={Note} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
@@ -72,7 +66,7 @@ const RouteList = () => {
       <Route path="/control-panel" component={ControlPanel} />
       <Route path="/GDMap" component={GDMap} />
       <Route path="/excel" component={Excel} />
-      <Redirect to="/platform" />
+      <Redirect to="/home" />
     </Switch>
   )
 }

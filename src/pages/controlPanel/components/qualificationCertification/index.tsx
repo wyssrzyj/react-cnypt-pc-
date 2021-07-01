@@ -6,6 +6,7 @@ import moment from 'moment'
 import { useStores } from '@/utils/mobx'
 import axios from '@/utils/axios'
 import { get, find, isEmpty } from 'lodash'
+import { getUserInfo } from '@/utils/tool'
 import QualificationModal from '../qualificationModal'
 import styles from './index.module.less'
 
@@ -24,6 +25,11 @@ const rowKey = 'id'
 
 const QualificationCertification = () => {
   const pageSize = 5
+  const currentUser = getUserInfo() || {}
+  const { factoryId } = currentUser
+  const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
+
+  const newFactoryId = isEmpty(enterpriseInfo) ? factoryId : enterpriseInfo.factoryId
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const { factoryCertificate = [] } = toJS(dictionary)
@@ -64,9 +70,7 @@ const QualificationCertification = () => {
       sorter: true,
       render: (value, row) => {
         const { neverExpire } = row
-        const date = neverExpire
-          ? '永久有效'
-          : moment(value).format('YYYY年MM月DD日')
+        const date = neverExpire ? '永久有效' : moment(value).format('YYYY年MM月DD日')
         return date
       }
     },
@@ -101,17 +105,11 @@ const QualificationCertification = () => {
         const name = newName.label
         return (
           <div className={styles.operationBox}>
-            <a
-              className={styles.boxItem}
-              onClick={() => operationCertificate(id, 'edit')}
-            >
+            <a className={styles.boxItem} onClick={() => operationCertificate(id, 'edit')}>
               编辑
             </a>
             {(status == 3 || status === 2) && (
-              <a
-                className={styles.boxItem}
-                onClick={() => deleteCertificate(id, name)}
-              >
+              <a className={styles.boxItem} onClick={() => deleteCertificate(id, name)}>
                 删除
               </a>
             )}
@@ -128,7 +126,7 @@ const QualificationCertification = () => {
         pageNum,
         pageSize,
         status: activeTab,
-        factoryId: 1,
+        factoryId: newFactoryId,
         sortField,
         sortType
       })
@@ -179,13 +177,11 @@ const QualificationCertification = () => {
       okText: '确认',
       cancelText: '取消',
       onOk: () => {
-        axios
-          .delete('/api/factory/factory-certificate/delete', { id })
-          .then(response => {
-            const { success, msg } = response
-            message[success ? 'success' : 'error'](msg)
-            success && getQualificationList()
-          })
+        axios.delete('/api/factory/factory-certificate/delete', { id }).then(response => {
+          const { success, msg } = response
+          message[success ? 'success' : 'error'](msg)
+          success && getQualificationList()
+        })
       }
     })
   }
@@ -196,19 +192,10 @@ const QualificationCertification = () => {
 
   return (
     <div className={styles.qualificationCertification}>
-      <Button
-        onClick={addQualification}
-        className={styles.addButton}
-        type="primary"
-      >
+      <Button onClick={addQualification} className={styles.addButton} type="primary">
         新增资质
       </Button>
-      <Tabs
-        type="card"
-        size="large"
-        activeKey={activeTab}
-        onChange={onTabChange}
-      >
+      <Tabs type="card" size="large" activeKey={activeTab} onChange={onTabChange}>
         {tabMaps.map(tab => (
           <TabPane tab={tab.label} key={tab.value}>
             <Table
@@ -232,6 +219,7 @@ const QualificationCertification = () => {
         <QualificationModal
           visible={isModalVisible}
           type={operationType}
+          factoryId={newFactoryId}
           current={currentData}
           handleOk={getQualificationList}
           handleCancel={() => setIsModalVisible(false)}

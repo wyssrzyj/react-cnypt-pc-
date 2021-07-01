@@ -1,0 +1,129 @@
+.intelligenceInner {
+    width: 1200px;
+    margin: -175px auto 0;
+    display: flex;
+  }
+
+  .customCascader {
+    position: relative;
+    height: 42px;
+    margin-bottom: 24px;
+    padding-left: 16px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #FFFFFF;
+    background: rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      //  border: 1px solid #40a9ff;
+    }
+
+    .inputIcon {
+      margin-right: 4px;
+    }
+
+    :global {
+      .ant-cascader-picker-clear {
+        background: transparent;
+        color: #FFFFFF;
+      }
+      .ant-cascader-picker {
+        width: 100%;
+        background: initial;
+      }
+
+      .ant-cascader-picker-label {
+        color: #fff !important;
+      }
+
+      input {
+        background: initial;
+        border: none;
+        outline: none;
+        color: #fff !important;
+      }
+    }
+  }
+
+  .intelligenceLeft {
+    width: 474px;
+    padding: 64px 48px 48px 48px;
+    background: #3B80FF;
+  }
+
+  .intelligenceRight {
+    width: 726px;
+    // background: yellowgreen;
+
+    .intellImg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .inputIcon {
+    color: #fff;
+    font-size: 14px;
+  }
+
+  .input {
+    margin-bottom: 24px;
+    padding-left: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    caret-color:#fff;
+
+    :global {
+      .ant-input {
+        margin-left: 8px;
+        background: initial;
+        color: #fff !important;
+      }
+    }
+  }
+
+  .searchImg {
+    display: block;
+    width: 84px;
+  }
+
+  .searchBtn {
+    margin-top: 60px;
+    display: block;
+    width: 100%;
+    height: 50px;
+    font-size: 18px;
+    background: #353535;
+    color: #fff;
+    border: none;
+  }
+
+  .searchTitle {
+    margin: 64px 0 32px;
+    font-size: 32px;
+    font-weight: 500;
+    color: #FFFFFF;
+  }
+
+  :global {
+    .cascaderPopup {
+      /* 设置滚动条的样式 */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      /* 滚动槽 */
+      ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(24, 144, 255, 0.1);
+        border-radius: 10px;
+      }
+      /* 滚动条滑块 */
+      ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: rgba(0,0,0,0.1);
+        -webkit-box-shadow: inset 0 0 6px rgba(24, 144, 255, 0.1);
+      }
+      ::-webkit-scrollbar-thumb:window-inactive {
+       background: rgb(239, 239, 239);
+      }
+    }
+  }

@@ -43,8 +43,8 @@ const PeriodValidity = props => {
 const QualificationModal = props => {
   const [form] = Form.useForm()
   const { validateFields } = form
-  const { visible, handleCancel, handleOk, type, current = {} } = props
-  const { certificationCode, certificationName, expiryDate, neverExpire, certificateImageURI } = current
+  const { visible, handleCancel, handleOk, type, current = {}, factoryId } = props
+  const { certificationCode, certificationName, expiryDate = new Date().valueOf(), neverExpire, certificateImageURI } = current
   const newExpiryDate = neverExpire ? '1' : expiryDate
   const initialValues = {
     certificationCode,
@@ -76,10 +76,10 @@ const QualificationModal = props => {
       }
       delete values.qualification
       axios
-        .post(' /api/factory/factory-certificate/save', {
+        .post('/api/factory/factory-certificate/save', {
           ...values,
           neverExpire,
-          factoryId: 1,
+          factoryId,
           certificateImageURI: imageUrl,
           status: 1
         })

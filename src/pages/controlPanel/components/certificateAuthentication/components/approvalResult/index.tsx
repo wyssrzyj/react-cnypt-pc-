@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Result, Button } from 'antd'
 import { get } from 'lodash'
 import axios from '@/utils/axios'
+import { getUserInfo } from '@/utils/tool'
 
 const titleMap = {
   pending: '提交成功，请等待审批',
@@ -13,6 +14,7 @@ const statusMap = { '0': 'noPass', '1': 'approval', '2': 'pending' }
 
 const ApprovalResult = props => {
   const { submit } = props
+  const currentUser = getUserInfo() || {}
   const [status, setStatus] = useState('pending')
   const [start, setStart] = useState(0)
   const [end, setEnd] = useState(2)
@@ -29,13 +31,14 @@ const ApprovalResult = props => {
         const { success, data } = response
         if (success) {
           const { approvalStatus, approvalDesc } = data
+          const newCurrentUser = { ...currentUser, approvalStatus }
+          localStorage.setItem('userInfo', JSON.stringify(newCurrentUser))
           const newStatus = get(statusMap, approvalStatus)
           setStatus(newStatus)
           setStart(newStatus === 'approval' ? 1 : 0)
           setEnd(newStatus === 'noPass' ? 1 : 2)
           setSubTitleMap({
-            pending:
-              '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',
+            pending: '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',
             approval: '恭喜您，企业信息审核通过，已为您开通企业权限。',
             noPass: (
               <div style={{ width: 464, margin: 'auto', textAlign: 'left' }}>

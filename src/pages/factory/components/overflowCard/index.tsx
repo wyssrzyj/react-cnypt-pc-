@@ -14,10 +14,11 @@ import SwiperCore, {
 } from 'swiper'
 
 import Swiper from 'swiper'
-import { transformProduceNumber } from '@/utils/tool'
+// import { transformProduceNumber } from '@/utils/tool'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
+import u1190 from '@/static/images/u1190.png'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
@@ -26,9 +27,10 @@ const OverflowCard = props => {
     factoryId,
     factoryName,
     factoryDistrict,
-    staffNumber,
+    effectiveLocation = '0',
     factoryCategoryList = [],
-    prodTypeList = []
+    prodTypeList = [],
+    pictureUrl
   } = props
 
   const history = useHistory()
@@ -37,7 +39,7 @@ const OverflowCard = props => {
   }
   const { commonStore } = useStores()
   const { dictionary } = commonStore
-  const allProdTypeList = toJS(dictionary).prodType
+  const allProdTypeList = toJS(dictionary).prodType || []
 
   useEffect(() => {
     new Swiper('.mySwiper', {
@@ -61,9 +63,9 @@ const OverflowCard = props => {
       <div className={styles.factoryInfo}>
         <img
           className={styles.factoryImg}
-          src={require('@/static/images/u1190.png')}
+          src={pictureUrl ? pictureUrl : u1190}
         />
-        <div>
+        <div className={styles.detail}>
           <div>
             <a className={styles.factoryName} onClick={goToDetail}>
               {factoryName}
@@ -82,36 +84,39 @@ const OverflowCard = props => {
           </div>
           <ul className={styles.factoryInfoList}>
             <li>
-              <span>生产人数：</span>
-              <span>{transformProduceNumber(staffNumber)}</span>
+              <span>有效车位：</span>
+              <span>{effectiveLocation ? effectiveLocation : '0'}人</span>
             </li>
             <li>
               <span>主要生产：</span>
               <span>
-                {isArray(factoryCategoryList) && factoryCategoryList.join('、')}
+                {isArray(factoryCategoryList)
+                  ? factoryCategoryList.join('、')
+                  : '待完善'}
               </span>
             </li>
             <li>
               <span>加工类型：</span>
               <span>
-                {isArray(prodTypeList) &&
-                  allProdTypeList
-                    .filter(function (val) {
-                      return (
-                        findIndex(prodTypeList, function (o) {
-                          return o.processType == val.value
-                        }) > -1
-                      )
-                    })
-                    .map(item => item.label)
-                    .join('、')}
+                {isArray(prodTypeList)
+                  ? allProdTypeList
+                      .filter(function (val) {
+                        return (
+                          findIndex(prodTypeList, function (o) {
+                            return o.processType == val.value
+                          }) > -1
+                        )
+                      })
+                      .map(item => item.label)
+                      .join('、')
+                  : '待完善'}
               </span>
               {}
             </li>
           </ul>
         </div>
       </div>
-      <div className={styles.swiperBox}>
+      {/* <div className={styles.swiperBox}>
         <div className="swiper-container mySwiper">
           <div className="swiper-wrapper">
             <div className={'swiper-slide'}>
@@ -137,7 +142,7 @@ const OverflowCard = props => {
           <div className="swiper-button-prev"></div>
           <div className="swiper-pagination"></div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

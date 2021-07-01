@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Badge } from 'antd'
+import { Badge, message } from 'antd'
 import moment from 'moment'
 import { toJS } from 'mobx'
 import { filter, find } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import axios from '@/utils/axios'
-import { Icon } from '@/components'
-// import { getCurrentUser } from '@/utils/tool'
+import { Icon, autoAddTooltip } from '@/components'
+import { getUserInfo } from '@/utils/tool'
 import styles from './index.module.less'
 
 const productionModeOptions = [
@@ -30,26 +30,27 @@ const typeOptions = [
 ]
 
 const FactoryReport = () => {
-  // const currentUser = getCurrentUser() || {}
-  // const { factoryId = '1' } = currentUser
+  const currentUser = getUserInfo() || {}
+  const { factoryId } = currentUser
   const { commonStore, factoryStore } = useStores()
   const { dictionary } = commonStore
   const { productCategoryList } = factoryStore
   const { factoryYearOutputValue = [], factoryYearOutputProd = [] } = toJS(dictionary)
-  const newList = toJS(productCategoryList)
-  const childList = newList.reduce((prev, item) => {
-    prev.push(...item.childList)
-    return prev
-  }, [])
 
   const [currentFactory, setCurrentFactory] = useState<any>({})
   const [mainList, setMainList] = useState<any>([])
   const [orderType, setOrderType] = useState<any>([])
-  const [inspectionMember, setInspectionMember] = useState<any>({})
+  // const [inspectionMember, setInspectionMember] = useState<any>([])
   const [validationTime, setValidationTime] = useState('')
+  const [memberText, setMemberText] = useState('')
 
   const getFactoryInfo = () => {
-    axios.get('/api/factory/info/get-factory-data', { factoryId: 1 }).then(response => {
+    const newList = toJS(productCategoryList)
+    const childList = newList.reduce((prev, item) => {
+      prev.push(...item.children)
+      return prev
+    }, [])
+    axios.get('/api/factory/info/get-factory-data', { factoryId }).then(response => {
       const { success, data } = response
       if (success) {
         const { mainCategoriesList, factoryProcessTypeList } = data
@@ -71,13 +72,22 @@ const FactoryReport = () => {
     })
   }
   const getInspectionMember = () => {
-    axios.get('/api/factory/info/get-audit-info', { factoryId: 1 }).then(response => {
+    axios.get('/api/factory/info/get-audit-info', { factoryId }).then(response => {
       const { success, data } = response
       if (success) {
-        const { auditPersonInfo, factoryAuditTime } = data
-        setInspectionMember({ ...auditPersonInfo })
-        setValidationTime(factoryAuditTime)
+        const { auditPersonInfoList, factoryRealAuditTime } = data
+        // setInspectionMember([...auditPersonInfoList])
+        setValidationTime(factoryRealAuditTime)
+
+        const text = auditPersonInfoList.map(item => `${item.userName}（${item.phoneNumber}）`).join('、')
+        setMemberText(text)
       }
+    })
+  }
+  const applyInspection = () => {
+    axios.get('/api/factory/info/update-factory-auditor-status', { factoryId }).then(response => {
+      const { success, msg } = response
+      message[success ? 'success' : 'error'](msg)
     })
   }
 
@@ -90,11 +100,20 @@ const FactoryReport = () => {
   return (
     <div className={styles.factoryReport}>
       <header className={styles.header}>
-        <span>
-          工厂由 {inspectionMember.userName}（{inspectionMember.phoneNumber}） 于{' '}
-          {validationTime ? moment(validationTime).format('YYYY/MM/DD') : '--'} 经过实地验厂
-        </span>
-        <div className={styles.button}>
+        <div className={styles.details}>
+          工厂由
+          {memberText &&
+            autoAddTooltip(
+              ref => (
+                <div ref={ref} className={styles.tooltipBpx}>
+                  {memberText}
+                </div>
+              ),
+              { title: memberText }
+            )}
+          于{validationTime ? moment(validationTime).format('YYYY/MM/DD') : '--'} 经过实地验厂
+        </div>
+        <div className={styles.button} onClick={applyInspection}>
           <Icon type="jack-ycsq" className={styles.factoryIcon} />
           <span>申请验厂</span>
         </div>

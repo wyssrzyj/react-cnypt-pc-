@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Input, Select, Checkbox, TreeSelect, Radio, InputNumber } from 'antd'
-import { DataNode } from '_rc-tree@4.1.5@rc-tree/lib/interface'
 import FormSwitch from './FormSwitch'
 import './index.less'
 import InputConcatSelect from './InputConcatSelect'
@@ -42,7 +41,7 @@ export type Props = {
   /**
    * @description TreeSelect的数据
    */
-  treeData?: DataNode[] | undefined
+  treeData?: any
   /**
    * @description 输入框后缀
    */

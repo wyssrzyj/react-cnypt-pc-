@@ -140,7 +140,6 @@ const Operate = props => {
 
   const keyChange = event => {
     const { activeIndex } = event
-    console.log('🚀 ~ file: index.tsx ~ line 185 ~ activeIndex', activeIndex)
     setCurKey(activeIndex)
   }
 

@@ -45,8 +45,8 @@ const updateTimeMap = [
 
 const FilterList = props => {
   const history = useHistory()
-  const { types, onFilterChange } = props
-  console.log('🚀 ~ file: index.tsx ~ line 49 ~ types', types)
+  // const { types, onFilterChange } = props
+  const { onFilterChange } = props
   const { factoryStore, commonStore } = useStores()
   const { dictionary, allArea } = commonStore
   const { prodType = [], factoryEffectiveLocation = [] } = toJS(dictionary)

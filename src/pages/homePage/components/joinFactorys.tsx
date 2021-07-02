@@ -1,4 +1,4 @@
-import React, { useRef, useState, useLayoutEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styles from './joinFactorys.module.less'
 import classNames from 'classnames'
 import IMG1 from '../img/focus1.png'
@@ -56,27 +56,6 @@ const JoinFactorys = props => {
   const rightRef = useRef<HTMLDivElement>()
   const [curKey, setCurKey] = useState(1)
 
-  useLayoutEffect(() => {
-    new SwiperCore('.factorySwiper', {
-      slidesPerView: 3,
-      spaceBetween: 0,
-      centeredSlides: true,
-      centeredSlidesBounds: true,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      },
-      loop: false,
-      on: {
-        slideChange: keyChange
-      }
-      // autoplay: {
-      //   delay: 2000,
-      //   disableOnInteraction: true,
-      // },
-    })
-  }, [])
-
   const datas = [
     {
       id: 8,
@@ -116,6 +95,27 @@ const JoinFactorys = props => {
     }
   ]
 
+  useEffect(() => {
+    new SwiperCore('.factorySwiper', {
+      slidesPerView: 3,
+      spaceBetween: 0,
+      centeredSlides: true,
+      centeredSlidesBounds: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+      },
+      loop: false,
+      on: {
+        slideChange: keyChange
+      }
+      // autoplay: {
+      //   delay: 2000,
+      //   disableOnInteraction: true,
+      // },
+    })
+  }, [])
+
   const toLeft = () => {
     rightRef.current.click()
   }
@@ -126,7 +126,6 @@ const JoinFactorys = props => {
 
   const keyChange = event => {
     const { activeIndex } = event
-    console.log('🚀 ~ file: index.tsx ~ line 185 ~ activeIndex', activeIndex)
     setCurKey(activeIndex)
   }
 

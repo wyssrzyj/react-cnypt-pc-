@@ -67,8 +67,6 @@ const FormNode = (props: Props) => {
     keys
   } = props
 
-  console.log(keys, 'keys')
-
   const [nodeValue, setNodeValue] = useState<any>(value)
 
   useEffect(() => {

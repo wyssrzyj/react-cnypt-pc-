@@ -27,9 +27,12 @@ const QualificationCertification = () => {
   const pageSize = 5
   const currentUser = getUserInfo() || {}
   const { factoryId } = currentUser
-  const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
+  const enterpriseInfo =
+    JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
 
-  const newFactoryId = isEmpty(enterpriseInfo) ? factoryId : enterpriseInfo.factoryId
+  const newFactoryId = isEmpty(enterpriseInfo)
+    ? factoryId
+    : enterpriseInfo.factoryId
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const { factoryCertificate = [] } = toJS(dictionary)
@@ -70,7 +73,9 @@ const QualificationCertification = () => {
       sorter: true,
       render: (value, row) => {
         const { neverExpire } = row
-        const date = neverExpire ? '永久有效' : moment(value).format('YYYY年MM月DD日')
+        const date = neverExpire
+          ? '永久有效'
+          : moment(value).format('YYYY年MM月DD日')
         return date
       }
     },
@@ -95,8 +100,7 @@ const QualificationCertification = () => {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      render: (value, row) => {
-        console.log(value)
+      render: (_value, row) => {
         const { status, id, certificationName } = row
         const newName =
           find(factoryCertificate, function (o) {
@@ -105,11 +109,17 @@ const QualificationCertification = () => {
         const name = newName.label
         return (
           <div className={styles.operationBox}>
-            <a className={styles.boxItem} onClick={() => operationCertificate(id, 'edit')}>
+            <a
+              className={styles.boxItem}
+              onClick={() => operationCertificate(id, 'edit')}
+            >
               编辑
             </a>
             {(status == 3 || status === 2) && (
-              <a className={styles.boxItem} onClick={() => deleteCertificate(id, name)}>
+              <a
+                className={styles.boxItem}
+                onClick={() => deleteCertificate(id, name)}
+              >
                 删除
               </a>
             )}
@@ -147,8 +157,8 @@ const QualificationCertification = () => {
     setIsModalVisible(true)
     setCurrentData({})
   }
-  const onTableChange = (pagination, filters, sorter) => {
-    console.log({ pagination, filters, sorter })
+  const onTableChange = (pagination, _filters, sorter) => {
+    // console.log({ pagination, filters, sorter })
     const { current } = pagination
     setPageNum(current)
     if (!isEmpty(sorter)) {
@@ -177,11 +187,13 @@ const QualificationCertification = () => {
       okText: '确认',
       cancelText: '取消',
       onOk: () => {
-        axios.delete('/api/factory/factory-certificate/delete', { id }).then(response => {
-          const { success, msg } = response
-          message[success ? 'success' : 'error'](msg)
-          success && getQualificationList()
-        })
+        axios
+          .delete('/api/factory/factory-certificate/delete', { id })
+          .then(response => {
+            const { success, msg } = response
+            message[success ? 'success' : 'error'](msg)
+            success && getQualificationList()
+          })
       }
     })
   }
@@ -192,10 +204,19 @@ const QualificationCertification = () => {
 
   return (
     <div className={styles.qualificationCertification}>
-      <Button onClick={addQualification} className={styles.addButton} type="primary">
+      <Button
+        onClick={addQualification}
+        className={styles.addButton}
+        type="primary"
+      >
         新增资质
       </Button>
-      <Tabs type="card" size="large" activeKey={activeTab} onChange={onTabChange}>
+      <Tabs
+        type="card"
+        size="large"
+        activeKey={activeTab}
+        onChange={onTabChange}
+      >
         {tabMaps.map(tab => (
           <TabPane tab={tab.label} key={tab.value}>
             <Table

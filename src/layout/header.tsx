@@ -10,7 +10,6 @@ type ProvinceOptions = Array<{ label: string; id: number }>
 
 const Header = (props: HeaderProps) => {
   const tips = '全国有XXX家工厂加盟服务，浙江XXX家工厂为您服务'
-  console.log(props)
 
   const options: ProvinceOptions = [
     { label: '浙江省', id: 1 },

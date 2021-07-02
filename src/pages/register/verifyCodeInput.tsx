@@ -31,7 +31,6 @@ const VerifyCodeInput = props => {
   }, [])
 
   useEffect(() => {
-    console.log(val)
     onChange && onChange(val)
   }, [val])
 

@@ -80,7 +80,6 @@ const AreaSearch = () => {
       provinceIds: ids.get(key)
     }
     const data = (await getFactorys(params)) || []
-    console.log(data, 'data')
     await setDataSource(data)
   }
 

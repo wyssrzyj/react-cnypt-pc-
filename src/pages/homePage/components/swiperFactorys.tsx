@@ -1,4 +1,4 @@
-import React, { useRef, useState, useLayoutEffect, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styles from './swiperFactorys.module.less'
 import classNames from 'classnames'
 import { Icon } from '@/components'
@@ -70,9 +70,6 @@ const SwiperCard = props => {
 }
 // 顶部地图工厂轮播
 const SwiperFactorys = props => {
-  // 最新工厂长度默认给10  长度不一致swiper会出问题
-  const initDatas = new Array(10).fill({})
-
   const { SwiperCore } = props
   const leftRef = useRef<HTMLDivElement>()
   const rightRef = useRef<HTMLDivElement>()
@@ -81,11 +78,10 @@ const SwiperFactorys = props => {
   const { factoryStore } = useStores()
   const { getFactoryList } = factoryStore
 
-  const [list, setList] = useState<any>(initDatas)
+  const [list, setList] = useState<any>([])
 
   useEffect(() => {
     ;(async () => {
-      // const res = await getNewFactorys(7)
       const params = {
         pageSize: 10,
         sortField: 'newest',
@@ -97,7 +93,7 @@ const SwiperFactorys = props => {
     })()
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     new SwiperCore('.mySwiper', {
       slidesPerView: 3,
       spaceBetween: 20,
@@ -111,12 +107,8 @@ const SwiperFactorys = props => {
       on: {
         slideChange: keyChange
       }
-      // autoplay: {
-      //   delay: 2000,
-      //   disableOnInteraction: true,
-      // },
     })
-  }, [])
+  }, [list])
 
   const toLeft = () => {
     rightRef.current.click()
@@ -137,7 +129,7 @@ const SwiperFactorys = props => {
         onChange={keyChange}
         className={classNames('swiper-container mySwiper', styles.mySwiper)}
       >
-        {list.length && (
+        {list.length > 0 && (
           <div className="swiper-wrapper">
             {list.map((item, idx) => {
               if (!item) return null

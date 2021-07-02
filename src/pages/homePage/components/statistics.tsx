@@ -13,7 +13,7 @@ const Statistics = () => {
 
   useEffect(() => {
     ;(async () => {
-      const res = await getStatisticalData()
+      const res = (await getStatisticalData()) || {}
       setData(res)
     })()
   }, [])

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router'
-import { Tag } from 'antd'
+import { Tag, message } from 'antd'
 import { HeartFilled } from '@ant-design/icons'
 import { toJS } from 'mobx'
 import classNames from 'classnames'
@@ -25,6 +25,7 @@ const FactoryInfo = props => {
   const { dictionary } = commonStore
   const { factoryTag = [], prodType } = toJS(dictionary)
   const currentUser = getCurrentUser() || {}
+  const { userId } = currentUser
   const [factoryInfo, setFactoryInfo] = useState<any>({})
   const [contactInfo, setContactInfo] = useState<any>({})
   const [factoryTagList, setFactoryTagList] = useState<any>([])
@@ -32,7 +33,6 @@ const FactoryInfo = props => {
   const [factoryImg, setFactoryImg] = useState<any>([{}, {}])
 
   const getFactoryDetails = async () => {
-    const { userId } = currentUser
     const response = await axios.post('/api/factory/info/details', {
       dictCode: 'factory_tag',
       factoryId,
@@ -89,6 +89,19 @@ const FactoryInfo = props => {
 
   const goLogin = () => {
     history.push('/login')
+  }
+  const focusOn = () => {
+    axios
+      .post('/api/factory/follow-factory/add-or-cancel', {
+        factoryId,
+        userId,
+        followStatus: factoryInfo.followStatus
+      })
+      .then(response => {
+        const { success, msg } = response
+        message[success ? 'success' : 'error'](msg)
+        success && getFactoryDetails()
+      })
   }
 
   useEffect(() => {
@@ -223,7 +236,7 @@ const FactoryInfo = props => {
               </span>
             )}
 
-            <span className={styles.firstLineIcon}>
+            <span className={styles.firstLineIcon} onClick={focusOn}>
               {factoryInfo.followStatus ? (
                 <HeartFilled style={{ color: 'gold', marginRight: 12 }} />
               ) : (

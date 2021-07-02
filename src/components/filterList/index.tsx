@@ -69,7 +69,7 @@ const FilterList = props => {
   const [updateTime, setUpdateTime] = useState<string>(null)
 
   const emptyFn = () => {
-    const newData = toJS(productCategoryList)
+    // const newData = toJS(productCategoryList)
     // 清空子类
     // setActiveMainCategory('')
     // setActiveDeputyCategory({ id: '', name: '全部' })
@@ -81,11 +81,11 @@ const FilterList = props => {
     onFilterChange({
       cityIds: [],
       prodType: '',
-      mainCategoryParentId: newData[0].id,
+      mainCategoryParentId: '',
       mainCategoryChildId: ''
     })
     // 清空本组件的状态
-    setActiveMainCategory(newData[0].id)
+    setActiveMainCategory('')
     setActiveDeputyCategory({ id: '', name: '全部' })
     setActiveArea([])
     setActiveProcessing({})
@@ -193,6 +193,27 @@ const FilterList = props => {
         updateTimeStart: undefined,
         updateTimeEnd: undefined
       })
+    }
+  }
+
+  const closeTag = params => {
+    const { id } = params
+    //产品类别
+    if (activeDeputyCategory.id === id) {
+      setActiveDeputyCategory({ id: '' })
+      onFilterChange({ mainCategoryParentId: activeMainCategory, mainCategoryChildId: '' })
+    }
+    //地区分类
+    const index = activeArea.findIndex(area => area.id === id)
+    if (index > -1) {
+      activeArea.splice(index, 1)
+      onFilterChange({ cityIds: activeArea.map(item => item.id) })
+      setActiveArea([...activeArea])
+    }
+    // 加工类型
+    if (activeProcessing.id === id) {
+      setActiveProcessing({})
+      onFilterChange({ prodType: '' })
     }
   }
 
@@ -361,7 +382,7 @@ const FilterList = props => {
         <div className={styles.classificationLabel}>已选条件</div>
         <div className={styles.classificationItem}>
           {activeTabs.map(item => (
-            <Tag color="orange" className={styles.activeTab} closable key={item.id + 'tag'}>
+            <Tag color="orange" className={styles.activeTab} closable key={item.id + 'tag'} onClose={() => closeTag(item)}>
               {item.name}
             </Tag>
           ))}

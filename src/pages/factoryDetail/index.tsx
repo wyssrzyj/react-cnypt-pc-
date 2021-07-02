@@ -14,7 +14,7 @@ const FactoryDetail = props => {
   } = props
   const searchFactory = name => {
     updateName(name)
-    history.push('/platform/factory-search')
+    history.push('/factory-search')
   }
   return (
     <div className={styles.factoryDetail}>

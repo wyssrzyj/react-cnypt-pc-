@@ -9,6 +9,7 @@ type HeaderProps = {}
 type ProvinceOptions = Array<{ label: string; id: number }>
 
 const Header = (props: HeaderProps) => {
+  console.log('🚀 ~ file: header.tsx ~ line 12 ~ Header ~ props', props)
   const tips = '全国有XXX家工厂加盟服务，浙江XXX家工厂为您服务'
 
   const options: ProvinceOptions = [
@@ -36,12 +37,7 @@ const Header = (props: HeaderProps) => {
   return (
     <div className={styles.header}>
       <div className={styles.left}>
-        <Select
-          className={styles.headerSelect}
-          size={'small'}
-          onChange={value => provinceSelect(value)}
-          value={province}
-        >
+        <Select className={styles.headerSelect} size={'small'} onChange={value => provinceSelect(value)} value={province}>
           {options.map((item, idx: number) => {
             return (
               <Option value={item.id} key={idx}>

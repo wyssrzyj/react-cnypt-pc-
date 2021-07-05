@@ -91,17 +91,21 @@ const FactoryInfo = props => {
     history.push('/login')
   }
   const focusOn = () => {
-    axios
-      .post('/api/factory/follow-factory/add-or-cancel', {
-        factoryId,
-        userId,
-        followStatus: factoryInfo.followStatus
-      })
-      .then(response => {
-        const { success, msg } = response
-        message[success ? 'success' : 'error'](msg)
-        success && getFactoryDetails()
-      })
+    if (userId) {
+      axios
+        .post('/api/factory/follow-factory/add-or-cancel', {
+          factoryId,
+          userId,
+          followStatus: factoryInfo.followStatus
+        })
+        .then(response => {
+          const { success, msg } = response
+          message[success ? 'success' : 'error'](msg)
+          success && getFactoryDetails()
+        })
+    } else {
+      message.info('请先登录！')
+    }
   }
 
   useEffect(() => {

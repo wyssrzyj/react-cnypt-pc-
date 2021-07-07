@@ -1,0 +1,94 @@
+.swiper-container {
+  // width: 100%;
+  // height: 100%;
+  --swiper-pagination-color: #fff; /* 两种都可以 */
+}
+
+.swiper-pagination {
+  height: 40px;
+  line-height: 40px;
+  background: rgba(0, 0, 0, 0.4);
+}
+#equipment-top{
+  width: 560px;
+  height: 560px;
+  float: left;
+  .swiper-slide {
+    /* Center slide text vertically */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    font-size: 18px;
+    text-align: center;
+    background: #fff;
+  }
+  
+  .swiper-slide img {
+    display: block;
+    width: 560px;
+    height: 560px;
+    object-fit: cover;
+  }
+
+}
+
+.swiper-button-next {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  left: auto;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--swiper-navigation-size) / 44 * 27);
+  height: var(--swiper-navigation-size);
+  margin-top: calc(0px - (var(--swiper-navigation-size) / 2));
+  color: var(--swiper-navigation-color, var(--swiper-theme-color));
+  cursor: pointer;
+}
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+}
+#equipment-thumbs {
+  box-sizing: border-box;
+  height: 560px;
+  // padding: 10px 0;
+  .swiper-slide {
+    width: 25%;
+    height: 136px;
+    opacity: 0.4;
+  }
+}
+#equipment-thumbs .swiper-slide {
+  width: 25%;
+  height: 136px;
+  opacity: 0.4;
+}
+#equipment-thumbs .swiper-slide-thumb-active {
+  opacity: 1;
+}
+#equipment-top {
+  .swiperItem {
+    height: 500px;
+  }
+
+  .swiper-slide {
+    height: 500px;
+  }
+}
+#equipment-thumbs {
+  float: right;
+  width: 136px;
+  margin-right: 20px;
+  .factory-small-img {
+    width: 136px;
+    height: 136px;
+    img {
+      max-width: 136px;
+      max-height: 136px;
+    }
+  }
+}

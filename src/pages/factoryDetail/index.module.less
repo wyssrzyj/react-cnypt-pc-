@@ -1,11 +1,46 @@
 @import '@/css/common.less';
 
+.header {
+  width: 100%;
+	padding: 24px 0;
+}
+.container {
+  width: 1200px;
+  margin: auto;
+	display: flex;
+	align-items: center;
+}
+.left{
+	display: flex;
+	align-items: center;
+	margin-right: 180px;
+}
 .factoryDetail {
-    width: 100%;
-    background: @containerBg;
+  width: 100%;
+  // background: @containerBg;
 }
 
 .detailContainer {
-    width: 1200px;
-    margin: 20px auto;
+  width: 1200px;
+  margin: 20px auto;
+}
+.logo {
+  max-width: 25px;
+  max-height: 25px;
+  overflow: hidden;
+  border-radius: 4px;
+	margin-right: 8px;
+}
+.name {
+  color: #333333;
+  font-weight: 500;
+  font-size: 20px;
+  font-family: PingFangSC-Medium, PingFang SC;
+}
+.active {
+  color: #3b80ff;
+  font-weight: 500;
+  font-size: 20px;
+  border-bottom: 3px solid #3b80ff;
+	padding: 8px 0;
 }

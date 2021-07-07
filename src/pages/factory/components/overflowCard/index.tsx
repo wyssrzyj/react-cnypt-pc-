@@ -1,17 +1,11 @@
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
 import { toJS } from 'mobx'
-// import { Tag } from 'antd'
-import { EnvironmentFilled } from '@ant-design/icons'
+import { Tag } from 'antd'
 import { isArray, findIndex } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
-import SwiperCore, {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay
-} from 'swiper'
+import { Icon } from '@/components'
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper'
 
 import Swiper from 'swiper'
 // import { transformProduceNumber } from '@/utils/tool'
@@ -61,42 +55,52 @@ const OverflowCard = props => {
   return (
     <div className={styles.overflowCard}>
       <div className={styles.factoryInfo}>
-        <img
-          className={styles.factoryImg}
-          src={pictureUrl ? pictureUrl : u1190}
-        />
+        <div className={styles.imgBox}>
+          <img className={styles.factoryImg} src={pictureUrl ? pictureUrl : u1190} />
+        </div>
         <div className={styles.detail}>
-          <div>
-            <a className={styles.factoryName} onClick={goToDetail}>
-              {factoryName}
-            </a>
-            {/* <Tag className={styles.factoryTag} color="#f50">
-              实名
-            </Tag>
-            <Tag className={styles.factoryTag} color="#f59a23">
-              验厂
-            </Tag> */}
-            <EnvironmentFilled className={styles.factoryIcon} />
-            <span>{factoryDistrict}</span>
+          <div className={styles.detailTop}>
+            <div>
+              <a className={styles.factoryName} onClick={goToDetail}>
+                {factoryName}
+              </a>
+              <Tag className={styles.factoryTag} color="#45CC7E">
+                <Icon type="jack-shiming1" className={styles.tagIcon} />
+                实名
+              </Tag>
+              <Tag className={styles.factoryTag} color="#3B88FF">
+                <Icon type="jack-ycsq" className={styles.tagIcon} />
+                验厂
+              </Tag>
+            </div>
+            <div className={styles.addressBox}>
+              <Icon type="jack-dizhi" className={styles.address} />
+              <span>{factoryDistrict ? factoryDistrict : '待完善'}</span>
+            </div>
             {/* <span>
               <b className={styles.factoryScore}>4.7</b>分
             </span> */}
           </div>
           <ul className={styles.factoryInfoList}>
             <li>
-              <span>有效车位：</span>
+              <span className={styles.ulName}>
+                <Icon type="jack-scrs" className={styles.ulIcon} />
+                有效车位：
+              </span>
               <span>{effectiveLocation ? effectiveLocation : '0'}人</span>
             </li>
             <li>
-              <span>主要生产：</span>
-              <span>
-                {isArray(factoryCategoryList)
-                  ? factoryCategoryList.join('、')
-                  : '待完善'}
+              <span className={styles.ulName}>
+                <Icon type="jack-zysc" className={styles.ulIcon} />
+                主要生产：
               </span>
+              <span>{isArray(factoryCategoryList) ? factoryCategoryList.join('、') : '待完善'}</span>
             </li>
             <li>
-              <span>加工类型：</span>
+              <span className={styles.ulName}>
+                <Icon type="jack-jglx" className={styles.ulIcon} />
+                加工类型：
+              </span>
               <span>
                 {isArray(prodTypeList)
                   ? allProdTypeList

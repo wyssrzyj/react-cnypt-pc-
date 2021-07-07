@@ -5,29 +5,10 @@ import { toJS } from 'mobx'
 import { filter, find } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import axios from '@/utils/axios'
+import { getTypeOptions, getProductClass, getProductMode } from '@/utils/tool'
 import { Icon, autoAddTooltip } from '@/components'
 import { getUserInfo } from '@/utils/tool'
 import styles from './index.module.less'
-
-const productionModeOptions = [
-  { label: '流水', value: '0' },
-  { label: '整件', value: '1' },
-  { label: '流水和整件', value: '2' }
-]
-
-const productClassOptions = [
-  { label: '高', value: '0' },
-  { label: '中', value: '1' },
-  { label: '低', value: '2' }
-]
-
-const typeOptions = [
-  { label: '清加工单', value: 'QJG' },
-  { label: 'OEM', value: 'OEM' },
-  { label: 'ODM', value: 'ODM' },
-  { label: '经销单', value: 'JXD' },
-  { label: '自营进出口单', value: 'ZCK' }
-]
 
 const FactoryReport = () => {
   const currentUser = getUserInfo() || {}
@@ -36,7 +17,9 @@ const FactoryReport = () => {
   const { dictionary } = commonStore
   const { productCategoryList } = factoryStore
   const { factoryYearOutputValue = [], factoryYearOutputProd = [] } = toJS(dictionary)
-
+  const productClassOptions = getProductClass()
+  const productionModeOptions = getProductMode()
+  const typeOptions = getTypeOptions()
   const [currentFactory, setCurrentFactory] = useState<any>({})
   const [mainList, setMainList] = useState<any>([])
   const [orderType, setOrderType] = useState<any>([])

@@ -382,7 +382,7 @@ const FilterList = props => {
         <div className={styles.classificationLabel}>已选条件</div>
         <div className={styles.classificationItem}>
           {activeTabs.map(item => (
-            <Tag color="orange" className={styles.activeTab} closable key={item.id + 'tag'} onClose={() => closeTag(item)}>
+            <Tag color="blue" className={styles.activeTab} closable key={item.id + 'tag'} onClose={() => closeTag(item)}>
               {item.name}
             </Tag>
           ))}

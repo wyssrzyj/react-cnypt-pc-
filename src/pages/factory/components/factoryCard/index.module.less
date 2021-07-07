@@ -2,13 +2,20 @@
 
 .factoryCard {
   margin-top: 20px;
+  background-color: #fff;
 }
 
 .cardHeader {
-  padding: 8px;
-  color: @66gray;
-  font-weight: bold;
-  background-color: @grayLine;
+  padding: 12px 0;
+  color: #333333;
+  font-weight: 500;
+  font-size: 20px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  border-bottom: 1px solid #f0f0f0;
+}
+.titleName {
+  padding-left: 16px;
+  border-left: 5px solid #3b80ff;
 }
 
 .factoryCardContent {
@@ -28,13 +35,24 @@
     }
   }
 }
-
+.label {
+  display: flex;
+}
+.tagIcon {
+  margin-right: 4px;
+  font-size: 20px;
+}
 .factoryName {
-  padding: 8px 0;
-  color: @hoverColor;
+  display: block;
+  padding: 6px 0;
+  color: #333333;
+  font-weight: 500;
+  font-size: 16px;
+  font-family: PingFangSC-Medium, PingFang SC;
 }
 
 .factoryInfo {
+  display: flex;
   padding: 4px 0;
 }
 .noDate {

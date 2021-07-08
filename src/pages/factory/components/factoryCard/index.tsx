@@ -4,6 +4,7 @@ import { Empty } from 'antd'
 import { isArray, isEmpty } from 'lodash'
 import { Icon } from '@/components'
 import styles from './index.module.less'
+import u1190 from '@/static/images/u1190.png'
 
 const FactoryCard = props => {
   const history = useHistory()
@@ -19,6 +20,7 @@ const FactoryCard = props => {
         <ul className={styles.factoryCardContent}>
           {list.map(item => (
             <li key={item.factoryId}>
+              <img className={styles.cardImg} src={item.pictureUrl ? item.pictureUrl : u1190} alt="" />
               <a
                 className={styles.factoryName}
                 onClick={() => {

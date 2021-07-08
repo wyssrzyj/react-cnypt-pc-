@@ -31,12 +31,22 @@
   font-size: 20px;
 }
 .active{
-  color: blue;
+  color: #3b80ff;;
 
 }
 .focusBox {
   display: flex;
   align-items: center;
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+.boxActive{
+  border: 1px solid #3b80ff;
+  color: #3b80ff;
+}
+.boxNormal{
+  border: 1px solid #999999;
+  color: #999999;
 }
 .content {
   padding: 24px 0;
@@ -75,10 +85,10 @@
 }
 .left{
   flex: 1;
-  margin-right: 36px;
 }
 .right{
   width: 240px;
+  height: 280px;
   border: 6px solid #237EFF;
   display: flex;
   flex-flow: column;
@@ -97,6 +107,7 @@
 }
 .abstract{
   margin-bottom: 36px;
+  width: 740px;
 }
 .title{
   font-size: 18px;
@@ -111,4 +122,10 @@
 }
 .gutterRow{
   margin: 4px 0;
+}
+.strong{
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 450;
+  color: #333333;
 }

@@ -39,39 +39,39 @@ const CommercialInfo = props => {
               <Row gutter={16}>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>名称</span>
-                  <span>{businessInfo.enterpriseName}</span>
+                  <span className={styles.strong}>{businessInfo.enterpriseName}</span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>注册地址</span>
-                  <span>{businessInfo.companyAddress}</span>
+                  <span className={styles.strong}>{businessInfo.companyAddress}</span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>信用代码</span>
-                  <span>{businessInfo.orgCode}</span>
+                  <span className={styles.strong}>{businessInfo.orgCode}</span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>注册资本</span>
-                  <span>{businessInfo.companyRegisteredCapital}</span>
+                  <span className={styles.strong}>{businessInfo.companyRegisteredCapital}</span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>成立时间</span>
-                  <span>{businessInfo.companyCreateTime}</span>
+                  <span className={styles.strong}>{businessInfo.companyCreateTime}</span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>类型</span>
-                  <span>{businessInfo.companyOrgType}</span>
+                  <span className={styles.strong}>{businessInfo.companyOrgType}</span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>法定代表人</span>
-                  <span>{businessInfo.legalPersonName}</span>
+                  <span className={styles.strong}>{businessInfo.legalPersonName}</span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>营业期限</span>
-                  <span>{businessInfo.companyBusinessTerm}</span>
+                  <span className={styles.strong}>{businessInfo.companyBusinessTerm}</span>
                 </Col>
                 <Col className={styles.gutterRow} span={24}>
                   <span className={styles.label}>经营范围</span>
-                  <span>{businessInfo.companyBusinessScope}</span>
+                  <span className={styles.strong}>{businessInfo.companyBusinessScope}</span>
                 </Col>
               </Row>
             </div>

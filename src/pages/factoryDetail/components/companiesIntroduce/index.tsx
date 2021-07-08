@@ -74,7 +74,7 @@ const CompaniesIntroduce = props => {
           <span className={styles.textCn}>企业介绍</span>
           <span className={styles.textEn}>ENTERPRISE INTRODUCTION</span>
         </div>
-        <div className={styles.focusBox} onClick={focusOn}>
+        <div className={classNames(styles.focusBox, followStatus ? styles.boxActive : styles.boxNormal)} onClick={focusOn}>
           <Icon type="jack-xingxingmianxing" className={classNames(styles.focusOn, followStatus ? styles.active : null)} />
           <span>{followStatus ? '已关注' : '关注'}</span>
         </div>
@@ -93,7 +93,7 @@ const CompaniesIntroduce = props => {
             </Tag>
           </div>
           <div className={styles.people}>
-            <Icon type="jack-ycsq" className={styles.tagIcon} />
+            <Icon type="jack-ycgl" className={styles.tagIcon} />
             <span className={styles.head}>验厂负责人</span>
             <span>{memberText}</span>
             <Icon type="jack-shijian" className={styles.time} />
@@ -108,23 +108,23 @@ const CompaniesIntroduce = props => {
             <Row gutter={16}>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>有效车位</span>
-                <span>{effectiveLocation ? effectiveLocation : '--'}人</span>
+                <span className={styles.strong}>{effectiveLocation ? effectiveLocation : '--'} 人</span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>厂房面积 </span>
-                <span>{factoryArea ? factoryArea : '--'}平方米</span>
+                <span className={styles.strong}>{factoryArea ? factoryArea : '--'} 平方米</span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>成立时间 </span>
-                <span>{factoryCreateTime ? moment(factoryCreateTime).format('YYYY年') : '--'}</span>
+                <span className={styles.strong}>{factoryCreateTime ? moment(factoryCreateTime).format('YYYY年') : '--'}</span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>生产线数 </span>
-                <span>{productLineNum ? productLineNum : '--'}</span>
+                <span className={styles.strong}>{productLineNum ? productLineNum : '--'} 条</span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>年产值</span>
-                <span>
+                <span className={styles.strong}>
                   {factoryYearOutputValue.find(item => item.value === yearOutputValue)
                     ? factoryYearOutputValue.find(item => item.value === yearOutputValue).label
                     : '--'}
@@ -132,7 +132,7 @@ const CompaniesIntroduce = props => {
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>年产量 </span>
-                <span>
+                <span className={styles.strong}>
                   {factoryYearOutputProd.find(item => item.value === yearOutputProd)
                     ? factoryYearOutputProd.find(item => item.value === yearOutputProd).label
                     : '--'}

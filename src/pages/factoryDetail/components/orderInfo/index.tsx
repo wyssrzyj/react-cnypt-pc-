@@ -59,15 +59,17 @@ const OrderInfo = props => {
             <ul className={styles.classes}>
               <li className={styles.classesLi}>
                 <Badge color="blue" text="主营类别" className={styles.classesSubtitle} />
-                <span>{mainList.join('，')}</span>
+                <span className={styles.strongText}>{mainList.join('，')}</span>
               </li>
               <li className={styles.classesLi}>
                 <Badge color="blue" text="擅长产品品类" className={styles.classesSubtitle} />
-                <span>{currentFactory.mainProductCategoriesDesc ? currentFactory.mainProductCategoriesDesc : '--'}</span>
+                <span className={styles.strongText}>
+                  {currentFactory.mainProductCategoriesDesc ? currentFactory.mainProductCategoriesDesc : '--'}
+                </span>
               </li>
               <li className={styles.classesLi}>
                 <Badge color="blue" text="产品档次" className={styles.classesSubtitle} />
-                <span>
+                <span className={styles.strongText}>
                   {productClassOptions.find(item => item.value == currentFactory.clothesGrade)
                     ? productClassOptions.find(item => item.value == currentFactory.clothesGrade).label
                     : '--'}

@@ -54,16 +54,14 @@ const OverflowCard = props => {
   }, [])
   return (
     <div className={styles.overflowCard}>
-      <div className={styles.factoryInfo}>
+      <div className={styles.factoryInfo} onClick={goToDetail}>
         <div className={styles.imgBox}>
           <img className={styles.factoryImg} src={pictureUrl ? pictureUrl : u1190} />
         </div>
         <div className={styles.detail}>
           <div className={styles.detailTop}>
             <div>
-              <a className={styles.factoryName} onClick={goToDetail}>
-                {factoryName}
-              </a>
+              <a className={styles.factoryName}>{factoryName}</a>
               <Tag className={styles.factoryTag} color="#45CC7E">
                 <Icon type="jack-shiming1" className={styles.tagIcon} />
                 实名

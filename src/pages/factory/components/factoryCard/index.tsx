@@ -19,16 +19,14 @@ const FactoryCard = props => {
       ) : (
         <ul className={styles.factoryCardContent}>
           {list.map(item => (
-            <li key={item.factoryId}>
+            <li
+              key={item.factoryId}
+              onClick={() => {
+                history.push(`/factory-detail/${item.factoryId}`)
+              }}
+            >
               <img className={styles.cardImg} src={item.pictureUrl ? item.pictureUrl : u1190} alt="" />
-              <a
-                className={styles.factoryName}
-                onClick={() => {
-                  history.push(`/factory-detail/${item.factoryId}`)
-                }}
-              >
-                {item.factoryName}
-              </a>
+              <a className={styles.factoryName}>{item.factoryName}</a>
               <div className={styles.factoryInfo}>
                 <span className={styles.label}>
                   <Icon type="jack-diqu_bai" className={styles.tagIcon} />

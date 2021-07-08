@@ -79,7 +79,7 @@ const CommercialInfo = props => {
               {businessInfo.businessLicenseUrl ? (
                 <img className={styles.photo} src={businessInfo.businessLicenseUrl} alt="" />
               ) : (
-                <span>暂无</span>
+                <div style={{ marginTop: '30%', textAlign: 'center' }}>图片待上传</div>
               )}
             </div>
           </div>

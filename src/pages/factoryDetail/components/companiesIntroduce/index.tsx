@@ -141,7 +141,11 @@ const CompaniesIntroduce = props => {
             </Row>
           </div>
           <div className={styles.right}>
-            {factoryAuditorImage ? <img className={styles.photo} src={factoryAuditorImage} alt="" /> : <span>暂无</span>}
+            {factoryAuditorImage ? (
+              <img className={styles.photo} src={factoryAuditorImage} alt="" />
+            ) : (
+              <span style={{ margin: 'auto' }}>暂无</span>
+            )}
 
             <div className={styles.text}>验厂人员现场照</div>
           </div>

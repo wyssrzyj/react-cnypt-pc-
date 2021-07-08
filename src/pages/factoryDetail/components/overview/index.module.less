@@ -46,3 +46,24 @@
   font-size: 16px;
   font-family: PingFangSC-Regular, PingFang SC;
 }
+.mapTemp {
+  position: relative;
+  width: 340px;
+  height: 220px;
+  // opacity: 0;
+  transition: all 0.2s ease;
+  margin-top: 20px;
+  :global {
+    .amap-copyright {
+      display: none !important;
+    }
+
+    .labelclass {
+      display: block;
+      width: 18px;
+      height: 18px;
+      background-size: contain !important;
+      background-repeat: no-repeat !important;
+    }
+  }
+}

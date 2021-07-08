@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { isEmpty, isNil } from 'lodash'
+import { Scene, Marker, MarkerLayer } from '@antv/l7'
+import { GaodeMap } from '@antv/l7-maps'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
-import { useStores, observer } from '@/utils/mobx'
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs } from 'swiper'
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
@@ -14,10 +15,10 @@ SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs])
 
 const Overview = props => {
   const { current = {}, factoryId } = props
-  const { commonStore } = useStores()
-  const { dictionary } = commonStore
   const currentUser = getCurrentUser() || {}
-  const factoryImg = [...current.factoryOutsizeImages, ...current.factoryWorkshopImages]
+  const { factoryOutsizeImages, factoryWorkshopImages } = current
+  const factoryImg =
+    factoryOutsizeImages && factoryWorkshopImages ? [...current.factoryOutsizeImages, ...current.factoryWorkshopImages] : []
   const [contactInfo, setContactInfo] = useState<any>({})
 
   const getContactInfo = () => {
@@ -45,11 +46,13 @@ const Overview = props => {
       } else {
         return str
       }
+    } else {
+      return '--'
     }
   }
 
   useEffect(() => {
-    if (!isEmpty(current)) {
+    if (!isEmpty(factoryImg)) {
       const galleryThumbs = new Swiper('#gallery-thumbs', {
         spaceBetween: 10,
         slidesPerView: 5,
@@ -66,19 +69,40 @@ const Overview = props => {
         },
         loop: true
       })
+      const { latitude = '30.404645', longitude = '20.311123' } = current
+      const scene = new Scene({
+        id: 'address',
+        map: new GaodeMap({
+          style: 'normal',
+          center: [longitude, latitude],
+          pitch: 0,
+          zoom: 13,
+          rotation: 0
+        })
+      })
+
+      scene.on('loaded', () => {
+        const markerLayer = new MarkerLayer()
+        const el = document.createElement('label')
+        el.className = 'labelclass'
+        el.style.background = 'url(https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ)'
+        const marker: any = new Marker({
+          element: el
+        }).setLnglat({ lng: longitude, lat: latitude })
+        markerLayer.addMarker(marker)
+        scene.addMarkerLayer(markerLayer)
+      })
     }
   }, [current])
 
   useEffect(() => {
-    if (dictionary) {
-      getContactInfo()
-    }
-  }, [dictionary])
+    getContactInfo()
+  }, [])
 
   return (
     <div className={styles.factoryInfo}>
       <div className={styles.factoryInfoContent}>
-        {!isEmpty(current) && (
+        {!isEmpty(factoryImg) && (
           <div className={styles.slideshow}>
             <div className="swiper-container" id="gallery-top">
               <div className="swiper-wrapper">
@@ -110,7 +134,7 @@ const Overview = props => {
                 <Icon type="jack-lianxiren" className={styles.icon} />
                 联系人
               </span>
-              <span className={styles.rightValue}>{contactInfo.realName}</span>
+              <span className={styles.rightValue}>{contactInfo.realName ? contactInfo.realName : '--'}</span>
             </li>
             <li>
               <span className={styles.rightLabel}>
@@ -140,6 +164,9 @@ const Overview = props => {
               </span>
               <span className={styles.rightValue}>{current.address}</span>
             </li>
+            <li>
+              <div id="address" className={styles.mapTemp}></div>
+            </li>
           </ul>
         </div>
       </div>
@@ -147,4 +174,4 @@ const Overview = props => {
   )
 }
 
-export default observer(Overview)
+export default Overview

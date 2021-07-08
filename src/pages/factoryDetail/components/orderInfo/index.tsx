@@ -25,14 +25,18 @@ const OrderInfo = props => {
         if (success) {
           const { factoryCategoryList, factoryProcessTypeList } = data
           setCurrentFactory({ ...data })
-          const newLabel = factoryCategoryList.map(item => `${item.name}（${item.remark}）`)
-          setMainList([...newLabel])
-          const newOrderType = filter(typeOptions, function (o) {
-            return find(factoryProcessTypeList, function (item) {
-              return item.processType === o.value
+          if (factoryCategoryList) {
+            const newLabel = factoryCategoryList.map(item => `${item.name}（${item.remark}）`)
+            setMainList([...newLabel])
+          }
+          if (factoryProcessTypeList) {
+            const newOrderType = filter(typeOptions, function (o) {
+              return find(factoryProcessTypeList, function (item) {
+                return item.processType === o.value
+              })
             })
-          })
-          setOrderType([...newOrderType])
+            setOrderType([...newOrderType])
+          }
         }
       })
   }

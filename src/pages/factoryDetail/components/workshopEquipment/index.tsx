@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Table } from 'antd'
 import { toJS } from 'mobx'
+import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { useStores, observer } from '@/utils/mobx'
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs } from 'swiper'
@@ -16,6 +17,8 @@ const rowKey = 'id'
 const WorkshopEquipment = props => {
   const { factoryId } = props
   const pageSize = 6
+  const leftRef = useRef<HTMLDivElement>()
+  const rightRef = useRef<HTMLDivElement>()
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const { factoryEquipmentType = [] } = toJS(dictionary)
@@ -24,6 +27,7 @@ const WorkshopEquipment = props => {
   const [loading, setLoading] = useState<boolean>(true)
   const [dataSource, setDataSource] = useState<any>([])
   const [factoryImg, setFactoryImg] = useState<any>([])
+  const [curKey, setCurKey] = useState(0)
 
   const columns = [
     {
@@ -95,6 +99,19 @@ const WorkshopEquipment = props => {
       })
   }
 
+  const keyChange = event => {
+    const { activeIndex } = event
+    setCurKey(activeIndex)
+  }
+
+  const toLeft = () => {
+    rightRef.current.click()
+  }
+
+  const toRight = () => {
+    leftRef.current.click()
+  }
+
   useEffect(() => {
     getEquipment()
   }, [])
@@ -116,7 +133,11 @@ const WorkshopEquipment = props => {
       thumbs: {
         swiper: galleryThumbs
       },
-      loop: true
+      loop: false,
+      effect: 'fade',
+      on: {
+        slideChange: keyChange
+      }
     })
   }, [factoryImg])
 
@@ -131,8 +152,14 @@ const WorkshopEquipment = props => {
               </div>
             ))}
           </div>
-          {/* <div className="swiper-button-next swiper-button-white"></div>
-          <div className="swiper-button-prev swiper-button-white"></div> */}
+          <div className="swiper-button-next" ref={leftRef}></div>
+          <div className="swiper-button-prev" ref={rightRef}></div>
+        </div>
+        <div className="equipment-button equipment-button-next" onClick={toLeft}>
+          {curKey === 0 ? <Icon type="jack-shang_icon" /> : <Icon type="jack-xia_icon" className={styles.upIcon} />}
+        </div>
+        <div className="equipment-button equipment-button-prev" onClick={toRight}>
+          {curKey < factoryImg.length - 1 ? <Icon type="jack-xia_icon" /> : <Icon type="jack-shang_icon" className={styles.upIcon} />}
         </div>
         <div className="swiper-container" id="equipment-thumbs">
           <div className="swiper-wrapper">

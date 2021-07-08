@@ -121,7 +121,7 @@ const WorkshopEquipment = props => {
     const galleryThumbs = new Swiper('#equipment-thumbs', {
       direction: 'vertical',
       spaceBetween: 10,
-      slidesPerView: 4,
+      slidesPerView: 3,
       watchSlidesVisibility: true //防止不可点击
     })
     new Swiper('#equipment-top', {

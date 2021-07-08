@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { isEmpty, isNil } from 'lodash'
 import { Scene, Marker, MarkerLayer } from '@antv/l7'
 import { GaodeMap } from '@antv/l7-maps'
@@ -14,12 +14,15 @@ import './style.less'
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs])
 
 const Overview = props => {
+  const leftRef = useRef<HTMLDivElement>()
+  const rightRef = useRef<HTMLDivElement>()
   const { current = {}, factoryId } = props
   const currentUser = getCurrentUser() || {}
   const { factoryOutsizeImages, factoryWorkshopImages } = current
   const factoryImg =
     factoryOutsizeImages && factoryWorkshopImages ? [...current.factoryOutsizeImages, ...current.factoryWorkshopImages] : []
   const [contactInfo, setContactInfo] = useState<any>({})
+  const [curKey, setCurKey] = useState(0)
 
   const getContactInfo = () => {
     axios
@@ -50,6 +53,17 @@ const Overview = props => {
       return '--'
     }
   }
+  const keyChange = event => {
+    const { activeIndex } = event
+    setCurKey(activeIndex)
+  }
+  const toLeft = () => {
+    rightRef.current.click()
+  }
+
+  const toRight = () => {
+    leftRef.current.click()
+  }
 
   useEffect(() => {
     if (!isEmpty(factoryImg)) {
@@ -67,7 +81,11 @@ const Overview = props => {
         thumbs: {
           swiper: galleryThumbs
         },
-        loop: true
+        loop: false,
+        effect: 'fade',
+        on: {
+          slideChange: keyChange
+        }
       })
       const { latitude = '30.404645', longitude = '20.311123' } = current
       const scene = new Scene({
@@ -112,8 +130,8 @@ const Overview = props => {
                   </div>
                 ))}
               </div>
-              <div className="swiper-button-next swiper-button-white"></div>
-              <div className="swiper-button-prev swiper-button-white"></div>
+              <div className="swiper-button-next swiper-button-white" ref={leftRef}></div>
+              <div className="swiper-button-prev swiper-button-white" ref={rightRef}></div>
             </div>
             <div className="swiper-container" id="gallery-thumbs">
               <div className="swiper-wrapper">
@@ -123,6 +141,20 @@ const Overview = props => {
                   </div>
                 ))}
               </div>
+            </div>
+            <div className="overview-button overview-button-next" onClick={toLeft}>
+              {curKey === 0 ? (
+                <Icon type="jack-shang_icon" className={styles.leftIcon} />
+              ) : (
+                <Icon type="jack-xia_icon" className={styles.rightIcon} />
+              )}
+            </div>
+            <div className="overview-button overview-button-prev" onClick={toRight}>
+              {curKey < factoryImg.length - 1 ? (
+                <Icon type="jack-xia_icon" className={styles.leftIcon} />
+              ) : (
+                <Icon type="jack-shang_icon" className={styles.rightIcon} />
+              )}
             </div>
           </div>
         )}

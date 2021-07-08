@@ -152,8 +152,8 @@ const WorkshopEquipment = props => {
               </div>
             ))}
           </div>
-          <div className="swiper-button-next" ref={leftRef}></div>
-          <div className="swiper-button-prev" ref={rightRef}></div>
+          <div className="swiper-button-next workshop-equipment-next" ref={leftRef}></div>
+          <div className="swiper-button-prev workshop-equipment-next" ref={rightRef}></div>
         </div>
         <div className="equipment-button equipment-button-next" onClick={toLeft}>
           {curKey === 0 ? <Icon type="jack-shang_icon" /> : <Icon type="jack-xia_icon" className={styles.upIcon} />}

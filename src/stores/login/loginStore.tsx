@@ -10,7 +10,10 @@ export default class LoginStore {
 
   @action login = async params => {
     try {
-      const res: ResponseProps = await axios.post('/api/user/account/login', params)
+      const res: ResponseProps = await axios.post(
+        '/api/user/account/login',
+        params
+      )
       const { data = {} } = res
       if (data) {
         localStorage.setItem('token', data.access_token)
@@ -49,7 +52,9 @@ export default class LoginStore {
 
   @action userInfo = async () => {
     try {
-      const res: ResponseProps = await axios.get('/api/factory/enterprise/get-login-info')
+      const res: ResponseProps = await axios.get(
+        '/api/factory/enterprise/get-login-info'
+      )
       const { data = {} } = res
       if (data) {
         localStorage.setItem('userInfo', JSON.stringify(data))
@@ -68,6 +73,27 @@ export default class LoginStore {
   @action verifyCode = async mobile => {
     try {
       const res: ResponseProps = await axios.get(`/api/sms/send-code/${mobile}`)
+
+      if (res.success) {
+        message.success(res.msg)
+      }
+      if (!res.success) {
+        message.error(res.msg)
+      }
+      // message.success('登录成功')
+      return res
+    } catch (e) {
+      console.log(e)
+      // message.error('')
+    }
+  }
+  // 忘记密码
+  @action resetPwd = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/user/forget-password`,
+        params
+      )
 
       if (res.success) {
         message.success(res.msg)

@@ -68,6 +68,10 @@ const Header = () => {
     history.push('/user/register')
   }
 
+  const toAccountSafe = () => {
+    history.push('/control-panel/account')
+  }
+
   const logoutToLogin = async () => {
     await logout()
     toLogin()
@@ -76,7 +80,7 @@ const Header = () => {
   const menu = (
     <Menu>
       <Menu.Item>
-        <div>账号安全</div>
+        <div onClick={toAccountSafe}>账号安全</div>
       </Menu.Item>
       {currentUser.userId ? (
         <Menu.Item>

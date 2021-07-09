@@ -16,7 +16,7 @@ const CertificateAuthentication = () => {
   }
 
   return (
-    <div>
+    <div className={styles.stepsBox}>
       <div className={styles.steps}>
         <Steps current={currentStep}>
           <Step title="证件信息" />

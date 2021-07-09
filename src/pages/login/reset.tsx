@@ -5,6 +5,7 @@ import { Icon } from '@/components'
 import styles from './index.module.less'
 import { phoneReg, pwdReg } from '../register/content'
 import { useStores } from '@/utils/mobx'
+import { useHistory } from 'react-router'
 
 const FromItem = Form.Item
 
@@ -16,29 +17,25 @@ const Reset = () => {
   const [form] = Form.useForm()
   const { getFieldValue, validateFields } = form
 
-  const { controlPanelStore, registerStore } = useStores()
-  const { codeUpdatePwd } = controlPanelStore
+  const { registerStore, loginStore } = useStores()
   const { checkUser } = registerStore
+  const { resetPwd } = loginStore
+  const history = useHistory()
 
   const [phone, setPhone] = useState()
 
   const newPwdValidator = (_, value) => {
-    const oldPwd = getFieldValue('oldPassword')
     if (!value) {
       return Promise.reject('请输入新密码~')
     }
-    console.log(value)
     if (!pwdReg.test(value)) {
       return Promise.reject('请输入符合规则的新密码~')
-    }
-    if (oldPwd === value) {
-      return Promise.reject('新密码不能与原密码相同~')
     }
     return Promise.resolve()
   }
 
   const pwdValidator = (_, value) => {
-    const target = getFieldValue('newPassword')
+    const target = getFieldValue('password')
     if (!value) {
       return Promise.reject('请输入确认密码~')
     }
@@ -69,19 +66,24 @@ const Reset = () => {
   const submit = async () => {
     try {
       const values = await validateFields()
-      values.newPassword = btoa(values.newPassword)
+      values.password = btoa(values.password)
       delete values.newPassword2
-      const res = await codeUpdatePwd(values)
-      console.log('🚀 ~ file: reset.tsx ~ line 52 ~ submit ~ res', res)
+      await resetPwd(values)
     } catch (e) {
       console.log(e)
     }
   }
 
   const valuesChange = changedValues => {
-    const { mobilePhone = ' ' } = changedValues
+    const { mobile = '' } = changedValues
+    const keys = Reflect.ownKeys(changedValues)
+    if (keys.includes('mobile')) {
+      setPhone(mobile)
+    }
+  }
 
-    setPhone(mobilePhone)
+  const backLogin = () => {
+    history.push('/user/login')
   }
 
   return (
@@ -93,7 +95,7 @@ const Reset = () => {
         onValuesChange={valuesChange}
       >
         <FromItem
-          name="mobilePhone"
+          name="mobile"
           label=""
           rules={[
             {
@@ -106,7 +108,7 @@ const Reset = () => {
         </FromItem>
 
         <FromItem
-          name="smsCode"
+          name="code"
           label=""
           rules={[
             {
@@ -123,7 +125,7 @@ const Reset = () => {
           />
         </FromItem>
         <FromItem
-          name="newPassword"
+          name="password"
           label=""
           rules={[{ required: true, validator: newPwdValidator }]}
         >
@@ -151,9 +153,14 @@ const Reset = () => {
             type="password"
           />
         </FromItem>
-        <Button type={'primary'} onClick={submit} className={styles.resetBtn}>
-          修改
-        </Button>
+        <div className={styles.resetBtnBox}>
+          <Button onClick={backLogin} className={styles.resetBtn}>
+            返回
+          </Button>
+          <Button type={'primary'} onClick={submit} className={styles.resetBtn}>
+            修改
+          </Button>
+        </div>
       </Form>
     </div>
   )

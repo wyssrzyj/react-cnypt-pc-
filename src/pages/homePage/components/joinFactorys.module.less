@@ -16,9 +16,12 @@
 
 .joinInfoTitle {
   padding-bottom: 10px;
+  overflow: hidden;
   color: #333333;
   font-weight: 500;
   font-size: 20px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .joinCard {
@@ -34,6 +37,14 @@
       color: #ffffff;
     }
   }
+}
+
+.joinText {
+  display: inline-block;
+  width: 128px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .joinInfoItem {

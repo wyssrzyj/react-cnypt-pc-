@@ -14,7 +14,13 @@ const Layout = (props: LayoutProps) => {
   const { allDictionary, getAllArea } = commonStore
   const { location } = props
   const { pathname } = location
-  const noUseHeaders = ['/login', '/register'] // 不展示首页header的路由列表
+  const noUseHeaders = [
+    '/user/login',
+    '/user/register',
+    '/user/reset',
+    '/control-panel'
+  ] // 不展示header的路由列表
+  const noUseFooters = ['/user/login', '/user/register', '/user/reset'] // 不展示footer的路由列表
 
   useEffect(() => {
     ;(window as any).requestIdleCallback(async () => {
@@ -23,11 +29,13 @@ const Layout = (props: LayoutProps) => {
     })
   }, [])
 
+  const headerFlag = noUseHeaders.some(item => pathname.includes(item))
+
   return (
     <div className={styles.container}>
-      {!noUseHeaders.includes(pathname) && <Header />}
+      {!headerFlag && <Header />}
       <div className={styles.content}>{props.children}</div>
-      <Footer></Footer>
+      {!noUseFooters.includes(pathname) && <Footer />}
     </div>
   )
 }

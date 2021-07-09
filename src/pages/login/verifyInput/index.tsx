@@ -5,7 +5,7 @@ import { useStores } from '@/utils/mobx'
 
 type InputEvent = ChangeEvent<HTMLInputElement>
 
-const VerifyCodeInput = props => {
+const VerifyInput = props => {
   const { onChange, value, tel, placeholder, code, ...rest } = props
 
   const { registerStore } = useStores()
@@ -78,13 +78,13 @@ const VerifyCodeInput = props => {
       <Button
         disabled={sending}
         onClick={sendCode}
-        type={'primary'}
+        type={'link'}
         className={styles.verifyBtn}
       >
-        {sending ? `${lastTime}s` : '发送验证码'}
+        {sending ? `${lastTime}s` : '获取验证码'}
       </Button>
     </div>
   )
 }
 
-export default VerifyCodeInput
+export default VerifyInput

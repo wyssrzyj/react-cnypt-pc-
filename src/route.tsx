@@ -13,14 +13,9 @@ const Note = Loadable({
   loader: () => import('@/pages/note')
 })
 
-// 登录页
-const Login = Loadable({
+// 登录 注册页
+const LoginAndRegister = Loadable({
   loader: () => import('@/pages/login')
-})
-
-// 注册页
-const Register = Loadable({
-  loader: () => import('@/pages/register')
 })
 
 // 工厂详情
@@ -43,7 +38,7 @@ const ControlPanel = Loadable({
   loader: () => import('@/pages/controlPanel')
 })
 
-// 控制台
+// 高德地图
 const GDMap = Loadable({
   loader: () => import('@/pages/homePage/GDMap')
 })
@@ -59,8 +54,7 @@ const RouteList = () => {
       <Route path="/home" component={HomePage} />
       <Route path="/factory-search" component={Platform} />
       <Route path="/note" component={Note} />
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
+      <Route path="/user" component={LoginAndRegister} />
       <Route path="/order-detail" component={OrderDetail} />
       <Route path="/factory-detail/:id" component={FactoryDetail} />
       <Route path="/control-panel" component={ControlPanel} />

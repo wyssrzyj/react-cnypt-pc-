@@ -19,7 +19,7 @@ const JoinCard = props => {
         <div className={styles.joinInfoItem}>
           <span className={styles.joinLabel}>
             <Icon type={'jack-nianfen_bai'} className={styles.joinIcon} />
-            <span>成立年份</span>
+            <span>成立年限</span>
           </span>
           <span>{data.date || 0}年</span>
         </div>
@@ -28,21 +28,21 @@ const JoinCard = props => {
             <Icon type={'jack-diqu_bai'} className={styles.joinIcon} />
             <span>地区</span>
           </span>
-          <span>{data.area}</span>
+          <span className={styles.joinText}>{data.area}</span>
         </div>
         <div className={styles.joinInfoItem}>
           <span className={styles.joinLabel}>
             <Icon type={'jack-chewei'} className={styles.joinIcon} />
             <span>有效车位</span>
           </span>
-          <span>{data.count}</span>
+          <span className={styles.joinText}>{data.count}</span>
         </div>
         <div className={styles.joinInfoItem}>
           <span className={styles.joinLabel}>
             <Icon type={'jack-pinpai_bai'} className={styles.joinIcon} />
             <span>服务品牌</span>
           </span>
-          <span>{data.serve}</span>
+          <span className={styles.joinText}>{data.serve}</span>
         </div>
       </div>
     </div>

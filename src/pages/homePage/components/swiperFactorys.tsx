@@ -94,7 +94,7 @@ const SwiperFactorys = props => {
   }, [])
 
   useEffect(() => {
-    new SwiperCore('.mySwiper', {
+    new SwiperCore('.factorysSwiper', {
       slidesPerView: 3,
       spaceBetween: 20,
       centeredSlides: true,
@@ -127,7 +127,10 @@ const SwiperFactorys = props => {
     <div className={styles.swaiperContainer}>
       <div
         onChange={keyChange}
-        className={classNames('swiper-container mySwiper', styles.mySwiper)}
+        className={classNames(
+          'swiper-container factorysSwiper',
+          styles.factorysSwiper
+        )}
       >
         {list.length > 0 && (
           <div className="swiper-wrapper">

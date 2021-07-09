@@ -3,10 +3,10 @@ import styles from './index.module.less'
 import { Form, Input, Button } from 'antd'
 import classNames from 'classnames'
 import { useHistory } from 'react-router'
-import ConcatInput from './concatInput'
-import VerifyCodeInput from './verifyCodeInput'
 import { useStores } from '@/utils/mobx'
 import * as _ from 'lodash'
+import { Icon } from '@/components'
+import VerifyInput from '../login/verifyInput'
 
 type InputEvent = ChangeEvent<HTMLInputElement>
 type CommonObj = {
@@ -26,16 +26,19 @@ const hasEmpty = (obj: CommonObj) => {
   })
 }
 
-// type TelInfo = Partial<{
-//   code?: string
-//   mobilePhone?: string
-// }>
+const UserIcon = () => <Icon type="jack-yonghuming" className={styles.icon} />
+const PwdIcon = () => <Icon type="jack-mima" className={styles.icon} />
+const PhoneIcon = () => <Icon type="jack-shouji1" className={styles.icon} />
+const CodeIcon = () => <Icon type="jack-yanzhengma" className={styles.icon} />
 
+export const phoneReg =
+  /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
+export const pwdReg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{6,}$/
 const initErrors = {
   userName: false,
   pwd: false,
   pwd2: false,
-  telInfo: false,
+  mobilePhone: false,
   code: false
 }
 
@@ -43,7 +46,7 @@ const initHelps = {
   userName: '',
   pwd: '',
   pwd2: '',
-  telInfo: '',
+  mobilePhone: '',
   code: ''
 }
 
@@ -55,18 +58,14 @@ const Register = () => {
   const { register, checkUser } = registerStore
 
   // const { getFieldValue, validateFields, setFieldsValue } = form
-  const [disabled, setDisabled] = useState<boolean>(false)
-  const [init, setInit] = useState<boolean>(true)
-  const [telInfo, setTelInfo] = useState<any>({})
+  const [disabled, setDisabled] = useState<boolean>(true)
+  const [mobilePhone, setMobilePhone] = useState<string>()
 
   const [errors, setErrors] = useState(initErrors)
   const [helps, setHelps] = useState(initHelps)
 
   const getValueFromEvent = (event: InputEvent, type: string) => {
     // 可根据需要 通过 setFieldsValue 设置联动效果
-    if (type === 'telConcat') {
-      return event
-    }
     if (type === 'verifyCode') {
       return event
     }
@@ -84,7 +83,7 @@ const Register = () => {
       const base64 = btoa(encode)
       const params = {
         code: values.code,
-        mobilePhone: values.telInfo.mobilePhone,
+        mobilePhone: values.mobilePhone,
         password: base64,
         userName: values.userName
       }
@@ -117,7 +116,9 @@ const Register = () => {
         } else {
           const regFlag = userReg.test(value)
 
-          nHelps[key] = !regFlag ? '请输入6-20位中文、英文或数字~' : !flag && '用户名已注册~'
+          nHelps[key] = !regFlag
+            ? '请输入6-20位中文、英文或数字~'
+            : !flag && '用户名已注册~'
           nErrors[key] = !regFlag || !flag
         }
 
@@ -125,14 +126,14 @@ const Register = () => {
         setHelps(nHelps)
         break
       case 'pwd':
-        const pwdReg = /^[0-9a-zA-Z]{6,20}$/g
         if (!value) {
-          nHelps[key] = '请输入6-20位数字、英文~'
+          nHelps[key] = '请输入密码~'
           nErrors[key] = true
         } else {
           const regFlag = pwdReg.test(value)
 
-          nHelps[key] = !regFlag && '请输入6-20位数字、英文~'
+          nHelps[key] =
+            !regFlag && '请输入字母，符号或数字中至少两项且长度超过6位的密码~'
           nErrors[key] = !regFlag
         }
 
@@ -141,7 +142,7 @@ const Register = () => {
         break
       case 'pwd2':
         if (!value) {
-          nHelps[key] = '请再次输入你的密码~'
+          nHelps[key] = '请确认密码~'
           nErrors[key] = true
         } else {
           nHelps[key] = value !== allValues.pwd && '两次密码输入不一致~'
@@ -150,17 +151,15 @@ const Register = () => {
         setErrors(nErrors)
         setHelps(nHelps)
         break
-      case 'telInfo':
-        const { telInfo } = allValues
-        const { mobilePhone } = telInfo
-        const phoneReg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
+      case 'mobilePhone':
+        const { mobilePhone } = allValues
+
         let phoneFlag
         if (mobilePhone) {
           phoneFlag = await checkUser(mobilePhone, 'mobilePhone')
         }
 
         const pFlag = phoneReg.test(mobilePhone)
-
         if (!mobilePhone || mobilePhone.length !== 11 || !pFlag) {
           nHelps[key] = '请输入正确的手机号~'
           nErrors[key] = true
@@ -168,11 +167,8 @@ const Register = () => {
           nHelps[key] = !phoneFlag && '手机号已注册~'
           nErrors[key] = !phoneFlag
         }
-        if (!init) {
-          setErrors(nErrors)
-          setHelps(nHelps)
-        }
-        setInit(false)
+        setErrors(nErrors)
+        setHelps(nHelps)
         break
     }
 
@@ -180,21 +176,23 @@ const Register = () => {
     const hasError = errorKeys.some(item => nErrors[item])
 
     const flag = hasEmpty(allValues) || hasError
-    setTelInfo(allValues.telInfo)
-
+    setMobilePhone(allValues.mobilePhone)
     setDisabled(flag)
   }
 
   const toLogin = () => {
-    history.push('/login')
+    history.push('/user/login')
   }
 
   return (
     <div className={styles.content}>
-      <div>
-        <div className={styles.title}>欢迎新用户注册</div>
-      </div>
-      <Form form={form} scrollToFirstError={true} className={styles.form} onValuesChange={onValuesChange}>
+      <div className={styles.title}>用户注册</div>
+      <Form
+        form={form}
+        scrollToFirstError={true}
+        className={styles.form}
+        onValuesChange={onValuesChange}
+      >
         <Form.Item
           name="userName"
           label=""
@@ -203,7 +201,7 @@ const Register = () => {
           validateStatus={errors.userName ? 'error' : 'success'}
           help={helps.userName}
         >
-          <Input placeholder="设置用户名"></Input>
+          <Input placeholder="用户名" prefix={<UserIcon />}></Input>
         </Form.Item>
         <Form.Item
           name="pwd"
@@ -213,7 +211,11 @@ const Register = () => {
           help={helps.pwd}
           getValueFromEvent={getValueFromEvent}
         >
-          <Input placeholder="设置你的登录密码" type="password"></Input>
+          <Input
+            placeholder="字母,符号或数字中至少两项且超过6位"
+            type="password"
+            prefix={<PwdIcon />}
+          ></Input>
         </Form.Item>
         <Form.Item
           name="pwd2"
@@ -223,22 +225,36 @@ const Register = () => {
           help={helps.pwd2}
           getValueFromEvent={getValueFromEvent}
         >
-          <Input placeholder="请再次输入你的密码" type="password"></Input>
+          <Input
+            prefix={<PwdIcon />}
+            placeholder="确认密码"
+            type="password"
+          ></Input>
         </Form.Item>
         <Form.Item
-          name="telInfo"
+          name="mobilePhone"
           label=""
           trigger={'onChange'}
           rules={[{ required: true, message: '请输入正确的手机号~' }]}
-          validateStatus={errors.telInfo ? 'error' : 'success'}
-          help={helps.telInfo}
-          initialValue={{ code: '+86', mobilePhone: null }}
-          getValueFromEvent={event => getValueFromEvent(event, 'telConcat')}
+          validateStatus={errors.mobilePhone ? 'error' : 'success'}
+          help={helps.mobilePhone}
+          getValueFromEvent={getValueFromEvent}
         >
-          <ConcatInput />
+          <Input placeholder="手机号" prefix={<PhoneIcon />}></Input>
+          {/* <ConcatInput prefix={<PhoneIcon />} /> */}
         </Form.Item>
-        <Form.Item name="code" label="" trigger={'onChange'} getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}>
-          <VerifyCodeInput tel={telInfo.mobilePhone} />
+        <Form.Item
+          name="code"
+          label=""
+          trigger={'onChange'}
+          getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}
+        >
+          <VerifyInput
+            prefix={<CodeIcon />}
+            code={'register'}
+            tel={mobilePhone}
+            placeholder={'验证码'}
+          />
         </Form.Item>
         {/* 滑动验证 */}
         <div id="your-dom-id" className="nc-container"></div>
@@ -249,11 +265,11 @@ const Register = () => {
           htmlType={'submit'}
           onClick={handleSubmit}
         >
-          同意条款并注册
+          注册
         </Button>
       </Form>
       <div className={styles.fastLogin}>
-        已有账号？<span onClick={toLogin}>{'快速登录>>'}</span>
+        <span onClick={toLogin}>使用已有账户登录</span>
       </div>
     </div>
   )

@@ -1,22 +1,18 @@
-import React, { useState, useEffect, ChangeEvent } from 'react'
+import React, { useState } from 'react'
 import styles from './index.module.less'
-import { Input, Button, Carousel, Tabs } from 'antd'
+import { Input, Button, Tabs, Checkbox, Form } from 'antd'
 import Icon from '@/components/Icon'
-// import { Link } from 'react-router-dom'
 import classNamess from 'classnames'
 import { useStores, observer } from '@/utils/mobx'
 import { useHistory } from 'react-router'
-import BANNER0 from './images/u104.png'
-import BANNER1 from './images/u105.png'
-import BANNER2 from './images/u106.png'
-import BANNER3 from './images/u107.png'
+import VerifyInput from './verifyInput'
+import { phoneReg, pwdReg } from '../register/content'
 
 const { TabPane } = Tabs
 
-const UserIcon = () => <Icon type="jack-yonghu" className={styles.icon} />
-const PwdIcon = () => <Icon type="jack-suo" className={styles.icon} />
-
-type InputEvent = ChangeEvent<HTMLInputElement>
+const UserIcon = () => <Icon type="jack-yonghuming" className={styles.icon} />
+const PwdIcon = () => <Icon type="jack-yanzhengma" className={styles.icon} />
+const PhoneIcon = () => <Icon type="jack-shouji1" className={styles.icon} />
 
 const LoginContent = () => {
   // const title = '春秋季服装订单大促'
@@ -25,150 +21,190 @@ const LoginContent = () => {
   const pwdPlaceholder = '请输入登录密码'
 
   const { loginStore } = useStores()
-  const { login, verifyCode, userInfo } = loginStore
+  const { login, userInfo } = loginStore
   const history = useHistory()
+  const [form] = Form.useForm()
+  const { validateFields, resetFields } = form
 
   const errorTexts = new Map()
   errorTexts.set(0, '登录名或登录密码不正确')
 
-  const [user, setUser] = useState<string>()
-  const [pwd, setPwd] = useState<string>()
   const [activeTab, setActiveTab] = useState<string>('1')
   const [phoneNumer, setPhoneNumber] = useState<string>()
-  const [verification, setVerification] = useState<string>()
   const [error, setError] = useState<boolean>(false)
-  const [disabled, setDisabled] = useState<boolean>(true)
 
-  const valueChange = (event: InputEvent, type: string) => {
-    const { value } = event.target
-    type === 'user' && setUser(value)
-    type === 'pwd' && setPwd(value)
-    type === 'phoneNumer' && setPhoneNumber(value)
-    type === 'verification' && setVerification(value)
+  const valueChange = changedValues => {
+    const { mobilePhone = '' } = changedValues
+    setPhoneNumber(mobilePhone)
+  }
+
+  const init = () => {
+    resetFields()
+    setError(false)
   }
 
   const callback = activeKey => {
     setActiveTab(activeKey)
-    if (activeKey === '1') {
-      const flag = user && pwd ? false : true
-      setDisabled(flag)
-    } else {
-      const flag = phoneNumer && verification ? false : true
-      setDisabled(flag)
-    }
+    init()
   }
-
-  useEffect(() => {
-    const flag = user && pwd ? false : true
-    setDisabled(flag)
-  }, [user, pwd])
-
-  useEffect(() => {
-    const flag = phoneNumer && verification ? false : true
-    setDisabled(flag)
-  }, [phoneNumer, verification])
 
   const submit = async () => {
-    const params =
-      +activeTab - 1
-        ? {
-            mobilePhone: phoneNumer,
-            code: verification,
-            loginType: 'sms_code'
-          }
-        : {
-            userName: user,
-            passWord: pwd,
-            loginType: 'password'
-          }
-    const res = await login(params)
-    const info = await userInfo()
-    setError(!res.success)
-    if (res.success) {
-      history.push('/platform/home')
+    try {
+      const values = await validateFields()
+      values.loginType = +activeTab === 1 ? 'password' : 'sms_code'
+      const res = await login(values)
+      await userInfo()
+      if (res && res.success) {
+        setError(false)
+        history.push('/platform/home')
+      } else {
+        setError(true)
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
-  const getVerification = async () => {
-    await verifyCode(phoneNumer)
+  // const automaticLogin = event => {
+  //   localStorage.setItem('autoLogin', event.target.checked)
+  // }
+
+  const toRegister = () => {
+    history.push('/user/register')
   }
 
-  return (
-    <div className={styles.loginContent}>
-      <div className={styles.content}>
-        <div className={styles.left}>
-          <Carousel autoplay className={styles.carousel} autoplaySpeed={2000}>
-            <img src={BANNER0} alt="" />
-            <img src={BANNER1} alt="" />
-            <img src={BANNER2} alt="" />
-            <img src={BANNER3} alt="" />
-          </Carousel>
-        </div>
+  const toReset = () => {
+    history.push('/user/reset')
+  }
 
-        <div className={styles.right}>
-          <Tabs activeKey={activeTab} onChange={callback} centered>
-            <TabPane className={styles.rightContent} tab="帐户密码登录" key="1">
+  console.log(phoneNumer)
+  return (
+    <div
+      className={classNamess(
+        styles.right,
+        +activeTab === 1 ? styles.userLogin : styles.phoneLogin
+      )}
+    >
+      <Form
+        form={form}
+        onValuesChange={valueChange}
+        scrollToFirstError={true}
+        className={styles.form}
+      >
+        <Tabs activeKey={activeTab} onChange={callback} centered>
+          <TabPane
+            className={styles.rightContent}
+            tab="帐户密码登录"
+            key="1"
+          ></TabPane>
+          <TabPane
+            className={styles.rightContent}
+            tab="手机号登录"
+            key="2"
+          ></TabPane>
+        </Tabs>
+        {+activeTab === 1 ? (
+          <>
+            <Form.Item
+              name="userName"
+              label=""
+              rules={[{ required: true, message: '请输入用户名~' }]}
+            >
               <Input
                 prefix={<UserIcon />}
                 className={styles.input}
+                // value={user}
                 placeholder={userPlaceholder}
-                onChange={(event: InputEvent) => valueChange(event, 'user')}
+                // onChange={(event: InputEvent) => valueChange(event, 'user')}
               />
+            </Form.Item>
+
+            <Form.Item
+              name="passWord"
+              label=""
+              rules={[
+                {
+                  required: true,
+                  message: '请输入正确格式的密码~',
+                  pattern: pwdReg
+                }
+              ]}
+            >
               <Input
                 prefix={<PwdIcon />}
-                className={styles.input}
+                className={styles.input2}
                 placeholder={pwdPlaceholder}
+                // value={pwd}
                 type="password"
-                onChange={(event: InputEvent) => valueChange(event, 'pwd')}
+                // onChange={(event: InputEvent) => valueChange(event, 'pwd')}
               />
-            </TabPane>
-            <TabPane className={styles.rightContent} tab="手机号登录" key="2">
+            </Form.Item>
+          </>
+        ) : (
+          <>
+            <Form.Item
+              name="mobilePhone"
+              label=""
+              rules={[
+                {
+                  required: true,
+                  message: '请输入11位手机号~',
+                  pattern: phoneReg
+                }
+              ]}
+            >
               <Input
-                prefix={<UserIcon />}
+                prefix={<PhoneIcon />}
                 className={styles.input}
                 placeholder="手机号"
-                onChange={(event: InputEvent) =>
-                  valueChange(event, 'phoneNumer')
-                }
               />
-              <div className={styles.verificationBox}>
-                <Input
-                  prefix={<PwdIcon />}
-                  className={styles.verification}
-                  placeholder="验证码"
-                  onChange={(event: InputEvent) =>
-                    valueChange(event, 'verification')
-                  }
-                />
-                <Button
-                  className={styles.getVerification}
-                  onClick={getVerification}
-                >
-                  获取验证码
-                </Button>
-              </div>
-            </TabPane>
-          </Tabs>
+            </Form.Item>
 
-          <div className={styles.loginOperation}>
-            {/* <Checkbox onChange={automaticLogin}>自动登录</Checkbox> */}
-            <a>忘记密码</a>
-          </div>
+            <Form.Item
+              name="code"
+              label=""
+              rules={[
+                {
+                  required: true,
+                  message: '请输入六位验证码~',
+                  min: 6,
+                  max: 6
+                }
+              ]}
+            >
+              <VerifyInput
+                prefix={<PwdIcon />}
+                className={styles.verification}
+                placeholder="验证码"
+                tel={phoneNumer}
+                code={'loginVerify'}
+              />
+            </Form.Item>
+          </>
+        )}
+      </Form>
 
-          <Button
-            disabled={disabled}
-            type={'primary'}
-            className={styles.btn}
-            onClick={submit}
-          >
-            登录
-          </Button>
-          <div
-            className={classNamess(styles.errorText, error && styles.showError)}
-          >
-            {errorTexts.get(0)}
-          </div>
-        </div>
+      <div className={classNamess(styles.errorText, error && styles.showError)}>
+        <Icon type={'jack-jingshi'} className={styles.errorIcon} />
+        {errorTexts.get(0)}
+      </div>
+      <div className={styles.loginOperation}>
+        {/* <Checkbox onChange={automaticLogin}>自动登录</Checkbox> */}
+        <span></span>
+        <span className={styles.forgetPwd} onClick={toReset}>
+          忘记密码
+        </span>
+      </div>
+
+      <Button type={'primary'} className={styles.btn} onClick={submit}>
+        登录
+      </Button>
+      <Button type={'text'} className={styles.registerBtn} onClick={toRegister}>
+        注册
+      </Button>
+      <div className={styles.otherLogin}>其他登录方式</div>
+      <div className={styles.otherBox}>
+        <Icon type={'jack-weixin1'} className={styles.otherIcon}></Icon>
       </div>
     </div>
   )

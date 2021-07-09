@@ -1,8 +1,15 @@
-import React, { createContext, useState, useEffect, useRef, useContext, useMemo } from "react"
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  useMemo
+} from 'react'
 
 const Context = createContext({})
 
-export const AliveScope = (props) => {
+export const AliveScope = props => {
   const [state, setState] = useState({})
   let ref = useMemo(() => {
     return {}
@@ -12,17 +19,17 @@ export const AliveScope = (props) => {
 
   const keep = useMemo(() => {
     return (id, children) =>
-      new Promise((resolve) => {
-        setState((pre) => ({
+      new Promise(resolve => {
+        setState(pre => ({
           ...pre,
-          [id]: { id, children },
+          [id]: { id, children }
         }))
         setTimeout(() => {
           //需要等待setState渲染完拿到实例返回给子组件。
           resolve(ref[id])
 
           const tableData = []
-          const target = tableData.map((item) => {
+          const target = tableData.map(item => {
             let num = tableData.reduce((prev, i) => {
               if (i.guid === item.guid) {
                 return prev + 1
@@ -34,8 +41,8 @@ export const AliveScope = (props) => {
             return item
           })
 
-          target.forEach((item) => {
-            target.forEach((i) => {
+          target.forEach(item => {
+            target.forEach(i => {
               if (item.num === i.num && i[3] !== item[3]) {
                 item.num = 0
               }
@@ -52,7 +59,7 @@ export const AliveScope = (props) => {
           return (
             <div
               key={id}
-              ref={(node) => {
+              ref={node => {
                 ref[id] = node
               }}
             >
@@ -65,8 +72,8 @@ export const AliveScope = (props) => {
   )
 }
 
-const KeepAlive = (props) => {
-  const keep = useContext(Context)
+const KeepAlive = props => {
+  const keep: any = useContext(Context)
   const ref = useRef(null)
 
   useEffect(() => {

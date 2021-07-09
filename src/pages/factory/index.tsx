@@ -71,7 +71,7 @@ const Factory = () => {
   }
   const getBrowsingHistory = async () => {
     const response = await axios.post('/api/factory/info/reactBrowsing', {
-      pageSize: 5,
+      pageSize: 3,
       userId
     })
     const { success, data } = response
@@ -90,7 +90,7 @@ const Factory = () => {
     }
     const params = {
       pageNum,
-      pageSize: 8,
+      pageSize: 10,
       // mainCategoryParentId: defaultMainId,
       factoryName,
       ...factoryParams
@@ -151,27 +151,16 @@ const Factory = () => {
               {isEmpty(factoryArray) ? (
                 <Empty className={styles.nodata} />
               ) : (
-                factoryArray.map((item, index) => (
-                  <OverflowCard key={index} {...item} />
-                ))
+                factoryArray.map((item, index) => <OverflowCard key={index} {...item} />)
               )}
             </Spin>
             <div className={styles.factoryPage}>
-              <Pagination
-                current={pageNum}
-                pageSize={3}
-                total={total}
-                showSizeChanger={false}
-                onChange={onPaginationChange}
-              />
+              <Pagination current={pageNum} pageSize={3} total={total} showSizeChanger={false} onChange={onPaginationChange} />
             </div>
           </div>
           <div className={styles.contentRight}>
             <div className={styles.newFactory}>
-              <img
-                className={styles.newFactoryImg}
-                src={require('@/static/images/ruzhu_bg.png')}
-              />
+              <img className={styles.newFactoryImg} src={require('@/static/images/ruzhu_bg.png')} />
               {/* <div className={styles.newFactoryTitle}>工厂入驻</div> */}
             </div>
             <FactoryCard title="推荐好工厂" list={factoryList} />

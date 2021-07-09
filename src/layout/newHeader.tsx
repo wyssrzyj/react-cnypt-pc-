@@ -117,7 +117,7 @@ const Header = () => {
 
         {currentUser.realName ? (
           <Dropdown overlay={menu}>
-            <span className={styles.user}>您好，{currentUser.realName}</span>
+            <span className={styles.user}>您好，{currentUser.realName || currentUser.username}</span>
           </Dropdown>
         ) : (
           <>

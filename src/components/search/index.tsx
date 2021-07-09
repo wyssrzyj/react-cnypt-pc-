@@ -18,6 +18,12 @@ const Search = () => {
     history.push('/factory-search')
   }
 
+  const enterFn = e => {
+    setSearchWord(e.target.value)
+    updateName(e.target.value)
+    history.push('/factory-search')
+  }
+
   return (
     // <div className={styles.searchContainer}>
     //   {/* <img src={BG_LOGO} alt="" className={styles.bgLogo} /> */}
@@ -45,15 +51,11 @@ const Search = () => {
             defaultValue={factoryName}
             value={searchWord}
             onChange={e => setSearchWord(e.target.value)}
+            onPressEnter={enterFn}
             className={styles.input}
-            placeholder={'请输入订单编号/工厂名称'}
+            placeholder={'请输入工厂名称'}
           />
-          <Button
-            className={styles.btn}
-            type={'primary'}
-            icon={<SearchOutlined />}
-            onClick={searchFunction}
-          >
+          <Button className={styles.btn} type={'primary'} icon={<SearchOutlined />} onClick={searchFunction}>
             搜索
           </Button>
         </div>

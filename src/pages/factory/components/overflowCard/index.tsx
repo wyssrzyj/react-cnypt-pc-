@@ -5,13 +5,7 @@ import { Tag } from 'antd'
 import { isArray, findIndex } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import { Icon } from '@/components'
-import SwiperCore, {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay
-} from 'swiper'
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper'
 
 import Swiper from 'swiper'
 // import { transformProduceNumber } from '@/utils/tool'
@@ -34,12 +28,15 @@ const OverflowCard = props => {
   } = props
 
   const history = useHistory()
+
+  const { commonStore } = useStores()
+  const { dictionary, updateName } = commonStore
+  const allProdTypeList = toJS(dictionary).prodType || []
+
   const goToDetail = () => {
+    updateName('')
     history.push(`/factory-detail/${factoryId}`)
   }
-  const { commonStore } = useStores()
-  const { dictionary } = commonStore
-  const allProdTypeList = toJS(dictionary).prodType || []
 
   useEffect(() => {
     new Swiper('.mySwiper', {
@@ -62,10 +59,7 @@ const OverflowCard = props => {
     <div className={styles.overflowCard}>
       <div className={styles.factoryInfo} onClick={goToDetail}>
         <div className={styles.imgBox}>
-          <img
-            className={styles.factoryImg}
-            src={pictureUrl ? pictureUrl : u1190}
-          />
+          <img className={styles.factoryImg} src={pictureUrl ? pictureUrl : u1190} />
         </div>
         <div className={styles.detail}>
           <div className={styles.detailTop}>
@@ -101,11 +95,7 @@ const OverflowCard = props => {
                 <Icon type="jack-zysc" className={styles.ulIcon} />
                 主要生产：
               </span>
-              <span>
-                {isArray(factoryCategoryList)
-                  ? factoryCategoryList.join('、')
-                  : '待完善'}
-              </span>
+              <span>{isArray(factoryCategoryList) ? factoryCategoryList.join('、') : '待完善'}</span>
             </li>
             <li>
               <span className={styles.ulName}>

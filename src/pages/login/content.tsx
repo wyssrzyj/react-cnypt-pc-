@@ -52,6 +52,9 @@ const LoginContent = () => {
     try {
       const values = await validateFields()
       values.loginType = +activeTab === 1 ? 'password' : 'sms_code'
+      if (+activeTab === 1) {
+        // values.passWord = atob(values.passWord)
+      }
       const res = await login(values)
       await userInfo()
       if (res && res.success) {

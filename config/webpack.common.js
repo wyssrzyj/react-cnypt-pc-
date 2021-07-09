@@ -38,7 +38,7 @@ module.exports = {
     new friendlyErrorsWebpackPlugin(),
     // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: '檃',
+      title: '产能云平台',
       template: path.resolve(__dirname, '../public/index.html'),
       filename: 'index.html'
     }),

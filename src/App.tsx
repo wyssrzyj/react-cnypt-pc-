@@ -13,6 +13,26 @@ import Layout from './layout'
 import 'antd/dist/antd.css'
 
 const App = () => {
+  // const [loading, setLoading] = useState(false)
+  // const popstate = event => {
+  //   const { target } = event
+  //   const { location } = target
+
+  //   if (location.pathname === '/home') {
+  //     location.reload()
+  //   }
+  //   setLoading(true)
+  // }
+
+  // useEffect(() => {
+  //   setLoading(true)
+  //   window.addEventListener('popstate', popstate, false)
+
+  //   return () => {
+  //     window.removeEventListener('popstate', popstate, false)
+  //   }
+  // }, [])
+
   return (
     <AliveScope>
       <ConfigProvider locale={zhCN}>

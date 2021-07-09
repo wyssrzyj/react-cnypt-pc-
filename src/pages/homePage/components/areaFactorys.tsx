@@ -137,7 +137,7 @@ const AreaFactorys = () => {
                   key={item.value}
                   onClick={() => areaTypeChange(item.value)}
                   type={areaType === item.value ? 'primary' : 'default'}
-                  ghost={areaType === item.value}
+                  ghost={areaType !== item.value}
                   className={styles.areaBtn}
                 >
                   {item.label}

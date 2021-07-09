@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './statistics.module.less'
 import { Icon } from '@/components'
-import { useStores } from '@/utils/mobx'
+import { useStores, observer } from '@/utils/mobx'
 
 // 地图右侧工厂统计信息
 const Statistics = () => {
@@ -13,7 +13,7 @@ const Statistics = () => {
 
   useEffect(() => {
     ;(async () => {
-      const res = await getStatisticalData()
+      const res = (await getStatisticalData()) || {}
       setData(res)
     })()
   }, [])
@@ -62,4 +62,4 @@ const Statistics = () => {
   )
 }
 
-export default Statistics
+export default observer(Statistics)

@@ -5,7 +5,7 @@ import classNames from 'classnames'
 
 const SlideBars = props => {
   const btnRef = useRef<HTMLDivElement>()
-  const { domMap, activeKey } = props
+  const { domMap, activeKey, barList } = props
   const slideBars = [
     { label: '智能搜索工厂' },
     { label: '地区工厂' },
@@ -16,6 +16,7 @@ const SlideBars = props => {
     { label: '最新物联设备' },
     { label: '合作品牌' }
   ]
+  const newList = barList ? barList : slideBars
 
   const moveTo = index => {
     const t = window || document.body
@@ -34,7 +35,7 @@ const SlideBars = props => {
         <Icon type={'jack-logo1'} className={styles.slideLogo} />
         <span>产能云平台</span>
       </div>
-      {slideBars.map((item, idx) => {
+      {newList.map((item, idx) => {
         return (
           <div
             key={item.label}

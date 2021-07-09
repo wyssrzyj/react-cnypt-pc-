@@ -1,13 +1,14 @@
 .slideBar {
   position: fixed;
   top: 50%;
-  left: 100px;
+  left: 0;
   z-index: 9999;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 150px;
+  width: 130px;
   background: #ffffff;
+  box-shadow: 0 3px 10px 0px rgb(0 0 0 / 12%);
   transform: translateY(-50%);
   cursor: pointer;
 }
@@ -30,11 +31,12 @@
 .slideItem {
   display: flex;
   align-items: center;
-  height: 60px;
+  height: 40px;
   color: #666666;
-  font-size: 18px;
+  font-weight: 400;
+  font-size: 14px;
   font-family: PingFangSC-Regular, PingFang SC;
-  line-height: 60px;
+  line-height: 40px;
 
   &:hover {
     color: #3b80ff;
@@ -57,7 +59,9 @@
   display: inline-block;
   flex: 1;
   margin-right: 10px;
-  border-bottom: 1px dashed #ececec;
+  text-align: justify;
+  text-align-last: justify;
+  border-bottom: 1px dashed #d4d4d4;
 }
 
 .slideBack {
@@ -65,9 +69,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 60px;
+  height: 40px;
   color: #666666;
-  font-size: 18px;
+  font-weight: 400;
+  font-size: 14px;
 
   &:hover {
     color: #3b80ff;
@@ -79,5 +84,5 @@
 }
 
 .slideBackLogo {
-  font-size: 32px;
+  font-size: 24px;
 }

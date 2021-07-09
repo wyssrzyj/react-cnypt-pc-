@@ -16,11 +16,10 @@ const MapTemp = () => {
       return {
         code: key,
         name: provinceData[key][0],
-        pop: provinceData[key][2] * 1,
+        pop: provinceData[key][2] * 1
       }
     })
 
-    console.log(data)
     // {code: "330282", name: "慈溪市", pop: 104}
 
     const scene = new Scene({
@@ -28,21 +27,21 @@ const MapTemp = () => {
       map: new Mapbox({
         style: 'light',
         pitch: 0,
-        center: [107.054293, 35.246265],
-      }),
+        center: [107.054293, 35.246265]
+      })
     })
 
     setMap(scene)
 
     scene.on('loaded', async () => {
       await new ProvinceLayer(scene, {
-        adcode: ['310000'],
+        adcode: ['310000']
       })
       await new ProvinceLayer(scene, {
-        adcode: ['320000'],
+        adcode: ['320000']
       })
       await new ProvinceLayer(scene, {
-        adcode: ['340000'],
+        adcode: ['340000']
       })
       await new ProvinceLayer(scene, {
         data,
@@ -51,13 +50,13 @@ const MapTemp = () => {
         depth: 3,
         label: {
           field: 'NAME_CHN',
-          textAllowOverlap: false,
+          textAllowOverlap: false
         },
         bubble: {
           enable: true,
           size: {
             field: 'pop',
-            values: [2, 15],
+            values: [2, 15]
           },
           color: {
             field: 'pop',
@@ -67,16 +66,16 @@ const MapTemp = () => {
               '#fdae6b',
               '#fd8d3c',
               '#e6550d',
-              '#a63603',
-            ],
-          },
+              '#a63603'
+            ]
+          }
         },
         popup: {
           enable: true,
           Html: props => {
             return `<span>${props.NAME_CHN}:</span><span>${props.pop}</span>`
-          },
-        },
+          }
+        }
       })
     })
   }
@@ -93,7 +92,7 @@ const MapTemp = () => {
     setTimeout(() => {
       map.setZoomAndCenter(4.930243767520109, {
         lat: 30.70327460663428,
-        lng: 118.65658099960251,
+        lng: 118.65658099960251
       })
     }, 1000)
   }, [map])

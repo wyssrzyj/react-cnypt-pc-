@@ -5,29 +5,10 @@ import { toJS } from 'mobx'
 import { filter, find } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import axios from '@/utils/axios'
+import { getTypeOptions, getProductClass, getProductMode } from '@/utils/tool'
 import { Icon, autoAddTooltip } from '@/components'
 import { getUserInfo } from '@/utils/tool'
 import styles from './index.module.less'
-
-const productionModeOptions = [
-  { label: '流水', value: '0' },
-  { label: '整件', value: '1' },
-  { label: '流水和整件', value: '2' }
-]
-
-const productClassOptions = [
-  { label: '高', value: '0' },
-  { label: '中', value: '1' },
-  { label: '低', value: '2' }
-]
-
-const typeOptions = [
-  { label: '清加工单', value: 'QJG' },
-  { label: 'OEM', value: 'OEM' },
-  { label: 'ODM', value: 'ODM' },
-  { label: '经销单', value: 'JXD' },
-  { label: '自营进出口单', value: 'ZCK' }
-]
 
 const FactoryReport = () => {
   const currentUser = getUserInfo() || {}
@@ -35,8 +16,11 @@ const FactoryReport = () => {
   const { commonStore, factoryStore } = useStores()
   const { dictionary } = commonStore
   const { productCategoryList } = factoryStore
-  const { factoryYearOutputValue = [], factoryYearOutputProd = [] } = toJS(dictionary)
-
+  const { factoryYearOutputValue = [], factoryYearOutputProd = [] } =
+    toJS(dictionary)
+  const productClassOptions = getProductClass()
+  const productionModeOptions = getProductMode()
+  const typeOptions = getTypeOptions()
   const [currentFactory, setCurrentFactory] = useState<any>({})
   const [mainList, setMainList] = useState<any>([])
   const [orderType, setOrderType] = useState<any>([])
@@ -50,45 +34,53 @@ const FactoryReport = () => {
       prev.push(...item.children)
       return prev
     }, [])
-    axios.get('/api/factory/info/get-factory-data', { factoryId }).then(response => {
-      const { success, data } = response
-      if (success) {
-        const { mainCategoriesList, factoryProcessTypeList } = data
-        setCurrentFactory({ ...data })
-        const newLabel = filter(childList, function (o) {
-          return find(mainCategoriesList, function (item) {
-            return item === o.id
-          })
-        }).map(item => item.name)
-        setMainList([...newLabel])
+    axios
+      .get('/api/factory/info/get-factory-data', { factoryId })
+      .then(response => {
+        const { success, data } = response
+        if (success) {
+          const { mainCategoriesList, factoryProcessTypeList } = data
+          setCurrentFactory({ ...data })
+          const newLabel = filter(childList, function (o) {
+            return find(mainCategoriesList, function (item) {
+              return item === o.id
+            })
+          }).map(item => item.name)
+          setMainList([...newLabel])
 
-        const newOrderType = filter(typeOptions, function (o) {
-          return find(factoryProcessTypeList, function (item) {
-            return item.processType === o.value
+          const newOrderType = filter(typeOptions, function (o) {
+            return find(factoryProcessTypeList, function (item) {
+              return item.processType === o.value
+            })
           })
-        })
-        setOrderType([...newOrderType])
-      }
-    })
+          setOrderType([...newOrderType])
+        }
+      })
   }
   const getInspectionMember = () => {
-    axios.get('/api/factory/info/get-audit-info', { factoryId }).then(response => {
-      const { success, data } = response
-      if (success) {
-        const { auditPersonInfoList, factoryRealAuditTime } = data
-        // setInspectionMember([...auditPersonInfoList])
-        setValidationTime(factoryRealAuditTime)
+    axios
+      .get('/api/factory/info/get-audit-info', { factoryId })
+      .then(response => {
+        const { success, data } = response
+        if (success) {
+          const { auditPersonInfoList, factoryRealAuditTime } = data
+          // setInspectionMember([...auditPersonInfoList])
+          setValidationTime(factoryRealAuditTime)
 
-        const text = auditPersonInfoList.map(item => `${item.userName}（${item.phoneNumber}）`).join('、')
-        setMemberText(text)
-      }
-    })
+          const text = auditPersonInfoList
+            .map(item => `${item.userName}（${item.phoneNumber}）`)
+            .join('、')
+          setMemberText(text)
+        }
+      })
   }
   const applyInspection = () => {
-    axios.get('/api/factory/info/update-factory-auditor-status', { factoryId }).then(response => {
-      const { success, msg } = response
-      message[success ? 'success' : 'error'](msg)
-    })
+    axios
+      .get('/api/factory/info/update-factory-auditor-status', { factoryId })
+      .then(response => {
+        const { success, msg } = response
+        message[success ? 'success' : 'error'](msg)
+      })
   }
 
   useEffect(() => {
@@ -111,7 +103,9 @@ const FactoryReport = () => {
               ),
               { title: memberText }
             )}
-          于{validationTime ? moment(validationTime).format('YYYY/MM/DD') : '--'} 经过实地验厂
+          于
+          {validationTime ? moment(validationTime).format('YYYY/MM/DD') : '--'}{' '}
+          经过实地验厂
         </div>
         <div className={styles.button} onClick={applyInspection}>
           <Icon type="jack-ycsq" className={styles.factoryIcon} />
@@ -129,7 +123,9 @@ const FactoryReport = () => {
               <span className={styles.subTitle}>工厂介绍</span>
             </div>
             <div className={styles.right}>
-              {currentFactory.enterpriseName}成立于{moment(currentFactory.factoryCreateTime).format('YYYY年')}，厂房占地面积
+              {currentFactory.enterpriseName}成立于
+              {moment(currentFactory.factoryCreateTime).format('YYYY年')}
+              ，厂房占地面积
               {currentFactory.factoryArea}平米
             </div>
           </li>
@@ -146,9 +142,14 @@ const FactoryReport = () => {
               <span className={styles.subTitle}>生产线和有效车位</span>
             </div>
             <div className={styles.right}>
-              生产线<b className={styles.strong}> {currentFactory.productLineNum} </b>条 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp;有效车位
-              <b className={styles.strong}> {currentFactory.effectiveLocation} </b>个
+              生产线
+              <b className={styles.strong}> {currentFactory.productLineNum} </b>
+              条 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;有效车位
+              <b className={styles.strong}>
+                {' '}
+                {currentFactory.effectiveLocation}{' '}
+              </b>
+              个
             </div>
           </li>
           <li>
@@ -159,14 +160,22 @@ const FactoryReport = () => {
             <div className={styles.right}>
               年生产值
               <b className={styles.strong}>
-                {factoryYearOutputValue.find(item => item.value === currentFactory.yearOutputValue)
-                  ? factoryYearOutputValue.find(item => item.value === currentFactory.yearOutputValue).label
+                {factoryYearOutputValue.find(
+                  item => item.value === currentFactory.yearOutputValue
+                )
+                  ? factoryYearOutputValue.find(
+                      item => item.value === currentFactory.yearOutputValue
+                    ).label
                   : '--'}
               </b>
               人民币&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;年生产量
               <b className={styles.strong}>
-                {factoryYearOutputProd.find(item => item.value === currentFactory.yearOutputProd)
-                  ? factoryYearOutputProd.find(item => item.value === currentFactory.yearOutputProd).label
+                {factoryYearOutputProd.find(
+                  item => item.value === currentFactory.yearOutputProd
+                )
+                  ? factoryYearOutputProd.find(
+                      item => item.value === currentFactory.yearOutputProd
+                    ).label
                   : '--'}
               </b>
             </div>
@@ -187,18 +196,38 @@ const FactoryReport = () => {
             <div className={styles.right}>
               <ul className={styles.classes}>
                 <li className={styles.classesLi}>
-                  <Badge color="blue" text="主营类别" className={styles.classesSubtitle} />
+                  <Badge
+                    color="blue"
+                    text="主营类别"
+                    className={styles.classesSubtitle}
+                  />
                   <span>{mainList.join('、')}</span>
                 </li>
                 <li className={styles.classesLi}>
-                  <Badge color="blue" text="擅长产品品类" className={styles.classesSubtitle} />
-                  <span>{currentFactory.mainProductCategoriesDesc ? currentFactory.mainProductCategoriesDesc : '--'}</span>
+                  <Badge
+                    color="blue"
+                    text="擅长产品品类"
+                    className={styles.classesSubtitle}
+                  />
+                  <span>
+                    {currentFactory.mainProductCategoriesDesc
+                      ? currentFactory.mainProductCategoriesDesc
+                      : '--'}
+                  </span>
                 </li>
                 <li className={styles.classesLi}>
-                  <Badge color="blue" text="产品档次" className={styles.classesSubtitle} />
+                  <Badge
+                    color="blue"
+                    text="产品档次"
+                    className={styles.classesSubtitle}
+                  />
                   <span>
-                    {productClassOptions.find(item => item.value == currentFactory.clothesGrade)
-                      ? productClassOptions.find(item => item.value == currentFactory.clothesGrade).label
+                    {productClassOptions.find(
+                      item => item.value == currentFactory.clothesGrade
+                    )
+                      ? productClassOptions.find(
+                          item => item.value == currentFactory.clothesGrade
+                        ).label
                       : '--'}
                   </span>
                 </li>
@@ -211,8 +240,12 @@ const FactoryReport = () => {
               <span className={styles.subTitle}>生产方式</span>
             </div>
             <div className={styles.right}>
-              {productionModeOptions.find(item => item.value == currentFactory.productionMode)
-                ? productionModeOptions.find(item => item.value == currentFactory.productionMode).label
+              {productionModeOptions.find(
+                item => item.value == currentFactory.productionMode
+              )
+                ? productionModeOptions.find(
+                    item => item.value == currentFactory.productionMode
+                  ).label
                 : '--'}
             </div>
           </li>
@@ -221,21 +254,29 @@ const FactoryReport = () => {
               <Icon type="jack-jdlx" className={styles.icon} />
               <span className={styles.subTitle}>接单类型</span>
             </div>
-            <div className={styles.right}>{orderType.map(item => item.label).join('、')}</div>
+            <div className={styles.right}>
+              {orderType.map(item => item.label).join('、')}
+            </div>
           </li>
           <li>
             <div className={styles.left}>
               <Icon type="jack-qdl" className={styles.icon} />
               <span className={styles.subTitle}>起订量</span>
             </div>
-            <div className={styles.right}>最少起订量{currentFactory.moq ? currentFactory.moq : '--'}件</div>
+            <div className={styles.right}>
+              最少起订量{currentFactory.moq ? currentFactory.moq : '--'}件
+            </div>
           </li>
           <li>
             <div className={styles.left}>
               <Icon type="jack-jdls" className={styles.icon} />
               <span className={styles.subTitle}>接单历史说明</span>
             </div>
-            <div className={styles.right}>{currentFactory.receiveOrderHistoryDesc ? currentFactory.receiveOrderHistoryDesc : '无'}</div>
+            <div className={styles.right}>
+              {currentFactory.receiveOrderHistoryDesc
+                ? currentFactory.receiveOrderHistoryDesc
+                : '无'}
+            </div>
           </li>
         </ul>
       </div>
@@ -250,21 +291,33 @@ const FactoryReport = () => {
               <Icon type="jack-rjyy" className={styles.icon} />
               <span className={styles.subTitle}>软件应用</span>
             </div>
-            <div className={styles.right}>{currentFactory.softwareApplicationUsage ? currentFactory.softwareApplicationUsage : '无'}</div>
+            <div className={styles.right}>
+              {currentFactory.softwareApplicationUsage
+                ? currentFactory.softwareApplicationUsage
+                : '无'}
+            </div>
           </li>
           <li>
             <div className={styles.left}>
               <Icon type="jack-sblw" className={styles.icon} />
               <span className={styles.subTitle}>设备联网情况</span>
             </div>
-            <div className={styles.right}>{currentFactory.deviceNetworkDesc ? currentFactory.deviceNetworkDesc : '无'}</div>
+            <div className={styles.right}>
+              {currentFactory.deviceNetworkDesc
+                ? currentFactory.deviceNetworkDesc
+                : '无'}
+            </div>
           </li>
           <li>
             <div className={styles.left}>
               <Icon type="jack-qtsm" className={styles.icon} />
               <span className={styles.subTitle}>其它说明</span>
             </div>
-            <div className={styles.right}>{currentFactory.digitalOtherDesc ? currentFactory.digitalOtherDesc : '无'}</div>
+            <div className={styles.right}>
+              {currentFactory.digitalOtherDesc
+                ? currentFactory.digitalOtherDesc
+                : '无'}
+            </div>
           </li>
         </ul>
       </div>

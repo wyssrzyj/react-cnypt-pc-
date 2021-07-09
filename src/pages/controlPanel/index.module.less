@@ -4,31 +4,115 @@
   width: 100%;
   background: @containerBg;
 }
+
 .controlPanelContainer {
-  width: 1200px;
+  // width: 1200px;
   margin: 0 auto;
   display: flex;
   height: 100%;
   background-color: #F9F9FC;
 }
+
 .controlPanelLeft {
+  display: flex;
   position: sticky;
   top: 0;
   // float: left;
   min-width: 256px;
   height: calc(100vh-120px);
   background-color: #001529;
+
+  :global {
+    .ant-menu-item-icon {
+      font-size: 16px !important;
+    }
+  }
 }
+
+.slideBar {
+  padding-top: 60px;
+  width: 100px;
+  height: 100%;
+  text-align: center;
+  background: #3B80FF;
+  color: #ffffff;
+}
+
+.logoIcon {
+  font-size: 36px;
+  margin-bottom: 200px;
+}
+
+.slideIconBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.slideIcon {
+  font-size: 30px;
+}
+
+.activeIconBox {
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.activeIcon {
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  cursor: pointer;
+
+  &:hover {
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+  }
+}
+
 .controlPanelRight {
   flex: 1;
   width: auto;
   // margin-left: 260px;
   padding: 4px 12px;
 }
+
 .contentTitle {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
-  padding: 8px 0;
+  padding: 0 0 20px;
   font-weight: bold;
   font-size: 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.contentLeft {
+  width: 125px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.headerIcon {
+  font-size: 20px;
+  margin-right: 24px;
+  cursor: pointer;
+}
+
+.menuIcon {
+  color: #ffffff;
 }

@@ -71,7 +71,7 @@ const Factory = () => {
   }
   const getBrowsingHistory = async () => {
     const response = await axios.post('/api/factory/info/reactBrowsing', {
-      pageSize: 5,
+      pageSize: 3,
       userId
     })
     const { success, data } = response
@@ -90,7 +90,7 @@ const Factory = () => {
     }
     const params = {
       pageNum,
-      pageSize: 3,
+      pageSize: 10,
       // mainCategoryParentId: defaultMainId,
       factoryName,
       ...factoryParams
@@ -160,8 +160,8 @@ const Factory = () => {
           </div>
           <div className={styles.contentRight}>
             <div className={styles.newFactory}>
-              <img className={styles.newFactoryImg} src={require('@/static/images/u1506.png')} />
-              <div className={styles.newFactoryTitle}>工厂入驻</div>
+              <img className={styles.newFactoryImg} src={require('@/static/images/ruzhu_bg.png')} />
+              {/* <div className={styles.newFactoryTitle}>工厂入驻</div> */}
             </div>
             <FactoryCard title="推荐好工厂" list={factoryList} />
             <FactoryCard title="最近浏览记录" list={browsingList} />

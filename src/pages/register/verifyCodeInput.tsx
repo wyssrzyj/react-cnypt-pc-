@@ -6,41 +6,45 @@ import { useStores } from '@/utils/mobx'
 type InputEvent = ChangeEvent<HTMLInputElement>
 
 const VerifyCodeInput = props => {
-  const { onChange, value, tel } = props
+  const { onChange, value, tel, placeholder, code, ...rest } = props
 
   const { registerStore } = useStores()
   const { sendVerifyCode } = registerStore
   const verifyTime = 60
 
-  const [val, setVal] = useState<string>(value)
   const [lastTime, setLastTime] = useState<number>(verifyTime)
   const [sending, setSending] = useState<boolean>(false)
   const [timer, setTimer] = useState<any>(null)
 
   const valueChange = (event: InputEvent) => {
-    setVal(event.target.value)
+    onChange && onChange(event.target.value)
   }
-
   useEffect(() => {
-    const last = localStorage.getItem('verifyTime')
+    const last = localStorage.getItem(`verifyTime${code}`)
     if (last) {
-      setLastTime(+last)
-      setSending(true)
-      timerRun()
+      const lastFlag = Date.now() - +last < verifyTime * 1000
+      if (lastFlag) {
+        setLastTime(Math.ceil((Date.now() - +last) / 1000))
+        setSending(true)
+        timerRun()
+      } else {
+        localStorage.setItem(`verifyTime${code}`, '')
+      }
     }
   }, [])
 
-  useEffect(() => {
-    console.log(val)
-    onChange && onChange(val)
-  }, [val])
-
   const timerRun = () => {
+    let last = localStorage.getItem(`verifyTime${code}`)
+
+    if (!last) {
+      last = Date.now().toString()
+      localStorage.setItem(`verifyTime${code}`, last)
+    }
+
     const t = setInterval(() => {
-      setLastTime(t => {
-        const n = t - 1
-        localStorage.setItem('verifyTime', `${n}`)
-        return n
+      setLastTime(() => {
+        const n = verifyTime - (Date.now() - +last) / 1000
+        return Math.ceil(n)
       })
     }, 1000)
     setTimer(t)
@@ -48,10 +52,10 @@ const VerifyCodeInput = props => {
 
   const sendCode = async () => {
     if (sending) return
-    setSending(true)
-    timerRun()
 
-    await sendVerifyCode(tel)
+    const res = await sendVerifyCode(tel)
+    res && setSending(true)
+    res && timerRun()
   }
 
   useEffect(() => {
@@ -64,8 +68,13 @@ const VerifyCodeInput = props => {
   }, [lastTime])
 
   return (
-    <div style={{ display: 'flex' }}>
-      <Input onChange={valueChange} value={value} />
+    <div style={{ display: 'flex', width: '100%' }}>
+      <Input
+        onChange={valueChange}
+        value={value}
+        placeholder={placeholder}
+        {...rest}
+      />
       <Button
         disabled={sending}
         onClick={sendCode}

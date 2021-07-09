@@ -90,7 +90,7 @@ const Factory = () => {
     }
     const params = {
       pageNum,
-      pageSize: 3,
+      pageSize: 8,
       // mainCategoryParentId: defaultMainId,
       factoryName,
       ...factoryParams
@@ -151,17 +151,28 @@ const Factory = () => {
               {isEmpty(factoryArray) ? (
                 <Empty className={styles.nodata} />
               ) : (
-                factoryArray.map((item, index) => <OverflowCard key={index} {...item} />)
+                factoryArray.map((item, index) => (
+                  <OverflowCard key={index} {...item} />
+                ))
               )}
             </Spin>
             <div className={styles.factoryPage}>
-              <Pagination current={pageNum} pageSize={3} total={total} showSizeChanger={false} onChange={onPaginationChange} />
+              <Pagination
+                current={pageNum}
+                pageSize={3}
+                total={total}
+                showSizeChanger={false}
+                onChange={onPaginationChange}
+              />
             </div>
           </div>
           <div className={styles.contentRight}>
             <div className={styles.newFactory}>
-              <img className={styles.newFactoryImg} src={require('@/static/images/u1506.png')} />
-              <div className={styles.newFactoryTitle}>工厂入驻</div>
+              <img
+                className={styles.newFactoryImg}
+                src={require('@/static/images/ruzhu_bg.png')}
+              />
+              {/* <div className={styles.newFactoryTitle}>工厂入驻</div> */}
             </div>
             <FactoryCard title="推荐好工厂" list={factoryList} />
             <FactoryCard title="最近浏览记录" list={browsingList} />

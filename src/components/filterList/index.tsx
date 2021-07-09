@@ -56,8 +56,12 @@ const FilterList = props => {
   const [activeArea, setActiveArea] = useState<any>([])
   const [activeProcessing, setActiveProcessing] = useState<any>({}) //加工类型
   const [activeTabs, setActiveTabs] = useState<any>([])
-  const [mainCategory, setMainCategory] = useState<any>([{ id: '', name: '全部' }])
-  const [deputyCategory, setDeputyCategory] = useState<any>([{ id: '', name: '全部' }])
+  const [mainCategory, setMainCategory] = useState<any>([
+    { id: '', name: '全部' }
+  ])
+  const [deputyCategory, setDeputyCategory] = useState<any>([
+    { id: '', name: '全部' }
+  ])
   const [activeMainCategory, setActiveMainCategory] = useState<string>('')
   const [activeDeputyCategory, setActiveDeputyCategory] = useState<any>({
     id: '',
@@ -201,7 +205,10 @@ const FilterList = props => {
     //产品类别
     if (activeDeputyCategory.id === id) {
       setActiveDeputyCategory({ id: '' })
-      onFilterChange({ mainCategoryParentId: activeMainCategory, mainCategoryChildId: '' })
+      onFilterChange({
+        mainCategoryParentId: activeMainCategory,
+        mainCategoryChildId: ''
+      })
     }
     //地区分类
     const index = activeArea.findIndex(area => area.id === id)
@@ -235,10 +242,14 @@ const FilterList = props => {
       if (state && state.mainCategoryChildId && state.mainCategoryParentId) {
         setMainCategory([{ id: '', name: '全部' }, ...newData])
         setActiveMainCategory(state.mainCategoryParentId)
-        const targetCategory = toJS(productCategoryList).find(item => item.id === state.mainCategoryParentId)
+        const targetCategory = toJS(productCategoryList).find(
+          item => item.id === state.mainCategoryParentId
+        )
         if (targetCategory && targetCategory.children) {
           setDeputyCategory([...targetCategory.children])
-          const target = targetCategory.children.find(i => i.id === state.mainCategoryChildId)
+          const target = targetCategory.children.find(
+            i => i.id === state.mainCategoryChildId
+          )
           if (target) {
             setActiveDeputyCategory({ id: target.id, name: target.name })
             onFilterChange({
@@ -287,7 +298,10 @@ const FilterList = props => {
             {mainCategory.map(item => (
               <span
                 key={item.id}
-                className={classNames(styles.classificationSpan, item.id === activeMainCategory ? styles.active : null)}
+                className={classNames(
+                  styles.classificationSpan,
+                  item.id === activeMainCategory ? styles.active : null
+                )}
                 onClick={() => cutMainCategory(item.id)}
               >
                 {item.name}
@@ -298,8 +312,13 @@ const FilterList = props => {
             {deputyCategory.map(item => (
               <span
                 key={item.id}
-                className={classNames(styles.classificationSpan, item.id === activeDeputyCategory.id ? styles.active : null)}
-                onClick={() => onProductChange({ id: item.id, name: item.name })}
+                className={classNames(
+                  styles.classificationSpan,
+                  item.id === activeDeputyCategory.id ? styles.active : null
+                )}
+                onClick={() =>
+                  onProductChange({ id: item.id, name: item.name })
+                }
               >
                 {item.name}
               </span>
@@ -309,9 +328,17 @@ const FilterList = props => {
       </div>
       <div className={styles.classification}>
         <div className={styles.classificationLabel}>地区分类</div>
-        <div className={classNames(styles.classificationItem, styles.areaCategory)}>
+        <div
+          className={classNames(styles.classificationItem, styles.areaCategory)}
+        >
           <div>
-            <span className={classNames(styles.classificationSpan, isEmpty(activeArea) ? styles.active : null)} onClick={selectAllArea}>
+            <span
+              className={classNames(
+                styles.classificationSpan,
+                isEmpty(activeArea) ? styles.active : null
+              )}
+              onClick={selectAllArea}
+            >
               全部
             </span>
             {areaCategory.map(item => (
@@ -319,7 +346,9 @@ const FilterList = props => {
                 key={item.id}
                 className={classNames(
                   styles.classificationSpan,
-                  activeArea.findIndex(val => val.id === item.id) > -1 ? styles.active : null
+                  activeArea.findIndex(val => val.id === item.id) > -1
+                    ? styles.active
+                    : null
                 )}
                 onClick={() => selectActiveArea(item)}
               >
@@ -327,7 +356,10 @@ const FilterList = props => {
               </span>
             ))}
           </div>
-          <Button disabled={!toJS(allArea).length} onClick={() => setModalVisible(true)}>
+          <Button
+            disabled={!toJS(allArea).length}
+            onClick={() => setModalVisible(true)}
+          >
             更多
           </Button>
         </div>
@@ -336,7 +368,10 @@ const FilterList = props => {
         <div className={styles.classificationLabel}>加工类型</div>
         <div className={styles.classificationItem}>
           <span
-            className={classNames(styles.classificationSpan, isEmpty(activeProcessing) ? styles.active : null)}
+            className={classNames(
+              styles.classificationSpan,
+              isEmpty(activeProcessing) ? styles.active : null
+            )}
             onClick={selectAllProcessing}
           >
             全部
@@ -344,8 +379,13 @@ const FilterList = props => {
           {prodType.map(item => (
             <span
               key={item.id}
-              className={classNames(styles.classificationSpan, item.value === activeProcessing.id ? styles.active : null)}
-              onClick={() => onProcessingChange({ id: item.value, name: item.label })}
+              className={classNames(
+                styles.classificationSpan,
+                item.value === activeProcessing.id ? styles.active : null
+              )}
+              onClick={() =>
+                onProcessingChange({ id: item.value, name: item.label })
+              }
             >
               {item.label}
             </span>
@@ -355,21 +395,39 @@ const FilterList = props => {
       <div className={styles.classification}>
         <div className={styles.classificationLabel}>更多选项</div>
         <div className={styles.classificationItem}>
-          <Select allowClear placeholder="成立时间" value={setUpTime} className={styles.moreSelect} onChange={onSetUpTimeChange}>
+          <Select
+            allowClear
+            placeholder="成立时间"
+            value={setUpTime}
+            className={styles.moreSelect}
+            onChange={onSetUpTimeChange}
+          >
             {setUpTimeMap.map(item => (
               <Option key={item.value} value={item.value}>
                 {item.label}
               </Option>
             ))}
           </Select>
-          <Select allowClear placeholder="有效车位" className={styles.moreSelect} value={factorySize} onChange={onFactorySizeChange}>
+          <Select
+            allowClear
+            placeholder="有效车位"
+            className={styles.moreSelect}
+            value={factorySize}
+            onChange={onFactorySizeChange}
+          >
             {factoryEffectiveLocation.map(item => (
               <Option key={item.id} value={item.value}>
                 {item.label}
               </Option>
             ))}
           </Select>
-          <Select allowClear value={updateTime} onChange={onUpdateTimeChange} placeholder="更新时间" className={styles.moreSelect}>
+          <Select
+            allowClear
+            value={updateTime}
+            onChange={onUpdateTimeChange}
+            placeholder="更新时间"
+            className={styles.moreSelect}
+          >
             {updateTimeMap.map(item => (
               <Option key={item.value} value={item.value}>
                 {item.label}
@@ -382,7 +440,13 @@ const FilterList = props => {
         <div className={styles.classificationLabel}>已选条件</div>
         <div className={styles.classificationItem}>
           {activeTabs.map(item => (
-            <Tag color="orange" className={styles.activeTab} closable key={item.id + 'tag'} onClose={() => closeTag(item)}>
+            <Tag
+              color="blue"
+              className={styles.activeTab}
+              closable
+              key={item.id + 'tag'}
+              onClose={() => closeTag(item)}
+            >
               {item.name}
             </Tag>
           ))}
@@ -408,7 +472,12 @@ const FilterList = props => {
         ))}
       </Tabs> */}
       {modalVisible && (
-        <AreaModal visible={modalVisible} selectedCity={activeArea} handleCancel={() => setModalVisible(false)} handleOk={handleModalOk} />
+        <AreaModal
+          visible={modalVisible}
+          selectedCity={activeArea}
+          handleCancel={() => setModalVisible(false)}
+          handleOk={handleModalOk}
+        />
       )}
     </div>
   )

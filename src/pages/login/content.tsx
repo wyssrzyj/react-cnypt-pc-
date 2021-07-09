@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styles from './index.module.less'
-import { Input, Button, Tabs, Checkbox, Form } from 'antd'
+import { Input, Button, Tabs, Form } from 'antd'
 import Icon from '@/components/Icon'
 import classNamess from 'classnames'
 import { useStores, observer } from '@/utils/mobx'

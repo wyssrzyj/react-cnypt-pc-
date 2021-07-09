@@ -139,3 +139,29 @@ export const getTreeData = (data: any[]) => {
   toTree(target, data)
   return target
 }
+
+export const getTypeOptions = () => {
+  return [
+    { label: '清加工单', value: 'QJG' },
+    { label: 'OEM', value: 'OEM' },
+    { label: 'ODM', value: 'ODM' },
+    { label: '经销单', value: 'JXD' },
+    { label: '自营进出口单', value: 'ZCK' }
+  ]
+}
+
+export const getProductClass = () => {
+  return [
+    { label: '高', value: '0' },
+    { label: '中', value: '1' },
+    { label: '低', value: '2' }
+  ]
+}
+
+export const getProductMode = () => {
+  return [
+    { label: '流水', value: '0' },
+    { label: '整件', value: '1' },
+    { label: '流水和整件', value: '2' }
+  ]
+}

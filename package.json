@@ -108,7 +108,8 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/runtime": "^7.12.5",
     "@mapbox/mapbox-gl-language": "^0.10.1",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "react-viewer": "^3.2.2"
   },
   "sideEffects": [
     "*.css",

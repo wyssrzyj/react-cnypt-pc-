@@ -9,7 +9,10 @@ import {
   // VerifiedOutlined,
   // ExceptionOutlined,
   TagsOutlined,
-  BookOutlined
+  BookOutlined,
+  PictureOutlined,
+  PartitionOutlined,
+  AppstoreOutlined
 } from '@ant-design/icons'
 import { useStores } from '@/utils/mobx'
 import {
@@ -17,7 +20,9 @@ import {
   PlantSitePhoto,
   QualificationCertification,
   CertificateAuthentication,
-  FactoryReport
+  FactoryReport,
+  FactoryEquipment,
+  FactoryPhotograph
 } from './components'
 import { getUserInfo } from '@/utils/tool'
 import styles from './index.module.less'
@@ -38,6 +43,8 @@ menusName.set('/control-panel/certificate', '企业证件认证')
 menusName.set('/control-panel/report', '验厂报告')
 menusName.set('/control-panel/account', '账号安全')
 menusName.set('/control-panel/logs', '登录日志')
+menusName.set('/control-panel/equipment', '车间设备')
+menusName.set('/control-panel/photograph', '工厂照片')
 
 const menuKeys = new Map()
 menuKeys.set('/control-panel/qualification', ['qualification', 'sub2', 'sub1'])
@@ -48,6 +55,9 @@ menuKeys.set('/control-panel/certificate', ['certificate', 'sub1'])
 menuKeys.set('/control-panel/report', ['report', 'sub1'])
 menuKeys.set('/control-panel/account', ['account', 'sub1'])
 menuKeys.set('/control-panel/logs', ['account', 'sub1'])
+menuKeys.set('/control-panel/report', ['report', 'sub2'])
+menuKeys.set('/control-panel/equipment', ['equipment', 'sub2'])
+menuKeys.set('/control-panel/photograph', ['photograph', 'sub2'])
 
 const subsMap = new Map()
 subsMap.set('/control-panel/qualification', ['sub2', 'sub1'])
@@ -58,6 +68,9 @@ subsMap.set('/control-panel/certificate', ['sub1'])
 subsMap.set('/control-panel/report', ['sub1'])
 subsMap.set('/control-panel/account', ['sub1'])
 subsMap.set('/control-panel/logs', ['sub1'])
+subsMap.set('/control-panel/report', ['sub2'])
+subsMap.set('/control-panel/equipment', ['sub2'])
+subsMap.set('/control-panel/photograph', ['sub2'])
 
 const ControlPanel = () => {
   const { factoryStore } = useStores()
@@ -165,10 +178,19 @@ const ControlPanel = () => {
                 <Link to="/control-panel/qualification">资质认证</Link>
               </Menu.Item>
             )}
+
             {factoryAuditStatus == '1' && (
-              <Menu.Item key="report" icon={<BankOutlined />}>
-                <Link to="/control-panel/report">验厂报告</Link>
-              </Menu.Item>
+              <SubMenu key="sub2" icon={<AppstoreOutlined />} title="验厂管理">
+                <Menu.Item key="report" icon={<BankOutlined />}>
+                  <Link to="/control-panel/report">基础资料报告</Link>
+                </Menu.Item>
+                <Menu.Item key="equipment" icon={<PartitionOutlined />}>
+                  <Link to="/control-panel/equipment">车间设备</Link>
+                </Menu.Item>
+                <Menu.Item key="photograph" icon={<PictureOutlined />}>
+                  <Link to="/control-panel/photograph">工厂照片</Link>
+                </Menu.Item>
+              </SubMenu>
             )}
             <Menu.Item
               key="account"
@@ -239,6 +261,16 @@ const ControlPanel = () => {
             {/* 验厂报告*/}
             <Route path="/control-panel/report" component={FactoryReport} />
             <Route path="/control-panel/account" component={AccountSafe} />
+            {/* 车间设备 */}
+            <Route
+              path="/control-panel/equipment"
+              component={FactoryEquipment}
+            />
+            {/* 工厂照片 */}
+            <Route
+              path="/control-panel/photograph"
+              component={FactoryPhotograph}
+            />
             <Redirect to="/platform" />
           </Switch>
         </div>

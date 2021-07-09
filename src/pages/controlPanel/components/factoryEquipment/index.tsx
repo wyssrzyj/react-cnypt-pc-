@@ -87,10 +87,12 @@ const FactoryEquipment = () => {
   }
 
   const applyInspection = () => {
-    axios.get('/api/factory/info/update-factory-auditor-status', { factoryId }).then(response => {
-      const { success, msg } = response
-      message[success ? 'success' : 'error'](msg)
-    })
+    axios
+      .get('/api/factory/info/update-factory-auditor-status', { factoryId })
+      .then(response => {
+        const { success, msg } = response
+        message[success ? 'success' : 'error'](msg)
+      })
   }
 
   useEffect(() => {
@@ -98,7 +100,11 @@ const FactoryEquipment = () => {
   }, [])
   return (
     <div>
-      <Button style={{ margin: '20px 0' }} type="primary" onClick={applyInspection}>
+      <Button
+        style={{ margin: '20px 0' }}
+        type="primary"
+        onClick={applyInspection}
+      >
         设备更新，申请再次验厂
       </Button>
       <Table

@@ -23,7 +23,8 @@ const QualificationCertificate = props => {
       const { records = [] } = data
       const newData = records.map(item => ({
         ...item,
-        certificationName: factoryCertificate.find(o => o.value === item.certificationName) || {}
+        certificationName:
+          factoryCertificate.find(o => o.value === item.certificationName) || {}
       }))
       setCertificate([...newData])
     }
@@ -48,7 +49,10 @@ const QualificationCertificate = props => {
           ) : (
             certificate.map(item => (
               <div key={item.id} className={styles.certificateBox}>
-                <img className={styles.certificateImg} src={item.certificateImageURI} />
+                <img
+                  className={styles.certificateImg}
+                  src={item.certificateImageURI}
+                />
                 <span>{item.certificationName.label}</span>
               </div>
             ))

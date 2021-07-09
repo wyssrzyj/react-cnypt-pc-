@@ -29,7 +29,11 @@ const FactoryPhotograph = () => {
           setNameplateFileList([...factoryAuditorImages])
           setLocationFileList([...outsizeImages])
           setWorkshopFileList([...workshopImages])
-          const newImages = [...factoryAuditorImages, ...outsizeImages, ...workshopImages].map(item => ({ src: item }))
+          const newImages = [
+            ...factoryAuditorImages,
+            ...outsizeImages,
+            ...workshopImages
+          ].map(item => ({ src: item }))
           setAllImages([...newImages])
         }
       })

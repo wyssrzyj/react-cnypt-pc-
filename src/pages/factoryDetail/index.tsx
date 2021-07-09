@@ -4,7 +4,15 @@ import { isEmpty } from 'lodash'
 import SlideBars from '../homePage/components/slideBar'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
-import { Overview, CompaniesIntroduce, CommercialInfo, OrderInfo, Digital, WorkshopEquipment, QualificationCertificate } from './components'
+import {
+  Overview,
+  CompaniesIntroduce,
+  CommercialInfo,
+  OrderInfo,
+  Digital,
+  WorkshopEquipment,
+  QualificationCertificate
+} from './components'
 import styles from './index.module.less'
 
 const barList = [
@@ -95,7 +103,9 @@ const FactoryDetail = props => {
       <header className={styles.header}>
         <div className={styles.container}>
           <div className={styles.left}>
-            {factoryInfo.logoUrl ? <img className={styles.logo} src={factoryInfo.logoUrl} alt="" /> : null}
+            {factoryInfo.logoUrl ? (
+              <img className={styles.logo} src={factoryInfo.logoUrl} alt="" />
+            ) : null}
 
             <span className={styles.name}>{factoryInfo.enterpriseName}</span>
           </div>
@@ -105,11 +115,17 @@ const FactoryDetail = props => {
         </div>
       </header>
       <div className={styles.homeContainer}>
-        {!isEmpty(factoryInfo) && <Overview factoryId={factoryId} current={factoryInfo} />}
+        {!isEmpty(factoryInfo) && (
+          <Overview factoryId={factoryId} current={factoryInfo} />
+        )}
 
         {/* 企业介绍 */}
         <div ref={domRef1} className={styles.intelligenceSearch}>
-          <CompaniesIntroduce factoryId={factoryId} current={factoryInfo} update={getFactoryInfo} />
+          <CompaniesIntroduce
+            factoryId={factoryId}
+            current={factoryInfo}
+            update={getFactoryInfo}
+          />
         </div>
 
         {/* 工商信息 */}

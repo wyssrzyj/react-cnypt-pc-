@@ -26,7 +26,9 @@ const OrderInfo = props => {
           const { factoryCategoryList, factoryProcessTypeList } = data
           setCurrentFactory({ ...data })
           if (factoryCategoryList) {
-            const newLabel = factoryCategoryList.map(item => `${item.name}（${item.remark}）`)
+            const newLabel = factoryCategoryList.map(
+              item => `${item.name}（${item.remark}）`
+            )
             setMainList([...newLabel])
           }
           if (factoryProcessTypeList) {
@@ -50,7 +52,9 @@ const OrderInfo = props => {
       <header className={styles.header}>
         <div>
           <span className={styles.textCn}>生产接单介绍</span>
-          <span className={styles.textEn}>INTRODUCTION OF PRODUCTION ORDER RECEIVING</span>
+          <span className={styles.textEn}>
+            INTRODUCTION OF PRODUCTION ORDER RECEIVING
+          </span>
         </div>
       </header>
       <ul className={styles.content}>
@@ -62,20 +66,38 @@ const OrderInfo = props => {
           <div className={styles.right}>
             <ul className={styles.classes}>
               <li className={styles.classesLi}>
-                <Badge color="blue" text="主营类别" className={styles.classesSubtitle} />
+                <Badge
+                  color="blue"
+                  text="主营类别"
+                  className={styles.classesSubtitle}
+                />
                 <span className={styles.strongText}>{mainList.join('，')}</span>
               </li>
               <li className={styles.classesLi}>
-                <Badge color="blue" text="擅长产品品类" className={styles.classesSubtitle} />
+                <Badge
+                  color="blue"
+                  text="擅长产品品类"
+                  className={styles.classesSubtitle}
+                />
                 <span className={styles.strongText}>
-                  {currentFactory.mainProductCategoriesDesc ? currentFactory.mainProductCategoriesDesc : '--'}
+                  {currentFactory.mainProductCategoriesDesc
+                    ? currentFactory.mainProductCategoriesDesc
+                    : '--'}
                 </span>
               </li>
               <li className={styles.classesLi}>
-                <Badge color="blue" text="产品档次" className={styles.classesSubtitle} />
+                <Badge
+                  color="blue"
+                  text="产品档次"
+                  className={styles.classesSubtitle}
+                />
                 <span className={styles.strongText}>
-                  {productClassOptions.find(item => item.value == currentFactory.clothesGrade)
-                    ? productClassOptions.find(item => item.value == currentFactory.clothesGrade).label
+                  {productClassOptions.find(
+                    item => item.value == currentFactory.clothesGrade
+                  )
+                    ? productClassOptions.find(
+                        item => item.value == currentFactory.clothesGrade
+                      ).label
                     : '--'}
                 </span>
               </li>
@@ -88,8 +110,12 @@ const OrderInfo = props => {
             <span className={styles.subTitle}>生产方式</span>
           </div>
           <div className={styles.right}>
-            {productionModeOptions.find(item => item.value == currentFactory.productionMode)
-              ? productionModeOptions.find(item => item.value == currentFactory.productionMode).label
+            {productionModeOptions.find(
+              item => item.value == currentFactory.productionMode
+            )
+              ? productionModeOptions.find(
+                  item => item.value == currentFactory.productionMode
+                ).label
               : '--'}
           </div>
         </li>
@@ -98,21 +124,29 @@ const OrderInfo = props => {
             <Icon type="jack-jdlx" className={styles.icon} />
             <span className={styles.subTitle}>接单类型</span>
           </div>
-          <div className={styles.right}>{orderType.map(item => item.label).join('、')}</div>
+          <div className={styles.right}>
+            {orderType.map(item => item.label).join('、')}
+          </div>
         </li>
         <li>
           <div className={styles.left}>
             <Icon type="jack-qdl" className={styles.icon} />
             <span className={styles.subTitle}>起订量</span>
           </div>
-          <div className={styles.right}>最少起订量{currentFactory.moq ? currentFactory.moq : '--'}件</div>
+          <div className={styles.right}>
+            最少起订量{currentFactory.moq ? currentFactory.moq : '--'}件
+          </div>
         </li>
         <li>
           <div className={styles.left}>
             <Icon type="jack-jdls" className={styles.icon} />
             <span className={styles.subTitle}>接单历史说明</span>
           </div>
-          <div className={styles.right}>{currentFactory.receiveOrderHistoryDesc ? currentFactory.receiveOrderHistoryDesc : '无'}</div>
+          <div className={styles.right}>
+            {currentFactory.receiveOrderHistoryDesc
+              ? currentFactory.receiveOrderHistoryDesc
+              : '无'}
+          </div>
         </li>
       </ul>
     </div>

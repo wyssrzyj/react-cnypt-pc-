@@ -1,17 +1,22 @@
 import React from 'react'
-import styles from './index.module.less'
-import LoginHeader from './header'
 import LoginContent from './content'
-import Footer from './footer'
+import Register from '@/pages/register'
+import Reset from './reset'
+import styles from './index.module.less'
+import { Route, Switch, Redirect } from 'react-router-dom'
 
-const Login = () => {
+const LoginAndRegister = () => {
   return (
-    <div className={styles.loginContainer}>
-      <LoginHeader></LoginHeader>
-      <LoginContent></LoginContent>
-      <Footer></Footer>
+    <div className={styles.content}>
+      <div className={styles.banner}></div>
+      <Switch>
+        <Route path="/user/login" component={LoginContent} />
+        <Route path="/user/register" component={Register} />
+        <Route path="/user/reset" component={Reset} />
+        <Redirect to="/user/login" />
+      </Switch>
     </div>
   )
 }
 
-export default Login
+export default LoginAndRegister

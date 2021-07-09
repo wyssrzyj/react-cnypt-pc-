@@ -4,7 +4,14 @@ import { toJS } from 'mobx'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { useStores, observer } from '@/utils/mobx'
-import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs } from 'swiper'
+import SwiperCore, {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+  Thumbs
+} from 'swiper'
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
@@ -152,14 +159,34 @@ const WorkshopEquipment = props => {
               </div>
             ))}
           </div>
-          <div className="swiper-button-next workshop-equipment-next" ref={leftRef}></div>
-          <div className="swiper-button-prev workshop-equipment-next" ref={rightRef}></div>
+          <div
+            className="swiper-button-next workshop-equipment-next"
+            ref={leftRef}
+          ></div>
+          <div
+            className="swiper-button-prev workshop-equipment-next"
+            ref={rightRef}
+          ></div>
         </div>
-        <div className="equipment-button equipment-button-next" onClick={toLeft}>
-          {curKey === 0 ? <Icon type="jack-shang_icon" /> : <Icon type="jack-xia_icon" className={styles.upIcon} />}
+        <div
+          className="equipment-button equipment-button-next"
+          onClick={toLeft}
+        >
+          {curKey === 0 ? (
+            <Icon type="jack-shang_icon" />
+          ) : (
+            <Icon type="jack-xia_icon" className={styles.upIcon} />
+          )}
         </div>
-        <div className="equipment-button equipment-button-prev" onClick={toRight}>
-          {curKey < factoryImg.length - 1 ? <Icon type="jack-xia_icon" /> : <Icon type="jack-shang_icon" className={styles.upIcon} />}
+        <div
+          className="equipment-button equipment-button-prev"
+          onClick={toRight}
+        >
+          {curKey < factoryImg.length - 1 ? (
+            <Icon type="jack-xia_icon" />
+          ) : (
+            <Icon type="jack-shang_icon" className={styles.upIcon} />
+          )}
         </div>
         <div className="swiper-container" id="equipment-thumbs">
           <div className="swiper-wrapper">

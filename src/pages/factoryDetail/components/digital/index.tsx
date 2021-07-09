@@ -55,7 +55,11 @@ const Digital = props => {
             <div>{digitalInfo.digitalOtherDesc}</div>
           </div>
           <div className={styles.imageBox}>
-            <img className={styles.image} src={require('@/static/images/qyszhqk_bg.png')} alt="" />
+            <img
+              className={styles.image}
+              src={require('@/static/images/qyszhqk_bg.png')}
+              alt=""
+            />
           </div>
         </div>
       </div>

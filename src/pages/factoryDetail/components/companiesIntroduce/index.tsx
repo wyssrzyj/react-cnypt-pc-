@@ -27,22 +27,25 @@ const CompaniesIntroduce = props => {
   const { userId } = currentUser
   const { commonStore } = useStores()
   const { dictionary } = commonStore
-  const { factoryYearOutputValue = [], factoryYearOutputProd = [] } = toJS(dictionary)
+  const { factoryYearOutputValue = [], factoryYearOutputProd = [] } =
+    toJS(dictionary)
   const [validationTime, setValidationTime] = useState('')
   const [memberText, setMemberText] = useState('')
 
   const getInspectionMember = () => {
-    axios.get('/api/factory/info/get-audit-info', { factoryId }).then(response => {
-      const { success, data } = response
-      if (success) {
-        const { auditPersonInfoList, factoryRealAuditTime } = data
-        // setInspectionMember([...auditPersonInfoList])
-        setValidationTime(factoryRealAuditTime)
+    axios
+      .get('/api/factory/info/get-audit-info', { factoryId })
+      .then(response => {
+        const { success, data } = response
+        if (success) {
+          const { auditPersonInfoList, factoryRealAuditTime } = data
+          // setInspectionMember([...auditPersonInfoList])
+          setValidationTime(factoryRealAuditTime)
 
-        const text = auditPersonInfoList.map(item => item.userName).join('、')
-        setMemberText(text)
-      }
-    })
+          const text = auditPersonInfoList.map(item => item.userName).join('、')
+          setMemberText(text)
+        }
+      })
   }
 
   const focusOn = () => {
@@ -74,8 +77,20 @@ const CompaniesIntroduce = props => {
           <span className={styles.textCn}>企业介绍</span>
           <span className={styles.textEn}>ENTERPRISE INTRODUCTION</span>
         </div>
-        <div className={classNames(styles.focusBox, followStatus ? styles.boxActive : styles.boxNormal)} onClick={focusOn}>
-          <Icon type="jack-xingxingmianxing" className={classNames(styles.focusOn, followStatus ? styles.active : null)} />
+        <div
+          className={classNames(
+            styles.focusBox,
+            followStatus ? styles.boxActive : styles.boxNormal
+          )}
+          onClick={focusOn}
+        >
+          <Icon
+            type="jack-xingxingmianxing"
+            className={classNames(
+              styles.focusOn,
+              followStatus ? styles.active : null
+            )}
+          />
           <span>{followStatus ? '已关注' : '关注'}</span>
         </div>
       </header>
@@ -97,7 +112,11 @@ const CompaniesIntroduce = props => {
             <span className={styles.head}>验厂负责人</span>
             <span>{memberText}</span>
             <Icon type="jack-shijian" className={styles.time} />
-            <span>{validationTime ? moment(validationTime).format('YYYY-MM-DD') : '--'}</span>
+            <span>
+              {validationTime
+                ? moment(validationTime).format('YYYY-MM-DD')
+                : '--'}
+            </span>
           </div>
         </div>
         <div className={styles.introduce}>
@@ -108,33 +127,51 @@ const CompaniesIntroduce = props => {
             <Row gutter={16}>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>有效车位</span>
-                <span className={styles.strong}>{effectiveLocation ? effectiveLocation : '--'} 人</span>
+                <span className={styles.strong}>
+                  {effectiveLocation ? effectiveLocation : '--'} 人
+                </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>厂房面积 </span>
-                <span className={styles.strong}>{factoryArea ? factoryArea : '--'} 平方米</span>
+                <span className={styles.strong}>
+                  {factoryArea ? factoryArea : '--'} 平方米
+                </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>成立时间 </span>
-                <span className={styles.strong}>{factoryCreateTime ? moment(factoryCreateTime).format('YYYY年') : '--'}</span>
+                <span className={styles.strong}>
+                  {factoryCreateTime
+                    ? moment(factoryCreateTime).format('YYYY年')
+                    : '--'}
+                </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>生产线数 </span>
-                <span className={styles.strong}>{productLineNum ? productLineNum : '--'} 条</span>
+                <span className={styles.strong}>
+                  {productLineNum ? productLineNum : '--'} 条
+                </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>年产值</span>
                 <span className={styles.strong}>
-                  {factoryYearOutputValue.find(item => item.value === yearOutputValue)
-                    ? factoryYearOutputValue.find(item => item.value === yearOutputValue).label
+                  {factoryYearOutputValue.find(
+                    item => item.value === yearOutputValue
+                  )
+                    ? factoryYearOutputValue.find(
+                        item => item.value === yearOutputValue
+                      ).label
                     : '--'}
                 </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>年产量 </span>
                 <span className={styles.strong}>
-                  {factoryYearOutputProd.find(item => item.value === yearOutputProd)
-                    ? factoryYearOutputProd.find(item => item.value === yearOutputProd).label
+                  {factoryYearOutputProd.find(
+                    item => item.value === yearOutputProd
+                  )
+                    ? factoryYearOutputProd.find(
+                        item => item.value === yearOutputProd
+                      ).label
                     : '--'}
                 </span>
               </Col>

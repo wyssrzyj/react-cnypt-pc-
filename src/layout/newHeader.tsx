@@ -61,11 +61,11 @@ const Header = () => {
   const history = useHistory()
 
   const toLogin = () => {
-    history.push('/login')
+    history.push('/user/login')
   }
 
   const toRegister = () => {
-    history.push('/register')
+    history.push('/user/register')
   }
 
   const logoutToLogin = async () => {
@@ -78,9 +78,11 @@ const Header = () => {
       <Menu.Item>
         <div>账号安全</div>
       </Menu.Item>
-      <Menu.Item>
-        <div onClick={logoutToLogin}>退出登录</div>
-      </Menu.Item>
+      {currentUser.userId ? (
+        <Menu.Item>
+          <div onClick={logoutToLogin}>退出登录</div>
+        </Menu.Item>
+      ) : null}
     </Menu>
   )
   const consoleMenu = (

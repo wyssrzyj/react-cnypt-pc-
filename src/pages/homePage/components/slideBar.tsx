@@ -39,7 +39,10 @@ const SlideBars = props => {
         return (
           <div
             key={item.label}
-            className={classNames(styles.slideItem, activeKey === idx + 1 ? styles.slideActive : null)}
+            className={classNames(
+              styles.slideItem,
+              activeKey === idx + 1 ? styles.slideActive : null
+            )}
             onClick={() => moveTo(idx + 1)}
           >
             <span className={styles.slideIcon}></span>

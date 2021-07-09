@@ -9,7 +9,14 @@ import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
 import { useStores, observer } from '@/utils/mobx'
-import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs } from 'swiper'
+import SwiperCore, {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+  Thumbs
+} from 'swiper'
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
 import './factoryDetail.less'
@@ -80,7 +87,9 @@ const FactoryInfo = props => {
         for (var i = 0; i < len; i++) {
           xing += '*'
         }
-        return str.substring(0, frontLen) + xing + str.substring(str.length - endLen)
+        return (
+          str.substring(0, frontLen) + xing + str.substring(str.length - endLen)
+        )
       } else {
         return str
       }
@@ -185,7 +194,12 @@ const FactoryInfo = props => {
             </li> */}
             <li>
               <span>有效车位：</span>
-              <span>{factoryInfo.effectiveLocation ? factoryInfo.effectiveLocation : '--'}人</span>
+              <span>
+                {factoryInfo.effectiveLocation
+                  ? factoryInfo.effectiveLocation
+                  : '--'}
+                人
+              </span>
             </li>
             <li>
               <span>加工类型：</span>
@@ -196,7 +210,11 @@ const FactoryInfo = props => {
               <span>
                 {factoryInfo.factoryCategoryList &&
                   factoryInfo.factoryCategoryList.map(item => (
-                    <Tag key={item.name} className={styles.factoryInfoTag} color="#f2f2f2">
+                    <Tag
+                      key={item.name}
+                      className={styles.factoryInfoTag}
+                      color="#f2f2f2"
+                    >
                       {item.name}
                     </Tag>
                   ))}
@@ -206,7 +224,11 @@ const FactoryInfo = props => {
               <span>企业标签：</span>
               <span>
                 {factoryTagList.map((item, index) => (
-                  <Tag key={index} className={styles.factoryInfoTag} color="#f2f2f2">
+                  <Tag
+                    key={index}
+                    className={styles.factoryInfoTag}
+                    color="#f2f2f2"
+                  >
                     {item}
                   </Tag>
                 ))}
@@ -232,7 +254,9 @@ const FactoryInfo = props => {
             <span>手机号码：</span>
             <span>{notLoggedIn(contactInfo.mobilePhone, 3, 4)}</span>
           </div>
-          <div className={classNames(styles.firstLineItem, styles.firstLineRight)}>
+          <div
+            className={classNames(styles.firstLineItem, styles.firstLineRight)}
+          >
             {isEmpty(currentUser) && (
               <span className={styles.firstLineIcon} onClick={goLogin}>
                 <Icon className={styles.icon} type="jack-login-settings" />

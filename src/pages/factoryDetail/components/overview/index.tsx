@@ -5,7 +5,14 @@ import { GaodeMap } from '@antv/l7-maps'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
-import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay, Thumbs } from 'swiper'
+import SwiperCore, {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+  Thumbs
+} from 'swiper'
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
@@ -20,7 +27,9 @@ const Overview = props => {
   const currentUser = getCurrentUser() || {}
   const { factoryOutsizeImages, factoryWorkshopImages } = current
   const factoryImg =
-    factoryOutsizeImages && factoryWorkshopImages ? [...current.factoryOutsizeImages, ...current.factoryWorkshopImages] : []
+    factoryOutsizeImages && factoryWorkshopImages
+      ? [...current.factoryOutsizeImages, ...current.factoryWorkshopImages]
+      : []
   const [contactInfo, setContactInfo] = useState<any>({})
   const [curKey, setCurKey] = useState(0)
 
@@ -45,7 +54,9 @@ const Overview = props => {
         for (var i = 0; i < len; i++) {
           xing += '*'
         }
-        return str.substring(0, frontLen) + xing + str.substring(str.length - endLen)
+        return (
+          str.substring(0, frontLen) + xing + str.substring(str.length - endLen)
+        )
       } else {
         return str
       }
@@ -103,7 +114,8 @@ const Overview = props => {
         const markerLayer = new MarkerLayer()
         const el = document.createElement('label')
         el.className = 'labelclass'
-        el.style.background = 'url(https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ)'
+        el.style.background =
+          'url(https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ)'
         const marker: any = new Marker({
           element: el
         }).setLnglat({ lng: longitude, lat: latitude })
@@ -130,8 +142,14 @@ const Overview = props => {
                   </div>
                 ))}
               </div>
-              <div className="swiper-button-next swiper-button-white" ref={leftRef}></div>
-              <div className="swiper-button-prev swiper-button-white" ref={rightRef}></div>
+              <div
+                className="swiper-button-next swiper-button-white"
+                ref={leftRef}
+              ></div>
+              <div
+                className="swiper-button-prev swiper-button-white"
+                ref={rightRef}
+              ></div>
             </div>
             <div className="swiper-container" id="gallery-thumbs">
               <div className="swiper-wrapper">
@@ -142,14 +160,20 @@ const Overview = props => {
                 ))}
               </div>
             </div>
-            <div className="overview-button overview-button-next" onClick={toLeft}>
+            <div
+              className="overview-button overview-button-next"
+              onClick={toLeft}
+            >
               {curKey === 0 ? (
                 <Icon type="jack-shang_icon" className={styles.leftIcon} />
               ) : (
                 <Icon type="jack-xia_icon" className={styles.rightIcon} />
               )}
             </div>
-            <div className="overview-button overview-button-prev" onClick={toRight}>
+            <div
+              className="overview-button overview-button-prev"
+              onClick={toRight}
+            >
               {curKey < factoryImg.length - 1 ? (
                 <Icon type="jack-xia_icon" className={styles.leftIcon} />
               ) : (
@@ -166,28 +190,36 @@ const Overview = props => {
                 <Icon type="jack-lianxiren" className={styles.icon} />
                 联系人
               </span>
-              <span className={styles.rightValue}>{contactInfo.realName ? contactInfo.realName : '--'}</span>
+              <span className={styles.rightValue}>
+                {contactInfo.realName ? contactInfo.realName : '--'}
+              </span>
             </li>
             <li>
               <span className={styles.rightLabel}>
                 <Icon type="jack-shoujihao" className={styles.icon} />
                 手机号
               </span>
-              <span className={styles.rightValue}>{notLoggedIn(contactInfo.mobilePhone, 3, 4)}</span>
+              <span className={styles.rightValue}>
+                {notLoggedIn(contactInfo.mobilePhone, 3, 4)}
+              </span>
             </li>
             <li>
               <span className={styles.rightLabel}>
                 <Icon type="jack-zuoji" className={styles.icon} />
                 座机号码
               </span>
-              <span className={styles.rightValue}>{notLoggedIn(contactInfo.contactPhone, 5, 1)}</span>
+              <span className={styles.rightValue}>
+                {notLoggedIn(contactInfo.contactPhone, 5, 1)}
+              </span>
             </li>
             <li>
               <span className={styles.rightLabel}>
                 <Icon type="jack-youxiang" className={styles.icon} />
                 邮箱
               </span>
-              <span className={styles.rightValue}>{notLoggedIn(contactInfo.email, 1, 7)}</span>
+              <span className={styles.rightValue}>
+                {notLoggedIn(contactInfo.email, 1, 7)}
+              </span>
             </li>
             <li>
               <span className={styles.rightLabel}>

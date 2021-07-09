@@ -39,11 +39,15 @@ const CommercialInfo = props => {
               <Row gutter={16}>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>名称</span>
-                  <span className={styles.strong}>{businessInfo.enterpriseName}</span>
+                  <span className={styles.strong}>
+                    {businessInfo.enterpriseName}
+                  </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>注册地址</span>
-                  <span className={styles.strong}>{businessInfo.companyAddress}</span>
+                  <span className={styles.strong}>
+                    {businessInfo.companyAddress}
+                  </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>信用代码</span>
@@ -51,35 +55,53 @@ const CommercialInfo = props => {
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>注册资本</span>
-                  <span className={styles.strong}>{businessInfo.companyRegisteredCapital}</span>
+                  <span className={styles.strong}>
+                    {businessInfo.companyRegisteredCapital}
+                  </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>成立时间</span>
-                  <span className={styles.strong}>{businessInfo.companyCreateTime}</span>
+                  <span className={styles.strong}>
+                    {businessInfo.companyCreateTime}
+                  </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>类型</span>
-                  <span className={styles.strong}>{businessInfo.companyOrgType}</span>
+                  <span className={styles.strong}>
+                    {businessInfo.companyOrgType}
+                  </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>法定代表人</span>
-                  <span className={styles.strong}>{businessInfo.legalPersonName}</span>
+                  <span className={styles.strong}>
+                    {businessInfo.legalPersonName}
+                  </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>营业期限</span>
-                  <span className={styles.strong}>{businessInfo.companyBusinessTerm}</span>
+                  <span className={styles.strong}>
+                    {businessInfo.companyBusinessTerm}
+                  </span>
                 </Col>
                 <Col className={styles.gutterRow} span={24}>
                   <span className={styles.label}>经营范围</span>
-                  <span className={styles.strong}>{businessInfo.companyBusinessScope}</span>
+                  <span className={styles.strong}>
+                    {businessInfo.companyBusinessScope}
+                  </span>
                 </Col>
               </Row>
             </div>
             <div className={styles.right}>
               {businessInfo.businessLicenseUrl ? (
-                <img className={styles.photo} src={businessInfo.businessLicenseUrl} alt="" />
+                <img
+                  className={styles.photo}
+                  src={businessInfo.businessLicenseUrl}
+                  alt=""
+                />
               ) : (
-                <div style={{ marginTop: '30%', textAlign: 'center' }}>图片待上传</div>
+                <div style={{ marginTop: '30%', textAlign: 'center' }}>
+                  图片待上传
+                </div>
               )}
             </div>
           </div>

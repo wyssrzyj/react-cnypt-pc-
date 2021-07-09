@@ -48,7 +48,12 @@ const Search = () => {
             className={styles.input}
             placeholder={'请输入订单编号/工厂名称'}
           />
-          <Button className={styles.btn} type={'primary'} icon={<SearchOutlined />} onClick={searchFunction}>
+          <Button
+            className={styles.btn}
+            type={'primary'}
+            icon={<SearchOutlined />}
+            onClick={searchFunction}
+          >
             搜索
           </Button>
         </div>

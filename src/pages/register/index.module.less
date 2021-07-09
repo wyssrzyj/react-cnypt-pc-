@@ -12,17 +12,10 @@
 }
 
 .content {
-  display: flex;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 1200px;
-  height: calc(100vh - 50px - 120px);
-  margin: 0 auto;
-  background: @white;
-  background-image: url(./images/u168.jpg);
-  background-repeat: round;
+  width: 600px;
+  padding-top: 160px;
+  padding-left: 80px;
+  background: #ffffff;
 
   :global {
     .ant-input {
@@ -63,14 +56,35 @@
 
 .form {
   width: 320px;
-  margin: 0 auto;
+
+  :global {
+    .ant-input-affix-wrapper {
+      padding-left: 0 !important;
+      border: none !important;
+      border-bottom: 1px solid #e4e4e4 !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    .ant-input {
+      padding-left: 12px !important;
+    }
+
+    .ant-form-item-control {
+      height: 65px !important;
+    }
+
+    .ant-form-item {
+      margin-bottom: 24px !important;
+    }
+  }
 }
 
 .title {
-  margin-bottom: 12px;
-  color: @66gray;
-  font-size: 28px;
-  text-align: center;
+  margin-bottom: 48px;
+  color: #333333;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .agreeBtn {
@@ -81,16 +95,16 @@
 }
 
 .blueBtn {
-  background: @blueBg !important;
-  border-color: @blueBg !important;
+  background: #237eff !important;
+  border-color: #237eff !important;
 }
 
 .fastLogin {
+  width: 320px;
   padding: 16px;
-  text-align: right;
+  text-align: center;
 
   span {
-    color: @blueBg;
     cursor: pointer;
   }
 }
@@ -98,4 +112,8 @@
 .verifyBtn {
   width: 102px;
   height: inherit;
+}
+
+.icon {
+  font-size: 20px;
 }

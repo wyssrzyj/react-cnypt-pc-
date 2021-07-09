@@ -134,7 +134,7 @@ const Header = () => {
       </div>
 
       <div className={styles.chunks}>
-        <Dropdown overlay={consoleMenu} trigger={['click']}>
+        <Dropdown overlay={consoleMenu}>
           <span className={styles.headerChunk}>控制台</span>
         </Dropdown>
       </div>

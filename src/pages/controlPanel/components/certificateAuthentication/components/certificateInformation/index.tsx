@@ -11,8 +11,8 @@ const { Option } = Select
 const messageTip = '企业证件信息仅用于进行实名认证，不会泄露您的任何证件信息。'
 
 const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 12 }
+  labelCol: { span: 3 },
+  wrapperCol: { span: 8 }
 }
 const certificateTypeMap = [
   { label: '企业营业执照', value: 'businessLicense' },

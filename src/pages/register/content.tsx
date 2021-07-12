@@ -31,8 +31,7 @@ const PwdIcon = () => <Icon type="jack-mima" className={styles.icon} />
 const PhoneIcon = () => <Icon type="jack-shouji1" className={styles.icon} />
 const CodeIcon = () => <Icon type="jack-yanzhengma" className={styles.icon} />
 
-export const phoneReg =
-  /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
+export const phoneReg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
 export const pwdReg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{6,}$/
 const initErrors = {
   userName: false,
@@ -89,7 +88,8 @@ const Register = () => {
       }
       const registerRes = await register(params)
       if (registerRes && registerRes.success) {
-        history.push('/login')
+        history.push('/user/login')
+        localStorage.setItem('currentUser', JSON.stringify({}))
       }
     } catch (err) {
       console.log(err)
@@ -116,9 +116,7 @@ const Register = () => {
         } else {
           const regFlag = userReg.test(value)
 
-          nHelps[key] = !regFlag
-            ? '请输入6-20位中文、英文或数字~'
-            : !flag && '用户名已注册~'
+          nHelps[key] = !regFlag ? '请输入6-20位中文、英文或数字~' : !flag && '用户名已注册~'
           nErrors[key] = !regFlag || !flag
         }
 
@@ -132,8 +130,7 @@ const Register = () => {
         } else {
           const regFlag = pwdReg.test(value)
 
-          nHelps[key] =
-            !regFlag && '请输入字母，符号或数字中至少两项且长度超过6位的密码~'
+          nHelps[key] = !regFlag && '请输入字母，符号或数字中至少两项且长度超过6位的密码~'
           nErrors[key] = !regFlag
         }
 
@@ -187,12 +184,7 @@ const Register = () => {
   return (
     <div className={styles.content}>
       <div className={styles.title}>用户注册</div>
-      <Form
-        form={form}
-        scrollToFirstError={true}
-        className={styles.form}
-        onValuesChange={onValuesChange}
-      >
+      <Form form={form} scrollToFirstError={true} className={styles.form} onValuesChange={onValuesChange}>
         <Form.Item
           name="userName"
           label=""
@@ -211,11 +203,7 @@ const Register = () => {
           help={helps.pwd}
           getValueFromEvent={getValueFromEvent}
         >
-          <Input
-            placeholder="字母,符号或数字中至少两项且超过6位"
-            type="password"
-            prefix={<PwdIcon />}
-          ></Input>
+          <Input placeholder="字母,符号或数字中至少两项且超过6位" type="password" prefix={<PwdIcon />}></Input>
         </Form.Item>
         <Form.Item
           name="pwd2"
@@ -225,11 +213,7 @@ const Register = () => {
           help={helps.pwd2}
           getValueFromEvent={getValueFromEvent}
         >
-          <Input
-            prefix={<PwdIcon />}
-            placeholder="确认密码"
-            type="password"
-          ></Input>
+          <Input prefix={<PwdIcon />} placeholder="确认密码" type="password"></Input>
         </Form.Item>
         <Form.Item
           name="mobilePhone"
@@ -243,24 +227,14 @@ const Register = () => {
           <Input placeholder="手机号" prefix={<PhoneIcon />}></Input>
           {/* <ConcatInput prefix={<PhoneIcon />} /> */}
         </Form.Item>
-        <Form.Item
-          name="code"
-          label=""
-          trigger={'onChange'}
-          getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}
-        >
-          <VerifyInput
-            prefix={<CodeIcon />}
-            code={'register'}
-            tel={mobilePhone}
-            placeholder={'验证码'}
-          />
+        <Form.Item name="code" label="" trigger={'onChange'} getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}>
+          <VerifyInput prefix={<CodeIcon />} code={'register'} tel={mobilePhone} placeholder={'验证码'} />
         </Form.Item>
         {/* 滑动验证 */}
         <div id="your-dom-id" className="nc-container"></div>
         <Button
           className={classNames(styles.agreeBtn, !disabled && styles.blueBtn)}
-          disabled={disabled}
+          // disabled={disabled}
           type={'primary'}
           htmlType={'submit'}
           onClick={handleSubmit}

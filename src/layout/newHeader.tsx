@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 import { Menu, Dropdown } from 'antd'
 import { isEmpty } from 'lodash'
-import { getCurrentUser } from '@/utils/tool'
+import { getCurrentUser, getUserInfo } from '@/utils/tool'
 import styles from './newHeader.module.less'
 import { useStores } from '@/utils/mobx'
 
@@ -51,12 +51,15 @@ const consoleOptions = [
 
 const Header = () => {
   const currentUser = getCurrentUser() || {}
+  const userInfo = getUserInfo() || {}
   const { loginStore } = useStores()
   const { logout } = loginStore
-  const { approvalStatus, factoryAuditStatus } = currentUser
+  const { approvalStatus, factoryAuditStatus } = userInfo
   const newConsoleOptions = consoleOptions
-    .filter(item => !(approvalStatus && item.title === '资质认证'))
-    .filter(obj => !(factoryAuditStatus == '1' && obj.title === '验厂管理'))
+    .filter(item => {
+      return !(!approvalStatus && item.title === '资质认证')
+    })
+    .filter(obj => !(factoryAuditStatus != '1' && obj.title === '验厂管理'))
 
   const history = useHistory()
 
@@ -112,8 +115,6 @@ const Header = () => {
     </div>
   )
 
-  console.log(currentUser, 'currentUser')
-
   return (
     <header className={styles.header}>
       <div>
@@ -123,9 +124,7 @@ const Header = () => {
 
         {currentUser.nickName ? (
           <Dropdown overlay={menu}>
-            <span className={styles.user}>
-              您好，{currentUser.realName || currentUser.username}
-            </span>
+            <span className={styles.user}>您好，{currentUser.realName || currentUser.username}</span>
           </Dropdown>
         ) : (
           <>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Input, Button, Radio, Cascader, Upload, message } from 'antd'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import { isEmpty } from 'lodash'
 import { toJS } from 'mobx'
 import axios from '@/utils/axios'
@@ -17,8 +17,8 @@ import styles from './index.module.less'
 const { TextArea } = Input
 
 const layout = {
-  labelCol: { span: 4 },
-  wrapperCol: { span: 12 }
+  labelCol: { span: 2 },
+  wrapperCol: { span: 8 }
 }
 
 // const typeOptions = [
@@ -61,8 +61,8 @@ const EnterpriseInfo = () => {
   const { uploadFiles } = factoryPageStore
   const { allArea } = commonStore
   // const [enterpriseType, setEnterpriseType] = useState<string>('')
-  const [loading, setLoading] = useState(false)
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [imageUrlList, setImageUrlList] = useState<any[]>([])
   const [enterpriseId, setEnterpriseId] = useState(undefined)
   const [factoryId, setFactoryId] = useState(undefined)
   const [enterpriseLogoId, setEnterpriseLogoId] = useState(undefined)
@@ -76,7 +76,7 @@ const EnterpriseInfo = () => {
 
   const uploadButton = (
     <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <PlusOutlined />
       <div style={{ marginTop: 8 }}>上传</div>
     </div>
   )
@@ -95,14 +95,13 @@ const EnterpriseInfo = () => {
 
   const customRequest = async ({ file }) => {
     // const list = cloneDeep(fileList)
-    setLoading(true)
     const formData = new FormData()
 
     formData.append('file', file)
     formData.append('module', 'factory')
     const res = await uploadFiles(formData)
     setImageUrl(res)
-    setLoading(false)
+    setImageUrlList([{ thumbUrl: res }])
   }
 
   const confirmSubmit = () => {
@@ -129,7 +128,8 @@ const EnterpriseInfo = () => {
         .then(response => {
           const { success, msg, data = {} } = response
           if (success) {
-            message.success('请完善企业证件认证，平台将在1~3个工作日与您取得联系，请注意接听来电。')
+            // message.success('请完善企业证件认证，平台将在1~3个工作日与您取得联系，请注意接听来电。')
+            message.success(msg)
             localStorage.setItem('enterpriseInfo', JSON.stringify(data))
             setTimeout(() => {
               window.location.reload()
@@ -194,6 +194,7 @@ const EnterpriseInfo = () => {
         initialValues={{
           mobilePhone: mobilePhone
         }}
+        style={{ position: 'relative' }}
         // onValuesChange={onValuesChange}
       >
         <div className={styles.enterpriseTitle}>基本信息</div>
@@ -202,19 +203,23 @@ const EnterpriseInfo = () => {
             name="avatar"
             listType="picture-card"
             className="avatar-uploader"
-            showUploadList={false}
+            showUploadList={true}
             beforeUpload={beforeUpload}
             customRequest={customRequest}
+            fileList={imageUrlList}
+            maxCount={1}
+            onRemove={() => setImageUrlList([])}
           >
-            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+            {isEmpty(imageUrlList) ? uploadButton : null}
           </Upload>
         </Form.Item>
+        <div className={styles.tipBox}>只能上传jpg/png格式文件，限传一个文件不能超过500kb</div>
 
         <Form.Item label="企业名称" name="enterpriseName" rules={[{ required: true, message: '请输入企业名称！' }]}>
           <Input placeholder="请输入企业名称" />
         </Form.Item>
 
-        <Form.Item label="企业类型" name="enterpriseType" rules={[{ required: true, message: '请输入企业名称！' }]}>
+        <Form.Item label="企业类型" name="enterpriseType" rules={[{ required: true, message: '请选择企业类型！' }]}>
           <Radio.Group>
             <Radio value="0">加工厂</Radio>
             <Radio value="1">发单商</Radio>
@@ -229,11 +234,11 @@ const EnterpriseInfo = () => {
           <Input placeholder="请填写手机号" disabled />
         </Form.Item>
 
-        <Form.Item label="电话号码" name="contactPhone" rules={[{ required: true, message: '请填写电话号码' }]}>
+        <Form.Item label="电话号码" name="contactPhone">
           <Input placeholder="请输入座机号码  如：0571-8******" />
         </Form.Item>
 
-        <Form.Item label="电子邮箱" name="email" rules={[{ required: true, message: '请填写电子邮箱' }]}>
+        <Form.Item label="电子邮箱" name="email">
           <Input placeholder="请填写电子邮箱" />
         </Form.Item>
 

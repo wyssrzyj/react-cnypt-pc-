@@ -126,6 +126,29 @@ export default class ControlPanelStore {
         `/api/user/code-update-password`,
         params
       )
+      console.log(
+        '🚀 ~ file: index.tsx ~ line 129 ~ ControlPanelStore ~ res',
+        res
+      )
+
+      if (res.success) {
+        message.success(res.msg)
+      } else {
+        message.error(res.msg)
+      }
+      return res.success
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 修改用户信息
+  @action changeUserInfo = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/user/saveBasicUserInfo`,
+        params
+      )
 
       if (res.success) {
         message.success(res.msg)

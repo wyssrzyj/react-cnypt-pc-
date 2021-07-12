@@ -10,6 +10,8 @@ import UnbindModal from './unbindModal'
 import { getCurrentUser } from '@/utils/tool'
 import { useStores } from '@/utils/mobx'
 import moment from 'moment'
+import { cloneDeep } from 'lodash'
+import UploadFile from './upload'
 
 const Title = ({ title }) => (
   <div className={styles.title}>
@@ -21,7 +23,7 @@ const Title = ({ title }) => (
 const AccountSafe = () => {
   const history = useHistory()
   const { controlPanelStore } = useStores()
-  const { getAccountInfo } = controlPanelStore
+  const { getAccountInfo, changeUserInfo } = controlPanelStore
 
   const currentUser = getCurrentUser()
   const nameRef = useRef<Input>()
@@ -30,6 +32,9 @@ const AccountSafe = () => {
   const [name, setName] = useState(currentUser.nickName)
   const [modalKey, setModalKey] = useState(0)
   const [userInfo, setUserInfo] = useState<any>({})
+
+  const userMobile = currentUser.mobilePhone
+  const showTel = userMobile.substr(0, 3) + '****' + userMobile.substr(7)
 
   useEffect(() => {
     ;(async () => {
@@ -51,12 +56,22 @@ const AccountSafe = () => {
 
   const nameChange = event => {
     const { value } = event.target
-    console.log('🚀 ~ file: index.tsx ~ line 16 ~ AccountSafe ~ value', value)
+    setName(value)
   }
 
-  const nameBlur = event => {
+  const nameBlur = async event => {
     const { value } = event.target
-    setName(value)
+    const params = {
+      nickName: value,
+      userId: currentUser.userId
+    }
+    const res = await changeUserInfo(params)
+    if (res) {
+      setName(value)
+      const newCurrentUser = cloneDeep(currentUser)
+      newCurrentUser.nickName = value
+      localStorage.setItem('currentUser', JSON.stringify(newCurrentUser))
+    }
     flagChange()
   }
 
@@ -76,7 +91,7 @@ const AccountSafe = () => {
     {
       title: '手机绑定',
       icon: 'jack-sjbd',
-      text: '您已绑定了手机138****6562。[您的手机号可以直接用于登录、找回密码等]'
+      text: `您已绑定了手机${showTel}。[您的手机号可以直接用于登录、找回密码等]`
     }
     // {
     //   title: '邮箱绑定',
@@ -130,14 +145,31 @@ const AccountSafe = () => {
     }
   }
 
+  const changeAvatar = async url => {
+    const params = {
+      userFaceUrl: url,
+      userId: currentUser.userId
+    }
+    const res = await changeUserInfo(params)
+    if (res) {
+      const newUserInfo = cloneDeep(userInfo)
+      newUserInfo.userFaceUrl = url
+      setUserInfo(newUserInfo)
+
+      const newCurrentUser = cloneDeep(currentUser)
+      newCurrentUser.userFaceUrl = url
+      localStorage.setItem('currentUser', JSON.stringify(newCurrentUser))
+    }
+  }
+
   return (
     <div className={styles.accountBox}>
       <div className={styles.accountInfo}>
         <Title title={'账号信息'} />
         <div className={styles.infoBox}>
           <div className={styles.avatarBox}>
-            <img src={''} className={styles.avatar} alt="" />
-            <div className={styles.avatarText}>修改头像</div>
+            <img src={userInfo.userFaceUrl} className={styles.avatar} alt="" />
+            <UploadFile onChange={changeAvatar} />
           </div>
           <div className={styles.userInfo}>
             <div className={styles.changeNameItem}>
@@ -146,6 +178,7 @@ const AccountSafe = () => {
                   onChange={nameChange}
                   onBlur={nameBlur}
                   className={styles.changeText}
+                  value={name}
                 />
               ) : (
                 <div className={styles.changeName}>{name}</div>

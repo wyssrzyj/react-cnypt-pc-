@@ -29,11 +29,7 @@ const FactoryPhotograph = () => {
           setNameplateFileList([...factoryAuditorImages])
           setLocationFileList([...outsizeImages])
           setWorkshopFileList([...workshopImages])
-          const newImages = [
-            ...factoryAuditorImages,
-            ...outsizeImages,
-            ...workshopImages
-          ].map(item => ({ src: item }))
+          const newImages = [...factoryAuditorImages, ...outsizeImages, ...workshopImages].map(item => ({ src: item }))
           setAllImages([...newImages])
         }
       })
@@ -48,8 +44,8 @@ const FactoryPhotograph = () => {
   }
 
   useEffect(() => {
-    getFactoryImage()
-  }, [])
+    factoryId && getFactoryImage()
+  }, [factoryId])
 
   return (
     <div className={styles.factoryPhotograph}>

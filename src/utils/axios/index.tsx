@@ -1,5 +1,5 @@
 import axios from 'axios'
-import NProgress from 'nprogress'
+// import NProgress from 'nprogress'
 import { message } from 'antd'
 import { getRefresh, getToken, getCurrentUser } from '../tool'
 import { dFn, Params, ResponseProps } from './types'
@@ -49,22 +49,22 @@ customAxios.interceptors.request.use(
     if (expire - Date.now() < 10 && !flag) {
       // dealRefresh(request)
     }
-    NProgress.start()
+    // NProgress.start()
     return request
   },
   function (error) {
-    NProgress.done()
+    // NProgress.done()
     return Promise.reject(error)
   }
 )
 
 customAxios.interceptors.response.use(
   response => {
-    NProgress.done()
+    // NProgress.done()
     return response.data
   },
   error => {
-    NProgress.done()
+    // NProgress.done()
     return Promise.reject(error)
   }
 )

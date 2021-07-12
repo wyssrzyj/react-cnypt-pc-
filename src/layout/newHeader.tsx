@@ -112,6 +112,8 @@ const Header = () => {
     </div>
   )
 
+  console.log(currentUser, 'currentUser')
+
   return (
     <header className={styles.header}>
       <div>
@@ -119,9 +121,11 @@ const Header = () => {
           产能云平台首页
         </Link>
 
-        {currentUser.realName ? (
+        {currentUser.nickName ? (
           <Dropdown overlay={menu}>
-            <span className={styles.user}>您好，{currentUser.realName || currentUser.username}</span>
+            <span className={styles.user}>
+              您好，{currentUser.realName || currentUser.username}
+            </span>
           </Dropdown>
         ) : (
           <>

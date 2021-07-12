@@ -14,7 +14,9 @@ const AreaModal = props => {
   const { visible, handleOk, handleCancel, selectedCity = [] } = props
   const [cityTree, setCityTree] = useState<any>([...newAllArea[0].children])
   const [activeCity, setActiveCity] = useState<any>([...selectedCity])
-  const [activeProvince, setActiveProvince] = useState<string>(newAllArea[0].value)
+  const [activeProvince, setActiveProvince] = useState<string>(
+    newAllArea[0].value
+  )
   const selectProvince = id => {
     setActiveProvince(id)
     const currentCity = newAllArea.find(tree => tree.value === id) || {}
@@ -50,12 +52,23 @@ const AreaModal = props => {
   }
 
   return (
-    <Modal title="请选择地区（最多选择8个）" visible={visible} onOk={confirmFn} onCancel={handleCancel} width={660}>
+    <Modal
+      title="请选择地区（最多选择8个）"
+      visible={visible}
+      onOk={confirmFn}
+      onCancel={handleCancel}
+      width={660}
+    >
       <div className={styles.hasChosen}>
         <div>
           <span>已选择：</span>
           {activeCity.map(city => (
-            <Tag key={city.id} className={styles.selectedTag} closable onClose={() => closeTag(city.id)}>
+            <Tag
+              key={city.id}
+              className={styles.selectedTag}
+              closable
+              onClose={() => closeTag(city.id)}
+            >
               {city.name}
             </Tag>
           ))}
@@ -69,7 +82,10 @@ const AreaModal = props => {
           {newAllArea.map(item => (
             <div
               key={item.value}
-              className={classNames(styles.provinces, item.value === activeProvince ? styles.active : null)}
+              className={classNames(
+                styles.provinces,
+                item.value === activeProvince ? styles.active : null
+              )}
               onClick={() => selectProvince(item.value)}
             >
               {item.label}
@@ -80,7 +96,12 @@ const AreaModal = props => {
           {cityTree.map(city => (
             <span
               key={city.value}
-              className={classNames(styles.cityBox, activeCity.findIndex(val => val.id === city.value) > -1 ? styles.cityActive : null)}
+              className={classNames(
+                styles.cityBox,
+                activeCity.findIndex(val => val.id === city.value) > -1
+                  ? styles.cityActive
+                  : null
+              )}
               onClick={() => selectCity({ id: city.value, name: city.label })}
             >
               {city.label}

@@ -94,6 +94,7 @@ export default class LoginStore {
         `/api/user/forget-password`,
         params
       )
+      console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
 
       if (res.success) {
         message.success(res.msg)

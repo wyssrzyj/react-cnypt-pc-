@@ -220,7 +220,7 @@ const AccountSafe = () => {
               ></Icon>
               <div className={styles.changeLabel}>注册时间</div>
               <div className={styles.changeText}>
-                {moment(userInfo.registerTime).format('YYYY-MM-DD hh:mm:ss')}
+                {moment(userInfo.registerTime).format('YYYY-MM-DD HH:mm:ss')}
               </div>
               <div onClick={showLogs} className={styles.cText}>
                 登录日志

@@ -68,7 +68,10 @@ const Reset = () => {
       const values = await validateFields()
       values.password = btoa(values.password)
       delete values.newPassword2
-      await resetPwd(values)
+      const res = await resetPwd(values)
+      if (res) {
+        history.push('/user/login')
+      }
     } catch (e) {
       console.log(e)
     }

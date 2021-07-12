@@ -25,7 +25,7 @@
 }
 
 .joinCard {
-  width: 280px;
+  width: 280px !important;
   background: #ffffff;
   cursor: pointer;
 
@@ -63,9 +63,15 @@
 }
 
 .joinSwiper {
-  width: 900px;
+  width: 900px !important;
   margin-right: unset !important;
   margin-left: unset !important;
+
+  :global {
+    .swiper-slide {
+      background: transparent !important;
+    }
+  }
 }
 
 .joinRight {

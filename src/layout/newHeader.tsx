@@ -4,8 +4,9 @@ import { useHistory } from 'react-router'
 import { Menu, Dropdown } from 'antd'
 import { isEmpty } from 'lodash'
 import { getCurrentUser, getUserInfo } from '@/utils/tool'
-import styles from './newHeader.module.less'
 import { useStores } from '@/utils/mobx'
+import { Icon } from '@/components'
+import styles from './newHeader.module.less'
 
 const consoleOptions = [
   {
@@ -81,13 +82,19 @@ const Header = () => {
   }
 
   const menu = (
-    <Menu>
+    <Menu className={styles.menuContent}>
       <Menu.Item>
-        <div onClick={toAccountSafe}>账号安全</div>
+        <div onClick={toAccountSafe} className={styles.menuItem}>
+          <Icon type="jack-gerenzhongxin1" className={styles.menuIcon} />
+          账号安全
+        </div>
       </Menu.Item>
       {currentUser.userId ? (
-        <Menu.Item>
-          <div onClick={logoutToLogin}>退出登录</div>
+        <Menu.Item className={styles.menuItem}>
+          <div onClick={logoutToLogin}>
+            <Icon type="jack-tuichu1" className={styles.logoIcon} />
+            退出登录
+          </div>
         </Menu.Item>
       ) : null}
     </Menu>
@@ -119,32 +126,34 @@ const Header = () => {
     <header className={styles.header}>
       <div>
         <Link to="/home" className={styles.home}>
-          产能云平台首页
+          <Icon type={'jack-logo1'} className={styles.logoIcon}></Icon>
+          <span>产能云平台首页</span>
+          <span className={styles.verticalBar}>|</span>
         </Link>
 
         {currentUser.nickName ? (
           <Dropdown overlay={menu}>
-            <span className={styles.user}>您好，{currentUser.realName || currentUser.username}</span>
+            <a className={styles.user}>您好，{currentUser.realName || currentUser.username}</a>
           </Dropdown>
         ) : (
           <>
-            <span>请</span>
-            <span className={styles.orangeText} onClick={toLogin}>
-              登录
+            <span style={{ cursor: 'pointer' }} onClick={toRegister}>
+              注册
             </span>
-            <span>或</span>
-            <span className={styles.orangeText} onClick={toRegister}>
-              免费注册
-            </span>
+            <span>&nbsp;&nbsp; / &nbsp;&nbsp;</span>
+            <a onClick={toLogin}>登录</a>
           </>
         )}
       </div>
 
-      <div className={styles.chunks}>
-        <Dropdown overlay={consoleMenu}>
-          <span className={styles.headerChunk}>控制台</span>
-        </Dropdown>
-      </div>
+      <Dropdown overlay={consoleMenu}>
+        <div className={styles.chunks}>
+          <span className={styles.consoleBox}>
+            <Icon type="jack-kongzhitai1" className={styles.consoleIcon} />
+            <span className={styles.headerChunk}>控制台</span>
+          </span>
+        </div>
+      </Dropdown>
     </header>
   )
 }

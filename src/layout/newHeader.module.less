@@ -2,8 +2,11 @@
   display: flex;
   justify-content: space-between;
   width: 1200px;
+  height: 60px;
   margin: 0 auto;
-  padding: 8px 0;
+  font-weight: 400;
+  line-height: 60px;
+  background: #f2f2f2;
 }
 
 .orangeText {
@@ -12,11 +15,21 @@
 }
 
 .chunks {
+  padding: 0 12px;
+  &:hover {
+    background-color: #fff;
+    .headerChunk {
+      color: #1890ff;
+    }
+  }
   .headerChunk {
     padding: 0 16px;
     color: #7f7f7f;
     border-right: 1px solid #7f7f7f;
     cursor: pointer;
+    &:hover {
+      color: #1890ff;
+    }
 
     &:nth-last-child(1) {
       border-right: none;
@@ -25,16 +38,65 @@
 }
 
 .home {
-  margin-right: 20px;
+  color: #333333;
   font-weight: 500;
   font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  line-height: 60px;
+}
+.verticalBar {
+  margin: 0 20px;
+  color: #d4d4d4;
+  font-size: 12px;
+}
+.logoIcon {
+  margin-right: 8px;
+  font-size: 20px;
+}
+.consoleIcon {
+  color: #1890ff;
+  font-size: 18px;
+  &:hover {
+    color: #1890ff;
+  }
+}
+
+.menuContent {
+  padding: 8px 16px;
+}
+.menuItem {
+  display: flex;
+  align-items: center;
+}
+.menuIcon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+.consoleBox {
+  display: inline-block;
+  &:hover {
+    color: #1890ff;
+  }
 }
 .user {
+  display: inline-block;
+  padding: 2px 12px 0;
+  color: #333333;
+  line-height: 54px;
   cursor: pointer;
+  &:hover {
+    background-color: #fff;
+  }
 }
 .title {
-  margin-top: 4px;
+  margin-top: 8px;
+  padding-left: 12px;
   font-weight: 800;
+  line-height: 14px;
+  border-left: 3px solid #1890ff;
+}
+.titleContent {
+  padding-left: 10px;
 }
 .console {
   min-width: 220px;
@@ -45,6 +107,7 @@
 .routerItem {
   display: inline-block;
   width: 50%;
-  padding: 4px 0;
+  padding: 8px 0;
+  color: #333333;
   white-space: nowrap;
 }

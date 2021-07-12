@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useHistory } from 'react-router'
+// import { useHistory } from 'react-router'
 import { toJS } from 'mobx'
 import { Tag } from 'antd'
 import { isArray, findIndex } from 'lodash'
@@ -27,7 +27,7 @@ const OverflowCard = props => {
     pictureUrl
   } = props
 
-  const history = useHistory()
+  // const history = useHistory()
 
   const { commonStore } = useStores()
   const { dictionary, updateName } = commonStore
@@ -35,7 +35,8 @@ const OverflowCard = props => {
 
   const goToDetail = () => {
     updateName('')
-    history.push(`/factory-detail/${factoryId}`)
+    // history.push(`/factory-detail/${factoryId}`)
+    window.open(`/factory-detail/${factoryId}`)
   }
 
   useEffect(() => {

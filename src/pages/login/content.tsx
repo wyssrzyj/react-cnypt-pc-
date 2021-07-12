@@ -17,7 +17,7 @@ const PhoneIcon = () => <Icon type="jack-shouji1" className={styles.icon} />
 const LoginContent = () => {
   // const title = '春秋季服装订单大促'
   // const desc = '全场两季7折，最高满赠2万元代金券！'
-  const userPlaceholder = '手机号/用户名'
+  const userPlaceholder = '请输入用户名'
   const pwdPlaceholder = '请输入登录密码'
 
   const { loginStore } = useStores()
@@ -159,7 +159,7 @@ const LoginContent = () => {
               <Input
                 prefix={<PhoneIcon />}
                 className={styles.input}
-                placeholder="手机号"
+                placeholder="请输入手机号"
               />
             </Form.Item>
 
@@ -178,7 +178,7 @@ const LoginContent = () => {
               <VerifyInput
                 prefix={<PwdIcon />}
                 className={styles.verification}
-                placeholder="验证码"
+                placeholder="请输入验证码"
                 tel={phoneNumer}
                 code={'loginVerify'}
               />

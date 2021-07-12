@@ -103,7 +103,7 @@ export default class LoginStore {
         message.error(res.msg)
       }
       // message.success('登录成功')
-      return res
+      return res.success
     } catch (e) {
       console.log(e)
       // message.error('')

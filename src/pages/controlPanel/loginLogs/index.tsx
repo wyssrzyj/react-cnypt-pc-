@@ -34,7 +34,7 @@ const LoginLogs = () => {
       title: '登录时间',
       dataIndex: 'loginTime',
       key: 'loginTime',
-      render: value => moment(value).format('YYYY-MM-DD hh:mm:ss')
+      render: value => moment(value).format('YYYY-MM-DD HH:mm:ss')
     },
     {
       title: '登录IP',

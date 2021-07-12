@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './focus.module.less'
 
 const Focus = () => {
   const [title, setTitle] = useState('')
   const [areas, setAreas] = useState('')
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useState(1)
 
   const focusImgs = [
     null,
@@ -78,7 +78,12 @@ const Focus = () => {
     setAreas(data.areas.join(' | '))
     setActive(idx)
   }
-  console.log(active, 'active')
+
+  useEffect(() => {
+    setTitle(focusImgs[1].title)
+    setAreas(focusImgs[1].areas.join(' | '))
+  }, [])
+
   return (
     <div className={styles.focusInner}>
       <div className={styles.focusLeft}>

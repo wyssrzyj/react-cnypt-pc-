@@ -136,9 +136,6 @@ const Header = () => {
             <span className={styles.user}>
               您好，{currentUser.nickName || currentUser.username}
             </span>
-            <a className={styles.user}>
-              您好，{currentUser.nickName || currentUser.username}
-            </a>
           </Dropdown>
         ) : (
           <>

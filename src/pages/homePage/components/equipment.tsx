@@ -1,12 +1,12 @@
 import React, { useRef, useState, useLayoutEffect } from 'react'
 import styles from './equipment.module.less'
 import classNames from 'classnames'
-import IMG7 from '../img/focus7.png'
-import IMG8 from '../img/focus8.png'
-import IMG9 from '../img/focus9.png'
-import IMG10 from '../img/focus10.png'
 import { Icon } from '@/components'
 import OIMG from '../img/operateImg.png'
+
+const poster =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210712/a4dce36518bb4cc4bec49ffc0d1d366e.png'
+
 // 最新物联设备
 const Equipment = props => {
   const { SwiperCore } = props
@@ -16,9 +16,6 @@ const Equipment = props => {
 
   useLayoutEffect(() => {
     new SwiperCore('.equipmentSwiper', {
-      // slidesPerView: 1,
-      // centeredSlides: true,
-      // centeredSlidesBounds: true,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev'
@@ -44,7 +41,7 @@ const Equipment = props => {
     leftRef.current.click()
   }
 
-  const datas = [IMG10, IMG9, IMG8, IMG7]
+  const datas = ['https://www.chinajack.com/DownLoad/202106121120463.mp4']
 
   return (
     <div className={styles.equipment}>
@@ -63,11 +60,19 @@ const Equipment = props => {
             )}
           >
             <div className="swiper-wrapper">
-              {datas.map((item, idx) => (
-                <div className={'swiper-slide'} key={idx + '~'}>
-                  <img src={item} alt="" className={styles.equipmentImg} />
-                </div>
-              ))}
+              {datas.map((item, idx) => {
+                return (
+                  <div className={'swiper-slide'} key={idx + '~'}>
+                    <video
+                      poster={poster}
+                      controls
+                      autoPlay={curKey === 1}
+                      src={item}
+                      className={styles.equipmentVideo}
+                    ></video>
+                  </div>
+                )
+              })}
             </div>
             <div className="swiper-button-next" ref={leftRef}></div>
             <div className="swiper-button-prev" ref={rightRef}></div>

@@ -76,8 +76,8 @@ const Header = () => {
   }
 
   const logoutToLogin = async () => {
-    await logout()
-    toLogin()
+    const res = await logout()
+    res && toLogin()
   }
 
   const menu = (
@@ -124,7 +124,9 @@ const Header = () => {
 
         {currentUser.nickName ? (
           <Dropdown overlay={menu}>
-            <span className={styles.user}>您好，{currentUser.realName || currentUser.username}</span>
+            <span className={styles.user}>
+              您好，{currentUser.realName || currentUser.username}
+            </span>
           </Dropdown>
         ) : (
           <>

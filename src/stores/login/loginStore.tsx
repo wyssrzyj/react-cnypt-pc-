@@ -44,7 +44,7 @@ export default class LoginStore {
         message.success('退出成功')
       }
 
-      return res
+      return res.success
     } catch (e) {
       console.log(e) // message.error('')
     }

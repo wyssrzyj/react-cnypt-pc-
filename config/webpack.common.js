@@ -5,6 +5,13 @@ require('@babel/polyfill')
 const friendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const webpack = require('webpack')
 
+const { NODE_ENV } = process.env
+
+const hosts = new Map()
+hosts.set('dev', 'http://8.136.225.110:8888/')
+hosts.set('test', 'http://8.136.225.110:8888/')
+hosts.set('production', 'http://47.97.217.13:8888/')
+
 module.exports = {
   entry: {
     main: path.resolve(__dirname, '../src/index.tsx')
@@ -80,7 +87,7 @@ module.exports = {
     hot: true, // 热更新
     port: 8002, // 端口号
     proxy: {
-      '/api': 'http://8.136.225.110:8888/',
+      '/api': hosts.get(NODE_ENV),
       '/baiduApi': {
         target: 'https://aip.baidubce.com', //访问地址
         changeOrigin: true,

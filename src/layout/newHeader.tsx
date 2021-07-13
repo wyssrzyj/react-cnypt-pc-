@@ -124,7 +124,7 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      <div>
+      <div className={styles.headerLeft}>
         <Link to="/home" className={styles.home}>
           <Icon type={'jack-logo1'} className={styles.logoIcon}></Icon>
           <span>产能云平台首页</span>

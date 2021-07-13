@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, Form, Select, Input, Upload, message, Checkbox, Button } from 'antd'
+import {
+  Alert,
+  Form,
+  Select,
+  Input,
+  Upload,
+  message,
+  Checkbox,
+  Button
+} from 'antd'
 import { isFunction, isEmpty } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
@@ -25,15 +34,16 @@ const certificateTypeMap = [
 
 const CertificateInformation = props => {
   const { submit } = props
-  const currentUser = getUserInfo() || {}
-  const { enterpriseId } = currentUser
+  const currentUserInfo = getUserInfo() || {}
+  const { enterpriseId } = currentUserInfo
   const [form] = Form.useForm()
   const { validateFields, setFieldsValue } = form
   const { factoryPageStore } = useStores()
   const { uploadFiles } = factoryPageStore
-  const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
+  // const enterpriseInfo =
+  //   JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
 
-  const newEnterpriseId = isEmpty(enterpriseInfo) ? enterpriseId : enterpriseInfo.enterpriseId
+  // const newEnterpriseId = isEmpty(enterpriseInfo) ? enterpriseId : enterpriseInfo.enterpriseId
   const [isCheck, setIsCheck] = useState<boolean>(false)
   const [cardId, setCardId] = useState(undefined)
   const [cardImageUrl, setCardImageUrl] = useState<string>('')
@@ -46,7 +56,6 @@ const CertificateInformation = props => {
   const [reverseFileList, setReverseFileList] = useState<any[]>([])
 
   const initialValues = {
-    enterpriseName: enterpriseInfo.enterpriseName,
     legalPersonIdType: '中国大陆居民身份证',
     certificateType: 'businessLicense'
   }
@@ -67,7 +76,10 @@ const CertificateInformation = props => {
     setIsCheck(e.target.checked)
   }
   const beforeUpload = file => {
-    const isJpgOrPng = file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/jpeg'
+    const isJpgOrPng =
+      file.type === 'image/jpg' ||
+      file.type === 'image/png' ||
+      file.type === 'image/jpeg'
     if (!isJpgOrPng) {
       message.error('只能上传jpg/png格式文件!')
     }
@@ -113,19 +125,19 @@ const CertificateInformation = props => {
       delete values.enterpriseName
       const enterpriseCredentialList = [
         {
-          businessId: newEnterpriseId,
+          businessId: enterpriseId,
           businessItemId: 'business_license',
           fileUrl: cardImageUrl,
           id: cardId
         },
         {
-          businessId: newEnterpriseId,
+          businessId: enterpriseId,
           businessItemId: 'legal_person_id_photo_face',
           fileUrl: positiveImageUrl,
           id: positiveId
         },
         {
-          businessId: newEnterpriseId,
+          businessId: enterpriseId,
           businessItemId: 'legal_person_id_photo_national',
           fileUrl: reverseImageUrl,
           id: reverseId
@@ -134,7 +146,7 @@ const CertificateInformation = props => {
       axios
         .post('/api/factory/enterprise/submit-enterprise-credential', {
           ...values,
-          enterpriseId: newEnterpriseId,
+          enterpriseId: enterpriseId,
           enterpriseCredentialList
         })
         .then(response => {
@@ -150,28 +162,44 @@ const CertificateInformation = props => {
   const getCertificationInfo = () => {
     axios
       .get('/api/factory/enterprise/get-enterprise-credential', {
-        enterpriseId: newEnterpriseId
+        enterpriseId: enterpriseId
       })
       .then(response => {
         const { success, data } = response
         if (success && !isEmpty(data)) {
-          const { legalPersonIdNumber, legalPersonName, orgCode, enterpriseCredentialList } = data
+          const {
+            legalPersonIdNumber,
+            legalPersonName,
+            orgCode,
+            enterpriseName,
+            enterpriseCredentialList
+          } = data
           if (legalPersonIdNumber && legalPersonName && orgCode) {
             let newCardUrl = { id: '', fileUrl: '' }
             let newPositiveUrl = { id: '', fileUrl: '' }
             let newReverseUrl = { id: '', fileUrl: '' }
             if (!isEmpty(enterpriseCredentialList)) {
-              newCardUrl = enterpriseCredentialList.find(item => item.businessItemId === 'business_license') || {}
+              newCardUrl =
+                enterpriseCredentialList.find(
+                  item => item.businessItemId === 'business_license'
+                ) || {}
               setCardImageUrl(newCardUrl.fileUrl)
               setCardFileList([{ thumbUrl: newCardUrl.fileUrl }])
               setCardId(newCardUrl.id)
 
-              newPositiveUrl = enterpriseCredentialList.find(item => item.businessItemId === 'legal_person_id_photo_face') || {}
+              newPositiveUrl =
+                enterpriseCredentialList.find(
+                  item => item.businessItemId === 'legal_person_id_photo_face'
+                ) || {}
               setPositiveImageUrl(newPositiveUrl.fileUrl)
               setPositiveFileList([{ thumbUrl: newPositiveUrl.fileUrl }])
               setPositiveId(newPositiveUrl.id)
 
-              newReverseUrl = enterpriseCredentialList.find(item => item.businessItemId === 'legal_person_id_photo_national') || {}
+              newReverseUrl =
+                enterpriseCredentialList.find(
+                  item =>
+                    item.businessItemId === 'legal_person_id_photo_national'
+                ) || {}
               setReverseImageUrl(newReverseUrl.fileUrl)
               setReverseFileList([{ thumbUrl: newReverseUrl.fileUrl }])
               setReverseId(newReverseUrl.id)
@@ -180,6 +208,7 @@ const CertificateInformation = props => {
               legalPersonIdNumber,
               legalPersonName,
               orgCode,
+              enterpriseName,
               enterpriseAdjunct: newCardUrl.fileUrl,
               positive: newPositiveUrl.fileUrl,
               reverse: newReverseUrl.fileUrl
@@ -190,7 +219,7 @@ const CertificateInformation = props => {
   }
 
   useEffect(() => {
-    if (newEnterpriseId) {
+    if (enterpriseId) {
       getCertificationInfo()
     } else {
       message.warning('请先去完善企业信息！')
@@ -203,7 +232,11 @@ const CertificateInformation = props => {
       <Form {...layout} name="basic" form={form} initialValues={initialValues}>
         <div className={styles.enterprise}>
           <h3>请上传企业证件</h3>
-          <Form.Item label="企业证件类型" name="certificateType" rules={[{ required: true, message: '请选择企业证件类型！' }]}>
+          <Form.Item
+            label="企业证件类型"
+            name="certificateType"
+            rules={[{ required: true, message: '请选择企业证件类型！' }]}
+          >
             <Select placeholder="请选择企业证件类型" disabled>
               {certificateTypeMap.map(type => (
                 <Option key={type.value} value={type.value}>
@@ -213,7 +246,11 @@ const CertificateInformation = props => {
             </Select>
           </Form.Item>
 
-          <Form.Item label="上传企业证件附件" name="enterpriseAdjunct" rules={[{ required: true, message: '请上传企业证件附件！' }]}>
+          <Form.Item
+            label="上传企业证件附件"
+            name="enterpriseAdjunct"
+            rules={[{ required: true, message: '请上传企业证件附件！' }]}
+          >
             <Upload
               name="avatar"
               listType="picture-card"
@@ -229,12 +266,20 @@ const CertificateInformation = props => {
             </Upload>
           </Form.Item>
 
-          <Form.Item label="企业名称" name="enterpriseName" rules={[{ required: true, message: '请输入企业名称！' }]}>
+          <Form.Item
+            label="企业名称"
+            name="enterpriseName"
+            rules={[{ required: true, message: '请输入企业名称！' }]}
+          >
             <Input disabled />
           </Form.Item>
 
           <Form.Item
-            label={<span className={styles.codeLabel}>统一社会信用代码/组织机构代码</span>}
+            label={
+              <span className={styles.codeLabel}>
+                统一社会信用代码/组织机构代码
+              </span>
+            }
             name="orgCode"
             rules={[
               {
@@ -248,11 +293,21 @@ const CertificateInformation = props => {
         </div>
         <div className={styles.enterprise}>
           <h3>请上传法定代表人证件</h3>
-          <Form.Item label="证件类型" name="legalPersonIdType" rules={[{ required: true, message: '请输入证件类型！' }]}>
+          <Form.Item
+            label="证件类型"
+            name="legalPersonIdType"
+            rules={[{ required: true, message: '请输入证件类型！' }]}
+          >
             <Input disabled placeholder="请输入证件类型" />
           </Form.Item>
 
-          <Form.Item label="姓名" name="legalPersonName" rules={[{ required: true, message: '请输入中国大陆居民身份证上的姓名！' }]}>
+          <Form.Item
+            label="姓名"
+            name="legalPersonName"
+            rules={[
+              { required: true, message: '请输入中国大陆居民身份证上的姓名！' }
+            ]}
+          >
             <Input placeholder="请输入中国大陆居民身份证上的姓名" />
           </Form.Item>
 
@@ -272,7 +327,9 @@ const CertificateInformation = props => {
           <Form.Item
             label="中国大陆居民身份证人像面"
             name="positive"
-            rules={[{ required: true, message: '请上传中国大陆居民身份证人像面！' }]}
+            rules={[
+              { required: true, message: '请上传中国大陆居民身份证人像面！' }
+            ]}
           >
             <Upload
               name="avatar"
@@ -292,7 +349,9 @@ const CertificateInformation = props => {
           <Form.Item
             label="中国大陆居民身份证国徽面"
             name="reverse"
-            rules={[{ required: true, message: '请上传中国大陆居民身份证国徽面！' }]}
+            rules={[
+              { required: true, message: '请上传中国大陆居民身份证国徽面！' }
+            ]}
           >
             <Upload
               name="avatar"

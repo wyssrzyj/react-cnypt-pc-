@@ -221,7 +221,7 @@ const Overview = props => {
                 {notLoggedIn(contactInfo.email, 1, 7)}
               </span>
             </li>
-            <li>
+            <li style={{ alignItems: 'flex-start' }}>
               <span className={styles.rightLabel}>
                 <Icon type="jack-dizhi" className={styles.icon} />
                 地址

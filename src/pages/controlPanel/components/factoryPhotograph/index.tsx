@@ -29,7 +29,11 @@ const FactoryPhotograph = () => {
           setNameplateFileList([...factoryAuditorImages])
           setLocationFileList([...outsizeImages])
           setWorkshopFileList([...workshopImages])
-          const newImages = [...factoryAuditorImages, ...outsizeImages, ...workshopImages].map(item => ({ src: item }))
+          const newImages = [
+            ...factoryAuditorImages,
+            ...outsizeImages,
+            ...workshopImages
+          ].map(item => ({ src: item }))
           setAllImages([...newImages])
         }
       })
@@ -53,7 +57,7 @@ const FactoryPhotograph = () => {
       {!isLoading && (
         <>
           <Row gutter={16} className={styles.row}>
-            <Col className="gutter-row" span={4}>
+            <Col className={styles.colLabel} span={2}>
               验厂员与企业铭牌照：
             </Col>
             <Col className="gutter-row" span={20}>
@@ -69,7 +73,7 @@ const FactoryPhotograph = () => {
           </Row>
 
           <Row gutter={16} className={styles.row}>
-            <Col className="gutter-row" span={4}>
+            <Col className={styles.colLabel} span={2}>
               企业外景照：
             </Col>
             <Col className="gutter-row" span={20}>
@@ -85,7 +89,7 @@ const FactoryPhotograph = () => {
           </Row>
 
           <Row gutter={16} className={styles.row}>
-            <Col className="gutter-row" span={4}>
+            <Col className={styles.colLabel} span={2}>
               企业车间照：
             </Col>
             <Col className="gutter-row" span={20}>

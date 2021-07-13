@@ -102,6 +102,7 @@ const ControlPanel = () => {
               <h2 className={styles.management}>企业管理</h2>
             </Menu.Item>
             <Menu.Item
+              className={styles.item}
               key="account"
               icon={
                 <Icon
@@ -115,6 +116,7 @@ const ControlPanel = () => {
 
             <Menu.Item
               key="enterprise"
+              className={styles.item}
               icon={<Icon className={styles.menuIcon} type="jack-qiyeguanli" />}
             >
               <Link to="/control-panel/enterprise">企业信息</Link>
@@ -122,6 +124,7 @@ const ControlPanel = () => {
 
             <Menu.Item
               key="certificate"
+              className={styles.item}
               icon={<Icon className={styles.menuIcon} type="jack-shiming1" />}
             >
               <Link to="/control-panel/certificate">企业证件认证</Link>
@@ -130,6 +133,7 @@ const ControlPanel = () => {
             {approvalStatus && (
               <Menu.Item
                 key="qualification"
+                className={styles.item}
                 icon={
                   <Icon
                     className={styles.menuIcon}
@@ -144,6 +148,7 @@ const ControlPanel = () => {
             {factoryAuditStatus == '1' && (
               <SubMenu
                 key="sub2"
+                className={styles.subItem}
                 icon={<Icon className={styles.menuIcon} type="jack-ycsq" />}
                 title="验厂管理"
               >

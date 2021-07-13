@@ -8,6 +8,7 @@ import axios from '@/utils/axios'
 import { getTypeOptions, getProductClass, getProductMode } from '@/utils/tool'
 import { Icon, autoAddTooltip } from '@/components'
 import { getUserInfo } from '@/utils/tool'
+import Title from '../title'
 import styles from './index.module.less'
 
 const FactoryReport = () => {
@@ -113,9 +114,10 @@ const FactoryReport = () => {
         </div>
       </header>
       <div className={styles.box}>
-        <header className={styles.title}>
+        {/* <header className={styles.title}>
           <span className={styles.name}>工厂基本情况</span>
-        </header>
+        </header> */}
+        <Title title={'工厂基本情况'} />
         <ul className={styles.content}>
           <li>
             <div className={styles.left}>
@@ -184,9 +186,10 @@ const FactoryReport = () => {
       </div>
 
       <div className={styles.box}>
-        <header className={styles.title}>
+        {/* <header className={styles.title}>
           <span className={styles.name}>生产接单介绍</span>
-        </header>
+        </header> */}
+        <Title title={'生产接单介绍'} />
         <ul className={styles.content}>
           <li className={styles.product}>
             <div className={styles.left}>
@@ -282,9 +285,10 @@ const FactoryReport = () => {
       </div>
 
       <div className={styles.box}>
-        <header className={styles.title}>
+        {/* <header className={styles.title}>
           <span className={styles.name}>工厂数字化情况</span>
-        </header>
+        </header> */}
+        <Title title={'工厂数字化情况'} />
         <ul className={styles.content}>
           <li>
             <div className={styles.left}>

@@ -3,65 +3,6 @@ import { Scene } from '@antv/l7'
 import { ProvinceLayer, CountryLayer } from '@antv/l7-district'
 import { GaodeMap } from '@antv/l7-maps'
 import styles from './index.module.less'
-import * as _ from 'lodash'
-
-// const ProvinceData = [
-//   {
-//     name: '湖州市',
-//     code: 330500,
-//     value: 21
-//   },
-//   {
-//     name: '杭州市',
-//     code: 330100,
-//     value: 55
-//   },
-//   {
-//     name: '嘉兴市',
-//     code: 330400,
-//     value: 55
-//   },
-//   {
-//     name: '绍兴市',
-//     code: 330600,
-//     value: 67
-//   },
-//   {
-//     name: '宁波市',
-//     code: 330200,
-//     value: 72
-//   },
-//   {
-//     name: '舟山市',
-//     code: 330900,
-//     value: 8
-//   },
-//   {
-//     name: '衢州市',
-//     code: 330800,
-//     value: 11
-//   },
-//   {
-//     name: '金华市',
-//     code: 330700,
-//     value: 32
-//   },
-//   {
-//     name: '台州市',
-//     code: 331000,
-//     value: 55
-//   },
-//   {
-//     name: '丽水市',
-//     code: 331100,
-//     value: 17
-//   },
-//   {
-//     name: '温州市',
-//     code: 330300,
-//     value: 33
-//   }
-// ]
 
 const AreaMap = props => {
   const { data = [], code } = props
@@ -144,7 +85,9 @@ const AreaMap = props => {
   }, [])
 
   useEffect(() => {
-    initMap() // 初始化地图
+    ;(window as any).requestIdleCallback(() => {
+      initMap() // 初始化地图
+    })
   }, [])
 
   useEffect(() => {

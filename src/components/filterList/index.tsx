@@ -274,24 +274,33 @@ const FilterList = props => {
     const { location } = history
 
     const state: any = location.state || {}
-    console.log('🚀 ~ file: index.tsx ~ line 269 ~ useEffect ~ state', state)
-    if (state && state.cityIds) {
-      const t = toJS(allArea).find(i => i.value === state.cityIds[0]) //  目标省份
-      if (t && t.children) {
-        const target = t.children.find(i => i.value === state.cityIds[1])
-        target.id = target.value
-        target.name = target.label
-        console.log(
-          '🚀 ~ file: index.tsx ~ line 284 ~ useEffect ~ target',
-          target
-        )
-        if (target && target.children) {
-          delete target.children
-          setActiveArea([target])
-          onFilterChange({ cityIds: [state.cityIds[1]] })
+    const { cityIds } = state
+    let targetArea = []
+    let targetCitys = []
+    if (state && cityIds && cityIds.length) {
+      cityIds.forEach(item => {
+        const t = toJS(allArea).find(i => i.value === item[0]) //  目标省份
+
+        if (t && t.children) {
+          const target = t.children.find(i => i.value === item[1])
+          target.id = target.value
+          target.name = target.label
+          console.log(
+            '🚀 ~ file: index.tsx ~ line 284 ~ useEffect ~ target',
+            target
+          )
+          if (target && target.children) {
+            delete target.children
+            targetArea.push(target)
+            targetCitys.push(item[1])
+          }
         }
-      }
+      })
     }
+    console.log(targetArea, 'targetArea')
+    console.log(targetCitys, 'targetCitys')
+    setActiveArea(targetArea)
+    onFilterChange({ cityIds: targetCitys })
   }, [])
 
   return (

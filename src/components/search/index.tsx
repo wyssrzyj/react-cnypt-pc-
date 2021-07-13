@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
+import classNames from 'classnames'
 import { useStores, observer } from '@/utils/mobx'
 import styles from './index.module.less'
 // import BG_LOGO from './bgLogo.png'
-import { Input, Button } from 'antd'
+import { Input, Button, Affix } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { useHistory } from 'react-router'
 
@@ -12,6 +13,7 @@ const Search = () => {
   const { factoryName, updateName } = commonStore
 
   const [searchWord, setSearchWord] = useState<string>(factoryName)
+  const [affixed, setAffixed] = useState<boolean>(false)
 
   const searchFunction = () => {
     updateName(searchWord)
@@ -46,19 +48,29 @@ const Search = () => {
       <div className={styles.content}>
         <h3 className={styles.subtitle}>要找好厂家 锁定产能云平台</h3>
         <h1 className={styles.title}>开始寻找适合的加工厂</h1>
-        <div className={styles.searchBox}>
-          <Input
-            defaultValue={factoryName}
-            value={searchWord}
-            onChange={e => setSearchWord(e.target.value)}
-            onPressEnter={enterFn}
-            className={styles.input}
-            placeholder={'请输入工厂名称'}
-          />
-          <Button className={styles.btn} type={'primary'} icon={<SearchOutlined />} onClick={searchFunction}>
-            搜索
-          </Button>
-        </div>
+        <Affix offsetTop={0} onChange={affixed => setAffixed(affixed)}>
+          <div
+            style={{ width: affixed ? document.body.clientWidth : 900 }}
+            className={classNames(styles.searchBox, affixed && styles.active)}
+          >
+            <Input
+              defaultValue={factoryName}
+              value={searchWord}
+              onChange={e => setSearchWord(e.target.value)}
+              onPressEnter={enterFn}
+              className={styles.input}
+              placeholder={'请输入工厂名称'}
+            />
+            <Button
+              className={styles.btn}
+              type={'primary'}
+              icon={<SearchOutlined />}
+              onClick={searchFunction}
+            >
+              搜索
+            </Button>
+          </div>
+        </Affix>
       </div>
     </div>
   )

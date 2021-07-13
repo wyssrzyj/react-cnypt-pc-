@@ -20,12 +20,12 @@ const ApprovalResult = props => {
   const [end, setEnd] = useState(2)
   const [subTitleMap, setSubTitleMap] = useState<any>({})
 
-  const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
+  // const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
 
   const getApprovalResult = () => {
     axios
       .get('/api/factory/enterprise/get-enterprise-approval-result', {
-        enterpriseId: enterpriseInfo.enterpriseId
+        enterpriseId: currentUser.enterpriseId
       })
       .then(response => {
         const { success, data } = response
@@ -38,11 +38,14 @@ const ApprovalResult = props => {
           setStart(newStatus === 'approval' ? 1 : 0)
           setEnd(newStatus === 'noPass' ? 1 : 2)
           setSubTitleMap({
-            pending: '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',
+            pending:
+              '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',
             approval: '恭喜您，企业信息审核通过，已为您开通企业权限。',
             noPass: (
               <div style={{ width: 464, margin: 'auto', textAlign: 'left' }}>
-                <div>您的企业信息审核不通过，请根据错误原因重新上传对应信息。原因如下：</div>
+                <div>
+                  您的企业信息审核不通过，请根据错误原因重新上传对应信息。原因如下：
+                </div>
                 <div>{approvalDesc}</div>
               </div>
             )

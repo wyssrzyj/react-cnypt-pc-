@@ -24,12 +24,11 @@ export const dealRefresh = async request => {
     localStorage.setItem('token', rToken)
     localStorage.setItem('currentUser', JSON.stringify(updateUser))
   } catch (err) {
-    console.log(err.response, 'err')
     const { response } = err
     const { status } = response
     if (status === 401) {
       // 401 跳登录页
-      location.replace('/login')
+      location.replace('/user/login')
     }
   }
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useLayoutEffect } from 'react'
+import React, { useRef, useState, useLayoutEffect, useEffect } from 'react'
 import styles from './equipment.module.less'
 import classNames from 'classnames'
 import { Icon } from '@/components'
@@ -12,7 +12,10 @@ const Equipment = props => {
   const { SwiperCore } = props
   const leftRef = useRef<HTMLDivElement>()
   const rightRef = useRef<HTMLDivElement>()
+  const videoRef: any = useRef<HTMLVideoElement>()
+
   const [curKey, setCurKey] = useState(0)
+  const [videoStatus, setVideoStatus] = useState('pause')
 
   useLayoutEffect(() => {
     new SwiperCore('.equipmentSwiper', {
@@ -43,6 +46,29 @@ const Equipment = props => {
 
   const datas = ['https://www.chinajack.com/DownLoad/202106121120463.mp4']
 
+  useEffect(() => {
+    if (videoRef) {
+      console.log(videoRef.current.paused, 'videoRef.current.paused')
+    }
+  }, [videoRef])
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.addEventListener('pause', () => {
+        setVideoStatus('pause')
+      })
+
+      videoRef.current.addEventListener('play', () => {
+        setVideoStatus('play')
+      })
+    }
+  }, [])
+
+  const videoClick = () => {
+    const { paused } = videoRef.current
+    paused ? videoRef.current.play() : videoRef.current.pause()
+  }
+
   return (
     <div className={styles.equipment}>
       <div className={styles.equipmentInner}>
@@ -54,22 +80,32 @@ const Equipment = props => {
         <div className={styles.equipmentSwiperOut}>
           <div
             onChange={keyChange}
-            className={classNames(
-              'swiper-container equipmentSwiper',
-              styles.equipmentSwiper
-            )}
+            className={'swiper-container equipmentSwiper'}
           >
             <div className="swiper-wrapper">
               {datas.map((item, idx) => {
                 return (
-                  <div className={'swiper-slide'} key={idx + '~'}>
+                  <div
+                    className={classNames('swiper-slide', styles.videoBox)}
+                    key={idx + '~'}
+                  >
                     <video
                       poster={poster}
+                      controlsList={'nodownload'}
                       controls
+                      disablePictureInPicture
                       autoPlay={curKey === 1}
                       src={item}
                       className={styles.equipmentVideo}
+                      ref={videoRef}
                     ></video>
+                    {videoStatus === 'pause' ? (
+                      <Icon
+                        onClick={videoClick}
+                        type={'jack-zanting'}
+                        className={styles.videoIcon}
+                      ></Icon>
+                    ) : null}
                   </div>
                 )
               })}

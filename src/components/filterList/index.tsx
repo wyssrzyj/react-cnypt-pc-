@@ -285,10 +285,6 @@ const FilterList = props => {
           const target = t.children.find(i => i.value === item[1])
           target.id = target.value
           target.name = target.label
-          console.log(
-            '🚀 ~ file: index.tsx ~ line 284 ~ useEffect ~ target',
-            target
-          )
           if (target && target.children) {
             delete target.children
             targetArea.push(target)
@@ -297,8 +293,6 @@ const FilterList = props => {
         }
       })
     }
-    console.log(targetArea, 'targetArea')
-    console.log(targetCitys, 'targetCitys')
     setActiveArea(targetArea)
     onFilterChange({ cityIds: targetCitys })
   }, [])

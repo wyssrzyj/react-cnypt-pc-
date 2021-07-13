@@ -70,7 +70,7 @@ const SwiperCard = props => {
 }
 // 顶部地图工厂轮播
 const SwiperFactorys = props => {
-  const { SwiperCore, initCallback } = props
+  const { SwiperCore } = props
   const leftRef = useRef<HTMLDivElement>()
   const rightRef = useRef<HTMLDivElement>()
   const [curKey, setCurKey] = useState(1)
@@ -109,7 +109,6 @@ const SwiperFactorys = props => {
         slideChange: keyChange
       }
     })
-    initCallback && initCallback(true)
   }, [list])
 
   const toLeft = () => {

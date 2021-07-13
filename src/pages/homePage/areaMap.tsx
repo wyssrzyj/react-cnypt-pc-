@@ -85,9 +85,7 @@ const AreaMap = props => {
   }, [])
 
   useEffect(() => {
-    ;(window as any).requestIdleCallback(() => {
-      initMap() // 初始化地图
-    })
+    initMap() // 初始化地图
   }, [])
 
   useEffect(() => {

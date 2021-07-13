@@ -13,6 +13,7 @@ import OIMG from '../img/operateImg.png'
 // 合作品牌
 const Cooperation = () => {
   const datas = [COOP1, COOP2, COOP3, COOP4, COOP5, COOP6, COOP7, COOP8]
+
   return (
     <div className={styles.cooperation}>
       <div className={styles.header}>

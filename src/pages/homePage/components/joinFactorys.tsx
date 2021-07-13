@@ -18,7 +18,7 @@ const JoinCard = props => {
             <Icon type={'jack-nianfen_bai'} className={styles.joinIcon} />
             <span>成立年限</span>
           </span>
-          <span>{data.date || 0}年</span>
+          <span>{data.establishedIn || 0}年</span>
         </div>
         <div className={styles.joinInfoItem}>
           <span className={styles.joinLabel}>

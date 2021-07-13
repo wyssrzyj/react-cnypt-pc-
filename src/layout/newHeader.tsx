@@ -124,7 +124,7 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      <div>
+      <div className={styles.headerLeft}>
         <Link to="/home" className={styles.home}>
           <Icon type={'jack-logo1'} className={styles.logoIcon}></Icon>
           <span>产能云平台首页</span>
@@ -133,9 +133,14 @@ const Header = () => {
 
         {currentUser.nickName ? (
           <Dropdown overlay={menu}>
-            <span className={styles.user}>
-              您好，{currentUser.nickName || currentUser.username}
-            </span>
+            <>
+              <span className={styles.user}>
+                您好，{currentUser.nickName || currentUser.username}
+              </span>
+              <a className={styles.user}>
+                您好，{currentUser.nickName || currentUser.username}
+              </a>
+            </>
           </Dropdown>
         ) : (
           <>

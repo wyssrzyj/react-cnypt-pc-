@@ -1,9 +1,14 @@
 import React from 'react'
 import styles from './software.module.less'
-import SOFT1 from '../img/soft1.png'
-import SOFT2 from '../img/soft2.png'
-import SOFT3 from '../img/soft3.png'
-import SOFT4 from '../img/soft4.png'
+
+const SOFT1 =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/2556b9ac220e4969a533392523057706.png'
+const SOFT2 =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/0be72f74fb10486681b054a9034f507b.png'
+const SOFT3 =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/1ae9185a1cdc4273983482ae5a9fb9c2.png'
+const SOFT4 =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/a0f98f6802ac4b328a89a5601e4a8576.png'
 
 // 工票软件
 const Software = () => {

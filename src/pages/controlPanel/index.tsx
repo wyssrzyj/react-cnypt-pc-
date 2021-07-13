@@ -1,19 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { Link } from 'react-router-dom'
-import { Menu, Tooltip } from 'antd'
-import {
-  BankOutlined,
-  ContainerOutlined,
-  FileSearchOutlined,
-  // VerifiedOutlined,
-  // ExceptionOutlined,
-  TagsOutlined,
-  BookOutlined,
-  PictureOutlined,
-  PartitionOutlined,
-  AppstoreOutlined
-} from '@ant-design/icons'
+import { Menu } from 'antd'
 import { useStores } from '@/utils/mobx'
 import {
   EnterpriseInfo,
@@ -25,12 +13,12 @@ import {
   FactoryPhotograph
 } from './components'
 import { getUserInfo } from '@/utils/tool'
-import styles from './index.module.less'
 import FactoryInformation from './factoryInformation'
-import { useLocation, useHistory } from 'react-router'
+import { useLocation } from 'react-router'
 import AccountSafe from './accountSafe'
 import LoginLogs from './loginLogs'
 import { Icon } from '@/components'
+import styles from './index.module.less'
 
 const { SubMenu } = Menu
 
@@ -82,7 +70,6 @@ const ControlPanel = () => {
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
 
   const location = useLocation()
-  const history = useHistory()
 
   useEffect(() => {
     ;(async () => {
@@ -100,141 +87,85 @@ const ControlPanel = () => {
     setOpenKeys(keys)
   }
 
-  const toHome = () => {
-    history.push('/home')
-  }
-
-  const toTarget = path => {
-    history.push(path)
-  }
-
   return (
     <div className={styles.controlPanel}>
       <div className={styles.controlPanelContainer}>
         <div className={styles.controlPanelLeft}>
-          <div className={styles.slideBar}>
-            <Icon type={'jack-logo1'} className={styles.logoIcon}></Icon>
-            <div className={styles.slideIconBox}>
-              <Tooltip title={'首页'}>
-                <div
-                  className={styles.activeIcon}
-                  onClick={() => toTarget('/home')}
-                >
-                  <Icon
-                    type={'jack-shouye'}
-                    className={styles.slideIcon}
-                  ></Icon>
-                </div>
-              </Tooltip>
-              <Tooltip title={'企业管理'}>
-                <div className={styles.activeIconBox}>
-                  <Icon
-                    type={'jack-qiyeguanli'}
-                    className={styles.slideIcon}
-                  ></Icon>
-                </div>
-              </Tooltip>
-              <Tooltip title={'订单管理'}>
-                <div className={styles.activeIcon}>
-                  <Icon
-                    type={'jack-dingdanguanli'}
-                    className={styles.slideIcon}
-                  ></Icon>
-                </div>
-              </Tooltip>
-            </div>
-          </div>
           <Menu
-            // defaultSelectedKeys={['enterprise']}
             openKeys={openKeys}
             selectedKeys={currentMenu}
             mode="inline"
-            // theme="dark"
             onClick={handleMenu}
             onOpenChange={onOpenChange}
           >
-            <SubMenu key="sub1" icon={<BookOutlined />} title="企业管理">
-              <Menu.Item key="enterprise" icon={<ContainerOutlined />}>
-                <Link to="/control-panel/enterprise">企业信息</Link>
-              </Menu.Item>
-
-              <Menu.Item key="certificate" icon={<FileSearchOutlined />}>
-                <Link to="/control-panel/certificate">企业证件认证</Link>
-              </Menu.Item>
-
-              {/* <Menu.Item key="result" icon={<ExceptionOutlined />}>
-                <Link to="/control-panel/result">审批结果</Link>
-              </Menu.Item> */}
-
-              {/* <Menu.Item key="information" icon={<FileSearchOutlined />}>
-                <Link to="/control-panel/information">工厂资料</Link>
-              </Menu.Item> */}
-              {/* <Menu.Item key="photo" icon={<BankOutlined />}>
-                <Link to="/control-panel/photo">厂房现场照</Link>
-              </Menu.Item> */}
-            </SubMenu>
-            {approvalStatus && (
-              <Menu.Item key="qualification" icon={<TagsOutlined />}>
-                <Link to="/control-panel/qualification">资质认证</Link>
-              </Menu.Item>
-            )}
-
-            {factoryAuditStatus == '1' && (
-              <SubMenu key="sub2" icon={<AppstoreOutlined />} title="验厂管理">
-                <Menu.Item key="report" icon={<BankOutlined />}>
-                  <Link to="/control-panel/report">基础资料报告</Link>
-                </Menu.Item>
-                <Menu.Item key="equipment" icon={<PartitionOutlined />}>
-                  <Link to="/control-panel/equipment">车间设备</Link>
-                </Menu.Item>
-                <Menu.Item key="photograph" icon={<PictureOutlined />}>
-                  <Link to="/control-panel/photograph">工厂照片</Link>
-                </Menu.Item>
-              </SubMenu>
-            )}
+            <Menu.Item key="management">
+              <h2 className={styles.management}>企业管理</h2>
+            </Menu.Item>
             <Menu.Item
               key="account"
               icon={
                 <Icon
                   className={styles.menuIcon}
-                  type={'jack-zhanghaoanquan'}
+                  type={'jack-zhanghaoanquan1'}
                 />
               }
             >
               <Link to="/control-panel/account">账号安全</Link>
             </Menu.Item>
+
+            <Menu.Item
+              key="enterprise"
+              icon={<Icon className={styles.menuIcon} type="jack-qiyeguanli" />}
+            >
+              <Link to="/control-panel/enterprise">企业信息</Link>
+            </Menu.Item>
+
+            <Menu.Item
+              key="certificate"
+              icon={<Icon className={styles.menuIcon} type="jack-shiming1" />}
+            >
+              <Link to="/control-panel/certificate">企业证件认证</Link>
+            </Menu.Item>
+
+            {approvalStatus && (
+              <Menu.Item
+                key="qualification"
+                icon={
+                  <Icon
+                    className={styles.menuIcon}
+                    type="jack-shimingrenzheng"
+                  />
+                }
+              >
+                <Link to="/control-panel/qualification">资质认证</Link>
+              </Menu.Item>
+            )}
+
+            {factoryAuditStatus == '1' && (
+              <SubMenu
+                key="sub2"
+                icon={<Icon className={styles.menuIcon} type="jack-ycsq" />}
+                title="验厂管理"
+              >
+                <Menu.Item key="report">
+                  <Link to="/control-panel/report">基础资料报告</Link>
+                </Menu.Item>
+                <Menu.Item key="equipment">
+                  <Link to="/control-panel/equipment">车间设备</Link>
+                </Menu.Item>
+                <Menu.Item key="photograph">
+                  <Link to="/control-panel/photograph">工厂照片</Link>
+                </Menu.Item>
+              </SubMenu>
+            )}
           </Menu>
         </div>
         <div className={styles.controlPanelRight}>
-          <header className={styles.contentTitle}>
+          {/* <header className={styles.contentTitle}>
             <div className={styles.contentLeft}>
               {menusName.get(location.pathname)}
             </div>
-            <div>
-              <Tooltip title={'首页'}>
-                <Icon
-                  onClick={toHome}
-                  type={'jack-wzsy'}
-                  className={styles.headerIcon}
-                ></Icon>
-              </Tooltip>
-              <Tooltip title={'个人中心'}>
-                <Icon
-                  type={'jack-gerenzhongxin'}
-                  className={styles.headerIcon}
-                ></Icon>
-              </Tooltip>
-              <Tooltip title={'收藏'}>
-                <Icon
-                  type={'jack-shoucangjia'}
-                  className={styles.headerIcon}
-                ></Icon>
-              </Tooltip>
-              <Tooltip title={'消息'}>
-                <Icon type={'jack-xiaoxi'} className={styles.headerIcon}></Icon>
-              </Tooltip>
-            </div>
-          </header>
+          </header> */}
           <Switch>
             {/* 企业信息 */}
             <Route

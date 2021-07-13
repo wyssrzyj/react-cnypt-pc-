@@ -99,7 +99,7 @@ const FactoryEquipment = () => {
     getEquipment()
   }, [])
   return (
-    <div>
+    <div style={{ backgroundColor: '#fff', padding: 20 }}>
       <Button
         style={{ margin: '20px 0' }}
         type="primary"

@@ -57,10 +57,10 @@ const FactoryPhotograph = () => {
       {!isLoading && (
         <>
           <Row gutter={16} className={styles.row}>
-            <Col className={styles.colLabel} span={2}>
+            <Col className={styles.colLabel} span={5}>
               验厂员与企业铭牌照：
             </Col>
-            <Col className="gutter-row" span={20}>
+            <Col className="gutter-row" span={18}>
               {nameplateFileList.map((item, index) => (
                 <div
                   key={index}
@@ -73,10 +73,10 @@ const FactoryPhotograph = () => {
           </Row>
 
           <Row gutter={16} className={styles.row}>
-            <Col className={styles.colLabel} span={2}>
+            <Col className={styles.colLabel} span={5}>
               企业外景照：
             </Col>
-            <Col className="gutter-row" span={20}>
+            <Col className="gutter-row" span={18}>
               {locationFileList.map((item, index) => (
                 <div
                   key={index}
@@ -89,10 +89,10 @@ const FactoryPhotograph = () => {
           </Row>
 
           <Row gutter={16} className={styles.row}>
-            <Col className={styles.colLabel} span={2}>
+            <Col className={styles.colLabel} span={5}>
               企业车间照：
             </Col>
-            <Col className="gutter-row" span={20}>
+            <Col className="gutter-row" span={18}>
               {workshopFileList.map((item, index) => (
                 <div
                   key={index}

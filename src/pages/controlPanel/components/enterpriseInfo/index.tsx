@@ -5,52 +5,17 @@ import { isEmpty } from 'lodash'
 import { toJS } from 'mobx'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
-// import cityData from '@/static/cityData'
 import { useStores, observer } from '@/utils/mobx'
 import BusinessAddressCom from '../businessAddressCom'
-// import ProcessingTypeCom from '../processingTypeCom'
-// import MainCategoriesCom from '../mainCategoriesCom'
+import Title from '../title'
 import styles from './index.module.less'
 
-// const { Option } = Select
-// const { RangePicker } = DatePicker
 const { TextArea } = Input
 
 const layout = {
-  labelCol: { span: 2 },
-  wrapperCol: { span: 8 }
+  labelCol: { span: 4 },
+  wrapperCol: { span: 16 }
 }
-
-// const typeOptions = [
-//   { label: '小单快反', value: 'Apple' },
-//   { label: '外贸工厂', value: 'Pear' },
-//   { label: '清加工工厂', value: 'Orange' },
-//   { label: '贴牌工厂', value: 'banana' }
-// ]
-// const productionOptions = [
-//   { label: '20人以内', value: '20' },
-//   { label: '20~50人', value: '50' },
-//   { label: '50~100人', value: '100' },
-//   { label: '101~500人', value: '500' },
-//   { label: '501~1000人', value: '1000' },
-//   { label: '1001~10000人', value: '10000' },
-//   { label: '10000以上', value: '10001' }
-// ]
-
-// const InputComponent = props => {
-//   const { text, disable = false, value } = props
-//   return (
-//     <div className={styles.inputComponent}>
-//       <Input
-//         style={{ width: 370 }}
-//         value={value}
-//         disabled={disable}
-//         placeholder={text}
-//       />
-//       <Checkbox>不公开</Checkbox>
-//     </div>
-//   )
-// }
 
 const EnterpriseInfo = () => {
   const [form] = Form.useForm()
@@ -209,7 +174,8 @@ const EnterpriseInfo = () => {
         style={{ position: 'relative' }}
         // onValuesChange={onValuesChange}
       >
-        <div className={styles.enterpriseTitle}>基本信息</div>
+        <Title title={'基本信息'} />
+        {/* <div className={styles.enterpriseTitle}>基本信息</div> */}
         <Form.Item label="企业Logo" name="enterpriseLogoUrl">
           <Upload
             name="avatar"

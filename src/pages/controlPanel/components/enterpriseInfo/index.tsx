@@ -175,7 +175,6 @@ const EnterpriseInfo = () => {
         // onValuesChange={onValuesChange}
       >
         <Title title={'基本信息'} />
-        {/* <div className={styles.enterpriseTitle}>基本信息</div> */}
         <Form.Item label="企业Logo" name="enterpriseLogoUrl">
           <Upload
             name="avatar"

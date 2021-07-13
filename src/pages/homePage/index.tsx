@@ -75,9 +75,8 @@ const HomePage = () => {
         key = idx + 1
       }
     })
-    if (key !== activeKey) {
-      setActiveKey(key)
-    }
+
+    setActiveKey(key)
   }
 
   useEffect(() => {
@@ -95,8 +94,6 @@ const HomePage = () => {
         target.scrollTo(0, 0)
       })
     })
-
-    console.log('parent')
   }, [])
 
   return (

@@ -3,14 +3,15 @@
 .controlPanel {
   width: 100%;
   background: @containerBg;
+  padding-top: 20px;
+  border-top: 1px solid #d1d5d8
 }
 
 .controlPanelContainer {
-  // width: 1200px;
+  width: 1200px;
   margin: 0 auto;
   display: flex;
   height: 100%;
-  background-color: #F9F9FC;
 }
 
 .controlPanelLeft {
@@ -20,7 +21,6 @@
   // float: left;
   min-width: 256px;
   // height: calc(100vh-120px);
-  background-color: #001529;
 
   :global {
     .ant-menu-item-icon {
@@ -84,8 +84,7 @@
 .controlPanelRight {
   flex: 1;
   width: auto;
-  // margin-left: 260px;
-  padding: 4px 12px;
+  margin-left: 20px;
 }
 
 .contentTitle {
@@ -113,7 +112,30 @@
   margin-right: 24px;
   cursor: pointer;
 }
+.controlPanelLeft{
+  font-size: 16px;
+  .menuIcon {
+    font-size: 20px!important;
+  }
 
-.menuIcon {
-  color: #ffffff;
+}
+
+.management{
+  font-size: 20px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #333333;
+  padding-top: 20px;
+  margin-bottom: 8px;
+}
+.item{
+  padding: 25px 24px!important;
+  // margin: 20px 0;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 1px solid #f0f0f0;
+}
+.subItem{
+  font-size: 16px;
+  font-weight: 500;
 }

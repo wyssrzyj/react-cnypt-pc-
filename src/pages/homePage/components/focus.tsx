@@ -12,86 +12,86 @@ const Focus = () => {
   const focusImgs = [
     null,
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/f6f10e0684014837a85478a9507ce042.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/cd483ab065ed4dccb55383a18c65adc8.png',
       title: '女装',
       areas: [
-        { id: '1989', name: '深圳市' },
-        { id: '1966', name: '广州市' },
-        { id: '2092', name: '东莞市' },
-        { id: '935', name: '杭州市' }
+        { ids: ['1965', '1989'], name: '深圳市' },
+        { ids: ['1965', '1966'], name: '广州市' },
+        { ids: ['1965', '2092'], name: '东莞市' },
+        { ids: ['934', '935'], name: '杭州市' }
       ]
     },
     null,
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/313c83b6feab4518817f2c72e3a84abb.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/858140b68f8f4a2d93a5d6357dafbb42.png',
       title: '婚纱',
-      areas: [{ id: '2147', name: '潮州市' }]
+      areas: [{ ids: ['1965', '2147'], name: '潮州市' }]
     },
     null,
     null,
     null,
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/62fd5ed4d574482794c422c92197d3d4.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/fea19a2930fc4cb8b5c87e3966c33262.png',
       title: '牛仔',
       areas: [
-        { id: '2124', name: '中山市' },
-        { id: '1966', name: '广州市' },
-        { id: '2012', name: '佛山市' },
-        { id: '1400', name: '淄博市' }
+        { ids: ['1965', '2124'], name: '中山市' },
+        { ids: ['1965', '1966'], name: '广州市' },
+        { ids: ['1965', '2012'], name: '佛山市' },
+        { ids: ['1376', '1400'], name: '淄博市' }
       ]
     },
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/7035231d18bf49fcac554a1dd9b02f41.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/0012d74ce3ce4ebc8c4b6641bf16a729.png',
       title: '内衣',
       areas: [
-        { id: '2012', name: '佛山市' },
-        { id: '1210', name: '泉州市' }
+        { ids: ['1965', '2012'], name: '佛山市' },
+        { ids: ['1169', '1210'], name: '泉州市' }
       ]
     },
     null,
     null,
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/8986161ce44c406581591abd326b976e.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/052411033eb74770b230dcc945951a72.png',
       title: '休闲装',
-      areas: [{ id: '2124', name: '中山市' }]
+      areas: [{ ids: ['1965', '2124'], name: '中山市' }]
     },
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/67fa8b460c134648aeef5915004bb1a8.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/ff53fadfdaf5460cb1f2245c19d3f82e.png',
       title: '西裤',
-      areas: [{ id: '1210', name: '泉州市' }]
+      areas: [{ ids: ['1169', '1210'], name: '泉州市' }]
     },
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/b7277ab94dd54e3ab6b897c41a67e93a.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/7fd0713240b548fdb3785661bfd4d07b.png',
       title: '运动休闲装',
-      areas: [{ id: '1210', name: '泉州市' }]
+      areas: [{ ids: ['1169', '1210'], name: '泉州市' }]
     },
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/bc84258776a447f4ab6165ccf867e9b1.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/15d1c5915f8844e083db5dc92372a714.png',
       title: '衬衫',
       areas: [
-        { id: '987', name: '绍兴市' },
-        { id: '2151', name: '揭阳市' }
+        { ids: ['934', '987'], name: '绍兴市' },
+        { ids: ['1965', '2151'], name: '揭阳市' }
       ]
     },
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/70cc4e233ed945bc9c6e340e8358e540.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/55ab8e80474d4687b8d0b23ffd57de3f.png',
       title: '童装',
-      areas: [{ id: '981', name: '湖州市' }]
+      areas: [{ ids: ['934', '981'], name: '湖州市' }]
     },
     null,
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/8f044ce3098245c7b1350325af9d4a4a.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/e785fd47f347463da59ba63d68f6b283.png',
       title: '男装',
       areas: [
-        { id: '961', name: '温州市' },
-        { id: '949', name: '宁波市' },
-        { id: '125', name: '保定市' }
+        { ids: ['934', '961'], name: '温州市' },
+        { ids: ['934', '949'], name: '宁波市' },
+        { ids: ['38', '125'], name: '保定市' }
       ]
     },
     {
-      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210707/828c046893fc4457b49b4a438b6c0cfb.png',
+      img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/92f3b240059045538740c17bd49af13f.png',
       title: '羽绒服',
-      areas: [{ id: '862', name: '苏州市' }]
+      areas: [{ ids: ['821', '862'], name: '苏州市' }]
     },
     null
   ]
@@ -110,9 +110,13 @@ const Focus = () => {
   }, [])
 
   const toSearch = () => {
+    const targetAreas = focusImgs[active].areas.map(item => item.ids)
+
     history.push({
-      pathname: '/factory-search'
-      // state: searchData
+      pathname: '/factory-search',
+      state: {
+        cityIds: targetAreas
+      }
     })
   }
 

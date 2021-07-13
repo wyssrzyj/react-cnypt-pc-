@@ -1,11 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react'
 import styles from './joinFactorys.module.less'
 import classNames from 'classnames'
-import IMG1 from '../img/focus1.png'
-import IMG2 from '../img/focus2.png'
-import IMG3 from '../img/focus3.png'
-import IMG4 from '../img/focus4.png'
 import { Icon } from '@/components'
+import { useStores, observer } from '@/utils/mobx'
 
 // 加盟工厂卡片
 const JoinCard = props => {
@@ -13,7 +10,7 @@ const JoinCard = props => {
 
   return (
     <div className={styles.joinCard}>
-      <img src={data.url} alt="" className={styles.joinImg} />
+      <img src={data.pictureUrl} alt="" className={styles.joinImg} />
       <div className={styles.joinInfo}>
         <div className={styles.joinInfoTitle}>{data.factoryName}</div>
         <div className={styles.joinInfoItem}>
@@ -28,21 +25,23 @@ const JoinCard = props => {
             <Icon type={'jack-diqu_bai'} className={styles.joinIcon} />
             <span>地区</span>
           </span>
-          <span className={styles.joinText}>{data.area}</span>
+          <span className={styles.joinText}>{data.factoryDistrict}</span>
         </div>
         <div className={styles.joinInfoItem}>
           <span className={styles.joinLabel}>
             <Icon type={'jack-chewei'} className={styles.joinIcon} />
             <span>有效车位</span>
           </span>
-          <span className={styles.joinText}>{data.count}</span>
+          <span className={styles.joinText}>{data.effectiveLocation}</span>
         </div>
         <div className={styles.joinInfoItem}>
           <span className={styles.joinLabel}>
             <Icon type={'jack-pinpai_bai'} className={styles.joinIcon} />
             <span>服务品牌</span>
           </span>
-          <span className={styles.joinText}>{data.serve}</span>
+          <span className={styles.joinText}>
+            {data.receiveOrderHistoryDesc}
+          </span>
         </div>
       </div>
     </div>
@@ -54,67 +53,42 @@ const JoinFactorys = props => {
   const { SwiperCore } = props
   const leftRef = useRef<HTMLDivElement>()
   const rightRef = useRef<HTMLDivElement>()
-  const [curKey, setCurKey] = useState(1)
 
-  const datas = [
-    {
-      id: 8,
-      factoryName: '绍兴市昌辉服饰有限公司',
-      area: '浙江-绍兴-越城区',
-      count: '180台',
-      type: '牛仔',
-      date: '10',
-      url: IMG1
-    },
-    {
-      id: 9,
-      factoryName: '绍兴市昌辉服饰有限公司',
-      area: '浙江-绍兴-越城区',
-      count: '180台',
-      type: '牛仔',
-      date: '10',
-      url: IMG2
-    },
-    {
-      id: 10,
-      factoryName: '绍兴市昌辉服饰有限公司',
-      area: '浙江-绍兴-越城区',
-      count: '180台',
-      type: '牛仔',
-      date: '10',
-      url: IMG3
-    },
-    {
-      id: 11,
-      factoryName: '绍兴市昌辉服饰有限公司',
-      area: '浙江-绍兴-越城区',
-      count: '180台',
-      type: '牛仔',
-      date: '10',
-      url: IMG4
-    }
-  ]
+  const { factoryStore } = useStores()
+  const { getFactoryList } = factoryStore
+
+  const [curKey, setCurKey] = useState(1)
+  const [data, setData] = useState([])
 
   useEffect(() => {
-    new SwiperCore('.factorySwiper', {
-      slidesPerView: 3,
-      spaceBetween: 0,
-      centeredSlides: true,
-      centeredSlidesBounds: true,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      },
-      loop: false,
-      on: {
-        slideChange: keyChange
-      }
-      // autoplay: {
-      //   delay: 2000,
-      //   disableOnInteraction: true,
-      // },
-    })
+    ;(async () => {
+      const res = await getFactoryList({ searchType: 'affiliate' })
+      setData(res.records)
+    })()
   }, [])
+
+  useEffect(() => {
+    if (data && data.length) {
+      new SwiperCore('.factorySwiper', {
+        slidesPerView: 3,
+        spaceBetween: 0,
+        centeredSlides: true,
+        centeredSlidesBounds: true,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        loop: false,
+        on: {
+          slideChange: keyChange
+        }
+        // autoplay: {
+        //   delay: 2000,
+        //   disableOnInteraction: true,
+        // },
+      })
+    }
+  }, [data])
 
   const toLeft = () => {
     rightRef.current.click()
@@ -139,8 +113,8 @@ const JoinFactorys = props => {
         )}
       >
         <div className="swiper-wrapper">
-          {datas.map(item => (
-            <div className={'swiper-slide'} key={item.id}>
+          {data.map(item => (
+            <div className={'swiper-slide'} key={item.factoryId}>
               <JoinCard data={item} />
             </div>
           ))}
@@ -165,7 +139,7 @@ const JoinFactorys = props => {
           onClick={toRight}
           className={classNames(
             styles.joinRightIcon,
-            curKey === datas.length - 2 && styles.joinDisableIcon
+            curKey === data.length - 2 && styles.joinDisableIcon
           )}
         />
       </div>
@@ -173,4 +147,4 @@ const JoinFactorys = props => {
   )
 }
 
-export default JoinFactorys
+export default observer(JoinFactorys)

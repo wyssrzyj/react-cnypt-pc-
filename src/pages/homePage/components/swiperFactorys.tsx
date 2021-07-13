@@ -70,7 +70,7 @@ const SwiperCard = props => {
 }
 // 顶部地图工厂轮播
 const SwiperFactorys = props => {
-  const { SwiperCore } = props
+  const { SwiperCore, initCallback } = props
   const leftRef = useRef<HTMLDivElement>()
   const rightRef = useRef<HTMLDivElement>()
   const [curKey, setCurKey] = useState(1)
@@ -94,6 +94,7 @@ const SwiperFactorys = props => {
   }, [])
 
   useEffect(() => {
+    // if (list.length) return
     new SwiperCore('.factorysSwiper', {
       slidesPerView: 3,
       spaceBetween: 20,
@@ -108,6 +109,7 @@ const SwiperFactorys = props => {
         slideChange: keyChange
       }
     })
+    initCallback && initCallback(true)
   }, [list])
 
   const toLeft = () => {

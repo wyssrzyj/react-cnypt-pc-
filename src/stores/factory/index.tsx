@@ -14,7 +14,7 @@ export default class FactoryStore {
     this.productCategoryList = []
   }
 
-  // 获取工厂列表 搜索
+  // 获取工厂列表 搜索工厂
   @action getFactoryList = async params => {
     try {
       const res: ResponseProps = await axios.post(

@@ -3,14 +3,13 @@ import { Icon } from '@/components'
 import styles from './intelligenc.module.less'
 import { Button, Cascader } from 'antd'
 import SEARCH from '../img/sousuo.png'
-// import FRATORY from '../img/factory.png'
 import { useHistory } from 'react-router'
 import { cloneDeep } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import { toJS } from 'mobx'
 
 const FRATORY =
-  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210629/9f1f625f42ea46108ff651f2ad78a9ac.jpg?x-oss-process=image/quality,q_90'
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/302fcc6977cc4adea9d66fae4593ecb5.png'
 
 const Intelligence = () => {
   const history = useHistory()
@@ -43,7 +42,7 @@ const Intelligence = () => {
 
   const areaChange = value => {
     const newData = cloneDeep(searchData)
-    newData['cityIds'] = value
+    newData['cityIds'] = [value]
     setSerachData(newData)
   }
 

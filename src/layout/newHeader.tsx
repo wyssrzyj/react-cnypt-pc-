@@ -133,12 +133,14 @@ const Header = () => {
 
         {currentUser.nickName ? (
           <Dropdown overlay={menu}>
-            <span className={styles.user}>
-              您好，{currentUser.nickName || currentUser.username}
-            </span>
-            <a className={styles.user}>
-              您好，{currentUser.nickName || currentUser.username}
-            </a>
+            <>
+              <span className={styles.user}>
+                您好，{currentUser.nickName || currentUser.username}
+              </span>
+              <a className={styles.user}>
+                您好，{currentUser.nickName || currentUser.username}
+              </a>
+            </>
           </Dropdown>
         ) : (
           <>

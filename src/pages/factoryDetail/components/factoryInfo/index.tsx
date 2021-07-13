@@ -198,7 +198,7 @@ const FactoryInfo = props => {
                 {factoryInfo.effectiveLocation
                   ? factoryInfo.effectiveLocation
                   : '--'}
-                人
+                台
               </span>
             </li>
             <li>

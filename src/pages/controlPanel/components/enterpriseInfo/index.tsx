@@ -13,8 +13,12 @@ import styles from './index.module.less'
 const { TextArea } = Input
 
 const layout = {
-  labelCol: { span: 4 },
-  wrapperCol: { span: 16 }
+  labelCol: { span: 3 },
+  wrapperCol: { span: 14 }
+}
+const itemLayout = {
+  labelCol: { span: 3 },
+  wrapperCol: { span: 17 }
 }
 
 const EnterpriseInfo = () => {
@@ -167,7 +171,9 @@ const EnterpriseInfo = () => {
       <Form
         {...layout}
         form={form}
+        colon={false}
         name="enterprise"
+        labelAlign="left"
         initialValues={{
           mobilePhone: mobilePhone
         }}
@@ -245,61 +251,9 @@ const EnterpriseInfo = () => {
           <Cascader options={toJS(allArea)} placeholder="请选择所在地" />
         </Form.Item>
 
-        {/* {enterpriseType === 'process' && (
-          <>
-            <Form.Item
-              label="工厂类型"
-              name="productionType"
-              rules={[{ required: true, message: '请选择生产类型！' }]}
-            >
-              <Checkbox.Group options={typeOptions} />
-            </Form.Item>
-
-            <Form.Item
-              label="主营类别"
-              name="mainCategories"
-              rules={[{ required: true, message: '请选择主营类别！' }]}
-            >
-              <MainCategoriesCom />
-            </Form.Item>
-
-            <Form.Item
-              label="加工类型"
-              name="processingType"
-              rules={[{ required: true, message: '请选择加工类型！' }]}
-            >
-              <ProcessingTypeCom />
-            </Form.Item>
-
-            <Form.Item
-              label="生产人数"
-              name="productionNumber"
-              rules={[{ required: true, message: '请选择生产人数！' }]}
-            >
-              <Select>
-                {productionOptions.map(option => (
-                  <Option key={option.value} value={option.value}>
-                    {option.label}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-
-            <Form.Item label="空档期" name="gapYear">
-              <RangePicker picker="month" />
-            </Form.Item>
-
-            <Form.Item label="加工介绍" name="processingIntroduced">
-              <TextArea
-                rows={4}
-                placeholder="示例：300件起订  支持贴牌  可接外贸订单  来样加工"
-              />
-            </Form.Item>
-          </>
-        )} */}
-
         <Form.Item
           label="企业地址"
+          {...itemLayout}
           name="businessAddress"
           rules={[{ required: true, message: '请选择企业地址！' }]}
         >
@@ -319,11 +273,14 @@ const EnterpriseInfo = () => {
             placeholder="填写自主品牌名称、市场定位、销售网络和规模等信息，不要填写电话/邮箱等联系方式，字数在100-700之间"
           />
         </Form.Item>
-        {/* <div className={styles.enterpriseTitle}>联系方式</div> */}
       </Form>
 
       <div className={styles.enterpriseFooter}>
-        <Button type="primary" onClick={confirmSubmit}>
+        <Button
+          className={styles.button}
+          type="primary"
+          onClick={confirmSubmit}
+        >
           确认{enterpriseId ? '修改' : '提交'}
         </Button>
       </div>

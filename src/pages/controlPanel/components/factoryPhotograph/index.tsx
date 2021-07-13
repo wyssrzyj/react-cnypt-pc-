@@ -108,6 +108,9 @@ const FactoryPhotograph = () => {
       <Viewer
         visible={visible}
         activeIndex={currentIndex}
+        onMaskClick={() => {
+          setVisible(false)
+        }}
         onClose={() => {
           setVisible(false)
         }}

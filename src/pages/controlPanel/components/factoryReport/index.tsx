@@ -151,7 +151,7 @@ const FactoryReport = () => {
                 {' '}
                 {currentFactory.effectiveLocation}{' '}
               </b>
-              个
+              台
             </div>
           </li>
           <li>

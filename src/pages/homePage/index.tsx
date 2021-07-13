@@ -51,7 +51,6 @@ const HomePage = () => {
   const containerRef = useRef<HTMLDivElement>()
 
   const [activeKey, setActiveKey] = useState(0)
-  const [init, setInit] = useState(false)
 
   const setMove = event => {
     if (!domRef1.current) return
@@ -83,10 +82,21 @@ const HomePage = () => {
 
   useEffect(() => {
     window.addEventListener('scroll', setMove, true)
-
     return () => {
       window.removeEventListener('scroll', setMove)
     }
+  }, [])
+
+  useEffect(() => {
+    const target: any = window || document.body
+
+    target.addEventListener('load', () => {
+      target.requestIdleCallback(() => {
+        target.scrollTo(0, 0)
+      })
+    })
+
+    console.log('parent')
   }, [])
 
   return (
@@ -101,45 +111,41 @@ const HomePage = () => {
             <Statistics />
           </div>
         </div>
-        <SwiperFactorys SwiperCore={SwiperCore} initCallback={setInit} />
-        {init ? (
-          <>
-            {/* 智能搜索工厂 */}
-            <div ref={domRef1} className={styles.intelligenceSearch}>
-              <Intelligence />
-            </div>
-            {/* 地区工厂 */}
-            <div ref={domRef2} className={styles.areaFactorys}>
-              <AreaFactorys />
-            </div>
-            {/* 产业聚集地 */}
-            <div ref={domRef3} className={styles.focus}>
-              <Focus />
-            </div>
-            {/* 加盟工厂 */}
-            <div ref={domRef4}>
-              <JoinFactorys SwiperCore={SwiperCore} />
-            </div>
-            {/* 运营团队 */}
-            <div ref={domRef5}>
-              <Operate SwiperCore={SwiperCore} />
-            </div>
-            {/* 工票软件 */}
-            <div ref={domRef6}>
-              <Software />
-            </div>
-            {/* 最新物联设备 */}
-            <div ref={domRef7}>
-              <Equipment SwiperCore={SwiperCore} />
-            </div>
-            {/* 合作品牌 */}
-            <div ref={domRef8}>
-              <Cooperation />
-            </div>
-            {/* 导航栏 */}
-            <SlideBars domMap={domMap} activeKey={activeKey} />
-          </>
-        ) : null}
+        <SwiperFactorys SwiperCore={SwiperCore} />
+        {/* 智能搜索工厂 */}
+        <div ref={domRef1} className={styles.intelligenceSearch}>
+          <Intelligence />
+        </div>
+        {/* 地区工厂 */}
+        <div ref={domRef2} className={styles.areaFactorys}>
+          <AreaFactorys />
+        </div>
+        {/* 产业聚集地 */}
+        <div ref={domRef3} className={styles.focus}>
+          <Focus />
+        </div>
+        {/* 加盟工厂 */}
+        <div ref={domRef4} className={styles.joinFactorys}>
+          <JoinFactorys SwiperCore={SwiperCore} />
+        </div>
+        {/* 运营团队 */}
+        <div ref={domRef5} className={styles.operate}>
+          <Operate SwiperCore={SwiperCore} />
+        </div>
+        {/* 工票软件 */}
+        <div ref={domRef6} className={styles.softWare}>
+          <Software />
+        </div>
+        {/* 最新物联设备 */}
+        <div ref={domRef7} className={styles.equipment}>
+          <Equipment SwiperCore={SwiperCore} />
+        </div>
+        {/* 合作品牌 */}
+        <div ref={domRef8} className={styles.cooperation}>
+          <Cooperation />
+        </div>
+        {/* 导航栏 */}
+        <SlideBars domMap={domMap} activeKey={activeKey} />
       </div>
     </div>
   )

@@ -14,6 +14,8 @@ const Focus = () => {
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/cd483ab065ed4dccb55383a18c65adc8.png',
       title: '女装',
+      mainCategoryChildId: '171',
+      mainCategoryParentId: '1',
       areas: [
         { ids: ['1965', '1989'], name: '深圳市' },
         { ids: ['1965', '1966'], name: '广州市' },
@@ -25,6 +27,8 @@ const Focus = () => {
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/858140b68f8f4a2d93a5d6357dafbb42.png',
       title: '婚纱',
+      mainCategoryChildId: '135',
+      mainCategoryParentId: '1',
       areas: [{ ids: ['1965', '2147'], name: '潮州市' }]
     },
     null,
@@ -33,6 +37,8 @@ const Focus = () => {
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/fea19a2930fc4cb8b5c87e3966c33262.png',
       title: '牛仔',
+      mainCategoryChildId: '129',
+      mainCategoryParentId: '1',
       areas: [
         { ids: ['1965', '2124'], name: '中山市' },
         { ids: ['1965', '1966'], name: '广州市' },
@@ -43,6 +49,8 @@ const Focus = () => {
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/0012d74ce3ce4ebc8c4b6641bf16a729.png',
       title: '内衣',
+      mainCategoryChildId: '5',
+      mainCategoryParentId: '7',
       areas: [
         { ids: ['1965', '2012'], name: '佛山市' },
         { ids: ['1169', '1210'], name: '泉州市' }
@@ -53,21 +61,29 @@ const Focus = () => {
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/052411033eb74770b230dcc945951a72.png',
       title: '休闲装',
+      mainCategoryChildId: '4',
+      mainCategoryParentId: '1',
       areas: [{ ids: ['1965', '2124'], name: '中山市' }]
     },
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/ff53fadfdaf5460cb1f2245c19d3f82e.png',
       title: '西裤',
+      mainCategoryChildId: '128',
+      mainCategoryParentId: '1',
       areas: [{ ids: ['1169', '1210'], name: '泉州市' }]
     },
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/7fd0713240b548fdb3785661bfd4d07b.png',
       title: '运动休闲装',
+      mainCategoryChildId: '132',
+      mainCategoryParentId: '1',
       areas: [{ ids: ['1169', '1210'], name: '泉州市' }]
     },
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/15d1c5915f8844e083db5dc92372a714.png',
       title: '衬衫',
+      mainCategoryChildId: '126',
+      mainCategoryParentId: '1',
       areas: [
         { ids: ['934', '987'], name: '绍兴市' },
         { ids: ['1965', '2151'], name: '揭阳市' }
@@ -76,12 +92,16 @@ const Focus = () => {
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/55ab8e80474d4687b8d0b23ffd57de3f.png',
       title: '童装',
+      mainCategoryChildId: '9',
+      mainCategoryParentId: '5',
       areas: [{ ids: ['934', '981'], name: '湖州市' }]
     },
     null,
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/e785fd47f347463da59ba63d68f6b283.png',
       title: '男装',
+      mainCategoryChildId: '172',
+      mainCategoryParentId: '5',
       areas: [
         { ids: ['934', '961'], name: '温州市' },
         { ids: ['934', '949'], name: '宁波市' },
@@ -91,6 +111,8 @@ const Focus = () => {
     {
       img: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/92f3b240059045538740c17bd49af13f.png',
       title: '羽绒服',
+      mainCategoryChildId: '135',
+      mainCategoryParentId: '1',
       areas: [{ ids: ['821', '862'], name: '苏州市' }]
     },
     null
@@ -110,12 +132,15 @@ const Focus = () => {
   }, [])
 
   const toSearch = () => {
-    const targetAreas = focusImgs[active].areas.map(item => item.ids)
+    const target = focusImgs[active]
+    const targetAreas = target.areas.map(item => item.ids)
 
     history.push({
       pathname: '/factory-search',
       state: {
-        cityIds: targetAreas
+        cityIds: targetAreas,
+        mainCategoryChildId: target['mainCategoryChildId'],
+        mainCategoryParentId: target['mainCategoryParentId']
       }
     })
   }
@@ -125,9 +150,9 @@ const Focus = () => {
       <div className={styles.focusLeft}>
         <div>产业聚集地</div>
         <div>INDUSTRIAL CLUSTER</div>
-        <div>{title}</div>
-        <div className={styles.areas} onClick={toSearch}>
-          {areas}
+        <div onClick={toSearch} className={styles.areas}>
+          <div>{title}</div>
+          <div>{areas}</div>
         </div>
       </div>
       <div className={styles.focusRight}>

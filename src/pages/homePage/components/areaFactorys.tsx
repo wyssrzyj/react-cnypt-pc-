@@ -98,7 +98,7 @@ const AreaFactorys = () => {
   }, [])
 
   return (
-    <div>
+    <>
       <div className={styles.areaHeader}>
         <div className={styles.headerLeft}>
           <div className={styles.areaTitle}>
@@ -160,7 +160,7 @@ const AreaFactorys = () => {
           })}
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

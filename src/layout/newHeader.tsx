@@ -131,7 +131,7 @@ const Header = () => {
           <span className={styles.verticalBar}>|</span>
         </Link>
 
-        {currentUser.nickName ? (
+        {currentUser.userId ? (
           <Dropdown overlay={menu}>
             <span className={styles.user}>
               您好，{currentUser.nickName || currentUser.username}

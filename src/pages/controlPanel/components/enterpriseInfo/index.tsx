@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Input, Button, Radio, Cascader, Upload, message } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import {
+  Form,
+  Input,
+  Button,
+  Radio,
+  Cascader,
+  Upload,
+  message,
+  Space
+} from 'antd'
+import { PlusOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { isEmpty } from 'lodash'
 import { toJS } from 'mobx'
 import axios from '@/utils/axios'
@@ -123,12 +132,6 @@ const EnterpriseInfo = () => {
         if (success && !isEmpty(data)) {
           const {
             enterpriseLogoUrl,
-            enterpriseName,
-            enterpriseType,
-            realName,
-            contactPhone,
-            email,
-            enterpriseDesc,
             factoryId,
             enterpriseId,
             provinceId,
@@ -145,13 +148,8 @@ const EnterpriseInfo = () => {
           setEnterpriseId(enterpriseId)
           setEnterpriseLogoId(enterpriseLogoId)
           setFieldsValue({
+            ...data,
             enterpriseLogoUrl,
-            enterpriseName,
-            enterpriseType,
-            realName,
-            contactPhone,
-            email,
-            enterpriseDesc,
             area: [
               provinceId.toString(),
               cityId.toString(),
@@ -181,7 +179,14 @@ const EnterpriseInfo = () => {
         // onValuesChange={onValuesChange}
       >
         <Title title={'基本信息'} />
-        <Form.Item label="企业Logo" name="enterpriseLogoUrl">
+        <Form.Item
+          label="企业Logo "
+          name="enterpriseLogoUrl"
+          tooltip={{
+            title: '只能上传jpg/png格式文件，限传一个文件不能超过500kb',
+            icon: <InfoCircleOutlined />
+          }}
+        >
           <Upload
             name="avatar"
             listType="picture-card"
@@ -196,17 +201,19 @@ const EnterpriseInfo = () => {
             {isEmpty(imageUrlList) ? uploadButton : null}
           </Upload>
         </Form.Item>
-        <div className={styles.tipBox}>
-          只能上传jpg/png格式文件，限传一个文件不能超过500kb
-        </div>
 
         <Form.Item
           label="企业名称"
           name="enterpriseName"
           rules={[{ required: true, message: '请输入企业名称！' }]}
+          tooltip={{
+            title: '企业名称务必与营业执照一致，如：广州某某信息科技有限公司',
+            icon: <InfoCircleOutlined />
+          }}
         >
           <Input placeholder="请输入企业名称" />
         </Form.Item>
+        <div></div>
 
         <Form.Item
           label="企业类型"
@@ -214,8 +221,20 @@ const EnterpriseInfo = () => {
           rules={[{ required: true, message: '请选择企业类型！' }]}
         >
           <Radio.Group>
-            <Radio value="0">加工厂</Radio>
-            <Radio value="1">发单商</Radio>
+            <Space direction="vertical">
+              <Radio value="0">
+                <span>加工厂</span>{' '}
+                <span className={styles.radioTip}>
+                  （加工厂拥有接单的权限）
+                </span>
+              </Radio>
+              <Radio value="1">
+                <span>发单商</span>
+                <span className={styles.radioTip}>
+                  （发单商拥有发单的权限，无法接单）
+                </span>
+              </Radio>
+            </Space>
           </Radio.Group>
         </Form.Item>
 

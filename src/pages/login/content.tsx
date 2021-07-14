@@ -80,7 +80,6 @@ const LoginContent = () => {
     history.push('/user/reset')
   }
 
-  console.log(phoneNumer)
   return (
     <div
       className={classNamess(

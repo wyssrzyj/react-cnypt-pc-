@@ -1,4 +1,4 @@
-import { makeAutoObservable, action, observable } from 'mobx'
+import { makeAutoObservable, action, observable, runInAction } from 'mobx'
 import axios from '@/utils/axios'
 import { ResponseProps } from '@/utils/axios/types'
 import { message } from 'antd'
@@ -40,7 +40,9 @@ export default class FactoryStore {
       )
 
       if (res) {
-        this.productCategoryList = res.data
+        runInAction(() => {
+          this.productCategoryList = res.data
+        })
         return res.data || []
       } else {
         message.error('获取数据失败~')

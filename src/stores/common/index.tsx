@@ -1,4 +1,4 @@
-import { observable, action, makeAutoObservable } from 'mobx'
+import { observable, action, makeAutoObservable, runInAction } from 'mobx'
 import { message } from 'antd'
 import axios from '@/utils/axios'
 import { ResponseProps } from '@/utils/axios/types'
@@ -21,7 +21,9 @@ export default class CommonStore {
         params
       )
       if (res) {
-        this.dictionary = res.data
+        runInAction(() => {
+          this.dictionary = res.data
+        })
         return res.data || []
       } else {
         message.error('获取数据失败~')
@@ -48,7 +50,10 @@ export default class CommonStore {
         //     children
         //   }
         // })
-        this.allArea = res.data
+        runInAction(() => {
+          this.allArea = res.data
+        })
+
         return res.data || []
       } else {
         message.error('获取数据失败~')

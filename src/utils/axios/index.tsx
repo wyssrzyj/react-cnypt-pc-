@@ -119,6 +119,7 @@ const apiAxios = async (
       responseData.code !== 40101 &&
         responseData.msg &&
         message.error(responseData.msg)
+      location.replace('/user/login')
       return Promise.reject(responseData)
     }
   } catch (error) {

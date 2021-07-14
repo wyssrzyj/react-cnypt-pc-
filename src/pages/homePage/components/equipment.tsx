@@ -47,12 +47,6 @@ const Equipment = props => {
   const datas = ['https://www.chinajack.com/DownLoad/202106121120463.mp4']
 
   useEffect(() => {
-    if (videoRef) {
-      console.log(videoRef.current.paused, 'videoRef.current.paused')
-    }
-  }, [videoRef])
-
-  useEffect(() => {
     if (videoRef.current) {
       videoRef.current.addEventListener('pause', () => {
         setVideoStatus('pause')

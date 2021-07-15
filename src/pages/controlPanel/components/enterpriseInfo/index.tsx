@@ -170,6 +170,7 @@ const EnterpriseInfo = () => {
         {...layout}
         form={form}
         colon={false}
+        size="large"
         name="enterprise"
         labelAlign="left"
         initialValues={{

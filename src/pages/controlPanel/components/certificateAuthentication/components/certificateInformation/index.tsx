@@ -229,9 +229,16 @@ const CertificateInformation = props => {
   return (
     <div className={styles.certificateInformation}>
       <Alert message={messageTip} type="info" showIcon />
-      <Form {...layout} name="basic" form={form} initialValues={initialValues}>
+      <Form
+        {...layout}
+        name="basic"
+        form={form}
+        size="large"
+        initialValues={initialValues}
+      >
         <div className={styles.enterprise}>
           <h3>请上传企业证件</h3>
+
           <Form.Item
             label="企业证件类型"
             name="certificateType"

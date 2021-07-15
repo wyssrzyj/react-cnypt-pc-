@@ -70,7 +70,7 @@ const Reset = () => {
       delete values.newPassword2
       const res = await resetPwd(values)
       if (res) {
-        history.push('/home')
+        history.push('/')
       }
     } catch (e) {
       console.log(e)

@@ -18,7 +18,7 @@ const App = () => {
   //   const { target } = event
   //   const { location } = target
 
-  //   if (location.pathname === '/home') {
+  //   if (location.pathname === '/') {
   //     location.reload()
   //   }
   //   setLoading(true)

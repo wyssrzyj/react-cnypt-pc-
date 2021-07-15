@@ -10,7 +10,6 @@ import SwiperCore, {
   EffectFade
 } from 'swiper'
 import 'swiper/swiper-bundle.min.css'
-
 import JoinFactorys from './components/joinFactorys'
 import Cooperation from './components/cooperation'
 import Equipment from './components/equipment'

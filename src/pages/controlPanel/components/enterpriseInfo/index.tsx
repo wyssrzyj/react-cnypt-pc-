@@ -213,7 +213,6 @@ const EnterpriseInfo = () => {
         >
           <Input placeholder="请输入企业名称" />
         </Form.Item>
-        <div></div>
 
         <Form.Item
           label="企业类型"

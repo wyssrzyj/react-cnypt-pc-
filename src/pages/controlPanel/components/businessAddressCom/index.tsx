@@ -30,6 +30,7 @@ const BusinessAddressCom = props => {
   useEffect(() => {
     const scene = new Scene({
       id: 'yjMap',
+      logoVisible: false,
       map: new GaodeMap({
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [120.311123, 30.404645],

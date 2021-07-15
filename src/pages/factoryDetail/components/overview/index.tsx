@@ -101,6 +101,7 @@ const Overview = props => {
       const { latitude = '30.404645', longitude = '20.311123' } = current
       const scene = new Scene({
         id: 'address',
+        logoVisible: false,
         map: new GaodeMap({
           style: 'normal',
           center: [longitude, latitude],

@@ -1,6 +1,7 @@
 import { makeAutoObservable, action } from 'mobx'
 import axios from '@/utils/axios'
 import { ResponseProps } from '@/utils/axios/types'
+import { message } from 'antd'
 
 type VerifyCodeParams = {
   code: string
@@ -50,6 +51,9 @@ export default class RegisterStore {
         `/api/user/account/register`,
         params
       )
+      if (res.success) {
+        message.success('注册成功~')
+      }
       return res
     } catch (e) {
       console.log(e, '------')

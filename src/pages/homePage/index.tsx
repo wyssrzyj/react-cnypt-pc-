@@ -10,7 +10,6 @@ import SwiperCore, {
   EffectFade
 } from 'swiper'
 import 'swiper/swiper-bundle.min.css'
-
 import JoinFactorys from './components/joinFactorys'
 import Cooperation from './components/cooperation'
 import Equipment from './components/equipment'
@@ -75,9 +74,8 @@ const HomePage = () => {
         key = idx + 1
       }
     })
-    if (key !== activeKey) {
-      setActiveKey(key)
-    }
+
+    setActiveKey(key)
   }
 
   useEffect(() => {
@@ -95,8 +93,6 @@ const HomePage = () => {
         target.scrollTo(0, 0)
       })
     })
-
-    console.log('parent')
   }, [])
 
   return (

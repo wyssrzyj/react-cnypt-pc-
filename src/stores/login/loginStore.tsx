@@ -23,11 +23,9 @@ export default class LoginStore {
       if (!res.success) {
         message.error(res.msg)
       }
-      // message.success('登录成功')
       return res
     } catch (e) {
       console.log(e)
-      // message.error('')
     }
   }
   @action logout = async () => {
@@ -38,7 +36,7 @@ export default class LoginStore {
         localStorage.setItem('refresh', '')
         localStorage.setItem('currentUser', JSON.stringify({}))
       }
-      if (!res.success) {
+      if (res && !res.success) {
         message.error(res.msg)
       } else {
         message.success('退出成功')
@@ -47,6 +45,13 @@ export default class LoginStore {
       return res.success
     } catch (e) {
       console.log(e) // message.error('')
+      if (e.code === 40101) {
+        message.success('退出成功')
+        localStorage.setItem('token', '')
+        localStorage.setItem('refresh', '')
+        localStorage.setItem('currentUser', JSON.stringify({}))
+        return true
+      }
     }
   }
 
@@ -62,11 +67,9 @@ export default class LoginStore {
       if (!res.success) {
         message.error(res.msg)
       }
-      // message.success('登录成功')
       return res
     } catch (e) {
       console.log(e)
-      // message.error('')
     }
   }
 
@@ -80,11 +83,9 @@ export default class LoginStore {
       if (!res.success) {
         message.error(res.msg)
       }
-      // message.success('登录成功')
       return res
     } catch (e) {
       console.log(e)
-      // message.error('')
     }
   }
   // 忘记密码
@@ -102,11 +103,9 @@ export default class LoginStore {
       if (!res.success) {
         message.error(res.msg)
       }
-      // message.success('登录成功')
       return res.success
     } catch (e) {
       console.log(e)
-      // message.error('')
     }
   }
 }

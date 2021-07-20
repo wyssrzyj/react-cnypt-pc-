@@ -59,7 +59,7 @@ const LoginContent = () => {
       await userInfo()
       if (res && res.success) {
         setError(false)
-        history.push('/platform/home')
+        history.push('/')
       } else {
         setError(true)
       }
@@ -80,7 +80,6 @@ const LoginContent = () => {
     history.push('/user/reset')
   }
 
-  console.log(phoneNumer)
   return (
     <div
       className={classNamess(

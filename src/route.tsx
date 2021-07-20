@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 import Loadable from '@/utils/loadable'
 
@@ -48,10 +48,15 @@ const Excel = Loadable({
   loader: () => import('@/pages/homePage/excel')
 })
 
+// NotFound
+const NotFound = Loadable({
+  loader: () => import('@/components/404')
+})
+
 const RouteList = () => {
   return (
     <Switch>
-      <Route path="/home" component={HomePage} />
+      <Route path="/" exact component={HomePage} />
       <Route path="/factory-search" component={Platform} />
       <Route path="/note" component={Note} />
       <Route path="/user" component={LoginAndRegister} />
@@ -60,7 +65,7 @@ const RouteList = () => {
       <Route path="/control-panel" component={ControlPanel} />
       <Route path="/GDMap" component={GDMap} />
       <Route path="/excel" component={Excel} />
-      <Redirect to="/home" />
+      <Route path="*" component={NotFound} />
     </Switch>
   )
 }

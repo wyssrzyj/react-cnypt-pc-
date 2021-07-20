@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Input, Button, Radio, Cascader, Upload, message } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import {
+  Form,
+  Input,
+  Button,
+  Radio,
+  Cascader,
+  Upload,
+  message,
+  Space
+} from 'antd'
+import { PlusOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { isEmpty } from 'lodash'
 import { toJS } from 'mobx'
 import axios from '@/utils/axios'
@@ -13,8 +22,12 @@ import styles from './index.module.less'
 const { TextArea } = Input
 
 const layout = {
-  labelCol: { span: 4 },
-  wrapperCol: { span: 16 }
+  labelCol: { span: 3 },
+  wrapperCol: { span: 14 }
+}
+const itemLayout = {
+  labelCol: { span: 3 },
+  wrapperCol: { span: 17 }
 }
 
 const EnterpriseInfo = () => {
@@ -119,12 +132,6 @@ const EnterpriseInfo = () => {
         if (success && !isEmpty(data)) {
           const {
             enterpriseLogoUrl,
-            enterpriseName,
-            enterpriseType,
-            realName,
-            contactPhone,
-            email,
-            enterpriseDesc,
             factoryId,
             enterpriseId,
             provinceId,
@@ -141,13 +148,8 @@ const EnterpriseInfo = () => {
           setEnterpriseId(enterpriseId)
           setEnterpriseLogoId(enterpriseLogoId)
           setFieldsValue({
+            ...data,
             enterpriseLogoUrl,
-            enterpriseName,
-            enterpriseType,
-            realName,
-            contactPhone,
-            email,
-            enterpriseDesc,
             area: [
               provinceId.toString(),
               cityId.toString(),
@@ -167,7 +169,10 @@ const EnterpriseInfo = () => {
       <Form
         {...layout}
         form={form}
+        colon={false}
+        size="large"
         name="enterprise"
+        labelAlign="left"
         initialValues={{
           mobilePhone: mobilePhone
         }}
@@ -175,7 +180,14 @@ const EnterpriseInfo = () => {
         // onValuesChange={onValuesChange}
       >
         <Title title={'基本信息'} />
-        <Form.Item label="企业Logo" name="enterpriseLogoUrl">
+        <Form.Item
+          label="企业Logo "
+          name="enterpriseLogoUrl"
+          tooltip={{
+            title: '只能上传jpg/png格式文件，限传一个文件不能超过500kb',
+            icon: <InfoCircleOutlined />
+          }}
+        >
           <Upload
             name="avatar"
             listType="picture-card"
@@ -190,14 +202,15 @@ const EnterpriseInfo = () => {
             {isEmpty(imageUrlList) ? uploadButton : null}
           </Upload>
         </Form.Item>
-        <div className={styles.tipBox}>
-          只能上传jpg/png格式文件，限传一个文件不能超过500kb
-        </div>
 
         <Form.Item
           label="企业名称"
           name="enterpriseName"
           rules={[{ required: true, message: '请输入企业名称！' }]}
+          tooltip={{
+            title: '企业名称务必与营业执照一致，如：广州某某信息科技有限公司',
+            icon: <InfoCircleOutlined />
+          }}
         >
           <Input placeholder="请输入企业名称" />
         </Form.Item>
@@ -208,8 +221,20 @@ const EnterpriseInfo = () => {
           rules={[{ required: true, message: '请选择企业类型！' }]}
         >
           <Radio.Group>
-            <Radio value="0">加工厂</Radio>
-            <Radio value="1">发单商</Radio>
+            <Space direction="vertical">
+              <Radio value="0">
+                <span>加工厂</span>{' '}
+                <span className={styles.radioTip}>
+                  （加工厂拥有接单的权限）
+                </span>
+              </Radio>
+              <Radio value="1">
+                <span>发单商</span>
+                <span className={styles.radioTip}>
+                  （发单商拥有发单的权限，无法接单）
+                </span>
+              </Radio>
+            </Space>
           </Radio.Group>
         </Form.Item>
 
@@ -245,61 +270,9 @@ const EnterpriseInfo = () => {
           <Cascader options={toJS(allArea)} placeholder="请选择所在地" />
         </Form.Item>
 
-        {/* {enterpriseType === 'process' && (
-          <>
-            <Form.Item
-              label="工厂类型"
-              name="productionType"
-              rules={[{ required: true, message: '请选择生产类型！' }]}
-            >
-              <Checkbox.Group options={typeOptions} />
-            </Form.Item>
-
-            <Form.Item
-              label="主营类别"
-              name="mainCategories"
-              rules={[{ required: true, message: '请选择主营类别！' }]}
-            >
-              <MainCategoriesCom />
-            </Form.Item>
-
-            <Form.Item
-              label="加工类型"
-              name="processingType"
-              rules={[{ required: true, message: '请选择加工类型！' }]}
-            >
-              <ProcessingTypeCom />
-            </Form.Item>
-
-            <Form.Item
-              label="生产人数"
-              name="productionNumber"
-              rules={[{ required: true, message: '请选择生产人数！' }]}
-            >
-              <Select>
-                {productionOptions.map(option => (
-                  <Option key={option.value} value={option.value}>
-                    {option.label}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-
-            <Form.Item label="空档期" name="gapYear">
-              <RangePicker picker="month" />
-            </Form.Item>
-
-            <Form.Item label="加工介绍" name="processingIntroduced">
-              <TextArea
-                rows={4}
-                placeholder="示例：300件起订  支持贴牌  可接外贸订单  来样加工"
-              />
-            </Form.Item>
-          </>
-        )} */}
-
         <Form.Item
           label="企业地址"
+          {...itemLayout}
           name="businessAddress"
           rules={[{ required: true, message: '请选择企业地址！' }]}
         >
@@ -319,11 +292,14 @@ const EnterpriseInfo = () => {
             placeholder="填写自主品牌名称、市场定位、销售网络和规模等信息，不要填写电话/邮箱等联系方式，字数在100-700之间"
           />
         </Form.Item>
-        {/* <div className={styles.enterpriseTitle}>联系方式</div> */}
       </Form>
 
       <div className={styles.enterpriseFooter}>
-        <Button type="primary" onClick={confirmSubmit}>
+        <Button
+          className={styles.button}
+          type="primary"
+          onClick={confirmSubmit}
+        >
           确认{enterpriseId ? '修改' : '提交'}
         </Button>
       </div>

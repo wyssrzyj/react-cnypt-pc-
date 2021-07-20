@@ -104,12 +104,7 @@ const ControlPanel = () => {
             <Menu.Item
               className={styles.item}
               key="account"
-              icon={
-                <Icon
-                  className={styles.menuIcon}
-                  type={'jack-zhanghaoanquan1'}
-                />
-              }
+              icon={<Icon className={styles.menuIcon} type={'jack-zhaq'} />}
             >
               <Link to="/control-panel/account">账号安全</Link>
             </Menu.Item>
@@ -117,7 +112,7 @@ const ControlPanel = () => {
             <Menu.Item
               key="enterprise"
               className={styles.item}
-              icon={<Icon className={styles.menuIcon} type="jack-qiyeguanli" />}
+              icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
             >
               <Link to="/control-panel/enterprise">企业信息</Link>
             </Menu.Item>
@@ -125,7 +120,7 @@ const ControlPanel = () => {
             <Menu.Item
               key="certificate"
               className={styles.item}
-              icon={<Icon className={styles.menuIcon} type="jack-shiming1" />}
+              icon={<Icon className={styles.menuIcon} type="jack-qyzjrz" />}
             >
               <Link to="/control-panel/certificate">企业证件认证</Link>
             </Menu.Item>
@@ -134,12 +129,7 @@ const ControlPanel = () => {
               <Menu.Item
                 key="qualification"
                 className={styles.item}
-                icon={
-                  <Icon
-                    className={styles.menuIcon}
-                    type="jack-shimingrenzheng"
-                  />
-                }
+                icon={<Icon className={styles.menuIcon} type="jack-zzrz" />}
               >
                 <Link to="/control-panel/qualification">资质认证</Link>
               </Menu.Item>
@@ -149,7 +139,7 @@ const ControlPanel = () => {
               <SubMenu
                 key="sub2"
                 className={styles.subItem}
-                icon={<Icon className={styles.menuIcon} type="jack-ycsq" />}
+                icon={<Icon className={styles.menuIcon} type="jack-ycgl" />}
                 title="验厂管理"
               >
                 <Menu.Item key="report">

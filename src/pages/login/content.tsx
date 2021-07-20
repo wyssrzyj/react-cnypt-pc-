@@ -59,7 +59,7 @@ const LoginContent = () => {
       await userInfo()
       if (res && res.success) {
         setError(false)
-        history.push('/platform/home')
+        history.push('/')
       } else {
         setError(true)
       }

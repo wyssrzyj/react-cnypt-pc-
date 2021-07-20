@@ -26,6 +26,10 @@ const AccountSafe = () => {
   const { getAccountInfo, changeUserInfo } = controlPanelStore
 
   const currentUser = getCurrentUser()
+  console.log(
+    '🚀 ~ file: index.tsx ~ line 29 ~ AccountSafe ~ currentUser',
+    currentUser
+  )
   const nameRef = useRef<Input>()
 
   const [changeFlag, setChangeFlag] = useState(false)
@@ -33,7 +37,8 @@ const AccountSafe = () => {
   const [modalKey, setModalKey] = useState(0)
   const [userInfo, setUserInfo] = useState<any>({})
 
-  const userMobile = currentUser.mobilePhone
+  const userMobile = currentUser.mobilePhone || ''
+
   const showTel = userMobile.substr(0, 3) + '****' + userMobile.substr(7)
 
   useEffect(() => {
@@ -220,7 +225,9 @@ const AccountSafe = () => {
               ></Icon>
               <div className={styles.changeLabel}>注册时间</div>
               <div className={styles.changeText}>
-                {moment(userInfo.registerTime).format('YYYY-MM-DD HH:mm:ss')}
+                {userInfo.registerTime
+                  ? moment(userInfo.registerTime).format('YYYY-MM-DD HH:mm:ss')
+                  : null}
               </div>
               <div onClick={showLogs} className={styles.cText}>
                 登录日志

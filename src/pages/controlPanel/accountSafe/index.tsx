@@ -26,10 +26,6 @@ const AccountSafe = () => {
   const { getAccountInfo, changeUserInfo } = controlPanelStore
 
   const currentUser = getCurrentUser()
-  console.log(
-    '🚀 ~ file: index.tsx ~ line 29 ~ AccountSafe ~ currentUser',
-    currentUser
-  )
   const nameRef = useRef<Input>()
 
   const [changeFlag, setChangeFlag] = useState(false)

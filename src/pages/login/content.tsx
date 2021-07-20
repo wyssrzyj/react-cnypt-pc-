@@ -68,10 +68,6 @@ const LoginContent = () => {
     }
   }
 
-  // const automaticLogin = event => {
-  //   localStorage.setItem('autoLogin', event.target.checked)
-  // }
-
   const toRegister = () => {
     history.push('/user/register')
   }
@@ -114,7 +110,6 @@ const LoginContent = () => {
             >
               <Input
                 prefix={<UserIcon />}
-                className={styles.input}
                 // value={user}
                 placeholder={userPlaceholder}
                 // onChange={(event: InputEvent) => valueChange(event, 'user')}
@@ -134,7 +129,6 @@ const LoginContent = () => {
             >
               <Input
                 prefix={<PwdIcon />}
-                className={styles.input2}
                 placeholder={pwdPlaceholder}
                 // value={pwd}
                 type="password"

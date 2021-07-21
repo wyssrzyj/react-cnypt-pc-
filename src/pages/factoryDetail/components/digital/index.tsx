@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
+import { checkValue } from '@/utils/tool'
 import styles from './index.module.less'
 
 const Digital = props => {
@@ -38,21 +39,21 @@ const Digital = props => {
               <Icon type="jack-rjyy1" className={styles.icon} />
               <span>软件应用</span>
             </div>
-            <div>{digitalInfo.softwareApplicationUsage}</div>
+            <div>{checkValue(digitalInfo.softwareApplicationUsage)}</div>
           </div>
           <div className={styles.equipment}>
             <div className={styles.label}>
               <Icon type="jack-sblw1" className={styles.icon} />
               <span>设备联网情况 </span>
             </div>
-            <div>{digitalInfo.deviceNetworkDesc}</div>
+            <div>{checkValue(digitalInfo.deviceNetworkDesc)}</div>
           </div>
           <div className={styles.equipment}>
             <div className={styles.label}>
               <Icon type="jack-qtsm1" className={styles.icon} />
               <span>其它说明 </span>
             </div>
-            <div>{digitalInfo.digitalOtherDesc}</div>
+            <div>{checkValue(digitalInfo.digitalOtherDesc)}</div>
           </div>
           <div className={styles.imageBox}>
             <img

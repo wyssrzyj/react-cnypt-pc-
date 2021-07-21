@@ -208,16 +208,17 @@ const FactoryInfo = props => {
             <li>
               <span>主营类别：</span>
               <span>
-                {factoryInfo.factoryCategoryList &&
-                  factoryInfo.factoryCategoryList.map(item => (
-                    <Tag
-                      key={item.name}
-                      className={styles.factoryInfoTag}
-                      color="#f2f2f2"
-                    >
-                      {item.name}
-                    </Tag>
-                  ))}
+                {factoryInfo.factoryCategoryList
+                  ? factoryInfo.factoryCategoryList.map(item => (
+                      <Tag
+                        key={item.name}
+                        className={styles.factoryInfoTag}
+                        color="#f2f2f2"
+                      >
+                        {item.name}
+                      </Tag>
+                    ))
+                  : '--'}
               </span>
             </li>
             <li>

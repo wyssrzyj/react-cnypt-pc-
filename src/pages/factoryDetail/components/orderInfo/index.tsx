@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Badge } from 'antd'
-import { filter, find } from 'lodash'
+import { filter, find, isEmpty } from 'lodash'
 import axios from '@/utils/axios'
-import { getTypeOptions, getProductClass, getProductMode } from '@/utils/tool'
+import {
+  getTypeOptions,
+  getProductClass,
+  getProductMode,
+  checkValue
+} from '@/utils/tool'
 import { Icon } from '@/components'
 import styles from './index.module.less'
 
@@ -71,7 +76,9 @@ const OrderInfo = props => {
                   text="主营类别"
                   className={styles.classesSubtitle}
                 />
-                <span className={styles.strongText}>{mainList.join('，')}</span>
+                <span className={styles.strongText}>
+                  {isEmpty(mainList) ? '--' : mainList.join('，')}
+                </span>
               </li>
               <li className={styles.classesLi}>
                 <Badge
@@ -125,7 +132,9 @@ const OrderInfo = props => {
             <span className={styles.subTitle}>接单类型</span>
           </div>
           <div className={styles.right}>
-            {orderType.map(item => item.label).join('、')}
+            {isEmpty(orderType)
+              ? '--'
+              : orderType.map(item => item.label).join('、')}
           </div>
         </li>
         <li>
@@ -134,7 +143,7 @@ const OrderInfo = props => {
             <span className={styles.subTitle}>起订量</span>
           </div>
           <div className={styles.right}>
-            最少起订量{currentFactory.moq ? currentFactory.moq : '--'}件
+            最少起订量{checkValue(currentFactory.moq)}件
           </div>
         </li>
         <li>
@@ -143,9 +152,7 @@ const OrderInfo = props => {
             <span className={styles.subTitle}>接单历史说明</span>
           </div>
           <div className={styles.right}>
-            {currentFactory.receiveOrderHistoryDesc
-              ? currentFactory.receiveOrderHistoryDesc
-              : '无'}
+            {checkValue(currentFactory.receiveOrderHistoryDesc)}
           </div>
         </li>
       </ul>

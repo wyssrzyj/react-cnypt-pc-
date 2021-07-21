@@ -1,4 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react'
+import { isEmpty, isNil } from 'lodash'
 
 export const getToken = () => {
   return localStorage.getItem('token')
@@ -138,6 +139,14 @@ export const getTreeData = (data: any[]) => {
   }
   toTree(target, data)
   return target
+}
+
+/**
+ * 判断是否有值
+ */
+export const checkValue = value => {
+  if (isNil(value) || isEmpty(value)) return '--'
+  return value
 }
 
 export const getTypeOptions = () => {

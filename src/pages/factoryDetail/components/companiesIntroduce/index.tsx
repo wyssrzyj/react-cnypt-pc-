@@ -3,8 +3,9 @@ import { Tag, Row, Col, message } from 'antd'
 import classNames from 'classnames'
 import moment from 'moment'
 import { toJS } from 'mobx'
+import { isEmpty } from 'lodash'
 import { Icon } from '@/components'
-import { getCurrentUser } from '@/utils/tool'
+import { getCurrentUser, checkValue } from '@/utils/tool'
 import { useStores, observer } from '@/utils/mobx'
 import axios from '@/utils/axios'
 import styles from './index.module.less'
@@ -30,7 +31,7 @@ const CompaniesIntroduce = props => {
   const { factoryYearOutputValue = [], factoryYearOutputProd = [] } =
     toJS(dictionary)
   const [validationTime, setValidationTime] = useState('')
-  const [memberText, setMemberText] = useState('')
+  const [memberText, setMemberText] = useState('--')
 
   const getInspectionMember = () => {
     axios
@@ -42,7 +43,9 @@ const CompaniesIntroduce = props => {
           // setInspectionMember([...auditPersonInfoList])
           setValidationTime(factoryRealAuditTime)
 
-          const text = auditPersonInfoList.map(item => item.userName).join('、')
+          const text = isEmpty(auditPersonInfoList)
+            ? '--'
+            : auditPersonInfoList.map(item => item.userName).join('、')
           setMemberText(text)
         }
       })
@@ -128,13 +131,13 @@ const CompaniesIntroduce = props => {
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>有效车位</span>
                 <span className={styles.strong}>
-                  {effectiveLocation ? effectiveLocation : '--'} 台
+                  {checkValue(effectiveLocation)} 台
                 </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>厂房面积 </span>
                 <span className={styles.strong}>
-                  {factoryArea ? factoryArea : '--'} 平方米
+                  {checkValue(factoryArea)} 平方米
                 </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
@@ -148,7 +151,7 @@ const CompaniesIntroduce = props => {
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>生产线数 </span>
                 <span className={styles.strong}>
-                  {productLineNum ? productLineNum : '--'} 条
+                  {checkValue(productLineNum)} 条
                 </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>

@@ -207,6 +207,7 @@ const CertificateInformation = props => {
             setFieldsValue({
               legalPersonIdNumber,
               legalPersonName,
+              enterpriseName,
               orgCode,
               enterpriseAdjunct: newCardUrl.fileUrl,
               positive: newPositiveUrl.fileUrl,

@@ -108,12 +108,7 @@ const LoginContent = () => {
               label=""
               rules={[{ required: true, message: '请输入用户名~' }]}
             >
-              <Input
-                prefix={<UserIcon />}
-                // value={user}
-                placeholder={userPlaceholder}
-                // onChange={(event: InputEvent) => valueChange(event, 'user')}
-              />
+              <Input prefix={<UserIcon />} placeholder={userPlaceholder} />
             </Form.Item>
 
             <Form.Item
@@ -130,9 +125,7 @@ const LoginContent = () => {
               <Input
                 prefix={<PwdIcon />}
                 placeholder={pwdPlaceholder}
-                // value={pwd}
                 type="password"
-                // onChange={(event: InputEvent) => valueChange(event, 'pwd')}
               />
             </Form.Item>
           </>

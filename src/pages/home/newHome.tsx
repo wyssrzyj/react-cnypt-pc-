@@ -18,6 +18,7 @@ import HB1 from './img/hb1.png'
 import HB2 from './img/hb2.png'
 import HB3 from './img/hb3.png'
 import HB4 from './img/hb4.png'
+import { useHistory } from 'react-router'
 
 import { Icon } from '@/components'
 
@@ -58,8 +59,11 @@ const SearchBar = () => {
 const Home = () => {
   const [val, setVal] = useState()
 
+  const history = useHistory()
+
   const searchFunction = () => {
     console.log(val)
+    history.push('/factory-search')
   }
 
   const valueChange = e => {

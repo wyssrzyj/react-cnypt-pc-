@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Input, Select, Checkbox, TreeSelect, Radio, InputNumber } from 'antd'
 import FormSwitch from './FormSwitch'
 import './index.less'
@@ -69,10 +69,6 @@ const FormNode = (props: Props) => {
 
   const [nodeValue, setNodeValue] = useState<any>(value)
 
-  useEffect(() => {
-    setNodeValue(value)
-  }, [value])
-
   const valueChange = (event: any) => {
     let val
 
@@ -91,6 +87,7 @@ const FormNode = (props: Props) => {
     } else {
       val = event.target.value
     }
+    setNodeValue(val)
     onChange && onChange(val)
   }
 

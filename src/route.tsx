@@ -5,7 +5,7 @@ import Loadable from '@/utils/loadable'
 
 // homePage 地图
 const HomePage = Loadable({
-  loader: () => import('@/pages/homePage')
+  loader: () => import('@/pages/home/newHome')
 })
 
 // note

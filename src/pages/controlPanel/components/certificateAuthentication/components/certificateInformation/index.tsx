@@ -208,10 +208,13 @@ const CertificateInformation = props => {
               legalPersonIdNumber,
               legalPersonName,
               orgCode,
-              enterpriseName,
               enterpriseAdjunct: newCardUrl.fileUrl,
               positive: newPositiveUrl.fileUrl,
               reverse: newReverseUrl.fileUrl
+            })
+          } else if (enterpriseName) {
+            setFieldsValue({
+              enterpriseName
             })
           }
         }

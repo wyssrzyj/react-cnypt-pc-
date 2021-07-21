@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col } from 'antd'
 import axios from '@/utils/axios'
+import { checkValue } from '@/utils/tool'
 import styles from './index.module.less'
 
 const CommercialInfo = props => {
@@ -40,53 +41,55 @@ const CommercialInfo = props => {
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>名称</span>
                   <span className={styles.strong}>
-                    {businessInfo.enterpriseName}
+                    {checkValue(businessInfo.enterpriseName)}
                   </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>注册地址</span>
                   <span className={styles.strong}>
-                    {businessInfo.companyAddress}
+                    {checkValue(businessInfo.companyAddress)}
                   </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>信用代码</span>
-                  <span className={styles.strong}>{businessInfo.orgCode}</span>
+                  <span className={styles.strong}>
+                    {checkValue(businessInfo.orgCode)}
+                  </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>注册资本</span>
                   <span className={styles.strong}>
-                    {businessInfo.companyRegisteredCapital}
+                    {checkValue(businessInfo.companyRegisteredCapital)}
                   </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>成立时间</span>
                   <span className={styles.strong}>
-                    {businessInfo.companyCreateTime}
+                    {checkValue(businessInfo.companyCreateTime)}
                   </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>类型</span>
                   <span className={styles.strong}>
-                    {businessInfo.companyOrgType}
+                    {checkValue(businessInfo.companyOrgType)}
                   </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>法定代表人</span>
                   <span className={styles.strong}>
-                    {businessInfo.legalPersonName}
+                    {checkValue(businessInfo.legalPersonName)}
                   </span>
                 </Col>
                 <Col className={styles.gutterRow} span={12}>
                   <span className={styles.label}>营业期限</span>
                   <span className={styles.strong}>
-                    {businessInfo.companyBusinessTerm}
+                    {checkValue(businessInfo.companyBusinessTerm)}
                   </span>
                 </Col>
                 <Col className={styles.gutterRow} span={24}>
                   <span className={styles.label}>经营范围</span>
                   <span className={styles.strong}>
-                    {businessInfo.companyBusinessScope}
+                    {checkValue(businessInfo.companyBusinessScope)}
                   </span>
                 </Col>
               </Row>

@@ -142,8 +142,11 @@ const EnterpriseInfo = () => {
             longitude,
             enterpriseLogoId
           } = data
-          setImageUrl(enterpriseLogoUrl)
-          setPreImageUrl(enterpriseLogoUrl)
+          if (enterpriseLogoUrl) {
+            setImageUrl(enterpriseLogoUrl)
+            setImageUrlList([{ thumbUrl: enterpriseLogoUrl }])
+            setPreImageUrl(enterpriseLogoUrl)
+          }
           setFactoryId(factoryId)
           setEnterpriseId(enterpriseId)
           setEnterpriseLogoId(enterpriseLogoId)

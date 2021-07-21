@@ -147,15 +147,16 @@ const Header = () => {
           </>
         )}
       </div>
-
-      <Dropdown overlay={consoleMenu}>
-        <div className={styles.chunks}>
-          <span className={styles.consoleBox}>
-            <Icon type="jack-kongzhitai1" className={styles.consoleIcon} />
-            <span className={styles.headerChunk}>控制台</span>
-          </span>
-        </div>
-      </Dropdown>
+      {currentUser.userId ? (
+        <Dropdown overlay={consoleMenu}>
+          <div className={styles.chunks}>
+            <span className={styles.consoleBox}>
+              <Icon type="jack-kongzhitai1" className={styles.consoleIcon} />
+              <span className={styles.headerChunk}>控制台</span>
+            </span>
+          </div>
+        </Dropdown>
+      ) : null}
     </header>
   )
 }

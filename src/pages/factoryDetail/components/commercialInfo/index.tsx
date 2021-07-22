@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col } from 'antd'
+import { NoData } from '@/components'
 import axios from '@/utils/axios'
 import { checkValue } from '@/utils/tool'
 import styles from './index.module.less'
@@ -102,9 +103,7 @@ const CommercialInfo = props => {
                   alt=""
                 />
               ) : (
-                <div style={{ marginTop: '30%', textAlign: 'center' }}>
-                  图片待上传
-                </div>
+                <NoData width={289} height={209} logoWidth={150} />
               )}
             </div>
           </div>

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import classNames from 'classnames'
 import { useStores, observer } from '@/utils/mobx'
 import styles from './index.module.less'
-// import BG_LOGO from './bgLogo.png'
 import { Input, Button, Affix } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { useHistory } from 'react-router'
@@ -11,6 +10,10 @@ const Search = () => {
   const history = useHistory()
   const { commonStore } = useStores()
   const { factoryName, updateName } = commonStore
+  console.log(
+    '🚀 ~ file: index.tsx ~ line 14 ~ Search ~ factoryName',
+    factoryName
+  )
 
   const [searchWord, setSearchWord] = useState<string>(factoryName)
   const [affixed, setAffixed] = useState<boolean>(false)

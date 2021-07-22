@@ -8,6 +8,9 @@ import { useStores } from '@/utils/mobx'
 import { Icon } from '@/components'
 import styles from './newHeader.module.less'
 
+const logo =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
+
 const consoleOptions = [
   {
     title: '企业管理',
@@ -126,23 +129,25 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles.headerLeft}>
         <Link to="/" className={styles.home}>
-          <Icon type={'jack-logo1'} className={styles.logoIcon}></Icon>
-          <span>产能云平台首页</span>
-          <span className={styles.verticalBar}>|</span>
+          {/* <Icon type={'jack-logo1'} className={styles.logoIcon}></Icon> */}
+          <img className={styles.logo} src={logo} alt="优产云平台" />
+          {/* <span className={styles.verticalBar}>|</span> */}
         </Link>
 
         {currentUser.userId ? (
           <Dropdown overlay={menu}>
             <span className={styles.user}>
+              <Icon type={'jack-yonghu2'} className={styles.userIcon}></Icon>
               您好，{currentUser.nickName || currentUser.username}
             </span>
           </Dropdown>
         ) : (
           <>
             <span style={{ cursor: 'pointer' }} onClick={toRegister}>
+              <Icon type={'jack-yonghu2'} className={styles.userIcon}></Icon>
               注册
             </span>
-            <span>&nbsp;&nbsp; / &nbsp;&nbsp;</span>
+            <span>&nbsp;/ &nbsp;</span>
             <a onClick={toLogin}>登录</a>
           </>
         )}

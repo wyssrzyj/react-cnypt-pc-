@@ -16,7 +16,8 @@ const QualificationCertificate = props => {
   // 资质证书
   const getCertificate = async () => {
     const response = await axios.post('/api/factory/factory-certificate/list', {
-      factoryId
+      factoryId,
+      status: 0 //已通过
     })
     const { success, data = {} } = response
     if (success) {

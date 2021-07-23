@@ -18,26 +18,38 @@ const BusinessAddressCom = props => {
 
   const onSearch = async value => {
     setLocationName(value)
-    const url = `https://restapi.amap.com/v3/geocode/geo?key=6d7e0822e5ed232cf706c42ff08cb66f&address=${value}`
-    const res = await axios.get(url)
-    if (res.status === 200) {
-      const location = res.data.geocodes[0].location
+    // const url = `https://restapi.amap.com/v3/geocode/geo?key=6d7e0822e5ed232cf706c42ff08cb66f&address=${value}`
+    // const res = await axios.get(url)
+
+    const url2 = `https://restapi.amap.com/v5/place/text?key=6d7e0822e5ed232cf706c42ff08cb66f&keywords=${value}`
+    const res2 = await axios.get(url2)
+    console.log('🚀 ~ file: index.tsx ~ line 26 ~ res2', res2)
+    // if (res.status === 200) {
+    //   const location = res.data.geocodes[0].location
+    //   isFunction(isFunction) && onChange({ location: location, address: value })
+    //   setMapLocation(location.split(','))
+    // }
+
+    if (res2.status === 200) {
+      const location = res2.data.pois[0].location
       isFunction(isFunction) && onChange({ location: location, address: value })
       setMapLocation(location.split(','))
     }
   }
 
   useEffect(() => {
+    const map = new GaodeMap({
+      style: 'mapbox://styles/mapbox/streets-v11',
+      // center: [120.311123, 30.404645],
+      pitch: 0,
+      zoom: 13,
+      rotation: 0
+    })
+
     const scene = new Scene({
       id: 'yjMap',
       logoVisible: false,
-      map: new GaodeMap({
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [120.311123, 30.404645],
-        pitch: 0,
-        zoom: 13,
-        rotation: 0
-      })
+      map: map
     })
 
     scene.on('loaded', () => {

@@ -77,9 +77,33 @@
 .container {
   width: 100%;
   height: calc(100vh - 282px);
-  background: url(http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210721/db26ec69396946f5866f9681a24dd423.jpg);
+  background: url(http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png) center center;
   background-repeat: no-repeat;
-  background-size: cover;
+  // background-size: cover;
+}
+
+.banner {
+  display: block;
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  // height: calc(100vh - 282px);
+  visibility: -1;
+}
+
+.bannerBefore {
+  display: block;
+  position: absolute;
+  z-index: 0;
+  width: 100%;
+  height: calc(100vh - 282px);
+  visibility: 0;
+}
+
+.beforeLoad {
+  display: block;
+  width: 100%;
+  height: calc(100vh - 282px);
 }
 
 .searchBar {

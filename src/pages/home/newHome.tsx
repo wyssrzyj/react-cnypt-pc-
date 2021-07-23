@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import styles from './newHome.module.less'
 import { Link } from 'react-router-dom'
 import { Input, Button } from 'antd'
@@ -16,6 +16,11 @@ import { Icon } from '@/components'
 import { useStores } from '@/utils/mobx'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectFade])
+
+const BANNER =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210721/db26ec69396946f5866f9681a24dd423.jpg'
+export const BEFORE_IMG =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png'
 
 const SearchBar = () => {
   const configs = [
@@ -80,6 +85,9 @@ const DealCount = ({ count, length }) => {
 }
 
 const Home = () => {
+  const bannerRef = useRef<any>()
+  const containerRef = useRef<any>()
+
   const history = useHistory()
   const { commonStore } = useStores()
   const { updateName } = commonStore
@@ -109,9 +117,17 @@ const Home = () => {
     d: 29066
   }
 
+  useEffect(() => {
+    bannerRef.current.onload = () => {
+      containerRef.current.style.background = `url(${BANNER}) center center`
+      containerRef.current.style.backgroundSize = 'cover'
+    }
+  }, [])
+
   return (
     <div className={styles.home}>
-      <div className={styles.container}>
+      <div className={styles.container} ref={containerRef}>
+        <img src={BANNER} ref={bannerRef} className={styles.banner} alt="" />
         <SearchBar></SearchBar>
         <div className={styles.searchBox}>
           <div className={styles.inputBox}>

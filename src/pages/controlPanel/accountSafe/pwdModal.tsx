@@ -6,13 +6,14 @@ import SUCCESS_SVG from './imgs/success.svg'
 import classNames from 'classnames'
 import { getCurrentUser } from '@/utils/tool'
 import { useStores } from '@/utils/mobx'
+import { pwdReg } from '@/pages/register/content'
 
 const FromItem = Form.Item
 
 const PwdModal = ({ cancel }) => {
   const [form] = Form.useForm()
   const formRef = useRef<any>()
-  const pwdReg = /^[0-9a-zA-Z]{6,20}$/
+  // const pwdReg = /^[0-9a-zA-Z]{6,20}$/
   const { controlPanelStore } = useStores()
   const { updatePwd, codeUpdatePwd } = controlPanelStore
 

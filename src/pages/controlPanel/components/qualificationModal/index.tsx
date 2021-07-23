@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Form, Select, Input, Radio, DatePicker, Upload, message } from 'antd'
+import {
+  Modal,
+  Form,
+  Select,
+  Input,
+  Radio,
+  DatePicker,
+  Upload,
+  message
+} from 'antd'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { toJS } from 'mobx'
 import moment from 'moment'
@@ -31,11 +40,21 @@ const PeriodValidity = props => {
   }
   return (
     <div>
-      <Radio.Group onChange={onTimeChange} value={timeType} disabled={type === 'check'}>
+      <Radio.Group
+        onChange={onTimeChange}
+        value={timeType}
+        disabled={type === 'check'}
+      >
         <Radio value="0">选择截止时间</Radio>
         <Radio value="1">长期有效</Radio>
       </Radio.Group>
-      {timeType === '0' && <DatePicker value={date} onChange={onDateChange} disabled={type === 'check'} />}
+      {timeType === '0' && (
+        <DatePicker
+          value={date}
+          onChange={onDateChange}
+          disabled={type === 'check'}
+        />
+      )}
     </div>
   )
 }
@@ -43,13 +62,27 @@ const PeriodValidity = props => {
 const QualificationModal = props => {
   const [form] = Form.useForm()
   const { validateFields } = form
-  const { visible, handleCancel, handleOk, type, current = {}, factoryId } = props
-  const { certificationCode, certificationName, expiryDate = new Date().valueOf(), neverExpire, certificateImageURI } = current
+  const {
+    visible,
+    handleCancel,
+    handleOk,
+    type,
+    current = {},
+    factoryId
+  } = props
+  const {
+    certificationCode,
+    certificationName,
+    expiryDate = new Date().valueOf(),
+    neverExpire,
+    certificateImageURI
+  } = current
   const newExpiryDate = neverExpire ? '1' : expiryDate
   const initialValues = {
     certificationCode,
     certificationName,
-    expiryDate: newExpiryDate
+    expiryDate: newExpiryDate,
+    qualification: certificateImageURI
   }
   const { commonStore, factoryPageStore } = useStores()
   const { dictionary } = commonStore
@@ -81,7 +114,8 @@ const QualificationModal = props => {
           neverExpire,
           factoryId,
           certificateImageURI: imageUrl,
-          status: 1
+          status: 1,
+          id: current.id
         })
         .then(response => {
           const { success, msg } = response
@@ -100,7 +134,10 @@ const QualificationModal = props => {
   )
 
   const beforeUpload = file => {
-    const isJpgOrPng = file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/jpeg'
+    const isJpgOrPng =
+      file.type === 'image/jpg' ||
+      file.type === 'image/png' ||
+      file.type === 'image/jpeg'
     if (!isJpgOrPng) {
       message.error('只能上传jpg/png格式文件!')
     }
@@ -125,12 +162,29 @@ const QualificationModal = props => {
     const arrList = cloneDeep(fileList)
     const target = arrList.filter(item => item.thumbUrl !== file.thumbUrl)
     setFileList(target)
+    setImageUrl(undefined)
   }
 
   return (
-    <Modal title={`${get(typeMap, type)}资质`} visible={visible} width={632} onOk={handleSelfOk} onCancel={handleCancel}>
-      <Form {...layout} form={form} key={type === 'add' ? null : current.factoryId} name="certification" initialValues={initialValues}>
-        <Form.Item label="资质名称" name="certificationName" rules={[{ required: true, message: '请选择资质名称！' }]}>
+    <Modal
+      title={`${get(typeMap, type)}资质`}
+      visible={visible}
+      width={632}
+      onOk={handleSelfOk}
+      onCancel={handleCancel}
+    >
+      <Form
+        {...layout}
+        form={form}
+        key={type === 'add' ? null : current.factoryId}
+        name="certification"
+        initialValues={initialValues}
+      >
+        <Form.Item
+          label="资质名称"
+          name="certificationName"
+          rules={[{ required: true, message: '请选择资质名称！' }]}
+        >
           <Select placeholder="请选择资质名称" disabled={type === 'check'}>
             {factoryCertificate.map(item => (
               <Option key={item.id} value={item.value}>
@@ -140,15 +194,27 @@ const QualificationModal = props => {
           </Select>
         </Form.Item>
 
-        <Form.Item label="证书编号" name="certificationCode" rules={[{ required: true, message: '请输入证书编号!' }]}>
+        <Form.Item
+          label="证书编号"
+          name="certificationCode"
+          rules={[{ required: true, message: '请输入证书编号!' }]}
+        >
           <Input disabled={type === 'check'} placeholder="请输入证书编号" />
         </Form.Item>
 
-        <Form.Item label="有效期" name="expiryDate" rules={[{ required: true, message: '请输入证书编号!' }]}>
+        <Form.Item
+          label="有效期"
+          name="expiryDate"
+          rules={[{ required: true, message: '请输入证书编号!' }]}
+        >
           <PeriodValidity type={type} />
         </Form.Item>
 
-        <Form.Item label="资质上传" name="qualification" rules={[{ required: true, message: '请输长传资质证书!' }]}>
+        <Form.Item
+          label="资质上传"
+          name="qualification"
+          rules={[{ required: true, message: '请输长传资质证书!' }]}
+        >
           <Upload
             name="avatar"
             listType="picture-card"

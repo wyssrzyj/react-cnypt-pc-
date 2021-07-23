@@ -55,7 +55,7 @@ module.exports = {
     })
   ],
   module: {
-    unsafeCache: true,
+    // unsafeCache: true,
     rules: [
       {
         test: /jsx?$/,

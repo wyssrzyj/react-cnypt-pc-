@@ -1,16 +1,24 @@
 .searchBox {
   margin: 0 auto;
-  width: fit-content;
+  width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding-top: 100px;
+}
+
+.inputBox {
+  position: relative;
+  width: 65% !important;
+  max-width: 780px !important;
 }
 
 .input {
   display: flex;
   align-items: center;
-  width: 780px !important;
-  height: 48px !important;
+  width: 100% !important;
+  // max-width: 780px !important;
+  height: 60px !important;
   font-size: 16px;
   border: none !important;
   border-bottom-right-radius: 0 !important;
@@ -18,10 +26,24 @@
   background: rgba(255, 255, 255, 0.2) !important;
 }
 
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: all 0.2s;
+  background-position: top;
+  background-size: cover;
+  background-attachment: fixed;
+  backdrop-filter: blur(10px);
+  content: '';
+}
+
 .btn {
   padding: 0 24px;
   font-size: 16px;
-  height: 48px;
+  height: 60px;
   width: 120px;
   border-bottom-left-radius: 0 !important;
   border-top-left-radius: 0 !important;
@@ -43,7 +65,7 @@
 
     .ant-input {
       background: initial;
-      height: 48px;
+      height: 60px;
       font-size: 16px;
       padding-left: 8px !important;
       color: #ffffff;
@@ -53,22 +75,54 @@
 }
 
 .container {
-  height: calc(100vh - 280px);
-  background: url(./img/banner.png);
+  width: 100%;
+  height: calc(100vh - 282px);
+  background: url(http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png) center center;
   background-repeat: no-repeat;
-  background-size: cover;
+  // background-size: cover;
+}
+
+.banner {
+  display: block;
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  // height: calc(100vh - 282px);
+  visibility: -1;
+}
+
+.bannerBefore {
+  display: block;
+  position: absolute;
+  z-index: 0;
+  width: 100%;
+  height: calc(100vh - 282px);
+  visibility: 0;
+}
+
+.beforeLoad {
+  display: block;
+  width: 100%;
+  height: calc(100vh - 282px);
 }
 
 .searchBar {
-  padding-top: 116px;
+  padding-top: 6%;
   text-align: center;
 }
 
 .linkItem {
+  display: inline-flex;
+  align-items: center;
   color: rgb(98, 0, 255);
-  font-size: 18px;
+  font-size: 28px;
   color: #ffffff;
   margin-right: 64px;
+}
+
+.searchBarIcon {
+  margin-right: 8px;
+  font-size: 32px;
 }
 
 .linkImg {
@@ -83,6 +137,7 @@
 
 .hbBox {
   display: flex;
+  padding-top: 8%;
   justify-content: center;
 }
 
@@ -90,7 +145,6 @@
   display: inline-block;
   width: 200px;
   margin-right: 104px;
-  padding-top: 156px;
 
   &:nth-child(3) {
     width: 240px;
@@ -100,4 +154,57 @@
     width: 240px;
     margin-right: 0;
   }
+}
+
+@font-face {
+  font-family: "numberFont";/*定义字体名*/
+  src: url(./font/font2.ttf);/*字体包的引入路径*/
+}
+
+.numberIcon {
+  font-size: 42px;
+}
+
+.dealCountBox {
+  display: flex;
+}
+
+.dealCount {
+  width: fit-content;
+  position: relative;
+  font-family: numberFont;
+  margin-right: -4px;
+}
+
+.dealNumber {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  font-size: 28px;
+}
+
+.cards {
+  padding-top: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  margin-right: 100px;
+  width: fit-content;
+  font-size: 16px;
+  color: #ffffff;
+
+  &:nth-last-child(1) {
+    margin-right: 0;
+  }
+}
+
+.cardTitle {
+  padding: 0 0 8px 0;
+  text-align: center;
+  font-size: 18px;
 }

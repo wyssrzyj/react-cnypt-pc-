@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { isEmpty, isNil } from 'lodash'
 import { Scene, Marker, MarkerLayer } from '@antv/l7'
 import { GaodeMap } from '@antv/l7-maps'
-import { Icon } from '@/components'
+import { Icon, NoData } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
 import SwiperCore, {
@@ -77,7 +77,7 @@ const Overview = props => {
   }
 
   useEffect(() => {
-    if (!isEmpty(factoryImg)) {
+    if (!isNil(current.latitude)) {
       const galleryThumbs = new Swiper('#gallery-thumbs', {
         spaceBetween: 10,
         slidesPerView: 5,
@@ -133,7 +133,7 @@ const Overview = props => {
   return (
     <div className={styles.factoryInfo}>
       <div className={styles.factoryInfoContent}>
-        {!isEmpty(factoryImg) && (
+        {!isEmpty(factoryImg) ? (
           <div className={styles.slideshow}>
             <div className="swiper-container" id="gallery-top">
               <div className="swiper-wrapper">
@@ -182,6 +182,8 @@ const Overview = props => {
               )}
             </div>
           </div>
+        ) : (
+          <NoData bgColor="#f6f6f6" height={523} width={700} float="left" />
         )}
 
         <div className={styles.infoRight}>

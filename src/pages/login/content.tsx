@@ -36,6 +36,7 @@ const LoginContent = () => {
   const valueChange = changedValues => {
     const { mobilePhone = '' } = changedValues
     setPhoneNumber(mobilePhone)
+    setError(false)
   }
 
   const init = () => {
@@ -56,9 +57,10 @@ const LoginContent = () => {
         values.passWord = btoa(values.passWord)
       }
       const res = await login(values)
-      await userInfo()
+
       if (res && res.success) {
         setError(false)
+        await userInfo()
         history.push('/')
       } else {
         setError(true)

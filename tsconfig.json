@@ -21,6 +21,7 @@
       "@/*": ["src/*"]
     }
   },
+  "extensions": [".ts", ".tsx", ".js", ".jsx", ".json"],
   "include": [
     // 通过终端的task，会自动监视ts代码变化输出结果到dist中
     "src/**/*.ts",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 import styles from './newHome.module.less'
 import { Link } from 'react-router-dom'
 import { Input, Button } from 'antd'
@@ -11,34 +11,32 @@ import SwiperCore, {
   Autoplay,
   EffectFade
 } from 'swiper'
-import H1 from './img/h1.png'
-import H2 from './img/h2.png'
-import H3 from './img/h3.png'
-import HB1 from './img/hb1.png'
-import HB2 from './img/hb2.png'
-import HB3 from './img/hb3.png'
-import HB4 from './img/hb4.png'
 import { useHistory } from 'react-router'
-
 import { Icon } from '@/components'
+import { useStores } from '@/utils/mobx'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectFade])
+
+const BANNER =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210721/db26ec69396946f5866f9681a24dd423.jpg'
+export const BEFORE_IMG =
+  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png'
 
 const SearchBar = () => {
   const configs = [
     {
       label: '地图找厂',
-      img: H1,
+      icon: 'jack-ditu',
       url: '/factory-search'
     },
     {
       label: '智能找厂',
-      img: H2,
+      icon: 'jack-dingdan3',
       url: '/factory-search'
     },
     {
       label: '订单找厂',
-      img: H3,
+      icon: 'jack-dingdan3',
       url: '/factory-search'
     }
   ]
@@ -48,7 +46,8 @@ const SearchBar = () => {
       {configs.map((item, idx) => {
         return (
           <Link key={idx} to={item.url} className={styles.linkItem}>
-            <img src={item.img} alt="" className={styles.linkImg} />
+            <Icon type={item.icon} className={styles.searchBarIcon}></Icon>
+            {item.label}
           </Link>
         )
       })}
@@ -56,35 +55,91 @@ const SearchBar = () => {
   )
 }
 
+const DealCount = ({ count, length }) => {
+  const len = `${count}`.length
+  const arr = new Array(len).fill({})
+
+  const reduceCount = length - len
+  const reduceArr = new Array(reduceCount).fill({})
+
+  return (
+    <div className={styles.dealCountBox}>
+      {reduceArr.map((_item, idx) => {
+        return (
+          <div key={idx} className={styles.dealCount}>
+            <Icon type={'jack-kapian'} className={styles.numberIcon}></Icon>
+            <span className={styles.dealNumber}>{0}</span>
+          </div>
+        )
+      })}
+      {arr.map((_item, idx) => {
+        return (
+          <div key={idx} className={styles.dealCount}>
+            <Icon type={'jack-kapian'} className={styles.numberIcon}></Icon>
+            <span className={styles.dealNumber}>{`${count}`[idx]}</span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 const Home = () => {
-  const [val, setVal] = useState()
+  const bannerRef = useRef<any>()
+  const containerRef = useRef<any>()
 
   const history = useHistory()
+  const { commonStore } = useStores()
+  const { updateName } = commonStore
 
   const searchFunction = () => {
-    console.log(val)
     history.push('/factory-search')
   }
 
   const valueChange = e => {
     const value = e.target.value
-    setVal(value)
+    updateName(value)
   }
 
   const SIcon = <Icon type={'jack-search'} className={styles.searchIcon}></Icon>
 
+  const cardConfigs = [
+    { label: '入驻加工厂数', field: 'a', length: 5 },
+    { label: '入驻发单商数', field: 'b', length: 5 },
+    { label: '联网设备数', field: 'c', length: 6 },
+    { label: '累计生产件数', field: 'd', length: 6 }
+  ]
+
+  const counts = {
+    a: 558,
+    b: 352,
+    c: 9060,
+    d: 29066
+  }
+
+  useEffect(() => {
+    bannerRef.current.onload = () => {
+      containerRef.current.style.background = `url(${BANNER}) center center`
+      containerRef.current.style.backgroundSize = 'cover'
+    }
+  }, [])
+
   return (
     <div className={styles.home}>
-      <div className={styles.container}>
+      <div className={styles.container} ref={containerRef}>
+        <img src={BANNER} ref={bannerRef} className={styles.banner} alt="" />
         <SearchBar></SearchBar>
         <div className={styles.searchBox}>
-          <Input
-            onChange={valueChange}
-            onPressEnter={searchFunction}
-            className={styles.input}
-            placeholder={'请输入加工厂信息'}
-            prefix={SIcon}
-          />
+          <div className={styles.inputBox}>
+            <div className={styles.mask}></div>
+            <Input
+              onChange={valueChange}
+              onPressEnter={searchFunction}
+              className={styles.input}
+              placeholder={'请输入加工厂信息'}
+              prefix={SIcon}
+            />
+          </div>
           <Button
             className={styles.btn}
             type={'primary'}
@@ -94,11 +149,20 @@ const Home = () => {
           </Button>
         </div>
 
-        <div className={styles.hbBox}>
-          <img src={HB1} className={styles.hb} alt="" />
-          <img src={HB2} className={styles.hb} alt="" />
-          <img src={HB3} className={styles.hb} alt="" />
-          <img src={HB4} className={styles.hb} alt="" />
+        <div className={styles.cards}>
+          {cardConfigs.map((item, idx) => {
+            return (
+              <div className={styles.card} key={idx}>
+                <div className={styles.cardTitle}>{item.label}</div>
+                <div>
+                  <DealCount
+                    length={item.length}
+                    count={counts[item.field]}
+                  ></DealCount>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
       <div className={styles.swiperContainer}>

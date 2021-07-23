@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Result, Button } from 'antd'
 import { get } from 'lodash'
+import moment from 'moment'
 import axios from '@/utils/axios'
 import { getUserInfo } from '@/utils/tool'
 
@@ -30,7 +31,7 @@ const ApprovalResult = props => {
       .then(response => {
         const { success, data } = response
         if (success) {
-          const { approvalStatus, approvalDesc } = data
+          const { approvalStatus, approvalDesc, approvalTime } = data
           const newCurrentUser = { ...currentUser, approvalStatus }
           localStorage.setItem('userInfo', JSON.stringify(newCurrentUser))
           const newStatus = get(statusMap, approvalStatus)
@@ -38,8 +39,9 @@ const ApprovalResult = props => {
           setStart(newStatus === 'approval' ? 1 : 0)
           setEnd(newStatus === 'noPass' ? 1 : 2)
           setSubTitleMap({
-            pending:
-              '您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间  2021年06月31日  17时06分',
+            pending: `您的企业信息审核请求已收到，平台将在1~3个工作日与您取得联系，请注意接听来电。请求时间 ${moment(
+              approvalTime
+            ).format('YYYY-MM-DD HH:mm:ss')}`,
             approval: '恭喜您，企业信息审核通过，已为您开通企业权限。',
             noPass: (
               <div style={{ width: 464, margin: 'auto', textAlign: 'left' }}>

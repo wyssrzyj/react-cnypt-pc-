@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import moment from 'moment'
 import { toJS } from 'mobx'
 import { isEmpty } from 'lodash'
-import { Icon } from '@/components'
+import { Icon, NoData } from '@/components'
 import { getCurrentUser, checkValue } from '@/utils/tool'
 import { useStores, observer } from '@/utils/mobx'
 import axios from '@/utils/axios'
@@ -184,7 +184,7 @@ const CompaniesIntroduce = props => {
             {factoryAuditorImage ? (
               <img className={styles.photo} src={factoryAuditorImage} alt="" />
             ) : (
-              <span style={{ margin: 'auto' }}>暂无</span>
+              <NoData width={227} height={280} logoWidth={150} />
             )}
 
             <div className={styles.text}>验厂人员现场照</div>

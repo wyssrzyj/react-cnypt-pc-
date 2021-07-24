@@ -4,7 +4,8 @@ import SlideBars from '../homePage/components/slideBar'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
 import {
-  Overview
+  Overview,
+  EnterpriseInformation
   // CompaniesIntroduce,
   // CommercialInfo,
   // OrderInfo,
@@ -123,6 +124,8 @@ const FactoryDetail = props => {
           activeTab={activeTab}
           onTabChange={key => setActiveTab(key)}
         />
+        {/* 企业信息 */}
+        {activeTab === 'info' && <EnterpriseInformation />}
       </div>
 
       {/* 导航栏 */}

@@ -20,7 +20,7 @@ const LoginAndRegister = Loadable({
 
 // 工厂详情
 const FactoryDetail = Loadable({
-  loader: () => import('@/pages/factoryDetail')
+  loader: () => import('@/pages/factoryDetail2')
 })
 
 // 订单详情

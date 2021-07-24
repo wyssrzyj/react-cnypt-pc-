@@ -31,7 +31,7 @@ const SearchBar = () => {
     },
     {
       label: '智能找厂',
-      icon: 'jack-dingdan3',
+      icon: 'jack-zhineng',
       url: '/factory-search'
     },
     {

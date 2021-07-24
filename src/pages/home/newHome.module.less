@@ -114,10 +114,13 @@
 .linkItem {
   display: inline-flex;
   align-items: center;
-  color: rgb(98, 0, 255);
   font-size: 28px;
   color: #ffffff;
   margin-right: 64px;
+
+  &:hover .searchBarIcon {
+    color: #40a9ff;
+  }
 }
 
 .searchBarIcon {
@@ -158,7 +161,8 @@
 
 @font-face {
   font-family: "numberFont";/*定义字体名*/
-  src: url(./font/font2.ttf);/*字体包的引入路径*/
+  // src: url(./font/font2.ttf);
+  src: url(http://http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210723/f8122a680f0c437d8f5ead00bcb35075.ttf);/*字体包的引入路径*/
 }
 
 .numberIcon {
@@ -172,13 +176,14 @@
 .dealCount {
   width: fit-content;
   position: relative;
-  font-family: numberFont;
+  font-family: monospace;
+  // font-family: numberFont;
   margin-right: -4px;
 }
 
 .dealNumber {
   position: absolute;
-  top: 58%;
+  top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;

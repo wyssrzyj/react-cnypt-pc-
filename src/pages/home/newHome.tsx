@@ -26,17 +26,20 @@ const SearchBar = () => {
   const configs = [
     {
       label: '地图找厂',
-      icon: 'jack-ditu',
+      icon: 'jack-home_ditu',
+      iconActive: 'jack-dituActive',
       url: '/factory-search'
     },
     {
       label: '智能找厂',
-      icon: 'jack-zhineng',
+      icon: 'jack-home_zhineng',
+      iconActive: 'jack-zhinengActive',
       url: '/factory-search'
     },
     {
       label: '订单找厂',
-      icon: 'jack-dingdan3',
+      icon: 'jack-home_dingdan',
+      iconActive: 'jack-dingdanActive',
       url: '/factory-search'
     }
   ]
@@ -47,6 +50,10 @@ const SearchBar = () => {
         return (
           <Link key={idx} to={item.url} className={styles.linkItem}>
             <Icon type={item.icon} className={styles.searchBarIcon}></Icon>
+            <Icon
+              type={item.iconActive}
+              className={styles.searchBarIconActive}
+            ></Icon>
             {item.label}
           </Link>
         )

@@ -77,7 +77,7 @@
 .container {
   width: 100%;
   height: calc(100vh - 282px);
-  background: url(http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png) center center;
+  // background: url(http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png) center center;
   background-repeat: no-repeat;
   // background-size: cover;
 }
@@ -117,16 +117,32 @@
   font-size: 28px;
   color: #ffffff;
   margin-right: 64px;
+  transition: none !important;
 
-  &:hover .searchBarIcon {
-    color: #40a9ff;
+  .searchBarIconActive{
+    display: none;
+  }
+
+  .searchBarIcon {
+    margin-right: 8px;
+    font-size: 32px;
+  }
+
+  &:hover {
+    .searchBarIconActive{
+      margin-right: 8px;
+      font-size: 32px;
+      display: block;
+    }
+
+    .searchBarIcon {
+      display: none;
+    }
+
   }
 }
 
-.searchBarIcon {
-  margin-right: 8px;
-  font-size: 32px;
-}
+
 
 .linkImg {
   display: inline-block;

@@ -14,6 +14,7 @@ import {
   QualificationCertificate
 } from './components'
 import styles from './index.module.less'
+import PieChart from './components/charts/pieChart'
 
 const barList = [
   { label: '企业介绍' },
@@ -114,6 +115,11 @@ const FactoryDetail = props => {
           </div>
         </div>
       </header>
+
+      <div>
+        <PieChart></PieChart>
+      </div>
+
       <div className={styles.homeContainer}>
         {!isEmpty(factoryInfo) && (
           <Overview factoryId={factoryId} current={factoryInfo} />

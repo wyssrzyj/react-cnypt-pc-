@@ -1,15 +1,18 @@
 .pieChartBox {
   width: 480px;
   height: 360px;
+  padding: 20px 30px 0;
   background: #ffffff;
 }
 
 .pieChartContainer {
-  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 30px;
 }
 
 .pieChartInfo {
-  display: flex;
+  flex-direction: column;
 }
 
 .pieChart {
@@ -19,6 +22,7 @@
 }
 
 .countInfo {
+  padding-bottom: 40px;
   color: #333333;
   font-weight: 400;
   font-size: 14px;
@@ -26,5 +30,33 @@
   .count {
     padding-right: 8px;
     font-size: 36px;
+  }
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.chartTitle {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 25px;
+  color: #333333;
+  font-weight: bold;
+  font-size: 18px;
+
+  &::before {
+    display: block;
+    width: 4px;
+    height: 17px;
+    margin-right: 24px;
+    background: #3b80ff;
+    border-radius: 3px;
+    content: '';
   }
 }

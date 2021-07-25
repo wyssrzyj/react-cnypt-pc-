@@ -11,10 +11,17 @@ import {
   OrderInfo,
   Digital,
   WorkshopEquipment,
-  QualificationCertificate
+  QualificationCertificate,
+  ProductEffect,
+  MonthProduceChart,
+  PieChart,
+  MoveChart,
+  PassPercent,
+  PresserFoot,
+  PinNumber,
+  ShearLine
 } from './components'
 import styles from './index.module.less'
-import PieChart from './components/charts/pieChart'
 
 const barList = [
   { label: '企业介绍' },
@@ -116,8 +123,15 @@ const FactoryDetail = props => {
         </div>
       </header>
 
-      <div>
+      <div className={styles.charts}>
         <PieChart></PieChart>
+        <MoveChart></MoveChart>
+        <MonthProduceChart></MonthProduceChart>
+        <ProductEffect></ProductEffect>
+        <PassPercent></PassPercent>
+        <PinNumber></PinNumber>
+        <ShearLine></ShearLine>
+        <PresserFoot></PresserFoot>
       </div>
 
       <div className={styles.homeContainer}>

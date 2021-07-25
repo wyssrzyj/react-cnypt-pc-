@@ -1,29 +1,15 @@
-import React, { RefObject, useEffect, useRef, useState, ReactNode } from 'react'
+import React, { RefObject, useEffect, useRef, useState } from 'react'
 import styles from './pieChart.module.less'
 import { Chart } from '@antv/g2'
 
-interface ChartTitleProps {
-  title: string
-  children?: ReactNode
-}
-
-export const ChartTitle = ({ title, children }: ChartTitleProps) => {
-  return (
-    <div className={styles.chartHeader}>
-      <span className={styles.chartTitle}>{title}</span>
-      {children && children}
-    </div>
-  )
-}
-
-export const CountInfo = ({ label, unit }) => {
+const CountInfo = () => {
   return (
     <div className={styles.countInfo}>
       <div>
         <span className={styles.count}>100</span>
-        <span>{unit}</span>
+        <span>台</span>
       </div>
-      <div>{label}</div>
+      <div>物联机器数</div>
     </div>
   )
 }
@@ -31,7 +17,7 @@ export const CountInfo = ({ label, unit }) => {
 const PieChart = () => {
   const chartRef: RefObject<HTMLDivElement> = useRef()
 
-  const [data, _setData] = useState([
+  const [data, setData] = useState([
     { item: '事例一', percent: 0.7, color: '#6395F9' },
     { item: '事例二', percent: 0.3, color: '#F3F4F8' }
   ])
@@ -114,11 +100,10 @@ const PieChart = () => {
 
   return (
     <div className={styles.pieChartBox}>
-      <ChartTitle title={'今日设备开机情况'}></ChartTitle>
       <div className={styles.pieChartContainer}>
         <div className={styles.pieChartInfo}>
-          <CountInfo label={'物联机器数'} unit={'台'}></CountInfo>
-          <CountInfo label={'今日开机'} unit={'台'}></CountInfo>
+          <CountInfo></CountInfo>
+          <CountInfo></CountInfo>
         </div>
         <div id={'pieChart'} className={styles.pieChart} ref={chartRef}></div>
       </div>

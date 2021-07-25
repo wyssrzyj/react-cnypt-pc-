@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { Tag, Row, Col, message } from 'antd'
-import classNames from 'classnames'
+import { Tag, Row, Col } from 'antd'
 import moment from 'moment'
 import { toJS } from 'mobx'
 import { isEmpty } from 'lodash'
 import { Icon, NoData } from '@/components'
-import { getCurrentUser, checkValue } from '@/utils/tool'
+import { checkValue } from '@/utils/tool'
 import { useStores, observer } from '@/utils/mobx'
 import axios from '@/utils/axios'
+import HeaderLine from '../headerLine'
 import styles from './index.module.less'
 
 const CompaniesIntroduce = props => {
-  const { current = {}, factoryId, update } = props
+  const { current = {}, factoryId } = props
   const {
-    followStatus,
     enterpriseName,
     enterpriseDesc,
     effectiveLocation,
@@ -24,8 +23,6 @@ const CompaniesIntroduce = props => {
     yearOutputProd,
     factoryAuditorImage
   } = current
-  const currentUser = getCurrentUser() || {}
-  const { userId } = currentUser
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const { factoryYearOutputValue = [], factoryYearOutputProd = [] } =
@@ -45,28 +42,10 @@ const CompaniesIntroduce = props => {
 
           const text = isEmpty(auditPersonInfoList)
             ? '--'
-            : auditPersonInfoList.map(item => item.userName).join('、')
+            : auditPersonInfoList.map(item => item.realName).join('、')
           setMemberText(text)
         }
       })
-  }
-
-  const focusOn = () => {
-    if (userId) {
-      axios
-        .post('/api/factory/follow-factory/add-or-cancel', {
-          factoryId,
-          userId,
-          followStatus: followStatus
-        })
-        .then(response => {
-          const { success, msg } = response
-          message[success ? 'success' : 'error'](msg)
-          success && update()
-        })
-    } else {
-      message.info('请先登录！')
-    }
   }
 
   useEffect(() => {
@@ -75,28 +54,7 @@ const CompaniesIntroduce = props => {
 
   return (
     <div className={styles.companiesIntroduce}>
-      <header className={styles.header}>
-        <div>
-          <span className={styles.textCn}>企业介绍</span>
-          <span className={styles.textEn}>ENTERPRISE INTRODUCTION</span>
-        </div>
-        <div
-          className={classNames(
-            styles.focusBox,
-            followStatus ? styles.boxActive : styles.boxNormal
-          )}
-          onClick={focusOn}
-        >
-          <Icon
-            type="jack-xingxingmianxing"
-            className={classNames(
-              styles.focusOn,
-              followStatus ? styles.active : null
-            )}
-          />
-          <span>{followStatus ? '已关注' : '关注'}</span>
-        </div>
-      </header>
+      <HeaderLine chinese="企业介绍" english="ENTERPRISE INTRODUCTION" />
       <div className={styles.content}>
         <div>
           <div>

@@ -10,10 +10,6 @@ const Search = () => {
   const history = useHistory()
   const { commonStore } = useStores()
   const { factoryName, updateName } = commonStore
-  console.log(
-    '🚀 ~ file: index.tsx ~ line 14 ~ Search ~ factoryName',
-    factoryName
-  )
 
   const [searchWord, setSearchWord] = useState<string>(factoryName)
   const [affixed, setAffixed] = useState<boolean>(false)

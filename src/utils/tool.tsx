@@ -1,5 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isArray } from 'lodash'
 
 export const getToken = () => {
   return localStorage.getItem('token')
@@ -145,8 +145,13 @@ export const getTreeData = (data: any[]) => {
  * 判断是否有值
  */
 export const checkValue = value => {
-  if (isNil(value) || isEmpty(value)) return '--'
-  return value
+  if (isNil(value)) {
+    return '--'
+  } else if (isArray(value) && isEmpty(value)) {
+    return '--'
+  } else {
+    return value
+  }
 }
 
 export const getTypeOptions = () => {
@@ -172,5 +177,17 @@ export const getProductMode = () => {
     { label: '流水', value: '0' },
     { label: '整件', value: '1' },
     { label: '流水和整件', value: '2' }
+  ]
+}
+
+export const getProductClassMap = () => {
+  return [
+    { value: 1, label: '低' },
+    { value: 2, label: '中' },
+    { value: 3, label: '中低' },
+    { value: 4, label: '高' },
+    { value: 5, label: '高低' },
+    { value: 6, label: '高中' },
+    { value: 7, label: '高中低' }
   ]
 }

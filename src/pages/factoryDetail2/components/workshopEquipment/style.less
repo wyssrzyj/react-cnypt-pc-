@@ -10,8 +10,8 @@
   background: rgba(0, 0, 0, 0.4);
 }
 #equipment-top{
-  width: 560px;
-  height: 560px;
+  width: 500px;
+  height: 334px;
   float: left;
   .swiper-slide {
     /* Center slide text vertically */
@@ -26,26 +26,26 @@
   
   .swiper-slide img {
     display: block;
-    width: 560px;
-    height: 560px;
+    width: 500px;
+    height: 334px;
     object-fit: cover;
   }
 
 }
 .equipment-button-next{
-  top: 12px;
+  top: 0;
 }
 .equipment-button{
   position: absolute;
   right: 20px;
-  font-size: 24px;
-  width: 136px;
+  font-size: 20px;
+  width: 106px;
   text-align: center;
   cursor: pointer;
   border: 2px solid #F0F0F0;
 }
 .equipment-button-prev{
-  bottom: 12px;
+  bottom: 0;
 }
 .workshop-equipment-next {
   display: none;
@@ -56,18 +56,18 @@
 }
 #equipment-thumbs {
   box-sizing: border-box;
-  height: 440px;
+  height: 240px;
   margin-top: 8%;
   // padding: 10px 0;
   .swiper-slide {
     width: 25%;
-    height: 136px;
+    height: 106px;
     opacity: 0.4;
   }
 }
 #equipment-thumbs .swiper-slide {
   width: 25%;
-  height: 136px;
+  height: 100px;
   opacity: 0.4;
 }
 #equipment-thumbs .swiper-slide-thumb-active {
@@ -84,14 +84,15 @@
 }
 #equipment-thumbs {
   float: right;
-  width: 136px;
-  margin-right: 20px;
+  width: 106px;
+  // margin-right: 20px;
   .factory-small-img {
-    width: 136px;
-    height: 136px;
+    width: 106px;
+    height: 70px;
     img {
-      max-width: 136px;
-      max-height: 136px;
+      width: 106px;
+    height: 70px;
+    object-fit: cover;
     }
   }
 }

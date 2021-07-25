@@ -14,6 +14,7 @@ import SwiperCore, {
 } from 'swiper'
 import Swiper from 'swiper'
 import { isEmpty } from 'lodash'
+import HeaderLine from '../headerLine'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
@@ -151,75 +152,75 @@ const WorkshopEquipment = props => {
 
   return (
     <div className={styles.workshopEquipment}>
-      {!isEmpty(factoryImg) ? (
+      <HeaderLine chinese="车间设备" english="WORKSHOP EQUIPMENT" />
+      <div className={styles.content}>
         <div className={styles.left}>
-          <div className="swiper-container " id="equipment-top">
-            <div className="swiper-wrapper">
-              {factoryImg.map((item, index) => (
-                <div key={index} className="swiper-slide">
-                  <img src={item} />
-                </div>
-              ))}
-            </div>
-            <div
-              className="swiper-button-next workshop-equipment-next"
-              ref={leftRef}
-            ></div>
-            <div
-              className="swiper-button-prev workshop-equipment-next"
-              ref={rightRef}
-            ></div>
-          </div>
-          <div
-            className="equipment-button equipment-button-next"
-            onClick={toLeft}
-          >
-            {curKey === 0 ? (
-              <Icon type="jack-shang_icon" />
-            ) : (
-              <Icon type="jack-xia_icon" className={styles.upIcon} />
-            )}
-          </div>
-          <div
-            className="equipment-button equipment-button-prev"
-            onClick={toRight}
-          >
-            {curKey < factoryImg.length - 1 ? (
-              <Icon type="jack-xia_icon" />
-            ) : (
-              <Icon type="jack-shang_icon" className={styles.upIcon} />
-            )}
-          </div>
-          <div className="swiper-container" id="equipment-thumbs">
-            <div className="swiper-wrapper">
-              {factoryImg.map((item, index) => (
-                <div key={index} className="swiper-slide factory-small-img">
-                  <img src={item} />
-                </div>
-              ))}
-            </div>
-          </div>
+          <Table
+            rowKey={rowKey}
+            loading={loading}
+            size="small"
+            dataSource={dataSource}
+            columns={columns}
+            pagination={{
+              current: pageNum,
+              pageSize,
+              total,
+              onChange: onPaginationChange
+            }}
+          />
         </div>
-      ) : (
-        <NoData width={740} bgColor="#fff" />
-      )}
-
-      <div className={styles.right}>
-        <h2 className={styles.nameCn}>车间设备</h2>
-        <h4 className={styles.nameEn}>WORKSHOP EQUIPMENT</h4>
-        <Table
-          rowKey={rowKey}
-          loading={loading}
-          size="small"
-          dataSource={dataSource}
-          columns={columns}
-          pagination={{
-            current: pageNum,
-            pageSize,
-            total,
-            onChange: onPaginationChange
-          }}
-        />
+        {!isEmpty(factoryImg) ? (
+          <div className={styles.right}>
+            <div className="swiper-container " id="equipment-top">
+              <div className="swiper-wrapper">
+                {factoryImg.map((item, index) => (
+                  <div key={index} className="swiper-slide">
+                    <img src={item} />
+                  </div>
+                ))}
+              </div>
+              <div
+                className="swiper-button-next workshop-equipment-next"
+                ref={leftRef}
+              ></div>
+              <div
+                className="swiper-button-prev workshop-equipment-next"
+                ref={rightRef}
+              ></div>
+            </div>
+            <div
+              className="equipment-button equipment-button-next"
+              onClick={toLeft}
+            >
+              {curKey === 0 ? (
+                <Icon type="jack-shang_icon" />
+              ) : (
+                <Icon type="jack-xia_icon" className={styles.upIcon} />
+              )}
+            </div>
+            <div
+              className="equipment-button equipment-button-prev"
+              onClick={toRight}
+            >
+              {curKey < factoryImg.length - 1 ? (
+                <Icon type="jack-xia_icon" />
+              ) : (
+                <Icon type="jack-shang_icon" className={styles.upIcon} />
+              )}
+            </div>
+            <div className="swiper-container" id="equipment-thumbs">
+              <div className="swiper-wrapper">
+                {factoryImg.map((item, index) => (
+                  <div key={index} className="swiper-slide factory-small-img">
+                    <img src={item} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <NoData width={740} bgColor="#fff" />
+        )}
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
 import React from 'react'
-import { isEmpty } from 'lodash'
+import { isArray } from 'lodash'
 import CompaniesIntroduce from '../companiesIntroduce'
 import EnterpriseImage from '../enterpriseImage'
 import OrderInfo from '../orderInfo'
@@ -10,12 +10,15 @@ import QualificationCertificate from '../qualificationCertificate'
 
 const EnterpriseInformation = props => {
   const { factoryId, current } = props
+  console.log('🚀 ~ file: index.tsx ~ line 13 ~ current', current)
   return (
     <div style={{ marginTop: 30, padding: 40, backgroundColor: '#fff' }}>
       {/* 企业介绍 */}
       <CompaniesIntroduce factoryId={factoryId} current={current} />
       {/* 企业照片 */}
-      {!isEmpty(current) && <EnterpriseImage current={current} />}
+      {isArray(current.factoryOutsizeImages) && (
+        <EnterpriseImage current={current} />
+      )}
       {/* 接单需求 */}
       <OrderInfo factoryId={factoryId} />
       {/* 车间设备 */}

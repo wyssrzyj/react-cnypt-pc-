@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { Badge } from 'antd'
 import { filter, find, isEmpty } from 'lodash'
+import classNames from 'classnames'
 import axios from '@/utils/axios'
 import {
   getTypeOptions,
-  getProductClass,
   getProductMode,
-  checkValue
+  checkValue,
+  getProductClassMap
 } from '@/utils/tool'
 import { Icon } from '@/components'
+import HeaderLine from '../headerLine'
 import styles from './index.module.less'
 
 const OrderInfo = props => {
   const { factoryId } = props
-  const productClassOptions = getProductClass()
+  const productClassOptions = getProductClassMap()
   const productionModeOptions = getProductMode()
   const [currentFactory, setCurrentFactory] = useState<any>({})
   const [mainList, setMainList] = useState<any>([])
   const [orderType, setOrderType] = useState<any>([])
+  const [grade, setGrade] = useState<string>('--')
 
   const getOrderReceiving = () => {
     const typeOptions = getTypeOptions()
@@ -28,12 +31,11 @@ const OrderInfo = props => {
       .then(response => {
         const { success, data } = response
         if (success) {
-          const { factoryCategoryList, factoryProcessTypeList } = data
+          const { factoryCategoryList, factoryProcessTypeList, clothesGrade } =
+            data
           setCurrentFactory({ ...data })
           if (factoryCategoryList) {
-            const newLabel = factoryCategoryList.map(
-              item => `${item.name}（${item.remark}）`
-            )
+            const newLabel = factoryCategoryList.map(item => `${item.name}`)
             setMainList([...newLabel])
           }
           if (factoryProcessTypeList) {
@@ -43,6 +45,16 @@ const OrderInfo = props => {
               })
             })
             setOrderType([...newOrderType])
+          }
+          // 产品档次
+          if (clothesGrade) {
+            const newGrade = productClassOptions.find(
+              item => item.value == clothesGrade
+            )
+            if (newGrade) {
+              const gradeText = newGrade.label.split('').join('、')
+              setGrade(gradeText)
+            }
           }
         }
       })
@@ -54,14 +66,7 @@ const OrderInfo = props => {
 
   return (
     <div className={styles.companiesIntroduce}>
-      <header className={styles.header}>
-        <div>
-          <span className={styles.textCn}>生产接单介绍</span>
-          <span className={styles.textEn}>
-            INTRODUCTION OF PRODUCTION ORDER RECEIVING
-          </span>
-        </div>
-      </header>
+      <HeaderLine chinese="接单需求" english="ORDET RECEIVING DEMAND" />
       <ul className={styles.content}>
         <li className={styles.product}>
           <div className={styles.left}>
@@ -76,7 +81,7 @@ const OrderInfo = props => {
                   text="主营类别"
                   className={styles.classesSubtitle}
                 />
-                <span className={styles.strongText}>
+                <span className={classNames(styles.strongText, styles.mainBox)}>
                   {isEmpty(mainList) ? '--' : mainList.join('，')}
                 </span>
               </li>
@@ -98,15 +103,7 @@ const OrderInfo = props => {
                   text="产品档次"
                   className={styles.classesSubtitle}
                 />
-                <span className={styles.strongText}>
-                  {productClassOptions.find(
-                    item => item.value == currentFactory.clothesGrade
-                  )
-                    ? productClassOptions.find(
-                        item => item.value == currentFactory.clothesGrade
-                      ).label
-                    : '--'}
-                </span>
+                <span className={styles.strongText}>{grade}</span>
               </li>
             </ul>
           </div>

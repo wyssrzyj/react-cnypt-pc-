@@ -1,37 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { isEmpty, isNil } from 'lodash'
-import { Icon } from '@/components'
+import { Icon, NoData } from '@/components'
 import axios from '@/utils/axios'
-import { getCurrentUser } from '@/utils/tool'
+import { checkValue } from '@/utils/tool'
 import styles from './index.module.less'
 
 const Overview = props => {
-  const { current = {}, factoryId } = props
-  const currentUser = getCurrentUser() || {}
+  const { factoryId } = props
   const [contactInfo, setContactInfo] = useState<any>({})
-
-  const notLoggedIn = (str, frontLen, endLen) => {
-    if (!isNil(str)) {
-      if (isEmpty(currentUser)) {
-        var len = str.length - frontLen - endLen
-        var xing = ''
-        for (var i = 0; i < len; i++) {
-          xing += '*'
-        }
-        return (
-          str.substring(0, frontLen) + xing + str.substring(str.length - endLen)
-        )
-      } else {
-        return str
-      }
-    } else {
-      return '--'
-    }
-  }
 
   const getContactInfo = () => {
     axios
-      .get('/api/user/get-user-info-factory-id', {
+      .get('/api/factory/info/get-details-head-info', {
         factoryId
       })
       .then(response => {
@@ -48,20 +27,23 @@ const Overview = props => {
 
   return (
     <div className={styles.factoryInfo}>
-      <img
-        className={styles.img}
-        src="http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/31bb1afd955c4450931f71e523707119.png"
-        alt=""
-      />
-      <div>
-        <h3></h3>
+      {contactInfo.headImageUrl ? (
+        <img className={styles.img} src={contactInfo.headImageUrl} alt="" />
+      ) : (
+        <NoData bgColor="#f6f6f6" height={200} width={300} float="left" />
+      )}
+
+      <div className={styles.box}>
+        <h3 className={styles.name}>{contactInfo.factoryName}</h3>
         <ul className={styles.factoryInfoList}>
           <li style={{ alignItems: 'flex-start' }}>
             <span className={styles.rightLabel}>
               <Icon type="jack-dizhi" className={styles.icon} />
               工厂地区
             </span>
-            <span className={styles.rightValue}>{current.address}</span>
+            <span className={styles.rightValue}>
+              {checkValue(contactInfo.districtName)}
+            </span>
           </li>
           <li>
             <span className={styles.rightLabel}>
@@ -69,7 +51,7 @@ const Overview = props => {
               有效车位
             </span>
             <span className={styles.rightValue}>
-              {contactInfo.realName ? contactInfo.realName : '--'}
+              {checkValue(contactInfo.effectiveLocation)} 台
             </span>
           </li>
           <li>
@@ -78,16 +60,20 @@ const Overview = props => {
               主营类别
             </span>
             <span className={styles.rightValue}>
-              {notLoggedIn(contactInfo.mobilePhone, 3, 4)}
+              {contactInfo.factoryCategoryList
+                ? contactInfo.factoryCategoryList
+                    .map(item => item.name)
+                    .join('、')
+                : '--'}
             </span>
           </li>
           <li>
             <span className={styles.rightLabel}>
               <Icon type="jack-qdl_lan" className={styles.icon} />
-              最低起订量{' '}
+              最低起订量
             </span>
             <span className={styles.rightValue}>
-              {notLoggedIn(contactInfo.contactPhone, 5, 1)}
+              {checkValue(contactInfo.moq)} 件
             </span>
           </li>
         </ul>

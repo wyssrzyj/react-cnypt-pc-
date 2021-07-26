@@ -4,6 +4,7 @@ import { get } from 'lodash'
 import moment from 'moment'
 import axios from '@/utils/axios'
 import { getUserInfo } from '@/utils/tool'
+import { useHistory } from 'react-router'
 
 const titleMap = {
   pending: '提交成功，请等待审批',
@@ -15,6 +16,7 @@ const statusMap = { '0': 'noPass', '1': 'approval', '2': 'pending' }
 
 const ApprovalResult = props => {
   const { submit } = props
+  const history = useHistory()
   const currentUser = getUserInfo() || {}
   const [status, setStatus] = useState('pending')
   const [start, setStart] = useState(0)
@@ -69,7 +71,13 @@ const ApprovalResult = props => {
           <Button type="primary" key="console" onClick={() => submit(0)}>
             返回上一页
           </Button>,
-          <Button type="primary" key="buy">
+          <Button
+            type="primary"
+            key="buy"
+            onClick={() => {
+              history.push('/control-panel/enterprise')
+            }}
+          >
             确认
           </Button>
         ].slice(start, end)}

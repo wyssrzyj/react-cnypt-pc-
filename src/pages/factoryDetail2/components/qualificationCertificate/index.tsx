@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash'
 import { toJS } from 'mobx'
 import axios from '@/utils/axios'
 import { useStores, observer } from '@/utils/mobx'
+import HeaderLine from '../headerLine'
 import styles from './index.module.less'
 
 const QualificationCertificate = props => {
@@ -38,12 +39,7 @@ const QualificationCertificate = props => {
   return (
     <div className={styles.qualificationCertificate}>
       <div className={styles.container}>
-        <header className={styles.header}>
-          <div>
-            <span className={styles.textCn}>资质证件</span>
-            <span className={styles.textEn}>QUALIFICATION CERTIFICATE</span>
-          </div>
-        </header>
+        <HeaderLine chinese="资质证件" english="QUALIFICATION CERTIFICATE" />
         <div className={styles.imgBox}>
           {isEmpty(certificate) ? (
             <Empty style={{ margin: 'auto' }} />

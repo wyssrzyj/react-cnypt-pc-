@@ -1,8 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
+import { useHistory } from 'react-router'
 import SlideBars from '../homePage/components/slideBar'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
+import { useStores } from '@/utils/mobx'
 import {
   Overview,
   EnterpriseInformation
@@ -45,8 +47,11 @@ const FactoryDetail = props => {
     match: { params = {} }
   } = props
   const { id: factoryId } = params
+  const history = useHistory()
   const currentUser = getCurrentUser() || {}
   const { userId } = currentUser
+  const { commonStore } = useStores()
+  const { updateName } = commonStore
   const [factoryInfo, setFactoryInfo] = useState<any>({})
   const [activeKey, setActiveKey] = useState(0)
   const [activeTab, setActiveTab] = useState('dynamic')
@@ -114,6 +119,11 @@ const FactoryDetail = props => {
       })
   }
 
+  const handleSearch = value => {
+    updateName(value)
+    history.push('/factory-search')
+  }
+
   useEffect(() => {
     getFactoryInfo()
     window.addEventListener('scroll', setMove, true)
@@ -125,7 +135,7 @@ const FactoryDetail = props => {
 
   return (
     <div className={styles.factoryDetail}>
-      <DetailHeader />
+      <DetailHeader search={handleSearch} />
       <div className={styles.container}>
         {/* 工厂概览 */}
         {!isEmpty(factoryInfo) && (
@@ -137,10 +147,12 @@ const FactoryDetail = props => {
           activeTab={activeTab}
           onTabChange={key => setActiveTab(key)}
         />
-        {/* 企业信息 */}
+        {/* 生产动态 */}
         {activeTab === 'dynamic' && <ProductDynamic />}
         {/* 企业信息 */}
-        {activeTab === 'info' && <EnterpriseInformation />}
+        {activeTab === 'info' && (
+          <EnterpriseInformation factoryId={factoryId} current={factoryInfo} />
+        )}
       </div>
 
       {/* 导航栏 */}

@@ -20,6 +20,8 @@
     "@ant-design/pro-card": "^1.13.2",
     "@ant-design/pro-field": "^1.18.2",
     "@ant-design/pro-table": "^2.39.2",
+    "@antv/g2": "^4.1.21",
+    "@antv/g2plot": "^2.3.27",
     "@antv/l7": "^2.4.4",
     "@antv/l7-district": "^2.3.9",
     "@antv/l7-maps": "^2.4.4",

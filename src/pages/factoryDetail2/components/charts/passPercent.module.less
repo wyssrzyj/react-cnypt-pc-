@@ -1,0 +1,89 @@
+.passPercentBox {
+  width: 386px;
+  height: 330px;
+  margin-top: 20px;
+  padding: 20px 30px 0;
+  background: #ffffff;
+
+  :global {
+    .g2-tooltip {
+      width: fit-content !important;
+      padding: 12px !important;
+    }
+
+    .tooltipTitle {
+      padding-bottom: 16px;
+      color: #333333;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .tooltipText1 {
+      display: flex;
+      align-items: center;
+      padding-bottom: 8px;
+      color: #333333;
+      font-weight: bold;
+      font-size: 14px;
+
+      &::before {
+        width: 10px;
+        height: 10px;
+        margin-right: 8px;
+        background: #30c5c5;
+        content: '';
+      }
+    }
+
+    .tooltipText3 {
+      display: flex;
+      align-items: center;
+      padding-bottom: 8px;
+      color: #333333;
+      font-weight: bold;
+      font-size: 14px;
+
+      &::before {
+        width: 10px;
+        height: 10px;
+        margin-right: 8px;
+        background: #333333;
+        content: '';
+      }
+    }
+
+    .tooltipText2 {
+      display: flex;
+      align-items: center;
+      padding-bottom: 8px;
+      color: #333333;
+      font-weight: bold;
+      font-size: 14px;
+
+      &::before {
+        width: 10px;
+        height: 10px;
+        margin-right: 8px;
+        background: #f4f5f8;
+        content: '';
+      }
+    }
+
+    .tooltipBox {
+    }
+  }
+}
+
+.monthProduceChartContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.monthProduceChartInfo {
+  padding-top: 30px;
+}
+
+#passPercent {
+  height: 270px;
+}

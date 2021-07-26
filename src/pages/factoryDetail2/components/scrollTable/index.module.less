@@ -1,0 +1,69 @@
+.scrollTableBox {
+  width: 1200px;
+  margin-top: 20px;
+  padding: 30px;
+  background: #ffffff;
+}
+
+.scrollTable {
+  position: relative;
+  height: 300px;
+  overflow: auto;
+  cursor: pointer;
+
+  :global {
+    .ant-table-thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      font-size: 16px;
+    }
+
+    .ant-table-thead > tr > th {
+      background: #ffffff;
+    }
+  }
+}
+
+.scrollTable::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scrollTable::-webkit-scrollbar-track {
+  margin: 54px 0 0;
+  background: rgb(239, 239, 239);
+  border-radius: 2px;
+}
+
+.scrollTable::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 10px;
+}
+
+.scrollTable::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+
+.custemRowEven {
+  color: #333;
+  font-size: 16px;
+  background: #f4f8ff;
+
+  &:hover {
+    td {
+      background: #e6efff !important;
+    }
+  }
+}
+
+.custemRowOdd {
+  color: #333;
+  font-size: 16px;
+  background: #ffffff;
+
+  &:hover {
+    td {
+      background: #e6efff !important;
+    }
+  }
+}

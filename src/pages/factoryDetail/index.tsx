@@ -114,6 +114,7 @@ const FactoryDetail = props => {
           </div>
         </div>
       </header>
+
       <div className={styles.homeContainer}>
         {!isEmpty(factoryInfo) && (
           <Overview factoryId={factoryId} current={factoryInfo} />

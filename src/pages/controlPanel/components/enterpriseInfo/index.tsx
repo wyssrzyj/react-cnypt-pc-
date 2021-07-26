@@ -287,7 +287,7 @@ const EnterpriseInfo = () => {
           name="enterpriseDesc"
           rules={[
             { required: true, message: '请填写企业简介！' },
-            { max: 700, min: 100 }
+            { max: 700 }
           ]}
         >
           <TextArea

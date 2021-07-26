@@ -5,3 +5,69 @@
     }
   }
 }
+.swaiperContainer {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 0 36px !important;
+
+  :global {
+    .swiper-button-next {
+      display: none;
+    }
+    .swiper-button-prev {
+      display: none;
+    }
+  }
+}
+
+.factorysSwiper {
+  display: flex;
+  width: 1000px !important;
+  height: 154px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.swaiperImg {
+  display: inline-block;
+  width: 230px;
+  height: 154px;
+  margin-right: 12px;
+}
+
+.left {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  width: 40px;
+  height: 154px;
+  font-size: 16px;
+  line-height: 154px;
+  text-align: center;
+  border: 2px solid #e9e9e9;
+  cursor: pointer;
+}
+
+.right {
+  position: absolute;
+  top: 36px;
+  right: 0;
+  width: 40px;
+  height: 154px;
+  font-size: 16px;
+  line-height: 154px;
+  text-align: center;
+  border: 2px solid #e9e9e9;
+  cursor: pointer;
+}
+.leftIcon {
+  transform: rotate(270deg);
+}
+.rightIcon {
+  transform: rotate(90deg);
+}
+
+.disableIcon {
+  color: #c4c4c4 !important;
+}

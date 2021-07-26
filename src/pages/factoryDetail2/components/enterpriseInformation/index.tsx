@@ -1,4 +1,5 @@
 import React from 'react'
+import { isEmpty } from 'lodash'
 import CompaniesIntroduce from '../companiesIntroduce'
 import EnterpriseImage from '../enterpriseImage'
 import OrderInfo from '../orderInfo'
@@ -14,7 +15,7 @@ const EnterpriseInformation = props => {
       {/* 企业介绍 */}
       <CompaniesIntroduce factoryId={factoryId} current={current} />
       {/* 企业照片 */}
-      <EnterpriseImage />
+      {!isEmpty(current) && <EnterpriseImage current={current} />}
       {/* 接单需求 */}
       <OrderInfo factoryId={factoryId} />
       {/* 车间设备 */}

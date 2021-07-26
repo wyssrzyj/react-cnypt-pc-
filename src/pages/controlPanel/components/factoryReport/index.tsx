@@ -77,7 +77,10 @@ const FactoryReport = () => {
   }
   const applyInspection = () => {
     axios
-      .get('/api/factory/info/update-factory-auditor-status', { factoryId })
+      .get('/api/factory/info/update-factory-auditor-status', {
+        factoryId,
+        auditorStatus: '3'
+      })
       .then(response => {
         const { success, msg } = response
         message[success ? 'success' : 'error'](msg)

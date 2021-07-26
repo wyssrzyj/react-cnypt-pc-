@@ -174,3 +174,7 @@ export const getProductMode = () => {
     { label: '流水和整件', value: '2' }
   ]
 }
+
+export const setTitle = title => {
+  document.title = title
+}

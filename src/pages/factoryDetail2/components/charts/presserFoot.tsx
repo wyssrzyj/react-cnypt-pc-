@@ -7,13 +7,13 @@ const PresserFoot = () => {
   const chartRef = useRef()
 
   const [data, _setData] = useState([
-    { date: '周一', num: 8 },
-    { date: '周二', num: 10 },
-    { date: '周三', num: 12 },
-    { date: '周四', num: 34 },
-    { date: '周五', num: 28 },
-    { date: '周六', num: 16 },
-    { date: '周日', num: 10 }
+    { date: '8', num: 8 },
+    { date: '10', num: 10 },
+    { date: '12', num: 12 },
+    { date: '14', num: 34 },
+    { date: '16', num: 28 },
+    { date: '18', num: 16 },
+    { date: '20', num: 10 }
   ])
 
   const setChart = () => {
@@ -37,23 +37,46 @@ const PresserFoot = () => {
     })
 
     chart.axis('num', {
+      grid: {
+        line: {
+          style: {
+            lineDash: [5]
+          }
+        }
+      },
+      label: {
+        style: {
+          fontSize: 16
+        }
+      },
       title: {
         text: '次数',
         autoRotate: false,
         position: 'end',
-        offset: 10,
-        textStyle: {
+        offset: 24,
+        style: {
           textAlign: 'start', // 文本对齐方向，可取值为： start middle end
-          fontSize: '12', // 文本大小
-          fontWeight: 'bold', // 文本粗细
-          textBaseline: 'top' // 文本基准线，可取 top middle bottom，默认为middle
+          fontSize: '14' // 文本大小
         }
       }
     })
 
+    const itemTpl = `
+      <div class='chart7Tpl'>
+        <div class='tplTitle'>{date}时</div>
+        <div class='tpl'>
+          <span class="tpl4">·</span>
+          剪线次数:&nbsp;&nbsp;&nbsp;{num} 次
+        </div>
+      </div>
+    `
+
     chart.tooltip({
-      showMarkers: false
+      showTitle: false,
+      showMarkers: false,
+      itemTpl: itemTpl
     })
+
     chart.interaction('active-region')
 
     chart
@@ -62,17 +85,39 @@ const PresserFoot = () => {
       .color(
         'l(100) 0:#975FE4 0.7: rgba(151, 95, 228,0.5) 1:rgba(151, 95, 228,0.1)'
       )
-    chart.line().size(3).position('date*num').color('#975FE4')
-    chart.point().size(4).position('date*num').shape('circle').color('#975FE4')
+    chart
+      .line()
+      .size(3)
+      .position('date*num')
+      .color('#975FE4')
+      .tooltip('date*num', (date, num) => {
+        return {
+          date,
+          num
+        }
+      })
+    chart
+      .point()
+      .size(4)
+      .position('date*num')
+      .shape('circle')
+      .color('#975FE4')
+      .tooltip('date*num', (date, num) => {
+        return {
+          date,
+          num
+        }
+      })
 
     const averageNum = 20
     const contentColor = '#6395F9'
-    const content = `周平均针数: ${averageNum}分`
+    const content = `平均抬压脚数: ${averageNum}分`
 
     chart.annotation().line({
       top: true,
       start: [-0.5, averageNum],
       end: [data.length + 0.5, averageNum],
+      animate: true,
       style: {
         stroke: contentColor,
         lineWidth: 1
@@ -82,7 +127,7 @@ const PresserFoot = () => {
         position: 'start',
         style: {
           fill: contentColor,
-          fontSize: 12,
+          fontSize: 14,
           fontWeight: 500
         },
         content: content,

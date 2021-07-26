@@ -19,6 +19,14 @@ const MonthProduceChart = () => {
       },
       wave: {
         length: 128
+      },
+      statistic: {
+        offsetX: 25,
+        style: {
+          fill: 'red',
+          color: 'blue',
+          stroke: 'yellow'
+        }
       }
     })
     liquidPlot.render()
@@ -33,8 +41,16 @@ const MonthProduceChart = () => {
       <ChartTitle title={'本月生产情况'}></ChartTitle>
       <div className={styles.monthProduceChartContainer}>
         <div className={styles.monthProduceChartInfo}>
-          <CountInfo label={'本月计划生产'} unit={'件'}></CountInfo>
-          <CountInfo label={'本月成衣入库'} unit={'件'}></CountInfo>
+          <CountInfo
+            count={16943}
+            label={'本月计划生产'}
+            unit={'件'}
+          ></CountInfo>
+          <CountInfo
+            count={2890}
+            label={'本月成衣入库'}
+            unit={'件'}
+          ></CountInfo>
         </div>
         <div
           id={'monthProduce'}

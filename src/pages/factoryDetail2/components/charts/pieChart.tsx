@@ -1,15 +1,29 @@
-import React, { RefObject, useEffect, useRef, useState } from 'react'
+import React, { RefObject, useEffect, useRef, useState, ReactNode } from 'react'
 import styles from './pieChart.module.less'
 import { Chart } from '@antv/g2'
 
-const CountInfo = () => {
+interface ChartTitleProps {
+  title: string
+  children?: ReactNode
+}
+
+export const ChartTitle = ({ title, children }: ChartTitleProps) => {
+  return (
+    <div className={styles.chartHeader}>
+      <span className={styles.chartTitle}>{title}</span>
+      {children && children}
+    </div>
+  )
+}
+
+export const CountInfo = ({ label, unit, count }) => {
   return (
     <div className={styles.countInfo}>
       <div>
-        <span className={styles.count}>100</span>
-        <span>台</span>
+        <span className={styles.count}>{count}</span>
+        <span>{unit}</span>
       </div>
-      <div>物联机器数</div>
+      <div>{label}</div>
     </div>
   )
 }
@@ -17,11 +31,10 @@ const CountInfo = () => {
 const PieChart = () => {
   const chartRef: RefObject<HTMLDivElement> = useRef()
 
-  const [data, setData] = useState([
+  const [data, _setData] = useState([
     { item: '事例一', percent: 0.7, color: '#6395F9' },
     { item: '事例二', percent: 0.3, color: '#F3F4F8' }
   ])
-  console.log(setData)
 
   const setChart = () => {
     const chart = new Chart({
@@ -31,8 +44,6 @@ const PieChart = () => {
       height: 220,
       padding: [0, 0, 0, 0]
     })
-
-    console.log(chart)
 
     chart.data(data)
     chart.scale('percent', {
@@ -56,12 +67,12 @@ const PieChart = () => {
 
     chart.annotation().text({
       position: ['50%', '50%'],
-      content: '100%',
+      content: '63%',
       style: {
-        fontSize: 28,
+        fontSize: 32,
         fill: '#333333',
-        // fontFamily: 'monospace',
-        fontWeight: 500,
+        fontFamily: 'monospace',
+        fontWeight: 'bold',
         textBaseline: 'bottom',
         textAlign: 'center'
       },
@@ -72,13 +83,13 @@ const PieChart = () => {
       position: ['50%', '50%'],
       content: '开机率',
       style: {
-        fontSize: 14,
+        fontSize: 16,
         fill: '#333333',
         fontWeight: 500,
         textBaseline: 'bottom',
         textAlign: 'center'
       },
-      offsetY: 24
+      offsetY: 28
     })
 
     chart.on('interval:click', ev => {
@@ -100,10 +111,11 @@ const PieChart = () => {
 
   return (
     <div className={styles.pieChartBox}>
+      <ChartTitle title={'今日设备开机情况'}></ChartTitle>
       <div className={styles.pieChartContainer}>
         <div className={styles.pieChartInfo}>
-          <CountInfo></CountInfo>
-          <CountInfo></CountInfo>
+          <CountInfo count={100} label={'物联机器数'} unit={'台'}></CountInfo>
+          <CountInfo count={63} label={'今日开机'} unit={'台'}></CountInfo>
         </div>
         <div id={'pieChart'} className={styles.pieChart} ref={chartRef}></div>
       </div>

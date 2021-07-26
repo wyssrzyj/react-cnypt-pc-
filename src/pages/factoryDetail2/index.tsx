@@ -15,6 +15,7 @@ import {
 } from './components'
 import { DetailHeader, TabHeader } from '@/components'
 import styles from './index.module.less'
+import ProductDynamic from './productDynamic'
 
 const barList = [
   { label: '企业介绍' },
@@ -35,6 +36,10 @@ const tabOptions = [
   }
 ]
 
+const titleMap = new Map()
+titleMap.set('dynamic', '产能云平台-工厂详情-生产动态')
+titleMap.set('info', '产能云平台-工厂详情-企业信息')
+
 const FactoryDetail = props => {
   const {
     match: { params = {} }
@@ -44,7 +49,15 @@ const FactoryDetail = props => {
   const { userId } = currentUser
   const [factoryInfo, setFactoryInfo] = useState<any>({})
   const [activeKey, setActiveKey] = useState(0)
-  const [activeTab, setActiveTab] = useState('info')
+  const [activeTab, setActiveTab] = useState('dynamic')
+
+  useEffect(() => {
+    document.title = titleMap.get(activeTab)
+
+    return () => {
+      document.title = '产能云平台'
+    }
+  }, [activeTab])
 
   const domRef1 = useRef<HTMLDivElement>()
   const domRef2 = useRef<HTMLDivElement>()
@@ -124,6 +137,8 @@ const FactoryDetail = props => {
           activeTab={activeTab}
           onTabChange={key => setActiveTab(key)}
         />
+        {/* 企业信息 */}
+        {activeTab === 'dynamic' && <ProductDynamic />}
         {/* 企业信息 */}
         {activeTab === 'info' && <EnterpriseInformation />}
       </div>

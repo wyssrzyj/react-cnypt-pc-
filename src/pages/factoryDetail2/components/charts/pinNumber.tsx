@@ -37,26 +37,58 @@ const PinNumber = () => {
     })
 
     chart.axis('num', {
+      grid: {
+        line: {
+          style: {
+            lineDash: [5]
+          }
+        }
+      },
+      label: {
+        style: {
+          fontSize: 16
+        }
+      },
       title: {
         text: '针数',
         autoRotate: false,
         position: 'end',
-        offset: 10,
-        textStyle: {
+        offset: 24,
+        style: {
           textAlign: 'start', // 文本对齐方向，可取值为： start middle end
-          fontSize: '12', // 文本大小
-          fontWeight: 'bold', // 文本粗细
-          textBaseline: 'top' // 文本基准线，可取 top middle bottom，默认为middle
+          fontSize: '14' // 文本大小
         }
       }
     })
 
+    const itemTpl = `
+      <div class='chart7Tpl'>
+        <div class='tplTitle'>{date}</div>
+        <div class='tpl'>
+          <span class="tpl2">·</span>
+          平均针数:&nbsp;&nbsp;&nbsp;{num} 针
+        </div>
+      </div>
+    `
+
     chart.tooltip({
-      showMarkers: false
+      showTitle: false,
+      showMarkers: false,
+      itemTpl: itemTpl
     })
+
     chart.interaction('active-region')
 
-    chart.interval().size(16).position('date*num')
+    chart
+      .interval()
+      .size(16)
+      .position('date*num')
+      .tooltip('date*num', (date, num) => {
+        return {
+          date,
+          num
+        }
+      })
 
     chart.render()
   }

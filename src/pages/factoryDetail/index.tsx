@@ -11,15 +11,7 @@ import {
   OrderInfo,
   Digital,
   WorkshopEquipment,
-  QualificationCertificate,
-  ProductEffect,
-  MonthProduceChart,
-  PieChart,
-  MoveChart,
-  PassPercent,
-  PresserFoot,
-  PinNumber,
-  ShearLine
+  QualificationCertificate
 } from './components'
 import styles from './index.module.less'
 
@@ -122,17 +114,6 @@ const FactoryDetail = props => {
           </div>
         </div>
       </header>
-
-      <div className={styles.charts}>
-        <PieChart></PieChart>
-        <MoveChart></MoveChart>
-        <MonthProduceChart></MonthProduceChart>
-        <ProductEffect></ProductEffect>
-        <PassPercent></PassPercent>
-        <PinNumber></PinNumber>
-        <ShearLine></ShearLine>
-        <PresserFoot></PresserFoot>
-      </div>
 
       <div className={styles.homeContainer}>
         {!isEmpty(factoryInfo) && (

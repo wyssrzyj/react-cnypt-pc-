@@ -46,7 +46,7 @@ const MoveChart = () => {
         width: 700,
         height: 300,
         nice: true,
-        padding: [24, 24, 32, 24]
+        padding: [24, 32, 32, 24]
       })
       setChart(c)
     }
@@ -99,31 +99,51 @@ const MoveChart = () => {
     })
 
     chart.axis('平均缝纫时长', {
+      grid: {
+        line: {
+          style: {
+            lineDash: [5]
+          }
+        }
+      },
+      label: {
+        style: {
+          fontSize: 16
+        }
+      },
       title: {
         text: '小时',
         autoRotate: false,
         position: 'end',
-        offset: 10,
-        textStyle: {
+        offset: 24,
+        style: {
           textAlign: 'start', // 文本对齐方向，可取值为： start middle end
-          fontSize: '12', // 文本大小
-          fontWeight: 'bold', // 文本粗细
-          textBaseline: 'top' // 文本基准线，可取 top middle bottom，默认为middle
+          fontSize: '14' // 文本大小
         }
       }
     })
 
     chart.axis('稼动率', {
+      grid: {
+        line: {
+          style: {
+            lineDash: [5]
+          }
+        }
+      },
+      label: {
+        style: {
+          fontSize: 16
+        }
+      },
       title: {
         text: '百分比',
         autoRotate: false,
         position: 'end',
-        offset: 5,
-        textStyle: {
+        offset: -16,
+        style: {
           textAlign: 'start', // 文本对齐方向，可取值为： start middle end
-          fontSize: '12', // 文本大小
-          fontWeight: 'bold', // 文本粗细
-          textBaseline: 'top' // 文本基准线，可取 top middle bottom，默认为middle
+          fontSize: '14' // 文本大小
         }
       }
     })
@@ -141,8 +161,9 @@ const MoveChart = () => {
       .interval()
       .size(16)
       .position('name*平均缝纫时长')
-      .tooltip('平均缝纫时长*稼动率', (平均缝纫时长, 稼动率) => {
+      .tooltip('name*平均缝纫时长*稼动率', (name, 平均缝纫时长, 稼动率) => {
         return {
+          name,
           平均缝纫时长,
           稼动率
         }
@@ -150,19 +171,20 @@ const MoveChart = () => {
 
     const itemTpl = `
             <div class='chart7Tpl'>
-                <div class='tpl'>
-                    <span class="tpl1">·</span>
-                    平均缝纫时长:&nbsp;&nbsp;&nbsp;{平均缝纫时长} 小时
-                </div>
-                <div class='tpl'>
-                    <span class="tpl2">·</span>
-                    稼动率:&nbsp;&nbsp;&nbsp;{稼动率} %
-                </div>
+              <div class='tplTitle'>{name}</div>
+              <div class='tpl'>
+                <span class="tpl3">·</span>
+                稼动率:&nbsp;&nbsp;&nbsp;{稼动率} %
+              </div>
+              <div class='tpl'>
+                <span class="tpl2">·</span>
+                平均缝纫时长:&nbsp;&nbsp;&nbsp;{平均缝纫时长} 小时
+              </div>
             </div>
         `
 
     chart.tooltip({
-      showTitle: true,
+      showTitle: false,
       showMarkers: false,
       itemTpl: itemTpl
     })
@@ -171,8 +193,9 @@ const MoveChart = () => {
       .position('name*稼动率')
       .size(2)
       .color('', () => '#30c5c5')
-      .tooltip('平均缝纫时长*稼动率', (平均缝纫时长, 稼动率) => {
+      .tooltip('name*平均缝纫时长*稼动率', (name, 平均缝纫时长, 稼动率) => {
         return {
+          name,
           平均缝纫时长,
           稼动率
         }

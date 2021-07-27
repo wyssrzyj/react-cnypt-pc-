@@ -7,6 +7,7 @@ import SUCCESS_SVG from './imgs/success.svg'
 import { useStores } from '@/utils/mobx'
 import { getCurrentUser } from '@/utils/tool'
 import { cloneDeep } from 'lodash'
+import { pwdReg } from '@/pages/register/content'
 
 const FromItem = Form.Item
 
@@ -14,7 +15,7 @@ const FromItem = Form.Item
 
 const phoneReg =
   /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
-const pwdReg = /^[0-9a-zA-Z]{6,20}$/g
+// const pwdReg = /^[0-9a-zA-Z]{6,20}$/g
 
 const PhoneModal = ({ cancel }) => {
   const [form] = Form.useForm()

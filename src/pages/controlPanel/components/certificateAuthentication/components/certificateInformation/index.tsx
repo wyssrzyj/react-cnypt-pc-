@@ -7,12 +7,15 @@ import {
   Upload,
   message,
   Checkbox,
-  Button
+  Button,
+  Row,
+  Col
 } from 'antd'
 import { isFunction, isEmpty } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
 import { getUserInfo } from '@/utils/tool'
+import { Icon } from '@/components'
 import styles from './index.module.less'
 
 const { Option } = Select
@@ -60,17 +63,21 @@ const CertificateInformation = props => {
     certificateType: 'businessLicense'
   }
   const uploadButton = (
-    <div>
-      <div className={styles.attachmentTip}>
+    <div style={{ marginBottom: 20 }}>
+      {/* <div className={styles.attachmentTip}>
         上传的图片格式要求jpg、jpeg、bmp、png，不超过10M；文件名(包含后缀名)的最大长度为100个字符。
-      </div>
-      <div className={styles.attachment}></div>
+      </div> */}
+      <div className={styles.attachment}>上传企业证件</div>
     </div>
   )
 
-  const positiveDom = <div className={styles.positiveDom}></div>
+  const positiveDom = (
+    <div className={styles.positiveDom}>中国大陆居民身份证人像面</div>
+  )
 
-  const reverseDom = <div className={styles.reverseDom}></div>
+  const reverseDom = (
+    <div className={styles.reverseDom}>中国大陆居民身份证国徽面</div>
+  )
 
   const onBoxChange = e => {
     setIsCheck(e.target.checked)
@@ -222,6 +229,34 @@ const CertificateInformation = props => {
       })
   }
 
+  const deleteImage = field => {
+    if (field === 'card') {
+      setTimeout(() => {
+        setFieldsValue({
+          enterpriseAdjunct: null
+        })
+        setCardFileList([])
+      })
+    }
+    if (field === 'positive') {
+      setTimeout(() => {
+        setFieldsValue({
+          positive: null
+        })
+        setPositiveFileList([])
+      })
+    }
+    if (field === 'reverse') {
+      setReverseFileList
+      setTimeout(() => {
+        setFieldsValue({
+          reverse: null
+        })
+        setReverseFileList([])
+      })
+    }
+  }
+
   useEffect(() => {
     if (enterpriseId) {
       getCertificationInfo()
@@ -241,7 +276,10 @@ const CertificateInformation = props => {
         initialValues={initialValues}
       >
         <div className={styles.enterprise}>
-          <h3>请上传企业证件</h3>
+          <h3 className={styles.title}>
+            <Icon className={styles.icon} type="jack-scqyzj" />
+            <span className={styles.titleName}>请上传企业证件</span>
+          </h3>
 
           <Form.Item
             label="企业证件类型"
@@ -271,11 +309,23 @@ const CertificateInformation = props => {
               customRequest={customRequestCard}
               fileList={cardFileList}
               maxCount={1}
-              onRemove={() => setCardFileList([])}
+              onRemove={() => deleteImage('card')}
             >
               {isEmpty(cardFileList) ? uploadButton : null}
             </Upload>
           </Form.Item>
+          <Row gutter={16}>
+            <Col className="gutter-row" span={7}></Col>
+            <Col className="gutter-row" span={14}>
+              <div className={styles.tip}>
+                <Icon className={styles.tipIcon} type="jack-jingshi1" />
+                <span>
+                  上传的图片格式要求jpg、jpeg、bmp、png，不超过10M；
+                  文件名(包含后缀名)的最大长度为100个字符
+                </span>
+              </div>
+            </Col>
+          </Row>
 
           <Form.Item
             label="企业名称"
@@ -303,7 +353,10 @@ const CertificateInformation = props => {
           </Form.Item>
         </div>
         <div className={styles.enterprise}>
-          <h3>请上传法定代表人证件</h3>
+          <h3 className={styles.title}>
+            <Icon className={styles.icon} type="jack-scfrzj" />
+            <span className={styles.titleName}>请上传法定代表人证件</span>
+          </h3>
           <Form.Item
             label="证件类型"
             name="legalPersonIdType"
@@ -351,7 +404,7 @@ const CertificateInformation = props => {
               customRequest={customRequestPositive}
               fileList={positiveFileList}
               maxCount={1}
-              onRemove={() => setPositiveFileList([])}
+              onRemove={() => deleteImage('positive')}
             >
               {isEmpty(positiveFileList) ? positiveDom : null}
             </Upload>
@@ -373,18 +426,36 @@ const CertificateInformation = props => {
               customRequest={customRequestReverse}
               fileList={reverseFileList}
               maxCount={1}
-              onRemove={() => setReverseFileList([])}
+              onRemove={() => deleteImage('reverse')}
             >
               {isEmpty(reverseFileList) ? reverseDom : null}
             </Upload>
           </Form.Item>
+
+          <Row gutter={16}>
+            <Col className="gutter-row" span={7}></Col>
+            <Col className="gutter-row" span={14}>
+              <div className={styles.tip}>
+                <Icon className={styles.tipIcon} type="jack-jingshi1" />
+                <span>
+                  上传的图片格式要求jpg、jpeg、bmp、png，不超过10M；
+                  文件名(包含后缀名)的最大长度为100个字符
+                </span>
+              </div>
+            </Col>
+          </Row>
         </div>
       </Form>
       <Checkbox onChange={onBoxChange}>
         请务必提供真实信息，平台有权自行或委托第三方，审查您提供的身份信息是否真实、有效。若提供虚假信息，由此带来的全部结果由您承担。
       </Checkbox>
       <div className={styles.submit}>
-        <Button disabled={!isCheck} type="primary" onClick={handleConfirm}>
+        <Button
+          className={styles.button}
+          disabled={!isCheck}
+          type="primary"
+          onClick={handleConfirm}
+        >
           确认{cardId ? '修改' : '提交'}
         </Button>
       </div>

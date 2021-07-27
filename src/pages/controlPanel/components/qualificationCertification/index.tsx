@@ -101,7 +101,7 @@ const QualificationCertification = () => {
       dataIndex: 'operation',
       key: 'operation',
       render: (_value, row) => {
-        const { status, id, certificationName } = row
+        const { id, certificationName } = row
         const newName =
           find(factoryCertificate, function (o) {
             return o.value === certificationName
@@ -115,14 +115,14 @@ const QualificationCertification = () => {
             >
               编辑
             </a>
-            {(status == 3 || status === 2) && (
-              <a
-                className={styles.boxItem}
-                onClick={() => deleteCertificate(id, name)}
-              >
-                删除
-              </a>
-            )}
+            <a
+              className={styles.boxItem}
+              onClick={() => deleteCertificate(id, name)}
+            >
+              删除
+            </a>
+            {/* {(status == 3 || status === 2) && (
+            )} */}
           </div>
         )
       }

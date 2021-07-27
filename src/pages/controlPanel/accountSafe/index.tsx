@@ -131,18 +131,6 @@ const AccountSafe = () => {
     const count = !index ? 5 : index + 4
     showModals(count)
     if (status === 1) {
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 100 ~ copyName ~ nameRef.current',
-        nameRef.current
-      )
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 100 ~ copyName ~ nameRef.current',
-        nameRef.current
-      )
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 100 ~ copyName ~ nameRef.current',
-        nameRef.current
-      )
     }
   }
 

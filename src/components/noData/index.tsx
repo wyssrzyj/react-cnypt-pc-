@@ -6,7 +6,8 @@ const NoData = props => {
     height = 560,
     width = 560,
     logoWidth = 200,
-    float = 'inherit'
+    float = 'inherit',
+    style = {}
   } = props
   return (
     <div
@@ -17,7 +18,8 @@ const NoData = props => {
         alignItems: 'center',
         justifyContent: 'center',
         float,
-        background: bgColor
+        background: bgColor,
+        ...style
       }}
     >
       <img

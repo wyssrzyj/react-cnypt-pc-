@@ -219,7 +219,7 @@ const WorkshopEquipment = props => {
             </div>
           </div>
         ) : (
-          <NoData width={740} bgColor="#fff" />
+          <NoData width={740} bgColor="#f6f6f6" />
         )}
       </div>
     </div>

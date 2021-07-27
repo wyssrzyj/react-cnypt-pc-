@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Radio } from 'antd'
 import classNames from 'classnames'
+import { isEmpty } from 'lodash'
 import SwiperCore, {
   Navigation,
   Pagination,
@@ -11,7 +12,7 @@ import SwiperCore, {
 } from 'swiper'
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
-import { Icon } from '@/components'
+import { Icon, NoData } from '@/components'
 import HeaderLine from '../headerLine'
 import styles from './index.module.less'
 
@@ -36,22 +37,26 @@ const EnterpriseImage = props => {
   const rightRef = useRef<HTMLDivElement>()
   const [curKey, setCurKey] = useState(0)
 
-  const [list, setList] = useState<any>([...factoryOutsizeImages])
+  const [list, setList] = useState<any>(
+    factoryOutsizeImages ? [...factoryOutsizeImages] : []
+  )
 
   useEffect(() => {
-    new Swiper('.factorysSwiper', {
-      slidesPerView: 4,
-      spaceBetween: 20,
-      centeredSlidesBounds: true,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      },
-      loop: false,
-      on: {
-        slideChange: keyChange
-      }
-    })
+    if (list) {
+      new Swiper('.factorysSwiper', {
+        slidesPerView: 4,
+        spaceBetween: 20,
+        centeredSlidesBounds: true,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        loop: false,
+        on: {
+          slideChange: keyChange
+        }
+      })
+    }
   }, [list])
 
   const toLeft = () => {
@@ -69,8 +74,10 @@ const EnterpriseImage = props => {
 
   const onGroupChange = e => {
     setType(e.target.value)
-    e.target.value === 'outside' && setList([...factoryOutsizeImages])
-    e.target.value === 'workshop' && setList([...factoryWorkshopImages])
+    e.target.value === 'outside' &&
+      setList(factoryOutsizeImages ? [...factoryOutsizeImages] : [])
+    e.target.value === 'workshop' &&
+      setList(factoryWorkshopImages ? [...factoryWorkshopImages] : [])
   }
 
   return (
@@ -89,51 +96,62 @@ const EnterpriseImage = props => {
         ))}
       </Radio.Group>
 
-      <div className={styles.swaiperContainer}>
-        <div
-          onChange={keyChange}
-          className={classNames(
-            'swiper-container factorysSwiper',
-            styles.factorysSwiper
-          )}
-        >
-          {list.length > 0 && (
-            <div className={classNames('swiper-wrapper', styles.listWrapper)}>
-              {list.map((item, idx) => {
-                if (!item) return null
-                return (
-                  <div className={'swiper-slide'} key={idx}>
-                    <img className={styles.swaiperImg} src={item} alt="" />
-                  </div>
-                )
-              })}
+      {isEmpty(list) ? (
+        <NoData
+          style={{
+            width: 1120,
+            height: 154,
+            backgroundColor: '#f6f6f6',
+            marginTop: 20
+          }}
+        />
+      ) : (
+        <div className={styles.swaiperContainer}>
+          <div
+            onChange={keyChange}
+            className={classNames(
+              'swiper-container factorysSwiper',
+              styles.factorysSwiper
+            )}
+          >
+            {list.length > 0 && (
+              <div className={classNames('swiper-wrapper', styles.listWrapper)}>
+                {list.map((item, idx) => {
+                  if (!item) return null
+                  return (
+                    <div className={'swiper-slide'} key={idx}>
+                      <img className={styles.swaiperImg} src={item} alt="" />
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+            {list.length > 0 ? (
+              <>
+                <div className="swiper-button-next" ref={leftRef}></div>
+                <div className="swiper-button-prev" ref={rightRef}></div>
+              </>
+            ) : null}
+            <div className="swiper-pagination"></div>
+          </div>
+          <div>
+            <div className={styles.left} onClick={toLeft}>
+              {curKey === 0 ? (
+                <Icon type="jack-shang_icon" className={styles.leftIcon} />
+              ) : (
+                <Icon type="jack-xia_icon" className={styles.rightIcon} />
+              )}
             </div>
-          )}
-          {list.length > 0 ? (
-            <>
-              <div className="swiper-button-next" ref={leftRef}></div>
-              <div className="swiper-button-prev" ref={rightRef}></div>
-            </>
-          ) : null}
-          <div className="swiper-pagination"></div>
-        </div>
-        <div>
-          <div className={styles.left} onClick={toLeft}>
-            {curKey === 0 ? (
-              <Icon type="jack-shang_icon" className={styles.leftIcon} />
-            ) : (
-              <Icon type="jack-xia_icon" className={styles.rightIcon} />
-            )}
-          </div>
-          <div className={styles.right} onClick={toRight}>
-            {curKey < list.length - 4 ? (
-              <Icon type="jack-xia_icon" className={styles.leftIcon} />
-            ) : (
-              <Icon type="jack-shang_icon" className={styles.rightIcon} />
-            )}
+            <div className={styles.right} onClick={toRight}>
+              {curKey < list.length - 4 ? (
+                <Icon type="jack-xia_icon" className={styles.leftIcon} />
+              ) : (
+                <Icon type="jack-shang_icon" className={styles.rightIcon} />
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

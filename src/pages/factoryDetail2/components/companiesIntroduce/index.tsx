@@ -89,51 +89,67 @@ const CompaniesIntroduce = props => {
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>有效车位</span>
                 <span className={styles.strong}>
-                  {checkValue(effectiveLocation)} 台
+                  <span className={styles.strongNumber}>
+                    {checkValue(effectiveLocation)}
+                  </span>
+                  {'  '}台
                 </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>厂房面积 </span>
                 <span className={styles.strong}>
-                  {checkValue(factoryArea)} 平方米
+                  <span className={styles.strongNumber}>
+                    {checkValue(factoryArea)}{' '}
+                  </span>
+                  平方米
                 </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>成立时间 </span>
                 <span className={styles.strong}>
-                  {factoryCreateTime
-                    ? moment(factoryCreateTime).format('YYYY年')
-                    : '--'}
+                  <span className={styles.strongNumber}>
+                    {factoryCreateTime
+                      ? moment(factoryCreateTime).format('YYYY')
+                      : '--'}
+                  </span>
+                  {'  '}年
                 </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>生产线数 </span>
                 <span className={styles.strong}>
-                  {checkValue(productLineNum)} 条
+                  <span className={styles.strongNumber}>
+                    {checkValue(productLineNum)}
+                  </span>
+                  {'  '}条
                 </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>年产值</span>
                 <span className={styles.strong}>
-                  {factoryYearOutputValue.find(
-                    item => item.value === yearOutputValue
-                  )
-                    ? factoryYearOutputValue.find(
-                        item => item.value === yearOutputValue
-                      ).label
-                    : '--'}
+                  <span className={styles.strongNumber}>
+                    {factoryYearOutputValue.find(
+                      item => item.value === yearOutputValue
+                    )
+                      ? factoryYearOutputValue.find(
+                          item => item.value === yearOutputValue
+                        ).label
+                      : '--'}
+                  </span>
                 </span>
               </Col>
               <Col className={styles.gutterRow} span={12}>
                 <span className={styles.label}>年产量 </span>
                 <span className={styles.strong}>
-                  {factoryYearOutputProd.find(
-                    item => item.value === yearOutputProd
-                  )
-                    ? factoryYearOutputProd.find(
-                        item => item.value === yearOutputProd
-                      ).label
-                    : '--'}
+                  <span className={styles.strongNumber}>
+                    {factoryYearOutputProd.find(
+                      item => item.value === yearOutputProd
+                    )
+                      ? factoryYearOutputProd.find(
+                          item => item.value === yearOutputProd
+                        ).label
+                      : '--'}
+                  </span>
                 </span>
               </Col>
             </Row>
@@ -142,7 +158,12 @@ const CompaniesIntroduce = props => {
             {factoryAuditorImage ? (
               <img className={styles.photo} src={factoryAuditorImage} alt="" />
             ) : (
-              <NoData width={227} height={280} logoWidth={150} />
+              <NoData
+                bgColor="#f6f6f6"
+                width={236}
+                height={280}
+                logoWidth={150}
+              />
             )}
 
             <div className={styles.text}>验厂人员现场照</div>

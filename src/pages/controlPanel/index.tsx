@@ -67,7 +67,7 @@ const ControlPanel = () => {
   const { approvalStatus, factoryAuditStatus } = currentUser
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
 
-  const [openKeys, setOpenKeys] = useState<Array<string>>([])
+  // const [openKeys, setOpenKeys] = useState<Array<string>>([])
 
   const location = useLocation()
 
@@ -76,17 +76,17 @@ const ControlPanel = () => {
       await productCategory()
     })()
     setCurrentMenu(menuKeys.get(location.pathname))
-    setOpenKeys(subsMap.get(location.pathname))
+    // setOpenKeys(subsMap.get(location.pathname))
   }, [])
 
   const handleMenu = ({ keyPath }) => {
     setCurrentMenu(keyPath)
   }
 
-  const onOpenChange = keys => {
-    console.log('🚀 ~ file: index.tsx ~ line 87 ~ ControlPanel ~ keys', keys)
-    setOpenKeys(keys)
-  }
+  // const onOpenChange = keys => {
+  //   console.log('🚀 ~ file: index.tsx ~ line 87 ~ ControlPanel ~ keys', keys)
+  //   setOpenKeys(keys)
+  // }
 
   return (
     <div className={styles.controlPanel}>
@@ -97,7 +97,7 @@ const ControlPanel = () => {
             selectedKeys={currentMenu}
             mode="inline"
             onClick={handleMenu}
-            onOpenChange={onOpenChange}
+            // onOpenChange={onOpenChange}
           >
             <SubMenu key="management" title="企业管理">
               <Menu.Item

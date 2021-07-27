@@ -84,6 +84,7 @@ const ControlPanel = () => {
   }
 
   const onOpenChange = keys => {
+    console.log('🚀 ~ file: index.tsx ~ line 87 ~ ControlPanel ~ keys', keys)
     setOpenKeys(keys)
   }
 
@@ -92,38 +93,37 @@ const ControlPanel = () => {
       <div className={styles.controlPanelContainer}>
         <div className={styles.controlPanelLeft}>
           <Menu
-            openKeys={openKeys}
+            openKeys={['management']}
             selectedKeys={currentMenu}
             mode="inline"
             onClick={handleMenu}
             onOpenChange={onOpenChange}
           >
-            <Menu.Item key="management">
-              <h2 className={styles.management}>企业管理</h2>
-            </Menu.Item>
-            <Menu.Item
-              className={styles.item}
-              key="account"
-              icon={<Icon className={styles.menuIcon} type={'jack-zhaq'} />}
-            >
-              <Link to="/control-panel/account">账号安全</Link>
-            </Menu.Item>
+            <SubMenu key="management" title="企业管理">
+              <Menu.Item
+                className={styles.item}
+                key="account"
+                icon={<Icon className={styles.menuIcon} type={'jack-zhaq'} />}
+              >
+                <Link to="/control-panel/account">账号安全</Link>
+              </Menu.Item>
 
-            <Menu.Item
-              key="enterprise"
-              className={styles.item}
-              icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
-            >
-              <Link to="/control-panel/enterprise">企业信息</Link>
-            </Menu.Item>
+              <Menu.Item
+                key="enterprise"
+                className={styles.item}
+                icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
+              >
+                <Link to="/control-panel/enterprise">企业信息</Link>
+              </Menu.Item>
 
-            <Menu.Item
-              key="certificate"
-              className={styles.item}
-              icon={<Icon className={styles.menuIcon} type="jack-qyzjrz" />}
-            >
-              <Link to="/control-panel/certificate">企业证件认证</Link>
-            </Menu.Item>
+              <Menu.Item
+                key="certificate"
+                className={styles.item}
+                icon={<Icon className={styles.menuIcon} type="jack-qyzjrz" />}
+              >
+                <Link to="/control-panel/certificate">企业证件认证</Link>
+              </Menu.Item>
+            </SubMenu>
 
             {approvalStatus && (
               <Menu.Item

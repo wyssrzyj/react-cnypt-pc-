@@ -1,7 +1,7 @@
 @import '@/css/common.less';
 
-@rightWidth: 600px;
-@banner: 'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210713/31bb1afd955c4450931f71e523707119.png';
+@rightWidth: 700px;
+@banner: 'http//:capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210727/cd6433f728514d839f433b5fc5fcabfb.png';
 
 .content {
   display: flex;
@@ -64,6 +64,10 @@
     .ant-form-item {
       height: 58px !important;
       margin-bottom: 24px !important;
+
+      &:nth-last-child(1) {
+        margin-bottom: 0 !important;
+      }
     }
   }
 }
@@ -95,7 +99,7 @@
 .loginOperation {
   display: flex;
   justify-content: space-between;
-  padding: 16px 0 40px;
+  padding: 0 0 32px;
 }
 
 .btn {
@@ -117,7 +121,7 @@
 }
 
 .errorText {
-  color: #e81414;
+  color: #ff4d4f;
   font-size: 14px;
   visibility: hidden;
 }
@@ -177,8 +181,8 @@
 }
 
 .resetBox {
-  width: 600px;
-  padding: 160px 0 0 80px;
+  width: 700px;
+  padding: 160px 80px;
   background: #ffffff;
 
   :global {
@@ -207,7 +211,7 @@
 }
 
 .resetForm {
-  width: 320px;
+  // width: 320px;
 }
 
 .resetBtnBox {

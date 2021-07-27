@@ -66,7 +66,7 @@ const OrderInfo = props => {
 
   return (
     <div className={styles.companiesIntroduce}>
-      <HeaderLine chinese="接单需求" english="ORDET RECEIVING DEMAND" />
+      <HeaderLine chinese="接单需求" english="ORDER RECEIVING DEMAND" />
       <ul className={styles.content}>
         <li className={styles.product}>
           <div className={styles.left}>

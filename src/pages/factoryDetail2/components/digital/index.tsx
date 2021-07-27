@@ -34,21 +34,21 @@ const Digital = props => {
           <div className={styles.equipment}>
             <div className={styles.label}>
               <Icon type="jack-rjyy2" className={styles.icon} />
-              <span>软件应用</span>
+              <span className={styles.labelName}>软件应用</span>
             </div>
             <div>{checkValue(digitalInfo.softwareApplicationUsage)}</div>
           </div>
           <div className={styles.equipment}>
             <div className={styles.label}>
               <Icon type="jack-sblw2" className={styles.icon} />
-              <span>设备联网情况 </span>
+              <span className={styles.labelName}>设备联网情况 </span>
             </div>
             <div>{checkValue(digitalInfo.deviceNetworkDesc)}</div>
           </div>
           <div className={styles.equipment}>
             <div className={styles.label}>
               <Icon type="jack-qtsm2" className={styles.icon} />
-              <span>其它说明 </span>
+              <span className={styles.labelName}>其它说明</span>
             </div>
             <div>{checkValue(digitalInfo.digitalOtherDesc)}</div>
           </div>

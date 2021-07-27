@@ -113,10 +113,23 @@
 }
 
 .verifyBtn {
-  width: 102px;
+  width: 102px !important;
+  height: 32px !important;
   height: inherit;
 }
 
 .icon {
   font-size: 20px;
+}
+
+.verifyBtnBox {
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  :global {
+    .ant-input {
+      height: 32px;
+    }
+  }
 }

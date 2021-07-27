@@ -7,11 +7,14 @@ import {
   Cascader,
   Upload,
   message,
-  Space
+  Space,
+  Row,
+  Col
 } from 'antd'
-import { PlusOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import { isEmpty } from 'lodash'
 import { toJS } from 'mobx'
+import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
 import { useStores, observer } from '@/utils/mobx'
@@ -184,12 +187,8 @@ const EnterpriseInfo = () => {
       >
         <Title title={'基本信息'} />
         <Form.Item
-          label="企业Logo "
+          label={<span className={styles.formLabel}>企业Logo</span>}
           name="enterpriseLogoUrl"
-          tooltip={{
-            title: '只能上传jpg/png格式文件，限传一个文件不能超过500kb',
-            icon: <InfoCircleOutlined />
-          }}
         >
           <Upload
             name="avatar"
@@ -206,17 +205,34 @@ const EnterpriseInfo = () => {
           </Upload>
         </Form.Item>
 
+        <Row>
+          <Col className="gutter-row" span={3}></Col>
+          <Col className="gutter-row" span={14}>
+            <div className={styles.tip}>
+              <Icon type="jack-jingshi1" />
+              {'    '}
+              只能上传jpg/png格式文件，限传一个文件不能超过500kb
+            </div>
+          </Col>
+        </Row>
+
         <Form.Item
           label="企业名称"
           name="enterpriseName"
           rules={[{ required: true, message: '请输入企业名称！' }]}
-          tooltip={{
-            title: '企业名称务必与营业执照一致，如：广州某某信息科技有限公司',
-            icon: <InfoCircleOutlined />
-          }}
         >
           <Input placeholder="请输入企业名称" />
         </Form.Item>
+        <Row>
+          <Col className="gutter-row" span={3}></Col>
+          <Col className="gutter-row" span={14}>
+            <div className={styles.tip}>
+              <Icon type="jack-jingshi1" />
+              {'    '}
+              企业名称务必与营业执照一致，如：广州某某信息科技有限公司
+            </div>
+          </Col>
+        </Row>
 
         <Form.Item
           label="企业类型"
@@ -257,11 +273,17 @@ const EnterpriseInfo = () => {
           <Input placeholder="请填写手机号" disabled />
         </Form.Item>
 
-        <Form.Item label="电话号码" name="contactPhone">
+        <Form.Item
+          label={<span className={styles.formLabel}>电话号码</span>}
+          name="contactPhone"
+        >
           <Input placeholder="请输入座机号码  如：0571-8******" />
         </Form.Item>
 
-        <Form.Item label="电子邮箱" name="email">
+        <Form.Item
+          label={<span className={styles.formLabel}>电子邮箱</span>}
+          name="email"
+        >
           <Input placeholder="请填写电子邮箱" />
         </Form.Item>
 

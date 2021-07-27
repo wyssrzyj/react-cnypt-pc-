@@ -133,8 +133,7 @@ const Register = () => {
         } else {
           const regFlag = pwdReg.test(value)
 
-          nHelps[key] =
-            !regFlag && '请输入字母，符号或数字中至少两项且长度超过6位的密码~'
+          nHelps[key] = !regFlag && '请输入字母，符号或数字中至少两项且超过6位~'
           nErrors[key] = !regFlag
         }
 

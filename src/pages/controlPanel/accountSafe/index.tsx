@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Input, message } from 'antd'
+import { Input, message, Button } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 import { useHistory } from 'react-router'
@@ -163,12 +163,22 @@ const AccountSafe = () => {
           <div className={styles.userInfo}>
             <div className={styles.changeNameItem}>
               {changeFlag ? (
-                <Input
-                  onChange={nameChange}
-                  onBlur={nameBlur}
-                  className={styles.changeText}
-                  value={name}
-                />
+                <div className={styles.changeNameBox}>
+                  <Input
+                    onChange={nameChange}
+                    onBlur={nameBlur}
+                    className={styles.changeText}
+                    value={name}
+                  />
+                  <Button
+                    className={styles.changeBtn}
+                    onClick={nameBlur}
+                    size={'small'}
+                    type={'primary'}
+                  >
+                    修改
+                  </Button>
+                </div>
               ) : (
                 <div className={styles.changeName}>{name}</div>
               )}

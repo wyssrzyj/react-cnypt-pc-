@@ -232,7 +232,7 @@ const EnterpriseInfo = () => {
           {...layout}
           form={form}
           colon={false}
-          size="large"
+          // size="large"
           name="enterprise"
           labelAlign="left"
           initialValues={{
@@ -278,7 +278,7 @@ const EnterpriseInfo = () => {
           >
             <Input placeholder="请输入企业名称" />
           </Form.Item>
-          <Row>
+          <Row className={styles.nameTip}>
             <Col className="gutter-row" span={3}></Col>
             <Col className="gutter-row" span={14}>
               <div className={styles.tip}>

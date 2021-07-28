@@ -268,13 +268,7 @@ const CertificateInformation = props => {
   return (
     <div className={styles.certificateInformation}>
       <Alert message={messageTip} type="info" showIcon />
-      <Form
-        {...layout}
-        name="basic"
-        form={form}
-        size="large"
-        initialValues={initialValues}
-      >
+      <Form {...layout} name="basic" form={form} initialValues={initialValues}>
         <div className={styles.enterprise}>
           <h3 className={styles.title}>
             <Icon className={styles.icon} type="jack-scqyzj" />

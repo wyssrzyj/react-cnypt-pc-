@@ -18,6 +18,7 @@
   align-items: center;
   width: 100% !important;
   // max-width: 780px !important;
+  color: rgba(225, 225, 225, 0.5) !important;
   height: 60px !important;
   font-size: 16px;
   border: none !important;
@@ -140,6 +141,10 @@
     }
 
   }
+
+  &:active {
+    color: #40a9ff;
+  }
 }
 
 
@@ -228,4 +233,20 @@
   padding: 0 0 8px 0;
   text-align: center;
   font-size: 18px;
+}
+
+.loadingBox {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+}
+
+.loadingImg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

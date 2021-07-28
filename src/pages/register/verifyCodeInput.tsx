@@ -68,7 +68,7 @@ const VerifyCodeInput = props => {
   }, [lastTime])
 
   return (
-    <div style={{ display: 'flex', width: '100%' }}>
+    <div className={styles.verifyBtnBox}>
       <Input
         onChange={valueChange}
         value={value}

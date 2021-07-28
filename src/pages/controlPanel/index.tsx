@@ -3,22 +3,41 @@ import { Redirect, Route, Switch } from 'react-router'
 import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 import { useStores } from '@/utils/mobx'
-import {
-  EnterpriseInfo,
-  PlantSitePhoto,
-  QualificationCertification,
-  CertificateAuthentication,
-  FactoryReport,
-  FactoryEquipment,
-  FactoryPhotograph
-} from './components'
+// import {
+//   EnterpriseInfo,
+//   PlantSitePhoto,
+//   QualificationCertification,
+//   CertificateAuthentication,
+//   FactoryReport,
+//   FactoryEquipment,
+//   FactoryPhotograph
+// } from './components'
 import { getUserInfo } from '@/utils/tool'
-import FactoryInformation from './factoryInformation'
+// import FactoryInformation from './factoryInformation'
 import { useLocation } from 'react-router'
-import AccountSafe from './accountSafe'
-import LoginLogs from './loginLogs'
+// import AccountSafe from './accountSafe'
+// import LoginLogs from './loginLogs'
 import { Icon } from '@/components'
 import styles from './index.module.less'
+
+const AccountSafe = React.lazy(() => import('./accountSafe'))
+const LoginLogs = React.lazy(() => import('./loginLogs'))
+const FactoryInformation = React.lazy(() => import('./factoryInformation'))
+const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
+const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
+const QualificationCertification = React.lazy(
+  () => import('./components/qualificationCertification')
+)
+const CertificateAuthentication = React.lazy(
+  () => import('./components/certificateAuthentication')
+)
+const FactoryReport = React.lazy(() => import('./components/factoryReport'))
+const FactoryEquipment = React.lazy(
+  () => import('./components/factoryEquipment')
+)
+const FactoryPhotograph = React.lazy(
+  () => import('./components/factoryPhotograph')
+)
 
 const { SubMenu } = Menu
 
@@ -67,7 +86,7 @@ const ControlPanel = () => {
   const { approvalStatus, factoryAuditStatus } = currentUser
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
 
-  // const [openKeys, setOpenKeys] = useState<Array<string>>([])
+  const [openKeys, setOpenKeys] = useState<Array<string>>([])
 
   const location = useLocation()
 
@@ -83,47 +102,46 @@ const ControlPanel = () => {
     setCurrentMenu(keyPath)
   }
 
-  // const onOpenChange = keys => {
-  //   console.log('🚀 ~ file: index.tsx ~ line 87 ~ ControlPanel ~ keys', keys)
-  //   setOpenKeys(keys)
-  // }
+  const onOpenChange = keys => {
+    console.log(openKeys)
+    setOpenKeys(keys)
+  }
 
   return (
     <div className={styles.controlPanel}>
       <div className={styles.controlPanelContainer}>
         <div className={styles.controlPanelLeft}>
+          <h2 className={styles.management}>企业管理</h2>
           <Menu
-            openKeys={['management']}
+            // openKeys={['management']}
             selectedKeys={currentMenu}
             mode="inline"
             onClick={handleMenu}
-            // onOpenChange={onOpenChange}
+            onOpenChange={onOpenChange}
           >
-            <SubMenu key="management" title="企业管理">
-              <Menu.Item
-                className={styles.item}
-                key="account"
-                icon={<Icon className={styles.menuIcon} type={'jack-zhaq'} />}
-              >
-                <Link to="/control-panel/account">账号安全</Link>
-              </Menu.Item>
+            <Menu.Item
+              className={styles.item}
+              key="account"
+              icon={<Icon className={styles.menuIcon} type={'jack-zhaq'} />}
+            >
+              <Link to="/control-panel/account">账号安全</Link>
+            </Menu.Item>
 
-              <Menu.Item
-                key="enterprise"
-                className={styles.item}
-                icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
-              >
-                <Link to="/control-panel/enterprise">企业信息</Link>
-              </Menu.Item>
+            <Menu.Item
+              key="enterprise"
+              className={styles.item}
+              icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
+            >
+              <Link to="/control-panel/enterprise">企业信息</Link>
+            </Menu.Item>
 
-              <Menu.Item
-                key="certificate"
-                className={styles.item}
-                icon={<Icon className={styles.menuIcon} type="jack-qyzjrz" />}
-              >
-                <Link to="/control-panel/certificate">企业证件认证</Link>
-              </Menu.Item>
-            </SubMenu>
+            <Menu.Item
+              key="certificate"
+              className={styles.item}
+              icon={<Icon className={styles.menuIcon} type="jack-qyzjrz" />}
+            >
+              <Link to="/control-panel/certificate">企业证件认证</Link>
+            </Menu.Item>
 
             {approvalStatus && (
               <Menu.Item

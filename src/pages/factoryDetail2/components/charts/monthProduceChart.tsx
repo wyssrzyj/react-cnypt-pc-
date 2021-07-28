@@ -1,14 +1,20 @@
-import React, { RefObject, useEffect, useRef } from 'react'
+import React, { RefObject, useEffect, useRef, useState } from 'react'
 import styles from './monthProduceChart.module.less'
 import { ChartTitle, CountInfo } from './pieChart'
 import { Liquid } from '@antv/g2plot'
+import { useStores, observer } from '@/utils/mobx'
 
 const MonthProduceChart = () => {
   const chartRef: RefObject<HTMLDivElement> = useRef()
 
-  const setChart = () => {
+  const { factoryStore } = useStores()
+  const { factoryData } = factoryStore
+
+  const [chart, setChart] = useState(null)
+
+  const chartInit = () => {
     const liquidPlot = new Liquid('monthProduce', {
-      percent: 0.25,
+      percent: 0,
       outline: {
         border: 4,
         distance: 8
@@ -30,11 +36,23 @@ const MonthProduceChart = () => {
       }
     })
     liquidPlot.render()
+    setChart(liquidPlot)
   }
 
   useEffect(() => {
-    setChart()
+    chartInit()
   }, [])
+
+  useEffect(() => {
+    if (chart) {
+      const percent = factoryData.monthProductionNum
+        ? factoryData.monthTicketNum / factoryData.monthProductionNum
+        : 0
+      chart.update({
+        percent: +percent.toFixed(2)
+      })
+    }
+  }, [factoryData, chart])
 
   return (
     <div className={styles.monthProduceChartBox}>
@@ -42,13 +60,13 @@ const MonthProduceChart = () => {
       <div className={styles.monthProduceChartContainer}>
         <div className={styles.monthProduceChartInfo}>
           <CountInfo
-            count={16943}
+            count={factoryData.monthProductionNum}
             label={'本月计划生产'}
             unit={'件'}
           ></CountInfo>
           <CountInfo
-            count={2890}
-            label={'本月成衣入库'}
+            count={factoryData.monthTicketNum}
+            label={'本月生产件数'}
             unit={'件'}
           ></CountInfo>
         </div>
@@ -62,4 +80,4 @@ const MonthProduceChart = () => {
   )
 }
 
-export default MonthProduceChart
+export default observer(MonthProduceChart)

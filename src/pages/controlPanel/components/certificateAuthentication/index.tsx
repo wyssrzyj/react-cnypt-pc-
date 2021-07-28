@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Steps } from 'antd'
+import { IdcardFilled, CarryOutFilled } from '@ant-design/icons'
 import { CertificateInformation, ApprovalResult } from './components'
+import Title from '../title'
 import { getUserInfo } from '@/utils/tool'
 import styles from './index.module.less'
 
@@ -17,12 +19,19 @@ const CertificateAuthentication = () => {
 
   return (
     <div className={styles.stepsBox}>
+      <Title title={'企业证件认证'} />
       <div className={styles.steps}>
-        <Steps current={currentStep}>
-          <Step title="证件信息" />
-          <Step title="待审核" />
+        <Steps
+          type="navigation"
+          size="small"
+          className="site-navigation-steps"
+          current={currentStep}
+        >
+          <Step title="证件信息" icon={<IdcardFilled />} />
+          <Step title="待审核" icon={<CarryOutFilled />} />
         </Steps>
       </div>
+
       {currentStep === 0 && <CertificateInformation submit={handleSubmit} />}
       {currentStep === 1 && <ApprovalResult submit={handleSubmit} />}
     </div>

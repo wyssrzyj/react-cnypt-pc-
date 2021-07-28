@@ -24,7 +24,7 @@
   }
   .headerChunk {
     padding: 0 16px;
-    color: #7f7f7f;
+    color: #333333;
     border-right: 1px solid #7f7f7f;
     cursor: pointer;
     &:hover {
@@ -41,7 +41,13 @@
   display: flex;
 }
 
+.homeIcon {
+  font-size: 16px;
+  margin-right: 8px;
+}
+
 .home {
+  margin-right: 80px;
   display: flex;
   align-items: center;
   color: #333333;
@@ -49,7 +55,14 @@
   font-size: 16px;
   font-family: PingFangSC-Regular, PingFang SC;
   line-height: 60px;
+
+  :hover {
+    .homeIcon {
+      color: #40a9ff;
+    }
+  }
 }
+
 .verticalBar {
   margin: 0 20px;
   color: #d4d4d4;
@@ -80,7 +93,7 @@
 .consoleBox {
   display: flex;
   align-items: center;
-
+  color: #333333;
   &:hover {
     color: #1890ff;
   }
@@ -137,5 +150,7 @@
   display: inline-block;
   width: 140px;
 }
+
+
 
 

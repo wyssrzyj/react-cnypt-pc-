@@ -28,6 +28,7 @@ const FactoryReport = () => {
   // const [inspectionMember, setInspectionMember] = useState<any>([])
   const [validationTime, setValidationTime] = useState('')
   const [memberText, setMemberText] = useState('')
+  // const [modalVisible, setModalVisible] = useState<boolean>(true)
 
   const getFactoryInfo = () => {
     const newList = toJS(productCategoryList)
@@ -328,6 +329,15 @@ const FactoryReport = () => {
           </li>
         </ul>
       </div>
+      {/* 申请验厂弹框 */}
+      {/* {modalVisible && (
+        <InspectionModal
+          visible={modalVisible}
+          factoryId={factoryId}
+          handleCancel={() => setModalVisible(false)}
+          // handleOk={handleModalOk}
+        />
+      )} */}
     </div>
   )
 }

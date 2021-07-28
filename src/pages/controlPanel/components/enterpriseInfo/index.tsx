@@ -8,12 +8,14 @@ import {
   Upload,
   message,
   Space,
+  Alert,
   Row,
   Col
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { isEmpty } from 'lodash'
 import { toJS } from 'mobx'
+import { get } from 'lodash'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
@@ -21,6 +23,7 @@ import { useStores, observer } from '@/utils/mobx'
 import BusinessAddressCom from '../businessAddressCom'
 import Title from '../title'
 import styles from './index.module.less'
+// import './style.less'
 
 const { TextArea } = Input
 
@@ -31,6 +34,12 @@ const layout = {
 const itemLayout = {
   labelCol: { span: 3 },
   wrapperCol: { span: 17 }
+}
+
+const statusMap = {
+  5: 'error',
+  4: 'success',
+  2: 'warning'
 }
 
 const EnterpriseInfo = () => {
@@ -49,6 +58,21 @@ const EnterpriseInfo = () => {
   const [factoryId, setFactoryId] = useState(undefined)
   const [enterpriseLogoId, setEnterpriseLogoId] = useState(undefined)
   const [preImageUrl, setPreImageUrl] = useState(undefined)
+  const [currentType, setCurrentType] = useState(undefined)
+
+  const messageMap = {
+    5: (
+      <span>
+        很抱歉通知您，您的平台入驻审批失败，失败原因请前往{' '}
+        <a href="/control-panel/certificate" target="_blank">
+          企业证件认证
+        </a>{' '}
+        查看！
+      </span>
+    ),
+    4: '恭喜您入驻信息审批通过，平台功能已为您开放，祝您上网愉快。',
+    2: '平台已收到您的入驻信息，请注意接听来电，我们将在1~3个工作日与您取得联系。'
+  }
 
   // const onValuesChange = changedValues => {
   //   if (get(changedValues, 'enterpriseType')) {
@@ -166,167 +190,199 @@ const EnterpriseInfo = () => {
         }
       })
   }
+
+  const getApprovalResult = () => {
+    axios
+      .get('/api/factory/enterprise/get-enterprise-approval-result', {
+        enterpriseId: enterpriseId
+      })
+      .then(response => {
+        const { success, data } = response
+        if (success) {
+          const { approvalStatus } = data
+          setCurrentType(approvalStatus)
+        }
+      })
+  }
+
+  useEffect(() => {
+    if (enterpriseId) {
+      getApprovalResult()
+    }
+  }, [enterpriseId])
+
   useEffect(() => {
     getEnterpriseInfo()
   }, [])
 
   return (
-    <div className={styles.enterpriseInfo}>
-      <Form
-        {...layout}
-        form={form}
-        colon={false}
-        size="large"
-        name="enterprise"
-        labelAlign="left"
-        initialValues={{
-          mobilePhone: mobilePhone
-        }}
-        style={{ position: 'relative' }}
-        // onValuesChange={onValuesChange}
-      >
+    <div className={styles.enterpriseInfoContent}>
+      {currentType && (
+        <Alert
+          banner
+          className={styles.topTip}
+          message={get(messageMap, currentType)}
+          type={get(statusMap, currentType)}
+          showIcon
+        />
+      )}
+      <div className={styles.enterpriseInfo}>
         <Title title={'基本信息'} />
-        <Form.Item
-          label={<span className={styles.formLabel}>企业Logo</span>}
-          name="enterpriseLogoUrl"
+        <Form
+          {...layout}
+          form={form}
+          colon={false}
+          size="large"
+          name="enterprise"
+          labelAlign="left"
+          initialValues={{
+            mobilePhone: mobilePhone
+          }}
+          style={{ position: 'relative' }}
+          // onValuesChange={onValuesChange}
         >
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={true}
-            beforeUpload={beforeUpload}
-            customRequest={customRequest}
-            fileList={imageUrlList}
-            maxCount={1}
-            onRemove={() => setImageUrlList([])}
+          <Form.Item
+            label={<span className={styles.formLabel}>企业Logo</span>}
+            name="enterpriseLogoUrl"
           >
-            {isEmpty(imageUrlList) ? uploadButton : null}
-          </Upload>
-        </Form.Item>
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={true}
+              beforeUpload={beforeUpload}
+              customRequest={customRequest}
+              fileList={imageUrlList}
+              maxCount={1}
+              onRemove={() => setImageUrlList([])}
+            >
+              {isEmpty(imageUrlList) ? uploadButton : null}
+            </Upload>
+          </Form.Item>
 
-        <Row>
-          <Col className="gutter-row" span={3}></Col>
-          <Col className="gutter-row" span={14}>
-            <div className={styles.tip}>
-              <Icon type="jack-jingshi1" />
-              {'    '}
-              只能上传jpg/png格式文件，限传一个文件不能超过500kb
-            </div>
-          </Col>
-        </Row>
+          <Row>
+            <Col className="gutter-row" span={3}></Col>
+            <Col className="gutter-row" span={14}>
+              <div className={styles.tip}>
+                <Icon type="jack-jingshi1" />
+                {'    '}
+                只能上传jpg/png格式文件，限传一个文件不能超过500kb
+              </div>
+            </Col>
+          </Row>
 
-        <Form.Item
-          label="企业名称"
-          name="enterpriseName"
-          rules={[{ required: true, message: '请输入企业名称！' }]}
-        >
-          <Input placeholder="请输入企业名称" />
-        </Form.Item>
-        <Row>
-          <Col className="gutter-row" span={3}></Col>
-          <Col className="gutter-row" span={14}>
-            <div className={styles.tip}>
-              <Icon type="jack-jingshi1" />
-              {'    '}
-              企业名称务必与营业执照一致，如：广州某某信息科技有限公司
-            </div>
-          </Col>
-        </Row>
+          <Form.Item
+            label="企业名称"
+            name="enterpriseName"
+            rules={[{ required: true, message: '请输入企业名称！' }]}
+          >
+            <Input placeholder="请输入企业名称" />
+          </Form.Item>
+          <Row>
+            <Col className="gutter-row" span={3}></Col>
+            <Col className="gutter-row" span={14}>
+              <div className={styles.tip}>
+                <Icon type="jack-jingshi1" />
+                {'    '}
+                企业名称务必与营业执照一致，如：广州某某信息科技有限公司
+              </div>
+            </Col>
+          </Row>
 
-        <Form.Item
-          label="企业类型"
-          name="enterpriseType"
-          rules={[{ required: true, message: '请选择企业类型！' }]}
-        >
-          <Radio.Group>
-            <Space direction="vertical">
-              <Radio value="0">
-                <span>加工厂</span>{' '}
-                <span className={styles.radioTip}>
-                  （加工厂拥有接单的权限）
-                </span>
-              </Radio>
-              <Radio value="1">
-                <span>发单商</span>
-                <span className={styles.radioTip}>
-                  （发单商拥有发单的权限，无法接单）
-                </span>
-              </Radio>
-            </Space>
-          </Radio.Group>
-        </Form.Item>
+          <Form.Item
+            label="企业类型"
+            name="enterpriseType"
+            rules={[{ required: true, message: '请选择企业类型！' }]}
+          >
+            <Radio.Group>
+              <Space direction="vertical">
+                <Radio value="0">
+                  <span>加工厂</span>{' '}
+                  <span className={styles.radioTip}>
+                    （加工厂拥有接单的权限）
+                  </span>
+                </Radio>
+                <Radio value="1">
+                  <span>发单商</span>
+                  <span className={styles.radioTip}>
+                    （发单商拥有发单的权限，无法接单）
+                  </span>
+                </Radio>
+              </Space>
+            </Radio.Group>
+          </Form.Item>
 
-        <Form.Item
-          label="联系人"
-          name="realName"
-          rules={[{ required: true, message: '请填写联系人姓名' }]}
-        >
-          <Input placeholder="请填写联系人姓名" />
-        </Form.Item>
+          <Form.Item
+            label="联系人"
+            name="realName"
+            rules={[{ required: true, message: '请填写联系人姓名' }]}
+          >
+            <Input placeholder="请填写联系人姓名" />
+          </Form.Item>
 
-        <Form.Item
-          label="手机号"
-          name="mobilePhone"
-          rules={[{ required: true, message: '请填写手机号' }]}
-        >
-          <Input placeholder="请填写手机号" disabled />
-        </Form.Item>
+          <Form.Item
+            label="手机号"
+            name="mobilePhone"
+            rules={[{ required: true, message: '请填写手机号' }]}
+          >
+            <Input placeholder="请填写手机号" disabled />
+          </Form.Item>
 
-        <Form.Item
-          label={<span className={styles.formLabel}>电话号码</span>}
-          name="contactPhone"
-        >
-          <Input placeholder="请输入座机号码  如：0571-8******" />
-        </Form.Item>
+          <Form.Item
+            label={<span className={styles.formLabel}>电话号码</span>}
+            name="contactPhone"
+          >
+            <Input placeholder="请输入座机号码  如：0571-8******" />
+          </Form.Item>
 
-        <Form.Item
-          label={<span className={styles.formLabel}>电子邮箱</span>}
-          name="email"
-        >
-          <Input placeholder="请填写电子邮箱" />
-        </Form.Item>
+          <Form.Item
+            label={<span className={styles.formLabel}>电子邮箱</span>}
+            name="email"
+          >
+            <Input placeholder="请填写电子邮箱" />
+          </Form.Item>
 
-        <Form.Item
-          label="所在地区"
-          name="area"
-          rules={[{ required: true, message: '请选择所在地' }]}
-        >
-          <Cascader options={toJS(allArea)} placeholder="请选择所在地" />
-        </Form.Item>
+          <Form.Item
+            label="所在地区"
+            name="area"
+            rules={[{ required: true, message: '请选择所在地' }]}
+          >
+            <Cascader options={toJS(allArea)} placeholder="请选择所在地" />
+          </Form.Item>
 
-        <Form.Item
-          label="企业地址"
-          {...itemLayout}
-          name="businessAddress"
-          rules={[{ required: true, message: '请选择企业地址！' }]}
-        >
-          <BusinessAddressCom />
-        </Form.Item>
+          <Form.Item
+            label="企业地址"
+            {...itemLayout}
+            name="businessAddress"
+            rules={[{ required: true, message: '请选择企业地址！' }]}
+          >
+            <BusinessAddressCom />
+          </Form.Item>
 
-        <Form.Item
-          label="企业简介"
-          name="enterpriseDesc"
-          rules={[
-            { required: true, message: '请填写企业简介！' },
-            { max: 700 }
-          ]}
-        >
-          <TextArea
-            rows={4}
-            placeholder="填写自主品牌名称、市场定位、销售网络和规模等信息，不要填写电话/邮箱等联系方式，字数在100-700之间"
-          />
-        </Form.Item>
-      </Form>
+          <Form.Item
+            label="企业简介"
+            name="enterpriseDesc"
+            rules={[
+              { required: true, message: '请填写企业简介！' },
+              { max: 700 }
+            ]}
+          >
+            <TextArea
+              rows={4}
+              placeholder="填写自主品牌名称、市场定位、销售网络和规模等信息，不要填写电话/邮箱等联系方式，字数在100-700之间"
+            />
+          </Form.Item>
+        </Form>
 
-      <div className={styles.enterpriseFooter}>
-        <Button
-          className={styles.button}
-          type="primary"
-          onClick={confirmSubmit}
-        >
-          确认{enterpriseId ? '修改' : '提交'}
-        </Button>
+        <div className={styles.enterpriseFooter}>
+          <Button
+            className={styles.button}
+            type="primary"
+            onClick={confirmSubmit}
+          >
+            确认{enterpriseId ? '修改' : '提交'}
+          </Button>
+        </div>
       </div>
     </div>
   )

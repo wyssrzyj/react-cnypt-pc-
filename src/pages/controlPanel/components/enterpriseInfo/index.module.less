@@ -1,7 +1,7 @@
 @import '@/css/common.less';
 
 .enterpriseInfo {
-  margin-bottom: 20px;
+  margin: 20px 0;
   padding: 20px 30px;
   overflow: hidden;
   font-size: 16px;
@@ -68,4 +68,27 @@
 }
 .formLabel {
   padding-left: 10px;
+}
+.topTip {
+  height: 70px;
+  font-size: 16px !important;
+}
+.enterpriseInfoContent {
+  :global {
+    .ant-alert-warning {
+      .ant-alert-message {
+        color: #ffa114 !important;
+      }
+    }
+    .ant-alert-error {
+      .ant-alert-message {
+        color: #ff4d4f !important;
+      }
+    }
+    .ant-alert-success {
+      .ant-alert-message {
+        color: #52c41a !important;
+      }
+    }
+  }
 }

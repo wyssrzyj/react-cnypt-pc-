@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Tag, Row, Col } from 'antd'
 import moment from 'moment'
 import { toJS } from 'mobx'
-import { isEmpty } from 'lodash'
+import { isEmpty, isArray } from 'lodash'
 import { Icon, NoData } from '@/components'
 import { checkValue } from '@/utils/tool'
 import { useStores, observer } from '@/utils/mobx'
@@ -21,7 +21,8 @@ const CompaniesIntroduce = props => {
     productLineNum,
     yearOutputValue,
     yearOutputProd,
-    factoryAuditorImage
+    factoryAuditorImage,
+    factoryTagCodeList = []
   } = current
   const { commonStore } = useStores()
   const { dictionary } = commonStore
@@ -59,10 +60,13 @@ const CompaniesIntroduce = props => {
         <div>
           <div>
             <span className={styles.name}>{enterpriseName}</span>
-            <Tag className={styles.factoryTag} color="#45CC7E">
-              <Icon type="jack-shiming1" className={styles.tagIcon} />
-              实名
-            </Tag>
+            {isArray(factoryTagCodeList) &&
+              factoryTagCodeList.find(item => item === 'verified_tag') && (
+                <Tag className={styles.factoryTag} color="#45CC7E">
+                  <Icon type="jack-shiming1" className={styles.tagIcon} />
+                  实名
+                </Tag>
+              )}
             <Tag className={styles.factoryTag} color="#3B88FF">
               <Icon type="jack-ycsq" className={styles.tagIcon} />
               验厂

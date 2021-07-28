@@ -9,6 +9,22 @@ export default class FactoryStore {
   }
 
   @observable productCategoryList = []
+  @observable factoryData = {
+    onlineNum: 0,
+    offlineNum: 0,
+    monthTicketNum: 0,
+    monthClothesNum: 0,
+    monthProductionNum: 0,
+    order: [],
+    production: {}
+  }
+
+  @observable factoryMachineData = {
+    statisticHour: [],
+    statisticWeek: []
+  }
+
+  @observable factoryProductList = []
 
   @action init = () => {
     this.productCategoryList = []
@@ -42,6 +58,78 @@ export default class FactoryStore {
       if (res) {
         runInAction(() => {
           this.productCategoryList = res.data
+        })
+        return res.data || []
+      } else {
+        message.error('获取数据失败~')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // /api/factory/unauth/statistic/sync_factory_data
+  @action getFactoryData = async factoryId => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/unauth/statistic/sync_factory_data`,
+        {
+          factoryId
+        }
+      )
+      console.log('🚀 ~ file: index.tsx ~ line 65 ~ FactoryStore ~ res', res)
+
+      if (res) {
+        runInAction(() => {
+          this.factoryData = res.data
+        })
+        return res.data || []
+      } else {
+        message.error('获取数据失败~')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // /api/factory/unauth/statistic/sync_factory_machine
+  @action getFactoryMachineData = async factoryId => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/unauth/statistic/sync_factory_machine`,
+        {
+          factoryId
+        }
+      )
+      console.log('🚀 ~ file: index.tsx ~ line 65 ~ FactoryStore ~ res', res)
+
+      if (res) {
+        runInAction(() => {
+          this.factoryMachineData = res.data
+        })
+        return res.data || []
+      } else {
+        message.error('获取数据失败~')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // /api/factory/unauth/statistic/sync_factory_board
+  @action getFactoryBoard = async factoryId => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/unauth/statistic/sync_factory_board`,
+        {
+          factoryId
+        }
+      )
+      console.log('🚀 ~ file: index.tsx ~ line 126 ~ FactoryStore ~ res', res)
+
+      if (res) {
+        runInAction(() => {
+          this.factoryProductList = res.data
         })
         return res.data || []
       } else {

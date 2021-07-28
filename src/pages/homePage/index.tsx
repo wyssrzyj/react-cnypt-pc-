@@ -89,9 +89,11 @@ const HomePage = () => {
     const target: any = window || document.body
 
     target.addEventListener('load', () => {
-      target.requestIdleCallback(() => {
-        target.scrollTo(0, 0)
-      })
+      // target.requestIdleCallback(() => {
+      //   target.scrollTo(0, 0)
+      // })
+
+      target.scrollTo(0, 0)
     })
   }, [])
 

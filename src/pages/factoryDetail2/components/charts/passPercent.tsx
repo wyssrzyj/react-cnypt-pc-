@@ -3,87 +3,51 @@ import styles from './passPercent.module.less'
 import { ChartTitle } from './pieChart'
 import { Bar } from '@antv/g2plot'
 import { LegendItem } from './moveChart'
-
-const initData = [
-  {
-    year: '裤子',
-    value: 60,
-    type: 'Lon'
-  },
-  {
-    year: '衬衫',
-    value: 40,
-    type: 'Lon'
-  },
-  {
-    year: '毛衣',
-    value: 35,
-    type: 'Lon'
-  },
-  {
-    year: '羽绒服',
-    value: 5,
-    type: 'Lon'
-  },
-  {
-    year: '内衣',
-    value: 25,
-    type: 'Lon'
-  },
-  {
-    year: '袜子',
-    value: 46,
-    type: 'Lon'
-  },
-  {
-    year: '裤子',
-    value: 20,
-    type: 'Bor'
-  },
-  {
-    year: '衬衫',
-    value: 34,
-    type: 'Bor'
-  },
-  {
-    year: '毛衣',
-    value: 33,
-    type: 'Bor'
-  },
-  {
-    year: '羽绒服',
-    value: 35,
-    type: 'Bor'
-  },
-  {
-    year: '内衣',
-    value: 38,
-    type: 'Bor'
-  },
-  {
-    year: '袜子',
-    value: 36,
-    type: 'Bor'
-  }
-]
+import { useStores, observer } from '@/utils/mobx'
 
 const PassPercent = () => {
   const chartRef = useRef()
 
-  const [data, _setData] = useState(initData)
+  const { factoryStore } = useStores()
+  const { factoryData } = factoryStore
 
-  const setChart = () => {
+  const [data, setData] = useState([])
+  const [chart, setChart] = useState(null)
+
+  useEffect(() => {
+    const arr = factoryData.order
+    const target = []
+    arr.forEach(item => {
+      target.push({
+        styleName: item.styleName,
+        num: item.num - item.unqualifiedNum,
+        type: 'qualifiedNum',
+        qualificationRatio: item.qualificationRatio,
+        total: item.num
+      })
+      target.push({
+        styleName: item.styleName,
+        num: item.unqualifiedNum,
+        type: 'total',
+        qualificationRatio: item.qualificationRatio,
+        total: item.num
+      })
+    })
+    setData(target)
+  }, [factoryData])
+
+  const chartInit = () => {
     const stackedBarPlot = new Bar('passPercent', {
       data: data.reverse(),
       width: 326,
       height: 270,
       isStack: true,
-      xField: 'value',
-      yField: 'year',
+      xField: 'num',
+      yField: 'styleName',
       legend: false,
       minBarWidth: 16,
       maxBarWidth: 16,
-      padding: [24, 16, 32, 52],
+      padding: [24, 16, 32, 12],
       xAxis: {
         line: null,
         grid: {
@@ -94,11 +58,12 @@ const PassPercent = () => {
       yAxis: {
         tickLine: null,
         line: null,
-        label: {
-          style: {
-            fontSize: 15
-          }
-        },
+        label: null,
+        // label: {
+        //   style: {
+        //     fontSize: 15
+        //   }
+        // },
         grid: {
           line: null
         }
@@ -109,11 +74,16 @@ const PassPercent = () => {
       tooltip: {
         customContent: (title, data) => {
           if (Array.isArray(data) && data.length) {
+            const target = data[1]['data']
+            const total = target ? target['total'] : 0
+            const qualificationRatio = target ? target['qualificationRatio'] : 0
             return `<div class='tooltipBox'>
             <div class='tooltipTitle'>${title}</div>
-            <div class='tooltipText3'>总数: ${data[1].value} 件</div>
+            <div class='tooltipText3'>总数: ${total} 件</div>
             <div class='tooltipText1'>合格数: ${data[0].value} 件</div>
-            <div class='tooltipText2'>合格率: ${data[1].value} %</div>
+            <div class='tooltipText2'>合格率: ${
+              qualificationRatio * 100
+            } %</div>
           </div>`
           }
         }
@@ -121,15 +91,25 @@ const PassPercent = () => {
     })
 
     stackedBarPlot.render()
+    setChart(stackedBarPlot)
   }
 
   useEffect(() => {
-    setChart()
+    chartInit()
   }, [])
+
+  useEffect(() => {
+    if (!chart) return
+    if (Array.isArray(data) && data.length) {
+      chart.update({
+        data: data.reverse()
+      })
+    }
+  }, [data, chart])
 
   return (
     <div className={styles.passPercentBox}>
-      <ChartTitle title={'合格率'}>
+      <ChartTitle title={'合格率'} desc={'最近五个生产单'}>
         <LegendItem
           name={'合格数'}
           type={'square'}
@@ -141,4 +121,4 @@ const PassPercent = () => {
   )
 }
 
-export default PassPercent
+export default observer(PassPercent)

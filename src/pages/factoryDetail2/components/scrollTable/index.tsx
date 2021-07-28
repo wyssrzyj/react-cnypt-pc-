@@ -2,12 +2,15 @@ import React, { useRef, useEffect, MutableRefObject, useState } from 'react'
 import { Table } from 'antd'
 import styles from './index.module.less'
 import { ChartTitle } from '../charts/pieChart'
+import { useStores, observer } from '@/utils/mobx'
 
 const rowClassMap = new Map()
 rowClassMap.set(0, styles.custemRowEven)
 rowClassMap.set(1, styles.custemRowOdd)
 
 const ScrollTable = () => {
+  const { factoryStore } = useStores()
+  const { factoryProductList } = factoryStore
   const colunms: any = [
     {
       title: '序号',
@@ -18,119 +21,37 @@ const ScrollTable = () => {
     {
       title: '设备名称',
       align: 'center',
-      dataIndex: 'name'
+      dataIndex: 'deptName'
     },
     {
       title: '设备数量',
       align: 'center',
-      dataIndex: 'count',
-      render: val => `${val}台`
+      dataIndex: 'machineNum',
+      render: val => `${val || 0}台`
     },
     {
       title: '生产进度',
       align: 'center',
-      dataIndex: 'progress',
-      render: val => `${val}%`
+      render: (_, row) => {
+        const num = row.goal ? (row.production / row.goal) * 100 : 0
+        return `${num ? num.toFixed(2) : 0}%`
+      }
     },
     {
       title: '参考产量(件)',
       align: 'center',
-      dataIndex: 'referenceProduction'
+      dataIndex: 'production'
     },
     {
       title: '目标产量(件)',
       align: 'center',
-      dataIndex: 'targetProduction'
+      dataIndex: 'goal'
     },
     {
       title: '平均工时',
       align: 'center',
-      dataIndex: 'averageHours',
-      render: val => `${val}小时`
-    }
-  ]
-
-  const dataSource = [
-    {
-      id: 1,
-      name: '铺布机',
-      count: 20,
-      progress: 50,
-      referenceProduction: 50,
-      targetProduction: 100,
-      averageHours: 8
-    },
-    {
-      id: 2,
-      name: '铺布机',
-      count: 20,
-      progress: 50,
-      referenceProduction: 50,
-      targetProduction: 100,
-      averageHours: 8
-    },
-    {
-      id: 3,
-      name: '铺布机',
-      count: 20,
-      progress: 50,
-      referenceProduction: 50,
-      targetProduction: 100,
-      averageHours: 8
-    },
-    {
-      id: 4,
-      name: '铺布机',
-      count: 20,
-      progress: 50,
-      referenceProduction: 50,
-      targetProduction: 100,
-      averageHours: 8
-    },
-    {
-      id: 5,
-      name: '铺布机',
-      count: 20,
-      progress: 50,
-      referenceProduction: 50,
-      targetProduction: 100,
-      averageHours: 8
-    },
-    {
-      id: 6,
-      name: '铺布机',
-      count: 20,
-      progress: 50,
-      referenceProduction: 50,
-      targetProduction: 100,
-      averageHours: 8
-    },
-    {
-      id: 7,
-      name: '铺布机',
-      count: 20,
-      progress: 50,
-      referenceProduction: 50,
-      targetProduction: 100,
-      averageHours: 8
-    },
-    {
-      id: 8,
-      name: '铺布机',
-      count: 20,
-      progress: 50,
-      referenceProduction: 50,
-      targetProduction: 100,
-      averageHours: 8
-    },
-    {
-      id: 9,
-      name: '铺布机',
-      count: 20,
-      progress: 50,
-      referenceProduction: 50,
-      targetProduction: 100,
-      averageHours: 8
+      dataIndex: 'devEletime',
+      render: val => `${val ? (val / 60 / 60).toFixed(2) : 0}小时`
     }
   ]
 
@@ -173,16 +94,16 @@ const ScrollTable = () => {
       >
         <Table
           columns={colunms}
-          dataSource={dataSource}
+          dataSource={factoryProductList}
           pagination={false}
           rowClassName={(_record, index) => {
             return rowClassMap.get(index % 2)
           }}
-          rowKey={'id'}
+          rowKey={'deptName'}
         ></Table>
       </div>
     </div>
   )
 }
 
-export default ScrollTable
+export default observer(ScrollTable)

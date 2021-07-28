@@ -23,10 +23,14 @@ const Layout = (props: LayoutProps) => {
   const noUseFooters = ['/user/login', '/user/register', '/user/reset'] // 不展示footer的路由列表
 
   useEffect(() => {
-    ;(window as any).requestIdleCallback(async () => {
+    // ;(window as any).requestIdleCallback(async () => {
+    //   await allDictionary([])
+    //   await getAllArea()
+    // })
+    ;(async () => {
       await allDictionary([])
       await getAllArea()
-    })
+    })()
   }, [])
 
   const headerFlag = noUseHeaders.some(item => pathname.includes(item))

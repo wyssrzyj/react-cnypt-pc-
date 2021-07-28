@@ -2,6 +2,7 @@ import React, { RefObject, useEffect, useRef, useState } from 'react'
 import styles from './moveChart.module.less'
 import { Chart } from '@antv/g2'
 import { ChartTitle } from './pieChart'
+import { useStores, observer } from '@/utils/mobx'
 
 interface LegendItem {
   name: string
@@ -26,15 +27,38 @@ export const LegendItem = ({ name, type, color }: LegendItem) => {
 const MoveChart = () => {
   const chartRef: RefObject<HTMLDivElement> = useRef()
 
-  const data = [
-    { name: '周一', 稼动率: 2, 平均缝纫时长: 5 },
-    { name: '周二', 稼动率: 4, 平均缝纫时长: 11 },
-    { name: '周三', 稼动率: 8, 平均缝纫时长: 13 },
-    { name: '周四', 稼动率: 5, 平均缝纫时长: 9 },
-    { name: '周五', 稼动率: 9, 平均缝纫时长: 6 },
-    { name: '周六', 稼动率: 3, 平均缝纫时长: 29 },
-    { name: '周日', 稼动率: 2, 平均缝纫时长: 19 }
+  // statisticWeek
+
+  const { factoryStore } = useStores()
+  const { factoryMachineData } = factoryStore
+
+  const initData = [
+    // { name: '周一', 稼动率: 2, 平均缝纫时长: 5 },
+    // { name: '周二', 稼动率: 4, 平均缝纫时长: 11 },
+    // { name: '周三', 稼动率: 8, 平均缝纫时长: 13 },
+    // { name: '周四', 稼动率: 5, 平均缝纫时长: 9 },
+    // { name: '周五', 稼动率: 9, 平均缝纫时长: 6 },
+    // { name: '周六', 稼动率: 3, 平均缝纫时长: 29 },
+    // { name: '周日', 稼动率: 2, 平均缝纫时长: 19 }
   ]
+
+  const [data, setData] = useState(initData)
+
+  useEffect(() => {
+    const arr = factoryMachineData.statisticWeek
+    const target = arr.map(item => {
+      const runtime = item.devEletime
+        ? ((item.devRunningtime / item.devEletime) * 100).toFixed(2)
+        : 0
+      return {
+        statisticDate: item.statisticDate,
+        devRunningtime: +runtime,
+        devEletime: +(item.devRunningtime / 60 / 60).toFixed(2)
+      }
+    })
+    console.log(target)
+    setData(target)
+  }, [factoryMachineData])
 
   const [chart, setChart] = useState(null)
 
@@ -46,19 +70,19 @@ const MoveChart = () => {
         width: 700,
         height: 300,
         nice: true,
-        padding: [24, 32, 32, 24]
+        padding: [24, 36, 32, 24]
       })
       setChart(c)
     }
-  }, [data])
+  }, [data, chart])
 
   useEffect(() => {
     chart && renderChart()
   }, [chart, data])
 
   const renderChart = () => {
-    const 平均缝纫时长s = data.map(i => i.平均缝纫时长)
-    const maxValue = Math.max(...平均缝纫时长s)
+    const devEletimes = data.map(i => i.devEletime)
+    const maxValue = Math.max(...devEletimes)
     const max = Math.ceil(maxValue / 10) * 10
     const margin = 1 / 5
 
@@ -68,9 +92,9 @@ const MoveChart = () => {
     chart.clear()
     chart.data(data)
 
-    chart.scale('稼动率', {
+    chart.scale('devRunningtime', {
       min: 0,
-      max: 10,
+      max: 100,
       tickCount: 6,
       range: [0, 1 - margin / 2]
     })
@@ -78,7 +102,7 @@ const MoveChart = () => {
     const tick = max / 5
     let ticks = new Array(6).fill(null)
     ticks = ticks.map((_i, t) => t * tick)
-    chart.scale('平均缝纫时长', {
+    chart.scale('devEletime', {
       min: 0,
       max: max,
       ticks: ticks,
@@ -86,19 +110,11 @@ const MoveChart = () => {
       range: [0, 1 - margin / 2]
     })
 
-    chart.scale('city', {
-      min: 0,
-      max: max,
-      ticks: ticks,
-      tickCount: 6,
-      range: [0, 1 - margin / 2]
-    })
-
-    chart.scale('name', {
+    chart.scale('statisticDate', {
       nice: true
     })
 
-    chart.axis('平均缝纫时长', {
+    chart.axis('devEletime', {
       grid: {
         line: {
           style: {
@@ -123,7 +139,7 @@ const MoveChart = () => {
       }
     })
 
-    chart.axis('稼动率', {
+    chart.axis('devRunningtime', {
       grid: {
         line: {
           style: {
@@ -148,7 +164,7 @@ const MoveChart = () => {
       }
     })
 
-    chart.axis('name', {
+    chart.axis('statisticDate', {
       label: {
         autoRotate: true,
         autoHide: false
@@ -160,25 +176,28 @@ const MoveChart = () => {
     chart
       .interval()
       .size(16)
-      .position('name*平均缝纫时长')
-      .tooltip('name*平均缝纫时长*稼动率', (name, 平均缝纫时长, 稼动率) => {
-        return {
-          name,
-          平均缝纫时长,
-          稼动率
+      .position('statisticDate*devEletime')
+      .tooltip(
+        'statisticDate*devEletime*devRunningtime',
+        (name, devEletime, devRunningtime) => {
+          return {
+            name,
+            devEletime,
+            devRunningtime
+          }
         }
-      })
+      )
 
     const itemTpl = `
             <div class='chart7Tpl'>
-              <div class='tplTitle'>{name}</div>
+              <div class='tplTitle'>{statisticDate}</div>
               <div class='tpl'>
                 <span class="tpl3">·</span>
-                稼动率:&nbsp;&nbsp;&nbsp;{稼动率} %
+                稼动率:&nbsp;&nbsp;&nbsp;{devRunningtime} %
               </div>
               <div class='tpl'>
                 <span class="tpl2">·</span>
-                平均缝纫时长:&nbsp;&nbsp;&nbsp;{平均缝纫时长} 小时
+                平均开机时长:&nbsp;&nbsp;&nbsp;{devEletime} 小时
               </div>
             </div>
         `
@@ -190,16 +209,19 @@ const MoveChart = () => {
     })
     chart
       .line()
-      .position('name*稼动率')
+      .position('statisticDate*devRunningtime')
       .size(2)
       .color('', () => '#30c5c5')
-      .tooltip('name*平均缝纫时长*稼动率', (name, 平均缝纫时长, 稼动率) => {
-        return {
-          name,
-          平均缝纫时长,
-          稼动率
+      .tooltip(
+        'statisticDate*devEletime*devRunningtime',
+        (statisticDate, devEletime, devRunningtime) => {
+          return {
+            statisticDate,
+            devEletime,
+            devRunningtime
+          }
         }
-      })
+      )
 
     chart.legend(false)
     chart.removeInteraction('legend-filter')
@@ -210,7 +232,7 @@ const MoveChart = () => {
     <div className={styles.moveChartBox}>
       <ChartTitle title={'稼动率'}>
         <div className={styles.legendBox}>
-          <LegendItem name={'平均缝纫时长'} type={'square'}></LegendItem>
+          <LegendItem name={'平均开机时长'} type={'square'}></LegendItem>
           <LegendItem name={'稼动率'} type={'line'}></LegendItem>
         </div>
       </ChartTitle>
@@ -219,4 +241,4 @@ const MoveChart = () => {
   )
 }
 
-export default MoveChart
+export default observer(MoveChart)

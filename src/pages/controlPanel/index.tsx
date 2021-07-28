@@ -3,22 +3,41 @@ import { Redirect, Route, Switch } from 'react-router'
 import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 import { useStores } from '@/utils/mobx'
-import {
-  EnterpriseInfo,
-  PlantSitePhoto,
-  QualificationCertification,
-  CertificateAuthentication,
-  FactoryReport,
-  FactoryEquipment,
-  FactoryPhotograph
-} from './components'
+// import {
+//   EnterpriseInfo,
+//   PlantSitePhoto,
+//   QualificationCertification,
+//   CertificateAuthentication,
+//   FactoryReport,
+//   FactoryEquipment,
+//   FactoryPhotograph
+// } from './components'
 import { getUserInfo } from '@/utils/tool'
-import FactoryInformation from './factoryInformation'
+// import FactoryInformation from './factoryInformation'
 import { useLocation } from 'react-router'
-import AccountSafe from './accountSafe'
-import LoginLogs from './loginLogs'
+// import AccountSafe from './accountSafe'
+// import LoginLogs from './loginLogs'
 import { Icon } from '@/components'
 import styles from './index.module.less'
+
+const AccountSafe = React.lazy(() => import('./accountSafe'))
+const LoginLogs = React.lazy(() => import('./loginLogs'))
+const FactoryInformation = React.lazy(() => import('./factoryInformation'))
+const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
+const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
+const QualificationCertification = React.lazy(
+  () => import('./components/qualificationCertification')
+)
+const CertificateAuthentication = React.lazy(
+  () => import('./components/certificateAuthentication')
+)
+const FactoryReport = React.lazy(() => import('./components/factoryReport'))
+const FactoryEquipment = React.lazy(
+  () => import('./components/factoryEquipment')
+)
+const FactoryPhotograph = React.lazy(
+  () => import('./components/factoryPhotograph')
+)
 
 const { SubMenu } = Menu
 

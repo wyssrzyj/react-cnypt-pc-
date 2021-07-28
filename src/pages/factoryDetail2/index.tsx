@@ -1,32 +1,14 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
 import { useHistory } from 'react-router'
-import SlideBars from '../homePage/components/slideBar'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
 import { useStores } from '@/utils/mobx'
-import {
-  Overview,
-  EnterpriseInformation
-  // CompaniesIntroduce,
-  // CommercialInfo,
-  // OrderInfo,
-  // Digital,
-  // WorkshopEquipment,
-  // QualificationCertificate
-} from './components'
+import { Overview, EnterpriseInformation } from './components'
 import { DetailHeader, TabHeader } from '@/components'
 import styles from './index.module.less'
 import ProductDynamic from './productDynamic'
 
-const barList = [
-  { label: '企业介绍' },
-  { label: '工商信息' },
-  { label: '生产接单介绍' },
-  { label: '企业数字化' },
-  { label: '车间设备' },
-  { label: '资质证书' }
-]
 const tabOptions = [
   {
     value: 'dynamic',
@@ -53,8 +35,7 @@ const FactoryDetail = props => {
   const { commonStore } = useStores()
   const { updateName } = commonStore
   const [factoryInfo, setFactoryInfo] = useState<any>({})
-  const [activeKey, setActiveKey] = useState(0)
-  const [activeTab, setActiveTab] = useState('dynamic')
+  const [activeTab, setActiveTab] = useState('info')
 
   useEffect(() => {
     document.title = titleMap.get(activeTab)
@@ -63,46 +44,6 @@ const FactoryDetail = props => {
       document.title = '产能云平台'
     }
   }, [activeTab])
-
-  const domRef1 = useRef<HTMLDivElement>()
-  const domRef2 = useRef<HTMLDivElement>()
-  const domRef3 = useRef<HTMLDivElement>()
-  const domRef4 = useRef<HTMLDivElement>()
-  const domRef5 = useRef<HTMLDivElement>()
-  const domRef6 = useRef<HTMLDivElement>()
-  const domMap = new Map()
-  domMap.set(1, domRef1)
-  domMap.set(2, domRef2)
-  domMap.set(3, domRef3)
-  domMap.set(4, domRef4)
-  domMap.set(5, domRef5)
-  domMap.set(6, domRef6)
-
-  const setMove = event => {
-    if (!domRef1.current) return
-    const offsetTops = [
-      domRef1.current.offsetTop,
-      domRef2.current.offsetTop,
-      domRef3.current.offsetTop,
-      domRef4.current.offsetTop,
-      domRef5.current.offsetTop,
-      domRef6.current.offsetTop
-    ]
-
-    const scrollTop = event.target.scrollingElement.scrollTop
-
-    let key = 0
-    offsetTops.forEach((item, idx) => {
-      if (idx === 2 && scrollTop >= item - 150) {
-        key = idx + 1
-      } else if (scrollTop >= item) {
-        key = idx + 1
-      }
-    })
-    if (key !== activeKey) {
-      setActiveKey(key)
-    }
-  }
 
   const getFactoryInfo = () => {
     axios
@@ -126,11 +67,6 @@ const FactoryDetail = props => {
 
   useEffect(() => {
     getFactoryInfo()
-    window.addEventListener('scroll', setMove, true)
-
-    return () => {
-      window.removeEventListener('scroll', setMove)
-    }
   }, [])
 
   return (
@@ -156,7 +92,6 @@ const FactoryDetail = props => {
       </div>
 
       {/* 导航栏 */}
-      <SlideBars barList={barList} domMap={domMap} activeKey={activeKey} />
     </div>
   )
 }

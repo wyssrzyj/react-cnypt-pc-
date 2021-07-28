@@ -157,9 +157,9 @@ const EnterpriseInfo = () => {
             ...data,
             enterpriseLogoUrl,
             area: [
-              provinceId.toString(),
-              cityId.toString(),
-              districtId.toString()
+              provinceId ? provinceId.toString() : undefined,
+              cityId ? cityId.toString() : undefined,
+              districtId ? districtId.toString() : undefined
             ],
             businessAddress: { location: `${longitude},${latitude}`, address }
           })

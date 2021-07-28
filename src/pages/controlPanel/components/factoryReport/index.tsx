@@ -69,7 +69,7 @@ const FactoryReport = () => {
           setValidationTime(factoryRealAuditTime)
 
           const text = auditPersonInfoList
-            .map(item => `${item.userName}（${item.phoneNumber}）`)
+            .map(item => `${item.realName}（${item.mobile}）`)
             .join('、')
           setMemberText(text)
         }
@@ -77,7 +77,7 @@ const FactoryReport = () => {
   }
   const applyInspection = () => {
     axios
-      .get('/api/factory/info/update-factory-auditor-status', {
+      .put('/api/factory/info/update-factory-auditor-status', {
         factoryId,
         auditorStatus: '3'
       })

@@ -20,7 +20,12 @@ const iconMap = {
   noPass: <Icon className={styles.statusIcon} type="jack-spbtg" />
 }
 
-const statusMap = { '0': 'noPass', '1': 'approval', '6': 'pending' }
+const statusMap = {
+  '0': 'noPass',
+  '1': 'approval',
+  '2': 'pending',
+  '3': 'pending'
+}
 
 const ApprovalResult = props => {
   const { submit } = props
@@ -35,13 +40,20 @@ const ApprovalResult = props => {
 
   const getApprovalResult = () => {
     axios
-      .get('/api/factory/enterprise/get-enterprise-approval-result', {
-        enterpriseId: currentUser.enterpriseId
-      })
+      .get(
+        '/api/factory/enterprise/get-enterprise-certificate-approval-result',
+        {
+          enterpriseId: currentUser.enterpriseId
+        }
+      )
       .then(response => {
         const { success, data } = response
         if (success) {
-          const { approvalStatus, approvalDesc, approvalTime } = data
+          const {
+            certificateApprovalStatus: approvalStatus,
+            approvalDesc,
+            approvalTime
+          } = data
           const newCurrentUser = { ...currentUser, approvalStatus }
           localStorage.setItem('userInfo', JSON.stringify(newCurrentUser))
           const newStatus = get(statusMap, approvalStatus)

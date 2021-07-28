@@ -37,9 +37,10 @@ const itemLayout = {
 }
 
 const statusMap = {
-  5: 'error',
-  4: 'success',
-  2: 'warning'
+  0: 'error',
+  1: 'success',
+  2: 'warning',
+  3: 'warning'
 }
 
 const EnterpriseInfo = () => {
@@ -61,7 +62,7 @@ const EnterpriseInfo = () => {
   const [currentType, setCurrentType] = useState(undefined)
 
   const messageMap = {
-    5: (
+    0: (
       <span>
         很抱歉通知您，您的平台入驻审批失败，失败原因请前往{' '}
         <a href="/control-panel/certificate" target="_blank">
@@ -70,8 +71,9 @@ const EnterpriseInfo = () => {
         查看！
       </span>
     ),
-    4: '恭喜您入驻信息审批通过，平台功能已为您开放，祝您上网愉快。',
-    2: '平台已收到您的入驻信息，请注意接听来电，我们将在1~3个工作日与您取得联系。'
+    1: '恭喜您入驻信息审批通过，平台功能已为您开放，祝您上网愉快。',
+    2: '平台已收到您的入驻信息，请注意接听来电，我们将在1~3个工作日与您取得联系。',
+    3: '平台已收到您的入驻信息，请注意接听来电，我们将在1~3个工作日与您取得联系。'
   }
 
   // const onValuesChange = changedValues => {
@@ -193,14 +195,14 @@ const EnterpriseInfo = () => {
 
   const getApprovalResult = () => {
     axios
-      .get('/api/factory/enterprise/get-enterprise-approval-result', {
+      .get('/api/factory/enterprise/get-enterprise-info-approval-result', {
         enterpriseId: enterpriseId
       })
       .then(response => {
         const { success, data } = response
         if (success) {
-          const { approvalStatus } = data
-          setCurrentType(approvalStatus)
+          const { infoApprovalStatus } = data
+          setCurrentType(infoApprovalStatus)
         }
       })
   }

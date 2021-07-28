@@ -2,11 +2,16 @@ import React, { useRef, useState, useEffect } from 'react'
 import styles from './productEffect.module.less'
 import { Chart } from '@antv/g2'
 import { ChartTitle } from './pieChart'
+import { useStores, observer } from '@/utils/mobx'
+import moment from 'moment'
 
 const ProductEffect = () => {
   const chartRef = useRef()
 
-  const [data, _setData] = useState([
+  const { factoryStore } = useStores()
+  const { factoryData } = factoryStore
+
+  const [data, setData] = useState([
     { date: '周一', num: 8 },
     { date: '周二', num: 10 },
     { date: '周三', num: 12 },
@@ -15,19 +20,35 @@ const ProductEffect = () => {
     { date: '周六', num: 16 },
     { date: '周日', num: 42 }
   ])
+  const [chart, setChart] = useState(null)
 
-  const setChart = () => {
-    const chart = new Chart({
+  useEffect(() => {
+    const target = []
+    const arr = factoryData.production
+    for (let item in arr) {
+      target.push({ date: moment(item).format('MM-DD'), num: arr[item] })
+    }
+    target.sort((a, b) => moment(a.date).valueOf() - moment(b.date).valueOf())
+    console.log(target, 'target')
+    setData(target)
+  }, [factoryData])
+
+  const chartInit = () => {
+    const c = new Chart({
       container: 'productEffect',
       autoFit: true,
       width: 300,
       height: 270,
       nice: true,
-      padding: [24, 24, 32, 24]
+      padding: [24, 0, 32, 0]
     })
 
-    const margin = 1 / 5
+    setChart(c)
+  }
 
+  const chartRender = () => {
+    const margin = 1 / 5
+    chart.clear()
     chart.data(data)
     chart.scale('num', {
       min: 0,
@@ -47,19 +68,23 @@ const ProductEffect = () => {
       label: {
         style: {
           fontSize: 16
-        }
-      },
-      title: {
-        text: '件数',
-        autoRotate: false,
-        position: 'end',
-        offset: 24,
-        style: {
-          textAlign: 'start', // 文本对齐方向，可取值为： start middle end
-          fontSize: '14' // 文本大小
-          // textBaseline: 'top' // 文本基准线，可取 top middle bottom，默认为middle
-        }
+        },
+        formatter: () => ''
+        // formatter: count => {
+        //   return 'xxxx'
+        // }
       }
+      // title: {
+      //   text: '件数',
+      //   autoRotate: false,
+      //   position: 'end',
+      //   offset: 24,
+      //   style: {
+      //     textAlign: 'start', // 文本对齐方向，可取值为： start middle end
+      //     fontSize: '14' // 文本大小
+      //     // textBaseline: 'top' // 文本基准线，可取 top middle bottom，默认为middle
+      //   }
+      // }
     })
 
     const itemTpl = `
@@ -94,8 +119,12 @@ const ProductEffect = () => {
   }
 
   useEffect(() => {
-    setChart()
-  }, [])
+    !chart && chartInit()
+  }, [chart])
+
+  useEffect(() => {
+    chart && chartRender()
+  }, [data, factoryData, chart])
 
   return (
     <div className={styles.productEffectBox}>
@@ -105,4 +134,4 @@ const ProductEffect = () => {
   )
 }
 
-export default ProductEffect
+export default observer(ProductEffect)

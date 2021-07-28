@@ -175,13 +175,13 @@ const LoginContent = () => {
         )}
       </Form>
 
-      <div className={classNamess(styles.errorText, error && styles.showError)}>
-        <Icon type={'jack-jingshi'} className={styles.errorIcon} />
-        {errorTexts.get(0)}
-      </div>
       <div className={styles.loginOperation}>
-        {/* <Checkbox onChange={automaticLogin}>自动登录</Checkbox> */}
-        <span></span>
+        <div
+          className={classNamess(styles.errorText, error && styles.showError)}
+        >
+          <Icon type={'jack-jingshi'} className={styles.errorIcon} />
+          {errorTexts.get(0)}
+        </div>
         <span className={styles.forgetPwd} onClick={toReset}>
           忘记密码
         </span>

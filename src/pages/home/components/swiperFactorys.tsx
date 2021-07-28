@@ -70,7 +70,7 @@ const SwiperCard = props => {
                   className={styles.factoryInfoIcon}
                 ></Icon>
                 &nbsp;
-                {item.label}
+                <span>{item.label}</span>
               </div>
               <div className={styles.text}>{target}</div>
             </div>

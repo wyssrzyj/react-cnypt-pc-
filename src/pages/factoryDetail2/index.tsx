@@ -84,7 +84,7 @@ const FactoryDetail = props => {
           onTabChange={key => setActiveTab(key)}
         />
         {/* 生产动态 */}
-        {activeTab === 'dynamic' && <ProductDynamic />}
+        {activeTab === 'dynamic' && <ProductDynamic factoryId={factoryId} />}
         {/* 企业信息 */}
         {activeTab === 'info' && (
           <EnterpriseInformation factoryId={factoryId} current={factoryInfo} />

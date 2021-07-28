@@ -30,7 +30,8 @@ const OverflowCard = props => {
     effectiveLocation = '0',
     factoryCategoryList = [],
     prodTypeList = [],
-    pictureUrl
+    pictureUrl,
+    factoryTagList = []
   } = props
 
   // const history = useHistory()
@@ -75,10 +76,13 @@ const OverflowCard = props => {
           <div className={styles.detailTop}>
             <div>
               <a className={styles.factoryName}>{factoryName}</a>
-              <Tag className={styles.factoryTag} color="#45CC7E">
-                <Icon type="jack-shiming1" className={styles.tagIcon} />
-                实名
-              </Tag>
+              {isArray(factoryTagList) &&
+                factoryTagList.find(item => item === 'verified_tag') && (
+                  <Tag className={styles.factoryTag} color="#45CC7E">
+                    <Icon type="jack-shiming1" className={styles.tagIcon} />
+                    实名
+                  </Tag>
+                )}
               <Tag className={styles.factoryTag} color="#3B88FF">
                 <Icon type="jack-ycsq" className={styles.tagIcon} />
                 验厂

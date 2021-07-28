@@ -367,6 +367,7 @@ const FilterList = props => {
             ))}
           </div>
           <Button
+            style={{ color: '#999999' }}
             disabled={!toJS(allArea).length}
             onClick={() => setModalVisible(true)}
           >
@@ -451,7 +452,6 @@ const FilterList = props => {
         <div className={styles.classificationItem}>
           {activeTabs.map(item => (
             <Tag
-              color="blue"
               className={styles.activeTab}
               closable
               key={item.id + 'tag'}
@@ -461,7 +461,11 @@ const FilterList = props => {
             </Tag>
           ))}
           {!isEmpty(activeTabs) && (
-            <Button icon={<DeleteOutlined />} onClick={emptyFn}>
+            <Button
+              style={{ color: '#999999' }}
+              icon={<DeleteOutlined />}
+              onClick={emptyFn}
+            >
               清空
             </Button>
           )}

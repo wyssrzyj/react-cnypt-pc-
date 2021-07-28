@@ -20,6 +20,8 @@
 
 .controlPanelLeft {
   display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
   position: sticky;
   top: 0;
   // float: left;
@@ -32,9 +34,13 @@
     }
 
     .ant-menu-submenu-title {
-      font-size: 18px !important;
+      color: #888888 !important;
       font-weight: bold !important;
+    }
+
+    .ant-menu-submenu-selected .ant-menu-title-content {
       color: #333333 !important;
+      font-weight: bold !important;
     }
 
     .ant-menu-item:active {
@@ -148,6 +154,7 @@
 }
 .controlPanelLeft{
   font-size: 16px;
+  margin-bottom: 20px;
   .menuIcon {
     font-size: 20px!important;
   }
@@ -155,9 +162,10 @@
 }
 
 .management{
+  padding-left: 24px;
   font-size: 20px;
   font-family: PingFangSC-Medium, PingFang SC;
-  font-weight: 500;
+  font-weight: bold;
   color: #333333;
   padding-top: 20px;
   margin-bottom: 8px;
@@ -168,6 +176,7 @@
   font-size: 16px;
   font-weight: 500;
   border-bottom: 1px solid #f0f0f0;
+  border-image:linear-gradient(to right,transparent 2%,#dadada, transparent 98%) 1 10;
 }
 .subItem{
   font-size: 16px;

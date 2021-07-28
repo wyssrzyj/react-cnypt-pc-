@@ -20,7 +20,7 @@ const iconMap = {
   noPass: <Icon className={styles.statusIcon} type="jack-spbtg" />
 }
 
-const statusMap = { '0': 'noPass', '1': 'approval', '2': 'pending' }
+const statusMap = { '0': 'noPass', '1': 'approval', '6': 'pending' }
 
 const ApprovalResult = props => {
   const { submit } = props

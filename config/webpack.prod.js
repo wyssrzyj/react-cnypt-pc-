@@ -14,7 +14,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin') // 对CSS进�
 const CompressionPlugin = require('compression-webpack-plugin')
 const HappyPack = require('happypack')
 
-function getLocalIdent(context, localIdentName, localName, options) {
+function getCSSModuleLocalIdent(context, localIdentName, localName, options) {
   // Use the filename or folder name, based on some uses the index.js / index.module.(css|scss|sass) project style
   const fileNameOrFolder = context.resourcePath.match(
     /index\.module\.(css|scss|sass|less)$/

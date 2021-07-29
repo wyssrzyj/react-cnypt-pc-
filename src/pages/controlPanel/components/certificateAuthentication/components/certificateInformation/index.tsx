@@ -272,7 +272,8 @@ const CertificateInformation = props => {
         {...layout}
         name="basic"
         form={form}
-        size="large"
+        colon={false}
+        labelAlign="left"
         initialValues={initialValues}
       >
         <div className={styles.enterprise}>

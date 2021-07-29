@@ -90,14 +90,6 @@ const ControlPanel = () => {
 
   const location = useLocation()
 
-  useEffect(() => {
-    ;(async () => {
-      await productCategory()
-    })()
-    setCurrentMenu(menuKeys.get(location.pathname))
-    // setOpenKeys(subsMap.get(location.pathname))
-  }, [])
-
   const handleMenu = ({ keyPath }) => {
     setCurrentMenu(keyPath)
   }
@@ -106,6 +98,19 @@ const ControlPanel = () => {
     console.log(openKeys)
     setOpenKeys(keys)
   }
+
+  useEffect(() => {
+    setCurrentMenu(menuKeys.get(location.pathname))
+    setOpenKeys(subsMap.get(location.pathname))
+  }, [location.pathname])
+
+  useEffect(() => {
+    ;(async () => {
+      await productCategory()
+    })()
+    setCurrentMenu(menuKeys.get(location.pathname))
+    // setOpenKeys(subsMap.get(location.pathname))
+  }, [])
 
   return (
     <div className={styles.controlPanel}>

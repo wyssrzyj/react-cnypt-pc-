@@ -6,18 +6,37 @@ require('@babel/polyfill')
 const path = require('path')
 // const BundleAnalyzerPlugin =
 //   require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-console.log(path.resolve(__dirname, './webpack.common.js'))
-console.log(path.resolve(__dirname, './getCSSModuleLocalIdent.js'))
-const { getCSSModuleLocalIdent } = require(path.resolve(
-  __dirname,
-  './getCSSModuleLocalIdent.js'
-))
+// const { getCSSModuleLocalIdent } = require('./getCSSModuleLocalIdent.js')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin') // 对js进行压缩
 const webpackbar = require('webpackbar')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin') // 对CSS进行压缩
 const CompressionPlugin = require('compression-webpack-plugin')
 const HappyPack = require('happypack')
+
+function getLocalIdent(context, localIdentName, localName, options) {
+  // Use the filename or folder name, based on some uses the index.js / index.module.(css|scss|sass) project style
+  const fileNameOrFolder = context.resourcePath.match(
+    /index\.module\.(css|scss|sass|less)$/
+  )
+    ? '[folder]'
+    : '[name]'
+  // Create a hash based on a the file location and class name. Will be unique across a project, and close to globally unique.
+  const hash = loaderUtils.getHashDigest(
+    path.posix.relative(context.rootContext, context.resourcePath) + localName,
+    'md5',
+    'base64',
+    5
+  )
+  // Use loaderUtils to find the file or folder name
+  const className = loaderUtils.interpolateName(
+    context,
+    `${fileNameOrFolder}_${localName}__${hash}`,
+    options
+  )
+  // remove the .module that appears in every classname when based on the file.
+  return className.replace('.module_', '_')
+}
 
 const config = merge(common, {
   mode: 'production',

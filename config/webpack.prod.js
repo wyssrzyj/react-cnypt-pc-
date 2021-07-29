@@ -4,10 +4,12 @@ const { merge } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 require('@babel/polyfill')
 const path = require('path')
-const loaderUtils = require('loader-utils')
-const BundleAnalyzerPlugin =
-  require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const { getCSSModuleLocalIdent } = require('./getCSSModuleLocalIdent.js')
+// const BundleAnalyzerPlugin =
+//   require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const { getCSSModuleLocalIdent } = require(path.resolve(
+  __dirname,
+  './getCSSModuleLocalIdent.js'
+))
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin') // 对js进行压缩
 const webpackbar = require('webpackbar')

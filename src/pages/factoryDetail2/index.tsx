@@ -35,7 +35,7 @@ const FactoryDetail = props => {
   const { commonStore } = useStores()
   const { updateName } = commonStore
   const [factoryInfo, setFactoryInfo] = useState<any>({})
-  const [activeTab, setActiveTab] = useState('info')
+  const [activeTab, setActiveTab] = useState('dynamic')
 
   useEffect(() => {
     document.title = titleMap.get(activeTab)

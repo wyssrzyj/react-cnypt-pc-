@@ -60,21 +60,18 @@ const EnterpriseInfo = () => {
   const [enterpriseLogoId, setEnterpriseLogoId] = useState(undefined)
   const [preImageUrl, setPreImageUrl] = useState(undefined)
   const [currentType, setCurrentType] = useState(undefined)
+  const [messageMap, setMessageMap] = useState<any>({})
 
-  const messageMap = {
-    0: (
-      <span>
-        很抱歉通知您，您的平台入驻审批失败，失败原因请前往{' '}
-        <a href="/control-panel/certificate" target="_blank">
-          企业证件认证
-        </a>{' '}
-        查看！
-      </span>
-    ),
-    1: '恭喜您入驻信息审批通过，平台功能已为您开放，祝您上网愉快。',
-    2: '平台已收到您的入驻信息，请注意接听来电，我们将在1~3个工作日与您取得联系。',
-    3: '平台已收到您的入驻信息，请注意接听来电，我们将在1~3个工作日与您取得联系。'
-  }
+  // const messageMap = {
+  //   0: (
+  //     <span>
+  //       很抱歉通知您，您的平台入驻审批失败，
+  //     </span>
+  //   ),
+  //   1: '恭喜您入驻信息审批通过，平台功能已为您开放，祝您上网愉快。',
+  //   2: '平台已收到您的入驻信息，请注意接听来电，我们将在1~3个工作日与您取得联系。',
+  //   3: '平台已收到您的入驻信息，请注意接听来电，我们将在1~3个工作日与您取得联系。'
+  // }
 
   // const onValuesChange = changedValues => {
   //   if (get(changedValues, 'enterpriseType')) {
@@ -201,8 +198,18 @@ const EnterpriseInfo = () => {
       .then(response => {
         const { success, data } = response
         if (success) {
-          const { infoApprovalStatus } = data
+          const { infoApprovalStatus, approvalDesc = '' } = data
           setCurrentType(infoApprovalStatus)
+          setMessageMap({
+            0: (
+              <span>
+                很抱歉通知您，您的平台入驻审批失败，失败原因：{approvalDesc}
+              </span>
+            ),
+            1: '恭喜您入驻信息审批通过，平台功能已为您开放，祝您上网愉快。',
+            2: '平台已收到您的入驻信息，请注意接听来电，我们将在1~3个工作日与您取得联系。',
+            3: '平台已收到您的入驻信息，请注意接听来电，我们将在1~3个工作日与您取得联系。'
+          })
         }
       })
   }

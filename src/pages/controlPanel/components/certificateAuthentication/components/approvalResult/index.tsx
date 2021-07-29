@@ -4,7 +4,7 @@ import { get } from 'lodash'
 import moment from 'moment'
 import axios from '@/utils/axios'
 import { getUserInfo } from '@/utils/tool'
-import { useHistory } from 'react-router'
+// import { useHistory } from 'react-router'
 import { Icon } from '@/components'
 import styles from './index.module.less'
 
@@ -29,11 +29,11 @@ const statusMap = {
 
 const ApprovalResult = props => {
   const { submit } = props
-  const history = useHistory()
+  // const history = useHistory()
   const currentUser = getUserInfo() || {}
   const [status, setStatus] = useState('pending')
-  const [start, setStart] = useState(0)
-  const [end, setEnd] = useState(2)
+  // const [start, setStart] = useState(0)
+  // const [end, setEnd] = useState(2)
   const [subTitleMap, setSubTitleMap] = useState<any>({})
 
   // const enterpriseInfo = JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
@@ -58,8 +58,8 @@ const ApprovalResult = props => {
           localStorage.setItem('userInfo', JSON.stringify(newCurrentUser))
           const newStatus = get(statusMap, approvalStatus)
           setStatus(newStatus)
-          setStart(newStatus === 'approval' ? 1 : 0)
-          setEnd(newStatus === 'noPass' ? 1 : 2)
+          // setStart(newStatus === 'approval' ? 1 : 0)
+          // setEnd(newStatus === 'noPass' ? 1 : 2)
           setSubTitleMap({
             pending: (
               <div className={styles.pending}>
@@ -108,18 +108,27 @@ const ApprovalResult = props => {
             onClick={() => submit(0)}
           >
             上一步
-          </Button>,
-          <Button
-            type="primary"
-            className={styles.confirm}
-            key="buy"
-            onClick={() => {
-              history.push('/control-panel/enterprise')
-            }}
-          >
-            确认
           </Button>
-        ].slice(start, end)}
+        ]}
+        // extra={[
+        //   <Button
+        //     key="console"
+        //     className={styles.perStep}
+        //     onClick={() => submit(0)}
+        //   >
+        //     上一步
+        //   </Button>,
+        //   <Button
+        //     type="primary"
+        //     className={styles.confirm}
+        //     key="buy"
+        //     onClick={() => {
+        //       history.push('/control-panel/enterprise')
+        //     }}
+        //   >
+        //     确认
+        //   </Button>
+        // ].slice(start, end)}
       />
     </div>
   )

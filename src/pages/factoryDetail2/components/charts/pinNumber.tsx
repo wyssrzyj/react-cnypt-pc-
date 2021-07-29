@@ -109,6 +109,16 @@ const PinNumber = () => {
           devPincount
         }
       })
+      .label('statisticDate*devPincount', () => {
+        return {
+          content: data => {
+            return `${data.devPincount}`
+          },
+          style: {
+            fill: '#333'
+          }
+        }
+      })
 
     chart.render()
   }
@@ -125,7 +135,7 @@ const PinNumber = () => {
 
   return (
     <div className={styles.pinNumberBox}>
-      <ChartTitle title={'平均针数'}></ChartTitle>
+      <ChartTitle title={'平均针数'} desc={'针'}></ChartTitle>
       <div ref={chartRef} id={'pinNumber'}></div>
     </div>
   )

@@ -6,6 +6,7 @@ import moment from 'moment'
 import { useStores } from '@/utils/mobx'
 import axios from '@/utils/axios'
 import { get, find, isEmpty } from 'lodash'
+import Title from '../title'
 import { getUserInfo } from '@/utils/tool'
 import QualificationModal from '../qualificationModal'
 import styles from './index.module.less'
@@ -204,6 +205,7 @@ const QualificationCertification = () => {
 
   return (
     <div className={styles.qualificationCertification}>
+      <Title title={'资质认证'} />
       <Button
         onClick={addQualification}
         className={styles.addButton}

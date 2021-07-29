@@ -47,7 +47,7 @@ const Overview = props => {
           </li>
           <li>
             <span className={styles.rightLabel}>
-              <Icon type="jack-chewei" className={styles.icon} />
+              <Icon type="jack-chewei" className={styles.icon1} />
               有效车位
             </span>
             <span className={styles.rightValue}>
@@ -56,7 +56,7 @@ const Overview = props => {
           </li>
           <li>
             <span className={styles.rightLabel}>
-              <Icon type="jack-zhuying_bai" className={styles.icon} />
+              <Icon type="jack-zhuying_bai" className={styles.icon1} />
               主营类别
             </span>
             <span className={styles.rightValue}>
@@ -69,7 +69,7 @@ const Overview = props => {
           </li>
           <li>
             <span className={styles.rightLabel}>
-              <Icon type="jack-qdl_lan" className={styles.icon} />
+              <Icon type="jack-qdl_lan" className={styles.icon1} />
               最低起订量
             </span>
             <span className={styles.rightValue}>

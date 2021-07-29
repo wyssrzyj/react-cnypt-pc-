@@ -269,7 +269,7 @@ const AccountSafe = () => {
                 className={styles.editRight}
                 onClick={() => showModals(false ? 4 : 3)}
               >
-                {false ? '解绑' : '添加'}
+                {false ? '解绑' : '设置'}
               </span>
             </div>
           </div>

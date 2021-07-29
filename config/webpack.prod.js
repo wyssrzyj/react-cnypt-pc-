@@ -4,6 +4,7 @@ const { merge } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 require('@babel/polyfill')
 const path = require('path')
+const loaderUtils = require('loader-utils')
 // const BundleAnalyzerPlugin =
 //   require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 // const { getCSSModuleLocalIdent } = require('./getCSSModuleLocalIdent.js')

@@ -2,7 +2,7 @@
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 require('@babel/polyfill')
-const { getCSSModuleLocalIdent } = require('./getCSSModuleLocalIdent.js')
+const getCSSModuleLocalIdent = require('./getCSSModuleLocalIdent.js')
 
 const cssRegex = /\.css$/
 const cssModuleRegex = /\.module\.css$/

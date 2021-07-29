@@ -114,6 +114,16 @@ const ProductEffect = () => {
           num
         }
       })
+      .label('date*num', () => {
+        return {
+          content: data => {
+            return `${data.num}`
+          },
+          style: {
+            fill: '#333'
+          }
+        }
+      })
 
     chart.render()
   }
@@ -128,7 +138,7 @@ const ProductEffect = () => {
 
   return (
     <div className={styles.productEffectBox}>
-      <ChartTitle title={'生产效率'}></ChartTitle>
+      <ChartTitle title={'生产效率'} desc={'件'}></ChartTitle>
       <div ref={chartRef} id={'productEffect'}></div>
     </div>
   )

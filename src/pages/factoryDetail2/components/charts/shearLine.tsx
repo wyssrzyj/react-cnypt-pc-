@@ -4,17 +4,12 @@ import { Chart } from '@antv/g2'
 import { ChartTitle } from './pieChart'
 import { useStores, observer } from '@/utils/mobx'
 import moment from 'moment'
-
 const ShearLine = () => {
   const chartRef = useRef()
-
   const { factoryStore } = useStores()
   const { factoryMachineData } = factoryStore
-
   const [data, setData] = useState([])
-
   const [chart, setChart] = useState(null)
-
   useEffect(() => {
     const arr = factoryMachineData.statisticHour
     const target = arr.map(item => {
@@ -25,7 +20,6 @@ const ShearLine = () => {
     })
     setData(target)
   }, [factoryMachineData])
-
   const chartInit = () => {
     const c = new Chart({
       container: 'shearLine',
@@ -37,7 +31,6 @@ const ShearLine = () => {
     })
     setChart(c)
   }
-
   const chartRender = () => {
     const margin = 1 / 5
     chart.clear()
@@ -48,7 +41,6 @@ const ShearLine = () => {
       tickCount: 6,
       range: [0, 1 - margin / 2]
     })
-
     chart.axis('devCutcount', {
       grid: {
         line: {
@@ -58,23 +50,7 @@ const ShearLine = () => {
         }
       },
       label: null
-      // label: {
-      //   style: {
-      //     fontSize: 16
-      //   }
-      // },
-      // title: {
-      //   text: '次数',
-      //   autoRotate: false,
-      //   position: 'end',
-      //   offset: 24,
-      //   style: {
-      //     textAlign: 'start', // 文本对齐方向，可取值为： start middle end
-      //     fontSize: '14' // 文本大小
-      //   }
-      // }
     })
-
     const itemTpl = `
       <div class='chart7Tpl'>
         <div class='tplTitle'>{t}时</div>
@@ -84,15 +60,12 @@ const ShearLine = () => {
         </div>
       </div>
     `
-
     chart.tooltip({
       showTitle: false,
       showMarkers: false,
       itemTpl: itemTpl
     })
-
     chart.interaction('active-region')
-
     chart
       .area()
       .position('t*devCutcount')
@@ -110,6 +83,7 @@ const ShearLine = () => {
           devCutcount
         }
       })
+
     chart
       .point()
       .size(4)
@@ -122,12 +96,21 @@ const ShearLine = () => {
           devCutcount
         }
       })
+      .label('t*devCutcount', () => {
+        return {
+          content: data => {
+            return `${data.devCutcount}`
+          },
+          style: {
+            fill: '#333'
+          }
+        }
+      })
 
     const total = data.reduce((prev, item) => prev + item.devCutcount, 0)
     const averageNum = (total / data.length).toFixed(2)
     const contentColor = '#3b80ff'
-    const content = `平均剪线次数: ${averageNum}次`
-
+    const content = `平均: ${averageNum}次`
     chart.annotation().line({
       top: true,
       start: [-0.5, averageNum],
@@ -136,7 +119,6 @@ const ShearLine = () => {
       style: {
         stroke: contentColor,
         lineWidth: 1
-        // lineDash: [3, 3]
       },
       text: {
         position: 'start',
@@ -149,20 +131,16 @@ const ShearLine = () => {
         offsetY: -5
       }
     })
-
     chart.render()
   }
-
   useEffect(() => {
     !chart && chartInit()
   }, [chart])
-
   useEffect(() => {
     if (chart && Array.isArray(data) && data.length) {
       chart && chartRender()
     }
   }, [data, factoryMachineData, chart])
-
   return (
     <div className={styles.shearLineBox}>
       <ChartTitle title={'剪线次数'}></ChartTitle>
@@ -170,5 +148,4 @@ const ShearLine = () => {
     </div>
   )
 }
-
 export default observer(ShearLine)

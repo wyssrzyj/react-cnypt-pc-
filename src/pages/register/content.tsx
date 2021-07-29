@@ -133,7 +133,7 @@ const Register = () => {
         } else {
           const regFlag = pwdReg.test(value)
 
-          nHelps[key] = !regFlag && '请输入字母，符号或数字中至少两项且超过6位~'
+          nHelps[key] = !regFlag && '密码(字母、符号或数字中至少2项且超过6位)~'
           nErrors[key] = !regFlag
         }
 
@@ -212,7 +212,7 @@ const Register = () => {
           getValueFromEvent={getValueFromEvent}
         >
           <Input
-            placeholder="字母,符号或数字中至少两项且超过6位"
+            placeholder="密码(字母、符号或数字中至少2项且超过6位)"
             type="password"
             prefix={<PwdIcon />}
           ></Input>

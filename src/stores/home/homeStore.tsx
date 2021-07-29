@@ -128,6 +128,18 @@ export default class HomeStore {
       console.log(err)
     }
   }
+
+  // /api/factory/unauth/statistic/get_total_capacity
+  @action getTotalCapacity = async () => {
+    try {
+      const res = await axios.get(
+        '/api/factory/unauth/statistic/get_total_capacity'
+      )
+      return res.data
+    } catch (err) {
+      console.log(err)
+    }
+  }
 }
 
 // export default class HomeStore {

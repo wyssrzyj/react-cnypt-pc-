@@ -93,7 +93,7 @@ const QualificationCertification = () => {
       dataIndex: 'certificateImageURI',
       key: 'certificateImageURI',
       render: value => {
-        return <Image width={100} src={value} />
+        return <Image width={100} height={100} src={value} />
       }
     },
     {

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import styles from './newHome.module.less'
 import { Link } from 'react-router-dom'
 import { Input, Button } from 'antd'
@@ -96,8 +96,18 @@ const Home = () => {
   const containerRef = useRef<any>()
 
   const history = useHistory()
-  const { commonStore } = useStores()
+  const { commonStore, homeStore } = useStores()
   const { updateName } = commonStore
+  const { getTotalCapacity } = homeStore
+
+  const [data, setData] = useState({})
+
+  useEffect(() => {
+    ;(async () => {
+      const totalData = await getTotalCapacity()
+      setData(totalData)
+    })()
+  }, [])
 
   const searchFunction = () => {
     history.push('/factory-search')
@@ -111,18 +121,11 @@ const Home = () => {
   const SIcon = <Icon type={'jack-search'} className={styles.searchIcon}></Icon>
 
   const cardConfigs = [
-    { label: '入驻加工厂数', field: 'a', length: 5 },
-    { label: '入驻发单商数', field: 'b', length: 5 },
-    { label: '联网设备数', field: 'c', length: 6 },
-    { label: '累计生产件数', field: 'd', length: 6 }
+    { label: '入驻加工厂数', field: 'totalFactoryNum', length: 5 },
+    { label: '入驻发单商数', field: 'totalOrderBillerNum', length: 5 },
+    { label: '联网设备数', field: 'totalDeviceNum', length: 6 },
+    { label: '累计生产件数', field: 'totalOutputNum', length: 9 }
   ]
-
-  const counts = {
-    a: 558,
-    b: 352,
-    c: 9060,
-    d: 29066
-  }
 
   useEffect(() => {
     bannerRef.current.onload = () => {
@@ -164,7 +167,7 @@ const Home = () => {
                 <div>
                   <DealCount
                     length={item.length}
-                    count={counts[item.field]}
+                    count={data[item.field] || 0}
                   ></DealCount>
                 </div>
               </div>

@@ -187,6 +187,13 @@ const MoveChart = () => {
           }
         }
       )
+      .label('statisticDate*valdevEletimeue', () => {
+        return {
+          content: data => {
+            return `${data.devEletime}`
+          }
+        }
+      })
 
     const itemTpl = `
             <div class='chart7Tpl'>
@@ -222,6 +229,16 @@ const MoveChart = () => {
           }
         }
       )
+    // .label('statisticDate*devRunningtime', () => {
+    //   return {
+    //     content: data => {
+    //       return `${data.devRunningtime}`
+    //     },
+    //     style: {
+    //       fill: '#333'
+    //     }
+    //   }
+    // })
 
     chart.legend(false)
     chart.removeInteraction('legend-filter')

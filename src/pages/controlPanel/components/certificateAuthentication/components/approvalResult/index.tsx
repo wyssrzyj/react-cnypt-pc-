@@ -95,7 +95,7 @@ const ApprovalResult = props => {
   }, [])
 
   return (
-    <div>
+    <div className={styles.approvalResult}>
       <Result
         // status={status === 'noPass' ? 'error' : 'success'}
         icon={get(iconMap, status)}

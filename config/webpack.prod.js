@@ -7,43 +7,21 @@ const path = require('path')
 const loaderUtils = require('loader-utils')
 const BundleAnalyzerPlugin =
   require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-// const getCSSModuleLocalIdent = require("./getCSSModuleLocalIdent.js")
+const { getCSSModuleLocalIdent } = require('./getCSSModuleLocalIdent.js')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin') // 对js进行压缩
 const webpackbar = require('webpackbar')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin') // 对CSS进行压缩
 const CompressionPlugin = require('compression-webpack-plugin')
-
-function getCSSModuleLocalIdent(context, localIdentName, localName, options) {
-  // Use the filename or folder name, based on some uses the index.js / index.module.(css|scss|sass) project style
-  const fileNameOrFolder = context.resourcePath.match(
-    /index\.module\.(css|scss|sass|less)$/
-  )
-    ? '[folder]'
-    : '[name]'
-  // Create a hash based on a the file location and class name. Will be unique across a project, and close to globally unique.
-  const hash = loaderUtils.getHashDigest(
-    path.posix.relative(context.rootContext, context.resourcePath) + localName,
-    'md5',
-    'base64',
-    5
-  )
-  // Use loaderUtils to find the file or folder name
-  const className = loaderUtils.interpolateName(
-    context,
-    fileNameOrFolder + '_' + localName + '__' + hash,
-    options
-  )
-  // remove the .module that appears in every classname when based on the file.
-  return className.replace('.module_', '_')
-}
+const HappyPack = require('happypack')
 
 const config = merge(common, {
   mode: 'production',
   stats: {
     children: true // false 不输出子模块的打包信息
   },
-  devtool: 'hidden-source-map',
+  // devtool: 'hidden-source-map',
+  devtool: false,
   module: {
     rules: [
       {
@@ -118,15 +96,30 @@ const config = merge(common, {
     new webpackbar(), // 打包时美化进度条
     new MiniCssExtractPlugin({
       filename: 'css/[name].[chunkhash:8].css', // 生成的文件名
-      chunkFilename: 'css/[id].[hash].css'
+      chunkFilename: 'css/[id].[hash].css',
+      ignoreOrder: true
     }),
     // new BundleAnalyzerPlugin({
     //     analyzerMode: "disable", // 不启用展示打包报告的web服务器
     //     generateStatsFile: true // 生成报告文件
     // }),
-    new CompressionPlugin()
+    new CompressionPlugin(),
+    new HappyPack({
+      //用id来标识 happypack处理那里类文件
+      id: 'babelid',
+      //配置 babel-loader
+      loaders: [
+        {
+          loader: 'babel-loader'
+        }
+      ],
+      verbose: true
+    })
   ],
   optimization: {
+    sideEffects: true, // 处理副作用 代码(检查package.json文件)
+    usedExports: true, // 开启 tree-shaking
+    concatenateModules: true,
     minimize: true,
     minimizer: [
       new TerserPlugin({
@@ -171,8 +164,7 @@ const config = merge(common, {
     },
     runtimeChunk: {
       name: entrypoint => `runtime-${entrypoint.name}`
-    },
-    usedExports: true
+    }
   }
 })
 

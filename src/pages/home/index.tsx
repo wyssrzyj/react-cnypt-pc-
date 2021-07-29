@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from './index.module.less'
 import { observer } from '@/utils/mobx'
 import Menu from './components/menu'
@@ -9,20 +9,8 @@ import Factory from './components/factory'
 import OnlineHot from './components/onlineHot'
 import ExcellentFactory from './components/excellentFactory'
 import ExcellentOrder from './components/excellentOrder'
-// import { refreshToken } from '@/stores/login/loginStore'
 
 const Home = () => {
-  // const { homeStore } = useStores()
-  // const { getAccess, getImgWord, getTemImgToWord } = homeStore
-
-  useEffect(() => {
-    ;(async () => {
-      // await getAccess()
-      // await getImgWord()
-      // await getTemImgToWord()
-    })()
-  }, [])
-
   return (
     <div className={styles.home}>
       <div className={styles.homeContainer}>

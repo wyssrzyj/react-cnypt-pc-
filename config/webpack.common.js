@@ -22,22 +22,6 @@ module.exports = {
     publicPath: '/',
     assetModuleFilename: 'images/[hash][ext][query]'
   },
-  // cache: {
-  //   type: 'memory' // 开发环境 默认 memory 不允许额外配置
-  // },
-  // cache: {
-  //   type: 'filesystem', // 文件系统 允许额外配置
-  //   cacheDirectory: 'node_modules/.cache/webpack', // 默认将缓存存储在 node_modules/.cache/webpack
-  //   cacheLocation: path.resolve(__dirname, '.test_cache'), // 缓存的路径 默认值
-  //   // 缓存依赖，当缓存依赖修改时，缓存失效
-  //   buildDependencies:{
-  //     // 将你的配置添加依赖，更改配置时，使得缓存失效
-  //     config: [__filename] // 官方推荐
-  //   },
-  //   hashAlgorithm: 'md4', // 哈希生成算法 默认md4
-  //   name: 'AppBuildCache',
-  //   store: 'pack', // 当编译器闲置时 将缓存数据存放在一个文件中
-  // },
   plugins: [
     new webpack.ProvidePlugin({
       process: 'process/browser'
@@ -55,27 +39,31 @@ module.exports = {
     })
   ],
   module: {
-    // unsafeCache: true,
     rules: [
       {
-        test: /jsx?$/,
+        test: /.jsx?$/,
         exclude: /node_modules/,
         use: ['babel-loader?cacheDirectory=true']
       },
       {
-        test: /tsx?$/,
+        test: /.tsx?$/,
         exclude: /node_modules/,
         use: 'ts-loader'
       },
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        exclude: /node_modules/,
         type: 'asset/resource'
       },
       {
         test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
+        exclude: /node_modules/,
         type: 'asset/inline'
       }
     ]
+  },
+  performance: {
+    maxEntrypointSize: 1000000
   },
   devServer: {
     publicPath: '/',

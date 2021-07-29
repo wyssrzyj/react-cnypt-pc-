@@ -43,7 +43,7 @@ const config = merge(common, {
   stats: {
     children: true // false 不输出子模块的打包信息
   },
-  // devtool: 'cheap-module-source-map',
+  devtool: 'hidden-source-map',
   module: {
     rules: [
       {

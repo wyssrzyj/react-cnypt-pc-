@@ -110,6 +110,7 @@ const PresserFoot = () => {
           devActioncount
         }
       })
+
     chart
       .point()
       .size(4)
@@ -122,11 +123,21 @@ const PresserFoot = () => {
           devActioncount
         }
       })
+      .label('t*devActioncount', () => {
+        return {
+          content: data => {
+            return `${data.devActioncount}`
+          },
+          style: {
+            fill: '#333'
+          }
+        }
+      })
 
     const total = data.reduce((prev, item) => prev + item.devActioncount, 0)
     const averageNum = (total / data.length).toFixed(2)
     const contentColor = '#3b80ff'
-    const content = `平均抬压脚数: ${averageNum}次`
+    const content = `平均: ${averageNum}次`
 
     chart.annotation().line({
       top: true,

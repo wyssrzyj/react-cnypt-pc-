@@ -6,6 +6,8 @@ require('@babel/polyfill')
 const path = require('path')
 // const BundleAnalyzerPlugin =
 //   require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+console.log(path.resolve(__dirname, './webpack.common.js'))
+console.log(path.resolve(__dirname, './getCSSModuleLocalIdent.js'))
 const { getCSSModuleLocalIdent } = require(path.resolve(
   __dirname,
   './getCSSModuleLocalIdent.js'

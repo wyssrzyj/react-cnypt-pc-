@@ -179,13 +179,17 @@ const EnterpriseInfo = () => {
           setFieldsValue({
             ...data,
             enterpriseLogoUrl,
-            area: [
-              provinceId ? provinceId.toString() : undefined,
-              cityId ? cityId.toString() : undefined,
-              districtId ? districtId.toString() : undefined
-            ],
             businessAddress: { location: `${longitude},${latitude}`, address }
           })
+          if (provinceId) {
+            setFieldsValue({
+              area: [
+                provinceId ? provinceId.toString() : undefined,
+                cityId ? cityId.toString() : undefined,
+                districtId ? districtId.toString() : undefined
+              ]
+            })
+          }
         }
       })
   }

@@ -104,7 +104,7 @@ const BusinessAddressCom = props => {
   }, [address, location])
 
   return (
-    <div>
+    <div className={styles.businessAddressCom}>
       <Search
         placeholder="请输入企业地址，如 浙江省杭州市余杭区新丰路199号"
         enterButton="精确定位"

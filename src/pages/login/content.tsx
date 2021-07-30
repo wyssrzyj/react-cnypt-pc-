@@ -20,8 +20,9 @@ const LoginContent = () => {
   const userPlaceholder = '请输入用户名'
   const pwdPlaceholder = '请输入登录密码'
 
-  const { loginStore } = useStores()
+  const { loginStore, registerStore } = useStores()
   const { login, userInfo } = loginStore
+  const { checkUser } = registerStore
   const history = useHistory()
   const [form] = Form.useForm()
   const { validateFields, resetFields } = form
@@ -168,6 +169,7 @@ const LoginContent = () => {
                 className={styles.verification}
                 placeholder="请输入验证码"
                 tel={phoneNumer}
+                checkCallback={checkUser}
                 code={'loginVerify'}
               />
             </Form.Item>

@@ -100,7 +100,7 @@ export default class HomeStore {
         '/api/factory/unauth/statistic/map/factory',
         params
       )
-      if (res.success) {
+      if (res.code === 200) {
         return res.data
       }
       return {}

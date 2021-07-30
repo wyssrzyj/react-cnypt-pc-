@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs, Row, Col } from 'antd'
 import styles from './index.module.less'
-import u1017 from '@/static/images/u1017.png'
+import u1017 from '@/static/images/u914.png'
 
 const { TabPane } = Tabs
 

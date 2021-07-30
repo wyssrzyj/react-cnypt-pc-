@@ -20,7 +20,7 @@ function SamplesShow() {
                 <div key={index} className={styles.samplesCard}>
                   <img
                     className={styles.goodsImg}
-                    src={require('@/static/images/u1848.png')}
+                    src={require('@/static/images/u912.png')}
                     alt=""
                   />
                   <span>{item}瓦俪娅 2021年春...</span>

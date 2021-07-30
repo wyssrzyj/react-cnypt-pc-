@@ -18,7 +18,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: 'js/[filename].[chunkhash:6].bundle.js',
+    filename: 'js/[name].[chunkhash:6].bundle.js',
     publicPath: '/',
     assetModuleFilename: 'images/[hash:6][ext][query]'
   },

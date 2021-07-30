@@ -127,7 +127,7 @@ const config = merge(common, {
     //     analyzerMode: "disable", // 不启用展示打包报告的web服务器
     //     generateStatsFile: true // 生成报告文件
     // }),
-    new CompressionPlugin(),
+    // new CompressionPlugin(),
     new HappyPack({
       //用id来标识 happypack处理那里类文件
       id: 'babelid',

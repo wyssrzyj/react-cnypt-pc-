@@ -4,15 +4,6 @@ import classNames from 'classnames'
 import { Icon } from '@/components'
 import { observer, useStores } from '@/utils/mobx'
 
-import GC1 from '../img/gongchang_1.png'
-import GC2 from '../img/gongchang_2.png'
-import GC3 from '../img/gongchang_3.png'
-
-const imgsMap = new Map()
-imgsMap.set(0, GC1)
-imgsMap.set(1, GC2)
-imgsMap.set(2, GC3)
-
 // 地图工厂轮播卡片
 const SwiperCard = props => {
   const { data } = props
@@ -41,12 +32,9 @@ const SwiperCard = props => {
     window.open(`/factory-detail/${data.factoryId}`)
   }
 
-  const random = Math.floor(Math.random() * 3)
-
   return (
     <div className={styles.swaperCard} onClick={toFactoryDetail}>
-      <img src={imgsMap.get(random)} alt="" className={styles.swaiperImg} />
-      {/* <img src={data.pictureUrl} alt="" className={styles.swaiperImg} /> */}
+      <img src={data.pictureUrl} alt="" className={styles.swaiperImg} />
       <div>
         <div className={styles.factoryName}>{data.factoryName}</div>
         {configs.map((item, idx) => {

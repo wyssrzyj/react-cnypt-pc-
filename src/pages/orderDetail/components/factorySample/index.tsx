@@ -11,7 +11,7 @@ const FactorySample = () => {
           <div className={styles.sampleBox} key={index}>
             <img
               className={styles.sampleImg}
-              src={require('@/static/images/u1848.png')}
+              src={require('@/static/images/u912.png')}
               alt=""
             />
             <div className={styles.sampleDes}>

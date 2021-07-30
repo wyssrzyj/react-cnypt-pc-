@@ -19,20 +19,24 @@ const CertificateAuthentication = () => {
   }
 
   const getApprovalResult = () => {
-    axios
-      .get(
-        '/api/factory/enterprise/get-enterprise-certificate-approval-result',
-        {
-          enterpriseId: currentUser.enterpriseId
-        }
-      )
-      .then(response => {
-        const { success, data } = response
-        if (success) {
-          const { certificateApprovalStatus } = data
-          setCurrentStep(certificateApprovalStatus ? 1 : 0)
-        }
-      })
+    if (currentUser.enterpriseId) {
+      axios
+        .get(
+          '/api/factory/enterprise/get-enterprise-certificate-approval-result',
+          {
+            enterpriseId: currentUser.enterpriseId
+          }
+        )
+        .then(response => {
+          const { success, data } = response
+          if (success) {
+            const { certificateApprovalStatus } = data
+            setCurrentStep(certificateApprovalStatus ? 1 : 0)
+          }
+        })
+    } else {
+      setCurrentStep(0)
+    }
   }
 
   useEffect(() => {

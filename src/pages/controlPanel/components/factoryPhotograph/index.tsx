@@ -98,7 +98,11 @@ const FactoryPhotograph = () => {
                   key={index}
                   className={styles.image}
                   style={{ backgroundImage: `url(${item})` }}
-                  onClick={() => checkImage(locationFileList.length + index)}
+                  onClick={() =>
+                    checkImage(
+                      nameplateFileList.length + locationFileList.length + index
+                    )
+                  }
                 ></div>
               ))}
             </Col>

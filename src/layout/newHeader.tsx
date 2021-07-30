@@ -58,10 +58,10 @@ const Header = () => {
   const userInfo = getUserInfo() || {}
   const { loginStore } = useStores()
   const { logout } = loginStore
-  const { approvalStatus, factoryAuditStatus } = userInfo
+  const { infoApprovalStatus, factoryAuditStatus } = userInfo
   const newConsoleOptions = consoleOptions
     .filter(item => {
-      return !(!approvalStatus && item.title === '资质认证')
+      return !(infoApprovalStatus != '1' && item.title === '资质认证')
     })
     .filter(obj => !(factoryAuditStatus != '1' && obj.title === '验厂管理'))
 

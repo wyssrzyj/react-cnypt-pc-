@@ -83,7 +83,7 @@ const ControlPanel = () => {
   const { factoryStore } = useStores()
   const { productCategory } = factoryStore
   const currentUser = getUserInfo() || {}
-  const { approvalStatus, factoryAuditStatus } = currentUser
+  const { infoApprovalStatus, factoryAuditStatus } = currentUser
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
 
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
@@ -148,7 +148,7 @@ const ControlPanel = () => {
               <Link to="/control-panel/certificate">企业证件认证</Link>
             </Menu.Item>
 
-            {approvalStatus && (
+            {infoApprovalStatus == '1' && (
               <Menu.Item
                 key="qualification"
                 className={styles.item}

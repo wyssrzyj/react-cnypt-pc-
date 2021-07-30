@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Steps } from 'antd'
 import { IdcardFilled, CarryOutFilled } from '@ant-design/icons'
 import { CertificateInformation, ApprovalResult } from './components'
 import Title from '../title'
+import axios from '@/utils/axios'
 import { getUserInfo } from '@/utils/tool'
 import styles from './index.module.less'
 
@@ -10,14 +11,33 @@ const { Step } = Steps
 
 const CertificateAuthentication = () => {
   const currentUser = getUserInfo() || {}
-  const { certificateApprovalStatus } = currentUser
-  const [currentStep, setCurrentStep] = useState<number>(
-    certificateApprovalStatus ? 1 : 0
-  )
+  // const { certificateApprovalStatus } = currentUser
+  const [currentStep, setCurrentStep] = useState<number>(undefined)
 
   const handleSubmit = step => {
     setCurrentStep(step)
   }
+
+  const getApprovalResult = () => {
+    axios
+      .get(
+        '/api/factory/enterprise/get-enterprise-certificate-approval-result',
+        {
+          enterpriseId: currentUser.enterpriseId
+        }
+      )
+      .then(response => {
+        const { success, data } = response
+        if (success) {
+          const { certificateApprovalStatus } = data
+          setCurrentStep(certificateApprovalStatus ? 1 : 0)
+        }
+      })
+  }
+
+  useEffect(() => {
+    getApprovalResult()
+  }, [])
 
   return (
     <div className={styles.stepsBox}>

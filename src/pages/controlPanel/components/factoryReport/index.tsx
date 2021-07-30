@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Badge, message } from 'antd'
 import moment from 'moment'
 import { toJS } from 'mobx'
-import { filter, find } from 'lodash'
+import { filter, find, isEmpty } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import axios from '@/utils/axios'
-import { getTypeOptions, getProductClass, getProductMode } from '@/utils/tool'
+import {
+  getTypeOptions,
+  getProductClassMap,
+  getProductMode
+} from '@/utils/tool'
 import { Icon, autoAddTooltip } from '@/components'
 import { getUserInfo } from '@/utils/tool'
 import Title from '../title'
@@ -19,7 +23,7 @@ const FactoryReport = () => {
   const { productCategoryList } = factoryStore
   const { factoryYearOutputValue = [], factoryYearOutputProd = [] } =
     toJS(dictionary)
-  const productClassOptions = getProductClass()
+  const productClassOptions = getProductClassMap()
   const productionModeOptions = getProductMode()
   const typeOptions = getTypeOptions()
   const [currentFactory, setCurrentFactory] = useState<any>({})
@@ -29,6 +33,7 @@ const FactoryReport = () => {
   const [validationTime, setValidationTime] = useState('')
   const [memberText, setMemberText] = useState('')
   // const [modalVisible, setModalVisible] = useState<boolean>(true)
+  const [grade, setGrade] = useState<string>('--')
 
   const getFactoryInfo = () => {
     const newList = toJS(productCategoryList)
@@ -41,7 +46,8 @@ const FactoryReport = () => {
       .then(response => {
         const { success, data } = response
         if (success) {
-          const { mainCategoriesList, factoryProcessTypeList } = data
+          const { mainCategoriesList, factoryProcessTypeList, clothesGrade } =
+            data
           setCurrentFactory({ ...data })
           const newLabel = filter(childList, function (o) {
             return find(mainCategoriesList, function (item) {
@@ -56,6 +62,16 @@ const FactoryReport = () => {
             })
           })
           setOrderType([...newOrderType])
+          // 产品档次
+          if (clothesGrade) {
+            const newGrade = productClassOptions.find(
+              item => item.value == clothesGrade
+            )
+            if (newGrade) {
+              const gradeText = newGrade.label.split('').join('、')
+              setGrade(gradeText)
+            }
+          }
         }
       })
   }
@@ -228,15 +244,7 @@ const FactoryReport = () => {
                     text="产品档次"
                     className={styles.classesSubtitle}
                   />
-                  <span>
-                    {productClassOptions.find(
-                      item => item.value == currentFactory.clothesGrade
-                    )
-                      ? productClassOptions.find(
-                          item => item.value == currentFactory.clothesGrade
-                        ).label
-                      : '--'}
-                  </span>
+                  <span>{grade}</span>
                 </li>
               </ul>
             </div>
@@ -262,7 +270,9 @@ const FactoryReport = () => {
               <span className={styles.subTitle}>接单类型</span>
             </div>
             <div className={styles.right}>
-              {orderType.map(item => item.label).join('、')}
+              {!isEmpty(orderType)
+                ? orderType.map(item => item.label).join('、')
+                : '--'}
             </div>
           </li>
           <li>

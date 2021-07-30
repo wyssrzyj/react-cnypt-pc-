@@ -10,8 +10,10 @@ const { Step } = Steps
 
 const CertificateAuthentication = () => {
   const currentUser = getUserInfo() || {}
-  const { approvalStatus } = currentUser
-  const [currentStep, setCurrentStep] = useState<number>(approvalStatus ? 1 : 0)
+  const { certificateApprovalStatus } = currentUser
+  const [currentStep, setCurrentStep] = useState<number>(
+    certificateApprovalStatus ? 1 : 0
+  )
 
   const handleSubmit = step => {
     setCurrentStep(step)

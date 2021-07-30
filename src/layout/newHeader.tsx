@@ -130,7 +130,7 @@ const Header = () => {
       <div className={styles.headerLeft}>
         <Link to="/" className={styles.home}>
           <Icon type={'jack-shouye2'} className={styles.homeIcon}></Icon>
-          <span>优产云平台首页</span>
+          <span className={styles.homeName}>优产云平台首页</span>
           {/* <Icon type={'jack-logo1'} className={styles.logoIcon}></Icon> */}
           {/* <img className={styles.logo} src={logo} alt="优产云平台" /> */}
           {/* <span className={styles.verticalBar}>|</span> */}

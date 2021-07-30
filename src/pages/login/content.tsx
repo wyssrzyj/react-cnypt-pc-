@@ -21,7 +21,7 @@ const LoginContent = () => {
   const pwdPlaceholder = '请输入登录密码'
 
   const { loginStore, registerStore } = useStores()
-  const { login, userInfo } = loginStore
+  const { login } = loginStore
   const { checkUser } = registerStore
   const history = useHistory()
   const [form] = Form.useForm()
@@ -61,7 +61,7 @@ const LoginContent = () => {
 
       if (res && res.success) {
         setError(false)
-        await userInfo()
+        // await userInfo()
         history.push('/')
       } else {
         setError(true)

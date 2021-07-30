@@ -10,8 +10,9 @@ interface LayoutProps extends RouteComponentProps {
 }
 
 const Layout = (props: LayoutProps) => {
-  const { commonStore } = useStores()
+  const { commonStore, loginStore } = useStores()
   const { allDictionary, getAllArea } = commonStore
+  const { userInfo } = loginStore
   const { location } = props
   const { pathname } = location
   const noUseHeaders = [
@@ -30,6 +31,7 @@ const Layout = (props: LayoutProps) => {
     ;(async () => {
       await allDictionary([])
       await getAllArea()
+      await userInfo()
     })()
   }, [])
 

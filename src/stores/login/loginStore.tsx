@@ -20,7 +20,7 @@ export default class LoginStore {
         localStorage.setItem('refresh', data.refresh_token)
         localStorage.setItem('currentUser', JSON.stringify(data))
       }
-      if (!res.success) {
+      if (res.code !== 200) {
         message.error(res.msg)
       }
       return res
@@ -31,12 +31,12 @@ export default class LoginStore {
   @action logout = async () => {
     try {
       const res: ResponseProps = await axios.post('/api/user/account/logout')
-      if (res.success) {
+      if (res.code === 200) {
         localStorage.setItem('token', '')
         localStorage.setItem('refresh', '')
         localStorage.setItem('currentUser', JSON.stringify({}))
       }
-      if (res && !res.success) {
+      if (res && res.code !== 200) {
         message.error(res.msg)
       } else {
         message.success('退出成功')
@@ -64,7 +64,7 @@ export default class LoginStore {
       if (data) {
         localStorage.setItem('userInfo', JSON.stringify(data))
       }
-      if (!res.success) {
+      if (res.code !== 200) {
         message.error(res.msg)
       }
       return res
@@ -77,10 +77,10 @@ export default class LoginStore {
     try {
       const res: ResponseProps = await axios.get(`/api/sms/send-code/${mobile}`)
 
-      if (res.success) {
+      if (res.code === 200) {
         message.success(res.msg)
       }
-      if (!res.success) {
+      if (res.code !== 200) {
         message.error(res.msg)
       }
       return res
@@ -97,13 +97,13 @@ export default class LoginStore {
       )
       console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
 
-      if (res.success) {
+      if (res.code === 200) {
         message.success(res.msg)
       }
-      if (!res.success) {
+      if (res.code !== 200) {
         message.error(res.msg)
       }
-      return res.success
+      return res.data
     } catch (e) {
       console.log(e)
     }

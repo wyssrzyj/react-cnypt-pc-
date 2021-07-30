@@ -46,7 +46,6 @@ const PhoneModal = ({ cancel }) => {
   const onOk = async () => {
     try {
       const values = await validateFields()
-      console.log('🚀 ~ file: phoneModal.tsx ~ line 32 ~ onOk ~ values', values)
       if (step === 1) {
         const res = await verificationCode(values)
         res && setStep(2)
@@ -57,6 +56,7 @@ const PhoneModal = ({ cancel }) => {
         const res = await checkPhonePwd({
           ...values
         })
+        console.log('🚀 ~ file: phoneModal.tsx ~ line 59 ~ onOk ~ res', res)
         res && setStep(2)
         res && resetFields()
       }

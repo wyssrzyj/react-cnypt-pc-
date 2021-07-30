@@ -18,9 +18,9 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: 'js/[name].bundle.js',
+    filename: 'js/[name].[chunkhash:6].bundle.js',
     publicPath: '/',
-    assetModuleFilename: 'images/[hash][ext][query]'
+    assetModuleFilename: 'images/[hash:6][ext][query]'
   },
   plugins: [
     new webpack.ProvidePlugin({

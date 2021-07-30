@@ -1,12 +1,13 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import styles from './index.module.less'
-import { Input, Button } from 'antd'
+import { Input, Button, message } from 'antd'
 import { useStores } from '@/utils/mobx'
 
 type InputEvent = ChangeEvent<HTMLInputElement>
 
 const VerifyInput = props => {
-  const { onChange, value, tel, placeholder, code, ...rest } = props
+  const { onChange, value, tel, placeholder, code, checkCallback, ...rest } =
+    props
 
   const { registerStore } = useStores()
   const { sendVerifyCode } = registerStore
@@ -52,10 +53,24 @@ const VerifyInput = props => {
 
   const sendCode = async () => {
     if (sending) return
-
-    const res = await sendVerifyCode(tel)
-    res && setSending(true)
-    res && timerRun()
+    try {
+      let flag = true
+      if (checkCallback && code !== 'register') {
+        const checktFlag = await checkCallback(tel, 'mobilePhone')
+        checktFlag && message.error('手机号未注册~')
+        flag = !checktFlag // checkFlag false 已注册
+      }
+      if (checkCallback && code === 'register') {
+        const checktFlag = await checkCallback(tel, 'mobilePhone')
+        !checktFlag && message.error('手机号已注册~')
+        flag = checktFlag // checkFlag false 已注册
+      }
+      if (flag) {
+        const res = await sendVerifyCode(tel)
+        res && setSending(true)
+        res && timerRun()
+      }
+    } catch {}
   }
 
   useEffect(() => {

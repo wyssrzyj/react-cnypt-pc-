@@ -253,6 +253,7 @@ const Register = () => {
             prefix={<CodeIcon />}
             code={'register'}
             tel={mobilePhone}
+            checkCallback={checkUser}
             placeholder={'验证码'}
           />
         </Form.Item>

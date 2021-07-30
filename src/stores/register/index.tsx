@@ -51,7 +51,7 @@ export default class RegisterStore {
         `/api/user/account/register`,
         params
       )
-      if (res.success) {
+      if (res.code === 200) {
         message.success('注册成功~')
       }
       return res

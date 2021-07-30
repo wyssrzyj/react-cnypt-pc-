@@ -123,10 +123,10 @@ export default class ControlPanelStore {
       )
       if (res.code === 200) {
         message.success(res.msg)
+        return true
       } else {
         message.error(res.msg)
       }
-      return res.data
     } catch (e) {
       console.log(e)
     }

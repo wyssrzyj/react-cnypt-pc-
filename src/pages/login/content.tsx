@@ -195,10 +195,10 @@ const LoginContent = () => {
       <Button type={'text'} className={styles.registerBtn} onClick={toRegister}>
         注册
       </Button>
-      <div className={styles.otherLogin}>其他登录方式</div>
+      {/* <div className={styles.otherLogin}>其他登录方式</div>
       <div className={styles.otherBox}>
         <Icon type={'jack-weixin1'} className={styles.otherIcon}></Icon>
-      </div>
+      </div> */}
     </div>
   )
 }

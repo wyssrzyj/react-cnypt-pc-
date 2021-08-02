@@ -120,6 +120,19 @@ const WorkshopEquipment = props => {
     leftRef.current.click()
   }
 
+  const getPagination = () => {
+    if (dataSource.length > 6) {
+      return {
+        current: pageNum,
+        pageSize,
+        total,
+        onChange: onPaginationChange
+      }
+    } else {
+      return false
+    }
+  }
+
   useEffect(() => {
     getEquipment()
   }, [])
@@ -213,12 +226,7 @@ const WorkshopEquipment = props => {
           size="small"
           dataSource={dataSource}
           columns={columns}
-          pagination={{
-            current: pageNum,
-            pageSize,
-            total,
-            onChange: onPaginationChange
-          }}
+          pagination={getPagination()}
         />
       </div>
     </div>

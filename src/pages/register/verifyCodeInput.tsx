@@ -19,6 +19,7 @@ const VerifyCodeInput = props => {
   const valueChange = (event: InputEvent) => {
     onChange && onChange(event.target.value)
   }
+
   useEffect(() => {
     const last = localStorage.getItem(`verifyTime${code}`)
     if (last) {
@@ -28,6 +29,8 @@ const VerifyCodeInput = props => {
         setSending(true)
         timerRun()
       } else {
+        // 初始化 倒计时时间
+        setLastTime(verifyTime)
         localStorage.setItem(`verifyTime${code}`, '')
       }
     }

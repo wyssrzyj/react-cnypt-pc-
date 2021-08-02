@@ -96,7 +96,9 @@ const WorkshopEquipment = props => {
           const { records, total } = data
           setTotal(total)
           setDataSource([...records])
-          const newUrl = records.map(item => item.imageUrl)
+          const newUrl = records
+            .filter(o => o.imageUrl)
+            .map(item => item.imageUrl)
           setFactoryImg([...newUrl])
         } else {
           setTotal(0)
@@ -119,6 +121,19 @@ const WorkshopEquipment = props => {
 
   const toRight = () => {
     leftRef.current.click()
+  }
+
+  const getPagination = () => {
+    if (dataSource.length > 6) {
+      return {
+        current: pageNum,
+        pageSize,
+        total,
+        onChange: onPaginationChange
+      }
+    } else {
+      return false
+    }
   }
 
   useEffect(() => {
@@ -161,12 +176,7 @@ const WorkshopEquipment = props => {
             size="small"
             dataSource={dataSource}
             columns={columns}
-            pagination={{
-              current: pageNum,
-              pageSize,
-              total,
-              onChange: onPaginationChange
-            }}
+            pagination={getPagination()}
           />
         </div>
         {!isEmpty(factoryImg) ? (

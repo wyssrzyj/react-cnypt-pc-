@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Tag, Row, Col } from 'antd'
+import { Tag, Row, Col, Image } from 'antd'
 import moment from 'moment'
 import { toJS } from 'mobx'
 import { isEmpty, isArray } from 'lodash'
@@ -160,8 +160,9 @@ const CompaniesIntroduce = props => {
           </div>
           <div className={styles.right}>
             {factoryAuditorImage ? (
-              <img className={styles.photo} src={factoryAuditorImage} alt="" />
+              <Image className={styles.photo} src={factoryAuditorImage} />
             ) : (
+              // <img className={styles.photo} src={factoryAuditorImage} alt="" />
               <NoData
                 bgColor="#f6f6f6"
                 width={236}

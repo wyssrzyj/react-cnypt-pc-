@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Empty } from 'antd'
+import { Empty, Image } from 'antd'
 import { isEmpty } from 'lodash'
 import { toJS } from 'mobx'
 import axios from '@/utils/axios'
@@ -46,7 +46,11 @@ const QualificationCertificate = props => {
           ) : (
             certificate.map(item => (
               <div key={item.id} className={styles.certificateBox}>
-                <img
+                {/* <img
+                  className={styles.certificateImg}
+                  src={item.certificateImageURI}
+                /> */}
+                <Image
                   className={styles.certificateImg}
                   src={item.certificateImageURI}
                 />

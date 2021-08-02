@@ -85,7 +85,7 @@ const EnterpriseInformation = props => {
       {/* 企业照片 */}
       {!isEmpty(current) && (
         <div ref={domRef1}>
-          <EnterpriseImage ref={domRef1} current={current} />
+          <EnterpriseImage current={current} />
         </div>
       )}
       {/* 接单需求 */}

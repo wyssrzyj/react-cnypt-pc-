@@ -67,6 +67,7 @@ export default class ControlPanelStore {
       console.log(e)
     }
   }
+
   @action checkPhonePwd = async params => {
     try {
       const res: ResponseProps = await axios.post(
@@ -75,7 +76,11 @@ export default class ControlPanelStore {
       )
       if (res.code === 200) {
         message.success(res.msg)
-        return res.data || {}
+        console.log(
+          '🚀 ~ file: index.tsx ~ line 79 ~ ControlPanelStore ~ res',
+          res
+        )
+        return res.data
       } else {
         message.error(res.msg)
       }
@@ -83,6 +88,7 @@ export default class ControlPanelStore {
       console.log(e)
     }
   }
+
   @action updatePwd = async params => {
     try {
       const res: ResponseProps = await axios.post(

@@ -26,7 +26,6 @@ const UploadFile = ({ onChange }) => {
       formData.append('file', file)
       formData.append('module', 'factory')
       const res = await uploadFiles(formData)
-      console.log('🚀 ~ file: upload.tsx ~ line 29 ~ customRequest ~ res', res)
       onChange && (await onChange(res))
       list.push({ thumbUrl: res })
       setFileList(list)

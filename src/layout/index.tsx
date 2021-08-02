@@ -4,12 +4,14 @@ import Header from './newHeader'
 import styles from './index.module.less'
 import { withRouter, RouteComponentProps } from 'react-router'
 import Footer from './footer'
+import { getCurrentUser } from '@/utils/tool'
 
 interface LayoutProps extends RouteComponentProps {
   children: ReactElement<any, any>
 }
 
 const Layout = (props: LayoutProps) => {
+  const currentUser = getCurrentUser()
   const { commonStore, loginStore } = useStores()
   const { allDictionary, getAllArea } = commonStore
   const { userInfo } = loginStore
@@ -31,7 +33,7 @@ const Layout = (props: LayoutProps) => {
     ;(async () => {
       await allDictionary([])
       await getAllArea()
-      await userInfo()
+      currentUser.userId && (await userInfo())
     })()
   }, [])
 

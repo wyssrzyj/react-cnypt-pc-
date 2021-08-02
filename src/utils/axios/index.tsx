@@ -124,8 +124,10 @@ const apiAxios = async (
     }
   } catch (error) {
     failure && failure()
-    console.log(error)
-    message.error(error)
+    const { response } = error
+    const { data } = response
+    const { msg } = data
+    message.error(msg)
   }
 }
 

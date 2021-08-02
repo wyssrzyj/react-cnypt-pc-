@@ -172,7 +172,7 @@ const AccountSafe = () => {
                   />
                   <Button
                     className={styles.changeBtn}
-                    onClick={nameBlur}
+                    // onClick={nameBlur}
                     size={'small'}
                     type={'primary'}
                   >

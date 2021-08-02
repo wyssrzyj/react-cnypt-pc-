@@ -140,7 +140,6 @@ const AccountSafe = () => {
       userId: currentUser.userId
     }
     const res = await changeUserInfo(params)
-    console.log('🚀 ~ file: index.tsx ~ line 143 ~ AccountSafe ~ res', res)
     if (res) {
       const newUserInfo = cloneDeep(userInfo)
       newUserInfo.userFaceUrl = url

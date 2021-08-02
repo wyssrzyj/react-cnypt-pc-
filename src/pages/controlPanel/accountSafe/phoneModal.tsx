@@ -56,7 +56,6 @@ const PhoneModal = ({ cancel }) => {
         const res = await checkPhonePwd({
           ...values
         })
-        console.log('🚀 ~ file: phoneModal.tsx ~ line 59 ~ onOk ~ res', res)
         res && setStep(2)
         res && resetFields()
       }
@@ -69,7 +68,7 @@ const PhoneModal = ({ cancel }) => {
 
         const newUser = cloneDeep(currentUser)
         newUser.mobilePhone = values.mobile
-        localStorage.setItem('currentUser', JSON.stringify(newUser))
+        res && localStorage.setItem('currentUser', JSON.stringify(newUser))
         res && setStep(5)
       }
     } catch (e) {

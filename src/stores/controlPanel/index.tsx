@@ -76,10 +76,7 @@ export default class ControlPanelStore {
       )
       if (res.code === 200) {
         message.success(res.msg)
-        console.log(
-          '🚀 ~ file: index.tsx ~ line 79 ~ ControlPanelStore ~ res',
-          res
-        )
+        console.log('🚀2222222222222222222', res)
         return res.data
       } else {
         message.error(res.msg)

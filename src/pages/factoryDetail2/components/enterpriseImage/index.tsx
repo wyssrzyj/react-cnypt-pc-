@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Radio } from 'antd'
+import { Radio, Image } from 'antd'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 import SwiperCore, {
@@ -120,7 +120,8 @@ const EnterpriseImage = props => {
                   if (!item) return null
                   return (
                     <div className={'swiper-slide'} key={idx}>
-                      <img className={styles.swaiperImg} src={item} alt="" />
+                      <Image className={styles.swaiperImg} src={item} />
+                      {/* <img className={styles.swaiperImg} src={item} alt="" /> */}
                     </div>
                   )
                 })}

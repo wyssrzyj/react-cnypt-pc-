@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col } from 'antd'
+import { Row, Col, Image } from 'antd'
 import { NoData } from '@/components'
 import axios from '@/utils/axios'
 import { checkValue } from '@/utils/tool'
@@ -92,10 +92,14 @@ const CommercialInfo = props => {
             </div>
             <div className={styles.right}>
               {businessInfo.businessLicenseUrl ? (
-                <img
+                // <img
+                //   className={styles.photo}
+                //   src={businessInfo.businessLicenseUrl}
+                //   alt=""
+                // />
+                <Image
                   className={styles.photo}
                   src={businessInfo.businessLicenseUrl}
-                  alt=""
                 />
               ) : (
                 <NoData

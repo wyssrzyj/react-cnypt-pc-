@@ -59,7 +59,7 @@ export default class ControlPanelStore {
         params
       )
       if (res.code === 200) {
-        return res.data || {}
+        return res.data
       } else {
         message.error(res.msg)
       }

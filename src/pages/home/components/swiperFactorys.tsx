@@ -73,7 +73,7 @@ const SwiperFactorys = props => {
   const { SwiperCore } = props
   const leftRef = useRef<HTMLDivElement>()
   const rightRef = useRef<HTMLDivElement>()
-  const [curKey, setCurKey] = useState(1)
+  const [curKey, setCurKey] = useState(0)
 
   const { factoryStore } = useStores()
   const { getFactoryList } = factoryStore

@@ -110,7 +110,7 @@ const BusinessAddressCom = props => {
         enterButton="精确定位"
         onSearch={onSearch}
         value={locationName}
-        style={{ width: 574 }}
+        style={{ width: 567 }}
         onChange={e => setLocationName(e.target.value)}
       />
       <div>

@@ -105,6 +105,7 @@ const Home = () => {
   useEffect(() => {
     ;(async () => {
       const totalData = await getTotalCapacity()
+      totalData.totalOrderBillerNum = 165
       setData(totalData)
     })()
   }, [])

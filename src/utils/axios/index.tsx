@@ -3,7 +3,7 @@ import axios from 'axios'
 import { message } from 'antd'
 import { getRefresh, getToken, getCurrentUser } from '../tool'
 import { dFn, Params, ResponseProps } from './types'
-import { dealRefresh } from './refreshAxios'
+// import { dealRefresh } from './refreshAxios'
 
 const customAxios = axios.create({})
 
@@ -47,7 +47,7 @@ customAxios.interceptors.request.use(
     const flag = whiteList.some(item => request.url.includes(item))
 
     if (expire - Date.now() < 1000 && !flag) {
-      dealRefresh(request)
+      // dealRefresh(request)
     }
     // NProgress.start()
     return request

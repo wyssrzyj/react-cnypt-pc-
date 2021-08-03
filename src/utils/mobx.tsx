@@ -4,6 +4,7 @@ import {
   MobXProviderContext,
   observer as _observer
 } from 'mobx-react'
+import { toJS } from 'mobx'
 
 export function inject(...args) {
   return componentClass => _inject(...args)(_observer(componentClass))
@@ -16,3 +17,5 @@ export function observer(target) {
 export const useStores: any = () => {
   return React.useContext(MobXProviderContext)
 }
+
+export { toJS }

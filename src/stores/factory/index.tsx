@@ -95,17 +95,19 @@ export default class FactoryStore {
           factoryId
         }
       )
-      console.log('🚀 ~ file: index.tsx ~ line 65 ~ FactoryStore ~ res', res)
-
-      if (res) {
+      if (res.code === 200) {
         runInAction(() => {
-          this.factoryData = res.data
+          this.factoryData = res.data || {}
         })
         return res.data || []
       } else {
         message.error('获取数据失败~')
       }
+      return res.data
     } catch (e) {
+      runInAction(() => {
+        this.factoryData = null
+      })
       console.log(e)
     }
   }
@@ -119,9 +121,8 @@ export default class FactoryStore {
           factoryId
         }
       )
-      console.log('🚀 ~ file: index.tsx ~ line 65 ~ FactoryStore ~ res', res)
 
-      if (res) {
+      if (res.code === 200) {
         runInAction(() => {
           this.factoryMachineData = res.data
         })
@@ -129,6 +130,8 @@ export default class FactoryStore {
       } else {
         message.error('获取数据失败~')
       }
+
+      return res.data
     } catch (e) {
       console.log(e)
     }
@@ -143,9 +146,8 @@ export default class FactoryStore {
           factoryId
         }
       )
-      console.log('🚀 ~ file: index.tsx ~ line 126 ~ FactoryStore ~ res', res)
 
-      if (res) {
+      if (res.code === 200) {
         runInAction(() => {
           this.factoryProductList = res.data
         })
@@ -153,7 +155,11 @@ export default class FactoryStore {
       } else {
         message.error('获取数据失败~')
       }
+      return res.data
     } catch (e) {
+      runInAction(() => {
+        this.factoryProductList = null
+      })
       console.log(e)
     }
   }

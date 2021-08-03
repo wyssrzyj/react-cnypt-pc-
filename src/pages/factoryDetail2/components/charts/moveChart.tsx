@@ -91,6 +91,7 @@ const MoveChart = () => {
 
     chart.clear()
     chart.data(data)
+    console.log('🚀 ~ file: moveChart.tsx ~ line 96 ~ renderChart ~ data', data)
 
     chart.scale('devRunningtime', {
       min: 0,
@@ -125,6 +126,9 @@ const MoveChart = () => {
       label: {
         style: {
           fontSize: 16
+        },
+        formatter: val => {
+          return isNaN(val) ? '' : val
         }
       },
       title: {

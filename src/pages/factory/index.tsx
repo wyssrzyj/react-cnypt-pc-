@@ -41,7 +41,7 @@ const Factory = () => {
   const currentUser = getCurrentUser() || {}
   const { userId } = currentUser
   const { factoryStore, commonStore } = useStores()
-  const { getFactoryList, productCategory } = factoryStore
+  const { getFactoryPageList, productCategory } = factoryStore
   const { factoryName } = commonStore
 
   // const [sort, setSort] = useState<string>('综合排序')
@@ -95,7 +95,7 @@ const Factory = () => {
       factoryName,
       ...factoryParams
     }
-    const data = (await getFactoryList(params)) || {}
+    const data = (await getFactoryPageList(params)) || {}
     if (isEmpty(data)) {
       setTotal(0)
       setFactoryArray([])

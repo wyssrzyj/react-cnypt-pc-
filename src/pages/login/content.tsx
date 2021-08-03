@@ -105,7 +105,7 @@ const LoginContent = () => {
           ></TabPane>
         </Tabs>
         {+activeTab === 1 ? (
-          <>
+          <section>
             <Form.Item
               name="userName"
               label=""
@@ -125,13 +125,14 @@ const LoginContent = () => {
                 }
               ]}
             >
-              <Input
+              <Input.Password
                 prefix={<PwdIcon />}
                 placeholder={pwdPlaceholder}
-                type="password"
+                // type="password"
+                size={'middle'}
               />
             </Form.Item>
-          </>
+          </section>
         ) : (
           <>
             <Form.Item
@@ -181,7 +182,7 @@ const LoginContent = () => {
         <div
           className={classNamess(styles.errorText, error && styles.showError)}
         >
-          <Icon type={'jack-jingshi'} className={styles.errorIcon} />
+          <Icon type={'jack-error'} className={styles.errorIcon} />
           {errorTexts.get(0)}
         </div>
         <span className={styles.forgetPwd} onClick={toReset}>

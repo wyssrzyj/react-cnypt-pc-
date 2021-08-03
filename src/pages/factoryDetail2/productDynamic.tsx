@@ -1,5 +1,4 @@
-import { useStores } from '@/utils/mobx'
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   MonthProduceChart,
   MoveChart,
@@ -13,19 +12,7 @@ import {
 import ScrollTable from './components/scrollTable'
 import styles from './index.module.less'
 
-const ProductDynamic = ({ factoryId }) => {
-  const { factoryStore } = useStores()
-  const { getFactoryData, getFactoryMachineData, getFactoryBoard } =
-    factoryStore
-
-  useEffect(() => {
-    ;(async () => {
-      await getFactoryData(factoryId)
-      await getFactoryMachineData(factoryId)
-      await getFactoryBoard(factoryId)
-    })()
-  }, [])
-
+const ProductDynamic = () => {
   return (
     <div>
       <div className={styles.charts}>

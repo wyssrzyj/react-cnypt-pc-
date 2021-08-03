@@ -20,6 +20,11 @@
   background: #ffffff;
 
   :global {
+
+    input:-internal-autofill-selected {
+      background: #ffffff !important;
+    }
+
     .ant-input-affix-wrapper {
       border: none !important;
       border-bottom: 1px solid #e4e4e4 !important;
@@ -27,12 +32,21 @@
       box-shadow: none !important;
     }
 
-    .ant-form-item-control {
-      margin-bottom: 20px;
+    .ant-form-item-has-error .ant-input-affix-wrapper{
+      border-bottom: 1px solid #ff4d4f !important;
     }
+
+    // .ant-form-item-control {
+    //   margin-bottom: 20px;
+    // }
 
     .ant-input {
       padding-left: 12px !important;
+      line-height: 48px !important;
+      height: 48px !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
     }
 
     .ant-tabs-tab-active {
@@ -62,11 +76,11 @@
     }
 
     .ant-form-item {
-      height: 58px !important;
-      margin-bottom: 24px !important;
+      // line-height: 58px !important;
+      // margin-bottom: 24px !important;
 
       &:nth-last-child(1) {
-        margin-bottom: 0 !important;
+        // margin-bottom: 0 !important;
       }
     }
   }
@@ -193,9 +207,9 @@
       box-shadow: none !important;
     }
 
-    .ant-form-item-control {
-      margin-bottom: 20px;
-    }
+    // .ant-form-item-control {
+    //   margin-bottom: 20px;
+    // }
 
     .ant-input {
       padding-left: 12px !important;

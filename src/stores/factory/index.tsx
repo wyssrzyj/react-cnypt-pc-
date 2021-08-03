@@ -30,11 +30,29 @@ export default class FactoryStore {
     this.productCategoryList = []
   }
 
-  // 获取工厂列表 搜索工厂
+  // 获取首页工厂列表 搜索工厂
   @action getFactoryList = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/factory/info/page-high-quality-factory`,
+        params
+      )
+
+      if (res) {
+        return res.data || []
+      } else {
+        message.error('获取数据失败~')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 获取工厂列表 搜索工厂
+  @action getFactoryPageList = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/factory/info/list-factories`,
         params
       )
 

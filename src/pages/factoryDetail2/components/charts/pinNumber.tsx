@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import styles from './pinNumber.module.less'
 import { Chart } from '@antv/g2'
-import { ChartTitle } from './pieChart'
+import { ChartTitle, EmptyChunk } from './pieChart'
 import { useStores, observer } from '@/utils/mobx'
 import moment from 'moment'
 
@@ -9,17 +9,9 @@ const PinNumber = () => {
   const chartRef = useRef()
 
   const { factoryStore } = useStores()
-  const { factoryMachineData } = factoryStore
+  const { factoryMachineData, factoryData } = factoryStore
 
-  const [data, setData] = useState([
-    // { statisticDate: '周一', devPincount: 8 },
-    // { statisticDate: '周二', devPincount: 10 },
-    // { statisticDate: '周三', devPincount: 12 },
-    // { statisticDate: '周四', devPincount: 34 },
-    // { statisticDate: '周五', devPincount: 28 },
-    // { statisticDate: '周六', devPincount: 16 },
-    // { statisticDate: '周日', devPincount: 10 }
-  ])
+  const [data, setData] = useState([])
   const [chart, setChart] = useState(null)
 
   useEffect(() => {
@@ -64,21 +56,6 @@ const PinNumber = () => {
         }
       },
       label: null
-      // label: {
-      //   style: {
-      //     fontSize: 16
-      //   }
-      // },
-      // title: {
-      //   text: '针数',
-      //   autoRotate: false,
-      //   position: 'end',
-      //   offset: 24,
-      //   style: {
-      //     textAlign: 'start', // 文本对齐方向，可取值为： start middle end
-      //     fontSize: '14' // 文本大小
-      //   }
-      // }
     })
 
     const itemTpl = `
@@ -124,8 +101,8 @@ const PinNumber = () => {
   }
 
   useEffect(() => {
-    chartInit()
-  }, [])
+    factoryData.onlineNum > 0 && data.length > 0 && chartInit()
+  }, [data, factoryData])
 
   useEffect(() => {
     if (chart && Array.isArray(data) && data.length) {
@@ -136,7 +113,12 @@ const PinNumber = () => {
   return (
     <div className={styles.pinNumberBox}>
       <ChartTitle title={'平均针数'} desc={'针'}></ChartTitle>
-      <div ref={chartRef} id={'pinNumber'}></div>
+
+      {data.length > 0 && factoryData.onlineNum > 0 ? (
+        <div ref={chartRef} id={'pinNumber'}></div>
+      ) : (
+        <EmptyChunk></EmptyChunk>
+      )}
     </div>
   )
 }

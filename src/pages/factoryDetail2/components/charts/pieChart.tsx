@@ -2,11 +2,21 @@ import React, { RefObject, useEffect, useRef, useState, ReactNode } from 'react'
 import styles from './pieChart.module.less'
 import { Chart } from '@antv/g2'
 import { useStores, observer } from '@/utils/mobx'
+import { urlImgs } from '@/components'
 
 interface ChartTitleProps {
   title: string
   desc?: string
   children?: ReactNode
+}
+
+export const EmptyChunk = () => {
+  return (
+    <figure className={styles.emptyImgBox}>
+      <img src={urlImgs.CHART_EMPTY} className={styles.emptyImg} alt="" />
+      <figcaption>抱歉，暂未获取到数据～</figcaption>
+    </figure>
+  )
 }
 
 export const ChartTitle = ({ title, desc, children }: ChartTitleProps) => {

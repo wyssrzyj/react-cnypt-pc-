@@ -454,7 +454,7 @@ const GDMap = (props: any) => {
   }, [cRef.current, map, provinceChange])
 
   useEffect(() => {
-    console.log(curTarget)
+    // console.log(curTarget)
   }, [curTarget])
 
   useEffect(() => {

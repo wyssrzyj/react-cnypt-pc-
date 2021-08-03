@@ -1,15 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react'
 import styles from './shearLine.module.less'
 import { Chart } from '@antv/g2'
-import { ChartTitle } from './pieChart'
+import { ChartTitle, EmptyChunk } from './pieChart'
 import { useStores, observer } from '@/utils/mobx'
 import moment from 'moment'
 const ShearLine = () => {
   const chartRef = useRef()
   const { factoryStore } = useStores()
-  const { factoryMachineData } = factoryStore
+  const { factoryMachineData, factoryData } = factoryStore
   const [data, setData] = useState([])
   const [chart, setChart] = useState(null)
+
   useEffect(() => {
     const arr = factoryMachineData.statisticHour
     const target = arr.map(item => {
@@ -20,6 +21,7 @@ const ShearLine = () => {
     })
     setData(target)
   }, [factoryMachineData])
+
   const chartInit = () => {
     const c = new Chart({
       container: 'shearLine',
@@ -41,6 +43,7 @@ const ShearLine = () => {
       tickCount: 6,
       range: [0, 1 - margin / 2]
     })
+
     chart.axis('devCutcount', {
       grid: {
         line: {
@@ -51,6 +54,7 @@ const ShearLine = () => {
       },
       label: null
     })
+
     const itemTpl = `
       <div class='chart7Tpl'>
         <div class='tplTitle'>{t}时</div>
@@ -65,13 +69,16 @@ const ShearLine = () => {
       showMarkers: false,
       itemTpl: itemTpl
     })
+
     chart.interaction('active-region')
+
     chart
       .area()
       .position('t*devCutcount')
       .color(
         'l(100) 0:#30C5C5 0.7: rgba(48, 197, 197,0.5) 1:rgba(48, 197, 197,0.1)'
       )
+
     chart
       .line()
       .size(3)
@@ -134,8 +141,8 @@ const ShearLine = () => {
     chart.render()
   }
   useEffect(() => {
-    !chart && chartInit()
-  }, [chart])
+    factoryData.onlineNum > 0 && !chart && data.length > 0 && chartInit()
+  }, [data, chart, factoryData])
   useEffect(() => {
     if (chart && Array.isArray(data) && data.length) {
       chart && chartRender()
@@ -144,7 +151,12 @@ const ShearLine = () => {
   return (
     <div className={styles.shearLineBox}>
       <ChartTitle title={'剪线次数'}></ChartTitle>
-      <div ref={chartRef} id={'shearLine'}></div>
+
+      {data.length > 0 && factoryData.onlineNum > 0 ? (
+        <div ref={chartRef} id={'shearLine'}></div>
+      ) : (
+        <EmptyChunk></EmptyChunk>
+      )}
     </div>
   )
 }

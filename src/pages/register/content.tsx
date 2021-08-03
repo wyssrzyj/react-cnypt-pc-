@@ -94,8 +94,8 @@ const Register = () => {
       }
     } catch (err) {
       console.log(err)
-      const { errorFields } = err
-      console.log(errorFields, '---')
+      // const { errorFields } = err
+      // console.log(errorFields, '---')
     }
   }
 

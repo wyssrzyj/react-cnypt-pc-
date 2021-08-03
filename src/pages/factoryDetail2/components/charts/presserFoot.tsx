@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import styles from './presserFoot.module.less'
 import { Chart } from '@antv/g2'
-import { ChartTitle } from './pieChart'
+import { ChartTitle, EmptyChunk } from './pieChart'
 import { useStores, observer } from '@/utils/mobx'
 import moment from 'moment'
 
@@ -9,7 +9,7 @@ const PresserFoot = () => {
   const chartRef = useRef()
 
   const { factoryStore } = useStores()
-  const { factoryMachineData } = factoryStore
+  const { factoryMachineData, factoryData } = factoryStore
 
   const [data, setData] = useState([])
 
@@ -165,8 +165,8 @@ const PresserFoot = () => {
   }
 
   useEffect(() => {
-    !chart && chartInit()
-  }, [chart])
+    factoryData.onlineNum > 0 && !chart && data.length > 0 && chartInit()
+  }, [chart, data, factoryData])
 
   useEffect(() => {
     if (chart && Array.isArray(data) && data.length) {
@@ -177,7 +177,12 @@ const PresserFoot = () => {
   return (
     <div className={styles.presserFootBox}>
       <ChartTitle title={'抬压脚次数'}></ChartTitle>
-      <div ref={chartRef} id={'presserFoot'}></div>
+
+      {data.length > 0 && factoryData.onlineNum > 0 ? (
+        <div ref={chartRef} id={'presserFoot'}></div>
+      ) : (
+        <EmptyChunk></EmptyChunk>
+      )}
     </div>
   )
 }

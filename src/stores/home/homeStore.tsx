@@ -18,7 +18,6 @@ export default class HomeStore {
   @action setCount = () => {
     this.count++
     this.name = 'zf'
-    console.log(this.count)
   }
 
   @action getUser = async () => {

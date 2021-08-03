@@ -1,7 +1,7 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
 import styles from './moveChart.module.less'
 import { Chart } from '@antv/g2'
-import { ChartTitle } from './pieChart'
+import { ChartTitle, EmptyChunk } from './pieChart'
 import { useStores, observer } from '@/utils/mobx'
 
 interface LegendItem {
@@ -27,20 +27,10 @@ export const LegendItem = ({ name, type, color }: LegendItem) => {
 const MoveChart = () => {
   const chartRef: RefObject<HTMLDivElement> = useRef()
 
-  // statisticWeek
-
   const { factoryStore } = useStores()
   const { factoryMachineData } = factoryStore
 
-  const initData = [
-    // { name: '周一', 稼动率: 2, 平均缝纫时长: 5 },
-    // { name: '周二', 稼动率: 4, 平均缝纫时长: 11 },
-    // { name: '周三', 稼动率: 8, 平均缝纫时长: 13 },
-    // { name: '周四', 稼动率: 5, 平均缝纫时长: 9 },
-    // { name: '周五', 稼动率: 9, 平均缝纫时长: 6 },
-    // { name: '周六', 稼动率: 3, 平均缝纫时长: 29 },
-    // { name: '周日', 稼动率: 2, 平均缝纫时长: 19 }
-  ]
+  const initData = []
 
   const [data, setData] = useState(initData)
 
@@ -56,14 +46,13 @@ const MoveChart = () => {
         devEletime: +(item.devRunningtime / 60 / 60).toFixed(2)
       }
     })
-    console.log(target)
     setData(target)
   }, [factoryMachineData])
 
   const [chart, setChart] = useState(null)
 
   useEffect(() => {
-    if (data && !chart) {
+    if (data && data.length > 0 && !chart) {
       const c = new Chart({
         container: 'moveChart',
         autoFit: true,
@@ -91,7 +80,6 @@ const MoveChart = () => {
 
     chart.clear()
     chart.data(data)
-    console.log('🚀 ~ file: moveChart.tsx ~ line 96 ~ renderChart ~ data', data)
 
     chart.scale('devRunningtime', {
       min: 0,
@@ -200,18 +188,18 @@ const MoveChart = () => {
       })
 
     const itemTpl = `
-            <div class='chart7Tpl'>
-              <div class='tplTitle'>{statisticDate}</div>
-              <div class='tpl'>
-                <span class="tpl3">·</span>
-                稼动率:&nbsp;&nbsp;&nbsp;{devRunningtime} %
-              </div>
-              <div class='tpl'>
-                <span class="tpl2">·</span>
-                平均开机时长:&nbsp;&nbsp;&nbsp;{devEletime} 小时
-              </div>
-            </div>
-        `
+      <div class='chart7Tpl'>
+        <div class='tplTitle'>{statisticDate}</div>
+        <div class='tpl'>
+          <span class="tpl3">·</span>
+          稼动率:&nbsp;&nbsp;&nbsp;{devRunningtime} %
+        </div>
+        <div class='tpl'>
+          <span class="tpl2">·</span>
+          平均开机时长:&nbsp;&nbsp;&nbsp;{devEletime} 小时
+        </div>
+      </div>
+  `
 
     chart.tooltip({
       showTitle: false,
@@ -233,16 +221,6 @@ const MoveChart = () => {
           }
         }
       )
-    // .label('statisticDate*devRunningtime', () => {
-    //   return {
-    //     content: data => {
-    //       return `${data.devRunningtime}`
-    //     },
-    //     style: {
-    //       fill: '#333'
-    //     }
-    //   }
-    // })
 
     chart.legend(false)
     chart.removeInteraction('legend-filter')
@@ -257,7 +235,11 @@ const MoveChart = () => {
           <LegendItem name={'稼动率'} type={'line'}></LegendItem>
         </div>
       </ChartTitle>
-      <div id={'moveChart'} className={styles.moveChart} ref={chartRef}></div>
+      {data.length > 0 ? (
+        <div id={'moveChart'} className={styles.moveChart} ref={chartRef}></div>
+      ) : (
+        <EmptyChunk></EmptyChunk>
+      )}
     </div>
   )
 }

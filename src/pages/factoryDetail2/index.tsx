@@ -3,13 +3,13 @@ import { isEmpty } from 'lodash'
 import { useHistory } from 'react-router'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
-import { useStores } from '@/utils/mobx'
+import { observer, useStores } from '@/utils/mobx'
 import { Overview, EnterpriseInformation } from './components'
 import { DetailHeader, TabHeader } from '@/components'
 import styles from './index.module.less'
 import ProductDynamic from './productDynamic'
 
-const tabOptions = [
+const initTabOptions = [
   {
     value: 'dynamic',
     label: '生产动态'
@@ -32,10 +32,37 @@ const FactoryDetail = props => {
   const history = useHistory()
   const currentUser = getCurrentUser() || {}
   const { userId } = currentUser
-  const { commonStore } = useStores()
+  const { commonStore, factoryStore } = useStores()
   const { updateName } = commonStore
   const [factoryInfo, setFactoryInfo] = useState<any>({})
   const [activeTab, setActiveTab] = useState('dynamic')
+  const [tabOptions, setTabOptions] = useState(initTabOptions)
+
+  const { getFactoryData, getFactoryMachineData, getFactoryBoard } =
+    factoryStore
+
+  useEffect(() => {
+    ;(async () => {
+      const res1 = await getFactoryData(factoryId)
+      const res2 = await getFactoryMachineData(factoryId)
+      const res3 = await getFactoryBoard(factoryId)
+
+      const flag = res1 === null && res2 === null && res3 === null
+      if (flag) {
+        setTabOptions([
+          {
+            value: 'info',
+            label: '企业信息'
+          }
+        ])
+        setActiveTab('info')
+      }
+      if (!flag) {
+        setTabOptions([...initTabOptions])
+        setActiveTab('dynamic')
+      }
+    })()
+  }, [factoryId])
 
   useEffect(() => {
     document.title = titleMap.get(activeTab)
@@ -84,7 +111,7 @@ const FactoryDetail = props => {
           onTabChange={key => setActiveTab(key)}
         />
         {/* 生产动态 */}
-        {activeTab === 'dynamic' && <ProductDynamic factoryId={factoryId} />}
+        {activeTab === 'dynamic' && <ProductDynamic />}
         {/* 企业信息 */}
         {activeTab === 'info' && (
           <EnterpriseInformation factoryId={factoryId} current={factoryInfo} />
@@ -96,4 +123,4 @@ const FactoryDetail = props => {
   )
 }
 
-export default FactoryDetail
+export default observer(FactoryDetail)

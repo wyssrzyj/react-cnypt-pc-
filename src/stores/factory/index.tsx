@@ -34,7 +34,7 @@ export default class FactoryStore {
   @action getFactoryList = async params => {
     try {
       const res: ResponseProps = await axios.post(
-        `/api/factory/info/list-factories`,
+        `/api/factory/info/page-high-quality-factory`,
         params
       )
 

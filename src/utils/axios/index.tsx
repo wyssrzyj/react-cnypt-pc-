@@ -47,7 +47,7 @@ customAxios.interceptors.request.use(
     const flag = whiteList.some(item => request.url.includes(item))
 
     if (expire - Date.now() < 1000 && !flag) {
-      dealRefresh(request)
+      await dealRefresh(request)
     }
     // NProgress.start()
     return request

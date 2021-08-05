@@ -76,7 +76,6 @@ export default class LoginStore {
   @action verifyCode = async mobile => {
     try {
       const res: ResponseProps = await axios.get(`/api/sms/send-code/${mobile}`)
-      console.log('🚀 ~ file: loginStore.tsx ~ line 79 ~ LoginStore ~ res', res)
 
       if (res.code === 200) {
         message.success(res.msg)
@@ -86,8 +85,7 @@ export default class LoginStore {
       }
       return res
     } catch (e) {
-      const { response } = e
-      console.log('🚀 ~ ~~~~~~~~~~~~', response)
+      // const { response } = e
       console.log(e)
     }
   }

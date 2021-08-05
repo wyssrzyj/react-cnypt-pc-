@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import styles from './passPercent.module.less'
-import { ChartTitle } from './pieChart'
+import { ChartTitle, EmptyChunk } from './pieChart'
 import { Bar } from '@antv/g2plot'
 import { LegendItem } from './moveChart'
 import { useStores, observer } from '@/utils/mobx'
@@ -38,7 +38,7 @@ const PassPercent = () => {
 
   const chartInit = () => {
     const stackedBarPlot = new Bar('passPercent', {
-      data: data.reverse(),
+      data: data,
       width: 326,
       height: 270,
       isStack: true,
@@ -119,8 +119,8 @@ const PassPercent = () => {
   }
 
   useEffect(() => {
-    chartInit()
-  }, [])
+    data.length && chartInit()
+  }, [data])
 
   useEffect(() => {
     if (!chart) return
@@ -140,7 +140,11 @@ const PassPercent = () => {
           color={'#30C5C5'}
         ></LegendItem>
       </ChartTitle>
-      <div ref={chartRef} id={'passPercent'}></div>
+      {data.length > 0 ? (
+        <div ref={chartRef} id={'passPercent'}></div>
+      ) : (
+        <EmptyChunk></EmptyChunk>
+      )}
     </div>
   )
 }

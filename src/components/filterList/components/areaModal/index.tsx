@@ -18,7 +18,6 @@ const AreaModal = props => {
     newAllArea[0].value
   )
   const selectProvince = id => {
-    console.log('🚀 ~ file: index.tsx ~ line 21 ~ id', id)
     setActiveProvince(id)
     const currentCity = newAllArea.find(tree => tree.value === id) || {}
     setCityTree([...currentCity.children])

@@ -1,70 +1,59 @@
 import axios from 'axios'
-// import NProgress from 'nprogress'
 import { message } from 'antd'
 import { getRefresh, getToken, getCurrentUser } from '../tool'
 import { dFn, Params, ResponseProps } from './types'
-import { dealRefresh } from './refreshAxios'
+import {
+  addSubscriber,
+  dealRefresh,
+  filterNull,
+  isRefreshing
+} from './filterNull'
 
 const customAxios = axios.create({})
 
-// TODO token是放在headers 还是在请求体中添加
-// TODO 通过setupProxy 设置代理
 const CancelToken = axios.CancelToken
 let cancels = []
 
-const toType = obj => {
-  return {}.toString
-    .call(obj)
-    .match(/\s([a-zA-Z]+)/)[1]
-    .toLowerCase()
-}
-
-// 参数过滤函数
-type O = {
-  [key: string]: any
-}
-const filterNull = (o: O) => {
-  for (let k in o) {
-    if (o[k] === null || o[k] === undefined) {
-      delete o[k]
-    }
-    o[k] = toType(o[k]) === 'string' ? o[k].trim() : o[k]
-    o[k] = ['object', 'array'].includes(toType(o[k])) ? filterNull(o[k]) : o[k]
-  }
-  return o
-}
-
 customAxios.interceptors.request.use(
   async function (request) {
-    const { expire } = getCurrentUser()
-
-    const whiteList = [
-      '/api/user/account/login',
-      '/api/user/account/refresh-token',
-      '/api/admin/manage/dict-item/list/dict-code'
-    ]
-
-    const flag = whiteList.some(item => request.url.includes(item))
-
-    if (expire - Date.now() < 1000 && !flag) {
-      await dealRefresh(request)
-    }
-    // NProgress.start()
+    const aToken = getToken()
+    const rToken = getRefresh()
+    // 更新token
+    request.headers.authorization = aToken
+    request.headers.refresh_token = rToken
     return request
   },
   function (error) {
-    // NProgress.done()
     return Promise.reject(error)
   }
 )
 
+// 响应拦截 处理token是否过期
 customAxios.interceptors.response.use(
   response => {
-    // NProgress.done()
+    const { data, config } = response
+    const { code } = data
+    const { expire } = getCurrentUser()
+    const flag = expire - Date.now() < 1000
+
+    if (flag || code === 40101) {
+      if (!isRefreshing) {
+        dealRefresh()
+      }
+      const retryOriginalRequest = new Promise(resolve => {
+        addSubscriber(() => {
+          resolve(customAxios(config))
+        })
+      })
+      return retryOriginalRequest
+    }
+    if (code === 401) {
+      // token失效
+      // location.replace('/user/login')
+    }
     return response.data
   },
   error => {
-    // NProgress.done()
     return Promise.reject(error)
   }
 )
@@ -83,7 +72,6 @@ const apiAxios = async (
     '/api/user/getUserByMobilePhone',
     '/api/user/login'
   ]
-
   const instanceParams = {
     method: method,
     url: url,
@@ -93,8 +81,8 @@ const apiAxios = async (
     withCredentials: true,
     headers: {
       common: {
-        authorization: getToken(),
-        refresh_token: getRefresh()
+        // authorization: getToken(),
+        // refresh_token: getRefresh()
       }
     },
     cancelToken: new CancelToken(function executor(c) {
@@ -106,11 +94,12 @@ const apiAxios = async (
   const flag = noTokenList.some(i => url.includes(i))
   if (flag) {
     // 不需要携带token的接口  去除 token
-    delete instanceParams.headers.common.authorization
-    delete instanceParams.headers.common.refresh_token
+    // delete instanceParams.headers.common.authorization
+    // delete instanceParams.headers.common.refresh_token
   }
   try {
     const responseData: ResponseProps = await customAxios(instanceParams)
+    // 接口状态码处理
     if ([200, 400].includes(responseData.code)) {
       success && success()
       return responseData

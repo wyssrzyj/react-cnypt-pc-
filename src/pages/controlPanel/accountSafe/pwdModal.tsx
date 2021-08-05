@@ -96,7 +96,6 @@ const PwdModal = ({ cancel }) => {
     if (!value) {
       return Promise.reject('请输入新密码~')
     }
-    console.log(value)
     if (!pwdReg.test(value)) {
       return Promise.reject('请输入符合规则的新密码~')
     }

@@ -348,11 +348,9 @@ const FactoryInformation = () => {
     </div>
   )
 
-  const submit = async flag => {
-    console.log(flag)
+  const submit = async _flag => {
     try {
-      const res = await validateFields()
-      console.log(res)
+      await validateFields()
     } catch (e) {
       console.log(e)
     }

@@ -36,14 +36,17 @@ const EnterpriseImage = props => {
   const leftRef = useRef<HTMLDivElement>()
   const rightRef = useRef<HTMLDivElement>()
   const [curKey, setCurKey] = useState(0)
+  const [targetSwiper, setTargetSwiper] = useState(null)
 
-  const [list, setList] = useState<any>(
-    factoryOutsizeImages ? [...factoryOutsizeImages] : []
+  const [list, _setList] = useState<any>(
+    factoryOutsizeImages && factoryWorkshopImages
+      ? [...factoryOutsizeImages, ...factoryWorkshopImages]
+      : []
   )
 
   useEffect(() => {
-    if (list) {
-      new Swiper('.factorysSwiper', {
+    if (list.length) {
+      const swiper = new Swiper('.factorysSwiper', {
         slidesPerView: 4,
         spaceBetween: 20,
         centeredSlidesBounds: true,
@@ -56,6 +59,7 @@ const EnterpriseImage = props => {
           slideChange: keyChange
         }
       })
+      setTargetSwiper(swiper)
     }
   }, [list])
 
@@ -70,14 +74,19 @@ const EnterpriseImage = props => {
   const keyChange = event => {
     const { activeIndex } = event
     setCurKey(activeIndex)
+    if (activeIndex >= factoryOutsizeImages.length - 1) {
+      setType('workshop')
+    } else {
+      setType('outside')
+    }
   }
 
   const onGroupChange = e => {
     setType(e.target.value)
-    e.target.value === 'outside' &&
-      setList(factoryOutsizeImages ? [...factoryOutsizeImages] : [])
+    e.target.value === 'outside' && targetSwiper && targetSwiper.slideTo(0)
     e.target.value === 'workshop' &&
-      setList(factoryWorkshopImages ? [...factoryWorkshopImages] : [])
+      targetSwiper &&
+      targetSwiper.slideTo(factoryOutsizeImages.length)
   }
 
   return (

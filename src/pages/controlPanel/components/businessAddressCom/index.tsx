@@ -31,7 +31,7 @@ const BusinessAddressCom = props => {
 
     if (res2.status === 200) {
       const location = res2.data.pois[0].location
-      isFunction(isFunction) && onChange({ location: location, address: value })
+      isFunction(onChange) && onChange({ location: location, address: value })
       setMapLocation(location.split(','))
     }
   }

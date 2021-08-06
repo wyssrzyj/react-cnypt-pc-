@@ -5,6 +5,7 @@ import { factoryPageStore } from './factoryPage'
 import { factoryStore } from './factory'
 import { commonStore } from './common'
 import { controlPanelStore } from './controlPanel'
+import { factoryDetailStore } from './factoryDetail'
 
 export const stores = {
   ...initHomeStore,
@@ -13,5 +14,6 @@ export const stores = {
   factoryPageStore,
   factoryStore,
   commonStore,
-  controlPanelStore
+  controlPanelStore,
+  factoryDetailStore
 }

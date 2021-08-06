@@ -4,7 +4,7 @@ import { useHistory } from 'react-router'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
 import { observer, useStores } from '@/utils/mobx'
-import { Overview, EnterpriseInformation } from './components'
+import { Overview, EnterpriseInformation, ContactCom } from './components'
 import { DetailHeader, TabHeader } from '@/components'
 import styles from './index.module.less'
 import ProductDynamic from './productDynamic'
@@ -17,12 +17,17 @@ const initTabOptions = [
   {
     value: 'info',
     label: '企业信息'
+  },
+  {
+    value: 'contact',
+    label: '联系方式'
   }
 ]
 
 const titleMap = new Map()
 titleMap.set('dynamic', '产能云平台-工厂详情-生产动态')
 titleMap.set('info', '产能云平台-工厂详情-企业信息')
+titleMap.set('contact', '产能云平台-工厂详情-联系方式')
 
 const FactoryDetail = props => {
   const {
@@ -116,6 +121,8 @@ const FactoryDetail = props => {
         {activeTab === 'info' && (
           <EnterpriseInformation factoryId={factoryId} current={factoryInfo} />
         )}
+        {/* 联系方式 */}
+        {activeTab === 'contact' && <ContactCom factoryId={factoryId} />}
       </div>
 
       {/* 导航栏 */}

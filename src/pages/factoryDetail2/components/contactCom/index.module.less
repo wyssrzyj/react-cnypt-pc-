@@ -1,0 +1,59 @@
+.factoryInfo {
+  width: 100%;
+  margin-top: 30px;
+  padding: 40px 90px 40px 50px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+}
+.factoryInfoList {
+  flex: 1;
+  // float: left;
+  // width: 470px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  :global {
+    li {
+      display: flex;
+      padding: 12px 0;
+    }
+  }
+}
+.icon {
+  margin-right: 20px;
+  font-size: 20px;
+}
+.rightLabel {
+  display: flex;
+  align-items: center;
+  width: 180px;
+}
+.rightValue {
+  flex: 1;
+  color: #333333;
+  font-weight: 600;
+}
+.mapTempBox {
+  float: right;
+}
+.mapTemp {
+  position: relative;
+  width: 540px;
+  height: 280px;
+  margin-right: 20px;
+  transition: all 0.2s ease;
+  :global {
+    .amap-copyright {
+      display: none !important;
+    }
+
+    .labelclass {
+      display: block;
+      width: 18px;
+      height: 18px;
+      background-repeat: no-repeat !important;
+      background-size: contain !important;
+    }
+  }
+}

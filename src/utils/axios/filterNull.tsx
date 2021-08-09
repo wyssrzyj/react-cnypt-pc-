@@ -69,7 +69,6 @@ export const dealRefresh = async () => {
       localStorage.setItem('currentUser', JSON.stringify(updateUser))
       onAccessTokenFetched()
       isRefreshing = false
-      console.log(8888888888888)
     })
     .catch(err => {
       const { response } = err

@@ -28,6 +28,7 @@ export default class LoginStore {
       console.log(e)
     }
   }
+
   @action logout = async () => {
     try {
       const res: ResponseProps = await axios.post('/api/user/account/logout')
@@ -45,7 +46,7 @@ export default class LoginStore {
       return res.success
     } catch (e) {
       console.log(e) // message.error('')
-      if (e.code === 40101) {
+      if (e.code === 40101 || e.code === 401) {
         message.success('退出成功')
         localStorage.setItem('token', '')
         localStorage.setItem('refresh', '')

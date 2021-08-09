@@ -14,6 +14,7 @@ export default class LoginStore {
         '/api/user/account/login',
         params
       )
+      console.log('🚀 ~ file: loginStore.tsx ~ line 17 ~ LoginStore ~ res', res)
       const { data = {} } = res
       if (data) {
         localStorage.setItem('token', data.access_token)
@@ -28,6 +29,7 @@ export default class LoginStore {
       console.log(e)
     }
   }
+
   @action logout = async () => {
     try {
       const res: ResponseProps = await axios.post('/api/user/account/logout')

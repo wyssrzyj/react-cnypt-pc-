@@ -16,6 +16,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import { isEmpty } from 'lodash'
 import { toJS } from 'mobx'
 import { get } from 'lodash'
+import Viewer from 'react-viewer'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
@@ -61,6 +62,8 @@ const EnterpriseInfo = () => {
   const [preImageUrl, setPreImageUrl] = useState(undefined)
   const [currentType, setCurrentType] = useState(undefined)
   const [messageMap, setMessageMap] = useState<any>({})
+  const [visible, setVisible] = useState<boolean>(false)
+  const [previewImage, setPreviewImage] = useState<string>('')
 
   // const messageMap = {
   //   0: (
@@ -218,6 +221,13 @@ const EnterpriseInfo = () => {
       })
   }
 
+  const handlePreview = file => {
+    if (file.thumbUrl) {
+      setVisible(true)
+      setPreviewImage(file.thumbUrl)
+    }
+  }
+
   useEffect(() => {
     if (enterpriseId) {
       getApprovalResult()
@@ -268,6 +278,7 @@ const EnterpriseInfo = () => {
               fileList={imageUrlList}
               maxCount={1}
               onRemove={() => setImageUrlList([])}
+              onPreview={handlePreview}
             >
               {isEmpty(imageUrlList) ? uploadButton : null}
             </Upload>
@@ -397,6 +408,17 @@ const EnterpriseInfo = () => {
           </Button>
         </div>
       </div>
+      <Viewer
+        visible={visible}
+        noFooter={true}
+        onMaskClick={() => {
+          setVisible(false)
+        }}
+        onClose={() => {
+          setVisible(false)
+        }}
+        images={[{ src: previewImage }]}
+      />
     </div>
   )
 }

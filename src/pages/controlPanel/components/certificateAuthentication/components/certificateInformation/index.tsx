@@ -12,6 +12,7 @@ import {
   Col
 } from 'antd'
 import { isFunction, isEmpty } from 'lodash'
+import Viewer from 'react-viewer'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
 import { getUserInfo } from '@/utils/tool'
@@ -57,6 +58,8 @@ const CertificateInformation = props => {
   const [reverseId, setReverseId] = useState(undefined)
   const [reverseImageUrl, setReverseImageUrl] = useState<string>('')
   const [reverseFileList, setReverseFileList] = useState<any[]>([])
+  const [visible, setVisible] = useState<boolean>(false)
+  const [previewImage, setPreviewImage] = useState<string>('')
 
   const initialValues = {
     legalPersonIdType: '中国大陆居民身份证',
@@ -257,6 +260,13 @@ const CertificateInformation = props => {
     }
   }
 
+  const handlePreview = file => {
+    if (file.thumbUrl) {
+      setVisible(true)
+      setPreviewImage(file.thumbUrl)
+    }
+  }
+
   useEffect(() => {
     if (enterpriseId) {
       getCertificationInfo()
@@ -311,6 +321,7 @@ const CertificateInformation = props => {
               fileList={cardFileList}
               maxCount={1}
               onRemove={() => deleteImage('card')}
+              onPreview={handlePreview}
             >
               {isEmpty(cardFileList) ? uploadButton : null}
             </Upload>
@@ -406,6 +417,7 @@ const CertificateInformation = props => {
               fileList={positiveFileList}
               maxCount={1}
               onRemove={() => deleteImage('positive')}
+              onPreview={handlePreview}
             >
               {isEmpty(positiveFileList) ? positiveDom : null}
             </Upload>
@@ -428,6 +440,7 @@ const CertificateInformation = props => {
               fileList={reverseFileList}
               maxCount={1}
               onRemove={() => deleteImage('reverse')}
+              onPreview={handlePreview}
             >
               {isEmpty(reverseFileList) ? reverseDom : null}
             </Upload>
@@ -460,6 +473,17 @@ const CertificateInformation = props => {
           确认{cardId ? '修改' : '提交'}
         </Button>
       </div>
+      <Viewer
+        visible={visible}
+        noFooter={true}
+        onMaskClick={() => {
+          setVisible(false)
+        }}
+        onClose={() => {
+          setVisible(false)
+        }}
+        images={[{ src: previewImage }]}
+      />
     </div>
   )
 }

@@ -4,7 +4,7 @@ import { Form, Col, Upload, Button } from 'antd'
 import FormNode from '@/components/FormNode'
 import CustomTable from './customTable'
 import { cloneDeep } from 'lodash'
-import { useStores } from '@/utils/mobx'
+import OSS from '@/utils/oss'
 
 type FileList = Array<any>
 
@@ -17,9 +17,6 @@ const FormItem = Form.Item
 const FactoryInformation = () => {
   const [form] = Form.useForm()
   const { validateFields } = form
-
-  const { factoryPageStore } = useStores()
-  const { uploadFiles } = factoryPageStore
 
   const [fileList, setFileList] = useState<FileList>([])
 
@@ -358,7 +355,6 @@ const FactoryInformation = () => {
 
   const customRequest = async ({ file }) => {
     const list = cloneDeep(fileList)
-    const formData = new FormData()
 
     // 图片资源转换成base64
     // const reader = new FileReader()
@@ -367,11 +363,16 @@ const FactoryInformation = () => {
     // }
     // reader.readAsDataURL(file)
 
-    formData.append('file', file)
-    formData.append('module', 'factory')
-    const res = await uploadFiles(formData)
-    list.push({ thumbUrl: res })
-    setFileList(list)
+    // /capacity-platform/platform 目标文件夹路径
+    const res = await OSS.put(
+      `/capacity-platform/platform/${file.uid}${file.name}`,
+      file
+    )
+    if (res) {
+      const { url } = res
+      list.push({ thumbUrl: url })
+      setFileList(list)
+    }
   }
 
   const fileRemove = file => {

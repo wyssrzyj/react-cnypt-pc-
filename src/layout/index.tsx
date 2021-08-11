@@ -20,10 +20,16 @@ const Layout = (props: LayoutProps) => {
   const noUseHeaders = [
     '/user/login',
     '/user/register',
-    '/user/reset'
+    '/user/reset',
+    '/mapSearch'
     // '/control-panel'
   ] // 不展示header的路由列表
-  const noUseFooters = ['/user/login', '/user/register', '/user/reset'] // 不展示footer的路由列表
+  const noUseFooters = [
+    '/user/login',
+    '/user/register',
+    '/user/reset',
+    '/mapSearch'
+  ] // 不展示footer的路由列表
 
   useEffect(() => {
     // ;(window as any).requestIdleCallback(async () => {

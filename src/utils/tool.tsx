@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback, useState } from 'react'
 import { isEmpty, isNil, isArray } from 'lodash'
 
 export const getToken = () => {
@@ -27,6 +27,22 @@ export const getUserInfo = () => {
     return JSON.parse(user)
   }
   return {}
+}
+
+export const useDebounceValue = (value, interval = 300) => {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value)
+      clearTimeout(timer)
+    }, interval)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [value, interval])
+
+  return debouncedValue
 }
 
 export function useDebounce(fn, delay, dep = []) {

@@ -35,8 +35,10 @@ customAxios.interceptors.response.use(
     const { code } = data
     const { expire } = getCurrentUser()
     const flag = expire - Date.now() < 1000
+    const noTokenList = ['/user/login']
+    const pathFlag = !noTokenList.includes(location.pathname)
 
-    if (flag || code === 40101) {
+    if (pathFlag && (flag || code === 40101)) {
       if (!isRefreshing) {
         dealRefresh()
       }
@@ -47,13 +49,22 @@ customAxios.interceptors.response.use(
       })
       return retryOriginalRequest
     }
-    if (code === 401) {
+    if (location.pathname !== '/user/login' && code === 401) {
       // token失效
-      // location.replace('/user/login')
+      location.replace('/user/login')
     }
     return response.data
   },
   error => {
+    const { response } = error
+    const { status, data } = response
+    if (
+      location.pathname !== '/user/login' &&
+      (status === 401 || +data.code === 401)
+    ) {
+      // token失效
+      location.replace('/user/login')
+    }
     return Promise.reject(error)
   }
 )

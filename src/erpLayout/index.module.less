@@ -1,0 +1,152 @@
+@import '@/css/common.less';
+
+@headerHeight: 50px;
+.container {
+  width: 100%;
+}
+.header {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  height: @headerHeight;
+  background-color: #fff;
+  border: 1px solid @d7Gray;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+}
+
+.logImg {
+  width: 143px;
+}
+
+.headerR {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 32px;
+}
+
+.userInfo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid @d7Gray;
+  border-radius: 50%;
+}
+
+.infoModal {
+  position: absolute;
+  top: 50px;
+  right: -20px;
+  z-index: 3;
+  display: none;
+  background: @white;
+  border: 1px solid @d7Gray;
+  border-radius: 4px;
+}
+
+.userInfo:hover {
+  .infoModal {
+    display: block;
+  }
+}
+
+.modalItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 32px;
+  margin: 4px 8px;
+
+  &:hover {
+    background: @eeGray;
+  }
+}
+
+.divider {
+  height: 1px;
+  margin: 4px 8px;
+  background: @d7Gray;
+}
+
+.icon {
+  margin-right: 12px;
+  color: @66gray !important;
+  font-size: 18px;
+}
+
+.body {
+  display: flex;
+  height: calc(100vh - @headerHeight);
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 300px;
+  height: 100%;
+  color: #666666;
+  border-right: 1px solid @d7Gray;
+}
+
+.miniMenu {
+  width: 80px;
+}
+
+.innerMenuBox {
+  flex: 1;
+}
+
+.menuIcon {
+  color: inherit !important;
+  font-size: 16px !important;
+  cursor: pointer;
+}
+
+.menuSwitchBox {
+  width: inherit;
+  background: #001529;
+  border-right: 1px solid #001529;
+}
+
+.menuSwitchIcon {
+  position: absolute;
+  bottom: 12px;
+  left: 24px;
+  color: @white !important;
+  font-size: 16px !important;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.centerSwitchIcon {
+  left: 32px;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+  background-color: #f6f6f6;
+}
+
+.fillContent {
+  overflow: inherit;
+}

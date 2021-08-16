@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 import { Menu, Dropdown } from 'antd'
+import { PartitionOutlined, AuditOutlined } from '@ant-design/icons'
 import { isEmpty } from 'lodash'
 import { getCurrentUser, getUserInfo } from '@/utils/tool'
 import { useStores } from '@/utils/mobx'
@@ -79,6 +80,10 @@ const Header = () => {
     history.push('/control-panel/account')
   }
 
+  const toErp = () => {
+    history.push('/erp')
+  }
+
   const logoutToLogin = async () => {
     const res = await logout()
     res && toLogin()
@@ -154,16 +159,26 @@ const Header = () => {
           </>
         )}
       </div>
-      {currentUser.userId ? (
-        <Dropdown overlay={consoleMenu}>
+      <div className={styles.headerLeft}>
+        {currentUser.userId ? (
           <div className={styles.chunks}>
-            <span className={styles.consoleBox}>
-              <Icon type="jack-kongzhitai1" className={styles.consoleIcon} />
-              <span className={styles.headerChunk}>控制台</span>
+            <span className={styles.consoleBox} onClick={toErp}>
+              <PartitionOutlined className={styles.icon} />
+              <span className={styles.headerChunk}>ERP管理系统</span>
             </span>
           </div>
-        </Dropdown>
-      ) : null}
+        ) : null}
+        {currentUser.userId ? (
+          <Dropdown overlay={consoleMenu}>
+            <div className={styles.chunks}>
+              <span className={styles.consoleBox}>
+                <AuditOutlined className={styles.icon} />
+                <span className={styles.headerChunk}>企业管理</span>
+              </span>
+            </div>
+          </Dropdown>
+        ) : null}
+      </div>
     </header>
   )
 }

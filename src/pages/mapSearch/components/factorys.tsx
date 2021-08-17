@@ -78,6 +78,11 @@ const Factorys = props => {
   }, [totalData])
 
   useEffect(() => {
+    // 通过加工厂信息卡片返回加工厂列表时  更新列表数据
+    !facoryShow && updateViewContent()
+  }, [facoryShow])
+
+  useEffect(() => {
     updateViewContent(throttleScrollTop)
   }, [throttleScrollTop])
 

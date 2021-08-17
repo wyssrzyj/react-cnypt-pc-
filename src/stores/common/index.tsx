@@ -62,6 +62,24 @@ export default class CommonStore {
       console.log(e)
     }
   }
+
+  // /api/factory/district/get-district-by-id
+  // 通过地址id获取地名
+  @action getAreaName = async id => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/district/get-district-by-id`,
+        { id }
+      )
+      if (res) {
+        return res.data || ''
+      } else {
+        message.error('获取数据失败~')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 
 export const commonStore = new CommonStore()

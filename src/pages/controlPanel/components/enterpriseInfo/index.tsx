@@ -46,7 +46,7 @@ const statusMap = {
 
 const EnterpriseInfo = () => {
   const [form] = Form.useForm()
-  const { validateFields, setFieldsValue } = form
+  const { validateFields, setFieldsValue, getFieldValue } = form
   const currentUser = getCurrentUser() || {}
   const { mobilePhone, userId } = currentUser
   const { factoryPageStore, commonStore, loginStore } = useStores()
@@ -380,7 +380,7 @@ const EnterpriseInfo = () => {
             name="businessAddress"
             rules={[{ required: true, message: '请选择企业地址！' }]}
           >
-            <BusinessAddressCom />
+            <BusinessAddressCom getFieldValue={getFieldValue} field={'area'} />
           </Form.Item>
 
           <Form.Item

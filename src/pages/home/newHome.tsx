@@ -28,7 +28,7 @@ const SearchBar = () => {
       label: '地图找厂',
       icon: 'jack-home_ditu',
       iconActive: 'jack-dituActive',
-      url: '/factory-search'
+      url: '/mapSearch'
     },
     {
       label: '智能找厂',

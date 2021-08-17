@@ -26,7 +26,7 @@ const areaCategory = [
   { id: '822', name: '南京市' }
 ]
 
-const setUpTimeMap = [
+export const setUpTimeMap = [
   { label: '1年内', value: '0,1' },
   { label: '1~3年', value: '1,3' },
   { label: '3~5年', value: '3,5' },
@@ -34,7 +34,7 @@ const setUpTimeMap = [
   { label: '10年以上', value: '10' }
 ]
 
-const updateTimeMap = [
+export const updateTimeMap = [
   { label: '1天内', value: 1 },
   { label: '7天内', value: 6 },
   { label: '30天内', value: 29 },
@@ -176,8 +176,8 @@ const FilterList = props => {
         start = moment().add(-Number(newValue[1]), 'y').format('x')
         end = moment().add(-Number(newValue[0]), 'y').format('x')
       } else {
-        start = moment().add(-Number(newValue[0]), 'y').format('x')
-        end = ''
+        start = ''
+        end = moment().add(-Number(newValue[0]), 'y').format('x')
       }
     }
     onFilterChange({

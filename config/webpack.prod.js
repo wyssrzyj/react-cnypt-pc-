@@ -5,8 +5,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 require('@babel/polyfill')
 const path = require('path')
 const loaderUtils = require('loader-utils')
-// const BundleAnalyzerPlugin =
-//   require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 // const { getCSSModuleLocalIdent } = require('./getCSSModuleLocalIdent.js')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin') // 对js进行压缩
@@ -123,10 +123,10 @@ const config = merge(common, {
       chunkFilename: 'css/[id].[hash].css',
       ignoreOrder: true
     }),
-    // new BundleAnalyzerPlugin({
-    //     analyzerMode: "disable", // 不启用展示打包报告的web服务器
-    //     generateStatsFile: true // 生成报告文件
-    // }),
+    new BundleAnalyzerPlugin({
+      // analyzerMode: "disable", // 不启用展示打包报告的web服务器
+      // generateStatsFile: true // 生成报告文件
+    }),
     // new CompressionPlugin(),
     new HappyPack({
       //用id来标识 happypack处理那里类文件

@@ -4,6 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 require('@babel/polyfill')
 const friendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const webpack = require('webpack')
+const ip = require('ip')
+const Dotenv = require('dotenv-webpack')
 
 const { NODE_ENV } = process.env
 
@@ -23,6 +25,9 @@ module.exports = {
     assetModuleFilename: 'images/[hash:6][ext][query]'
   },
   plugins: [
+    new Dotenv({
+      ignorSub: true
+    }),
     new webpack.ProvidePlugin({
       process: 'process/browser'
     }),
@@ -74,6 +79,14 @@ module.exports = {
     compress: true, // 压缩
     hot: true, // 热更新
     port: 8002, // 端口号
+    host: 'dev.uchat.com.cn',
+    allowedHosts: [
+      'localhost',
+      ip.address(),
+      '0.0.0.0',
+      '127.0.0.1',
+      'dev.uchat.com.cn'
+    ],
     proxy: {
       '/api': hosts.get(NODE_ENV),
       '/baiduApi': {
@@ -94,12 +107,15 @@ module.exports = {
     // "react-router-dom": "ReactRouterDOM",
     // antd: "antd",
   },
+  node: {},
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'], // 这几个后缀名的文件后缀可以省略不写
     alias: {
       '@': path.join(__dirname, '../src'), // 这样 @就表示根目录src这个路径
       process: 'process/browser'
     },
-    fallback: { assert: require.resolve('assert/') }
+    fallback: {
+      assert: require.resolve('assert/')
+    }
   }
 }

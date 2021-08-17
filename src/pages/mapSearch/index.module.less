@@ -11,12 +11,37 @@
       justify-content: center;
       font-size: 12px;
     }
+
+    .amap-marker {
+      img {
+        width: 24px;
+        height: 24px;
+        // display: none;
+      }
+    }
+
+    .amap-marker-label {
+      padding: 0 !important;
+      border: none !important;
+    }
+
+    .markerLabel {
+      padding: 8px 12px;
+      color: #ffffff;
+      font-size: 16px;
+      background: #3b80ff;
+      cursor: pointer;
+
+      &:hover {
+        background: #3b80ffcc
+      }
+    }
   }
 }
 
 .mapTemp {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 60px)
 }
 
 .searchBar {
@@ -25,4 +50,11 @@
   left: 40px;
   z-index: 9999;
   background: transparent;
+}
+
+.btn {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 9999;
 }

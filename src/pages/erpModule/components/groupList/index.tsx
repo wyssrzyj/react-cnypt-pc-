@@ -1,6 +1,7 @@
-import React from 'react'
-import { Divider, Radio, Space } from 'antd'
+import React, { useState } from 'react'
+import { Divider, Radio, Space, Pagination, Empty } from 'antd'
 import classNames from 'classnames'
+import { isEmpty } from 'lodash'
 import styles from './index.module.less'
 
 const operations = [
@@ -18,14 +19,14 @@ const operations = [
   }
 ]
 
-const list = [
-  { name: '常用', index: 1 },
-  { name: '常用', index: 2 },
-  { name: '常用', index: 3 }
-]
-
 const GroupList = props => {
-  const { title = '分组', handleGroup } = props
+  const { title = '分组', handleGroup, dataSource, total } = props
+  const [pageNum, setPageNum] = useState(1)
+
+  const onPaginationChange = page => {
+    setPageNum(page)
+  }
+
   return (
     <div className={styles.groupList}>
       <header className={styles.header}>
@@ -45,30 +46,46 @@ const GroupList = props => {
           })}
         </div>
       </header>
-      <div>
-        <div className={styles.tableTitle}>
-          <span className={styles.nameBox}>名称</span>
-          <span className={styles.indexBox}>排序</span>
+      {isEmpty(dataSource) ? (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className={styles.empty} />
+      ) : (
+        <div>
+          <div className={styles.tableTitle}>
+            <span className={styles.nameBox}>名称</span>
+            <span className={styles.indexBox}>排序</span>
+          </div>
+          <Radio.Group>
+            <Space direction="vertical">
+              {dataSource.map((item, index) => {
+                return (
+                  <div
+                    key={item.id}
+                    className={classNames(
+                      styles.item,
+                      index % 2 === 0 && styles.bgColor
+                    )}
+                  >
+                    <Radio value={item.id}>
+                      <span className={styles.nameBox}>{item.name}</span>
+                      <span className={styles.indexBox}>{item.sortNo}</span>
+                    </Radio>
+                  </div>
+                )
+              })}
+            </Space>
+          </Radio.Group>
         </div>
-        <Radio.Group>
-          <Space direction="vertical">
-            {list.map((item, index) => {
-              return (
-                <div
-                  className={classNames(
-                    styles.item,
-                    index % 2 === 0 && styles.bgColor
-                  )}
-                >
-                  <Radio value={item.index}>
-                    <span className={styles.nameBox}>{item.name}</span>
-                    <span className={styles.indexBox}>{item.index}</span>
-                  </Radio>
-                </div>
-              )
-            })}
-          </Space>
-        </Radio.Group>
+      )}
+
+      <div className={styles.footer}>
+        <Pagination
+          current={pageNum}
+          pageSize={10}
+          total={total}
+          showSizeChanger={false}
+          onChange={onPaginationChange}
+          size="small"
+        />
       </div>
     </div>
   )

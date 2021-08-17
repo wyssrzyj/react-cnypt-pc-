@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import styles from './index.module.less'
 import { Menu } from 'antd'
+import { useLocation } from 'react-router'
 import Icon from '@/components/Icon'
 import classNames from 'classnames'
 import { useHistory } from 'react-router'
+import { get, isEmpty } from 'lodash'
 
 const { SubMenu } = Menu
 const MenuItem = Menu.Item
 
 const MenuBox = () => {
-  const [collapsed, setcollapsed] = useState<boolean>(false)
+  const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
+  const [collapsed, setCollapsed] = useState<boolean>(false)
   const history = useHistory()
+  const location = useLocation()
 
   const toggleCollapsed = () => {
-    setcollapsed(f => !f)
+    setCollapsed(f => !f)
   }
 
   useEffect(() => {
@@ -141,9 +145,32 @@ const MenuBox = () => {
     history.push(target)
   }
 
+  const getSelectKey = menus => {
+    menus.forEach(item => {
+      const url = get(item, 'url', '')
+      const children = get(item, 'children', [])
+      if (url === location.pathname) {
+        setCurrentMenu([item.key])
+      } else if (!isEmpty(children)) {
+        getSelectKey(children)
+      }
+    })
+  }
+
+  useEffect(() => {
+    console.log(
+      '🚀 ~ file: menu.tsx ~ line 165 ~ MenuBox ~ location.pathname',
+      location.pathname
+    )
+    getSelectKey(menus)
+    // setCurrentMenu(menuKeys.get(location.pathname))
+    // setOpenKeys(subsMap.get(location.pathname))
+  }, [location.pathname])
+
   return (
     <div className={classNames(styles.menu, collapsed && styles.miniMenu)}>
       <Menu
+        selectedKeys={currentMenu}
         defaultSelectedKeys={['classification']}
         defaultOpenKeys={['basicConfiguration']}
         mode="inline"

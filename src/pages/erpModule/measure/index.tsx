@@ -3,7 +3,7 @@ import { Button, Table, Modal } from 'antd'
 import { ExclamationCircleOutlined, SearchOutlined } from '@ant-design/icons'
 import { get } from 'lodash'
 import classNames from 'classnames'
-import { SearchInput } from '@/components'
+import { SearchInput, Icon } from '@/components'
 import { GroupList, GroupModal, AddModal } from '../components'
 import styles from './index.module.less'
 
@@ -94,10 +94,16 @@ const Measure = () => {
             />
           </div>
           <div>
-            <Button className={styles.colorBtn} icon={<SearchOutlined />}>
+            <Button
+              className={styles.colorBtn}
+              icon={<Icon type="jack-daoru" className={styles.icon} />}
+            >
               导入
             </Button>
-            <Button className={styles.colorBtn} icon={<SearchOutlined />}>
+            <Button
+              className={styles.colorBtn}
+              icon={<Icon type="jack-daochu" className={styles.icon} />}
+            >
               导出
             </Button>
             <Button

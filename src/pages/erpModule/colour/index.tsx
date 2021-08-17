@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Button, Table, Modal } from 'antd'
-import { ExclamationCircleOutlined, SearchOutlined } from '@ant-design/icons'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { get } from 'lodash'
 import classNames from 'classnames'
-import { SearchInput } from '@/components'
-import { GroupList, GroupModal, AddModal } from '../components'
+import { SearchInput, Icon } from '@/components'
+import { GroupList, GroupModal, AddModal, ImportModal } from '../components'
 import styles from './index.module.less'
 
 const titleMap = { add: '新增分组', edit: '编辑分组' }
@@ -14,6 +14,7 @@ const Colour = () => {
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false)
   const [groupTitle, setGroupTitle] = useState<string>('')
   const [classifyTitle, setClassifyTitle] = useState<string>('')
+  const [importVisible, setImportVisible] = useState<boolean>(false)
 
   const dataSource = [
     {
@@ -94,17 +95,20 @@ const Colour = () => {
             />
           </div>
           <div>
-            <Button className={styles.colorBtn} icon={<SearchOutlined />}>
+            <Button
+              className={styles.colorBtn}
+              icon={<Icon type="jack-daoru" className={styles.icon} />}
+              onClick={() => setImportVisible(true)}
+            >
               导入
             </Button>
-            <Button className={styles.colorBtn} icon={<SearchOutlined />}>
+            <Button
+              className={styles.colorBtn}
+              icon={<Icon type="jack-daochu" className={styles.icon} />}
+            >
               导出
             </Button>
-            <Button
-              type="primary"
-              icon={<SearchOutlined />}
-              onClick={addColour}
-            >
+            <Button type="primary" onClick={addColour}>
               新增颜色
             </Button>
           </div>
@@ -127,6 +131,11 @@ const Colour = () => {
         visible={addModalVisible}
         title={classifyTitle}
         handleCancel={() => setAddModalVisible(false)}
+      />
+      {/* 导入弹框 */}
+      <ImportModal
+        visible={importVisible}
+        handleCancel={() => setImportVisible(false)}
       />
     </div>
   )

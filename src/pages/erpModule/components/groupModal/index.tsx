@@ -13,11 +13,7 @@ const GroupModal = props => {
 
   const handleSelfOk = () => {
     validateFields().then(values => {
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 11 ~ validateFields ~ values',
-        values
-      )
-      handleOk()
+      handleOk({ ...values })
     })
   }
 
@@ -37,7 +33,7 @@ const GroupModal = props => {
           <Input placeholder="请输入分组名称" />
         </Form.Item>
 
-        <Form.Item label="排序" name="index">
+        <Form.Item label="排序" name="sortNo">
           <InputNumber min={0} />
         </Form.Item>
       </Form>

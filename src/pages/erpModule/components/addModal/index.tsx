@@ -1,6 +1,8 @@
 import React from 'react'
 import { Modal, Form, Input, InputNumber, Switch, Select } from 'antd'
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons'
+import { isEmpty } from 'lodash'
+import { isAdd } from '@/utils/tool'
 
 const { Option } = Select
 
@@ -9,33 +11,25 @@ const layout = {
   wrapperCol: { span: 16 }
 }
 
-const groupOptios = [
-  {
-    value: 'man',
-    label: '男装'
-  },
-  {
-    value: '我门',
-    label: '女装'
-  },
-  {
-    value: 'child',
-    label: '童装'
-  }
-]
-
 const AddModal = props => {
-  const { title, visible, handleOk, handleCancel } = props
+  const {
+    title,
+    visible,
+    handleOk,
+    handleCancel,
+    current,
+    options = []
+  } = props
   const [form] = Form.useForm()
   const { validateFields } = form
 
+  const initialValues = {
+    openStatus: true
+  }
+
   const handleSelfOk = () => {
     validateFields().then(values => {
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 11 ~ validateFields ~ values',
-        values
-      )
-      handleOk()
+      handleOk({ ...values })
     })
   }
 
@@ -46,14 +40,22 @@ const AddModal = props => {
       onOk={handleSelfOk}
       onCancel={handleCancel}
     >
-      <Form {...layout} form={form} name="certification">
-        <Form.Item
-          label="系统编号"
-          name="name"
-          rules={[{ required: true, message: '请输入系统编号!' }]}
-        >
-          <Input placeholder="系统自动生成" disabled />
-        </Form.Item>
+      <Form
+        {...layout}
+        form={form}
+        name="certification"
+        key={isAdd(current) ? 'add' : current.id}
+        initialValues={initialValues}
+      >
+        {!isAdd(current) && (
+          <Form.Item
+            label="系统编号"
+            name="code"
+            rules={[{ required: true, message: '请输入系统编号!' }]}
+          >
+            <Input placeholder="系统自动生成" disabled />
+          </Form.Item>
+        )}
 
         <Form.Item
           label={`${title}名称`}
@@ -63,29 +65,31 @@ const AddModal = props => {
           <Input placeholder={`请输入${title}名称`} />
         </Form.Item>
 
-        <Form.Item label="所属组名" name="name">
-          <Select placeholder="请选择企业证件类型">
-            {groupOptios.map(type => (
-              <Option key={type.value} value={type.value}>
-                {type.label}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+        {title !== '单位' && (
+          <Form.Item label="所属组名" name="groupId">
+            <Select placeholder="请选择企业证件类型">
+              {!isEmpty(options) &&
+                options.map(type => (
+                  <Option key={type.value} value={type.value}>
+                    {type.label}
+                  </Option>
+                ))}
+            </Select>
+          </Form.Item>
+        )}
 
-        <Form.Item label="排序" name="index">
+        <Form.Item label="排序" name="sortNo">
           <InputNumber min={0} />
         </Form.Item>
 
         <Form.Item
           label="状态"
-          name="index"
+          name="openStatus"
           rules={[{ required: true, message: '请选择状态!' }]}
         >
           <Switch
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
-            defaultChecked
           />
         </Form.Item>
       </Form>

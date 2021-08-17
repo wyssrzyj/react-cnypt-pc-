@@ -1,8 +1,8 @@
 import * as OSS from 'ali-oss'
 
 const client = new OSS({
-  accessKeyId: 'LTAI5tMLunJqU333pVvDrwCd',
-  accessKeySecret: 'rARmhjb96YXVRSMHJEBD2uFnQ0ItWn',
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  accessKeySecret: process.env.ACCESS_KEY_SECRET,
   regoin: 'oss-cn-hangzhou',
   endpoint: 'oss-cn-hangzhou.aliyuncs.com',
   bucket: 'capacity-platform',

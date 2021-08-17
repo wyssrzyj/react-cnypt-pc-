@@ -5,6 +5,7 @@ require('@babel/polyfill')
 const friendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const webpack = require('webpack')
 const ip = require('ip')
+const Dotenv = require('dotenv-webpack')
 
 const { NODE_ENV } = process.env
 
@@ -24,6 +25,9 @@ module.exports = {
     assetModuleFilename: 'images/[hash:6][ext][query]'
   },
   plugins: [
+    new Dotenv({
+      ignorSub: true
+    }),
     new webpack.ProvidePlugin({
       process: 'process/browser'
     }),

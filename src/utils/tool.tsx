@@ -45,6 +45,34 @@ export const useDebounceValue = (value, interval = 300) => {
   return debouncedValue
 }
 
+export const useThrottleValue = (value, interval = 300) => {
+  const [throttleValue, setThrottleValue] = useState(value)
+  const startTimeRef = useRef(new Date())
+
+  useEffect(() => {
+    let endTime: any = new Date()
+    const startTime: any = startTimeRef.current
+    let timer
+    const diffTime: any = endTime - startTime
+    const nextTime = interval - (endTime - startTime)
+    if (diffTime >= interval) {
+      setThrottleValue(value)
+      startTimeRef.current = new Date()
+    } else {
+      timer = setTimeout(() => {
+        setThrottleValue(value)
+        startTimeRef.current = new Date()
+      }, nextTime)
+    }
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [value, interval])
+
+  return throttleValue
+}
+
 export function useDebounce(fn, delay, dep = []) {
   const { current } = useRef({ fn, timer: null })
   useEffect(

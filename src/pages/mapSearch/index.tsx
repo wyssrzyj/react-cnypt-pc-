@@ -12,7 +12,8 @@ const MapSearch = () => {
     setMoveCityValue,
     setMapMove,
     mapMove,
-    mapSearchFactorys
+    mapSearchFactorys,
+    setMapSearchCityLntlats
   } = factoryStore
   const { allArea } = commonStore
 
@@ -45,12 +46,13 @@ const MapSearch = () => {
     })
 
     map.on('complete', () => {
-      console.log('complete')
+      // console.log('complete')
     })
 
     map.on('moveend', () => {
       const center = map.getCenter()
       const lnglat = [center.lng, center.lat]
+      setMapSearchCityLntlats(lnglat)
 
       geocoder.getAddress(lnglat, function (status, result) {
         if (status === 'complete' && result.regeocode) {

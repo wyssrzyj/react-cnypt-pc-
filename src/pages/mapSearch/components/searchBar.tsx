@@ -8,6 +8,7 @@ import { setUpTimeMap, updateTimeMap } from '@/components/filterList'
 import moment from 'moment'
 import { useDebounceValue } from '@/utils/tool'
 import Factorys from './factorys'
+import { useHistory } from 'react-router'
 
 const filterNull = obj => {
   const keys = Reflect.ownKeys(obj)
@@ -35,6 +36,8 @@ const SearchBar = props => {
     mapSearchFactorys
   } = factoryStore
   const { prodType = [], factoryEffectiveLocation = [] } = toJS(dictionary)
+
+  const history = useHistory()
 
   const [areaData, setAreaData] = useState([])
   const [typeData, setTypeData] = useState([])
@@ -88,11 +91,12 @@ const SearchBar = props => {
   const dealTreeData = data => {
     if (Array.isArray(data) && data.length) {
       data.forEach(item => {
-        if (item.level === 2) {
+        if (item.level === 2 && !item.countyCity) {
           item.children = []
         }
+
         if (item.level === 1) {
-          item.disabled = true
+          // item.disabled = true
         }
         if (Array.isArray(item.children) && item.children.length) {
           dealTreeData(item.children)
@@ -103,14 +107,6 @@ const SearchBar = props => {
   }
   // 搜索内容处理 ----------------------------------
   const areaChange = (value, _label, _extra) => {
-    console.log(
-      '🚀 ~ file: searchBar.tsx ~ line 106 ~ areaChange ~ _extra',
-      _extra
-    )
-    console.log(
-      '🚀 ~ file: searchBar.tsx ~ line 106 ~ areaChange ~ value',
-      value
-    )
     const newParams = cloneDeep(params)
     if (value) {
       newParams.cityIds = [value]
@@ -202,21 +198,24 @@ const SearchBar = props => {
   // 参数更改以后 重新获取工厂列表数据
   useEffect(() => {
     const { cityIds } = params
-
     ;(async () => {
       if (Array.isArray(cityIds) && cityIds.length) {
         const cityId = cityIds[0]
-        await getMapFactorys(params)
-        await getMapCityInfo(cityId)
+        const res = await getMapCityInfo(cityId)
+        res && (await getMapFactorys(params))
       }
     })()
   }, [params])
 
+  const toHome = () => {
+    history.push('/')
+  }
+
   return (
     <section className={styles.searchBar}>
-      <div className={styles.searchBarLogo}>
+      <div className={styles.searchBarLogo} onClick={toHome}>
         <Icon type={'jack-dtzc'} className={styles.searchIcon}></Icon>
-        <div>地图找厂</div>
+        <div>首页</div>
       </div>
 
       <div className={styles.searchContent}>

@@ -169,6 +169,12 @@ export default class FactoryStore {
     }
   }
 
+  @action setMapSearchCityLntlats = lntlats => {
+    runInAction(() => {
+      this.mapSearchCityLntlats = lntlats
+    })
+  }
+
   // 获取城市区级信息
   @action getMapCityInfo = async pId => {
     try {
@@ -182,17 +188,28 @@ export default class FactoryStore {
       if (res.code === 200) {
         const citys = Reflect.ownKeys(res.data)
         const target = citys.find(item => res.data[item].id === pId)
-
         const targetCity = res.data[target]
+        if (
+          targetCity.longitude === this.mapSearchCityLntlats[0] &&
+          targetCity.latitude === this.mapSearchCityLntlats[1]
+        ) {
+          return false
+        }
 
-        runInAction(() => {
-          this.mapSearchDistrict = res.data
-          this.mapSearchCityLntlats = [
-            targetCity.longitude,
-            targetCity.latitude
-          ]
-        })
-        return res.data || []
+        if (
+          targetCity.longitude !== this.mapSearchCityLntlats[0] &&
+          targetCity.latitude !== this.mapSearchCityLntlats[1]
+        ) {
+          runInAction(() => {
+            this.mapSearchDistrict = res.data
+            this.mapSearchCityLntlats = [
+              targetCity.longitude,
+              targetCity.latitude
+            ]
+          })
+        }
+
+        return true
       } else {
         message.error('获取城市数据失败~')
       }

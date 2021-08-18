@@ -6,6 +6,9 @@ import { Icon } from '@/components'
 import moment from 'moment'
 import classNames from 'classnames'
 
+const EMPTY_IMG =
+  'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/factoryEmpty.png'
+
 const Factorys = props => {
   const { last = 3, itemHeight = 82, list = [], map } = props
 
@@ -27,13 +30,19 @@ const Factorys = props => {
   const [currentFactoryDetail, setCurrentFactoryDetail] = useState({}) // 当前选择的加工厂详情
   const [currentFactoryImgs, setCurrentFactoryImgs] = useState([]) // 当前选择的加工厂的照片
   const [viewCount, setViewCount] = useState(null) // 当前选择的加工厂的照片
+  const [factorysShow, setFactorysShow] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFactorysShow(true)
+    }, 500)
+  }, [])
 
   useEffect(() => {
     list.forEach((item, idx) => {
       item.idx = idx + 1
     })
     setTotalData(list)
-    // setData(list)
   }, [list])
 
   /*
@@ -68,7 +77,6 @@ const Factorys = props => {
       }
       // 截取可视区域数据
       const viewData = totalData.slice(start, end)
-      console.log('🚀 ~~~~~~~~~~~ ~ viewData', viewData)
 
       setData(viewData)
       setTransform(`translateY(${start * itemHeight}px)`)
@@ -126,7 +134,6 @@ const Factorys = props => {
   }, [throttleScrollTop])
 
   const factoryClick = data => {
-    console.log('🚀 ~ file: factorys.tsx ~ line 81 ~ data', toJS(data))
     const { factoryLnglat } = data
     if (Array.isArray(factoryLnglat) && !factoryLnglat.includes('null')) {
       map && map.panTo(factoryLnglat)
@@ -183,7 +190,7 @@ const Factorys = props => {
     <div
       className={classNames(
         styles.factorys,
-        facoryShow ? styles.fitHeight : '',
+        facoryShow || !list.length ? styles.fitHeight : '',
         !menuFlag ? styles.menuRetract : ''
       )}
       ref={factorysRef}
@@ -195,51 +202,56 @@ const Factorys = props => {
           <Icon type={'jack-you_31'}></Icon>
         )}
       </div>
-      <>
+      <div
+        className={classNames(
+          styles.title,
+          facoryShow ? styles.hiddenTitle : styles.showTitle
+        )}
+      >
+        找到{totalData.length}家工厂
+      </div>
+      <div
+        className={styles.virtualList}
+        onScroll={handleScroll}
+        ref={virtualListRef}
+      >
         <div
-          className={classNames(
-            styles.title,
-            facoryShow ? styles.hiddenTitle : styles.showTitle
-          )}
-        >
-          找到{totalData.length}家工厂
-        </div>
-        <div
-          className={styles.virtualList}
-          onScroll={handleScroll}
-          ref={virtualListRef}
-        >
-          <div
-            className={styles.virtualListHeight}
-            style={{ height: `${totalHeight}px` }}
-          />
+          className={styles.virtualListHeight}
+          style={{ height: `${totalHeight}px` }}
+        />
 
-          <div className={styles.viewContent} style={{ transform: transform }}>
-            {data.map(item => {
-              return (
-                <div
-                  onClick={() => factoryClick(item)}
-                  className={styles.viewItem}
-                  key={item.factoryId}
-                >
-                  <div className={styles.viewIdx}>{item.idx}</div>
-                  <img
-                    src={item.outsizeImageUrl}
-                    alt={''}
-                    className={styles.viewImg}
-                  ></img>
-                  <div className={styles.viewInfo}>
-                    <div className={styles.viewTitle}>{item.factoryName}</div>
-                    <div className={styles.viewAddress}>
-                      {item.factoryAddress}
-                    </div>
+        <div className={styles.viewContent} style={{ transform: transform }}>
+          {data.map(item => {
+            return (
+              <div
+                onClick={() => factoryClick(item)}
+                className={styles.viewItem}
+                key={item.factoryId}
+              >
+                <div className={styles.viewIdx}>{item.idx}</div>
+                <img
+                  src={item.outsizeImageUrl}
+                  alt={''}
+                  className={styles.viewImg}
+                ></img>
+                <div className={styles.viewInfo}>
+                  <div className={styles.viewTitle}>{item.factoryName}</div>
+                  <div className={styles.viewAddress}>
+                    {item.factoryAddress}
                   </div>
                 </div>
-              )
-            })}
-          </div>
+              </div>
+            )
+          })}
         </div>
-      </>
+      </div>
+
+      {factorysShow && !list.length ? (
+        <div className={styles.emptyBlock}>
+          <img src={EMPTY_IMG} alt="" className={styles.emptyImg} />
+          <div>抱歉，暂未找到合适的工厂～</div>
+        </div>
+      ) : null}
       {facoryShow ? (
         <div className={styles.viewFactoryInfo}>
           <div onClick={backToList} className={styles.viewFactoryBack}>

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Divider, Radio, Space, Pagination, Empty } from 'antd'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
+import { useStores } from '@/utils/mobx'
 import styles from './index.module.less'
 
 const operations = [
@@ -20,11 +21,27 @@ const operations = [
 ]
 
 const GroupList = props => {
-  const { title = '分组', handleGroup, dataSource, total } = props
+  const {
+    title = '分组',
+    handleGroup,
+    dataSource,
+    total,
+    paginationChange,
+    type
+  } = props
+  const { erpModuleStore } = useStores()
+  const { updateGroupId } = erpModuleStore
   const [pageNum, setPageNum] = useState(1)
+  const [radioId, setRadioId] = useState<string>(undefined)
 
   const onPaginationChange = page => {
     setPageNum(page)
+    paginationChange(page)
+  }
+
+  const onRadioChange = e => {
+    setRadioId(e.target.value)
+    updateGroupId(type, e.target.value)
   }
 
   return (
@@ -36,12 +53,10 @@ const GroupList = props => {
         <div>
           {operations.map((item, index) => {
             return (
-              <>
-                <a key={item.value} onClick={() => handleGroup(item.value)}>
-                  {item.label}
-                </a>
+              <span key={item.value}>
+                <a onClick={() => handleGroup(item.value)}>{item.label}</a>
                 {index !== operations.length - 1 && <Divider type="vertical" />}
-              </>
+              </span>
             )
           })}
         </div>
@@ -49,12 +64,12 @@ const GroupList = props => {
       {isEmpty(dataSource) ? (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className={styles.empty} />
       ) : (
-        <div>
+        <div className={styles.content}>
           <div className={styles.tableTitle}>
             <span className={styles.nameBox}>名称</span>
             <span className={styles.indexBox}>排序</span>
           </div>
-          <Radio.Group>
+          <Radio.Group value={radioId} onChange={onRadioChange}>
             <Space direction="vertical">
               {dataSource.map((item, index) => {
                 return (

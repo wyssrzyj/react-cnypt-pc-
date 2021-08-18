@@ -11,25 +11,48 @@ const layout = {
   wrapperCol: { span: 16 }
 }
 
+const noShow = ['单位', '品牌', '工艺', '币种']
+
+const USwitch = props => {
+  const { value, onChange } = props
+  const onSelfChange = checked => {
+    onChange(checked)
+  }
+  return (
+    <Switch
+      checkedChildren={<CheckOutlined />}
+      unCheckedChildren={<CloseOutlined />}
+      checked={value}
+      onChange={onSelfChange}
+    />
+  )
+}
+
 const AddModal = props => {
   const {
     title,
     visible,
     handleOk,
     handleCancel,
-    current,
-    options = []
+    current = {},
+    groupOptions = []
   } = props
   const [form] = Form.useForm()
   const { validateFields } = form
 
+  const { code, name, sortNo, id, status = true, groupId } = current
+
   const initialValues = {
-    openStatus: true
+    status,
+    code,
+    name,
+    sortNo,
+    groupId
   }
 
   const handleSelfOk = () => {
     validateFields().then(values => {
-      handleOk({ ...values })
+      handleOk({ ...values, id })
     })
   }
 
@@ -65,13 +88,13 @@ const AddModal = props => {
           <Input placeholder={`请输入${title}名称`} />
         </Form.Item>
 
-        {title !== '单位' && (
+        {!noShow.includes(title) && (
           <Form.Item label="所属组名" name="groupId">
-            <Select placeholder="请选择企业证件类型">
-              {!isEmpty(options) &&
-                options.map(type => (
-                  <Option key={type.value} value={type.value}>
-                    {type.label}
+            <Select placeholder="请选择所属组名">
+              {!isEmpty(groupOptions) &&
+                groupOptions.map(item => (
+                  <Option key={item.id} value={item.id}>
+                    {item.name}
                   </Option>
                 ))}
             </Select>
@@ -84,13 +107,10 @@ const AddModal = props => {
 
         <Form.Item
           label="状态"
-          name="openStatus"
+          name="status"
           rules={[{ required: true, message: '请选择状态!' }]}
         >
-          <Switch
-            checkedChildren={<CheckOutlined />}
-            unCheckedChildren={<CloseOutlined />}
-          />
+          <USwitch />
         </Form.Item>
       </Form>
     </Modal>

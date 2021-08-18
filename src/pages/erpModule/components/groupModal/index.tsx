@@ -1,5 +1,6 @@
 import React from 'react'
 import { Modal, Form, Input, InputNumber } from 'antd'
+import { isAdd } from '@/utils/tool'
 
 const layout = {
   labelCol: { span: 6 },
@@ -7,9 +8,15 @@ const layout = {
 }
 
 const GroupModal = props => {
-  const { title, visible, handleOk, handleCancel } = props
+  const { title, visible, handleOk, handleCancel, current = {} } = props
+  const { name, sortNo } = current
   const [form] = Form.useForm()
   const { validateFields } = form
+
+  const initialValues = {
+    name,
+    sortNo
+  }
 
   const handleSelfOk = () => {
     validateFields().then(values => {
@@ -24,7 +31,13 @@ const GroupModal = props => {
       onOk={handleSelfOk}
       onCancel={handleCancel}
     >
-      <Form {...layout} form={form} name="certification">
+      <Form
+        {...layout}
+        form={form}
+        name="certification"
+        key={isAdd(current) ? 'add' : current.id}
+        initialValues={initialValues}
+      >
         <Form.Item
           label="分组名称"
           name="name"

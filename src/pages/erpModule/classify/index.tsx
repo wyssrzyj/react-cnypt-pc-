@@ -6,8 +6,7 @@ import {
   CheckOutlined
 } from '@ant-design/icons'
 import { get } from 'lodash'
-import { useStores } from '@/utils/mobx'
-import { getUserInfo } from '@/utils/tool'
+import { useStores, observer } from '@/utils/mobx'
 import { GroupList, GroupModal, AddModal } from '../components'
 import styles from './index.module.less'
 
@@ -18,13 +17,19 @@ const rowKey = 'id'
 const Classify = () => {
   const pageSize = 10
   const { erpModuleStore } = useStores()
-  const { goodGroupLists, editGoodGroup, goodClassifyLists, editGoodClassify } =
-    erpModuleStore
+  const {
+    goodGroupLists,
+    editGoodGroup,
+    goodClassifyLists,
+    editGoodClassify,
+    currentClassifyId,
+    deleteGood
+  } = erpModuleStore
   const [groupModalVisible, setGroupModalVisible] = useState<boolean>(false)
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false)
   const [groupTitle, setGroupTitle] = useState<string>('')
   const [classifyTitle, setClassifyTitle] = useState<string>('')
-  const [pageNum, _setPageNum] = useState<number>(1)
+  const [pageNum, setPageNum] = useState<number>(1)
   const [tablePageNum, setTablePageNum] = useState<number>(1)
   const [currentClassify, setCurrentClassify] = useState<any>({})
   const [loading, setLoading] = useState<boolean>(true)
@@ -33,15 +38,14 @@ const Classify = () => {
   const [options, setOptions] = useState<any>([])
   const [groupDataSource, setGroupDataSource] = useState<any>([])
   const [groupTotal, setGroupTotal] = useState<number>(0)
-
-  const userInfo = getUserInfo() || {}
-  const { factoryId } = userInfo
+  const [currentGroup, setCurrentGroup] = useState<any>({})
 
   const columns = [
     {
       title: '序号',
       dataIndex: 'index',
-      key: 'index'
+      key: 'index',
+      render: (_value, _row, index) => index + 1
     },
     {
       title: '系统编号',
@@ -61,7 +65,11 @@ const Classify = () => {
     {
       title: '组名',
       dataIndex: 'groupId',
-      key: 'groupId'
+      key: 'groupId',
+      render: value => {
+        const current = options.find(option => option.id === value) || {}
+        return current.name
+      }
     },
     {
       title: '状态',
@@ -82,56 +90,83 @@ const Classify = () => {
       dataIndex: 'operation',
       key: 'operation',
       render: (_value, row) => {
+        const { name, id } = row
         return (
           <>
             <a onClick={() => addClassify(row)}>编辑</a>
             <Divider type="vertical" />
-            <a>删除</a>
+            <a
+              onClick={() => {
+                deleteClassify(name, id)
+              }}
+            >
+              删除
+            </a>
           </>
         )
       }
     }
   ]
-  const handleGroup = type => {
-    if (type === 'delete') {
-      // 删除
-      deleteGroup(1, 'aa')
-    } else {
-      setGroupTitle(get(titleMap, type))
-      setGroupModalVisible(true)
-    }
-  }
 
-  const deleteGroup = (id, name) => {
+  // 删除商品分类
+  const deleteClassify = (name, id) => {
     Modal.confirm({
-      title: `确认删除 ${name} ${id} 吗？`,
+      title: `确认删除 ${name} 吗？`,
       icon: <ExclamationCircleOutlined />,
       okText: '确认',
       cancelText: '取消',
-      onOk: () => {}
+      onOk: () => {
+        deleteGood('category', id).then(response => {
+          const { success, msg } = response
+          message[success ? 'success' : 'error'](msg)
+          success && getGoodClassifyLists()
+        })
+      }
+    })
+  }
+  const handleGroup = type => {
+    setGroupTitle(get(titleMap, type))
+    //新增
+    if (type === 'add') {
+      setGroupModalVisible(true)
+    } else {
+      if (currentClassifyId) {
+        type === 'delete' && deleteGroup() // 删除
+        type === 'edit' && setGroupModalVisible(true) //编辑
+      } else {
+        message.warning('请先选择要操作的分组！')
+      }
+    }
+  }
+
+  const deleteGroup = () => {
+    const { name, id } = currentGroup
+    Modal.confirm({
+      title: `确认删除 ${name} 吗？`,
+      icon: <ExclamationCircleOutlined />,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        deleteGood('group', id).then(response => {
+          const { success, msg } = response
+          message[success ? 'success' : 'error'](msg)
+          success && getGoodGroupLists()
+        })
+      }
     })
   }
 
   const addClassify = (values = {}) => {
-    console.log(
-      '🚀 ~ file: index.tsx ~ line 113 ~ addClassify ~ values',
-      values
-    )
     setAddModalVisible(true)
     setClassifyTitle('分类')
     setCurrentClassify({ ...values })
   }
 
   const getGoodGroupLists = () => {
-    goodGroupLists({
-      factoryId,
+    goodGroupLists('product', {
       pageNum,
       pageSize
     }).then(response => {
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 78 ~ goodGroupLists ~ response',
-        response
-      )
       const { data, success } = response
       if (success) {
         const { total, records } = data
@@ -145,8 +180,7 @@ const Classify = () => {
   }
 
   const getAllGoodGroup = () => {
-    goodGroupLists({
-      factoryId,
+    goodGroupLists('product', {
       pageNum: 1,
       pageSize: 10000
     }).then(response => {
@@ -160,18 +194,10 @@ const Classify = () => {
 
   // 新建/更新商品分类的分组
   const operationGoodGroup = values => {
-    console.log(
-      '🚀 ~ file: index.tsx ~ line 97 ~ operationGoodGroup ~ values',
-      values
-    )
-    editGoodGroup({
-      factoryId,
-      ...values
+    editGoodGroup('product', {
+      ...values,
+      id: currentGroup.id
     }).then(response => {
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 98 ~ editGoodGroup ~ response',
-        response
-      )
       const { success, msg } = response
       message[success ? 'success' : 'error'](msg)
       success && getGoodGroupLists()
@@ -183,9 +209,9 @@ const Classify = () => {
   const getGoodClassifyLists = () => {
     setLoading(true)
     goodClassifyLists({
-      factoryId,
       pageNum: tablePageNum,
-      pageSize
+      pageSize,
+      groupId: currentClassifyId ? currentClassifyId : undefined
     })
       .then(response => {
         const { success, data } = response
@@ -205,18 +231,17 @@ const Classify = () => {
 
   // 新建/更新商品分类
   const operationGoodClassify = values => {
-    console.log('🚀 ~ file: index.tsx ~ line 134 ~ Classify ~ values', values)
     editGoodClassify({
-      factoryId,
-      ...values
+      ...values,
+      openStatus: values.status ? 1 : 0,
+      id: currentClassify.id ? currentClassify.id : undefined
     }).then(response => {
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 137 ~ operationGoodClassify ~ response',
-        response
-      )
       const { success, msg } = response
       message[success ? 'success' : 'error'](msg)
-      success && getGoodClassifyLists()
+      if (success) {
+        getGoodClassifyLists()
+        getAllGoodGroup()
+      }
       setAddModalVisible(false)
     })
   }
@@ -225,14 +250,30 @@ const Classify = () => {
     setTablePageNum(page)
   }
 
+  const listPaginationChange = page => {
+    setPageNum(page)
+  }
+
   useEffect(() => {
-    getAllGoodGroup()
-    getGoodGroupLists()
-  }, [])
+    if (currentClassifyId) {
+      const current =
+        groupDataSource.find(data => data.id === currentClassifyId) || {}
+      setCurrentGroup({ ...current })
+      getGoodClassifyLists()
+    }
+  }, [currentClassifyId])
 
   useEffect(() => {
     getGoodClassifyLists()
   }, [tablePageNum])
+
+  useEffect(() => {
+    getGoodGroupLists()
+  }, [pageNum])
+
+  useEffect(() => {
+    getAllGoodGroup()
+  }, [])
 
   return (
     <div className={styles.classify}>
@@ -241,6 +282,8 @@ const Classify = () => {
           handleGroup={handleGroup}
           dataSource={groupDataSource}
           total={groupTotal}
+          type="classify"
+          paginationChange={listPaginationChange}
         />
       </div>
       <div className={styles.right}>
@@ -254,6 +297,7 @@ const Classify = () => {
           dataSource={dataSource}
           columns={columns}
           pagination={{
+            size: 'small',
             current: tablePageNum,
             pageSize,
             total,
@@ -262,23 +306,28 @@ const Classify = () => {
         />
       </div>
       {/* 新增 编辑 分组 弹框 */}
-      <GroupModal
-        title={groupTitle}
-        visible={groupModalVisible}
-        handleCancel={() => setGroupModalVisible(false)}
-        handleOk={operationGoodGroup}
-      />
+      {groupModalVisible && (
+        <GroupModal
+          title={groupTitle}
+          visible={groupModalVisible}
+          current={currentGroup}
+          handleCancel={() => setGroupModalVisible(false)}
+          handleOk={operationGoodGroup}
+        />
+      )}
       {/* 新增商品分类 弹框 */}
-      <AddModal
-        visible={addModalVisible}
-        title={classifyTitle}
-        current={currentClassify}
-        options={options}
-        handleCancel={() => setAddModalVisible(false)}
-        handleOk={operationGoodClassify}
-      />
+      {addModalVisible && (
+        <AddModal
+          visible={addModalVisible}
+          title={classifyTitle}
+          current={currentClassify}
+          groupOptions={options}
+          handleCancel={() => setAddModalVisible(false)}
+          handleOk={operationGoodClassify}
+        />
+      )}
     </div>
   )
 }
 
-export default Classify
+export default observer(Classify)

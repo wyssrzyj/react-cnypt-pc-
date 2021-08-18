@@ -61,30 +61,30 @@ const MenuBox = () => {
     {
       label: '基础配置',
       key: 'basicConfiguration',
-      icon: 'jack-qiye1',
+      icon: 'jack-shezhi',
       children: [
         {
           label: '商品分类维护',
           key: 'classification',
-          icon: 'jack-caozuo',
+          icon: 'jack-gouwu',
           url: '/erp/classify'
         },
         {
           label: '颜色维护',
           key: 'color',
-          icon: 'jack-ziyuan143',
+          icon: 'jack-yanse',
           url: '/erp/colour'
         },
         {
           label: '尺寸维护',
           key: 'size',
-          icon: 'jack-caozuo',
+          icon: 'jack-shangyi',
           url: '/erp/measure'
         },
         {
           label: '其它配置',
           key: 'others',
-          icon: 'jack-ziyuan143',
+          icon: 'jack-chuhang',
           url: '/erp/others'
         }
       ]
@@ -158,10 +158,6 @@ const MenuBox = () => {
   }
 
   useEffect(() => {
-    console.log(
-      '🚀 ~ file: menu.tsx ~ line 165 ~ MenuBox ~ location.pathname',
-      location.pathname
-    )
     getSelectKey(menus)
     // setCurrentMenu(menuKeys.get(location.pathname))
     // setOpenKeys(subsMap.get(location.pathname))

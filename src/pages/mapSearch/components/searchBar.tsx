@@ -106,15 +106,49 @@ const SearchBar = props => {
     return data
   }
   // 搜索内容处理 ----------------------------------
-  const areaChange = (value, _label, _extra) => {
+  const areaChange = (_value, _label, extra) => {
+    const { triggerNode = {} } = extra
     const newParams = cloneDeep(params)
-    if (value) {
-      newParams.cityIds = [value]
-      setMapMove(true)
-    } else {
-      delete newParams.cityIds
-    }
+    if (triggerNode) {
+      const { props } = triggerNode
+      if (!props.value) {
+        delete newParams.cityIds
+      }
+      // 市级
+      if (props.level === 2 && props.countyCity !== 1) {
+        newParams['cityIds'] = [props.value]
+      }
+      // 直辖县级城市
+      if (props.level === 2 && props.countyCity === 1) {
+        const target = allArea.find(item => +item.value === +props.pid)
 
+        if (target && Array.isArray(target.children)) {
+          const t = target.children.find(i => +i.value === +props.value)
+          if (t && Array.isArray(target.children)) {
+            const city = t.children.find(c => +c.value === +props.value + 1)
+            newParams['districtIds'] = [city.value]
+            delete newParams.cityIds
+          }
+        }
+      }
+      // 省级城市 查找省会城市
+      // 省会城市value 是省级value+1
+      if (props.level === 1) {
+        const target = allArea.find(item => +item.value === +props.value)
+        if (target && Array.isArray(target.children)) {
+          const t = target.children.find(i => +i.value === +props.value + 1)
+          if (t) {
+            newParams['cityIds'] = [t.value]
+          }
+        }
+      }
+      // 直辖县级城市 第三级 更换查询字段
+      if (props.level === 3 && props.countyCity === 1) {
+        newParams['districtIds'] = [props.value]
+        delete newParams.cityIds
+      }
+      setMapMove(true)
+    }
     setParams(filterNull(newParams))
   }
 
@@ -197,11 +231,16 @@ const SearchBar = props => {
 
   // 参数更改以后 重新获取工厂列表数据
   useEffect(() => {
-    const { cityIds } = params
+    const { cityIds, districtIds } = params
     ;(async () => {
       if (Array.isArray(cityIds) && cityIds.length) {
         const cityId = cityIds[0]
         const res = await getMapCityInfo(cityId)
+        res && (await getMapFactorys(params))
+      }
+      if (Array.isArray(districtIds) && districtIds.length) {
+        const districtId = districtIds[0]
+        const res = await getMapCityInfo(districtId)
         res && (await getMapFactorys(params))
       }
     })()
@@ -227,7 +266,10 @@ const SearchBar = props => {
           placeholder="所在地区"
           onChange={areaChange}
           treeData={areaData}
-          value={params.cityIds[0]}
+          value={
+            (params.cityIds && params.cityIds[0]) ||
+            (params.districtIds && params.districtIds[0])
+          }
         />
 
         <TreeSelect

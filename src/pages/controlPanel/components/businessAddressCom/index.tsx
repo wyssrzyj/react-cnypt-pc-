@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Input } from 'antd'
+import { Input, message } from 'antd'
 import axios from 'axios'
 import { isFunction } from 'lodash'
 import styles from './index.module.less'
@@ -41,9 +41,13 @@ const BusinessAddressCom = props => {
     url = districtName ? url + `&district=${districtName}` : url
     const res = await axios.get(url)
     if (res.status === 200) {
-      const location = res.data.pois[0].location
-      isFunction(onChange) && onChange({ location: location, address: value })
-      setMapLocation(location.split(','))
+      if (!res.data.pois.length) {
+        message.error('请输入正确的地址')
+      } else {
+        const location = res.data.pois[0].location
+        isFunction(onChange) && onChange({ location: location, address: value })
+        setMapLocation(location.split(','))
+      }
     }
   }
 
@@ -57,7 +61,7 @@ const BusinessAddressCom = props => {
       map.clearMap()
       const { lnglat } = ev
       const { lng, lat } = lnglat
-      var marker = new _AMap.Marker({
+      let marker = new _AMap.Marker({
         position: new _AMap.LngLat(lng, lat)
       })
       const strArr = `${lnglat.lng},${lnglat.lat}`
@@ -80,7 +84,7 @@ const BusinessAddressCom = props => {
   useEffect(() => {
     if (mapLocation.length && mapScene) {
       mapScene.clearMap()
-      var marker = new _AMap.Marker({
+      let marker = new _AMap.Marker({
         position: new _AMap.LngLat(mapLocation[0], mapLocation[1])
       })
       mapScene.add(marker)

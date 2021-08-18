@@ -182,6 +182,7 @@ export default class FactoryStore {
       if (res.code === 200) {
         const citys = Reflect.ownKeys(res.data)
         const target = citys.find(item => res.data[item].id === pId)
+
         const targetCity = res.data[target]
 
         runInAction(() => {
@@ -211,11 +212,13 @@ export default class FactoryStore {
 
       if (res.code === 200) {
         runInAction(() => {
-          res.data.forEach(item => {
+          res.data.forEach((item, idx) => {
             item.city = item.cityName
             item.district = item.districtName
             item.lnglat = item.districtLnglat
+            item.idx = idx + 1
           })
+
           this.mapSearchFactorys = res.data
         })
         return res.data || []
@@ -224,6 +227,7 @@ export default class FactoryStore {
       }
       return res.data
     } catch (e) {
+      e
       console.log(e)
     }
   }

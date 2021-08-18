@@ -103,6 +103,14 @@ const SearchBar = props => {
   }
   // 搜索内容处理 ----------------------------------
   const areaChange = (value, _label, _extra) => {
+    console.log(
+      '🚀 ~ file: searchBar.tsx ~ line 106 ~ areaChange ~ _extra',
+      _extra
+    )
+    console.log(
+      '🚀 ~ file: searchBar.tsx ~ line 106 ~ areaChange ~ value',
+      value
+    )
     const newParams = cloneDeep(params)
     if (value) {
       newParams.cityIds = [value]
@@ -218,7 +226,6 @@ const SearchBar = props => {
           dropdownClassName={styles.searchBarTreeDrop}
           dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
           placeholder="所在地区"
-          allowClear
           onChange={areaChange}
           treeData={areaData}
           value={params.cityIds[0]}

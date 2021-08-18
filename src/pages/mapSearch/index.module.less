@@ -12,36 +12,91 @@
       font-size: 12px;
     }
 
-    .amap-marker {
-      img {
-        width: 24px;
-        height: 24px;
-        // display: none;
+    .markerLabelFactory {
+      display: none;
+      padding-left: 4px;
+    }
+
+    .markerLabel {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      color: #ffffff;
+      font-size: 16px;
+      cursor: pointer;
+
+      &::after {
+        position: absolute;
+        top: 29px;
+        left: 50%;
+        z-index: 2;
+        width: 0;
+        height: 0;
+        border-color: #3b80ff transparent transparent;
+        border-style: solid;
+        border-width: 6px 6px 0px;
+        transform: translateX(-50%);
+        content: '';
       }
     }
 
     .amap-marker-label {
-      padding: 0 !important;
-      border: none !important;
+      left: 0 !important;
+      background: #3b80ff;
+      border-radius: 4px;
+      transform: translateX(-50%);
     }
 
-    .markerLabel {
-      padding: 8px 12px;
-      color: #ffffff;
-      font-size: 16px;
-      background: #3b80ff;
-      cursor: pointer;
-
+    .amap-marker {
       &:hover {
-        background: #3b80ffcc
+        z-index: 999 !important;
+
+        .amap-marker-label {
+          left: 0 !important;
+          background: #fa5741;
+          transform: translateX(-50%);
+        }
+
+        .markerLabelFactory {
+          display: inline-block;
+        }
+
+        .markerLabel {
+          &::after {
+            position: absolute;
+            top: 29px;
+            left: 50%;
+            z-index: 2;
+            width: 0;
+            height: 0;
+            border-color: #fa5741 transparent transparent;
+            border-style: solid;
+            border-width: 8px 8px 0px;
+            transform: translateX(-50%);
+            content: '';
+          }
+        }
       }
+
+      img {
+        display: none;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .amap-marker-label {
+      top: 0;
+      padding: 0 !important;
+      border: none !important;
     }
   }
 }
 
 .mapTemp {
   width: 100%;
-  height: calc(100% - 60px)
+  height: calc(100% - 60px);
 }
 
 .searchBar {

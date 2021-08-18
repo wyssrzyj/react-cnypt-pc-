@@ -12,10 +12,11 @@ const Factorys = props => {
   const { factoryStore } = useStores()
   const { getFactoryDetail } = factoryStore
 
-  const virtualListRef: any = useRef()
+  const virtualListRef = useRef<HTMLDivElement>()
+  const factorysRef = useRef<HTMLDivElement>()
 
   const [menuFlag, setMenuFlag] = useState(true) // true 打开 false 收起
-  const [totalHeight, setTotalHeight] = useState('') // 虚拟盒子的总高度
+  const [totalHeight, setTotalHeight] = useState(0) // 虚拟盒子的总高度
   const [transform, setTransform] = useState('') // 实际盒子需要移动的距离
   const [data, setData] = useState([]) // 实际显示的数据
   const [totalData, setTotalData] = useState([]) // 总数据
@@ -25,6 +26,7 @@ const Factorys = props => {
   const [facoryShow, setFacoryShow] = useState(false) // 是否展示加工厂
   const [currentFactoryDetail, setCurrentFactoryDetail] = useState({}) // 当前选择的加工厂详情
   const [currentFactoryImgs, setCurrentFactoryImgs] = useState([]) // 当前选择的加工厂的照片
+  const [viewCount, setViewCount] = useState(null) // 当前选择的加工厂的照片
 
   useEffect(() => {
     list.forEach((item, idx) => {
@@ -46,22 +48,27 @@ const Factorys = props => {
   const getData = () => {}
 
   const updateViewContent = (scrollTop = 0) => {
+    scrollTop = virtualListRef.current.scrollTop || scrollTop
     const totalEnd = totalData.length
     if (virtualListRef.current) {
       // 计算可视区域里能放几个元素
-      const viewCount = Math.ceil(
-        virtualListRef.current.clientHeight / itemHeight
-      )
+      let viewNum
+      if (!viewCount) {
+        viewNum = Math.ceil(virtualListRef.current.clientHeight / itemHeight)
+        setViewCount(viewNum)
+      }
+
       // 计算可视区域开始的索引
       const start = Math.floor(scrollTop / itemHeight)
       // 计算可视区域结束索引
-      const end = start + viewCount
+      const end = start + (viewCount || viewNum)
       if (end >= totalEnd - last) {
         // 根据最后的索引与总的数据长度进行比较 请求下一页数据
         getData()
       }
       // 截取可视区域数据
       const viewData = totalData.slice(start, end)
+      console.log('🚀 ~~~~~~~~~~~ ~ viewData', viewData)
 
       setData(viewData)
       setTransform(`translateY(${start * itemHeight}px)`)
@@ -69,9 +76,41 @@ const Factorys = props => {
   }
 
   useEffect(() => {
-    const totalH = totalData.length * itemHeight + 'px'
+    const totalH = totalData.length * itemHeight
     setTotalHeight(totalH)
   }, [totalData, itemHeight])
+
+  useEffect(() => {
+    const len = list.length
+    if (len && viewCount && len < viewCount) {
+      factorysRef.current.style.height = totalHeight + 80 + 'px'
+    }
+    if (len && viewCount && len > viewCount) {
+      factorysRef.current.style.height = `calc(100% - 60px)`
+    }
+  }, [viewCount, list, totalHeight])
+
+  useEffect(() => {
+    const { factoryId } = currentFactory
+    if (factoryId) {
+      ;(async () => {
+        const factoryDetail = await getFactoryDetail(factoryId)
+        //
+        let imgs = [].concat(
+          factoryDetail.factoryOutsizeImages,
+          factoryDetail.factoryWorkshopImages
+        )
+        imgs = imgs.map(item => {
+          item +=
+            '?x-oss-process=image/resize,limit_0,m_fill,w70,h_70/quality,q_100'
+          return item
+        })
+        setCurrentFactoryDetail(factoryDetail)
+        setCurrentFactoryImgs(imgs)
+        setFacoryShow(true)
+      })()
+    }
+  }, [currentFactory])
 
   useEffect(() => {
     updateViewContent()
@@ -98,28 +137,6 @@ const Factorys = props => {
   const backToList = () => {
     setFacoryShow(false)
   }
-
-  useEffect(() => {
-    const { factoryId } = currentFactory
-    if (factoryId) {
-      ;(async () => {
-        const factoryDetail = await getFactoryDetail(factoryId)
-        //
-        let imgs = [].concat(
-          factoryDetail.factoryOutsizeImages,
-          factoryDetail.factoryWorkshopImages
-        )
-        imgs = imgs.map(item => {
-          item +=
-            '?x-oss-process=image/resize,limit_0,m_fill,w70,h_70/quality,q_100'
-          return item
-        })
-        setCurrentFactoryDetail(factoryDetail)
-        setCurrentFactoryImgs(imgs)
-        setFacoryShow(true)
-      })()
-    }
-  }, [currentFactory])
 
   const toDetail = () => {
     window.open(`/factory-detail/${currentFactory.factoryId}`)
@@ -169,6 +186,7 @@ const Factorys = props => {
         facoryShow ? styles.fitHeight : '',
         !menuFlag ? styles.menuRetract : ''
       )}
+      ref={factorysRef}
     >
       <div className={classNames(styles.slideChunk)} onClick={transformMenu}>
         {menuFlag ? (
@@ -193,7 +211,7 @@ const Factorys = props => {
         >
           <div
             className={styles.virtualListHeight}
-            style={{ height: totalHeight }}
+            style={{ height: `${totalHeight}px` }}
           />
 
           <div className={styles.viewContent} style={{ transform: transform }}>
@@ -202,7 +220,7 @@ const Factorys = props => {
                 <div
                   onClick={() => factoryClick(item)}
                   className={styles.viewItem}
-                  key={item.idx}
+                  key={item.factoryId}
                 >
                   <div className={styles.viewIdx}>{item.idx}</div>
                   <img

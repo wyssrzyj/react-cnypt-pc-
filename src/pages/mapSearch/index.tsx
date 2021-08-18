@@ -105,7 +105,7 @@ const MapSearch = () => {
     overlayGroups && overlayGroups.clearOverlays(markers)
     const target = lnglats.filter(item => item.factoryLnglat)
     for (var i = 0; i < target.length; i++) {
-      var { factoryLnglat, factoryName, factoryId } = target[i]
+      var { factoryLnglat, factoryName, factoryId, idx } = target[i]
       // 创建点实例
       var labelOffset = new _AMap.Pixel(0, -5)
 
@@ -119,11 +119,14 @@ const MapSearch = () => {
         extData: {
           id: i + 1
         },
-        icon: 'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/factory.png',
+        icon: null,
         label: {
           direction: 'top',
           offset: labelOffset,
-          content: `<div class='markerLabel'>${factoryName}</div>`
+          content: `<div class='markerLabel'>
+          <span>${idx}</span>
+          <span class='markerLabelFactory'>${factoryName}</span>
+        </div>`
         }
       })
 

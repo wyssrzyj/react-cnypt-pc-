@@ -58,7 +58,6 @@ const LoginContent = () => {
         values.passWord = btoa(values.passWord)
       }
       const res = await login(values)
-      console.log('🚀~~~~~~~~~~~~~~', res)
 
       if (res && res.success) {
         setError(false)

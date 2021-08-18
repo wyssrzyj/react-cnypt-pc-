@@ -113,10 +113,12 @@ const SearchBar = props => {
       const { props } = triggerNode
       if (!props.value) {
         delete newParams.cityIds
+        delete newParams.districtIds
       }
       // 市级
       if (props.level === 2 && props.countyCity !== 1) {
         newParams['cityIds'] = [props.value]
+        delete newParams.districtIds
       }
       // 直辖县级城市
       if (props.level === 2 && props.countyCity === 1) {
@@ -139,6 +141,7 @@ const SearchBar = props => {
           const t = target.children.find(i => +i.value === +props.value + 1)
           if (t) {
             newParams['cityIds'] = [t.value]
+            delete newParams.districtIds
           }
         }
       }

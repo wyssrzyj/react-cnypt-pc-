@@ -5,6 +5,12 @@ import { useStores } from '@/utils/mobx'
 import './style.less'
 
 const { Dragger } = Upload
+const { NODE_ENV } = process.env
+
+const hosts = new Map()
+hosts.set('development', 'http://8.136.225.110:8888/')
+hosts.set('test', 'http://8.136.225.110:8888/')
+hosts.set('production', 'http://47.97.217.13:8888/')
 
 const ImportModal = props => {
   const { visible, handleCancel, field } = props
@@ -31,6 +37,10 @@ const ImportModal = props => {
 
   const onChange = info => {
     console.log('🚀 ~ file: index.tsx ~ line 45 ~ info', info)
+  }
+
+  const downLoad = () => {
+    window.open(`${hosts.get(NODE_ENV)}api/basic/unit/export-template`)
   }
 
   return (
@@ -60,9 +70,9 @@ const ImportModal = props => {
         <div className="errResult">导入失败，错误原因：{errResult}</div>
       )}
       <div style={{ marginTop: 12 }} onClick={exportOther}>
-        <a download href="/api/basic/unit/export-template.xls">
+        <span onClick={downLoad} className={'download'}>
           下载模板
-        </a>
+        </span>
       </div>
     </Modal>
   )

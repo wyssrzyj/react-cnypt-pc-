@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 // import { useHistory } from 'react-router'
 import { toJS } from 'mobx'
 import { Tag } from 'antd'
@@ -18,7 +18,6 @@ import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
-import u1190 from '@/static/images/u1190.png'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
@@ -63,14 +62,22 @@ const OverflowCard = props => {
       // },
     })
   }, [])
+
+  const imgUrl = useMemo(() => {
+    if (pictureUrl) {
+      return (
+        pictureUrl +
+        '?x-oss-process=image/resize,limit_0,m_fill,w80,h_80/quality,q_100'
+      )
+    }
+    return ''
+  }, [pictureUrl])
+
   return (
     <div className={styles.overflowCard}>
       <div className={styles.factoryInfo} onClick={goToDetail}>
         <div className={styles.imgBox}>
-          <img
-            className={styles.factoryImg}
-            src={pictureUrl ? pictureUrl : u1190}
-          />
+          <img className={styles.factoryImg} src={imgUrl} />
         </div>
         <div className={styles.detail}>
           <div className={styles.detailTop}>

@@ -110,7 +110,7 @@ const Factorys = props => {
         )
         imgs = imgs.map(item => {
           item +=
-            '?x-oss-process=image/resize,limit_0,m_fill,w70,h_70/quality,q_100'
+            '?x-oss-process=image/resize,limit_0,m_fill,w70,h_70/quality,q_80'
           return item
         })
         setCurrentFactoryDetail(factoryDetail)
@@ -222,6 +222,9 @@ const Factorys = props => {
 
         <div className={styles.viewContent} style={{ transform: transform }}>
           {data.map(item => {
+            const imgUrl =
+              item.outsizeImageUrl +
+              '?x-oss-process=image/resize,limit_0,m_fill,w70,h_70/quality,q_100'
             return (
               <div
                 onClick={() => factoryClick(item)}
@@ -229,11 +232,7 @@ const Factorys = props => {
                 key={item.factoryId}
               >
                 <div className={styles.viewIdx}>{item.idx}</div>
-                <img
-                  src={item.outsizeImageUrl}
-                  alt={''}
-                  className={styles.viewImg}
-                ></img>
+                <img src={imgUrl} alt={''} className={styles.viewImg}></img>
                 <div className={styles.viewInfo}>
                   <div className={styles.viewTitle}>{item.factoryName}</div>
                   <div className={styles.viewAddress}>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import { Input, message, Button } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components'
@@ -151,13 +151,23 @@ const AccountSafe = () => {
     }
   }
 
+  const imgUrl = useMemo(() => {
+    if (userInfo.userFaceUrl) {
+      return (
+        userInfo.userFaceUrl +
+        '?x-oss-process=image/resize,limit_0,m_fill,w88,h_88/quality,q_100'
+      )
+    }
+    return null
+  }, [userInfo.userFaceUrl])
+
   return (
     <div className={styles.accountBox}>
       <div className={styles.accountInfo}>
         <Title title={'账号信息'} />
         <div className={styles.infoBox}>
           <div className={styles.avatarBox}>
-            <img src={userInfo.userFaceUrl} className={styles.avatar} alt="" />
+            <img src={imgUrl} className={styles.avatar} alt="" />
             <UploadFile onChange={changeAvatar} />
           </div>
           <div className={styles.userInfo}>

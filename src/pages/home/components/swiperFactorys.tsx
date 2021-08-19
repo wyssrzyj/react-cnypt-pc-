@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useMemo } from 'react'
 import styles from './swiperFactorys.module.less'
 import classNames from 'classnames'
 import { Icon } from '@/components'
@@ -32,9 +32,19 @@ const SwiperCard = props => {
     window.open(`/factory-detail/${data.factoryId}`)
   }
 
+  const imgUrl = useMemo(() => {
+    if (data.pictureUrl) {
+      return (
+        data.pictureUrl +
+        '?x-oss-process=image/resize,limit_0,m_fill,w80,h_80/quality,q_100'
+      )
+    }
+    return ''
+  }, [data.pictureUrl])
+
   return (
     <div className={styles.swaperCard} onClick={toFactoryDetail}>
-      <img src={data.pictureUrl} alt="" className={styles.swaiperImg} />
+      <img src={imgUrl} alt="" className={styles.swaiperImg} />
       <div>
         <div className={styles.factoryName}>{data.factoryName}</div>
         {configs.map((item, idx) => {

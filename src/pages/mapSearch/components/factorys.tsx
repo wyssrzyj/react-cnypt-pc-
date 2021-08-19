@@ -43,6 +43,7 @@ const Factorys = props => {
       item.idx = idx + 1
     })
     setTotalData(list)
+    backToList()
   }, [list])
 
   /*

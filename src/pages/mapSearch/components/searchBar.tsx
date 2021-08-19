@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Icon } from '@/components'
 import styles from './searchBar.module.less'
-import { Select, TreeSelect, Input } from 'antd'
+import { Select, TreeSelect, Input, Popover } from 'antd'
 import { useStores, observer, toJS } from '@/utils/mobx'
 import { cloneDeep, isNil } from 'lodash'
 import { setUpTimeMap, updateTimeMap } from '@/components/filterList'
@@ -238,13 +237,13 @@ const SearchBar = props => {
     ;(async () => {
       if (Array.isArray(cityIds) && cityIds.length) {
         const cityId = cityIds[0]
-        const res = await getMapCityInfo(cityId)
-        res && (await getMapFactorys(params))
+        await getMapCityInfo(cityId)
+        await getMapFactorys(params)
       }
       if (Array.isArray(districtIds) && districtIds.length) {
         const districtId = districtIds[0]
-        const res = await getMapCityInfo(districtId)
-        res && (await getMapFactorys(params))
+        await getMapCityInfo(districtId)
+        await getMapFactorys(params)
       }
     })()
   }, [params])
@@ -256,8 +255,17 @@ const SearchBar = props => {
   return (
     <section className={styles.searchBar}>
       <div className={styles.searchBarLogo} onClick={toHome}>
-        <Icon type={'jack-dtzc'} className={styles.searchIcon}></Icon>
-        <div>首页</div>
+        {/* <Icon type={'jack-dtzc'} className={styles.searchIcon}></Icon>
+        <div>首页</div> */}
+        <Popover content={'首页'}>
+          <img
+            className={styles.uchatIcon}
+            src={
+              'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
+            }
+            alt=""
+          />
+        </Popover>
       </div>
 
       <div className={styles.searchContent}>

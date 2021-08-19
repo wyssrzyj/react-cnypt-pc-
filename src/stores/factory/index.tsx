@@ -193,21 +193,23 @@ export default class FactoryStore {
           targetCity.longitude === this.mapSearchCityLntlats[0] &&
           targetCity.latitude === this.mapSearchCityLntlats[1]
         ) {
-          return false
+          // return false
         }
 
         if (
           targetCity.longitude !== this.mapSearchCityLntlats[0] &&
           targetCity.latitude !== this.mapSearchCityLntlats[1]
         ) {
-          runInAction(() => {
-            this.mapSearchDistrict = res.data
-            this.mapSearchCityLntlats = [
-              targetCity.longitude,
-              targetCity.latitude
-            ]
-          })
+          //
         }
+
+        runInAction(() => {
+          this.mapSearchDistrict = res.data
+          this.mapSearchCityLntlats = [
+            targetCity.longitude,
+            targetCity.latitude
+          ]
+        })
 
         return true
       } else {

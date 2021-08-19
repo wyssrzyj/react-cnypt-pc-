@@ -187,5 +187,17 @@ export default class ErpModuleStore {
       console.log(e)
     }
   }
+
+  // 导出计量单位模板
+  @action exportOther = async () => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/basic/unit/export-template`
+      )
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 export const erpModuleStore = new ErpModuleStore()

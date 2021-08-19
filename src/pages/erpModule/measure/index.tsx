@@ -200,13 +200,16 @@ const Measure = () => {
 
   // 新建/更新商品分类的分组
   const operationGoodGroup = values => {
-    editGoodGroup('color', {
+    editGoodGroup('size', {
       ...values,
       id: currentGroup.id
     }).then(response => {
       const { success, msg } = response
       message[success ? 'success' : 'error'](msg)
-      success && getGoodGroupLists()
+      if (success) {
+        getGoodGroupLists()
+        getAllGoodGroup()
+      }
       setGroupModalVisible(false)
     })
   }

@@ -126,7 +126,6 @@ const FactoryDetail = props => {
         {/* 联系方式 */}
         {activeTab === 'contact' && <ContactCom enterpriseId={enterpriseId} />}
       </div>
-
       {/* 导航栏 */}
     </div>
   )

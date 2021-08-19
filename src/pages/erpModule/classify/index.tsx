@@ -23,7 +23,8 @@ const Classify = () => {
     goodClassifyLists,
     editGoodClassify,
     currentClassifyId,
-    deleteGood
+    deleteGood,
+    updateGroupId
   } = erpModuleStore
   const [groupModalVisible, setGroupModalVisible] = useState<boolean>(false)
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false)
@@ -75,11 +76,12 @@ const Classify = () => {
       title: '状态',
       dataIndex: 'openStatus',
       key: 'openStatus',
-      render: value => {
+      render: (value, row) => {
         return (
           <Switch
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
+            onChange={checked => onSwitchChange(checked, row)}
             checked={value}
           />
         )
@@ -108,6 +110,11 @@ const Classify = () => {
     }
   ]
 
+  const onSwitchChange = (checked, values) => {
+    values.status = checked
+    operationGoodClassify(values)
+  }
+
   // 删除商品分类
   const deleteClassify = (name, id) => {
     Modal.confirm({
@@ -129,6 +136,7 @@ const Classify = () => {
     //新增
     if (type === 'add') {
       setGroupModalVisible(true)
+      setCurrentGroup({})
     } else {
       if (currentClassifyId) {
         type === 'delete' && deleteGroup() // 删除
@@ -150,7 +158,11 @@ const Classify = () => {
         deleteGood('group', id).then(response => {
           const { success, msg } = response
           message[success ? 'success' : 'error'](msg)
-          success && getGoodGroupLists()
+          if (success) {
+            getGoodGroupLists()
+            getAllGoodGroup()
+            updateGroupId('classify', undefined)
+          }
         })
       }
     })
@@ -200,7 +212,11 @@ const Classify = () => {
     }).then(response => {
       const { success, msg } = response
       message[success ? 'success' : 'error'](msg)
-      success && getGoodGroupLists()
+      if (success) {
+        getGoodGroupLists()
+        getAllGoodGroup()
+        updateGroupId('classify', undefined)
+      }
       setGroupModalVisible(false)
     })
   }
@@ -234,13 +250,12 @@ const Classify = () => {
     editGoodClassify({
       ...values,
       openStatus: values.status ? 1 : 0,
-      id: currentClassify.id ? currentClassify.id : undefined
+      id: currentClassify.id || values.id || undefined
     }).then(response => {
       const { success, msg } = response
       message[success ? 'success' : 'error'](msg)
       if (success) {
         getGoodClassifyLists()
-        getAllGoodGroup()
       }
       setAddModalVisible(false)
     })

@@ -12,6 +12,13 @@ import { SearchInput, Icon } from '@/components'
 import { GroupList, GroupModal, AddModal, ImportModal } from '../components'
 import styles from './index.module.less'
 
+const { NODE_ENV } = process.env
+
+const hosts = new Map()
+hosts.set('development', 'http://8.136.225.110:8888/')
+hosts.set('test', 'http://8.136.225.110:8888/')
+hosts.set('production', 'http://47.97.217.13:8888/')
+
 const titleMap = { add: '新增分组', edit: '编辑分组' }
 
 const rowKey = 'id'
@@ -26,7 +33,8 @@ const Colour = () => {
     editColor,
     currentColorId,
     deleteGoodColor,
-    deleteColor
+    deleteColor,
+    updateGroupId
   } = erpModuleStore
   const [groupModalVisible, setGroupModalVisible] = useState<boolean>(false)
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false)
@@ -81,11 +89,12 @@ const Colour = () => {
       title: '状态',
       dataIndex: 'openStatus',
       key: 'openStatus',
-      render: value => {
+      render: (value, row) => {
         return (
           <Switch
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
+            onChange={checked => onSwitchChange(checked, row)}
             checked={value}
           />
         )
@@ -113,6 +122,11 @@ const Colour = () => {
       }
     }
   ]
+
+  const onSwitchChange = (checked, values) => {
+    values.status = checked
+    operationGoodClassify(values)
+  }
   // 删除商品分类
   const deleteClassify = (name, id) => {
     Modal.confirm({
@@ -134,6 +148,7 @@ const Colour = () => {
     //新增
     if (type === 'add') {
       setGroupModalVisible(true)
+      setCurrentGroup({})
     } else {
       if (currentColorId) {
         type === 'delete' && deleteGroup() // 删除
@@ -155,7 +170,11 @@ const Colour = () => {
         deleteGoodColor('color', id).then(response => {
           const { success, msg } = response
           message[success ? 'success' : 'error'](msg)
-          success && getGoodGroupLists()
+          if (success) {
+            getGoodGroupLists()
+            getAllGoodGroup()
+            updateGroupId('color', undefined)
+          }
         })
       }
     })
@@ -205,7 +224,11 @@ const Colour = () => {
     }).then(response => {
       const { success, msg } = response
       message[success ? 'success' : 'error'](msg)
-      success && getGoodGroupLists()
+      if (success) {
+        getGoodGroupLists()
+        getAllGoodGroup()
+        updateGroupId('color', undefined)
+      }
       setGroupModalVisible(false)
     })
   }
@@ -241,7 +264,7 @@ const Colour = () => {
     editColor('color', {
       ...values,
       openStatus: values.status ? 1 : 0,
-      id: currentClassify.id ? currentClassify.id : undefined
+      id: currentClassify.id || values.id || undefined
     }).then(response => {
       const { success, msg } = response
       message[success ? 'success' : 'error'](msg)
@@ -268,6 +291,10 @@ const Colour = () => {
   const onNumberChange = value => {
     setPageNum(1)
     setOtherNumber(value)
+  }
+
+  const exportTable = () => {
+    window.open(`${hosts.get(NODE_ENV)}api/basic/color/export-data`)
   }
 
   useEffect(() => {
@@ -327,6 +354,7 @@ const Colour = () => {
             <Button
               className={styles.colorBtn}
               icon={<Icon type="jack-daochu" className={styles.icon} />}
+              onClick={exportTable}
             >
               导出
             </Button>
@@ -375,6 +403,7 @@ const Colour = () => {
       {/* 导入弹框 */}
       <ImportModal
         visible={importVisible}
+        field="color"
         handleCancel={() => setImportVisible(false)}
       />
     </div>

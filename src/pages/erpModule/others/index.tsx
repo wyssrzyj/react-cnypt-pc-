@@ -9,9 +9,15 @@ import classNames from 'classnames'
 import { get } from 'lodash'
 import { useStores } from '@/utils/mobx'
 import { SearchInput, Icon } from '@/components'
-import { getUserInfo } from '@/utils/tool'
 import { AddModal, ImportModal } from '../components'
 import styles from './index.module.less'
+
+const { NODE_ENV } = process.env
+
+const hosts = new Map()
+hosts.set('development', 'http://8.136.225.110:8888/')
+hosts.set('test', 'http://8.136.225.110:8888/')
+hosts.set('production', 'http://47.97.217.13:8888/')
 
 const { TabPane } = Tabs
 
@@ -51,9 +57,6 @@ const Others = () => {
   const [otherNumber, setOtherNumber] = useState<string>(undefined)
   const [importantVisible, setImportantVisible] = useState<boolean>(false)
 
-  const userInfo = getUserInfo() || {}
-  const { factoryId } = userInfo
-
   const columns = [
     {
       title: '序号',
@@ -80,11 +83,12 @@ const Others = () => {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: value => {
+      render: (value, row) => {
         return (
           <Switch
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
+            onChange={checked => onSwitchChange(checked, row)}
             checked={!!value}
           />
         )
@@ -112,6 +116,11 @@ const Others = () => {
       }
     }
   ]
+
+  const onSwitchChange = (checked, values) => {
+    values.status = checked
+    editDataSource(values)
+  }
 
   const onSerialNumberChange = value => {
     setPageNum(1)
@@ -153,7 +162,6 @@ const Others = () => {
   const getDataSource = () => {
     setLoading(true)
     getOtherConfiguration(activeKey, {
-      factoryId,
       pageNum,
       pageSize,
       name: otherName,
@@ -190,7 +198,7 @@ const Others = () => {
 
   const editDataSource = values => {
     editOtherConfiguration(activeKey, {
-      tenantId: factoryId,
+      // tenantId: factoryId,
       ...values,
       status: values.status ? 1 : 0
     }).then(response => {
@@ -199,6 +207,10 @@ const Others = () => {
       success && getDataSource()
       setAddModalVisible(false)
     })
+  }
+
+  const exportOther = () => {
+    window.open(`${hosts.get(NODE_ENV)}api/basic/${activeKey}/export-data`)
   }
 
   useEffect(() => {
@@ -244,6 +256,7 @@ const Others = () => {
                 <Button
                   className={styles.colorBtn}
                   icon={<Icon type="jack-daochu" className={styles.icon} />}
+                  onClick={exportOther}
                 >
                   导出
                 </Button>

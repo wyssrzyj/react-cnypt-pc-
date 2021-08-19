@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Divider, Radio, Space, Pagination, Empty } from 'antd'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
-import { useStores } from '@/utils/mobx'
+import { useStores, observer } from '@/utils/mobx'
 import styles from './index.module.less'
 
 const operations = [
@@ -30,7 +30,8 @@ const GroupList = props => {
     type
   } = props
   const { erpModuleStore } = useStores()
-  const { updateGroupId } = erpModuleStore
+  const { updateGroupId, currentClassifyId, currentColorId, currentSizeId } =
+    erpModuleStore
   const [pageNum, setPageNum] = useState(1)
   const [radioId, setRadioId] = useState<string>(undefined)
 
@@ -43,6 +44,12 @@ const GroupList = props => {
     setRadioId(e.target.value)
     updateGroupId(type, e.target.value)
   }
+
+  useEffect(() => {
+    if (type === 'classify') setRadioId(currentClassifyId)
+    if (type === 'color') setRadioId(currentColorId)
+    if (type === 'size') setRadioId(currentSizeId)
+  }, [currentSizeId, currentColorId, currentClassifyId])
 
   return (
     <div className={styles.groupList}>
@@ -106,4 +113,4 @@ const GroupList = props => {
   )
 }
 
-export default GroupList
+export default observer(GroupList)

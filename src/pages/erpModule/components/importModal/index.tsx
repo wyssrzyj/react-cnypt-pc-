@@ -15,11 +15,11 @@ hosts.set('production', 'http://47.97.217.13:8888/')
 const ImportModal = props => {
   const { visible, handleCancel, field } = props
   const { erpModuleStore } = useStores()
-  const { importOther, exportOther } = erpModuleStore
+  const { importOther } = erpModuleStore
   const [errResult, setErrResult] = useState<string>('')
   const [codeNumber, setCodeNumber] = useState<number>(0)
 
-  const customRequestCard = async ({ file }) => {
+  const customRequest = async ({ file }) => {
     const formData = new FormData()
     formData.append('file', file)
     formData.append('module', 'basic-service')
@@ -35,12 +35,8 @@ const ImportModal = props => {
 
   const handleSelfOk = () => {}
 
-  const onChange = info => {
-    console.log('🚀 ~ file: index.tsx ~ line 45 ~ info', info)
-  }
-
   const downLoad = () => {
-    window.open(`${hosts.get(NODE_ENV)}api/basic/unit/export-template`)
+    window.open(`${hosts.get(NODE_ENV)}api/basic/${field}/export-template`)
   }
 
   return (
@@ -52,11 +48,7 @@ const ImportModal = props => {
       wrapClassName="importModal"
     >
       {codeNumber === 0 && (
-        <Dragger
-          onChange={onChange}
-          name="file"
-          customRequest={customRequestCard}
-        >
+        <Dragger name="file" customRequest={customRequest}>
           <p className="ant-upload-drag-icon">
             <InboxOutlined />
           </p>
@@ -69,7 +61,7 @@ const ImportModal = props => {
       {codeNumber === 400 && (
         <div className="errResult">导入失败，错误原因：{errResult}</div>
       )}
-      <div style={{ marginTop: 12 }} onClick={exportOther}>
+      <div style={{ marginTop: 12 }}>
         <span onClick={downLoad} className={'download'}>
           下载模板
         </span>

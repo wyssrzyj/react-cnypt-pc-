@@ -258,8 +258,7 @@ const Measure = () => {
   const operationGoodClassify = values => {
     editColor('size', {
       ...values,
-      openStatus: values.status ? 1 : 0,
-      id: currentClassify.id || values.id || undefined
+      openStatus: values.status ? 1 : 0
     }).then(response => {
       const { success, msg } = response
       message[success ? 'success' : 'error'](msg)

@@ -12,13 +12,6 @@ import { SearchInput, Icon } from '@/components'
 import { GroupList, GroupModal, AddModal, ImportModal } from '../components'
 import styles from './index.module.less'
 
-const { NODE_ENV } = process.env
-
-const hosts = new Map()
-hosts.set('development', 'http://8.136.225.110:8888/')
-hosts.set('test', 'http://8.136.225.110:8888/')
-hosts.set('production', 'http://47.97.217.13:8888/')
-
 const titleMap = { add: '新增分组', edit: '编辑分组' }
 
 const rowKey = 'id'
@@ -34,7 +27,8 @@ const Measure = () => {
     currentSizeId,
     deleteGoodColor,
     deleteColor,
-    updateGroupId
+    updateGroupId,
+    exportColor
   } = erpModuleStore
   const [groupModalVisible, setGroupModalVisible] = useState<boolean>(false)
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false)
@@ -295,7 +289,14 @@ const Measure = () => {
   }
 
   const exportTable = () => {
-    window.open(`${hosts.get(NODE_ENV)}api/basic/color/export-data`)
+    exportColor('size').then(res => {
+      let blob = new Blob([res], { type: 'application/octet-stream' })
+      let download = document.createElement('a')
+      download.href = window.URL.createObjectURL(blob)
+      download.download = `sizeData.xls`
+      download.click()
+      window.URL.revokeObjectURL(download.href)
+    })
   }
 
   useEffect(() => {
@@ -350,6 +351,7 @@ const Measure = () => {
             <Button
               className={styles.colorBtn}
               icon={<Icon type="jack-daoru" className={styles.icon} />}
+              onClick={() => setImportVisible(true)}
             >
               导入
             </Button>
@@ -403,11 +405,13 @@ const Measure = () => {
         />
       )}
       {/* 导入弹框 */}
-      <ImportModal
-        visible={importVisible}
-        field="size"
-        handleCancel={() => setImportVisible(false)}
-      />
+      {importVisible && (
+        <ImportModal
+          visible={importVisible}
+          field="size"
+          handleCancel={() => setImportVisible(false)}
+        />
+      )}
     </div>
   )
 }

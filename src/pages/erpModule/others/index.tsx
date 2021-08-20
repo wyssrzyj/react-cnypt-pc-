@@ -293,11 +293,13 @@ const Others = () => {
         />
       )}
       {/* 导入 弹框 */}
-      <ImportModal
-        visible={importantVisible}
-        field={activeKey}
-        handleCancel={() => setImportantVisible(false)}
-      />
+      {importantVisible && (
+        <ImportModal
+          visible={importantVisible}
+          field={activeKey}
+          handleCancel={() => setImportantVisible(false)}
+        />
+      )}
     </div>
   )
 }

@@ -1,21 +1,15 @@
 import React, { useState } from 'react'
-import { Modal, Upload } from 'antd'
+import { Modal, Upload, message } from 'antd'
 import { InboxOutlined } from '@ant-design/icons'
 import { useStores } from '@/utils/mobx'
 import './style.less'
 
 const { Dragger } = Upload
-const { NODE_ENV } = process.env
-
-const hosts = new Map()
-hosts.set('development', 'http://8.136.225.110:8888/')
-hosts.set('test', 'http://8.136.225.110:8888/')
-hosts.set('production', 'http://47.97.217.13:8888/')
 
 const ImportModal = props => {
   const { visible, handleCancel, field } = props
   const { erpModuleStore } = useStores()
-  const { importOther } = erpModuleStore
+  const { importOther, exportOther } = erpModuleStore
   const [errResult, setErrResult] = useState<string>('')
   const [codeNumber, setCodeNumber] = useState<number>(0)
 
@@ -26,28 +20,36 @@ const ImportModal = props => {
     const res = await importOther(field, formData)
     const { success, msg, code } = res
     setCodeNumber(code)
-
+    message[success ? 'success' : 'error'](msg)
     if (success) {
+      setTimeout(() => {
+        handleCancel()
+      }, 1000)
     } else {
       setErrResult(msg)
     }
   }
 
-  const handleSelfOk = () => {}
-
   const downLoad = () => {
-    window.open(`${hosts.get(NODE_ENV)}api/basic/${field}/export-template`)
+    exportOther().then(res => {
+      let blob = new Blob([res], { type: 'application/octet-stream' })
+      let download = document.createElement('a')
+      download.href = window.URL.createObjectURL(blob)
+      download.download = `${field}Template.xls`
+      download.click()
+      window.URL.revokeObjectURL(download.href)
+    })
   }
 
   return (
     <Modal
       title="导入"
       visible={visible}
-      onOk={handleSelfOk}
+      onOk={handleCancel}
       onCancel={handleCancel}
       wrapClassName="importModal"
     >
-      {codeNumber === 0 && (
+      {codeNumber !== 400 && (
         <Dragger name="file" customRequest={customRequest}>
           <p className="ant-upload-drag-icon">
             <InboxOutlined />

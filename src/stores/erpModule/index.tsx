@@ -199,5 +199,17 @@ export default class ErpModuleStore {
       console.log(e)
     }
   }
+
+  // 导导出颜色表格
+  @action exportColor = async field => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/basic/${field}/export-data`
+      )
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 export const erpModuleStore = new ErpModuleStore()

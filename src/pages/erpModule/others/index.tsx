@@ -298,6 +298,7 @@ const Others = () => {
           visible={importantVisible}
           field={activeKey}
           handleCancel={() => setImportantVisible(false)}
+          handleOk={getDataSource}
         />
       )}
     </div>

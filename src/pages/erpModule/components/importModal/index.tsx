@@ -7,7 +7,7 @@ import './style.less'
 const { Dragger } = Upload
 
 const ImportModal = props => {
-  const { visible, handleCancel, field } = props
+  const { visible, handleCancel, field, handleOk } = props
   const { erpModuleStore } = useStores()
   const { importOther, exportOther } = erpModuleStore
   const [errResult, setErrResult] = useState<string>('')
@@ -24,6 +24,7 @@ const ImportModal = props => {
     if (success) {
       setTimeout(() => {
         handleCancel()
+        handleOk()
       }, 1000)
     } else {
       setErrResult(msg)

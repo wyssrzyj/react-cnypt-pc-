@@ -61,7 +61,7 @@ const Measure = () => {
       key: 'code'
     },
     {
-      title: '颜色名称',
+      title: '尺寸名称',
       dataIndex: 'name',
       key: 'name'
     },
@@ -410,6 +410,7 @@ const Measure = () => {
           visible={importVisible}
           field="size"
           handleCancel={() => setImportVisible(false)}
+          handleOk={getGoodClassifyLists}
         />
       )}
     </div>

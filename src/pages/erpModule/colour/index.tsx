@@ -61,7 +61,7 @@ const Colour = () => {
       key: 'code'
     },
     {
-      title: '尺寸名称',
+      title: '颜色名称',
       dataIndex: 'name',
       key: 'name'
     },
@@ -407,6 +407,7 @@ const Colour = () => {
           visible={importVisible}
           field="color"
           handleCancel={() => setImportVisible(false)}
+          handleOk={getGoodClassifyLists}
         />
       )}
     </div>

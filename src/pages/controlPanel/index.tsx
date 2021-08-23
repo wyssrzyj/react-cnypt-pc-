@@ -3,20 +3,8 @@ import { Redirect, Route, Switch } from 'react-router'
 import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 import { useStores } from '@/utils/mobx'
-// import {
-//   EnterpriseInfo,
-//   PlantSitePhoto,
-//   QualificationCertification,
-//   CertificateAuthentication,
-//   FactoryReport,
-//   FactoryEquipment,
-//   FactoryPhotograph
-// } from './components'
 import { getUserInfo } from '@/utils/tool'
-// import FactoryInformation from './factoryInformation'
 import { useLocation } from 'react-router'
-// import AccountSafe from './accountSafe'
-// import LoginLogs from './loginLogs'
 import { Icon } from '@/components'
 import styles from './index.module.less'
 
@@ -25,6 +13,9 @@ const LoginLogs = React.lazy(() => import('./loginLogs'))
 const FactoryInformation = React.lazy(() => import('./factoryInformation'))
 const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
 const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
+const IssuerEnterpriseInfo = React.lazy(
+  () => import('./components/issuerEnterpriseInfo')
+)
 const QualificationCertification = React.lazy(
   () => import('./components/qualificationCertification')
 )
@@ -84,6 +75,7 @@ const ControlPanel = () => {
   const { productCategory } = factoryStore
   const currentUser = getUserInfo() || {}
   const { infoApprovalStatus, factoryAuditStatus } = currentUser
+
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
 
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
@@ -188,8 +180,14 @@ const ControlPanel = () => {
             {/* 企业信息 */}
             <Route
               path="/control-panel/enterprise"
-              component={EnterpriseInfo}
+              component={
+                Math.random() > 0.5 ? EnterpriseInfo : IssuerEnterpriseInfo
+              }
             />
+            {/* <Route
+              path="/control-panel/enterprise"
+              component={IssuerEnterpriseInfo}
+            /> */}
             {/* 企业证件认证 */}
             <Route
               path="/control-panel/certificate"

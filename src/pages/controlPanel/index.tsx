@@ -16,6 +16,10 @@ const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
 const IssuerEnterpriseInfo = React.lazy(
   () => import('./components/issuerEnterpriseInfo')
 )
+console.log(
+  '🚀 ~ file: index.tsx ~ line 19 ~ IssuerEnterpriseInfo',
+  IssuerEnterpriseInfo
+)
 const QualificationCertification = React.lazy(
   () => import('./components/qualificationCertification')
 )

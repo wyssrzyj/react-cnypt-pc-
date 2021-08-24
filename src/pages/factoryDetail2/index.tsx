@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
 import { useHistory } from 'react-router'
 import axios from '@/utils/axios'
-import { getCurrentUser } from '@/utils/tool'
+import { getCurrentUser, getUserInfo } from '@/utils/tool'
 import { observer, useStores } from '@/utils/mobx'
 import { Overview, EnterpriseInformation, ContactCom } from './components'
 import { DetailHeader, TabHeader } from '@/components'
@@ -37,6 +37,8 @@ const FactoryDetail = props => {
   const history = useHistory()
   const currentUser = getCurrentUser() || {}
   const { userId } = currentUser
+  const userInfo = getUserInfo() || {}
+  const { enterpriseId } = userInfo
   const { commonStore, factoryStore } = useStores()
   const { updateName } = commonStore
   const [factoryInfo, setFactoryInfo] = useState<any>({})
@@ -122,9 +124,8 @@ const FactoryDetail = props => {
           <EnterpriseInformation factoryId={factoryId} current={factoryInfo} />
         )}
         {/* 联系方式 */}
-        {activeTab === 'contact' && <ContactCom factoryId={factoryId} />}
+        {activeTab === 'contact' && <ContactCom enterpriseId={enterpriseId} />}
       </div>
-
       {/* 导航栏 */}
     </div>
   )

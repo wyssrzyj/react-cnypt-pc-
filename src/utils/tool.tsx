@@ -239,3 +239,10 @@ export const getProductClassMap = () => {
     { value: 7, label: '高中低' }
   ]
 }
+
+/**
+ * 判断from表单是新增还是编辑
+ */
+export const isAdd = value => {
+  return isEmpty(value) || isNil(value) ? true : false
+}

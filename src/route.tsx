@@ -12,8 +12,9 @@ const ControlPanel = React.lazy(() => import('@/pages/controlPanel'))
 const NotFound = React.lazy(() => import('@/components/404'))
 const MapSearch = React.lazy(() => import('@/pages/mapSearch/index'))
 const FactoryPage = React.lazy(() => import('@/pages/factoryPage'))
+const ErpModule = React.lazy(() => import('@/pages/erpModule'))
 // const Note = React.lazy(() => import('@/pages/note'))
-// const Excel = React.lazy(() => import('@/pages/homePage/excel'))
+const Excel = React.lazy(() => import('@/pages/homePage/excel'))
 
 const RouteList = () => {
   return (
@@ -27,8 +28,9 @@ const RouteList = () => {
       <Route path="/control-panel" component={ControlPanel} />
       <Route path="/mapSearch" component={MapSearch} />
       <Route path="/factoryPage" component={FactoryPage} />
+      <Route path="/erp" component={ErpModule} />
       {/* <Route path="/GDMap" component={GDMap} /> */}
-      {/* <Route path="/excel" component={Excel} /> */}
+      <Route path="/excel" component={Excel} />
       <Route path="*" component={NotFound} />
     </Switch>
   )

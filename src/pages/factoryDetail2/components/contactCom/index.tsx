@@ -7,14 +7,14 @@ import styles from './index.module.less'
 
 const contactCom = props => {
   const _AMap = window.AMap as any
-  const { factoryId } = props
+  const { enterpriseId } = props
   const currentUser = getCurrentUser() || {}
   const { factoryDetailStore } = useStores()
   const { contactPort } = factoryDetailStore
   const [contactInfo, setContactInfo] = useState<any>({})
 
   const getContactInfo = () => {
-    contactPort({ factoryId }).then(response => {
+    contactPort({ enterpriseId }).then(response => {
       const { success, data } = response
       if (success) {
         setContactInfo({ ...data })
@@ -71,7 +71,7 @@ const contactCom = props => {
             联系人
           </span>
           <span className={styles.rightValue}>
-            {checkValue(contactInfo.realName)}
+            {checkValue(contactInfo.name)}
           </span>
         </li>
         <li>
@@ -80,7 +80,7 @@ const contactCom = props => {
             手机号
           </span>
           <span className={styles.rightValue}>
-            {notLoggedIn(contactInfo.mobilePhone, 3, 4)}
+            {notLoggedIn(contactInfo.mobile, 3, 4)}
           </span>
         </li>
         <li>
@@ -89,7 +89,7 @@ const contactCom = props => {
             座机号码
           </span>
           <span className={styles.rightValue}>
-            {notLoggedIn(contactInfo.contactPhone, 5, 1)}
+            {notLoggedIn(contactInfo.telephone, 5, 1)}
           </span>
         </li>
         <li>

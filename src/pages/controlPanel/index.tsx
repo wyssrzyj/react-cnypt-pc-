@@ -186,7 +186,7 @@ const ControlPanel = () => {
             /> */}
             <Route
               path="/control-panel/enterprise"
-              component={IssuerEnterpriseInfo}
+              component={EnterpriseInfo}
             />
             {/* 企业证件认证 */}
             <Route

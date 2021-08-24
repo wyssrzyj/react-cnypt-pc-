@@ -267,7 +267,7 @@ const IssuerEnterpriseInfo = () => {
         })}
         <div className={styles.btnBox}>
           <Button size={'large'} type={'primary'} onClick={submit}>
-            确认
+            确认提交
           </Button>
         </div>
       </Form>

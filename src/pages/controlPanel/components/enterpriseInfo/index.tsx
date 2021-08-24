@@ -64,6 +64,7 @@ const EnterpriseInfo = () => {
   const [messageMap, setMessageMap] = useState<any>({})
   const [visible, setVisible] = useState<boolean>(false)
   const [previewImage, setPreviewImage] = useState<string>('')
+  const [contactsId, setContactsId] = useState<string>(undefined)
 
   // const messageMap = {
   //   0: (
@@ -124,6 +125,7 @@ const EnterpriseInfo = () => {
       axios
         .post('/api/factory/enterprise/enterprise-info-save', {
           ...values,
+          contactsId,
           enterpriseLogoUrl: imageUrl === preImageUrl ? undefined : imageUrl,
           provinceId: area[0],
           cityId: area[1],
@@ -169,8 +171,10 @@ const EnterpriseInfo = () => {
             address,
             latitude,
             longitude,
-            enterpriseLogoId
+            enterpriseLogoId,
+            contactsId
           } = data
+          setContactsId(contactsId)
           if (enterpriseLogoUrl) {
             setImageUrl(enterpriseLogoUrl)
             setImageUrlList([{ thumbUrl: enterpriseLogoUrl }])
@@ -338,7 +342,7 @@ const EnterpriseInfo = () => {
 
           <Form.Item
             label="联系人"
-            name="realName"
+            name="contactsName"
             rules={[{ required: true, message: '请填写联系人姓名' }]}
           >
             <Input placeholder="请填写联系人姓名" />

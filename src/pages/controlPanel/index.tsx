@@ -178,16 +178,16 @@ const ControlPanel = () => {
           </header> */}
           <Switch>
             {/* 企业信息 */}
-            <Route
+            {/* <Route
               path="/control-panel/enterprise"
               component={
                 Math.random() > 0.5 ? EnterpriseInfo : IssuerEnterpriseInfo
               }
-            />
-            {/* <Route
+            /> */}
+            <Route
               path="/control-panel/enterprise"
               component={IssuerEnterpriseInfo}
-            /> */}
+            />
             {/* 企业证件认证 */}
             <Route
               path="/control-panel/certificate"

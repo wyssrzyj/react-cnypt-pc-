@@ -16,10 +16,7 @@ const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
 const IssuerEnterpriseInfo = React.lazy(
   () => import('./components/issuerEnterpriseInfo')
 )
-console.log(
-  '🚀 ~ file: index.tsx ~ line 19 ~ IssuerEnterpriseInfo',
-  IssuerEnterpriseInfo
-)
+
 const QualificationCertification = React.lazy(
   () => import('./components/qualificationCertification')
 )
@@ -47,6 +44,7 @@ menusName.set('/control-panel/account', '账号安全')
 menusName.set('/control-panel/logs', '登录日志')
 menusName.set('/control-panel/equipment', '车间设备')
 menusName.set('/control-panel/photograph', '工厂照片')
+menusName.set('/control-panel/issue-bill', '发单信息')
 
 const menuKeys = new Map()
 menuKeys.set('/control-panel/qualification', ['qualification', 'sub2', 'sub1'])
@@ -60,6 +58,7 @@ menuKeys.set('/control-panel/logs', ['account', 'sub1'])
 menuKeys.set('/control-panel/report', ['report', 'sub2'])
 menuKeys.set('/control-panel/equipment', ['equipment', 'sub2'])
 menuKeys.set('/control-panel/photograph', ['photograph', 'sub2'])
+menuKeys.set('/control-panel/issue-bill', ['issue-bill', 'sub1'])
 
 const subsMap = new Map()
 subsMap.set('/control-panel/qualification', ['sub2', 'sub1'])
@@ -73,6 +72,7 @@ subsMap.set('/control-panel/logs', ['sub1'])
 subsMap.set('/control-panel/report', ['sub2'])
 subsMap.set('/control-panel/equipment', ['sub2'])
 subsMap.set('/control-panel/photograph', ['sub2'])
+subsMap.set('/control-panel/issue-bill', ['sub1'])
 
 const ControlPanel = () => {
   const { factoryStore } = useStores()
@@ -137,6 +137,14 @@ const ControlPanel = () => {
             </Menu.Item>
 
             <Menu.Item
+              key="issue-bill"
+              className={styles.item}
+              icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
+            >
+              <Link to="/control-panel/issue-bill">发单信息</Link>
+            </Menu.Item>
+
+            <Menu.Item
               key="certificate"
               className={styles.item}
               icon={<Icon className={styles.menuIcon} type="jack-qyzjrz" />}
@@ -182,12 +190,10 @@ const ControlPanel = () => {
           </header> */}
           <Switch>
             {/* 企业信息 */}
-            {/* <Route
-              path="/control-panel/enterprise"
-              component={
-                Math.random() > 0.5 ? EnterpriseInfo : IssuerEnterpriseInfo
-              }
-            /> */}
+            <Route
+              path="/control-panel/issue-bill"
+              component={IssuerEnterpriseInfo}
+            />
             <Route
               path="/control-panel/enterprise"
               component={EnterpriseInfo}

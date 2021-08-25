@@ -107,6 +107,7 @@ const FormNode = (props: FormNodeProps) => {
   }, [type, value])
 
   const valueChange = (event: any) => {
+    console.log('🚀 ~ file: index.tsx ~ line 110 ~ valueChange ~ event', event)
     let val
 
     const flag = [
@@ -118,7 +119,9 @@ const FormNode = (props: FormNodeProps) => {
       'tree',
       'number',
       'inputAndSelect',
-      'img'
+      'img',
+      'datePicker',
+      'rangePicker'
     ].includes(type)
     if (flag) {
       val = event
@@ -188,7 +191,7 @@ const FormNode = (props: FormNodeProps) => {
     case 'datePicker':
       return (
         <DatePicker
-          onChange={onChange}
+          onChange={valueChange}
           value={nodeValue}
           {...other}
         ></DatePicker>
@@ -196,7 +199,7 @@ const FormNode = (props: FormNodeProps) => {
     case 'rangePicker':
       return (
         <RangePicker
-          onChange={onChange}
+          onChange={valueChange}
           value={nodeValue}
           {...other}
         ></RangePicker>
@@ -275,7 +278,14 @@ const FormNode = (props: FormNodeProps) => {
         />
       )
     case 'textarea':
-      return <TextArea onChange={valueChange} value={nodeValue} {...other} />
+      return (
+        <TextArea
+          placeholder={placeholder}
+          onChange={valueChange}
+          value={nodeValue}
+          {...other}
+        />
+      )
     case 'switch':
       return <FormSwitch onChange={valueChange} value={nodeValue} {...other} />
     case 'number':

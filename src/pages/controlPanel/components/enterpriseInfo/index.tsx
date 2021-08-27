@@ -24,6 +24,7 @@ import { useStores, observer } from '@/utils/mobx'
 import BusinessAddressCom from '../businessAddressCom'
 import Title from '../title'
 import styles from './index.module.less'
+import { cloneDeep } from 'lodash'
 // import './style.less'
 
 const { TextArea } = Input
@@ -66,6 +67,7 @@ const EnterpriseInfo = () => {
   const [visible, setVisible] = useState<boolean>(false)
   const [previewImage, setPreviewImage] = useState<string>('')
   const [contactsId, setContactsId] = useState<string>(undefined)
+  const [oldData, setOldData] = useState<any>({})
 
   // const messageMap = {
   //   0: (
@@ -120,27 +122,59 @@ const EnterpriseInfo = () => {
   const confirmSubmit = () => {
     validateFields().then(values => {
       const { area = [], businessAddress = {} } = values
+
       const { address, location } = businessAddress
+
       delete values.area
       delete values.businessAddress
+      let flag = false
+      if (oldData.enterpriseId) {
+        if (oldData.enterpriseName !== values.enterpriseName) {
+          flag = true
+        }
+        if (oldData.enterpriseType !== values.enterpriseType) {
+          flag = true
+        }
+        if (
+          +oldData.provinceId !== +area[0] ||
+          +oldData.cityId !== +area[1] ||
+          +oldData.districtId !== +area[2]
+        ) {
+          flag = true
+        }
+        if (oldData.address !== address) {
+          flag = true
+        }
+        if (
+          oldData.latitude !== location.split(',')[1] ||
+          oldData.longitude !== location.split(',')[0]
+        ) {
+          flag = true
+        }
+      } else {
+        flag = true
+      }
+
+      const params = {
+        ...values,
+        contactsId,
+        enterpriseLogoUrl: imageUrl === preImageUrl ? undefined : imageUrl,
+        provinceId: area[0],
+        cityId: area[1],
+        districtId: area[2],
+        address,
+        latitude: location.split(',')[1],
+        longitude: location.split(',')[0],
+        enterpriseId,
+        factoryId,
+        purchaserId,
+        userId,
+        isInfoApproval: flag ? 1 : 0,
+        enterpriseLogoId:
+          imageUrl === preImageUrl ? undefined : enterpriseLogoId
+      }
       axios
-        .post('/api/factory/enterprise/enterprise-info-save', {
-          ...values,
-          contactsId,
-          enterpriseLogoUrl: imageUrl === preImageUrl ? undefined : imageUrl,
-          provinceId: area[0],
-          cityId: area[1],
-          districtId: area[2],
-          address,
-          latitude: location.split(',')[1],
-          longitude: location.split(',')[0],
-          enterpriseId,
-          factoryId,
-          purchaserId,
-          userId,
-          enterpriseLogoId:
-            imageUrl === preImageUrl ? undefined : enterpriseLogoId
-        })
+        .post('/api/factory/enterprise/enterprise-info-save', params)
         .then(response => {
           const { success, msg, data = {} } = response
           if (success) {
@@ -177,6 +211,7 @@ const EnterpriseInfo = () => {
             enterpriseLogoId,
             contactsId
           } = data
+          setOldData(cloneDeep(data))
           setContactsId(contactsId)
           if (enterpriseLogoUrl) {
             setImageUrl(enterpriseLogoUrl)
@@ -291,7 +326,6 @@ const EnterpriseInfo = () => {
               {isEmpty(imageUrlList) ? uploadButton : null}
             </Upload>
           </Form.Item>
-
           <Row>
             <Col className="gutter-row" span={3}></Col>
             <Col className="gutter-row" span={14}>
@@ -302,7 +336,6 @@ const EnterpriseInfo = () => {
               </div>
             </Col>
           </Row>
-
           <Form.Item
             label="企业名称"
             name="enterpriseName"
@@ -320,7 +353,6 @@ const EnterpriseInfo = () => {
               </div>
             </Col>
           </Row>
-
           <Form.Item
             label="企业类型"
             name="enterpriseType"
@@ -343,7 +375,6 @@ const EnterpriseInfo = () => {
               </Space>
             </Radio.Group>
           </Form.Item>
-
           <Form.Item
             label="联系人"
             name="contactsName"
@@ -351,7 +382,6 @@ const EnterpriseInfo = () => {
           >
             <Input placeholder="请填写联系人姓名" />
           </Form.Item>
-
           <Form.Item
             label="手机号"
             name="mobilePhone"
@@ -359,14 +389,12 @@ const EnterpriseInfo = () => {
           >
             <Input placeholder="请填写手机号" disabled />
           </Form.Item>
-
           <Form.Item
             label={<span className={styles.formLabel}>电话号码</span>}
             name="contactPhone"
           >
             <Input placeholder="请输入座机号码  如：0571-8******" />
           </Form.Item>
-
           <Form.Item
             label={<span className={styles.formLabel}>电子邮箱</span>}
             name="email"
@@ -381,7 +409,6 @@ const EnterpriseInfo = () => {
           >
             <Cascader options={toJS(allArea)} placeholder="请选择所在地" />
           </Form.Item>
-
           <Form.Item
             label="企业地址"
             {...itemLayout}
@@ -390,7 +417,6 @@ const EnterpriseInfo = () => {
           >
             <BusinessAddressCom getFieldValue={getFieldValue} field={'area'} />
           </Form.Item>
-
           <Form.Item
             label="企业简介"
             name="enterpriseDesc"

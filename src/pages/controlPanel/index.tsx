@@ -89,7 +89,6 @@ const ControlPanel = () => {
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
 
   const location = useLocation()
-  const userInfo = getUserInfo()
 
   const handleMenu = ({ keyPath }) => {
     setCurrentMenu(keyPath)
@@ -141,7 +140,7 @@ const ControlPanel = () => {
               <Link to="/control-panel/panel/enterprise">企业信息</Link>
             </Menu.Item>
             {/* infoApprovalStatus === 1 */}
-            {userInfo.infoApprovalStatus === 1 ? (
+            {+infoApprovalStatus === 1 ? (
               <Menu.Item
                 key="issue-bill"
                 className={styles.item}
@@ -159,7 +158,7 @@ const ControlPanel = () => {
               <Link to="/control-panel/panel/certificate">企业证件认证</Link>
             </Menu.Item>
 
-            {infoApprovalStatus == '1' && (
+            {+infoApprovalStatus === 1 && (
               <Menu.Item
                 key="qualification"
                 className={styles.item}
@@ -169,7 +168,7 @@ const ControlPanel = () => {
               </Menu.Item>
             )}
 
-            {factoryAuditStatus == '1' && (
+            {+factoryAuditStatus === 1 && (
               <SubMenu
                 key="sub2"
                 className={styles.subItem}

@@ -2,6 +2,7 @@ import { Icon } from '@/components'
 import React, { useState } from 'react'
 import styles from './header.module.less'
 import { Select } from 'antd'
+import { getCurrentUser, getUserInfo } from '@/utils/tool'
 
 const { Option } = Select
 
@@ -18,6 +19,8 @@ const IconAndInfo = ({ data }) => {
 }
 
 const Header = ({ rightConfigs }) => {
+  const currentUser = getCurrentUser()
+
   const daysOptions = [
     { label: '今日', value: 1 },
     { label: '本周', value: 2 },
@@ -35,7 +38,7 @@ const Header = ({ rightConfigs }) => {
       {/* 左侧 */}
       <div className={styles.headerLeft}>
         {/* 头像 */}
-        <img src="" alt="" className={styles.avatar} />
+        <img src={currentUser.userFaceUrl} alt="" className={styles.avatar} />
         {/* 信息 */}
         <div className={styles.userInfo}>
           <div className={styles.name}>早安,李玉华</div>

@@ -37,10 +37,9 @@ const Layout = (props: LayoutProps) => {
     //   await getAllArea()
     // })
     ;(async () => {
+      currentUser.userId && (await userInfo())
       await allDictionary([])
       await getAllArea()
-      console.log(currentUser.userId, 'currentUser.userId')
-      currentUser.userId && (await userInfo())
     })()
   }, [])
 

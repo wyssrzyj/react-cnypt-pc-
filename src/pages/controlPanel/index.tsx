@@ -79,14 +79,27 @@ subsMap.set('/control-panel/panel/photograph', ['sub2'])
 subsMap.set('/control-panel/panel/issue-bill', ['sub1'])
 
 const ControlPanel = () => {
-  const { factoryStore } = useStores()
+  const { factoryStore, loginStore } = useStores()
   const { productCategory } = factoryStore
-  const currentUser = getUserInfo() || {}
-  const { infoApprovalStatus, factoryAuditStatus } = currentUser
+  const { userInfo } = loginStore
+  // const currentUser = getUserInfo() || {}
+  const [currentUser, setCurrentUser] = useState<any>({})
+
+  // const [currentUser, setCurrentUser] = useState({})
+  // const { infoApprovalStatus, factoryAuditStatus } = currentUser
 
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
 
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
+
+  useEffect(() => {
+    ;(async () => {
+      const res = await userInfo()
+      const { data } = res
+      setCurrentUser(data)
+      console.log('🚀 ~ file: index.tsx ~ line 98 ~ data', data)
+    })()
+  }, [])
 
   const location = useLocation()
 
@@ -140,7 +153,7 @@ const ControlPanel = () => {
               <Link to="/control-panel/panel/enterprise">企业信息</Link>
             </Menu.Item>
             {/* infoApprovalStatus === 1 */}
-            {+infoApprovalStatus === 1 ? (
+            {+currentUser.infoApprovalStatus === 1 ? (
               <Menu.Item
                 key="issue-bill"
                 className={styles.item}
@@ -158,7 +171,7 @@ const ControlPanel = () => {
               <Link to="/control-panel/panel/certificate">企业证件认证</Link>
             </Menu.Item>
 
-            {+infoApprovalStatus === 1 && (
+            {+currentUser.infoApprovalStatus === 1 && (
               <Menu.Item
                 key="qualification"
                 className={styles.item}
@@ -168,7 +181,7 @@ const ControlPanel = () => {
               </Menu.Item>
             )}
 
-            {+factoryAuditStatus === 1 && (
+            {+currentUser.factoryAuditStatus === 1 && (
               <SubMenu
                 key="sub2"
                 className={styles.subItem}

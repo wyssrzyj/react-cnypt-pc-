@@ -2,7 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 import { Menu, Dropdown } from 'antd'
-import { PartitionOutlined, AuditOutlined } from '@ant-design/icons'
+// import { PartitionOutlined, AuditOutlined } from '@ant-design/icons'
+import { AuditOutlined } from '@ant-design/icons'
 import { isEmpty } from 'lodash'
 import { getCurrentUser, getUserInfo } from '@/utils/tool'
 import { useStores } from '@/utils/mobx'
@@ -80,9 +81,9 @@ const Header = () => {
     history.push('/control-panel/panel/account')
   }
 
-  const toErp = () => {
-    history.push('/erp')
-  }
+  // const toErp = () => {
+  //   history.push('/erp')
+  // }
 
   const logoutToLogin = async () => {
     const res = await logout()

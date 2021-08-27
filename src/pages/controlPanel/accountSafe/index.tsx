@@ -13,7 +13,7 @@ import moment from 'moment'
 import { cloneDeep } from 'lodash'
 import UploadFile from './upload'
 
-const Title = ({ title }) => (
+export const Title = ({ title }) => (
   <div className={styles.title}>
     <div className={styles.titleLine}></div>
     {title}

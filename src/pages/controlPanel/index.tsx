@@ -34,45 +34,49 @@ const FactoryPhotograph = React.lazy(
 const { SubMenu } = Menu
 
 const menusName = new Map()
-menusName.set('/control-panel/qualification', '资质认证')
-menusName.set('/control-panel/photo', '厂房现场照')
-menusName.set('/control-panel/information', '工厂资料')
-menusName.set('/control-panel/enterprise', '企业信息')
-menusName.set('/control-panel/certificate', '企业证件认证')
-menusName.set('/control-panel/report', '验厂报告')
-menusName.set('/control-panel/account', '账号安全')
-menusName.set('/control-panel/logs', '登录日志')
-menusName.set('/control-panel/equipment', '车间设备')
-menusName.set('/control-panel/photograph', '工厂照片')
-menusName.set('/control-panel/issue-bill', '发单信息')
+menusName.set('/control-panel/panel/qualification', '资质认证')
+menusName.set('/control-panel/panel/photo', '厂房现场照')
+menusName.set('/control-panel/panel/information', '工厂资料')
+menusName.set('/control-panel/panel/enterprise', '企业信息')
+menusName.set('/control-panel/panel/certificate', '企业证件认证')
+menusName.set('/control-panel/panel/report', '验厂报告')
+menusName.set('/control-panel/panel/account', '账号安全')
+menusName.set('/control-panel/panel/logs', '登录日志')
+menusName.set('/control-panel/panel/equipment', '车间设备')
+menusName.set('/control-panel/panel/photograph', '工厂照片')
+menusName.set('/control-panel/panel/issue-bill', '发单信息')
 
 const menuKeys = new Map()
-menuKeys.set('/control-panel/qualification', ['qualification', 'sub2', 'sub1'])
-menuKeys.set('/control-panel/photo', ['photo', 'sub1'])
-menuKeys.set('/control-panel/information', ['information', 'sub1'])
-menuKeys.set('/control-panel/enterprise', ['enterprise', 'sub1'])
-menuKeys.set('/control-panel/certificate', ['certificate', 'sub1'])
-menuKeys.set('/control-panel/report', ['report', 'sub1'])
-menuKeys.set('/control-panel/account', ['account', 'sub1'])
-menuKeys.set('/control-panel/logs', ['account', 'sub1'])
-menuKeys.set('/control-panel/report', ['report', 'sub2'])
-menuKeys.set('/control-panel/equipment', ['equipment', 'sub2'])
-menuKeys.set('/control-panel/photograph', ['photograph', 'sub2'])
-menuKeys.set('/control-panel/issue-bill', ['issue-bill', 'sub1'])
+menuKeys.set('/control-panel/panel/qualification', [
+  'qualification',
+  'sub2',
+  'sub1'
+])
+menuKeys.set('/control-panel/panel/photo', ['photo', 'sub1'])
+menuKeys.set('/control-panel/panel/information', ['information', 'sub1'])
+menuKeys.set('/control-panel/panel/enterprise', ['enterprise', 'sub1'])
+menuKeys.set('/control-panel/panel/certificate', ['certificate', 'sub1'])
+menuKeys.set('/control-panel/panel/report', ['report', 'sub1'])
+menuKeys.set('/control-panel/panel/account', ['account', 'sub1'])
+menuKeys.set('/control-panel/panel/logs', ['account', 'sub1'])
+menuKeys.set('/control-panel/panel/report', ['report', 'sub2'])
+menuKeys.set('/control-panel/panel/equipment', ['equipment', 'sub2'])
+menuKeys.set('/control-panel/panel/photograph', ['photograph', 'sub2'])
+menuKeys.set('/control-panel/panel/issue-bill', ['issue-bill', 'sub1'])
 
 const subsMap = new Map()
-subsMap.set('/control-panel/qualification', ['sub2', 'sub1'])
-subsMap.set('/control-panel/photo', ['sub1'])
-subsMap.set('/control-panel/information', ['sub1'])
-subsMap.set('/control-panel/enterprise', ['sub1'])
-subsMap.set('/control-panel/certificate', ['sub1'])
-subsMap.set('/control-panel/report', ['sub1'])
-subsMap.set('/control-panel/account', ['sub1'])
-subsMap.set('/control-panel/logs', ['sub1'])
-subsMap.set('/control-panel/report', ['sub2'])
-subsMap.set('/control-panel/equipment', ['sub2'])
-subsMap.set('/control-panel/photograph', ['sub2'])
-subsMap.set('/control-panel/issue-bill', ['sub1'])
+subsMap.set('/control-panel/panel/qualification', ['sub2', 'sub1'])
+subsMap.set('/control-panel/panel/photo', ['sub1'])
+subsMap.set('/control-panel/panel/information', ['sub1'])
+subsMap.set('/control-panel/panel/enterprise', ['sub1'])
+subsMap.set('/control-panel/panel/certificate', ['sub1'])
+subsMap.set('/control-panel/panel/report', ['sub1'])
+subsMap.set('/control-panel/panel/account', ['sub1'])
+subsMap.set('/control-panel/panel/logs', ['sub1'])
+subsMap.set('/control-panel/panel/report', ['sub2'])
+subsMap.set('/control-panel/panel/equipment', ['sub2'])
+subsMap.set('/control-panel/panel/photograph', ['sub2'])
+subsMap.set('/control-panel/panel/issue-bill', ['sub1'])
 
 const ControlPanel = () => {
   const { factoryStore } = useStores()
@@ -125,7 +129,7 @@ const ControlPanel = () => {
               key="account"
               icon={<Icon className={styles.menuIcon} type={'jack-zhaq'} />}
             >
-              <Link to="/control-panel/account">账号安全</Link>
+              <Link to="/control-panel/panel/account">账号安全</Link>
             </Menu.Item>
 
             <Menu.Item
@@ -133,7 +137,7 @@ const ControlPanel = () => {
               className={styles.item}
               icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
             >
-              <Link to="/control-panel/enterprise">企业信息</Link>
+              <Link to="/control-panel/panel/enterprise">企业信息</Link>
             </Menu.Item>
 
             <Menu.Item
@@ -141,7 +145,7 @@ const ControlPanel = () => {
               className={styles.item}
               icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
             >
-              <Link to="/control-panel/issue-bill">发单信息</Link>
+              <Link to="/control-panel/panel/issue-bill">发单信息</Link>
             </Menu.Item>
 
             <Menu.Item
@@ -149,7 +153,7 @@ const ControlPanel = () => {
               className={styles.item}
               icon={<Icon className={styles.menuIcon} type="jack-qyzjrz" />}
             >
-              <Link to="/control-panel/certificate">企业证件认证</Link>
+              <Link to="/control-panel/panel/certificate">企业证件认证</Link>
             </Menu.Item>
 
             {infoApprovalStatus == '1' && (
@@ -158,7 +162,7 @@ const ControlPanel = () => {
                 className={styles.item}
                 icon={<Icon className={styles.menuIcon} type="jack-zzrz" />}
               >
-                <Link to="/control-panel/qualification">资质认证</Link>
+                <Link to="/control-panel/panel/qualification">资质认证</Link>
               </Menu.Item>
             )}
 
@@ -170,13 +174,13 @@ const ControlPanel = () => {
                 title="验厂管理"
               >
                 <Menu.Item key="report">
-                  <Link to="/control-panel/report">基础资料报告</Link>
+                  <Link to="/control-panel/panel/report">基础资料报告</Link>
                 </Menu.Item>
                 <Menu.Item key="equipment">
-                  <Link to="/control-panel/equipment">车间设备</Link>
+                  <Link to="/control-panel/panel/equipment">车间设备</Link>
                 </Menu.Item>
                 <Menu.Item key="photograph">
-                  <Link to="/control-panel/photograph">工厂照片</Link>
+                  <Link to="/control-panel/panel/photograph">工厂照片</Link>
                 </Menu.Item>
               </SubMenu>
             )}
@@ -191,41 +195,50 @@ const ControlPanel = () => {
           <Switch>
             {/* 企业信息 */}
             <Route
-              path="/control-panel/issue-bill"
+              path="/control-panel/panel/issue-bill"
               component={IssuerEnterpriseInfo}
             />
             <Route
-              path="/control-panel/enterprise"
+              path="/control-panel/panel/enterprise"
               component={EnterpriseInfo}
             />
             {/* 企业证件认证 */}
             <Route
-              path="/control-panel/certificate"
+              path="/control-panel/panel/certificate"
               component={CertificateAuthentication}
             />
             <Route
-              path="/control-panel/information"
+              path="/control-panel/panel/information"
               component={FactoryInformation}
             />
-            <Route path="/control-panel/photo" component={PlantSitePhoto} />
+            <Route
+              path="/control-panel/panel/photo"
+              component={PlantSitePhoto}
+            />
             {/* 资质认证 */}
             <Route
-              path="/control-panel/qualification"
+              path="/control-panel/panel/qualification"
               component={QualificationCertification}
             />
             {/* 登录日志 */}
-            <Route path="/control-panel/logs/:id" component={LoginLogs} />
+            <Route path="/control-panel/panel/logs/:id" component={LoginLogs} />
             {/* 验厂报告*/}
-            <Route path="/control-panel/report" component={FactoryReport} />
-            <Route path="/control-panel/account" component={AccountSafe} />
+            <Route
+              path="/control-panel/panel/report"
+              component={FactoryReport}
+            />
+            <Route
+              path="/control-panel/panel/account"
+              component={AccountSafe}
+            />
             {/* 车间设备 */}
             <Route
-              path="/control-panel/equipment"
+              path="/control-panel/panel/equipment"
               component={FactoryEquipment}
             />
             {/* 工厂照片 */}
             <Route
-              path="/control-panel/photograph"
+              path="/control-panel/panel/photograph"
               component={FactoryPhotograph}
             />
             <Redirect to="/platform" />

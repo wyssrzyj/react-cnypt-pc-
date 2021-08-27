@@ -5,16 +5,16 @@ import { useStores } from '@/utils/mobx'
 import { getCurrentUser, checkValue } from '@/utils/tool'
 import styles from './index.module.less'
 
-const contactCom = props => {
+const ContactCom = props => {
   const _AMap = window.AMap as any
-  const { enterpriseId } = props
+  const { factoryId } = props
   const currentUser = getCurrentUser() || {}
   const { factoryDetailStore } = useStores()
   const { contactPort } = factoryDetailStore
   const [contactInfo, setContactInfo] = useState<any>({})
 
   const getContactInfo = () => {
-    contactPort({ enterpriseId }).then(response => {
+    contactPort({ factoryId }).then(response => {
       const { success, data } = response
       if (success) {
         setContactInfo({ ...data })
@@ -126,4 +126,4 @@ const contactCom = props => {
   )
 }
 
-export default contactCom
+export default ContactCom

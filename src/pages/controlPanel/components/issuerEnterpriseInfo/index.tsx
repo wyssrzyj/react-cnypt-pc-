@@ -55,7 +55,7 @@ const IssuerEnterpriseInfo = () => {
     // },
     {
       label: '企业名称',
-      field: 'name',
+      field: 'enterpriseName',
       type: 'text',
       disabled: true,
       required: true,

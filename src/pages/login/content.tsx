@@ -14,6 +14,11 @@ const UserIcon = () => <Icon type="jack-yonghuming" className={styles.icon} />
 const PwdIcon = () => <Icon type="jack-yanzhengma" className={styles.icon} />
 const PhoneIcon = () => <Icon type="jack-shouji1" className={styles.icon} />
 
+const pathMap = new Map()
+pathMap.set(null, '/')
+pathMap.set(0, '/control-panel/factory')
+pathMap.set(1, '/control-panel/business')
+
 const LoginContent = () => {
   // const title = '春秋季服装订单大促'
   // const desc = '全场两季7折，最高满赠2万元代金券！'
@@ -51,6 +56,7 @@ const LoginContent = () => {
   }
 
   const submit = async () => {
+    // enterpriseType 0 加工厂 1 发单商
     try {
       const values = await validateFields()
       values.loginType = +activeTab === 1 ? 'password' : 'sms_code'
@@ -61,8 +67,15 @@ const LoginContent = () => {
 
       if (res && res.success) {
         setError(false)
-        await userInfo()
-        history.push('/')
+        const { data } = await userInfo()
+        if (data) {
+          const path = pathMap.get(
+            data.enterpriseType ? +data.enterpriseType : data.enterpriseType
+          )
+          history.push(path)
+        } else {
+          history.push('/')
+        }
       } else {
         setError(true)
       }

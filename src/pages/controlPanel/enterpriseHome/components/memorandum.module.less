@@ -1,0 +1,77 @@
+.memorandum {
+  width: 362px;
+  height: 540px;
+  padding: 30px 30px 20px 30px;
+  background: #ffffff;
+}
+
+.content {
+  padding-top: 8px;
+}
+
+.badgeBox {
+  position: absolute;
+  top: 16px;
+  left: 10px;
+}
+
+.empty {
+  padding: 20px 0;
+  color: #999999;
+  font-weight: 400;
+  font-size: 14px;
+  text-align: center;
+}
+
+.btnIcon {
+  margin-top: 2px;
+  font-size: 16px;
+}
+
+.btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100%;
+  height: 40px;
+}
+
+.todoList {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 0;
+}
+
+.modalContent {
+  display: flex;
+}
+
+.modalLabel {
+  width: 90px;
+  font-weight: bold;
+}
+
+.btnBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 40px;
+}
+
+.modalBtn {
+  width: 120px !important;
+  height: 40px !important;
+
+  &:nth-child(1) {
+    margin-right: 20px;
+  }
+}
+
+:global {
+  .addEventModal {
+    .ant-modal-header {
+      border-bottom: none !important;
+    }
+  }
+}

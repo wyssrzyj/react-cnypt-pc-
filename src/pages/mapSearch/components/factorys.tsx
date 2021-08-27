@@ -135,6 +135,7 @@ const Factorys = props => {
   }, [throttleScrollTop])
 
   const factoryClick = data => {
+    console.log('🚀 ~ file: factorys.tsx ~ line 138 ~ data', data)
     const { factoryLnglat } = data
     if (Array.isArray(factoryLnglat) && !factoryLnglat.includes('null')) {
       map && map.panTo(factoryLnglat)

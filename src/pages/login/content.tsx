@@ -70,6 +70,7 @@ const LoginContent = () => {
         const { data } = await userInfo()
         if (data) {
           data.enterpriseType && history.push('/control-panel/home')
+          !data.enterpriseType && history.push('/')
         } else {
           history.push('/')
         }

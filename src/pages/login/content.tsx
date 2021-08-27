@@ -69,10 +69,7 @@ const LoginContent = () => {
         setError(false)
         const { data } = await userInfo()
         if (data) {
-          // const path = pathMap.get(
-          //   data.enterpriseType ? +data.enterpriseType : data.enterpriseType
-          // )
-          history.push('/control-panel/home')
+          data.enterpriseType && history.push('/control-panel/home')
         } else {
           history.push('/')
         }

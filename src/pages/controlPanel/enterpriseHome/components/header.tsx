@@ -2,7 +2,7 @@ import { Icon } from '@/components'
 import React, { useState } from 'react'
 import styles from './header.module.less'
 import { Select } from 'antd'
-import { getCurrentUser, getUserInfo } from '@/utils/tool'
+import { getCurrentUser } from '@/utils/tool'
 
 const { Option } = Select
 

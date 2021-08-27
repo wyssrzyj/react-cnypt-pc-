@@ -58,6 +58,7 @@ const EnterpriseInfo = () => {
   const [imageUrlList, setImageUrlList] = useState<any[]>([])
   const [enterpriseId, setEnterpriseId] = useState(undefined)
   const [factoryId, setFactoryId] = useState(undefined)
+  const [purchaserId, setPurchaserId] = useState(undefined)
   const [enterpriseLogoId, setEnterpriseLogoId] = useState(undefined)
   const [preImageUrl, setPreImageUrl] = useState(undefined)
   const [currentType, setCurrentType] = useState(undefined)
@@ -135,6 +136,7 @@ const EnterpriseInfo = () => {
           longitude: location.split(',')[0],
           enterpriseId,
           factoryId,
+          purchaserId,
           userId,
           enterpriseLogoId:
             imageUrl === preImageUrl ? undefined : enterpriseLogoId
@@ -163,7 +165,8 @@ const EnterpriseInfo = () => {
         if (success && !isEmpty(data)) {
           const {
             enterpriseLogoUrl,
-            factoryId,
+            factoryId, //加工厂
+            purchaserId, //发单商
             enterpriseId,
             provinceId,
             cityId,
@@ -181,6 +184,7 @@ const EnterpriseInfo = () => {
             setPreImageUrl(enterpriseLogoUrl)
           }
           setFactoryId(factoryId)
+          setPurchaserId(purchaserId)
           setEnterpriseId(enterpriseId)
           setEnterpriseLogoId(enterpriseLogoId)
           setFieldsValue({

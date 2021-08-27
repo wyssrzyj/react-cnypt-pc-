@@ -11,13 +11,17 @@ const Business = React.lazy(() => import('./business'))
 const LOGO =
   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
 
-const paths = ['/control-panel/factory', '/control-panel/business']
+// const paths = ['/control-panel/factory', '/control-panel/business']
+const paths = ['/control-panel/home']
+const routeMap = new Map()
+routeMap.set(0, Factory)
+routeMap.set(1, Business)
 
 const ControlPanel = React.lazy(() => import('@/pages/controlPanel'))
 
-const pathMap = new Map()
-pathMap.set(0, '/control-panel/factory')
-pathMap.set(1, '/control-panel/business')
+// const pathMap = new Map()
+// pathMap.set(0, '/control-panel/factory')
+// pathMap.set(1, '/control-panel/business')
 
 const EnterpriseHome = () => {
   const location = useLocation()
@@ -26,9 +30,9 @@ const EnterpriseHome = () => {
   const userInfo = getUserInfo()
 
   const toTarget = type => {
-    const path = pathMap.get(+userInfo.enterpriseType)
+    // const path = pathMap.get(+userInfo.enterpriseType)
     type === 'control' && history.push('/control-panel/panel/account')
-    type !== 'control' && history.push(path)
+    type !== 'control' && history.push('/control-panel/home')
   }
 
   return (
@@ -37,15 +41,18 @@ const EnterpriseHome = () => {
         <div className={styles.navBar}>
           <img src={LOGO} alt="" className={styles.navLogo} />
           <div className={styles.navs}>
-            <div
-              className={classNames(
-                styles.navItem,
-                flag ? styles.activeNavItem : ''
-              )}
-              onClick={toTarget}
-            >
-              首页
-            </div>
+            {userInfo.enterpriseType !== null ? (
+              <div
+                className={classNames(
+                  styles.navItem,
+                  flag ? styles.activeNavItem : ''
+                )}
+                onClick={toTarget}
+              >
+                首页
+              </div>
+            ) : null}
+
             <div
               className={classNames(
                 styles.navItem,
@@ -62,8 +69,12 @@ const EnterpriseHome = () => {
       <div className={styles.content}>
         <Switch>
           <Route path="/control-panel/panel" component={ControlPanel} />
-          <Route path="/control-panel/factory" component={Factory} />
-          <Route path="/control-panel/business" component={Business} />
+          <Route
+            path="/control-panel/home"
+            component={routeMap.get(+userInfo.enterpriseType)}
+          />
+          {/* <Route path="/control-panel/factory" component={Factory} />
+          <Route path="/control-panel/business" component={Business} /> */}
         </Switch>
       </div>
     </div>

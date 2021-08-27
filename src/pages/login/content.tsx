@@ -72,7 +72,7 @@ const LoginContent = () => {
           const path = pathMap.get(
             data.enterpriseType ? +data.enterpriseType : data.enterpriseType
           )
-          history.push(path)
+          history.push('/control-panel/home')
         } else {
           history.push('/')
         }

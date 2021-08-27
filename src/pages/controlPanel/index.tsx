@@ -89,6 +89,7 @@ const ControlPanel = () => {
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
 
   const location = useLocation()
+  const userInfo = getUserInfo()
 
   const handleMenu = ({ keyPath }) => {
     setCurrentMenu(keyPath)
@@ -139,14 +140,16 @@ const ControlPanel = () => {
             >
               <Link to="/control-panel/panel/enterprise">企业信息</Link>
             </Menu.Item>
-
-            <Menu.Item
-              key="issue-bill"
-              className={styles.item}
-              icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
-            >
-              <Link to="/control-panel/panel/issue-bill">发单信息</Link>
-            </Menu.Item>
+            {/* infoApprovalStatus === 1 */}
+            {userInfo.infoApprovalStatus === 1 ? (
+              <Menu.Item
+                key="issue-bill"
+                className={styles.item}
+                icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
+              >
+                <Link to="/control-panel/panel/issue-bill">发单信息</Link>
+              </Menu.Item>
+            ) : null}
 
             <Menu.Item
               key="certificate"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { useStores, observer } from '@/utils/mobx'
 import styles from './index.module.less'
@@ -24,6 +24,10 @@ const Search = () => {
     updateName(e.target.value)
     history.push('/factory-search')
   }
+
+  useEffect(() => {
+    setSearchWord(factoryName)
+  }, [factoryName])
 
   return (
     <div className={styles.search}>

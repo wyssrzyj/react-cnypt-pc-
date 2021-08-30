@@ -99,9 +99,6 @@ const OverflowCard = props => {
               <Icon type="jack-dizhi" className={styles.address} />
               <span>{factoryDistrict ? factoryDistrict : '待完善'}</span>
             </div>
-            {/* <span>
-              <b className={styles.factoryScore}>4.7</b>分
-            </span> */}
           </div>
           <ul className={styles.factoryInfoList}>
             <li>
@@ -146,33 +143,6 @@ const OverflowCard = props => {
           </ul>
         </div>
       </div>
-      {/* <div className={styles.swiperBox}>
-        <div className="swiper-container mySwiper">
-          <div className="swiper-wrapper">
-            <div className={'swiper-slide'}>
-              <img
-                className="swiper-img"
-                src={require('@/static/images/u1495.png')}
-              />
-            </div>
-            <div className={'swiper-slide'}>
-              <img
-                className="swiper-img"
-                src={require('@/static/images/u1496.png')}
-              />
-            </div>
-            <div className={'swiper-slide'}>
-              <img
-                className="swiper-img"
-                src={require('@/static/images/u1497.png')}
-              />
-            </div>
-          </div>
-          <div className="swiper-button-next"></div>
-          <div className="swiper-button-prev"></div>
-          <div className="swiper-pagination"></div>
-        </div>
-      </div> */}
     </div>
   )
 }

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Title } from '../../accountSafe'
 import styles from './memorandum.module.less'
 import { Calendar, Badge, Button, Modal, Input } from 'antd'
 import { Icon } from '@/components'
+import { Title } from '../../accountSafe'
 
 const { TextArea } = Input
 

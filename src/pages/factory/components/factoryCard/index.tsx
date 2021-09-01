@@ -4,7 +4,6 @@ import { Empty } from 'antd'
 import { isArray, isEmpty } from 'lodash'
 import { Icon } from '@/components'
 import styles from './index.module.less'
-import u1190 from '@/static/images/u1190.png'
 
 const FactoryCard = props => {
   const history = useHistory()
@@ -18,41 +17,43 @@ const FactoryCard = props => {
         <Empty className={styles.noDate} />
       ) : (
         <ul className={styles.factoryCardContent}>
-          {list.map(item => (
-            <li
-              key={item.factoryId}
-              onClick={() => {
-                history.push(`/factory-detail/${item.factoryId}`)
-              }}
-            >
-              <img
-                className={styles.cardImg}
-                src={item.pictureUrl ? item.pictureUrl : u1190}
-                alt=""
-              />
-              <a className={styles.factoryName}>{item.factoryName}</a>
-              <div className={styles.factoryInfo}>
-                <span className={styles.label}>
-                  <Icon type="jack-diqu_bai" className={styles.tagIcon} />
-                  所在地区：
-                </span>
-                <span>
-                  {item.factoryDistrict ? item.factoryDistrict : '待完善'}
-                </span>
-              </div>
-              <div className={styles.factoryInfo}>
-                <span className={styles.label}>
-                  <Icon type="jack-zhuying_bai" className={styles.tagIcon} />
-                  主要生产：
-                </span>
-                <span>
-                  {isArray(item.factoryCategoryList)
-                    ? item.factoryCategoryList.join('，')
-                    : '待完善'}
-                </span>
-              </div>
-            </li>
-          ))}
+          {list.map(item => {
+            const imgUrl = item.pictureUrl
+              ? item.pictureUrl +
+                '?x-oss-process=image/resize,limit_0,m_fill,w150,h_150/quality,q_100'
+              : item.pictureUrl
+            return (
+              <li
+                key={item.factoryId}
+                onClick={() => {
+                  history.push(`/factory-detail/${item.factoryId}`)
+                }}
+              >
+                <img className={styles.cardImg} src={imgUrl} alt="" />
+                <a className={styles.factoryName}>{item.factoryName}</a>
+                <div className={styles.factoryInfo}>
+                  <span className={styles.label}>
+                    <Icon type="jack-diqu_bai" className={styles.tagIcon} />
+                    所在地区：
+                  </span>
+                  <span>
+                    {item.factoryDistrict ? item.factoryDistrict : '待完善'}
+                  </span>
+                </div>
+                <div className={styles.factoryInfo}>
+                  <span className={styles.label}>
+                    <Icon type="jack-zhuying_bai" className={styles.tagIcon} />
+                    主要生产：
+                  </span>
+                  <span>
+                    {isArray(item.factoryCategoryList)
+                      ? item.factoryCategoryList.join('，')
+                      : '待完善'}
+                  </span>
+                </div>
+              </li>
+            )
+          })}
         </ul>
       )}
     </div>

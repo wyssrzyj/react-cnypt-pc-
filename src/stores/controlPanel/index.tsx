@@ -133,5 +133,42 @@ export default class ControlPanelStore {
       console.log(e)
     }
   }
+
+  // 获取发单商详细信息
+  // /api/factory/enterprise/get-enterprise-purchase-details-info
+  @action getPurchaserInfo = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/enterprise/get-enterprise-purchase-details-info`,
+        params
+      )
+      if (res.code === 200) {
+        return res.data
+      } else {
+        message.error(res.msg)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 保存发单商信息
+  // /api/factory/enterprise/save-enterprise-purchase-details-info
+  @action savePurchaserInfo = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/factory/enterprise/save-enterprise-purchase-details-info`,
+        params
+      )
+      if (res.code === 200) {
+        message.success(res.msg)
+        return res.data
+      } else {
+        message.error(res.msg)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 export const controlPanelStore = new ControlPanelStore()

@@ -58,6 +58,10 @@ const FactoryDetail = props => {
           {
             value: 'info',
             label: '企业信息'
+          },
+          {
+            value: 'contact',
+            label: '联系方式'
           }
         ])
         setActiveTab('info')
@@ -124,7 +128,6 @@ const FactoryDetail = props => {
         {/* 联系方式 */}
         {activeTab === 'contact' && <ContactCom factoryId={factoryId} />}
       </div>
-
       {/* 导航栏 */}
     </div>
   )

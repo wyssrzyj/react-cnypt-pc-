@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback, useState } from 'react'
 import { isEmpty, isNil, isArray } from 'lodash'
 
 export const getToken = () => {
@@ -27,6 +27,50 @@ export const getUserInfo = () => {
     return JSON.parse(user)
   }
   return {}
+}
+
+export const useDebounceValue = (value, interval = 300) => {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value)
+      clearTimeout(timer)
+    }, interval)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [value, interval])
+
+  return debouncedValue
+}
+
+export const useThrottleValue = (value, interval = 300) => {
+  const [throttleValue, setThrottleValue] = useState(value)
+  const startTimeRef = useRef(new Date())
+
+  useEffect(() => {
+    let endTime: any = new Date()
+    const startTime: any = startTimeRef.current
+    let timer
+    const diffTime: any = endTime - startTime
+    const nextTime = interval - (endTime - startTime)
+    if (diffTime >= interval) {
+      setThrottleValue(value)
+      startTimeRef.current = new Date()
+    } else {
+      timer = setTimeout(() => {
+        setThrottleValue(value)
+        startTimeRef.current = new Date()
+      }, nextTime)
+    }
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [value, interval])
+
+  return throttleValue
 }
 
 export function useDebounce(fn, delay, dep = []) {
@@ -194,4 +238,11 @@ export const getProductClassMap = () => {
     { value: 6, label: '高中' },
     { value: 7, label: '高中低' }
   ]
+}
+
+/**
+ * 判断from表单是新增还是编辑
+ */
+export const isAdd = value => {
+  return isEmpty(value) || isNil(value) ? true : false
 }

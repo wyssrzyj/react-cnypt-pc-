@@ -14,8 +14,9 @@ import {
 import { isFunction, isEmpty } from 'lodash'
 import Viewer from 'react-viewer'
 import axios from '@/utils/axios'
-import { useStores } from '@/utils/mobx'
+// import { useStores } from '@/utils/mobx'
 import { getUserInfo } from '@/utils/tool'
+import OSS from '@/utils/oss'
 import { Icon } from '@/components'
 import styles from './index.module.less'
 
@@ -42,8 +43,8 @@ const CertificateInformation = props => {
   const { enterpriseId } = currentUserInfo
   const [form] = Form.useForm()
   const { validateFields, setFieldsValue } = form
-  const { factoryPageStore } = useStores()
-  const { uploadFiles } = factoryPageStore
+  // const { factoryPageStore } = useStores()
+  // const { uploadFiles } = factoryPageStore
   // const enterpriseInfo =
   //   JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
 
@@ -99,31 +100,44 @@ const CertificateInformation = props => {
     }
     return isJpgOrPng && isLt10M
   }
+
   const customRequestCard = async ({ file }) => {
     const formData = new FormData()
     formData.append('file', file)
     formData.append('module', 'factory-service')
-    const res = await uploadFiles(formData)
-    setCardImageUrl(res)
-    setCardFileList([{ thumbUrl: res }])
+    const res = await OSS.put(
+      `/capacity-platform/platform/${file.uid}${file.name}`,
+      file
+    )
+    const { url } = res
+    setCardImageUrl(url)
+    setCardFileList([{ thumbUrl: url }])
   }
   // 中国大陆居民身份证人像面
   const customRequestPositive = async ({ file }) => {
     const formData = new FormData()
     formData.append('file', file)
     formData.append('module', 'factory-service')
-    const res = await uploadFiles(formData)
-    setPositiveImageUrl(res)
-    setPositiveFileList([{ thumbUrl: res }])
+    const res = await await OSS.put(
+      `/capacity-platform/platform/${file.uid}${file.name}`,
+      file
+    )
+    const { url } = res
+    setPositiveImageUrl(url)
+    setPositiveFileList([{ thumbUrl: url }])
   }
   //中国大陆居民身份证国徽面
   const customRequestReverse = async ({ file }) => {
     const formData = new FormData()
     formData.append('file', file)
     formData.append('module', 'factory-service')
-    const res = await uploadFiles(formData)
-    setReverseImageUrl(res)
-    setReverseFileList([{ thumbUrl: res }])
+    const res = await OSS.put(
+      `/capacity-platform/platform/${file.uid}${file.name}`,
+      file
+    )
+    const { url } = res
+    setReverseImageUrl(url)
+    setReverseFileList([{ thumbUrl: url }])
   }
 
   const handleConfirm = () => {

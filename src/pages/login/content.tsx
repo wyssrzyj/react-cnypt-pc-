@@ -14,6 +14,11 @@ const UserIcon = () => <Icon type="jack-yonghuming" className={styles.icon} />
 const PwdIcon = () => <Icon type="jack-yanzhengma" className={styles.icon} />
 const PhoneIcon = () => <Icon type="jack-shouji1" className={styles.icon} />
 
+const pathMap = new Map()
+pathMap.set(null, '/')
+pathMap.set(0, '/control-panel/factory')
+pathMap.set(1, '/control-panel/business')
+
 const LoginContent = () => {
   // const title = '春秋季服装订单大促'
   // const desc = '全场两季7折，最高满赠2万元代金券！'
@@ -21,7 +26,7 @@ const LoginContent = () => {
   const pwdPlaceholder = '请输入登录密码'
 
   const { loginStore, registerStore } = useStores()
-  const { login } = loginStore
+  const { login, userInfo } = loginStore
   const { checkUser } = registerStore
   const history = useHistory()
   const [form] = Form.useForm()
@@ -51,6 +56,7 @@ const LoginContent = () => {
   }
 
   const submit = async () => {
+    // enterpriseType 0 加工厂 1 发单商
     try {
       const values = await validateFields()
       values.loginType = +activeTab === 1 ? 'password' : 'sms_code'
@@ -58,12 +64,16 @@ const LoginContent = () => {
         values.passWord = btoa(values.passWord)
       }
       const res = await login(values)
-      console.log('🚀~~~~~~~~~~~~~~', res)
 
       if (res && res.success) {
         setError(false)
-        // await userInfo()
-        history.push('/')
+        const { data } = await userInfo()
+        if (data) {
+          data.enterpriseType && history.push('/control-panel/home')
+          !data.enterpriseType && history.push('/')
+        } else {
+          history.push('/')
+        }
       } else {
         setError(true)
       }

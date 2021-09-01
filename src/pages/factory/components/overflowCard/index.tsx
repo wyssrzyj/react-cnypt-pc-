@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-// import { useHistory } from 'react-router'
+import React, { useEffect, useMemo } from 'react'
 import { toJS } from 'mobx'
 import { Tag } from 'antd'
 import { isArray, findIndex } from 'lodash'
@@ -12,13 +11,12 @@ import SwiperCore, {
   A11y,
   Autoplay
 } from 'swiper'
-
 import Swiper from 'swiper'
-// import { transformProduceNumber } from '@/utils/tool'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
-import u1190 from '@/static/images/u1190.png'
+// import { useHistory } from 'react-router'
+// import { transformProduceNumber } from '@/utils/tool'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
@@ -63,14 +61,22 @@ const OverflowCard = props => {
       // },
     })
   }, [])
+
+  const imgUrl = useMemo(() => {
+    if (pictureUrl) {
+      return (
+        pictureUrl +
+        '?x-oss-process=image/resize,limit_0,m_fill,w80,h_80/quality,q_100'
+      )
+    }
+    return ''
+  }, [pictureUrl])
+
   return (
     <div className={styles.overflowCard}>
       <div className={styles.factoryInfo} onClick={goToDetail}>
         <div className={styles.imgBox}>
-          <img
-            className={styles.factoryImg}
-            src={pictureUrl ? pictureUrl : u1190}
-          />
+          <img className={styles.factoryImg} src={imgUrl} />
         </div>
         <div className={styles.detail}>
           <div className={styles.detailTop}>
@@ -92,9 +98,6 @@ const OverflowCard = props => {
               <Icon type="jack-dizhi" className={styles.address} />
               <span>{factoryDistrict ? factoryDistrict : '待完善'}</span>
             </div>
-            {/* <span>
-              <b className={styles.factoryScore}>4.7</b>分
-            </span> */}
           </div>
           <ul className={styles.factoryInfoList}>
             <li>
@@ -139,33 +142,6 @@ const OverflowCard = props => {
           </ul>
         </div>
       </div>
-      {/* <div className={styles.swiperBox}>
-        <div className="swiper-container mySwiper">
-          <div className="swiper-wrapper">
-            <div className={'swiper-slide'}>
-              <img
-                className="swiper-img"
-                src={require('@/static/images/u1495.png')}
-              />
-            </div>
-            <div className={'swiper-slide'}>
-              <img
-                className="swiper-img"
-                src={require('@/static/images/u1496.png')}
-              />
-            </div>
-            <div className={'swiper-slide'}>
-              <img
-                className="swiper-img"
-                src={require('@/static/images/u1497.png')}
-              />
-            </div>
-          </div>
-          <div className="swiper-button-next"></div>
-          <div className="swiper-button-prev"></div>
-          <div className="swiper-pagination"></div>
-        </div>
-      </div> */}
     </div>
   )
 }

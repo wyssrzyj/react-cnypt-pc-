@@ -1,0 +1,289 @@
+.factorys {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  z-index: 2;
+  width: 400px;
+  height: calc(100% - 60px);
+  padding: 16px 0;
+  background: #ffffff;
+  opacity: 1;
+  transition: all linear 0.2s;
+}
+
+.menuRetract {
+  transform: translateX(-400px);
+}
+
+.slideChunk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(100%, -50%);
+  background: #ffffff;
+  width: 20px;
+  height: 80px;
+  cursor: pointer;
+}
+
+.fitHeight {
+  height: fit-content !important;
+}
+
+.title {
+  margin: 0 24px;
+  padding-bottom: 16px;
+  color: #999999;
+  font-weight: 400;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.hiddenTitle {
+  display: none;
+}
+
+.showTitle {
+  display: block;
+}
+
+.virtualList {
+  position: relative;
+  height: calc(100% - 40px);
+  overflow: auto;
+  margin: 0 0 0 24px;
+  // border: 1px solid #ddd;
+}
+
+.virtualList::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+  border-radius: 6px;
+}
+.virtualList::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+.virtualList::-webkit-scrollbar-thumb {
+  background:  #f0f0f0;
+  border-radius: 10px;
+}
+
+.virtualList::-webkit-scrollbar-thumb:hover {
+  background:  #f0f0f0;
+}
+
+.virtualListHeight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.viewContent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+.viewItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 70px;
+  margin: 0 auto 12px;
+  background: #ffffff;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.viewIdx {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 16px;
+  color: #3b80ff;
+  font-size: 12px;
+  line-height: 18px;
+  border: 1px solid rgba(59, 128, 255, 0.3);
+  border-radius: 50%;
+}
+
+.viewImg {
+  display: flex;
+  box-sizing: border-box;
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+  border: 1px solid #cccccc;
+  background: url(http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png) center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.viewInfo {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 10px 0;
+}
+
+.viewTitle {
+  width: 248px;
+  height: 24px;
+  line-height: 24px;
+  color: #333333;
+  font-weight: bold;
+  font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.viewAddress {
+  width: 248px;
+  color: #666666;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.viewFactoryInfo {
+  // width: 200px;
+  background: #ffffff;
+}
+
+.viewFactoryBack {
+  margin: 0 30px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #999999;
+  cursor: pointer;
+}
+
+.viewFactoryBackIcon {
+  margin-right: 4px;
+  font-size: 12px;
+  color: #999999;
+  transform: rotate(180deg);
+}
+
+.viewFactoryContent {
+  margin: 0 24px 0 30px;
+  padding: 10px 0 0;
+}
+
+.viewFactoryName {
+  font-size: 20px;
+  font-weight: 500;
+  color: #333333;
+  padding-bottom: 16px;
+}
+
+.viewFactoryIcon {
+  font-size: 20px;
+  color: #666666;
+  margin-right: 4px;
+}
+
+.viewFactoryItem {
+  font-size: 16px;
+  display: flex;
+  align-items: flex-start;
+  padding-bottom: 14px;
+}
+
+.viewFactoryItemLeft {
+  display: flex;
+  align-items: center;
+  min-width: 110px;
+  margin-right: 24px;
+}
+
+.viewFactoryItemRight {
+  display: flex;
+  align-items: center;
+}
+
+.viewFactoryInfoCount {
+  margin-right: 4px;
+}
+
+.viewFactoryImgs {
+  padding-bottom: 16px;
+  margin-bottom: 12px;
+  width: 100%;
+  display: flex;
+  overflow: auto;
+}
+
+.viewFactoryImgs::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+}
+.viewFactoryImgs::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+.viewFactoryImgs::-webkit-scrollbar-thumb {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.viewFactoryImgs::-webkit-scrollbar-thumb:hover {
+  background: #f0f0f0;
+}
+
+.viewFactoryImg {
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+  margin-right: 16px;
+  background: url(http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png) center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.toDetail {
+  color: #999999;
+  width: fit-content;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.toDetailIcon {
+  color: #999999;
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+.emptyBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 256px;
+  font-size: 14px;
+  color: #333333;
+}
+
+.emptyImg {
+  margin-bottom: 16px;
+  display: block;
+  width: 140px;
+  height: 140px;
+}

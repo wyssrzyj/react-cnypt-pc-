@@ -59,7 +59,7 @@ export default class LoginStore {
   @action userInfo = async () => {
     try {
       const res: ResponseProps = await axios.get(
-        '/api/factory/enterprise/get-login-user-enterprise-status-info'
+        '/api/factory/enterprise/get-login-account-enterprise-factory-info'
       )
       const { data = {} } = res
       if (data) {

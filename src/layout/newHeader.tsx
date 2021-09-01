@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 import { Menu, Dropdown } from 'antd'
+// import { PartitionOutlined, AuditOutlined } from '@ant-design/icons'
+import { AuditOutlined } from '@ant-design/icons'
 import { isEmpty } from 'lodash'
 import { getCurrentUser, getUserInfo } from '@/utils/tool'
 import { useStores } from '@/utils/mobx'
@@ -17,11 +19,11 @@ const consoleOptions = [
     children: [
       {
         title: '企业信息',
-        url: '/control-panel/enterprise'
+        url: '/control-panel/panel/enterprise'
       },
       {
         title: '企业证件认证',
-        url: '/control-panel/certificate'
+        url: '/control-panel/panel/certificate'
       }
     ]
   },
@@ -30,7 +32,7 @@ const consoleOptions = [
     children: [
       {
         title: '资质认证',
-        url: '/control-panel/qualification'
+        url: '/control-panel/panel/qualification'
       }
     ]
   },
@@ -39,15 +41,15 @@ const consoleOptions = [
     children: [
       {
         title: '基础资料报告',
-        url: '/control-panel/report'
+        url: '/control-panel/panel/report'
       },
       {
         title: '车间设备',
-        url: '/control-panel/equipment'
+        url: '/control-panel/panel/equipment'
       },
       {
         title: '工厂照片',
-        url: '/control-panel/photograph'
+        url: '/control-panel/panel/photograph'
       }
     ]
   }
@@ -76,8 +78,12 @@ const Header = () => {
   }
 
   const toAccountSafe = () => {
-    history.push('/control-panel/account')
+    history.push('/control-panel/panel/account')
   }
+
+  // const toErp = () => {
+  //   history.push('/erp')
+  // }
 
   const logoutToLogin = async () => {
     const res = await logout()
@@ -154,16 +160,26 @@ const Header = () => {
           </>
         )}
       </div>
-      {currentUser.userId ? (
-        <Dropdown overlay={consoleMenu}>
+      <div className={styles.headerLeft}>
+        {/* {currentUser.userId ? (
           <div className={styles.chunks}>
-            <span className={styles.consoleBox}>
-              <Icon type="jack-kongzhitai1" className={styles.consoleIcon} />
-              <span className={styles.headerChunk}>控制台</span>
+            <span className={styles.consoleBox} onClick={toErp}>
+              <PartitionOutlined className={styles.icon} />
+              <span className={styles.headerChunk}>ERP管理系统</span>
             </span>
           </div>
-        </Dropdown>
-      ) : null}
+        ) : null} */}
+        {currentUser.userId ? (
+          <Dropdown overlay={consoleMenu}>
+            <div className={styles.chunks}>
+              <span className={styles.consoleBox}>
+                <AuditOutlined className={styles.icon} />
+                <span className={styles.headerChunk}>企业管理</span>
+              </span>
+            </div>
+          </Dropdown>
+        ) : null}
+      </div>
     </header>
   )
 }

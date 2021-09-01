@@ -25,6 +25,11 @@ export default class FactoryStore {
   }
 
   @observable factoryProductList = []
+  @observable mapSearchCityLntlats = [] // 地图搜索栏中 切换城市后的经纬度
+  @observable mapSearchCityValue = '' // 地图移动后的城市value
+  @observable mapMove = false // 地图是否需要移动
+  @observable mapSearchFactorys = [] // 地图 工厂列表数据
+  @observable mapSearchDistrict = [] // 地图 城市区级信息
 
   @action init = () => {
     this.productCategoryList = []
@@ -160,6 +165,122 @@ export default class FactoryStore {
       runInAction(() => {
         this.factoryProductList = null
       })
+      console.log(e)
+    }
+  }
+
+  @action setMapSearchCityLntlats = lntlats => {
+    runInAction(() => {
+      this.mapSearchCityLntlats = lntlats
+    })
+  }
+
+  // 获取城市区级信息
+  @action getMapCityInfo = async pId => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/district/list-children-and-parent`,
+        {
+          pId
+        }
+      )
+
+      if (res.code === 200) {
+        const citys = Reflect.ownKeys(res.data)
+        const target = citys.find(item => res.data[item].id === pId)
+        const targetCity = res.data[target]
+        if (
+          targetCity.longitude === this.mapSearchCityLntlats[0] &&
+          targetCity.latitude === this.mapSearchCityLntlats[1]
+        ) {
+          // return false
+        }
+
+        if (
+          targetCity.longitude !== this.mapSearchCityLntlats[0] &&
+          targetCity.latitude !== this.mapSearchCityLntlats[1]
+        ) {
+          //
+        }
+
+        runInAction(() => {
+          this.mapSearchDistrict = res.data
+          this.mapSearchCityLntlats = [
+            targetCity.longitude,
+            targetCity.latitude
+          ]
+        })
+
+        return true
+      } else {
+        message.error('获取城市数据失败~')
+      }
+      return res.data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 地图找厂 获取加工厂信息
+  @action getMapFactorys = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/factory/info/list-factory-atlas-info`,
+        params
+      )
+
+      if (res.code === 200) {
+        runInAction(() => {
+          res.data.forEach((item, idx) => {
+            item.city = item.cityName
+            item.district = item.districtName
+            item.lnglat = item.districtLnglat
+            item.idx = idx + 1
+          })
+
+          this.mapSearchFactorys = res.data
+        })
+        return res.data || []
+      } else {
+        message.error('获取城市数据失败~')
+      }
+      return res.data
+    } catch (e) {
+      e
+      console.log(e)
+    }
+  }
+
+  @action setMoveCityValue = value => {
+    runInAction(() => {
+      this.mapSearchCityValue = value
+    })
+  }
+
+  @action setMapMove = value => {
+    runInAction(() => {
+      this.mapMove = value
+    })
+  }
+
+  // /api/factory/info/get-details-enterprise-desc
+  // 工厂详情
+  @action getFactoryDetail = async factoryId => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/factory/info/get-details-enterprise-desc`,
+        {
+          factoryId
+        }
+      )
+
+      if (res.code === 200) {
+        return res.data || []
+      } else {
+        message.error('获取工厂数据失败~')
+      }
+      return res.data
+    } catch (e) {
       console.log(e)
     }
   }

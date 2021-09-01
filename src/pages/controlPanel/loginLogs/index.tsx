@@ -55,7 +55,7 @@ const LoginLogs = () => {
   ]
 
   const back = () => {
-    history.push('/control-panel/account')
+    history.push('/control-panel/panel/account')
   }
 
   return (

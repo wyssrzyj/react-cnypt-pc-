@@ -124,8 +124,8 @@ const config = merge(common, {
       ignoreOrder: true
     }),
     // new BundleAnalyzerPlugin({
-    //     analyzerMode: "disable", // 不启用展示打包报告的web服务器
-    //     generateStatsFile: true // 生成报告文件
+    //   analyzerMode: "disable", // 不启用展示打包报告的web服务器
+    //   generateStatsFile: true // 生成报告文件
     // }),
     // new CompressionPlugin(),
     new HappyPack({

@@ -31,8 +31,6 @@ customAxios.interceptors.request.use(
 // 响应拦截 处理token是否过期
 customAxios.interceptors.response.use(
   response => {
-    console.log('🚀 ~ file: index.tsx ~ line 35 ~ response', response)
-
     const { data, config } = response
     const { code } = data
     const { expire } = getCurrentUser()

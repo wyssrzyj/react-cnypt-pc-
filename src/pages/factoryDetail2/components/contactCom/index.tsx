@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { isEmpty, isNil } from 'lodash'
-import { Scene, Marker, MarkerLayer } from '@antv/l7'
-import { GaodeMap } from '@antv/l7-maps'
 import { Icon, NoData } from '@/components'
 import { useStores } from '@/utils/mobx'
 import { getCurrentUser, checkValue } from '@/utils/tool'
 import styles from './index.module.less'
 
-const contactCom = props => {
+const ContactCom = props => {
+  const _AMap = window.AMap as any
   const { factoryId } = props
   const currentUser = getCurrentUser() || {}
   const { factoryDetailStore } = useStores()
@@ -45,30 +44,17 @@ const contactCom = props => {
   useEffect(() => {
     if (!isNil(contactInfo.longitude)) {
       const { latitude = '30.404645', longitude = '20.311123' } = contactInfo
-      const scene = new Scene({
-        id: 'address',
-        logoVisible: false,
-        map: new GaodeMap({
-          style: 'normal',
-          center: [longitude, latitude],
-          pitch: 0,
-          zoom: 13,
-          rotation: 0
-        })
+      const map = new _AMap.Map('address', {
+        zoom: 15,
+        animateEnable: true,
+        center: [longitude, latitude],
+        mapStyle: 'amap://styles/dcf78c909fec3cc16509c3afe6513956'
       })
 
-      scene.on('loaded', () => {
-        const markerLayer = new MarkerLayer()
-        const el = document.createElement('label')
-        el.className = 'labelclass'
-        el.style.background =
-          'url(https://gw.alipayobjects.com/mdn/antv_site/afts/img/A*BJ6cTpDcuLcAAAAAAAAAAABkARQnAQ)'
-        const marker: any = new Marker({
-          element: el
-        }).setLnglat({ lng: longitude, lat: latitude })
-        markerLayer.addMarker(marker)
-        scene.addMarkerLayer(markerLayer)
+      let marker = new _AMap.Marker({
+        position: new _AMap.LngLat(longitude, latitude)
       })
+      map.add(marker)
     }
   }, [contactInfo])
 
@@ -85,7 +71,7 @@ const contactCom = props => {
             联系人
           </span>
           <span className={styles.rightValue}>
-            {checkValue(contactInfo.realName)}
+            {checkValue(contactInfo.name)}
           </span>
         </li>
         <li>
@@ -94,7 +80,7 @@ const contactCom = props => {
             手机号
           </span>
           <span className={styles.rightValue}>
-            {notLoggedIn(contactInfo.mobilePhone, 3, 4)}
+            {notLoggedIn(contactInfo.mobile, 3, 4)}
           </span>
         </li>
         <li>
@@ -103,7 +89,7 @@ const contactCom = props => {
             座机号码
           </span>
           <span className={styles.rightValue}>
-            {notLoggedIn(contactInfo.contactPhone, 5, 1)}
+            {notLoggedIn(contactInfo.telephone, 5, 1)}
           </span>
         </li>
         <li>
@@ -140,4 +126,4 @@ const contactCom = props => {
   )
 }
 
-export default contactCom
+export default ContactCom

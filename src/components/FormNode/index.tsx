@@ -1,17 +1,31 @@
-import React, { useState } from 'react'
-import { Input, Select, Checkbox, TreeSelect, Radio, InputNumber } from 'antd'
+import React, { useState, useRef, useEffect } from 'react'
+import {
+  Input,
+  Select,
+  Checkbox,
+  TreeSelect,
+  Radio,
+  InputNumber,
+  Space,
+  Upload,
+  DatePicker,
+  message
+} from 'antd'
 import FormSwitch from './FormSwitch'
 import './index.less'
 import InputConcatSelect from './InputConcatSelect'
+import { cloneDeep, isEmpty } from 'lodash'
+import OSS from '@/utils/oss'
 
 const CheckboxGroup = Checkbox.Group
 const { Option } = Select
 const { TextArea } = Input
 const { SHOW_PARENT } = TreeSelect
 const { Group } = Radio
+const { RangePicker } = DatePicker
 
 export type commonObj = { [key: string]: any }
-export type Props = {
+export type FormNodeProps = {
   /**
    * @description 类型
    */
@@ -26,6 +40,9 @@ export type Props = {
     | 'radio'
     | 'number'
     | 'inputAndSelect'
+    | 'img'
+    | 'datePicker'
+    | 'rangePicker'
   /**
    * @description 是否禁用
    */
@@ -50,10 +67,15 @@ export type Props = {
   min?: number
   width?: number | string
   keys?: string[]
+  direction?: 'horizontal' | 'vertical'
+  maxImgs?: number
+  treeCheckable?: boolean
+  tips?: string
+  maxSize?: number
   onChange?: (event: any) => void
 }
 
-const FormNode = (props: Props) => {
+const FormNode = (props: FormNodeProps) => {
   const {
     type = 'text',
     placeholder,
@@ -64,12 +86,28 @@ const FormNode = (props: Props) => {
     onChange,
     suffix,
     min,
-    keys
+    keys,
+    direction = 'horizontal',
+    treeCheckable = false,
+    maxImgs = 10,
+    maxSize = 500,
+    tips,
+    ...other
   } = props
+
+  const uploadRef = useRef<any>()
 
   const [nodeValue, setNodeValue] = useState<any>(value)
 
+  useEffect(() => {
+    if (type === 'img') {
+      // 头像上传初始化值为数组类型
+      !Array.isArray(value) && setNodeValue([])
+    }
+  }, [type, value])
+
   const valueChange = (event: any) => {
+    console.log('🚀 ~ file: index.tsx ~ line 110 ~ valueChange ~ event', event)
     let val
 
     const flag = [
@@ -80,7 +118,10 @@ const FormNode = (props: Props) => {
       'checkbox',
       'tree',
       'number',
-      'inputAndSelect'
+      'inputAndSelect',
+      'img',
+      'datePicker',
+      'rangePicker'
     ].includes(type)
     if (flag) {
       val = event
@@ -91,17 +132,90 @@ const FormNode = (props: Props) => {
     onChange && onChange(val)
   }
 
+  // upload 图片处理
+  useEffect(() => {
+    if (type !== 'img') return
+    if (uploadRef.current) {
+      console.log(uploadRef.current.upload.props.onChange)
+    }
+  }, [uploadRef])
+  const beforeUpload: any = file => {
+    return new Promise((resolve, reject) => {
+      const isJpgOrPng =
+        file.type === 'image/jpg' ||
+        file.type === 'image/png' ||
+        file.type === 'image/jpeg'
+      const isLtMaxSize = file.size / 1024 < 500
+
+      if (!isJpgOrPng) {
+        message.error('只能上传jpg/png格式文件!')
+        return reject(file)
+      } else if (!isLtMaxSize) {
+        message.error(`文件不能超过${maxSize}KB!`)
+        return reject(file)
+      } else {
+        return resolve(true)
+      }
+    })
+  }
+
+  const customRequest = async ({ file }) => {
+    const imgs = cloneDeep(nodeValue) || []
+    // /capacity-platform/platform 目标文件夹路径
+    const res = await OSS.put(
+      `/capacity-platform/platform/${file.uid}${file.name}`,
+      file
+    )
+    if (res) {
+      const { url } = res
+      imgs.push({ thumbUrl: url })
+      setNodeValue(imgs)
+      valueChange && valueChange(imgs)
+    }
+  }
+
+  const uploadButton = (
+    <div>
+      <div style={{ marginTop: 8 }}>上传</div>
+    </div>
+  )
+
+  const fileRemove = file => {
+    const arrList = cloneDeep(nodeValue) || []
+    const target = arrList.filter(item => item.thumbUrl !== file.thumbUrl)
+    setNodeValue(target)
+    onChange && onChange(target)
+  }
+
   switch (type) {
+    case 'datePicker':
+      return (
+        <DatePicker
+          onChange={valueChange}
+          value={nodeValue}
+          {...other}
+        ></DatePicker>
+      )
+    case 'rangePicker':
+      return (
+        <RangePicker
+          onChange={valueChange}
+          value={nodeValue}
+          {...other}
+        ></RangePicker>
+      )
     case 'radio':
       return (
-        <Group>
-          {options &&
-            options.length > 0 &&
-            options.map(item => (
-              <Radio value={item.value} key={item.value}>
-                {item.label}
-              </Radio>
-            ))}
+        <Group onChange={valueChange} value={nodeValue} {...other}>
+          <Space direction={direction}>
+            {options &&
+              options.length > 0 &&
+              options.map(item => (
+                <Radio value={item.value} key={item.value}>
+                  {item.label}
+                </Radio>
+              ))}
+          </Space>
         </Group>
       )
     case 'text':
@@ -113,6 +227,7 @@ const FormNode = (props: Props) => {
           disabled={disabled}
           placeholder={placeholder}
           suffix={suffix}
+          {...other}
         />
       )
     case 'select':
@@ -128,6 +243,7 @@ const FormNode = (props: Props) => {
           placeholder={placeholder}
           style={{ minWidth: 80 }}
           {...rest}
+          {...other}
         >
           {options &&
             options.length &&
@@ -144,6 +260,7 @@ const FormNode = (props: Props) => {
           onChange={valueChange}
           value={nodeValue}
           options={options}
+          {...other}
         />
       )
     case 'tree':
@@ -151,24 +268,33 @@ const FormNode = (props: Props) => {
         <TreeSelect
           onChange={valueChange}
           value={nodeValue}
-          style={{ width: '100%' }}
+          style={{ width: '100%', minWidth: 100 }}
           allowClear
           treeData={treeData}
-          treeCheckable
+          treeCheckable={treeCheckable}
           showCheckedStrategy={SHOW_PARENT}
           placeholder={placeholder}
+          {...other}
         />
       )
     case 'textarea':
-      return <TextArea onChange={valueChange} value={nodeValue} />
+      return (
+        <TextArea
+          placeholder={placeholder}
+          onChange={valueChange}
+          value={nodeValue}
+          {...other}
+        />
+      )
     case 'switch':
-      return <FormSwitch onChange={valueChange} value={nodeValue} />
+      return <FormSwitch onChange={valueChange} value={nodeValue} {...other} />
     case 'number':
       return (
         <InputNumber
           min={+min}
           onChange={valueChange}
           value={nodeValue}
+          {...other}
         ></InputNumber>
       )
     case 'inputAndSelect':
@@ -178,7 +304,25 @@ const FormNode = (props: Props) => {
           onChange={valueChange}
           value={nodeValue}
           options={options}
+          {...other}
         />
+      )
+    case 'img':
+      return (
+        <Upload
+          ref={uploadRef}
+          fileList={nodeValue}
+          listType="picture-card"
+          accept={'.jpg,.png,.jpeg'}
+          name="file"
+          maxCount={maxImgs}
+          beforeUpload={beforeUpload}
+          customRequest={customRequest}
+          onRemove={fileRemove}
+          {...other}
+        >
+          {isEmpty(nodeValue) ? uploadButton : null}
+        </Upload>
       )
   }
 }

@@ -1,0 +1,102 @@
+.header {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: 100%;
+  height: 158px;
+  padding: 35px 30px 35px 40px;
+  background: #ffffff;
+}
+
+.headerLeft {
+  display: flex;
+}
+
+.avatar {
+  display: block;
+  box-sizing: border-box;
+  width: 90px;
+  height: 90px;
+  margin-right: 24px;
+  border: 1px solid #cccccc;
+  border-radius: 50%;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  justify-content: space-between;
+}
+
+.name {
+  color: #333333;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.companyInfo {
+  display: flex;
+  color: #333333;
+  font-size: 14px;
+}
+
+.companyInfoL {
+  padding-right: 24px;
+}
+
+.headerIcon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.headerRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.dayInfo {
+  color: #999999;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 17px;
+}
+
+.iconAndInfo {
+  display: flex;
+  align-items: baseline;
+  padding: 0 32px;
+  line-height: 22px;
+  border-right: 1px solid #e8e8e8;
+
+  &:nth-last-child(1) {
+    padding-right: 0;
+    border-right: none;
+  }
+}
+
+.iconAndInfoIcon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.iconAndInfoLabel {
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 12px;
+  color: #666666;
+  font-size: 14px;
+}
+
+.iconAndInfoCount {
+  color: #333333;
+  font-weight: 500;
+  font-size: 30px;
+}
+
+.headerRightBtm {
+  display: flex;
+}

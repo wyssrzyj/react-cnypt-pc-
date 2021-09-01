@@ -1,7 +1,7 @@
 // 发单商首页
 import { Icon } from '@/components'
 import React from 'react'
-import { Title } from '../../accountSafe'
+import { Title } from '../../controlPanel/accountSafe'
 import styles from './basic.module.less'
 
 const InfoCard = ({ data }) => {

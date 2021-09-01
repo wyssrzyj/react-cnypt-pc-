@@ -17,7 +17,6 @@ const EnterpriseHome = React.lazy(
 
 // const ControlPanel = React.lazy(() => import('@/pages/controlPanel'))
 // const GDMap = React.lazy(() => import('@/pages/homePage/GDMap'))
-// const Note = React.lazy(() => import('@/pages/note'))
 
 const RouteList = () => {
   return (
@@ -33,7 +32,6 @@ const RouteList = () => {
       <Route path="/excel" component={Excel} />
       <Route path="/control-panel" component={EnterpriseHome} />
       <Route path="*" component={NotFound} />
-      {/* <Route path="/note" component={Note} /> */}
       {/* <Route path="/GDMap" component={GDMap} /> */}
       {/* <Route path="/control-panel" component={ControlPanel} /> */}
     </Switch>

@@ -11,7 +11,7 @@ const MapSearch = React.lazy(() => import('@/pages/mapSearch/index'))
 const FactoryPage = React.lazy(() => import('@/pages/factoryPage'))
 const ErpModule = React.lazy(() => import('@/pages/erpModule'))
 const Excel = React.lazy(() => import('@/pages/homePage/excel'))
-const MiddleGround = React.lazy(() => import('@/pages/middleGround'))
+const MiddleGround = React.lazy(() => import('@/pages/middleground'))
 
 // const ControlPanel = React.lazy(() => import('@/pages/controlPanel'))
 // const GDMap = React.lazy(() => import('@/pages/homePage/GDMap'))

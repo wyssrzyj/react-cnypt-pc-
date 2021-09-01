@@ -170,6 +170,7 @@ const EnterpriseInfo = () => {
         purchaserId,
         userId,
         isInfoApproval: flag ? 1 : 0,
+        enterpriseInfoApproveId: oldData.enterpriseInfoApproveId,
         enterpriseLogoId:
           imageUrl === preImageUrl ? undefined : enterpriseLogoId
       }

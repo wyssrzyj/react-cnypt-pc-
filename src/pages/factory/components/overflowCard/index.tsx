@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react'
-// import { useHistory } from 'react-router'
 import { toJS } from 'mobx'
 import { Tag } from 'antd'
 import { isArray, findIndex } from 'lodash'
@@ -12,12 +11,12 @@ import SwiperCore, {
   A11y,
   Autoplay
 } from 'swiper'
-
 import Swiper from 'swiper'
-// import { transformProduceNumber } from '@/utils/tool'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
+// import { useHistory } from 'react-router'
+// import { transformProduceNumber } from '@/utils/tool'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 

@@ -58,6 +58,10 @@ const FactoryDetail = props => {
           {
             value: 'info',
             label: '企业信息'
+          },
+          {
+            value: 'contact',
+            label: '联系方式'
           }
         ])
         setActiveTab('info')

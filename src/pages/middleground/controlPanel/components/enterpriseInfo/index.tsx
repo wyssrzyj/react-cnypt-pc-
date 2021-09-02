@@ -25,7 +25,7 @@ import BusinessAddressCom from '../businessAddressCom'
 import Title from '../title'
 import styles from './index.module.less'
 import { cloneDeep } from 'lodash'
-// import './style.less'
+import { dealRefresh } from '@/utils/axios/filterNull'
 
 const { TextArea } = Input
 
@@ -176,16 +176,19 @@ const EnterpriseInfo = () => {
       }
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
-        .then(response => {
+        .then(async response => {
           const { success, msg, data = {} } = response
           if (success) {
             // message.success('请完善企业证件认证，平台将在1~3个工作日与您取得联系，请注意接听来电。')
             message.success(msg)
             userInfo() //更新企业名称、企业id
             localStorage.setItem('enterpriseInfo', JSON.stringify(data))
+
+            !enterpriseId && (await dealRefresh())
+
             setTimeout(() => {
               window.location.reload()
-            }, 2000)
+            }, 500)
           } else {
             message.error(msg)
           }

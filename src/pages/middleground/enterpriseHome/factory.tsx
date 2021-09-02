@@ -11,19 +11,19 @@ const FactoryHome = () => {
     {
       icon: 'jack-shoucang',
       label: '收藏数',
-      count: 6,
+      count: 0,
       field: ''
     },
     {
       icon: 'jack-fangke',
       label: '访客数',
-      count: 56,
+      count: 0,
       field: ''
     },
     {
       icon: 'jack-liulan',
       label: '浏览量',
-      count: 2160,
+      count: 0,
       field: ''
     }
   ]
@@ -33,21 +33,21 @@ const FactoryHome = () => {
       label: '待确认订单数',
       icon: 'jack-dqrdd',
       field: '',
-      count: 10000,
+      count: 0,
       color: '#FFE9ED'
     },
     {
       label: '待绑定订单数',
       icon: 'jack-dbddd',
       field: '',
-      count: 10000,
+      count: 0,
       color: '#E4EEFF'
     },
     {
       label: '进行中订单数',
       icon: 'jack-jxzdd',
       field: '',
-      count: 10000,
+      count: 0,
       color: '#EEE5FF'
     },
 
@@ -55,7 +55,7 @@ const FactoryHome = () => {
       label: '已完成订单数',
       icon: 'jack-ywcdd',
       field: '',
-      count: 10000,
+      count: 0,
       color: '#D7F0E2'
     }
   ]

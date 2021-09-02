@@ -81,11 +81,7 @@ const ControlPanel = () => {
   const { factoryStore, loginStore } = useStores()
   const { productCategory } = factoryStore
   const { userInfo } = loginStore
-  // const currentUser = getUserInfo() || {}
   const [currentUser, setCurrentUser] = useState<any>({})
-
-  // const [currentUser, setCurrentUser] = useState({})
-  // const { infoApprovalStatus, factoryAuditStatus } = currentUser
 
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
 
@@ -152,7 +148,7 @@ const ControlPanel = () => {
               <Link to="/control-panel/panel/enterprise">企业信息</Link>
             </Menu.Item>
             {/* infoApprovalStatus === 1 */}
-            {+currentUser.infoApprovalStatus === 1 ? (
+            {currentUser.enterpriseId ? (
               <Menu.Item
                 key="issue-bill"
                 className={styles.item}
@@ -207,11 +203,12 @@ const ControlPanel = () => {
             </div>
           </header> */}
           <Switch>
-            {/* 企业信息 */}
+            {/* 发单信息 */}
             <Route
               path="/control-panel/panel/issue-bill"
               component={IssuerEnterpriseInfo}
             />
+            {/* 企业信息 */}
             <Route
               path="/control-panel/panel/enterprise"
               component={EnterpriseInfo}

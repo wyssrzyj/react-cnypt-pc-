@@ -55,7 +55,7 @@ const Header = ({ rightConfigs }) => {
               <span>管理员</span>
             </div>
           </div>
-          <div className={styles.dayInfo}>已入驻平台 365 天</div>
+          <div className={styles.dayInfo}>已入驻平台 0 天</div>
         </div>
       </div>
       {/* 右侧 */}

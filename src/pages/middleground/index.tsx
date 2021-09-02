@@ -7,11 +7,12 @@ import { getUserInfo } from '@/utils/tool'
 
 const Factory = React.lazy(() => import('./enterpriseHome/factory'))
 const Business = React.lazy(() => import('./enterpriseHome/business'))
+const PutManage = React.lazy(() => import('./putManage'))
+const ReceiveManage = React.lazy(() => import('./receiveManage'))
 
 const LOGO =
   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
 
-const paths = ['/control-panel/home']
 const routeMap = new Map()
 routeMap.set(0, Factory)
 routeMap.set(1, Business)
@@ -21,7 +22,6 @@ const ControlPanel = React.lazy(() => import('./controlPanel'))
 const EnterpriseHome = () => {
   const location = useLocation()
   const history = useHistory()
-  const flag = paths.includes(location.pathname)
   const [userInfo, setUserInfo] = useState({ enterpriseType: null })
 
   useEffect(() => {
@@ -33,7 +33,9 @@ const EnterpriseHome = () => {
 
   const toTarget = type => {
     type === 'control' && history.push('/control-panel/panel/account')
-    type !== 'control' && history.push('/control-panel/home')
+    type === 'put' && history.push('/control-panel/put-manage')
+    type === 'receive' && history.push('/control-panel/receive-manage')
+    type === 'home' && history.push('/control-panel/home')
   }
 
   return (
@@ -46,9 +48,11 @@ const EnterpriseHome = () => {
               <div
                 className={classNames(
                   styles.navItem,
-                  flag ? styles.activeNavItem : ''
+                  location.pathname === '/control-panel/home'
+                    ? styles.activeNavItem
+                    : ''
                 )}
-                onClick={toTarget}
+                onClick={() => toTarget('home')}
               >
                 首页
               </div>
@@ -57,7 +61,33 @@ const EnterpriseHome = () => {
             <div
               className={classNames(
                 styles.navItem,
-                !flag ? styles.activeNavItem : ''
+                location.pathname === '/control-panel/put-manage'
+                  ? styles.activeNavItem
+                  : ''
+              )}
+              onClick={() => toTarget('put')}
+            >
+              接单管理
+            </div>
+
+            <div
+              className={classNames(
+                styles.navItem,
+                location.pathname === '/control-panel/receive-manage'
+                  ? styles.activeNavItem
+                  : ''
+              )}
+              onClick={() => toTarget('receive')}
+            >
+              发单管理
+            </div>
+
+            <div
+              className={classNames(
+                styles.navItem,
+                location.pathname.includes('/control-panel/panel')
+                  ? styles.activeNavItem
+                  : ''
               )}
               onClick={() => toTarget('control')}
             >
@@ -70,6 +100,11 @@ const EnterpriseHome = () => {
       <div className={styles.content}>
         <Switch>
           <Route path="/control-panel/panel" component={ControlPanel} />
+          <Route path="/control-panel/put-manage" component={PutManage} />
+          <Route
+            path="/control-panel/receive-manage"
+            component={ReceiveManage}
+          />
           <Route
             path="/control-panel/home"
             component={routeMap.get(+userInfo.enterpriseType)}

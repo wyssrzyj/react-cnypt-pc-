@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styles from './index.module.less'
-import { Tabs } from 'antd'
+import { Tabs, Button } from 'antd'
 import { useHistory, useLocation } from 'react-router'
+import { Icon } from '@/components'
 
 const { TabPane } = Tabs
 
@@ -22,7 +23,10 @@ const tabs: Array<OptionType> = [
   { label: '草稿箱', url: '', key: 'draft' }
 ]
 
+const AddIcon = <Icon type={'jack-add1'} className={styles.addIcon}></Icon>
+
 const PutManage = () => {
+  // TODO:解析url路由参数 获取key值
   const location = useLocation()
   console.log('🚀 ~ file: index.tsx ~ line 28 ~ PutManage ~ location', location)
   const history = useHistory()
@@ -36,11 +40,17 @@ const PutManage = () => {
 
   return (
     <div className={styles.container}>
-      <Tabs activeKey={activeKey} onChange={tabChange}>
-        {tabs.map((item: OptionType) => (
-          <TabPane tab={item.label} key={item.key} />
-        ))}
-      </Tabs>
+      <div className={styles.tabBar}>
+        <Tabs size={'large'} activeKey={activeKey} onChange={tabChange}>
+          {tabs.map((item: OptionType) => (
+            <TabPane tab={item.label} key={item.key} />
+          ))}
+        </Tabs>
+
+        <Button icon={AddIcon} className={styles.addOrderBtn}>
+          新增订单
+        </Button>
+      </div>
     </div>
   )
 }

@@ -18,6 +18,10 @@ const consoleOptions = [
     title: '企业管理',
     children: [
       {
+        title: '首页',
+        url: '/control-panel/home'
+      },
+      {
         title: '企业信息',
         url: '/control-panel/panel/enterprise'
       },

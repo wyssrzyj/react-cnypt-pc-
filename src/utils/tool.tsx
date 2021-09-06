@@ -246,3 +246,18 @@ export const getProductClassMap = () => {
 export const isAdd = value => {
   return isEmpty(value) || isNil(value) ? true : false
 }
+
+/**
+ * 获取url携带的参数信息
+ * @param {string} url
+ * @returns {Object}
+ */
+export function urlGet() {
+  var parts = window.location.search.substr(1).split('&')
+  var params = {}
+  for (var i = 0; i < parts.length; i++) {
+    var temp = parts[i].split('=')
+    params[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1])
+  }
+  return params
+}

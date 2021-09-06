@@ -193,6 +193,7 @@ const FormNode = (props: FormNodeProps) => {
         <DatePicker
           onChange={valueChange}
           value={nodeValue}
+          style={{ width: '100%' }}
           {...other}
         ></DatePicker>
       )
@@ -294,6 +295,7 @@ const FormNode = (props: FormNodeProps) => {
           min={+min}
           onChange={valueChange}
           value={nodeValue}
+          style={{ width: '100%' }}
           {...other}
         ></InputNumber>
       )

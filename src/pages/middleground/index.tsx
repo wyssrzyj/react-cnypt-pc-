@@ -9,6 +9,8 @@ const Factory = React.lazy(() => import('./enterpriseHome/factory'))
 const Business = React.lazy(() => import('./enterpriseHome/business'))
 const PutManage = React.lazy(() => import('./putManage'))
 const ReceiveManage = React.lazy(() => import('./receiveManage'))
+const OrderPage = React.lazy(() => import('./orderPage'))
+const ProductPage = React.lazy(() => import('./productPage'))
 
 const LOGO =
   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
@@ -25,6 +27,7 @@ const EnterpriseHome = () => {
   const [userInfo, setUserInfo] = useState({ enterpriseType: null })
 
   useEffect(() => {
+    console.log(location, 'location')
     setTimeout(() => {
       const info = getUserInfo()
       setUserInfo(info)
@@ -61,11 +64,11 @@ const EnterpriseHome = () => {
             <div
               className={classNames(
                 styles.navItem,
-                location.pathname === '/control-panel/put-manage'
+                location.pathname === '/control-panel/receive-manage'
                   ? styles.activeNavItem
                   : ''
               )}
-              onClick={() => toTarget('put')}
+              onClick={() => toTarget('receive')}
             >
               接单管理
             </div>
@@ -73,11 +76,12 @@ const EnterpriseHome = () => {
             <div
               className={classNames(
                 styles.navItem,
-                location.pathname === '/control-panel/receive-manage'
+                location.pathname === '/control-panel/put-manage' ||
+                  location.pathname.includes('/control-panel/order')
                   ? styles.activeNavItem
                   : ''
               )}
-              onClick={() => toTarget('receive')}
+              onClick={() => toTarget('put')}
             >
               发单管理
             </div>
@@ -109,6 +113,8 @@ const EnterpriseHome = () => {
             path="/control-panel/home"
             component={routeMap.get(+userInfo.enterpriseType)}
           />
+          <Route path="/control-panel/order/:type" component={OrderPage} />
+          <Route path="/control-panel/product/:type" component={ProductPage} />
         </Switch>
       </div>
     </div>

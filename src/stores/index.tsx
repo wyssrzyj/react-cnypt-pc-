@@ -7,6 +7,7 @@ import { commonStore } from './common'
 import { controlPanelStore } from './controlPanel'
 import { factoryDetailStore } from './factoryDetail'
 import { erpModuleStore } from './erpModule'
+import { orderStore } from './middleground/order'
 
 export const stores = {
   ...initHomeStore,
@@ -17,5 +18,6 @@ export const stores = {
   commonStore,
   controlPanelStore,
   factoryDetailStore,
-  erpModuleStore
+  erpModuleStore,
+  orderStore
 }

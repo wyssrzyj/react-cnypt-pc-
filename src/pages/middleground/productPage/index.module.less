@@ -1,4 +1,4 @@
-.orderPage {
+.productPage {
   padding-top: 30px;
 
   :global {
@@ -32,7 +32,7 @@
   font-size: 16px;
 }
 
-.orderSection {
+.productSection {
   margin-top: 20px;
   padding: 30px 30px 0px 30px;
   background: #ffffff;
@@ -41,59 +41,6 @@
 .row {
   display: flex;
   flex-wrap: wrap;
-}
-
-.goodsSection {
-  margin-top: 20px;
-  padding: 30px;
-  background: #ffffff;
-}
-
-.goodsBtns {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.goodsBtn {
-  color: #3b80ff;
-  cursor: pointer;
-
-  &:nth-child(1) {
-    padding-right: 8px;
-  }
-  &:nth-last-child(1) {
-    padding-left: 8px;
-  }
-  &:hover {
-    opacity: 0.8;
-  }
-}
-
-.goodsAddBtn {
-  color: #3b80ff;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-}
-
-.line {
-  width: 1px;
-  height: 14px;
-  background: #3b80ff;
-}
-
-.tableFooter {
-  color: #999999;
-  text-align: right;
-}
-
-.tableFooterCount {
-  color: #333333;
-  font-weight: bold;
 }
 
 .submitBtns {
@@ -113,4 +60,68 @@
 .submitBtn {
   width: 120px;
   height: 40px;
+}
+
+.tableTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tableIcon {
+  padding-left: 8px;
+  color: #498afe;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.delIcon {
+  color: #498afe;
+  font-size: 16px;
+}
+
+.tableModalBtn {
+  width: 120px;
+  height: 40px;
+
+  &:nth-child(1) {
+    margin-right: 20px;
+  }
+}
+
+.productModalContent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  .label {
+    min-width: 64px;
+  }
+}
+
+.productModalBtns {
+  margin: 0 auto;
+  padding-top: 32px;
+  text-align: center;
+}
+
+.saveBtn {
+  display: block;
+  margin: 32px auto;
+}
+
+.requiredTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    display: inline-block;
+    margin-right: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+    content: '*';
+  }
 }

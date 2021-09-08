@@ -15,9 +15,10 @@ hosts.set('test', 'http://8.136.225.110:8888/')
 hosts.set('production', 'http://47.97.217.13:8888/')
 
 module.exports = {
-  entry: {
-    main: path.resolve(__dirname, '../src/index.tsx')
-  },
+  entry: ['@babel/polyfill', path.resolve(__dirname, '../src/index.tsx')],
+  // entry: {
+  //   main: path.resolve(__dirname, '../src/index.tsx')
+  // },
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'js/[name].[chunkhash:6].bundle.js',

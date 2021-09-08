@@ -9,13 +9,15 @@ import {
   Space,
   Upload,
   DatePicker,
-  message
+  message,
+  Button
 } from 'antd'
 import FormSwitch from './FormSwitch'
 import './index.less'
 import InputConcatSelect from './InputConcatSelect'
 import { cloneDeep, isEmpty } from 'lodash'
 import OSS from '@/utils/oss'
+import { Icon } from '..'
 
 const CheckboxGroup = Checkbox.Group
 const { Option } = Select
@@ -40,9 +42,10 @@ export type FormNodeProps = {
     | 'radio'
     | 'number'
     | 'inputAndSelect'
-    | 'img'
+    | 'img' // 图片上传
     | 'datePicker'
     | 'rangePicker'
+    | 'annex' // 附件上传
   /**
    * @description 是否禁用
    */
@@ -72,6 +75,8 @@ export type FormNodeProps = {
   treeCheckable?: boolean
   tips?: string
   maxSize?: number
+  accept?: string
+  rows?: number
   onChange?: (event: any) => void
 }
 
@@ -92,6 +97,8 @@ const FormNode = (props: FormNodeProps) => {
     maxImgs = 10,
     maxSize = 500,
     tips,
+    accept,
+    rows = 4,
     ...other
   } = props
 
@@ -100,14 +107,13 @@ const FormNode = (props: FormNodeProps) => {
   const [nodeValue, setNodeValue] = useState<any>(value)
 
   useEffect(() => {
-    if (type === 'img') {
+    if (['img', 'annex'].includes(type)) {
       // 头像上传初始化值为数组类型
       !Array.isArray(value) && setNodeValue([])
     }
   }, [type, value])
 
   const valueChange = (event: any) => {
-    console.log('🚀 ~ file: index.tsx ~ line 110 ~ valueChange ~ event', event)
     let val
 
     const flag = [
@@ -120,6 +126,7 @@ const FormNode = (props: FormNodeProps) => {
       'number',
       'inputAndSelect',
       'img',
+      'annex',
       'datePicker',
       'rangePicker'
     ].includes(type)
@@ -139,36 +146,51 @@ const FormNode = (props: FormNodeProps) => {
       console.log(uploadRef.current.upload.props.onChange)
     }
   }, [uploadRef])
+
   const beforeUpload: any = file => {
+    // 类型由外部传入  待修改
     return new Promise((resolve, reject) => {
       const isJpgOrPng =
         file.type === 'image/jpg' ||
         file.type === 'image/png' ||
         file.type === 'image/jpeg'
-      const isLtMaxSize = file.size / 1024 < 500
 
-      if (!isJpgOrPng) {
+      const imgIsLtMaxSize = file.size / 1024 < maxSize
+      const fileIsLtMaxSize = file.size / 1024 / 1024 < maxSize
+      console.log(
+        '🚀 ~ file: index.tsx ~ line 158 ~ returnnewPromise ~ fileIsLtMaxSize',
+        fileIsLtMaxSize
+      )
+
+      if (type === 'img' && !isJpgOrPng) {
         message.error('只能上传jpg/png格式文件!')
         return reject(file)
-      } else if (!isLtMaxSize) {
+      }
+
+      if (type === 'img' && !imgIsLtMaxSize) {
         message.error(`文件不能超过${maxSize}KB!`)
         return reject(file)
-      } else {
-        return resolve(true)
       }
+
+      if (type === 'annex' && !fileIsLtMaxSize) {
+        message.error(`文件不能超过${maxSize}MB!`)
+        return reject(file)
+      }
+
+      return resolve(true)
     })
   }
 
   const customRequest = async ({ file }) => {
     const imgs = cloneDeep(nodeValue) || []
-    // /capacity-platform/platform 目标文件夹路径
+    // /capacity-platform/platform 目标文件夹路径 __ 分割符号
     const res = await OSS.put(
-      `/capacity-platform/platform/${file.uid}${file.name}`,
+      `/capacity-platform/platform/${file.uid}__${file.name}`,
       file
     )
     if (res) {
-      const { url } = res
-      imgs.push({ thumbUrl: url })
+      const { url, name } = res
+      imgs.push({ thumbUrl: url, name: name.split('__')[1] })
       setNodeValue(imgs)
       valueChange && valueChange(imgs)
     }
@@ -284,6 +306,7 @@ const FormNode = (props: FormNodeProps) => {
           placeholder={placeholder}
           onChange={valueChange}
           value={nodeValue}
+          rows={rows}
           {...other}
         />
       )
@@ -311,20 +334,57 @@ const FormNode = (props: FormNodeProps) => {
       )
     case 'img':
       return (
-        <Upload
-          ref={uploadRef}
-          fileList={nodeValue}
-          listType="picture-card"
-          accept={'.jpg,.png,.jpeg'}
-          name="file"
-          maxCount={maxImgs}
-          beforeUpload={beforeUpload}
-          customRequest={customRequest}
-          onRemove={fileRemove}
-          {...other}
-        >
-          {isEmpty(nodeValue) ? uploadButton : null}
-        </Upload>
+        <div>
+          <Upload
+            ref={uploadRef}
+            fileList={nodeValue}
+            listType="picture-card"
+            accept={accept}
+            name="file"
+            maxCount={maxImgs}
+            beforeUpload={beforeUpload}
+            customRequest={customRequest}
+            onRemove={fileRemove}
+            {...other}
+          >
+            {isEmpty(nodeValue) || nodeValue.length < maxImgs
+              ? uploadButton
+              : null}
+          </Upload>
+          {tips ? (
+            <div className={'uploadTipsBox'}>
+              <Icon type={'jack-jingshi1'}></Icon>
+              <span>&nbsp;{tips}</span>
+            </div>
+          ) : null}
+        </div>
+      )
+    case 'annex': // 附件
+      return (
+        <div>
+          <Upload
+            ref={uploadRef}
+            fileList={nodeValue}
+            accept={accept}
+            name="file"
+            maxCount={maxImgs}
+            beforeUpload={beforeUpload}
+            customRequest={customRequest}
+            onRemove={fileRemove}
+            {...other}
+          >
+            <Button icon={<Icon type={'jack-upload-2-fill'}></Icon>}>
+              上传文件
+            </Button>
+          </Upload>
+
+          {tips ? (
+            <div className={'uploadTipsBox'}>
+              <Icon type={'jack-jingshi1'}></Icon>
+              <span>&nbsp;{tips}</span>
+            </div>
+          ) : null}
+        </div>
       )
   }
 }

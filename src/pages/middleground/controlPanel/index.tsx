@@ -137,7 +137,7 @@ const ControlPanel = () => {
               key="account"
               icon={<Icon className={styles.menuIcon} type={'jack-zhaq'} />}
             >
-              <Link to="/control-panel/panel/account">账号安全</Link>
+              {/* <Link to="/control-panel/panel/account">账号安全</Link> */}
             </Menu.Item>
 
             <Menu.Item

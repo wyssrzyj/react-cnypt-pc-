@@ -80,7 +80,7 @@ const EnterpriseHome = () => {
 
       <div className={styles.content}>
         <Switch>
-          <Route path="/control-panel/Issueabill/:id" component={Issueabill} />
+          <Route path="/control-panel/Issueabill" component={Issueabill} />
           <Route path="/control-panel/panel" component={ControlPanel} />
           <Route
             path="/control-panel/home"

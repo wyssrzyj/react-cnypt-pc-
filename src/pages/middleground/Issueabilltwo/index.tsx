@@ -1,63 +1,74 @@
 import React, { useState } from 'react'
-import { Button, Menu, Form, Input, Row, Col, Pagination } from 'antd'
+import { Button, Form, Input, Row, Col, Pagination, Tabs } from 'antd'
 import styles from './todo.module.less'
 import { PlusCircleTwoTone } from '_@ant-design_icons@4.6.4@@ant-design/icons'
-import { useHistory, useLocation } from 'react-router'
-import Component from './components'
+import Product from './Allorders/Product'
 
 // 配置路由
 
 const Issueabill = () => {
   const [sum, setSum] = useState(false)
-  const { push } = useHistory()
+  const [keyt, setKeyt] = useState(0)
 
-  const Menus = [
-    { name: '全部订单', id: 1 },
-    { name: '待确认', id: 2 },
-    { name: '进行中', id: 3 },
-    { name: '待验收', id: 4 },
-    { name: '已完成', id: 5 },
-    { name: '退回', id: 6 },
-    { name: '取消', id: 7 }
-  ]
   const [form] = Form.useForm()
-  const location = useLocation()
-  console.log(
-    '🚀 ~ file: index.tsx ~ line 27 ~ Issueabill ~ location',
-    location
+  // const location = useLocation()
+  // console.log(
+  //   '🚀 ~ file: index.tsx ~ line 27 ~ Issueabill ~ location',
+  //   location
+  // )
+  // const history = useHistory()
+  // console.log('🚀 ~ file: index.tsx ~ line 29 ~ Issueabill ~ history', history)
+  const { TabPane } = Tabs
+  const operations = (
+    <Button className={styles.newly} icon={<PlusCircleTwoTone />}>
+      新增按钮
+    </Button>
   )
-  const history = useHistory()
-  console.log('🚀 ~ file: index.tsx ~ line 29 ~ Issueabill ~ history', history)
+  // 判断按钮显示是否是在草稿箱
+  const onTabClick = key => {
+    console.log(key)
+    if (key == 8) {
+      setKeyt(key)
+    } else {
+      setKeyt(0)
+    }
+  }
 
   return (
     <div className={styles.Issuebill}>
-      <Menu
-        defaultOpenKeys={['1']}
-        className={styles.menyTop}
-        onClick={({ key }) => {
-          push({
-            pathname: key
-          })
-        }}
-        // selectedKeys={[current]}
-        mode="horizontal"
-      >
-        {Menus.map(item => {
-          return (
-            <Menu.Item className={styles.meny} key={item.id}>
-              {item.name}
-            </Menu.Item>
-          )
-        })}
-
-        <Menu.Item className={styles.drafts} key="7">
-          草稿箱
-        </Menu.Item>
-        <Button className={styles.newly} icon={<PlusCircleTwoTone />}>
-          新增按钮
-        </Button>
-      </Menu>
-
+      <div className={styles.tutu}>
+        <Tabs
+          tabPosition="top"
+          tabBarGutter={80}
+          tabBarExtraContent={operations}
+          onTabClick={onTabClick}
+        >
+          <TabPane tab="全部订单" key="1">
+            Content of tab 1
+          </TabPane>
+          <TabPane tab="待确认" key="2">
+            Content of tab 2
+          </TabPane>
+          <TabPane tab="进行中" key="3">
+            Content of tab 3进行中
+          </TabPane>
+          <TabPane tab="待验收" key="4">
+            Content of tab 3待验收
+          </TabPane>
+          <TabPane tab="已完成" key="5">
+            Content of tab 3已完成
+          </TabPane>
+          <TabPane tab="退回" key="6">
+            Content of tab 3退回
+          </TabPane>
+          <TabPane tab="取消" key="7">
+            Content of tab 3取消
+          </TabPane>
+          <TabPane tab="草稿箱" key="8">
+            Content of tab 3草稿箱
+          </TabPane>
+        </Tabs>
+      </div>
       <Form
         form={form}
         className={styles.form}
@@ -146,9 +157,7 @@ const Issueabill = () => {
         </Row>
       </div>
       {/* 全部订单 */}
-      <div>
-        <Component />
-      </div>
+      <Product keyt={keyt} />
 
       <Pagination className={styles.paging} defaultCurrent={1} total={50} />
     </div>

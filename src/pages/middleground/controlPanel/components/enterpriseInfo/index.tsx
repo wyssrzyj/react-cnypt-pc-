@@ -365,7 +365,7 @@ const EnterpriseInfo = () => {
             <Radio.Group>
               <Space direction="vertical">
                 <Radio value="0">
-                  <span>加工厂</span>{' '}
+                  <span>加工厂</span>
                   <span className={styles.radioTip}>
                     （加工厂拥有接单的权限）
                   </span>

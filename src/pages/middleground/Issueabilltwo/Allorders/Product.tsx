@@ -8,8 +8,9 @@ import {
   LikeFilled,
   PauseCircleOutlined,
   SwitcherFilled
-} from '_@ant-design_icons@4.6.4@@ant-design/icons'
-import { value } from '_dom7@3.0.0@dom7'
+} from '@ant-design/icons'
+
+// <Icon type="jack-daoru" className={styles.icon} />
 
 const { confirm } = Modal //弹窗
 function showConfirm() {
@@ -150,7 +151,7 @@ const Product = props => {
   const handleCancel = () => {
     setIsModalVisible(false)
   }
-  const plainOptions = ['Apple']
+  // const plainOptions = ['Apple']
   const [indeterminate, setIndeterminate] = React.useState(true) //中心点的状态全选之后为false
   const [checkAll, setCheckAll] = React.useState(false) //用来判断全选的状态
 
@@ -266,13 +267,7 @@ const Product = props => {
                           >
                             退回订单
                           </p>
-                          <p
-                            onClick={() => {
-                              reason()
-                            }}
-                          >
-                            查看原因
-                          </p>
+                          <p onClick={reason}>查看原因</p>
                         </div>
                       ) : null}
                       {data.StatusDataJudgment == 5 ? (

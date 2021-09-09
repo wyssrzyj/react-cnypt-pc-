@@ -5,6 +5,9 @@ import styles from './index.module.less'
 import { Form, Col, Row, Table, Button } from 'antd'
 import FormNode from '@/components/FormNode'
 import { useHistory } from 'react-router'
+import { observer, toJS, useStores } from '@/utils/mobx'
+import { cloneDeep, isEmpty, debounce } from 'lodash'
+import moment from 'moment'
 
 const FormItem = Form.Item
 
@@ -12,22 +15,24 @@ const keys = [
   'type',
   'options',
   'keys',
-  'maxImgs',
-  'maxSize',
-  'tips',
   'placeholder',
   'disabled',
   'max',
-  'min'
+  'min',
+  'showSearch',
+  'onSearch',
+  'filterOption',
+  'allowClear'
 ]
 
 const Footer = ({ data }) => {
-  const { count } = data
+  const { totalPrice } = data
+
   return (
     <div className={styles.tableFooter}>
       合计总价&nbsp;&nbsp;
-      {count >= 0 ? (
-        <span className={styles.tableFooterCount}>{count}&nbsp;元</span>
+      {totalPrice >= 0 ? (
+        <span className={styles.tableFooterCount}>{totalPrice}&nbsp;元</span>
       ) : null}
     </div>
   )
@@ -36,13 +41,26 @@ const Footer = ({ data }) => {
 const OrderPage = props => {
   const { title = '新增订单' } = props
   const [form] = Form.useForm()
+  const { validateFields } = form
+
   const history = useHistory()
-
-  const [showInvoiceCount, setShowInvoiceCount] = useState(false)
-
-  useEffect(() => {
-    // 编辑 查看时 需要初始化 showInvoiceCount
-  }, [])
+  const { orderStore, factoryStore, commonStore } = useStores()
+  const {
+    productInfo,
+    resetProductInfo,
+    orderInfo,
+    setOrderInfo,
+    getSearchEnterprises,
+    saveOrder
+  } = orderStore
+  const { getProductCategoryName } = factoryStore
+  const { dictionary } = commonStore
+  const {
+    paymentType = [],
+    deliveryType = [],
+    salesMarket = [],
+    orderProcessType = []
+  } = toJS(dictionary)
 
   const orderConfigs = [
     {
@@ -59,12 +77,9 @@ const OrderPage = props => {
       message: '请选择付款方式',
       placeholder: '请选择付款方式',
       type: 'select',
-      field: 'payWay',
+      field: 'payType',
       span: 12,
-      options: [
-        { label: '现金', value: 1 },
-        { label: '支付宝', value: 2 }
-      ]
+      options: paymentType
     },
     {
       label: '交货方式',
@@ -74,10 +89,7 @@ const OrderPage = props => {
       type: 'select',
       field: 'deliveryType',
       span: 12,
-      options: [
-        { label: '自取', value: 1 },
-        { label: '快递', value: 2 }
-      ]
+      options: deliveryType
     },
     {
       label: '收货地址',
@@ -93,10 +105,7 @@ const OrderPage = props => {
       type: 'select',
       field: 'salesMarketType',
       span: 12,
-      options: [
-        { label: '华东', value: 1 },
-        { label: '华南', value: 2 }
-      ]
+      options: salesMarket
     },
     {
       label: '加工类型',
@@ -106,10 +115,7 @@ const OrderPage = props => {
       type: 'select',
       field: 'processType',
       span: 12,
-      options: [
-        { label: '清加工', value: 1 },
-        { label: 'ODM', value: 2 }
-      ]
+      options: orderProcessType
     },
     {
       label: '物料到货时间',
@@ -143,6 +149,8 @@ const OrderPage = props => {
       label: '发票点数(%)',
       field: 'invoiceCount',
       placeholder: '请填写发票点数',
+      required: true,
+      message: '请填写发票点数',
       type: 'number',
       max: 100,
       min: 0,
@@ -150,15 +158,19 @@ const OrderPage = props => {
     }
   ]
 
-  const contactConfigs = [
+  const contactInitConfigs = [
     {
       label: '加工厂名称',
       required: true,
       message: '请选择加工厂',
       placeholder: '请选择加工厂',
       type: 'select',
+      showSearch: true,
       options: [],
-      field: 'supplierName',
+      field: 'supplierId',
+      allowClear: true,
+      filterOption: false,
+      onSearch: event => onSearch(event),
       span: 12
     },
     {
@@ -191,14 +203,115 @@ const OrderPage = props => {
     }
   ]
 
-  const valuesChange = values => {
+  const [showInvoiceCount, setShowInvoiceCount] = useState(false)
+  const [tableData, setTableData] = useState([{ uid: 0 }])
+  const [contactConfigs, setContactConfigs] = useState(contactInitConfigs)
+
+  useEffect(() => {
+    // 编辑 查看时 需要初始化 showInvoiceCount
+  }, [])
+
+  useEffect(() => {
+    setShowInvoiceCount(!!orderInfo.addedValueTax)
+  }, [orderInfo])
+
+  useEffect(() => {
+    onSearch('')
+  }, [])
+
+  useEffect(() => {
+    if (isEmpty(productInfo)) {
+      setTableData([{ uid: 0 }])
+    } else {
+      ;(async () => {
+        const target = cloneDeep(productInfo)
+        const data =
+          (await getProductCategoryName([productInfo.goodsCategoryId])) || []
+
+        if (Array.isArray(data) && data.length > 0) {
+          target.goodsCategory = data[0].name
+        }
+        setTableData([target])
+      })()
+    }
+  }, [])
+
+  const onSearch = debounce(async value => {
+    const target = cloneDeep(contactConfigs)
+    const data = (await getSearchEnterprises(value)) || {}
+    const { records } = data
+    if (Array.isArray(records)) {
+      records.forEach(item => {
+        item.label = item.enterpriseName
+        item.value = item.enterpriseId
+      })
+      target[0].options = records
+    }
+    setTimeout(() => {
+      setContactConfigs(target)
+    })
+  }, 200)
+
+  const valuesChange = (values, allValues) => {
     const keys = Reflect.ownKeys(values)
     if (keys.includes('addedValueTax')) {
       setShowInvoiceCount(!!values['addedValueTax'])
     }
+    if (keys.includes('supplierName')) {
+      //
+      onSearch(values['supplierName'])
+    }
+
+    setOrderInfo(allValues)
   }
 
-  const submitClick = () => {}
+  const delProduct = () => {
+    resetProductInfo()
+    setTableData([{ uid: 0 }])
+  }
+
+  const editProduct = () => {
+    history.push('/control-panel/product/edit')
+  }
+
+  const submitClick = async status => {
+    try {
+      const values = await validateFields()
+      values.status = status
+      let times = ['materialArrivalTime', 'expectDeliveryTime']
+      times.forEach(item => {
+        values[item] = moment(values[item]).valueOf()
+      })
+
+      const params = {
+        orderVO: values,
+        goodsInfoVO: toJS(productInfo)
+      }
+
+      // 处理加工厂名称
+      const targetEnterPrise =
+        contactConfigs[0].options.find(
+          item => item.value === values.supplierId
+        ) || {}
+      params.orderVO.supplierName = targetEnterPrise['label']
+      // 处理商品附件
+      params.goodsInfoVO.annex = params.goodsInfoVO.annex.map(
+        item => item.thumbUrl
+      )
+      // 处理商品款图
+      params.goodsInfoVO.stylePicture = params.goodsInfoVO.stylePicture.map(
+        item => item.thumbUrl
+      )
+      console.log(
+        '🚀 ~ file: index.tsx ~ line 275 ~ submitClick ~ params',
+        params
+      )
+      await saveOrder(params, status)
+      history.goBack()
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   const layout = {
     labelCol: {
@@ -212,45 +325,65 @@ const OrderPage = props => {
   const columns: any[] = [
     {
       title: '商品名称',
-      dataIndex: 'a',
+      dataIndex: 'name',
       align: 'center',
       render: val => (val ? val : '-')
     },
     {
       title: '商品品类',
-      dataIndex: 'b',
+      dataIndex: 'goodsCategory',
       align: 'center',
       render: val => (val ? val : '-')
     },
     {
       title: '图片',
-      dataIndex: 'c',
       align: 'center',
-      render: val => (val ? val : '-')
+      render: (_val, row) => {
+        if (Array.isArray(row.stylePicture) && row.stylePicture.length) {
+          return (
+            <img
+              src={row.stylePicture[0].thumbUrl}
+              alt=""
+              className={styles.tableImg}
+            />
+          )
+        }
+        return '-'
+      }
     },
     {
       title: 'SPU编号',
-      dataIndex: 'd',
+      dataIndex: 'spuCode',
       align: 'center',
       render: val => (val ? val : '-')
     },
     {
       title: '数量(件)',
-      dataIndex: 'e',
+      dataIndex: 'quantity',
       align: 'center',
-      render: val => (val ? val : '-')
+      render: (_val, row) => {
+        const total =
+          row.skuVOList &&
+          row.skuVOList.reduce((prev, item) => {
+            return prev + +item.quantity
+          }, 0)
+        return total ? total : '-'
+      }
     },
     {
       title: '操作',
-      dataIndex: 'f',
       align: 'center',
       render: (_val, row) => {
-        if (row.id > 0) {
+        if (row.uid) {
           return (
             <div className={styles.goodsBtns}>
-              <span className={styles.goodsBtn}>删除</span>
+              <span className={styles.goodsBtn} onClick={delProduct}>
+                删除
+              </span>
               <div className={styles.line}></div>
-              <span className={styles.goodsBtn}>修改</span>
+              <span className={styles.goodsBtn} onClick={editProduct}>
+                修改
+              </span>
             </div>
           )
         }
@@ -264,8 +397,6 @@ const OrderPage = props => {
       }
     }
   ]
-
-  const dataSource = [{ id: -1 }]
 
   const toAddProduct = () => {
     history.push('/control-panel/product/add')
@@ -283,7 +414,7 @@ const OrderPage = props => {
         colon={false}
         onValuesChange={valuesChange}
         scrollToFirstError={true}
-        onFinish={submitClick}
+        onFinish={() => submitClick(1)}
       >
         <div className={styles.header}>
           <Icon
@@ -307,12 +438,22 @@ const OrderPage = props => {
               if (item.field === 'invoiceCount' && !showInvoiceCount) {
                 return null
               }
+              let initialValue = orderInfo[item.field]
+              if (
+                ['materialArrivalTime', 'expectDeliveryTime'].includes(
+                  item.field
+                )
+              ) {
+                initialValue = moment(initialValue)
+              }
+
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem
                     name={item.field}
                     label={item.label}
                     rules={[{ required: item.required, message: item.message }]}
+                    initialValue={orderInfo[item.field]}
                     {...layout}
                   >
                     <FormNode {...data}></FormNode>
@@ -326,11 +467,11 @@ const OrderPage = props => {
         <section className={styles.goodsSection}>
           <Title title={'商品信息'}></Title>
           <Table
-            footer={() => <Footer data={dataSource[0]}></Footer>}
+            footer={() => <Footer data={tableData[0]}></Footer>}
             columns={columns}
-            dataSource={dataSource}
+            dataSource={tableData}
             pagination={false}
-            rowKey={'id'}
+            rowKey={'uid'}
           />
         </section>
 
@@ -351,6 +492,7 @@ const OrderPage = props => {
                     name={item.field}
                     label={item.label}
                     rules={[{ required: item.required, message: item.message }]}
+                    initialValue={orderInfo[item.field]}
                     {...layout}
                   >
                     <FormNode {...data}></FormNode>
@@ -362,10 +504,19 @@ const OrderPage = props => {
         </section>
 
         <div className={styles.submitBtns}>
-          <Button type={'primary'} ghost className={styles.saveBtn}>
+          <Button
+            type={'primary'}
+            ghost
+            className={styles.saveBtn}
+            onClick={() => submitClick(-1)}
+          >
             保存
           </Button>
-          <Button type={'primary'} className={styles.submitBtn}>
+          <Button
+            type={'primary'}
+            className={styles.submitBtn}
+            htmlType={'submit'}
+          >
             提交订单
           </Button>
         </div>
@@ -374,4 +525,4 @@ const OrderPage = props => {
   )
 }
 
-export default OrderPage
+export default observer(OrderPage)

@@ -1,5 +1,6 @@
 import { useRef, useEffect, useCallback, useState } from 'react'
 import { isEmpty, isNil, isArray } from 'lodash'
+import { v4 as uuidv4 } from 'uuid'
 
 export const getToken = () => {
   return localStorage.getItem('token')
@@ -260,4 +261,8 @@ export function urlGet() {
     params[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1])
   }
   return params
+}
+
+export const getUId = () => {
+  return uuidv4().split('-')[0]
 }

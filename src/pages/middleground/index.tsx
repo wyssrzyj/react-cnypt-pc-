@@ -76,8 +76,7 @@ const EnterpriseHome = () => {
             <div
               className={classNames(
                 styles.navItem,
-                location.pathname === '/control-panel/put-manage' ||
-                  location.pathname.includes('/control-panel/order')
+                location.pathname === '/control-panel/put-manage'
                   ? styles.activeNavItem
                   : ''
               )}

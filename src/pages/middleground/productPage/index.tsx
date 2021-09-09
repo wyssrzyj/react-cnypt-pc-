@@ -1,174 +1,104 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Icon } from '@/components'
 import Title from '../controlPanel/components/title'
-import { Form, Col, Row, Table, Input, Modal, Button } from 'antd'
+import { Form, Col, Row, Table, Input, Button, Select } from 'antd'
 import FormNode from '@/components/FormNode'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import styles from './index.module.less'
 import { cloneDeep } from 'lodash'
-import { useStores, observer } from '@/utils/mobx'
+import { useStores, observer, toJS } from '@/utils/mobx'
+import ProductModal from './productModal'
+import { getUId } from '@/utils/tool'
+import {
+  keys,
+  layout,
+  layout2,
+  Material,
+  otherConfigs,
+  Product,
+  productConfigs,
+  RequiredTitle,
+  TabelTitle
+} from './configs'
 
 const FormItem = Form.Item
-const { TextArea } = Input
+const { Option } = Select
 
-const keys = [
-  'type',
-  'options',
-  'keys',
-  'maxImgs',
-  'maxSize',
-  'tips',
-  'placeholder',
-  'disabled',
-  'max',
-  'min'
-]
+const pageTitleMap = new Map()
+pageTitleMap.set('add', '新增商品')
+pageTitleMap.set('edit', '编辑商品')
+pageTitleMap.set('detail', '商品详情')
 
-const TabelTitle = props => {
-  const { title, callback } = props
-  const addClick = () => {
-    callback && callback()
-  }
-
-  return (
-    <div className={styles.tableTitle}>
-      {title ? title : null}
-      <Icon
-        type={'jack-del'}
-        onClick={addClick}
-        className={styles.tableIcon}
-      ></Icon>
-    </div>
-  )
-}
-
-const RequiredTitle = props => {
-  const { title } = props
-
-  return <div className={styles.requiredTitle}>{title}</div>
-}
-
-const productModalTexts = new Map()
-productModalTexts.set('color', { title: '添加颜色', label: '颜色' })
-productModalTexts.set('size', { title: '添加尺寸', label: '尺寸' })
-
-const ProductPage = props => {
-  const { title = '新增商品' } = props
+const ProductPage = () => {
   const [form] = Form.useForm()
   const history = useHistory()
+  const location = useLocation()
 
-  const { orderStore } = useStores()
-  const { productInfo } = orderStore
+  const { orderStore, commonStore, factoryStore } = useStores()
+  const { setProductInfo, productInfo } = orderStore
+  const { dictionary } = commonStore
+  const { productCategory, productCategoryList } = factoryStore
 
-  const [productData, setProductData] = useState([])
+  const {
+    supplyType = [],
+    procedureType = [],
+    materialType = []
+  } = toJS(dictionary)
+
+  const [pageType, setPageType] = useState<string>('add')
+  const [productData, setProductData] = useState<Array<Partial<Product>>>([])
   const [productModal, setProductModal] = useState(false)
   const [productModalType, setProductModalType] = useState('color')
-  const [productModalValue, setProductModalValue] = useState('')
   const [productDataError, setProductDataError] = useState(false)
+  const [productErrorMsg] = useState('请检查输入的商品规格内容， 最少一条数据')
+  const [materialData, setMaterialData] = useState<Array<Partial<Material>>>([])
+  const [count, setCount] = useState<number>(0) // 产品总数
+  const [amount, setAmount] = useState<number>(0) // 产品总价
 
-  const productConfigs = [
-    {
-      label: '商品名称',
-      required: true,
-      message: '请输入商品名称',
-      placeholder: '请输入商品名称',
-      field: 'name',
-      span: 12
-    },
-    {
-      label: '商品品类',
-      required: true,
-      message: '请选择商品品类',
-      placeholder: '请选择商品品类',
-      type: 'select',
-      options: [
-        { label: '品类一', value: 1 },
-        { label: '品类二', value: 2 }
-      ],
-      field: 'goodsCategoryId',
-      span: 12
-    },
-    {
-      label: 'SPU编码',
-      placeholder: '请输入SPU编码',
-      field: 'spuCode',
-      span: 12
-    },
-    {
-      label: '生产方式',
-      required: true,
-      message: '请选择生产方式',
-      placeholder: '请选择生产方式',
-      type: 'select',
-      options: [
-        { label: '方式一', value: 1 },
-        { label: '方式二', value: 2 }
-      ],
-      field: 'procedureType',
-      span: 12
+  useEffect(() => {
+    const type = location.pathname.replace('/control-panel/product/', '')
+    setPageType(type)
+    if (type !== 'add') {
+      setProductData(productInfo.skuVOList)
+      setMaterialData(productInfo.goodsMaterialInfoList)
     }
-  ]
+  }, [])
 
-  const otherConfigs = [
-    {
-      label: '款图',
-      field: 'imgs',
-      maxImgs: 10,
-      required: true,
-      accept: '.jpg,.png,.jpeg',
-      message: '请上传款图',
-      maxSize: 500,
-      span: 20,
-      type: 'img',
-      tips: '上传款图，只能上传jpg/png格式文件，文件不能超过20M，最多上传10个文件'
-    },
-    {
-      label: '附件',
-      type: 'annex',
-      field: 'annex',
-      maxSize: 20,
-      span: 20,
-      accept: '.jpg,.png,.jpeg,.rar,.zip,.doc,.docx,.pdf',
-      tips: '支持扩展名：.rar .zip .doc .docx .pdf .jpg...'
-    },
-    {
-      label: '备注说明',
-      type: 'textarea',
-      field: 'remark',
-      rows: 4,
-      span: 20
+  useEffect(() => {
+    ;(async () => {
+      await productCategory()
+    })()
+  }, [])
+
+  useEffect(() => {
+    if (Array.isArray(productData)) {
+      const totalCount = productData.reduce((prev, item) => {
+        return prev + (item.quantity ? +item.quantity : 0)
+      }, 0)
+      const totalAmount = productData.reduce((prev, item) => {
+        return (
+          prev +
+          (item.price ? +item.price : 0) * (item.quantity ? +item.quantity : 0)
+        )
+      }, 0)
+
+      setCount(totalCount)
+      setAmount(totalAmount)
     }
-  ]
+  }, [productData])
 
-  const layout = {
-    labelCol: {
-      span: 5
-    },
-    wrapperCol: {
-      span: 12
-    }
-  }
+  const valuesChange = _values => {}
 
-  const layout2 = {
-    labelCol: {
-      span: 3
-    },
-    wrapperCol: {
-      span: 17
-    }
-  }
-
-  const valuesChange = _values => {
-    // const keys = Reflect.ownKeys(values)
-  }
-
-  const backToOrder = () => {
+  const back = () => {
     history.goBack()
   }
 
   const productValuesChange = (event, field, index) => {
     const targetData = cloneDeep(productData)
     targetData[index][field] = event.target.value
+    if (['price', 'quantity'].includes(field) && isNaN(event.target.value)) {
+      targetData[index][field] = null
+    }
     setProductData(targetData)
   }
 
@@ -178,7 +108,7 @@ const ProductPage = props => {
       align: 'center',
       dataIndex: 'skuCode',
       width: 210,
-      render: (val, row, idx) => (
+      render: (val, _row, idx) => (
         <Input
           placeholder={'请输入SKU编号'}
           value={val}
@@ -196,7 +126,7 @@ const ProductPage = props => {
       align: 'center',
       dataIndex: 'color',
       width: 210,
-      render: (val, row, idx) => (
+      render: (val, _row, idx) => (
         <Input
           placeholder={'请输入颜色'}
           value={val}
@@ -214,7 +144,7 @@ const ProductPage = props => {
       align: 'center',
       dataIndex: 'size',
       width: 210,
-      render: (val, row, idx) => (
+      render: (val, _row, idx) => (
         <Input
           placeholder={'请输入尺寸'}
           value={val}
@@ -225,26 +155,26 @@ const ProductPage = props => {
     {
       title: <RequiredTitle title={'数量(件)'}></RequiredTitle>,
       align: 'center',
-      dataIndex: 'count',
+      dataIndex: 'quantity',
       width: 210,
-      render: (val, row, idx) => (
+      render: (val, _row, idx) => (
         <Input
           placeholder={'请输入数量'}
           value={val}
-          onChange={event => productValuesChange(event, 'count', idx)}
+          onChange={event => productValuesChange(event, 'quantity', idx)}
         ></Input>
       )
     },
     {
       title: <RequiredTitle title={'单价'}></RequiredTitle>,
       align: 'center',
-      dataIndex: 'amount',
+      dataIndex: 'price',
       width: 210,
-      render: (val, row, idx) => (
+      render: (val, _row, idx) => (
         <Input
           placeholder={'请输入单价'}
           value={val}
-          onChange={event => productValuesChange(event, 'amount', idx)}
+          onChange={event => productValuesChange(event, 'price', idx)}
         ></Input>
       )
     },
@@ -252,7 +182,7 @@ const ProductPage = props => {
       title: <TabelTitle callback={() => showProductModal('add')} />,
       align: 'center',
       dataIndex: 'edit',
-      render: (val, row, idx) => (
+      render: (_val, _row, idx) => (
         <Icon
           type={'jack-del-icon'}
           className={styles.delIcon}
@@ -262,17 +192,127 @@ const ProductPage = props => {
     }
   ]
 
+  const materialValuesChange = (event, field, index) => {
+    let value = ['supplyType', 'materialTypeId'].includes(field)
+      ? event
+      : event.target.value
+    const targetData = cloneDeep(materialData)
+    targetData[index][field] = value
+    setMaterialData(targetData)
+  }
+
+  const addMaterial = () => {
+    const targetData = cloneDeep(materialData) || []
+    targetData.push({ uid: getUId() })
+    setMaterialData(targetData)
+  }
+
+  const delMaterial = index => {
+    const targetData = materialData.filter((_item, idx) => idx !== index)
+    setMaterialData(targetData)
+  }
+
+  const materialOptions = materialType
+
+  const materialColumns: any = [
+    {
+      title: '物料类型',
+      dataIndex: 'materialTypeId',
+      width: 265,
+      align: 'center',
+      render: (value, _row, idx) => {
+        return (
+          <Select
+            value={value}
+            style={{ width: '100%', textAlign: 'initial' }}
+            placeholder={'请选择物料类型'}
+            onChange={val => materialValuesChange(val, 'materialTypeId', idx)}
+          >
+            {materialOptions.map(option => (
+              <Option value={option.value} key={option.value}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
+        )
+      }
+    },
+    {
+      title: '名称',
+      dataIndex: 'name',
+      width: 265,
+      align: 'center',
+      render: (value, _row, idx) => {
+        return (
+          <Input
+            placeholder={'请输入名称'}
+            value={value}
+            onChange={event => materialValuesChange(event, 'name', idx)}
+          ></Input>
+        )
+      }
+    },
+    {
+      title: '其他说明',
+      dataIndex: 'remark',
+      width: 265,
+      align: 'center',
+      render: (value, _row, idx) => {
+        return (
+          <Input
+            placeholder={'请输入其他说明'}
+            value={value}
+            onChange={event => materialValuesChange(event, 'remark', idx)}
+          ></Input>
+        )
+      }
+    },
+    {
+      title: '供应类型',
+      dataIndex: 'supplyType',
+      width: 265,
+      align: 'center',
+      render: (value, _row, idx) => {
+        return (
+          <Select
+            value={value}
+            placeholder={'请选择供应类型'}
+            style={{ width: '100%', textAlign: 'initial' }}
+            onChange={val => materialValuesChange(val, 'supplyType', idx)}
+          >
+            {supplyType.map(option => (
+              <Option value={option.value} key={option.value}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
+        )
+      }
+    },
+    {
+      title: <TabelTitle callback={addMaterial} />,
+      align: 'center',
+      dataIndex: 'edit',
+      width: 75,
+      render: (_val, _row, idx) => (
+        <Icon
+          type={'jack-del-icon'}
+          className={styles.delIcon}
+          onClick={() => delMaterial(idx)}
+        ></Icon>
+      )
+    }
+  ]
+
   const showProductModal = type => {
     if (type === 'add') {
       const dataList = cloneDeep(productData)
-      const target =
-        dataList.length > 0 ? cloneDeep(dataList[dataList.length - 1]) : {}
-      target[productModalType] = productModalValue
+      const target: Partial<Product> = {}
+      target.uid = getUId()
       const res = [].concat(dataList, target)
       setProductData(res)
       return
     }
-
     setProductModal(f => !f)
     type && setProductModalType(type)
   }
@@ -282,79 +322,68 @@ const ProductPage = props => {
     setProductData(targetList)
   }
 
-  const productModalValueChange = event => {
-    const { value } = event.target
-    setProductModalValue(value)
-  }
-
-  const productModalSubmit = () => {
-    const dataList = cloneDeep(productData)
+  const productModalSubmit = value => {
+    const dataList = cloneDeep(productData) || []
     const target =
       dataList.length > 0 ? cloneDeep(dataList[dataList.length - 1]) : {}
-    target[productModalType] = productModalValue
+    target[productModalType] = value
     target['skuCode'] = ''
-    target['count'] = ''
-    target['amount'] = ''
+    target['quantity'] = ''
+    target['price'] = ''
+    target.uid = getUId()
     const res = [].concat(dataList, target)
     setProductData(res)
     setProductModal(f => !f)
   }
 
   const submitClick = async () => {
+    let flag
+    if (productData.length) {
+      flag = !productData.every(item => {
+        return item.price > 0 && item.quantity > 0
+      })
+    } else {
+      flag = true
+    }
+    setProductDataError(flag)
     try {
       const values = await form.validateFields()
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 284 ~ saveProduct ~ values',
-        values
-      )
-      const flag = productData.every(item => {
-        return item.count > 0 && item.amount > 0
-      })
-      setProductDataError(flag)
+
+      const info = {
+        skuVOList: productData,
+        goodsMaterialInfoList: materialData,
+        totalAmount: count, // 接口 产品总数
+        totalPrice: amount, // 接口 产品总价
+        uid: getUId(),
+        ...values
+      }
+      setProductInfo(!flag ? info : {})
+      back()
     } catch (err) {
       console.log(err)
     }
   }
 
+  const dealTypeData = data => {
+    data.forEach(item => {
+      item.label = item.name
+      item.value = item.id
+      if (Array.isArray(item.children) && item.children.length) {
+        dealTypeData(item.children)
+      }
+    })
+    return data
+  }
+
   return (
     <div className={styles.productPage}>
       {productModal ? (
-        <Modal
+        <ProductModal
+          callback={showProductModal}
           visible={productModal}
-          centered
-          maskClosable={false}
-          onCancel={showProductModal}
-          title={false}
-          footer={false}
-        >
-          <Title
-            title={productModalTexts.get(productModalType).title}
-            size={18}
-          ></Title>
-          <div className={styles.productModalContent}>
-            <span className={styles.label}>
-              {productModalTexts.get(productModalType).label}
-            </span>
-            <TextArea rows={4} onChange={productModalValueChange}></TextArea>
-          </div>
-          <div className={styles.productModalBtns}>
-            <Button
-              type={'primary'}
-              ghost
-              className={styles.tableModalBtn}
-              onClick={showProductModal}
-            >
-              取消
-            </Button>
-            <Button
-              type={'primary'}
-              className={styles.tableModalBtn}
-              onClick={productModalSubmit}
-            >
-              确定
-            </Button>
-          </div>
-        </Modal>
+          type={productModalType}
+          onOk={productModalSubmit}
+        ></ProductModal>
       ) : null}
 
       <Form
@@ -367,30 +396,36 @@ const ProductPage = props => {
       >
         <div className={styles.header}>
           <Icon
-            onClick={backToOrder}
+            onClick={back}
             type={'jack-left-copy'}
             className={styles.headerIcon}
           ></Icon>
-          {title}
+          {pageTitleMap.get(pageType)}
         </div>
 
         <section className={styles.productSection}>
           <Title title={'商品信息'}></Title>
           <Row className={styles.row}>
             {productConfigs.map(item => {
+              if (item.field === 'goodsCategoryId') {
+                item.treeData = dealTypeData(productCategoryList)
+              }
+              if (item.field === 'procedureType') {
+                item.options = procedureType
+              }
               const data: any = {}
               keys.forEach(i => {
                 if (![null, undefined].includes(item[i])) {
                   data[i] = item[i]
                 }
               })
-
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem
                     name={item.field}
                     label={item.label}
                     rules={[{ required: item.required, message: item.message }]}
+                    initialValue={productInfo[item.field]}
                     {...layout}
                   >
                     <FormNode {...data}></FormNode>
@@ -400,22 +435,35 @@ const ProductPage = props => {
             })}
           </Row>
         </section>
-
         <section className={styles.productSection}>
           <Title title={'商品规格'}></Title>
           <Table
             pagination={false}
             columns={productColumns}
             dataSource={productData}
+            rowKey={'uid'}
           ></Table>
-
           {productDataError ? (
-            <div>请检查输入的商品规内容， 最少一条数据</div>
+            <div className={styles.productErrorMsg}>{productErrorMsg}</div>
           ) : null}
+          <div className={styles.productFooter}>
+            <div className={styles.footerItem}>
+              合计数量 <span className={styles.footerNumber}>{count}</span>件
+            </div>
+            <div className={styles.footerItem}>
+              合计总价 <span className={styles.footerNumber}>{amount}</span>元
+            </div>
+          </div>
         </section>
 
         <section className={styles.productSection}>
           <Title title={'物料信息'}></Title>
+          <Table
+            pagination={false}
+            columns={materialColumns}
+            dataSource={materialData}
+            rowKey={'uid'}
+          ></Table>
         </section>
 
         <section className={styles.productSection}>
@@ -428,13 +476,13 @@ const ProductPage = props => {
                   data[i] = item[i]
                 }
               })
-
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem
                     name={item.field}
                     label={item.label}
                     rules={[{ required: item.required, message: item.message }]}
+                    initialValue={productInfo[item.field]}
                     {...layout2}
                   >
                     <FormNode {...data}></FormNode>
@@ -452,5 +500,4 @@ const ProductPage = props => {
     </div>
   )
 }
-
 export default observer(ProductPage)

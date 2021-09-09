@@ -8,6 +8,7 @@ import SearchBar from '../components/searchBar'
 import { cloneDeep } from 'lodash'
 import ListHeader from '../components/listHeader'
 import ListCard from '../components/listCard'
+import { useStores } from '@/utils/mobx'
 
 const { TabPane } = Tabs
 
@@ -69,6 +70,9 @@ const PutManage = () => {
   const history = useHistory()
   const location = useLocation()
 
+  const { orderStore } = useStores()
+  const { getOrders } = orderStore
+
   const [activeKey, setActiveKey] = useState<string>('all')
   const [params, setParams] = useState<Params>({
     pageNum: 1,
@@ -90,13 +94,19 @@ const PutManage = () => {
   }, [])
 
   useEffect(() => {
+    ;(async () => {
+      await getOrders()
+    })()
+  }, [])
+
+  useEffect(() => {
     const flag = dataSource.every(item => !item.checked)
     setDelBtnDisabled(flag)
   }, [dataSource])
 
   const tabChange = key => {
     setActiveKey(key)
-    history.push(`${location.pathname}?key=${key}`)
+    history.replace(`${location.pathname}?key=${key}`)
   }
 
   const changeParams = values => {

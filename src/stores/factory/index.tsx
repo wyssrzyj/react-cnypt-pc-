@@ -91,6 +91,26 @@ export default class FactoryStore {
     }
   }
 
+  // 获取产品类别
+  @action getProductCategoryName = async ids => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/factory/api/product/catalog/list/by/ids`,
+        ids
+      )
+
+      if (res) {
+        console.log('🚀 ~ file: index.tsx ~ line 103 ~ FactoryStore ~ res', res)
+
+        return res.data || []
+      } else {
+        message.error('获取数据失败~')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   // /api/factory/unauth/statistic/sync_factory_data
   @action getFactoryData = async factoryId => {
     try {

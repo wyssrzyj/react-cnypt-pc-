@@ -16,7 +16,6 @@ export const filterNull = (o: O) => {
   for (let k in o) {
     if (o[k] === null || o[k] === undefined) {
       delete o[k]
-      console.log(o, '~~~~~`')
     }
     o[k] = toType(o[k]) === 'string' ? o[k].trim() : o[k]
     o[k] = ['object', 'array'].includes(toType(o[k])) ? filterNull(o[k]) : o[k]

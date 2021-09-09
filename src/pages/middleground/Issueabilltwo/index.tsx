@@ -5,15 +5,25 @@ import { PlusCircleTwoTone } from '_@ant-design_icons@4.6.4@@ant-design/icons'
 import Product from './components/allorders/product'
 import FormModular from './components/formModular/index'
 import TopList from './components/topList/index'
+import { useHistory } from 'react-router'
+
 // 配置路由
 
 const Issueabill = () => {
+  const history = useHistory()
+  const added = () => {
+    history.push('/control-panel/components/newlyAdded')
+  }
   const [keyt, setKeyt] = useState('1')
   const [completed, setCompleted] = useState('1')
   const data = { keyt, completed }
   const { TabPane } = Tabs
   const operations = (
-    <Button className={styles.newly} icon={<PlusCircleTwoTone />}>
+    <Button
+      onClick={added}
+      className={styles.newly}
+      icon={<PlusCircleTwoTone />}
+    >
       新增按钮
     </Button>
   )

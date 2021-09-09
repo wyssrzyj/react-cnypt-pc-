@@ -8,6 +8,9 @@ import { getUserInfo } from '@/utils/tool'
 const Factory = React.lazy(() => import('./enterpriseHome/factory'))
 const Business = React.lazy(() => import('./enterpriseHome/business'))
 const Issueabill = React.lazy(() => import('./Issueabilltwo'))
+const NewlyAdded = React.lazy(
+  () => import('./Issueabilltwo/components/newlyAdded')
+)
 
 const LOGO =
   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
@@ -81,6 +84,11 @@ const EnterpriseHome = () => {
       <div className={styles.content}>
         <Switch>
           <Route path="/control-panel/Issueabill" component={Issueabill} />
+          <Route
+            path="/control-panel/components/newlyAdded"
+            component={NewlyAdded}
+          />
+
           <Route path="/control-panel/panel" component={ControlPanel} />
           <Route
             path="/control-panel/home"

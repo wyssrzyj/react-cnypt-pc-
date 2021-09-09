@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import styles from './todo.module.less'
 import { Icon } from '@/components'
 import { Checkbox, Divider, Row, Col, Button, Modal, Pagination } from 'antd'
-import { PauseCircleOutlined } from '@ant-design/icons'
 import Empty from './empty'
 const { confirm } = Modal //弹窗
 function showConfirm() {
@@ -11,6 +10,7 @@ function showConfirm() {
     centered: true,
     closable: true,
     icon: <Icon type="jack-ts" className={styles.ulIcon} />,
+
     content: '确认取消当前订单 ',
     onOk() {
       console.log('确认删除')
@@ -66,8 +66,13 @@ const Product = props => {
   const { keyt, completed } = data //传过来的数据
   const [buttondisplay, Buttondisplay] = useState(false) //判断已完成和草稿箱的按钮显示
   const [ompletiontime, setCompletiontime] = useState(false) //判断已完成的数据显示
-  console.log(ompletiontime)
+  const [topping, setTopping] = useState(false) //判断置顶
+  console.log(setTopping)
+  const judgeTopping = () => {
+    console.log('置顶测试')
 
+    setTopping(!topping)
+  }
   useEffect(() => {
     if (keyt == '8' || completed == '5') {
       Buttondisplay(true)
@@ -209,9 +214,20 @@ const Product = props => {
                         <span> 查看他的所有订单</span>
                       </Col>
                       <Col span={3}>
-                        <div className={styles.count}>
-                          <PauseCircleOutlined /> 置顶
-                        </div>
+                        {topping ? (
+                          <div className={styles.counts} onClick={judgeTopping}>
+                            <Icon
+                              type="jack-zhiding_1"
+                              className={styles.ulIcon}
+                            />
+                            置顶
+                          </div>
+                        ) : (
+                          <div className={styles.count} onClick={judgeTopping}>
+                            <Icon type="jack-zhiding_2" />
+                            置顶
+                          </div>
+                        )}
                       </Col>
                     </Row>
                   </div>
@@ -308,80 +324,91 @@ const Product = props => {
                           ) : null}
                         </Col>
                       )}
-
-                      <Col span={4}>
-                        {/* 待确认 */}
-                        {data.StatusDataJudgment == 1 ? (
-                          <Button
-                            onClick={() => {
-                              showConfirm()
-                            }}
-                            className={styles.button}
-                          >
-                            取消订单
-                          </Button>
-                        ) : null}
-
-                        {/* 进行中 */}
-                        {data.StatusDataJudgment == 2 ? (
-                          <>
-                            <Button className={styles.button} type="primary">
-                              状态跟踪
-                            </Button>
-                            <Button className={styles.button}>在线跟单</Button>
-                          </>
-                        ) : null}
-
-                        {/* 待验收 */}
-                        {data.StatusDataJudgment == 3 ? (
-                          <>
+                      {ompletiontime ? (
+                        <Col span={4}>
+                          <Button className={styles.button}>再次下单</Button>
+                          <Button className={styles.button}>状态跟踪</Button>
+                          <Button className={styles.button}>删除订单</Button>
+                        </Col>
+                      ) : (
+                        <Col span={4}>
+                          {/* 待确认 */}
+                          {data.StatusDataJudgment == 1 ? (
                             <Button
+                              onClick={() => {
+                                showConfirm()
+                              }}
                               className={styles.button}
-                              type="primary"
-                              onClick={() => {
-                                acceptance()
-                              }}
                             >
-                              确认验收
+                              取消订单
                             </Button>
-                            <Button className={styles.button}>状态跟踪</Button>
-                          </>
-                        ) : null}
+                          ) : null}
 
-                        {/* 退回订单 */}
-                        {data.StatusDataJudgment == 4 ? (
-                          <>
-                            <Button className={styles.button} type="primary">
-                              重新编辑
-                            </Button>
-                            <Button
-                              className={styles.btn}
-                              onClick={() => {
-                                Returndraft()
-                              }}
-                            >
-                              退回草稿箱
-                            </Button>
-                          </>
-                        ) : null}
+                          {/* 进行中 */}
+                          {data.StatusDataJudgment == 2 ? (
+                            <>
+                              <Button className={styles.button} type="primary">
+                                状态跟踪
+                              </Button>
+                              <Button className={styles.button}>
+                                在线跟单
+                              </Button>
+                            </>
+                          ) : null}
 
-                        {/* 取消订单 */}
-                        {data.StatusDataJudgment == 5 ? (
-                          <>
-                            <Button className={styles.button} type="primary">
-                              重新编辑
-                            </Button>
-                            <Button
-                              className={styles.btn}
-                              onClick={() => {
-                                Returndraft()
-                              }}
-                            >
-                              退回草稿箱
-                            </Button>
-                          </>
-                        ) : null}
-                      </Col>
+                          {/* 待验收 */}
+                          {data.StatusDataJudgment == 3 ? (
+                            <>
+                              <Button
+                                className={styles.button}
+                                type="primary"
+                                onClick={() => {
+                                  acceptance()
+                                }}
+                              >
+                                确认验收
+                              </Button>
+                              <Button className={styles.button}>
+                                状态跟踪
+                              </Button>
+                            </>
+                          ) : null}
+
+                          {/* 退回订单 */}
+                          {data.StatusDataJudgment == 4 ? (
+                            <>
+                              <Button className={styles.button} type="primary">
+                                重新编辑
+                              </Button>
+                              <Button
+                                className={styles.btn}
+                                onClick={() => {
+                                  Returndraft()
+                                }}
+                              >
+                                退回草稿箱
+                              </Button>
+                            </>
+                          ) : null}
+
+                          {/* 取消订单 */}
+                          {data.StatusDataJudgment == 5 ? (
+                            <>
+                              <Button className={styles.button} type="primary">
+                                重新编辑
+                              </Button>
+                              <Button
+                                className={styles.btn}
+                                onClick={() => {
+                                  Returndraft()
+                                }}
+                              >
+                                退回草稿箱
+                              </Button>
+                            </>
+                          ) : null}
+                        </Col>
+                      )}
                     </Row>
                   </div>
                 </>

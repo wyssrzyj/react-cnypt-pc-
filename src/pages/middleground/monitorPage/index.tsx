@@ -1,23 +1,9 @@
 import React, { useState } from 'react'
-import {
-  PlusCircleOutlined,
-  UserOutlined,
-  ExclamationCircleOutlined
-} from '@ant-design/icons'
+
 import { Icon } from '@/components'
 import styles from './index.module.less'
 
-import {
-  PageHeader,
-  Divider,
-  Form,
-  Input,
-  Button,
-  Table,
-  Space,
-  Tag,
-  Modal
-} from 'antd'
+import { Divider, Form, Input, Button, Table, Space, Modal, Select } from 'antd'
 
 const data = [
   {
@@ -49,8 +35,13 @@ const data = [
 
 const MonitorPage = () => {
   const [list, setList] = useState(data)
-  const [isDisable, setIsDibble] = useState(true)
+  const [isDisable, setIsDibble] = useState(true) //判断按钮是否可用
+  const [isModalVisible, setIsModalVisible] = useState(false) //设备弹窗
+  const [judgment, setJudgment] = useState(false) //连接成功
+  const [failed, setFailed] = useState(false) //连接失败
+  const [deletionFailed, setDeletionFailed] = useState(false) //删除设备
   const [successFailure, setSuccessFailure] = useState(false) //判断是成功还是失败
+  const [connection, setConnection] = useState(false) //判断是连接测试还是提交
   console.log(setSuccessFailure)
 
   const columns = [
@@ -76,16 +67,14 @@ const MonitorPage = () => {
       render: tags => (
         <>
           {tags.map(tag => {
-            let color = 'green'
+            let color = '#45CB77'
             if (tag === '失败') {
-              color = 'red'
+              color = '#E81414'
             }
-
-            return (
-              <Tag color={color} key={tag}>
-                {tag}
-              </Tag>
-            )
+            const style = {
+              color: color
+            }
+            return <span style={style}>{tag}</span>
           })}
         </>
       )
@@ -98,111 +87,83 @@ const MonitorPage = () => {
     {
       title: '操作',
       key: 'action',
-      render: () => (
+      render: (c, rData) => (
         <Space size="middle">
-          <a>编辑</a>
-          <a onClick={showConfirm}> |删除</a>
-          <a onClick={accountShowModal}>|绑定优产部门</a>
+          <a
+            onClick={() => {
+              setIsModalVisible(true)
+              console.log(123)
+              console.log(c)
+              console.log(rData)
+              form.setFieldsValue({
+                ...rData,
+                id: rData.key
+              })
+            }}
+          >
+            编辑
+          </a>
+          <span>|</span>
+          <a onClick={DeleteDeviceDisplay}> 删除</a>
+          <span>|</span>
+
+          <a onClick={accountShowModal}>绑定优产部门</a>
         </Space>
       )
     }
   ]
 
-  const equipment = [
-    {
-      label: '设备名称',
-      name: 'Equipment '
-    },
-    {
-      label: '设备品牌',
-      name: 'brand'
-    },
-    {
-      label: '设备部门',
-      name: 'Department'
-    },
-    {
-      label: '设备序列号',
-      name: 'serial'
-    },
-
-    {
-      label: '验证码',
-      name: 'Code'
-    }
-  ]
-
   const [form] = Form.useForm()
-
-  const { confirm } = Modal
-  //   删除设备
-  function showConfirm() {
-    confirm({
-      title: '删除设备',
-      icon: <ExclamationCircleOutlined />,
-      content: '确认将当前设备删除',
-      onOk() {
-        console.log('OK')
-      },
-      onCancel() {
-        console.log('Cancel')
-      }
-    })
-  }
-  //   连接成功
-  function succeeded() {
-    confirm({
-      title: '连接成功',
-      icon: <Icon type="jack-wc" className={styles.menuIcon} />,
-
-      content: '设备连接成功，X秒后返回列表页',
-      onOk() {
-        console.log('OK')
-      },
-      onCancel() {
-        console.log('Cancel')
-      }
-    })
-  }
-  //   连接失败
-  function snowfall() {
-    confirm({
-      title: '连接失败',
-      icon: <Icon type="jack-sptg1" className={styles.menuIcon} />,
-      content: '您所提交的信息有误，请确认序列号或验证码',
-      onOk() {
-        console.log('OK')
-      },
-      onCancel() {
-        console.log('Cancel')
-      }
-    })
-  }
-
   // 查询form
   const onQueryFinish = (values: any) => {
     console.log('Success:', values)
     form.resetFields()
   }
 
-  //设备弹窗
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const equipmentHandleOk = () => {
-    form.submit()
-    setIsDibble(true)
-    setIsModalVisible(false)
+  //   连接成功
+  const showModals = () => {
+    setJudgment(true)
   }
+  const cancellation = () => {
+    setJudgment(false)
+  }
+  //连接失败
+  const connectionFailed = () => {
+    setFailed(true)
+  }
+  const ConnectionFailedCancel = () => {
+    setFailed(false)
+  }
+  //删除设备
+  const DeleteDeviceDisplay = () => {
+    setDeletionFailed(true)
+  }
+  const deleteDeviceCancel = () => {
+    setDeletionFailed(false)
+  }
+  // 新增提交按钮事件
+  const equipmentHandleOk = () => {
+    setJudgment(false)
+    setFailed(false)
+    setIsModalVisible(false)
+    form.submit()
+
+    console.log(123)
+
+    // setIsModalVisible(false)
+  }
+  // 新增取消按钮事件
   const equipmentHandleCancel = () => {
     setIsDibble(true)
     setIsModalVisible(false)
   }
   // 设备form
   const onFinish = (v: any) => {
-    console.log(v)
+    connections()
     console.log(setList)
-    //   先判断接口是否湖获取成功 成功后再新增
+    console.log(v)
   }
-
+  // 新增显示
   const showModal = () => {
     setIsModalVisible(true)
     form.resetFields()
@@ -231,23 +192,30 @@ const MonitorPage = () => {
   }
   //   连接测试
   const connections = () => {
-    if (successFailure) {
-      succeeded()
-    } else {
-      snowfall()
+    if (connection) {
+      if (successFailure) {
+        showModals()
+      } else {
+        connectionFailed()
+      }
     }
-
-    // succeeded()
+    setConnection(false)
     setIsDibble(false)
+  }
+
+  // 返回上一级
+  const previous = () => {
+    console.log('返回上一级')
   }
 
   return (
     <div className={styles.monitor}>
-      <PageHeader
-        className="site-page-header"
-        onBack={() => null}
-        title="监控列表"
-      />
+      <div>
+        <span onClick={previous}>
+          <Icon type="jack-left-copy" className={styles.previous} />
+        </span>
+        <span className={styles.system}>监控系统</span>
+      </div>
       <Divider />
       <Form
         className={styles.header}
@@ -258,27 +226,34 @@ const MonitorPage = () => {
         onFinish={onQueryFinish}
         autoComplete="off"
       >
-        <Form.Item label="设备关键名字" name="Equipment">
+        <Form.Item label="设备关键名字" name="Equipments">
           <Input className={styles.Input} placeholder="请输入设备名称" />
         </Form.Item>
-
         <Form.Item>
           <Button className={styles.query} type="primary" htmlType="submit">
             查询
           </Button>
         </Form.Item>
         <Button
+          icon={<Icon type="jack-del" className={styles.del} />}
           className={styles.added}
           onClick={showModal}
-          icon={<PlusCircleOutlined twoToneColor="#3b80ff" />}
         >
           新增按钮
         </Button>
       </Form>
       <Table
-        // pagination={{ position: [topCenter] }}
+        className={styles.Table}
         columns={columns}
         dataSource={list}
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          position: ['bottomCenter'],
+          onShowSizeChange(c, s) {
+            console.log(c, s)
+          }
+        }}
       ></Table>
       {/* 新增设备弹窗 */}
       <Modal
@@ -291,15 +266,14 @@ const MonitorPage = () => {
             type="primary"
             disabled={isDisable}
             onClick={equipmentHandleOk}
+            htmlType="submit"
           >
             提交
           </Button>
         ]}
         confirmLoading={true}
         visible={isModalVisible}
-        centered
-        // onOk={equipmentHandleOk}
-        // onCancel={equipmentHandleCancel}
+        centered={true}
       >
         <Form
           form={form}
@@ -309,26 +283,63 @@ const MonitorPage = () => {
           onFinish={onFinish}
           autoComplete="off"
         >
-          {equipment.map((item, index) => {
-            return (
-              <Form.Item
-                key={index}
-                label={item.label}
-                name={item.name}
-                rules={[{ required: true, message: `请输入${item.label}` }]}
-              >
-                <Input key={index} placeholder={`请输入${item.label}`} />
-              </Form.Item>
-            )
-          })}
+          <Form.Item
+            label="设备名称"
+            name="Equipment"
+            rules={[{ required: true, message: `请输入设备名称` }]}
+          >
+            <Input placeholder={`请输入请输入设备名称`} />
+          </Form.Item>
+
+          <Form.Item
+            label="设备品牌 "
+            name="brand"
+            rules={[{ required: true, message: `请输入设备品牌` }]}
+          >
+            <Select placeholder="请输入设备品牌">
+              <Select.Option value="demo">设备品牌</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            label="设备部门 "
+            name="Department"
+            rules={[{ required: true, message: `请输入设备部门` }]}
+          >
+            <Select placeholder="请输入设备部门">
+              <Select.Option value="demo">设备部门</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="设备序列号"
+            name="serial"
+            rules={[{ required: true, message: `请输入设备序列号` }]}
+          >
+            <Input placeholder={`请输入请输入设备序列号`} />
+          </Form.Item>
+          <Form.Item
+            label="验证码"
+            name="Code"
+            rules={[{ required: true, message: `请输入验证码` }]}
+          >
+            <Input placeholder={`请输入请输入验证码`} />
+          </Form.Item>
+
+          <Form.Item
+            className={styles.Submit}
+            wrapperCol={{ offset: 8, span: 16 }}
+          >
+            <Button
+              onClick={() => {
+                setConnection(true)
+              }}
+              type="primary"
+              htmlType="submit"
+            >
+              测试连接
+            </Button>
+          </Form.Item>
         </Form>
-        <Button
-          type="primary"
-          onClick={connections}
-          className={styles.Connection}
-        >
-          连接测试
-        </Button>
       </Modal>
       {/* 绑定优产账号弹窗 */}
       <Modal
@@ -336,9 +347,10 @@ const MonitorPage = () => {
         visible={accountModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
+        footer={[]}
+        centered={true}
       >
         <Form
-          form={form}
           name="basic"
           labelCol={{ span: 4 }}
           initialValues={{ remember: true }}
@@ -347,15 +359,109 @@ const MonitorPage = () => {
           autoComplete="off"
         >
           <Form.Item name="username">
-            <Input prefix={<UserOutlined />} placeholder="请输入账号" />
+            <Input
+              prefix={<Icon type="jack-gerenzhongxin1" />}
+              placeholder="请输入账号"
+            />
           </Form.Item>
           <Form.Item name="password">
             <Input
-              prefix={<Icon type="jack-mima" className={styles.menuIcon} />}
+              prefix={<Icon type="jack-mima" />}
               placeholder="请输入密码"
             />
           </Form.Item>
+          <Form.Item
+            className={styles.binds}
+            wrapperCol={{ offset: 8, span: 16 }}
+          >
+            <Button
+              onClick={handleOk}
+              className={styles.bind}
+              type="primary"
+              htmlType="submit"
+            >
+              立即绑定
+            </Button>
+          </Form.Item>
+          <Form.Item
+            className={styles.cancel}
+            wrapperCol={{ offset: 8, span: 18 }}
+          >
+            <Button
+              className={styles.cancels}
+              onClick={() => {
+                setaceousModalVisible(false)
+              }}
+              htmlType="submit"
+            >
+              取消
+            </Button>
+          </Form.Item>
         </Form>
+      </Modal>
+
+      {/* 成功的 */}
+      <Modal
+        className={styles.ok}
+        centered={true}
+        footer={null}
+        visible={judgment}
+      >
+        <p>
+          <Icon type="jack-chenggong" className={styles.menuIcon} />
+        </p>
+        <p>连接成功</p>
+        <p>设备连接成功，X秒后返回</p>
+        <p>
+          <Button type="primary" onClick={cancellation}>
+            立即返回
+          </Button>
+        </p>
+      </Modal>
+      {/* 失败的 */}
+      <Modal
+        className={styles.ok}
+        centered={true}
+        footer={null}
+        visible={failed}
+        onCancel={ConnectionFailedCancel}
+      >
+        <p>
+          <Icon type="jack-sptg1" className={styles.menuIcon} />
+        </p>
+        <p>连接失败</p>
+        <p>您所提交的信息有误，请确认序列号或验证码</p>
+        <p>
+          <Button type="primary" onClick={ConnectionFailedCancel}>
+            立即返回
+          </Button>
+        </p>
+      </Modal>
+      {/* 删除设备 */}
+      <Modal
+        className={styles.ok}
+        onCancel={deleteDeviceCancel}
+        centered={true}
+        footer={null}
+        visible={deletionFailed}
+      >
+        <p>
+          <Icon type="jack-sptg1" className={styles.menuIcon} />
+        </p>
+        <p className={styles.current}>确认将当前设备删除</p>
+        <p>
+          <Button className={styles.cancels} onClick={deleteDeviceCancel}>
+            取消
+          </Button>
+
+          <Button
+            className={styles.deleteDeviceCancels}
+            type="primary"
+            onClick={deleteDeviceCancel}
+          >
+            确认
+          </Button>
+        </p>
       </Modal>
     </div>
   )

@@ -7,7 +7,7 @@ import { getUserInfo } from '@/utils/tool'
 
 const Factory = React.lazy(() => import('./enterpriseHome/factory'))
 const Business = React.lazy(() => import('./enterpriseHome/business'))
-const MonitorPage = React.lazy(() => import('./monitorPage/index'))
+const MonitorPage = React.lazy(() => import('./monitorPage'))
 
 const LOGO =
   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'

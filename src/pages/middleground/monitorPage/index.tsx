@@ -1,40 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from '@/utils/axios'
 
 import { Icon } from '@/components'
 import styles from './index.module.less'
+import {
+  insertModelAPI,
+  listDataAPI,
+  equipmentDepartmentAPI,
+  moveAPI,
+  newlyAddedAPI
+} from './services/nptice'
+import {
+  Divider,
+  Form,
+  Input,
+  Button,
+  Table,
+  Space,
+  Modal,
+  TreeSelect,
+  message
+} from 'antd'
+const rowKey = 'id'
+const { TreeNode } = TreeSelect
+const dealTypeData = data => {
+  data.forEach(item => {
+    item.label = item.deptName
+    item.value = item.id
 
-import { Divider, Form, Input, Button, Table, Space, Modal, Select } from 'antd'
-
-const data = [
-  {
-    key: 1,
-    Equipment: '测试设备1号',
-    brand: '萤石',
-    serial: '17786647',
-    Connection: ['成功'],
-    Department: '车间1组1号位'
-  },
-  {
-    key: 2,
-    Equipment: '测试设备1号',
-    brand: '萤石',
-    serial: '17786647',
-    Connection: ['失败'],
-    Department: '车间1组1号位'
-  },
-  {
-    key: 3,
-    Equipment: '测试设备1号',
-    brand: '萤石',
-    serial: '17786647',
-    Connection: ['成功'],
-    Department: '车间1组1号位',
-    ss: '车间1组1号位'
-  }
-]
+    if (Array.isArray(item.children) && item.children.length) {
+      dealTypeData(item.children)
+    }
+  })
+  return data
+}
 
 const MonitorPage = () => {
-  const [list, setList] = useState(data)
   const [isDisable, setIsDibble] = useState(true) //判断按钮是否可用
   const [isModalVisible, setIsModalVisible] = useState(false) //设备弹窗
   const [judgment, setJudgment] = useState(false) //连接成功
@@ -42,13 +43,37 @@ const MonitorPage = () => {
   const [deletionFailed, setDeletionFailed] = useState(false) //删除设备
   const [successFailure, setSuccessFailure] = useState(false) //判断是成功还是失败
   const [connection, setConnection] = useState(false) //判断是连接测试还是提交
+  const [list, setList] = useState([]) //数据
+  const [department, setDepartment] = useState<any>([]) // 设备部门
+  const [equipmentbrand, setEquipmentbrand] = useState<any>([]) // 设备品牌
+  const [moved, setMoved] = useState<any>(0) // 删除id
+  const onChangeset = value => {
+    console.log(value)
+  }
+  // 获取设备品牌
+  const allDictionary = async () => {
+    const brand = await insertModelAPI([])
+    setEquipmentbrand(brand.data.cameraBrand)
+  }
+
+  const getFactoryInfo = async () => {
+    const response = await listDataAPI()
+    setList(response.data.records)
+    const equipment = await equipmentDepartmentAPI()
+    setDepartment(dealTypeData(equipment.data))
+  }
+
+  useEffect(() => {
+    getFactoryInfo()
+    allDictionary()
+  }, [])
   console.log(setSuccessFailure)
 
   const columns = [
     {
       title: '设备名称',
-      dataIndex: 'Equipment',
-      key: 'Equipment'
+      dataIndex: 'name',
+      key: 'name'
     },
     {
       title: '设备品牌',
@@ -57,42 +82,44 @@ const MonitorPage = () => {
     },
     {
       title: '设备序列号',
-      dataIndex: 'serial',
-      key: 'serial'
+      dataIndex: 'serialNumber',
+      key: 'serialNumber'
     },
     {
       title: '连接状态',
-      key: 'Connection',
-      dataIndex: 'Connection',
-      render: tags => (
-        <>
-          {tags.map(tag => {
-            let color = '#45CB77'
-            if (tag === '失败') {
-              color = '#E81414'
-            }
-            const style = {
-              color: color
-            }
-            return <span style={style}>{tag}</span>
-          })}
-        </>
-      )
+      key: 'status',
+      dataIndex: 'status'
+
+      // return (
+      //   <>
+      //     {tags.map(tag => {
+      //       let color = '#45CB77'
+      //       if (tag === '0') {
+      //         color = '#E81414'
+      //       }
+      //       const style = {
+      //         color: color
+      //       }
+      //       return <span style={style}>{tag}</span>
+      //     })}
+      //   </>
+      // )
     },
     {
       title: '所属部门',
-      key: 'Department',
-      dataIndex: 'Department'
+      key: 'orgNameList',
+
+      dataIndex: 'orgNameList'
     },
     {
       title: '操作',
       key: 'action',
+
       render: (c, rData) => (
         <Space size="middle">
           <a
             onClick={() => {
               setIsModalVisible(true)
-              console.log(123)
               console.log(c)
               console.log(rData)
               form.setFieldsValue({
@@ -103,9 +130,16 @@ const MonitorPage = () => {
           >
             编辑
           </a>
-          <span>|</span>
-          <a onClick={DeleteDeviceDisplay}> 删除</a>
-          <span>|</span>
+          <Divider type="vertical" />
+          <a
+            onClick={() => {
+              DeleteDeviceDisplay(rData.id)
+            }}
+          >
+            {' '}
+            删除
+          </a>
+          <Divider type="vertical" />
 
           <a onClick={accountShowModal}>绑定优产部门</a>
         </Space>
@@ -114,6 +148,7 @@ const MonitorPage = () => {
   ]
 
   const [form] = Form.useForm()
+
   // 查询form
   const onQueryFinish = (values: any) => {
     console.log('Success:', values)
@@ -135,20 +170,24 @@ const MonitorPage = () => {
     setFailed(false)
   }
   //删除设备
-  const DeleteDeviceDisplay = () => {
+  const DeleteDeviceDisplay = id => {
+    setMoved(id)
     setDeletionFailed(true)
   }
-  const deleteDeviceCancel = () => {
-    setDeletionFailed(false)
+  const deleteDeviceCancel = async () => {
+    const deletion = await moveAPI(moved)
+    if (deletion.code == 200) {
+      getFactoryInfo()
+      setDeletionFailed(false)
+    }
   }
   // 新增提交按钮事件
   const equipmentHandleOk = () => {
     setJudgment(false)
     setFailed(false)
-    setIsModalVisible(false)
+    // setIsModalVisible(false)//关闭弹窗
+    setIsDibble(true)
     form.submit()
-
-    console.log(123)
 
     // setIsModalVisible(false)
   }
@@ -158,7 +197,30 @@ const MonitorPage = () => {
     setIsModalVisible(false)
   }
   // 设备form
-  const onFinish = (v: any) => {
+  const onFinish = async (v: any) => {
+    //  判断是测试还是提交
+    if (connection) {
+      const { serialNumber, verificationCode } = v
+      const connectParamVO = { serialNumber, verificationCode }
+      axios
+        .post('/api/factory/factory-camera/connect', { connectParamVO })
+        .then(res => {
+          console.log(res)
+        })
+    } else {
+      const newlywed = await newlyAddedAPI(v)
+      console.log(newlywed)
+      if (newlywed.code === 200) {
+        setIsModalVisible(false)
+        getFactoryInfo()
+        message.success(newlywed.msg)
+      } else {
+        message.warning(newlywed.msg)
+      }
+
+      getFactoryInfo()
+    }
+
     connections()
     console.log(setList)
     console.log(v)
@@ -226,7 +288,7 @@ const MonitorPage = () => {
         onFinish={onQueryFinish}
         autoComplete="off"
       >
-        <Form.Item label="设备关键名字" name="Equipments">
+        <Form.Item colon={false} label="设备关键名字" name="Equipments">
           <Input className={styles.Input} placeholder="请输入设备名称" />
         </Form.Item>
         <Form.Item>
@@ -239,13 +301,14 @@ const MonitorPage = () => {
           className={styles.added}
           onClick={showModal}
         >
-          新增按钮
+          新增设备
         </Button>
       </Form>
       <Table
         className={styles.Table}
         columns={columns}
         dataSource={list}
+        rowKey={rowKey}
         pagination={{
           showQuickJumper: true,
           pageSize: 10,
@@ -284,49 +347,83 @@ const MonitorPage = () => {
           autoComplete="off"
         >
           <Form.Item
+            className={styles.item}
+            colon={false}
             label="设备名称"
-            name="Equipment"
+            name="name"
             rules={[{ required: true, message: `请输入设备名称` }]}
           >
             <Input placeholder={`请输入请输入设备名称`} />
           </Form.Item>
 
           <Form.Item
+            className={styles.item}
+            colon={false}
             label="设备品牌 "
             name="brand"
             rules={[{ required: true, message: `请输入设备品牌` }]}
           >
-            <Select placeholder="请输入设备品牌">
-              <Select.Option value="demo">设备品牌</Select.Option>
-            </Select>
+            <TreeSelect
+              showSearch
+              style={{ width: '100%' }}
+              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+              placeholder="请输入设备品牌"
+              allowClear
+              treeDefaultExpandAll
+            >
+              {equipmentbrand.map(item => {
+                return (
+                  <TreeNode
+                    key={item}
+                    value={item.value}
+                    title={item.label}
+                  ></TreeNode>
+                )
+              })}
+            </TreeSelect>
           </Form.Item>
 
           <Form.Item
+            className={styles.item}
+            colon={false}
             label="设备部门 "
-            name="Department"
+            name="orgIdList"
             rules={[{ required: true, message: `请输入设备部门` }]}
           >
-            <Select placeholder="请输入设备部门">
-              <Select.Option value="demo">设备部门</Select.Option>
-            </Select>
+            <TreeSelect
+              showSearch
+              treeData={department}
+              style={{ width: '100%' }}
+              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+              placeholder="请输入设备部门"
+              allowClear
+              multiple
+              treeDefaultExpandAll
+              onChange={onChangeset}
+            ></TreeSelect>
           </Form.Item>
+
           <Form.Item
+            className={styles.item}
+            colon={false}
             label="设备序列号"
-            name="serial"
+            name="serialNumber"
             rules={[{ required: true, message: `请输入设备序列号` }]}
           >
             <Input placeholder={`请输入请输入设备序列号`} />
           </Form.Item>
           <Form.Item
+            className={styles.item}
+            colon={false}
             label="验证码"
-            name="Code"
+            name="verificationCode"
             rules={[{ required: true, message: `请输入验证码` }]}
           >
             <Input placeholder={`请输入请输入验证码`} />
           </Form.Item>
 
           <Form.Item
-            className={styles.Submit}
+            className={styles.submit}
             wrapperCol={{ offset: 8, span: 16 }}
           >
             <Button
@@ -347,7 +444,7 @@ const MonitorPage = () => {
         visible={accountModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        footer={[]}
+        footer={null}
         centered={true}
       >
         <Form
@@ -450,7 +547,12 @@ const MonitorPage = () => {
         </p>
         <p className={styles.current}>确认将当前设备删除</p>
         <p>
-          <Button className={styles.cancels} onClick={deleteDeviceCancel}>
+          <Button
+            className={styles.cancels}
+            onClick={() => {
+              setDeletionFailed(false)
+            }}
+          >
             取消
           </Button>
 

@@ -392,7 +392,9 @@ const OrderPage = () => {
       if (orderId) {
         values.id = orderId
       }
-
+      if (pageType === 'add') {
+        delete values.id
+      }
       const params = {
         orderVO: values,
         goodsInfoVOList: [toJS(productInfo)]
@@ -511,7 +513,7 @@ const OrderPage = () => {
           )
         }
 
-        if (+row.uid) {
+        if (row.uid) {
           return (
             <div className={styles.goodsBtns}>
               <span className={styles.goodsBtn} onClick={delProduct}>

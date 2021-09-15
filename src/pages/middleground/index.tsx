@@ -13,6 +13,7 @@ const OrderPage = React.lazy(() => import('./orderPage'))
 const ProductPage = React.lazy(() => import('./productPage'))
 const StateTracking = React.lazy(() => import('./stateTracking'))
 const BindProduce = React.lazy(() => import('./bindProduce'))
+const ControlPanel = React.lazy(() => import('./controlPanel'))
 
 const LOGO =
   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
@@ -21,15 +22,24 @@ const routeMap = new Map()
 routeMap.set(0, Factory)
 routeMap.set(1, Business)
 
-const ControlPanel = React.lazy(() => import('./controlPanel'))
+interface UserInfo {
+  certificateApprovalStatus: string
+  enterpriseId: string
+  enterpriseType: string
+  factoryAuditStatus: string
+  factoryId: string
+  infoApprovalStatus: string
+  purchaserId: string
+}
 
 const EnterpriseHome = () => {
   const location = useLocation()
   const history = useHistory()
-  const [userInfo, setUserInfo] = useState({ enterpriseType: null })
+  const [userInfo, setUserInfo] = useState<Partial<UserInfo>>({
+    enterpriseType: null
+  })
 
   useEffect(() => {
-    console.log(location, 'location')
     setTimeout(() => {
       const info = getUserInfo()
       setUserInfo(info)
@@ -62,30 +72,44 @@ const EnterpriseHome = () => {
                 首页
               </div>
             ) : null}
+            {+userInfo.enterpriseType === 0 ? (
+              <div
+                className={classNames(
+                  styles.navItem,
+                  [
+                    '/control-panel/put-manage',
+                    '/control-panel/receive-manage',
+                    '/control-panel/order',
+                    '/control-panel/product'
+                  ].some(item => location.pathname.includes(item))
+                    ? styles.activeNavItem
+                    : ''
+                )}
+                onClick={() => toTarget('receive')}
+              >
+                接单管理
+              </div>
+            ) : null}
 
-            <div
-              className={classNames(
-                styles.navItem,
-                location.pathname === '/control-panel/receive-manage'
-                  ? styles.activeNavItem
-                  : ''
-              )}
-              onClick={() => toTarget('receive')}
-            >
-              接单管理
-            </div>
-
-            <div
-              className={classNames(
-                styles.navItem,
-                location.pathname === '/control-panel/put-manage'
-                  ? styles.activeNavItem
-                  : ''
-              )}
-              onClick={() => toTarget('put')}
-            >
-              发单管理
-            </div>
+            {+userInfo.enterpriseType === 1 ? (
+              <div
+                className={classNames(
+                  styles.navItem,
+                  [
+                    '/control-panel/bind-produce',
+                    '/control-panel/put-manage',
+                    '/control-panel/order',
+                    '/control-panel/product',
+                    '/control-panel/receive-manage'
+                  ].some(item => location.pathname.includes(item))
+                    ? styles.activeNavItem
+                    : ''
+                )}
+                onClick={() => toTarget('put')}
+              >
+                发单管理
+              </div>
+            ) : null}
 
             <div
               className={classNames(

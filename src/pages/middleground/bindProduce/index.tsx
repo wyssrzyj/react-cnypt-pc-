@@ -4,6 +4,8 @@ import styles from './index.module.less'
 import { Icon } from '@/components'
 import { useHistory } from 'react-router'
 import BindSoftWare from './components/bindSoftWare'
+import BindAccount from './components/bindAccount'
+import BindOrder from './components/bindOrder'
 
 const { Step } = Steps
 
@@ -73,8 +75,12 @@ const BindProduce = () => {
       </div>
 
       {curStep === 0 ? (
-        <BindSoftWare callback={stepChange}></BindSoftWare>
+        <BindSoftWare callback={() => stepChange(1)}></BindSoftWare>
       ) : null}
+      {curStep === 1 ? (
+        <BindAccount callback={() => stepChange(2)}></BindAccount>
+      ) : null}
+      {curStep === 2 ? <BindOrder></BindOrder> : null}
     </div>
   )
 }

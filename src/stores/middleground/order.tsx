@@ -30,6 +30,9 @@ export default class OrderStore {
     runInAction(() => {
       this.productInfo = {}
       this.orderInfo = {}
+      this.orderGetInfo = true
+      this.fromProduct = false
+      this.fromOrder = false
     })
   }
 
@@ -54,7 +57,6 @@ export default class OrderStore {
 
   @action setProductInfo = async productInfo => {
     runInAction(() => {
-      console.log(productInfo, 'productInfo')
       this.productInfo = productInfo
     })
   }
@@ -174,7 +176,6 @@ export default class OrderStore {
   @action factoryConfirmOrder = async params => {
     try {
       const res = await axios.post('/api/oms/order/confirm', params)
-      console.log('🚀 ~ file: order.tsx ~ line 168 ~ OrderStore ~ res', res)
       if (res && res.code === 200) {
         message.success('提交成功')
         return res.data
@@ -191,7 +192,6 @@ export default class OrderStore {
   @action backToDraft = async id => {
     try {
       const res = await axios.post('/api/oms/order/back-draft', { id })
-      console.log('🚀 ~ file: order.tsx ~ line 168 ~ OrderStore ~ res', res)
       if (res && res.code === 200) {
         message.success('退回草稿')
         return res.data
@@ -211,7 +211,6 @@ export default class OrderStore {
         id,
         status: -2
       })
-      console.log('🚀 ~ file: order.tsx ~ line 168 ~ OrderStore ~ res', res)
       if (res && res.code === 200) {
         message.success('取消成功')
         return res.data

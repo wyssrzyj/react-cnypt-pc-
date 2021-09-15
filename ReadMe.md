@@ -49,4 +49,4 @@
 
 #### 阿里云 oss 图片参数处理
 
-`?x-oss-process=image/resize,limit_0,m_fill,w70,h_70/quality,q_100`
+`?x-oss-process=image/crop,limit_0,m_fill,w70,h_70/quality,q_100`

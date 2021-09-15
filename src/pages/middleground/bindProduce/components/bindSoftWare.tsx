@@ -17,7 +17,7 @@ const Card = ({ label, img }) => {
 }
 
 interface Props {
-  callback?: (step: number) => void
+  callback?: () => void
 }
 
 const BindSoftWare = (props: Props) => {
@@ -35,7 +35,7 @@ const BindSoftWare = (props: Props) => {
   }
 
   const nextClick = () => {
-    callback && callback(1)
+    callback && callback()
   }
 
   return (

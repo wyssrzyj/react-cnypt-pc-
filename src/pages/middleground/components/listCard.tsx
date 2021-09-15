@@ -19,7 +19,7 @@ RECEIVE_STATUS.set(-3, '已退回')
 
 const PUT_STATUS = new Map()
 PUT_STATUS.set(1, '待确认')
-PUT_STATUS.set(2, '待绑定')
+PUT_STATUS.set(2, '进行中')
 PUT_STATUS.set(3, '进行中')
 PUT_STATUS.set(4, '待验收')
 PUT_STATUS.set(-3, '退回订单')
@@ -37,6 +37,15 @@ COLOR_CLASS_MAP.set(4, styles.green)
 COLOR_CLASS_MAP.set(-2, styles.gray)
 COLOR_CLASS_MAP.set(-3, styles.red)
 COLOR_CLASS_MAP.set(5, styles.green)
+
+const COLOR_CLASS_MAP2 = new Map()
+COLOR_CLASS_MAP2.set(1, styles.red)
+COLOR_CLASS_MAP2.set(2, styles.blue)
+COLOR_CLASS_MAP2.set(3, styles.blue)
+COLOR_CLASS_MAP2.set(4, styles.green)
+COLOR_CLASS_MAP2.set(-2, styles.gray)
+COLOR_CLASS_MAP2.set(-3, styles.red)
+COLOR_CLASS_MAP2.set(5, styles.green)
 
 const STICK_TIPS = new Map()
 STICK_TIPS.set(1, '取消置顶')
@@ -84,7 +93,8 @@ const ListCard = ({
     factoryFinishProduct,
     acceptanceOrder,
     reproduce,
-    changeOrderStick
+    changeOrderStick,
+    initOrderAndProduct
   } = orderStore
   const { dictionary } = commonStore
   const { productCategoryList } = factoryStore
@@ -172,7 +182,11 @@ const ListCard = ({
         if (type === 'receive') {
           return (
             <>
-              <Button type={'primary'} className={styles.btn}>
+              <Button
+                type={'primary'}
+                className={styles.btn}
+                onClick={toProduce}
+              >
                 绑定生产单
               </Button>
               <Button
@@ -188,9 +202,18 @@ const ListCard = ({
         }
         if (type === 'put') {
           return (
-            <Button type={'primary'} className={styles.btn}>
-              绑定生产单
-            </Button>
+            <>
+              <Button
+                type={'primary'}
+                className={styles.btn}
+                onClick={statusTrack}
+              >
+                状态跟踪
+              </Button>
+              <Button type={'primary'} ghost className={styles.btn2}>
+                在线跟单
+              </Button>
+            </>
           )
         }
 
@@ -217,7 +240,11 @@ const ListCard = ({
         if (type === 'put') {
           return (
             <>
-              <Button type={'primary'} className={styles.btn}>
+              <Button
+                type={'primary'}
+                className={styles.btn}
+                onClick={statusTrack}
+              >
                 状态跟踪
               </Button>
               <Button type={'primary'} ghost className={styles.btn2}>
@@ -249,7 +276,12 @@ const ListCard = ({
               >
                 确认验收
               </Button>
-              <Button type={'primary'} ghost className={styles.btn2}>
+              <Button
+                type={'primary'}
+                ghost
+                className={styles.btn2}
+                onClick={statusTrack}
+              >
                 状态跟踪
               </Button>
             </>
@@ -260,10 +292,16 @@ const ListCard = ({
         if (type === 'put') {
           return (
             <>
-              <Button type={'primary'} className={styles.btn}>
+              <Button
+                type={'primary'}
+                className={styles.btn}
+                onClick={restartOrder}
+              >
                 再次下单
               </Button>
-              <div className={styles.textBtn}>状态跟踪</div>
+              <div className={styles.textBtn} onClick={statusTrack}>
+                状态跟踪
+              </div>
               <div className={styles.textBtn} onClick={() => showModal('del')}>
                 删除订单
               </div>
@@ -360,6 +398,7 @@ const ListCard = ({
 
   const getPutstatus = status => {
     switch (+status) {
+      case 2:
       case 3:
         return (
           <div className={styles.statusTextBox}>
@@ -514,6 +553,14 @@ const ListCard = ({
     getData && (await getData())
     showModal(null)
   }
+  // 状态跟踪
+  const statusTrack = () => {
+    history.push(`/control-panel/state/${id}`)
+  }
+  // 绑定生产单
+  const toProduce = () => {
+    history.push(`/control-panel/bind-produce/${id}`)
+  }
   // 返回生产
   const reproduceOrder = async () => {
     await reproduce(id)
@@ -543,7 +590,14 @@ const ListCard = ({
   }
   // 编辑订单
   const editOrder = async () => {
+    initOrderAndProduct()
     history.push(`/control-panel/order/edit?id=${id}`)
+  }
+
+  // 再次下单
+  const restartOrder = async () => {
+    initOrderAndProduct()
+    history.push(`/control-panel/order/add?id=${id}`)
   }
 
   const showModal = async type => {
@@ -613,7 +667,6 @@ const ListCard = ({
       }
       searchBar.valuesChange(option.value, 'purchaserTenantId')
     }
-
     searchBar.changeOptions(option)
   }
 
@@ -686,12 +739,8 @@ const ListCard = ({
               checked={checked}
             ></Checkbox>
           ) : null}
-
-          <img
-            src={`${pictureUrl}?x-oss-process=image/resize,limit_0,m_fill,w100,h_100/quality,q_100`}
-            alt=""
-            className={styles.orderImg}
-          />
+          {/* ?x-oss-process=image/crop,limit_0,m_fill,w100,h_100/quality,q_100 */}
+          <img src={`${pictureUrl}`} alt="" className={styles.orderImg} />
           <div className={styles.orderInfoRight}>
             <div className={styles.orderTitle}>{name}</div>
             <div className={styles.orderText}>加工类型：{prodTypeText}</div>
@@ -726,7 +775,9 @@ const ListCard = ({
                     {RECEIVE_STATUS.get(+status)}
                   </div>
                   {![-2, -3, 5].includes(+status) ? (
-                    <div>状态跟踪 &gt;</div>
+                    <div onClick={statusTrack} className={styles.statusTrack}>
+                      状态跟踪 &gt;
+                    </div>
                   ) : null}
                 </>
               ) : null}
@@ -741,7 +792,7 @@ const ListCard = ({
               {/* 非退回 已完成tab页 */}
               {!['complete'].includes(curKey) ? (
                 <>
-                  <div className={COLOR_CLASS_MAP.get(+status)}>
+                  <div className={COLOR_CLASS_MAP2.get(+status)}>
                     {PUT_STATUS.get(+status)}
                   </div>
                   {getPutstatus(+status)}

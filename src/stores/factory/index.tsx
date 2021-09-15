@@ -100,8 +100,6 @@ export default class FactoryStore {
       )
 
       if (res) {
-        console.log('🚀 ~ file: index.tsx ~ line 103 ~ FactoryStore ~ res', res)
-
         return res.data || []
       } else {
         message.error('获取数据失败~')

@@ -94,6 +94,7 @@ const EnterpriseHome = () => {
             path="/control-panel/home"
             component={routeMap.get(+userInfo.enterpriseType)}
           />
+          <Route path="/control-panel/monitorPage" component={MonitorPage} />
         </Switch>
       </div>
     </div>

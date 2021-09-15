@@ -38,5 +38,10 @@ export const moveAPI = id =>
 export const newlyAddedAPI = data =>
   axios.post('/api/factory/factory-camera/save', data)
 
+/**
+ * 查询
+ * @param data
+ * @returns
+ */
 export const searchAPI = data =>
   axios.post('/api/factory/factory-camera/list-camera-org-info', data)

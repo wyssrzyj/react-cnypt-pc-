@@ -190,6 +190,7 @@ const FormNode = (props: FormNodeProps) => {
     )
     if (res) {
       const { url, name } = res
+      console.log('🚀 ~ file: index.tsx ~ line 193 ~ customRequest ~ url', url)
       imgs.push({ thumbUrl: url, name: name.split('__')[1] })
       setNodeValue(imgs)
       valueChange && valueChange(imgs)
@@ -216,6 +217,7 @@ const FormNode = (props: FormNodeProps) => {
           onChange={valueChange}
           value={nodeValue}
           style={{ width: '100%' }}
+          disabled={disabled}
           {...other}
         ></DatePicker>
       )
@@ -224,12 +226,18 @@ const FormNode = (props: FormNodeProps) => {
         <RangePicker
           onChange={valueChange}
           value={nodeValue}
+          disabled={disabled}
           {...other}
         ></RangePicker>
       )
     case 'radio':
       return (
-        <Group onChange={valueChange} value={nodeValue} {...other}>
+        <Group
+          onChange={valueChange}
+          value={nodeValue}
+          disabled={disabled}
+          {...other}
+        >
           <Space direction={direction}>
             {options &&
               options.length > 0 &&
@@ -264,7 +272,8 @@ const FormNode = (props: FormNodeProps) => {
           onChange={valueChange}
           value={nodeValue}
           placeholder={placeholder}
-          style={{ minWidth: 80 }}
+          style={{ minWidth: 80, width: other.width }}
+          disabled={disabled}
           {...rest}
           {...other}
         >
@@ -283,6 +292,7 @@ const FormNode = (props: FormNodeProps) => {
           onChange={valueChange}
           value={nodeValue}
           options={options}
+          disabled={disabled}
           {...other}
         />
       )
@@ -297,6 +307,7 @@ const FormNode = (props: FormNodeProps) => {
           treeCheckable={treeCheckable}
           showCheckedStrategy={SHOW_PARENT}
           placeholder={placeholder}
+          disabled={disabled}
           {...other}
         />
       )
@@ -307,6 +318,7 @@ const FormNode = (props: FormNodeProps) => {
           onChange={valueChange}
           value={nodeValue}
           rows={rows}
+          disabled={disabled}
           {...other}
         />
       )
@@ -319,6 +331,7 @@ const FormNode = (props: FormNodeProps) => {
           onChange={valueChange}
           value={nodeValue}
           style={{ width: '100%' }}
+          disabled={disabled}
           {...other}
         ></InputNumber>
       )
@@ -345,9 +358,10 @@ const FormNode = (props: FormNodeProps) => {
             beforeUpload={beforeUpload}
             customRequest={customRequest}
             onRemove={fileRemove}
+            disabled={disabled}
             {...other}
           >
-            {isEmpty(nodeValue) || nodeValue.length < maxImgs
+            {!disabled && (isEmpty(nodeValue) || nodeValue.length) < maxImgs
               ? uploadButton
               : null}
           </Upload>
@@ -371,9 +385,13 @@ const FormNode = (props: FormNodeProps) => {
             beforeUpload={beforeUpload}
             customRequest={customRequest}
             onRemove={fileRemove}
+            disabled={disabled}
             {...other}
           >
-            <Button icon={<Icon type={'jack-upload-2-fill'}></Icon>}>
+            <Button
+              disabled={disabled}
+              icon={<Icon type={'jack-upload-2-fill'}></Icon>}
+            >
               上传文件
             </Button>
           </Upload>

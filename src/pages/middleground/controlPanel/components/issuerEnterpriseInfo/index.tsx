@@ -34,7 +34,7 @@ const IssuerEnterpriseInfo = () => {
 
   useEffect(() => {
     ;(async () => {
-      const res = (await getPurchaserInfo()) || {}
+      const res = (await getPurchaserInfo({})) || {}
       res.establishedTime = res.establishedTime
         ? moment(res.establishedTime)
         : null

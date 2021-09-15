@@ -120,7 +120,7 @@ export const keys = [
 ]
 
 export const TabelTitle = props => {
-  const { title, callback } = props
+  const { title, callback, disabled } = props
   const addClick = () => {
     callback && callback()
   }
@@ -128,11 +128,13 @@ export const TabelTitle = props => {
   return (
     <div className={styles.tableTitle}>
       {title ? title : null}
-      <Icon
-        type={'jack-del'}
-        onClick={addClick}
-        className={styles.tableIcon}
-      ></Icon>
+      {!disabled ? (
+        <Icon
+          type={'jack-del'}
+          onClick={addClick}
+          className={styles.tableIcon}
+        ></Icon>
+      ) : null}
     </div>
   )
 }

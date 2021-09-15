@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './index.module.less'
 import Icon from '@/components/Icon'
-import { useHistory } from 'react-router'
-import { useStores } from '@/utils/mobx'
+// import { useHistory } from 'react-router'
+// import { useStores } from '@/utils/mobx'
 
 const KeyIcon = () => <Icon type="jack-yuechi" className={styles.icon} />
 
@@ -11,14 +11,14 @@ const UserIcon = () => <Icon type="jack-user" className={styles.icon} />
 const ExitIcon = () => <Icon type="jack-tuichu" className={styles.icon} />
 
 const Header = () => {
-  const { loginStore } = useStores()
-  const { exit } = loginStore
+  // const { loginStore } = useStores()
+  // const { exit } = loginStore
 
-  const history = useHistory()
+  // const history = useHistory()
 
   const exitToLogin = async () => {
-    const res = await exit()
-    res && history.push('/login')
+    // const res = await exit()
+    // res && history.push('/login')
   }
 
   const infos = [

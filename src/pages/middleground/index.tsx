@@ -11,6 +11,8 @@ const PutManage = React.lazy(() => import('./putManage'))
 const ReceiveManage = React.lazy(() => import('./receiveManage'))
 const OrderPage = React.lazy(() => import('./orderPage'))
 const ProductPage = React.lazy(() => import('./productPage'))
+const StateTracking = React.lazy(() => import('./stateTracking'))
+const BindProduce = React.lazy(() => import('./bindProduce'))
 
 const LOGO =
   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
@@ -114,6 +116,11 @@ const EnterpriseHome = () => {
           />
           <Route path="/control-panel/order/:type" component={OrderPage} />
           <Route path="/control-panel/product/:type" component={ProductPage} />
+          <Route path="/control-panel/state/:id" component={StateTracking} />
+          <Route
+            path="/control-panel/bind-produce/:id"
+            component={BindProduce}
+          />
         </Switch>
       </div>
     </div>

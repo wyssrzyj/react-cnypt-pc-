@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import styles from './index.module.less'
-import { Tabs, Button, Checkbox } from 'antd'
+import { Tabs, Button, Checkbox, Pagination } from 'antd'
 import { useHistory, useLocation } from 'react-router'
 import { urlGet } from '@/utils/tool'
 import SearchBar from '../components/searchBar'
 import { cloneDeep } from 'lodash'
 import ListHeader from '../components/listHeader'
 import ListCard from '../components/listCard'
+import { useStores, observer } from '@/utils/mobx'
+import { ORDER_EMPTY, tabsStatus } from '../putManage'
 
 const { TabPane } = Tabs
 
@@ -26,6 +28,7 @@ export interface Params {
   maxAmount?: string
   startTime?: any
   endTime?: any
+  status?: string | number
 }
 
 const tabs: Array<OptionType> = [
@@ -35,8 +38,8 @@ const tabs: Array<OptionType> = [
   { label: '待验收', url: '', key: 'checked' },
   { label: '已完成', url: '', key: 'complete' },
   { label: '退回', url: '', key: 'return' },
-  { label: '取消', url: '', key: 'cancel' },
-  { label: '草稿箱', url: '', key: 'draft' }
+  { label: '取消', url: '', key: 'cancel' }
+  // { label: '草稿箱', url: '', key: 'draft' }
 ]
 
 const SORT_ICON_MAP = new Map()
@@ -51,39 +54,66 @@ SORT_TYPE.set(1, 'desc')
 
 const DEL_CHECK_KEYS = ['complete', 'return']
 
-const list = [
-  { type: 'receive', orderStatus: -2, checked: false },
-  { type: 'receive', orderStatus: 1, checked: false },
-  { type: 'receive', orderStatus: 2, checked: false },
-  { type: 'receive', orderStatus: 3, checked: false },
-  { type: 'receive', orderStatus: 4, checked: false },
-  { type: 'receive', orderStatus: 5, checked: false },
-  { type: 'receive', orderStatus: -3, checked: false }
-]
+const defaultPageSize = 20
 
 const ReceiveManage = () => {
   const history = useHistory()
   const location = useLocation()
+  const { pathname, search } = location
+  const searchRef = useRef()
+
+  const { orderStore, factoryStore } = useStores()
+  const { getOrders, delOrders } = orderStore
+  const { productCategory } = factoryStore
 
   const [activeKey, setActiveKey] = useState<string>('all')
   const [params, setParams] = useState<Params>({
     pageNum: 1,
-    pageSize: 5
+    pageSize: defaultPageSize
   })
-  const [dataSource, setDataSource] = useState<any[]>(list)
+  const [dataSource, setDataSource] = useState<any[]>([])
   const [allChecked, setAllChecked] = useState<boolean>(false)
   const [delBtnDisabled, setDelBtnDisabled] = useState<boolean>(false)
+  const [total, setTotal] = useState<number>(100)
+
+  // 获取产品类别
+  useEffect(() => {
+    ;(async () => {
+      await productCategory()
+    })()
+  }, [])
 
   useEffect(() => {
-    const res: any = urlGet()
-    if (res) {
-      const key = res.key || 'all'
-      history.replace(`${location.pathname}?key=${key}`)
-      setActiveKey(key)
-    } else {
-      setActiveKey('all')
+    const res: any = urlGet() || {}
+    const { pageNum = 1, pageSize = defaultPageSize, key = 'all' } = res
+    const keys = Reflect.ownKeys(res)
+    const newParams = cloneDeep(params)
+    let flag = false
+    if (keys.includes('pageSize') || keys.includes('pageNum')) {
+      flag =
+        +pageNum === +newParams.pageNum && +pageSize === +newParams.pageSize
     }
-  }, [])
+
+    if (flag) return
+    const targetUrl = `${location.pathname}?key=${key}&pageNum=${pageNum}&pageSize=${pageSize}`
+
+    if (targetUrl !== `${pathname}${search}`) {
+      history.replace(targetUrl)
+    }
+
+    setActiveKey(key)
+    // tab页签变化 页码变化 更改查询条件
+    newParams.pageNum = +pageNum || 1
+    newParams.pageSize = +pageSize || defaultPageSize
+    const target = +tabsStatus.get(activeKey)
+    if (target !== 0) {
+      newParams.status = +tabsStatus.get(activeKey)
+    } else {
+      // 全部订单
+      delete newParams.status
+    }
+    setParams(newParams)
+  }, [search, activeKey])
 
   useEffect(() => {
     const flag = dataSource.every(item => !item.checked)
@@ -96,6 +126,7 @@ const ReceiveManage = () => {
   }
 
   const changeParams = values => {
+    // 查询条件变更时 点击查询按钮的回调
     const newParams = cloneDeep(params)
     const keys = Reflect.ownKeys(values)
     keys.forEach(item => {
@@ -104,8 +135,24 @@ const ReceiveManage = () => {
     setParams(newParams)
   }
 
+  const getData = async () => {
+    // 查询条件变更 发送请求
+    const res = await getOrders(params)
+    if (res) {
+      const { records = [] } = res
+      records.forEach(record => {
+        record.type = 'receive'
+        record.checked = false
+      })
+      setTotal(total)
+      setDataSource(records)
+    }
+  }
+
   useEffect(() => {
-    console.log(params, 'params')
+    setTimeout(async () => {
+      await getData()
+    })
   }, [params])
 
   const allChoose = event => {
@@ -124,12 +171,18 @@ const ReceiveManage = () => {
     setDataSource(newDataSource)
   }
 
-  const delOrders = () => {
+  const deleteOrders = async () => {
     // 删除完了之后 重新获取当前页的数据
     const list = dataSource.filter(item => item.checked)
-    console.log('🚀 ~ file: index.tsx ~ line 132 ~ delOrders ~ list', list)
-    const newParams = cloneDeep(params)
-    setParams(newParams)
+    const targetList = list.map(item => item.id)
+    await delOrders(targetList)
+    await getData()
+  }
+
+  const paginationChange = (page, pageSize) => {
+    history.replace(
+      `${pathname}?key=${activeKey}&pageNum=${page}&pageSize=${pageSize}`
+    )
   }
 
   return (
@@ -142,7 +195,11 @@ const ReceiveManage = () => {
         </Tabs>
       </div>
       {/* 搜索栏 */}
-      <SearchBar callback={changeParams}></SearchBar>
+      <SearchBar
+        callback={changeParams}
+        type={'receive'}
+        ref={searchRef}
+      ></SearchBar>
       {/* 列表头部 */}
       <ListHeader
         callback={changeParams}
@@ -151,30 +208,49 @@ const ReceiveManage = () => {
       ></ListHeader>
       {/* 加工厂 退回 已完成 列表显示全选 */}
       <div>
-        {dataSource.map((item, idx) => {
-          return (
-            <ListCard
-              showCheck={DEL_CHECK_KEYS.includes(activeKey)}
-              data={item}
-              key={idx}
-              curKey={activeKey}
-              callback={event => dataChoose(event.target.checked, idx)}
-            ></ListCard>
-          )
-        })}
+        {Array.isArray(dataSource) && dataSource.length > 0 ? (
+          dataSource.map((card, idx) => {
+            return (
+              <ListCard
+                searchBar={searchRef.current}
+                getData={getData}
+                showCheck={DEL_CHECK_KEYS.includes(activeKey)}
+                data={card}
+                key={idx + card.status}
+                curKey={activeKey}
+                callback={event => dataChoose(event.target.checked, idx)}
+              ></ListCard>
+            )
+          })
+        ) : (
+          <div className={styles.emptyBox}>
+            <img src={ORDER_EMPTY} alt="" className={styles.orderEmpty} />
+          </div>
+        )}
         {DEL_CHECK_KEYS.includes(activeKey) ? (
           <div>
             <Checkbox onChange={allChoose} checked={allChecked}>
               全选
             </Checkbox>
-            <Button disabled={delBtnDisabled} onClick={delOrders}>
+            <Button disabled={delBtnDisabled} onClick={deleteOrders}>
               批量删除
             </Button>
           </div>
         ) : null}
       </div>
+
+      <div className={styles.pagenationBox}>
+        <Pagination
+          total={total}
+          pageSize={+params.pageSize}
+          current={+params.pageNum}
+          onChange={paginationChange}
+          hideOnSinglePage
+          pageSizeOptions={['5', '10', '20']}
+        ></Pagination>
+      </div>
     </div>
   )
 }
 
-export default ReceiveManage
+export default observer(ReceiveManage)

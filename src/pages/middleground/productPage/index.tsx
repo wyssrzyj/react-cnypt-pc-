@@ -3,12 +3,12 @@ import { Icon } from '@/components'
 import Title from '../controlPanel/components/title'
 import { Form, Col, Row, Table, Input, Button, Select } from 'antd'
 import FormNode from '@/components/FormNode'
-import { useHistory, useLocation } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import styles from './index.module.less'
 import { cloneDeep } from 'lodash'
 import { useStores, observer, toJS } from '@/utils/mobx'
 import ProductModal from './productModal'
-import { getUId } from '@/utils/tool'
+import { getUId, urlGet } from '@/utils/tool'
 import {
   keys,
   layout,
@@ -28,14 +28,17 @@ const pageTitleMap = new Map()
 pageTitleMap.set('add', '新增商品')
 pageTitleMap.set('edit', '编辑商品')
 pageTitleMap.set('detail', '商品详情')
+pageTitleMap.set('confirm', '商品详情')
 
 const ProductPage = () => {
   const [form] = Form.useForm()
+  const { resetFields } = form
   const history = useHistory()
-  const location = useLocation()
+  const routerParams: { type?: string } = useParams()
 
   const { orderStore, commonStore, factoryStore } = useStores()
-  const { setProductInfo, productInfo } = orderStore
+  const { setProductInfo, productInfo, setFromProduct, getOrder, fromOrder } =
+    orderStore
   const { dictionary } = commonStore
   const { productCategory, productCategoryList } = factoryStore
 
@@ -56,13 +59,29 @@ const ProductPage = () => {
   const [amount, setAmount] = useState<number>(0) // 产品总价
 
   useEffect(() => {
-    const type = location.pathname.replace('/control-panel/product/', '')
+    setFromProduct(false)
+    // 编辑 查看时 需要初始化 showInvoiceCount
+    const urlParams: { id?: string } = urlGet()
+    const { id = '' } = urlParams
+    if (id && pageType !== 'add' && !fromOrder) {
+      ;(async () => {
+        await getOrder(id)
+        await resetFields()
+      })()
+    }
+    return () => {
+      setFromProduct(true)
+    }
+  }, [pageType])
+
+  useEffect(() => {
+    const { type } = routerParams
     setPageType(type)
     if (type !== 'add') {
       setProductData(productInfo.skuVOList)
       setMaterialData(productInfo.goodsMaterialInfoList)
     }
-  }, [])
+  }, [productInfo])
 
   useEffect(() => {
     ;(async () => {
@@ -110,9 +129,10 @@ const ProductPage = () => {
       width: 210,
       render: (val, _row, idx) => (
         <Input
-          placeholder={'请输入SKU编号'}
+          placeholder={pageType === 'confirm' ? '' : '请输入SKU编号'}
           value={val}
           onChange={event => productValuesChange(event, 'skuCode', idx)}
+          disabled={pageType === 'confirm'}
         ></Input>
       )
     },
@@ -121,6 +141,7 @@ const ProductPage = () => {
         <TabelTitle
           title={'颜色'}
           callback={() => showProductModal('color')}
+          disabled={pageType === 'confirm'}
         ></TabelTitle>
       ),
       align: 'center',
@@ -128,9 +149,10 @@ const ProductPage = () => {
       width: 210,
       render: (val, _row, idx) => (
         <Input
-          placeholder={'请输入颜色'}
+          placeholder={pageType === 'confirm' ? '' : '请输入颜色'}
           value={val}
           onChange={event => productValuesChange(event, 'color', idx)}
+          disabled={pageType === 'confirm'}
         ></Input>
       )
     },
@@ -139,6 +161,7 @@ const ProductPage = () => {
         <TabelTitle
           title={'尺寸'}
           callback={() => showProductModal('size')}
+          disabled={pageType === 'confirm'}
         ></TabelTitle>
       ),
       align: 'center',
@@ -146,9 +169,10 @@ const ProductPage = () => {
       width: 210,
       render: (val, _row, idx) => (
         <Input
-          placeholder={'请输入尺寸'}
+          placeholder={pageType === 'confirm' ? '' : '请输入尺寸'}
           value={val}
           onChange={event => productValuesChange(event, 'size', idx)}
+          disabled={pageType === 'confirm'}
         ></Input>
       )
     },
@@ -159,9 +183,10 @@ const ProductPage = () => {
       width: 210,
       render: (val, _row, idx) => (
         <Input
-          placeholder={'请输入数量'}
+          placeholder={pageType === 'confirm' ? '' : '请输入数量'}
           value={val}
           onChange={event => productValuesChange(event, 'quantity', idx)}
+          disabled={pageType === 'confirm'}
         ></Input>
       )
     },
@@ -172,9 +197,10 @@ const ProductPage = () => {
       width: 210,
       render: (val, _row, idx) => (
         <Input
-          placeholder={'请输入单价'}
+          placeholder={pageType === 'confirm' ? '' : '请输入单价'}
           value={val}
           onChange={event => productValuesChange(event, 'price', idx)}
+          disabled={pageType === 'confirm'}
         ></Input>
       )
     },
@@ -193,7 +219,7 @@ const ProductPage = () => {
   ]
 
   const materialValuesChange = (event, field, index) => {
-    let value = ['supplyType', 'materialTypeId'].includes(field)
+    let value = ['supplyType', 'materialType'].includes(field)
       ? event
       : event.target.value
     const targetData = cloneDeep(materialData)
@@ -217,7 +243,7 @@ const ProductPage = () => {
   const materialColumns: any = [
     {
       title: '物料类型',
-      dataIndex: 'materialTypeId',
+      dataIndex: 'materialType',
       width: 265,
       align: 'center',
       render: (value, _row, idx) => {
@@ -226,7 +252,7 @@ const ProductPage = () => {
             value={value}
             style={{ width: '100%', textAlign: 'initial' }}
             placeholder={'请选择物料类型'}
-            onChange={val => materialValuesChange(val, 'materialTypeId', idx)}
+            onChange={val => materialValuesChange(val, 'materialType', idx)}
           >
             {materialOptions.map(option => (
               <Option value={option.value} key={option.value}>
@@ -337,6 +363,10 @@ const ProductPage = () => {
   }
 
   const submitClick = async () => {
+    if (pageType === 'confrim') {
+      back()
+      return
+    }
     let flag
     if (productData.length) {
       flag = !productData.every(item => {
@@ -346,6 +376,7 @@ const ProductPage = () => {
       flag = true
     }
     setProductDataError(flag)
+
     try {
       const values = await form.validateFields()
 
@@ -356,6 +387,9 @@ const ProductPage = () => {
         totalPrice: amount, // 接口 产品总价
         uid: getUId(),
         ...values
+      }
+      if (productInfo.id) {
+        info.id = productInfo.id
       }
       setProductInfo(!flag ? info : {})
       back()
@@ -393,6 +427,7 @@ const ProductPage = () => {
         onValuesChange={valuesChange}
         scrollToFirstError={true}
         onFinish={submitClick}
+        initialValues={productInfo}
       >
         <div className={styles.header}>
           <Icon
@@ -419,13 +454,14 @@ const ProductPage = () => {
                   data[i] = item[i]
                 }
               })
+              data.disabled = pageType === 'confirm'
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem
                     name={item.field}
                     label={item.label}
                     rules={[{ required: item.required, message: item.message }]}
-                    initialValue={productInfo[item.field]}
+                    // initialValue={productInfo[item.field]}
                     {...layout}
                   >
                     <FormNode {...data}></FormNode>
@@ -439,13 +475,18 @@ const ProductPage = () => {
           <Title title={'商品规格'}></Title>
           <Table
             pagination={false}
-            columns={productColumns}
+            columns={
+              pageType === 'confirm'
+                ? productColumns.slice(0, productColumns.length - 1)
+                : productColumns
+            }
             dataSource={productData}
             rowKey={'uid'}
           ></Table>
           {productDataError ? (
             <div className={styles.productErrorMsg}>{productErrorMsg}</div>
           ) : null}
+
           <div className={styles.productFooter}>
             <div className={styles.footerItem}>
               合计数量 <span className={styles.footerNumber}>{count}</span>件
@@ -460,7 +501,11 @@ const ProductPage = () => {
           <Title title={'物料信息'}></Title>
           <Table
             pagination={false}
-            columns={materialColumns}
+            columns={
+              pageType === 'confirm'
+                ? materialColumns.slice(0, materialColumns.length - 1)
+                : materialColumns
+            }
             dataSource={materialData}
             rowKey={'uid'}
           ></Table>
@@ -476,13 +521,14 @@ const ProductPage = () => {
                   data[i] = item[i]
                 }
               })
+              data.disabled = pageType === 'confirm'
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem
                     name={item.field}
                     label={item.label}
                     rules={[{ required: item.required, message: item.message }]}
-                    initialValue={productInfo[item.field]}
+                    // initialValue={productInfo[item.field]}
                     {...layout2}
                   >
                     <FormNode {...data}></FormNode>
@@ -492,10 +538,23 @@ const ProductPage = () => {
             })}
           </Row>
         </section>
-
-        <Button type={'primary'} className={styles.saveBtn} htmlType={'submit'}>
-          保存商品
-        </Button>
+        {pageType === 'confirm' ? (
+          <Button
+            type={'primary'}
+            className={styles.saveBtn}
+            htmlType={'submit'}
+          >
+            返回
+          </Button>
+        ) : (
+          <Button
+            type={'primary'}
+            className={styles.saveBtn}
+            htmlType={'submit'}
+          >
+            保存商品
+          </Button>
+        )}
       </Form>
     </div>
   )

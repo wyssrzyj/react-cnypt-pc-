@@ -16,6 +16,13 @@ export interface Params {
   endTime?: any
 }
 
+interface Config {
+  label: string
+  sort: number
+  field: string
+  width: number
+}
+
 const SORT_ICON_MAP = new Map()
 SORT_ICON_MAP.set(-1, 'jack-shengjiangxu-morenzhuangtai')
 SORT_ICON_MAP.set(0, 'jack-shengjiangxu-shengxu')
@@ -26,7 +33,7 @@ SORT_TYPE.set(-1, null)
 SORT_TYPE.set(0, 'asc')
 SORT_TYPE.set(1, 'desc')
 
-const headerConfigs = [
+const headerConfigs: Array<Partial<Config>> = [
   {
     label: '订单详情',
     width: 400
@@ -34,19 +41,19 @@ const headerConfigs = [
   {
     label: '数量',
     sort: -1,
-    field: 'count',
+    field: 'total_amount',
     width: 200
   },
   {
     label: '总金额(元)',
     sort: -1,
-    field: 'amount',
+    field: 'total_price',
     width: 200
   },
   {
     label: '订单状态',
     sort: -1,
-    field: 'amount',
+    field: 'status',
     width: 200
   },
   {
@@ -55,7 +62,7 @@ const headerConfigs = [
 ]
 
 const ListHeader = ({ callback, curKey, type }) => {
-  const [configs, setConfigs] = useState(headerConfigs)
+  const [configs, setConfigs] = useState<Array<Partial<Config>>>(headerConfigs)
 
   useEffect(() => {
     const newConfigs = cloneDeep(configs)
@@ -63,14 +70,13 @@ const ListHeader = ({ callback, curKey, type }) => {
     newConfigs[3] = {
       label: '订单状态',
       sort: -1,
-      field: 'amount',
+      field: 'status',
       width: 200
     }
 
     if (curKey === 'complete') {
       newConfigs[3] = {
         label: '订单完成时间',
-        sort: -1,
         field: 'completeTime',
         width: 200
       }
@@ -78,7 +84,6 @@ const ListHeader = ({ callback, curKey, type }) => {
     if (curKey === 'draft') {
       newConfigs[3] = {
         label: '操作时间',
-        sort: -1,
         field: 'editTime',
         width: 200
       }
@@ -86,7 +91,6 @@ const ListHeader = ({ callback, curKey, type }) => {
     if (curKey === 'return' && type === 'receive') {
       newConfigs[3] = {
         label: '退回订单时间',
-        sort: -1,
         field: 'returnTime',
         width: 200
       }
@@ -122,7 +126,10 @@ const ListHeader = ({ callback, curKey, type }) => {
           <div
             key={idx}
             className={styles.listHeaderItem}
-            style={{ width: item.width }}
+            style={{
+              width: item.width,
+              flex: idx === configs.length - 1 ? 1 : null
+            }}
           >
             {item.label}
             {typeof item.sort === 'number' ? (

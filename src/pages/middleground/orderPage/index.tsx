@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Icon } from '@/components'
 import Title from '../controlPanel/components/title'
 import styles from './index.module.less'
-import { Form, Col, Row, Table, Button } from 'antd'
+import { Form, Col, Row, Table, Button, message } from 'antd'
 import FormNode from '@/components/FormNode'
-import { useHistory } from 'react-router'
 import { observer, toJS, useStores } from '@/utils/mobx'
 import { cloneDeep, isEmpty, debounce } from 'lodash'
 import moment from 'moment'
+import { useHistory, useParams } from 'react-router'
+import { urlGet } from '@/utils/tool'
+import { layout2 } from '../productPage/configs'
 
 const FormItem = Form.Item
 
@@ -22,7 +24,8 @@ const keys = [
   'showSearch',
   'onSearch',
   'filterOption',
-  'allowClear'
+  'allowClear',
+  'width'
 ]
 
 const Footer = ({ data }) => {
@@ -38,12 +41,22 @@ const Footer = ({ data }) => {
   )
 }
 
-const OrderPage = props => {
-  const { title = '新增订单' } = props
+const OrderTitleMap = new Map()
+OrderTitleMap.set('add', '新增订单')
+OrderTitleMap.set('edit', '编辑订单')
+OrderTitleMap.set('confirm', '确认订单')
+
+interface ProductInfo {
+  [key: string]: any
+  uid?: string | number
+}
+const OrderPage = () => {
   const [form] = Form.useForm()
-  const { validateFields } = form
+  const { validateFields, resetFields } = form
+  const routerParams: { type: string } = useParams()
 
   const history = useHistory()
+
   const { orderStore, factoryStore, commonStore } = useStores()
   const {
     productInfo,
@@ -51,7 +64,13 @@ const OrderPage = props => {
     orderInfo,
     setOrderInfo,
     getSearchEnterprises,
-    saveOrder
+    saveOrder,
+    getOrder,
+    setOrderGetInfo,
+    orderGetInfo,
+    initOrderAndProduct,
+    setFromOrder,
+    factoryConfirmOrder
   } = orderStore
   const { getProductCategoryName } = factoryStore
   const { dictionary } = commonStore
@@ -203,20 +222,89 @@ const OrderPage = props => {
     }
   ]
 
+  const confirmConfigs = [
+    {
+      label: '确认结果',
+      required: true,
+      message: '请选择确认结果',
+      width: 240,
+      type: 'select',
+      options: [
+        { label: '通过', value: 2 },
+        { label: '不通过', value: -3 }
+      ],
+      placeholder: '请选择确认结果',
+      field: 'orderStatus',
+      span: 20
+    },
+    {
+      label: '附件',
+      type: 'annex',
+      field: 'urlList',
+      maxSize: 20,
+      span: 20,
+      accept: '.jpg,.png,.jpeg,.rar,.zip,.doc,.docx,.pdf',
+      tips: '支持扩展名：.rar .zip .doc .docx .pdf .jpg...'
+    },
+    {
+      label: '不通过原因',
+      placeholder: '请输入不通过原因',
+      type: 'textarea',
+      field: 'passFailReason',
+      span: 20
+    }
+  ]
+
   const [showInvoiceCount, setShowInvoiceCount] = useState(false)
-  const [tableData, setTableData] = useState([{ uid: 0 }])
+  const [tableData, setTableData] = useState<Array<ProductInfo>>([{ uid: 0 }])
   const [contactConfigs, setContactConfigs] = useState(contactInitConfigs)
+  const [orderId, setOrderId] = useState('') // 订单id
+  const [loading, setLoading] = useState(false) // 提交loading
+  const [pageType, setPageType] = useState('add') // 页面类型 add edit confirm
+  const [factoryOrderStatus, setFactoryOrderStatus] = useState(2) // 加工厂确认订单状态
 
   useEffect(() => {
     // 编辑 查看时 需要初始化 showInvoiceCount
+    const urlParams: { id?: string } = urlGet()
+    const { id = '' } = urlParams
+    const { type = '' } = routerParams
+
+    setPageType(type)
+    setOrderId(id)
+    ;(async () => {
+      if (orderGetInfo && id) {
+        const order = await getOrder(id)
+        if (order) {
+          const target = cloneDeep(contactConfigs)
+          const factoryInitOptions = [
+            {
+              label: order?.orderVO?.supplierName,
+              value: order?.orderVO?.supplierId
+            }
+          ]
+          target[0].options = factoryInitOptions
+          setContactConfigs(target)
+        }
+
+        await resetFields()
+      }
+      if (orderGetInfo && !id) {
+        initOrderAndProduct()
+        await resetFields()
+      }
+    })()
   }, [])
 
   useEffect(() => {
     setShowInvoiceCount(!!orderInfo.addedValueTax)
+    // contactInitConfigs
   }, [orderInfo])
 
   useEffect(() => {
     onSearch('')
+    return () => {
+      setFromOrder(true)
+    }
   }, [])
 
   useEffect(() => {
@@ -224,7 +312,8 @@ const OrderPage = props => {
       setTableData([{ uid: 0 }])
     } else {
       ;(async () => {
-        const target = cloneDeep(productInfo)
+        const target: ProductInfo =
+          cloneDeep(productInfo) || ({ uid: 0 } as ProductInfo)
         const data =
           (await getProductCategoryName([productInfo.goodsCategoryId])) || []
 
@@ -234,7 +323,7 @@ const OrderPage = props => {
         setTableData([target])
       })()
     }
-  }, [])
+  }, [productInfo])
 
   const onSearch = debounce(async value => {
     const target = cloneDeep(contactConfigs)
@@ -253,9 +342,13 @@ const OrderPage = props => {
   }, 200)
 
   const valuesChange = (values, allValues) => {
+    // setFactoryOrderStatus
     const keys = Reflect.ownKeys(values)
     if (keys.includes('addedValueTax')) {
       setShowInvoiceCount(!!values['addedValueTax'])
+    }
+    if (keys.includes('orderStatus')) {
+      setFactoryOrderStatus(values['addedValueTax'])
     }
     if (keys.includes('supplierName')) {
       //
@@ -270,22 +363,47 @@ const OrderPage = props => {
     setTableData([{ uid: 0 }])
   }
 
-  const editProduct = () => {
-    history.push('/control-panel/product/edit')
-  }
-
   const submitClick = async status => {
     try {
+      if (loading) return
+      setLoading(true)
       const values = await validateFields()
+      // 加工厂确认订单页面
+      if (pageType === 'confirm') {
+        const params = {
+          passFailReason: values['passFailReason'],
+          status: values['orderStatus'],
+          urlList: Array.isArray(values['urlList'])
+            ? values['urlList'].map(item => item.thumbUrl)
+            : [],
+          id: orderId
+        }
+
+        const res = await factoryConfirmOrder(params)
+        res && back()
+        return
+      }
+      // 发单商 新增/编辑订单
       values.status = status
       let times = ['materialArrivalTime', 'expectDeliveryTime']
       times.forEach(item => {
         values[item] = moment(values[item]).valueOf()
       })
+      if (orderId) {
+        values.id = orderId
+      }
 
       const params = {
         orderVO: values,
-        goodsInfoVO: toJS(productInfo)
+        goodsInfoVOList: [toJS(productInfo)]
+      }
+      // 商品信息为空
+      if (
+        isEmpty(params.goodsInfoVOList[0]) ||
+        params.goodsInfoVOList[0].uid === 0
+      ) {
+        message.error('请至少填写一条商品信息~')
+        return
       }
 
       // 处理加工厂名称
@@ -294,22 +412,31 @@ const OrderPage = props => {
           item => item.value === values.supplierId
         ) || {}
       params.orderVO.supplierName = targetEnterPrise['label']
-      // 处理商品附件
-      params.goodsInfoVO.annex = params.goodsInfoVO.annex.map(
-        item => item.thumbUrl
-      )
-      // 处理商品款图
-      params.goodsInfoVO.stylePicture = params.goodsInfoVO.stylePicture.map(
-        item => item.thumbUrl
-      )
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 275 ~ submitClick ~ params',
-        params
-      )
+      if (
+        Array.isArray(params.goodsInfoVOList) &&
+        params.goodsInfoVOList.length
+      ) {
+        // 处理商品附件
+        const annex = params.goodsInfoVOList[0].annex
+        if (Array.isArray(annex)) {
+          params.goodsInfoVOList[0].annex = params.goodsInfoVOList[0].annex.map(
+            item => item.thumbUrl
+          )
+        }
+        // 处理商品款图
+        const stylePicture = params.goodsInfoVOList[0].stylePicture
+        if (Array.isArray(stylePicture)) {
+          params.goodsInfoVOList[0].stylePicture =
+            params.goodsInfoVOList[0].stylePicture.map(item => item.thumbUrl)
+        }
+      }
+
       await saveOrder(params, status)
-      history.goBack()
+      back()
     } catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -374,7 +501,17 @@ const OrderPage = props => {
       title: '操作',
       align: 'center',
       render: (_val, row) => {
-        if (row.uid) {
+        if (pageType === 'confirm') {
+          return (
+            <div className={styles.goodsBtns}>
+              <span className={styles.goodsAddBtn} onClick={toConfirmProduct}>
+                查看
+              </span>
+            </div>
+          )
+        }
+
+        if (+row.uid) {
           return (
             <div className={styles.goodsBtns}>
               <span className={styles.goodsBtn} onClick={delProduct}>
@@ -398,12 +535,35 @@ const OrderPage = props => {
     }
   ]
 
+  const toConfirmProduct = () => {
+    setOrderGetInfo()
+    const url = `/control-panel/product/confirm?id=${orderId}`
+    history.push(url)
+  }
+
   const toAddProduct = () => {
-    history.push('/control-panel/product/add')
+    setOrderGetInfo()
+    resetProductInfo()
+    const url = orderId
+      ? `/control-panel/product/add?id=${orderId}`
+      : `/control-panel/product/add`
+    history.push(url)
+  }
+
+  const editProduct = () => {
+    setOrderGetInfo()
+    const url = orderId
+      ? `/control-panel/product/edit?id=${orderId}`
+      : `/control-panel/product/edit`
+    history.push(url)
   }
 
   const backToBusiness = () => {
     history.push('/control-panel/put-manage')
+  }
+
+  const back = () => {
+    history.goBack()
   }
 
   return (
@@ -415,6 +575,7 @@ const OrderPage = props => {
         onValuesChange={valuesChange}
         scrollToFirstError={true}
         onFinish={() => submitClick(1)}
+        initialValues={orderInfo}
       >
         <div className={styles.header}>
           <Icon
@@ -422,7 +583,7 @@ const OrderPage = props => {
             type={'jack-left-copy'}
             className={styles.headerIcon}
           ></Icon>
-          {title}
+          {OrderTitleMap.get(pageType)}
         </div>
 
         <section className={styles.orderSection}>
@@ -446,6 +607,7 @@ const OrderPage = props => {
               ) {
                 initialValue = moment(initialValue)
               }
+              data.disabled = pageType === 'confirm'
 
               return (
                 <Col key={item.field} span={item.span}>
@@ -453,7 +615,7 @@ const OrderPage = props => {
                     name={item.field}
                     label={item.label}
                     rules={[{ required: item.required, message: item.message }]}
-                    initialValue={orderInfo[item.field]}
+                    // initialValue={orderInfo[item.field]}
                     {...layout}
                   >
                     <FormNode {...data}></FormNode>
@@ -486,13 +648,14 @@ const OrderPage = props => {
                 }
               })
 
+              data.disabled = pageType === 'confirm'
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem
                     name={item.field}
                     label={item.label}
                     rules={[{ required: item.required, message: item.message }]}
-                    initialValue={orderInfo[item.field]}
+                    // initialValue={orderInfo[item.field]}
                     {...layout}
                   >
                     <FormNode {...data}></FormNode>
@@ -503,23 +666,83 @@ const OrderPage = props => {
           </Row>
         </section>
 
-        <div className={styles.submitBtns}>
-          <Button
-            type={'primary'}
-            ghost
-            className={styles.saveBtn}
-            onClick={() => submitClick(-1)}
-          >
-            保存
-          </Button>
-          <Button
-            type={'primary'}
-            className={styles.submitBtn}
-            htmlType={'submit'}
-          >
-            提交订单
-          </Button>
-        </div>
+        {pageType === 'confirm' ? (
+          <section className={styles.goodsSection}>
+            <Title title={'确认订单'}></Title>
+            <Row className={styles.row}>
+              {/* 根据确认结果显示不同内容 */}
+              {(factoryOrderStatus === 2
+                ? confirmConfigs.slice(0, 1)
+                : confirmConfigs
+              ).map(item => {
+                const data: any = {}
+                keys.forEach(i => {
+                  if (![null, undefined].includes(item[i])) {
+                    data[i] = item[i]
+                  }
+                })
+                let initialValue = null
+                // 初始化确认结果为通过
+                if (item.field === 'orderStatus') {
+                  initialValue = factoryOrderStatus
+                }
+                return (
+                  <Col key={item.field} span={item.span}>
+                    <FormItem
+                      name={item.field}
+                      label={item.label}
+                      rules={[
+                        { required: item.required, message: item.message }
+                      ]}
+                      initialValue={initialValue}
+                      {...layout2}
+                    >
+                      <FormNode {...data}></FormNode>
+                    </FormItem>
+                  </Col>
+                )
+              })}
+            </Row>
+          </section>
+        ) : null}
+
+        {pageType === 'confirm' ? (
+          <div className={styles.submitBtns}>
+            <Button
+              type={'primary'}
+              ghost
+              className={styles.saveBtn}
+              onClick={back}
+            >
+              取消
+            </Button>
+            <Button
+              type={'primary'}
+              className={styles.submitBtn}
+              htmlType={'submit'}
+            >
+              提交
+            </Button>
+          </div>
+        ) : (
+          <div className={styles.submitBtns}>
+            <Button
+              type={'primary'}
+              ghost
+              className={styles.saveBtn}
+              onClick={() => submitClick(-1)}
+            >
+              保存
+            </Button>
+            <Button
+              type={'primary'}
+              className={styles.submitBtn}
+              htmlType={'submit'}
+            >
+              提交订单
+            </Button>
+          </div>
+        )}
       </Form>
     </div>
   )

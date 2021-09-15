@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Tabs } from 'antd'
 import styles from './todo.module.less'
-import { PlusCircleTwoTone } from '_@ant-design_icons@4.6.4@@ant-design/icons'
+import { PlusCircleTwoTone } from '@ant-design/icons'
 import Product from './components/allorders/product'
 import FormModular from './components/formModular/index'
 import TopList from './components/topList/index'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { LeftOutlined } from '_@ant-design_icons@4.6.4@@ant-design/icons'
+import { LeftOutlined } from '@ant-design/icons'
 import styles from './todo.module.less'
 import {
   Button,

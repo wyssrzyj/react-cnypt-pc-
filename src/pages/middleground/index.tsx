@@ -21,6 +21,7 @@ routeMap.set(0, Factory)
 routeMap.set(1, Business)
 
 const ControlPanel = React.lazy(() => import('./controlPanel'))
+const MonitorPage = React.lazy(() => import('./monitorPage'))
 
 const EnterpriseHome = () => {
   const location = useLocation()

@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import axios from '@/utils/axios'
 
 import { Icon } from '@/components'
 import styles from './index.module.less'
-import {
-  insertModelAPI,
-  listDataAPI,
-  equipmentDepartmentAPI,
-  moveAPI,
-  newlyAddedAPI,
-  searchAPI
-} from './services/nptice'
 import {
   Divider,
   Form,
@@ -19,9 +10,10 @@ import {
   Table,
   Space,
   Modal,
-  TreeSelect,
-  message
+  TreeSelect
+  // message
 } from 'antd'
+
 const rowKey = 'id'
 const { TreeNode } = TreeSelect
 const dealTypeData = data => {
@@ -35,8 +27,23 @@ const dealTypeData = data => {
   })
   return data
 }
+import { useStores } from '@/utils/mobx'
 
 const MonitorPage = () => {
+  const { monitorPage } = useStores()
+  const {
+    searchAPI,
+    newlyAddedAPI,
+    listDataAPI,
+    insertModelAPI,
+    equipmentDepartmentAPI,
+    moveAPI,
+    connectingAPI,
+    youChanAPI,
+    bindZhAPI
+  } = monitorPage
+  //优产账号弹窗
+  const [accountModalVisible, setaceousModalVisible] = useState(false)
   const [isDisable, setIsDibble] = useState(true) //判断按钮是否可用
   const [isModalVisible, setIsModalVisible] = useState(false) //设备弹窗
   const [judgment, setJudgment] = useState(false) //连接成功
@@ -51,15 +58,15 @@ const MonitorPage = () => {
   const onChangeset = value => {
     console.log(value)
   }
+
   // 获取设备品牌
   const allDictionary = async () => {
     const brand = await insertModelAPI([])
-    setEquipmentbrand(brand.data.cameraBrand)
+    setEquipmentbrand(brand.cameraBrand)
   }
-
   const getFactoryInfo = async () => {
     const response = await listDataAPI()
-    setList(response.data.records)
+    setList(response.records)
     const equipment = await equipmentDepartmentAPI()
     setDepartment(dealTypeData(equipment.data))
   }
@@ -68,7 +75,6 @@ const MonitorPage = () => {
     getFactoryInfo()
     allDictionary()
   }, [])
-  console.log(setSuccessFailure)
 
   const columns = [
     {
@@ -89,28 +95,24 @@ const MonitorPage = () => {
     {
       title: '连接状态',
       key: 'status',
-      dataIndex: 'status'
+      dataIndex: 'status',
+      render(value) {
+        console.log(value)
 
-      // return (
-      //   <>
-      //     {tags.map(tag => {
-      //       let color = '#45CB77'
-      //       if (tag === '0') {
-      //         color = '#E81414'
-      //       }
-      //       const style = {
-      //         color: color
-      //       }
-      //       return <span style={style}>{tag}</span>
-      //     })}
-      //   </>
-      // )
+        return value ? (
+          <span className={styles.success}>成功</span>
+        ) : (
+          <span className={styles.success}>失败</span>
+        )
+      }
     },
     {
       title: '所属部门',
       key: 'orgNameList',
-
-      dataIndex: 'orgNameList'
+      dataIndex: 'orgNameList',
+      render: value => {
+        return value.join('、')
+      }
     },
     {
       title: '操作',
@@ -131,8 +133,11 @@ const MonitorPage = () => {
           >
             编辑
           </a>
-          <Divider type="vertical" />
+          <a className={styles.vertical} href="">
+            |
+          </a>
           <a
+            className={styles.line}
             onClick={() => {
               DeleteDeviceDisplay(rData.id)
             }}
@@ -140,9 +145,13 @@ const MonitorPage = () => {
             {' '}
             删除
           </a>
-          <Divider type="vertical" />
+          <a className={styles.vertical} href="">
+            |
+          </a>
 
-          <a onClick={accountShowModal}>绑定优产部门</a>
+          <a className={styles.line} onClick={accountShowModal}>
+            绑定优产部门
+          </a>
         </Space>
       )
     }
@@ -155,7 +164,7 @@ const MonitorPage = () => {
     console.log(v.name)
     if (v.name != '') {
       const querydata = await searchAPI(v)
-      setList(querydata.data.records)
+      setList(querydata.records)
     } else {
       getFactoryInfo()
     }
@@ -164,7 +173,6 @@ const MonitorPage = () => {
   } //查询
   const querybtn = () => {
     queryform.submit()
-    // queryform.resetFields()
   }
 
   //   连接成功
@@ -188,6 +196,7 @@ const MonitorPage = () => {
   }
   const deleteDeviceCancel = async () => {
     const deletion = await moveAPI(moved)
+
     if (deletion.code == 200) {
       getFactoryInfo()
       setDeletionFailed(false)
@@ -213,29 +222,26 @@ const MonitorPage = () => {
     //  判断是测试还是提交
     if (connection) {
       const { serialNumber, verificationCode } = v
-      const connectParamVO = { serialNumber, verificationCode }
-      axios
-        .post('/api/factory/factory-camera/connect', { connectParamVO })
-        .then(res => {
-          console.log(res)
-        })
+      console.log(serialNumber)
+      console.log(verificationCode)
+      const ConnectingEquipment = await connectingAPI({
+        serialNumber,
+        verificationCode
+      })
+      if (ConnectingEquipment === 200) {
+        setSuccessFailure(true)
+      } else {
+        setSuccessFailure(false)
+      }
     } else {
       const newlywed = await newlyAddedAPI(v)
-      console.log(newlywed)
-      if (newlywed.code === 200) {
+      if (newlywed.code == 200) {
         setIsModalVisible(false)
         getFactoryInfo()
-        message.success(newlywed.msg)
-      } else {
-        message.warning(newlywed.msg)
       }
-
-      getFactoryInfo()
     }
 
     connections()
-    console.log(setList)
-    console.log(v)
   }
   // 新增显示
   const showModal = () => {
@@ -243,27 +249,24 @@ const MonitorPage = () => {
     form.resetFields()
   }
 
-  //优产账号弹窗
-  const [accountModalVisible, setaceousModalVisible] = useState(false)
-  const accountShowModal = () => {
+  const accountShowModal = async () => {
     form.resetFields()
-    setaceousModalVisible(true)
-  }
-  const handleOk = () => {
-    form.submit()
-    setaceousModalVisible(false)
-  }
-
-  const handleCancel = () => {
-    setaceousModalVisible(false)
+    const account = await youChanAPI()
+    console.log(account)
+    if (account.data == true) {
+      setaceousModalVisible(true)
+    }
   }
   //优产账号form
-  const onFinishProduction = (values: any) => {
+  const onFinishProduction = async (values: any) => {
     console.log('优产账号form:', values)
+    const bindYo = await bindZhAPI(values)
+    console.log(bindYo)
+    if (bindYo) {
+      setaceousModalVisible(false)
+    }
   }
-  const onFinishFailedProduction = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
-  }
+
   //   连接测试
   const connections = () => {
     if (connection) {
@@ -331,6 +334,7 @@ const MonitorPage = () => {
         }}
       ></Table>
       {/* 新增设备弹窗 */}
+
       <Modal
         title="新增设备"
         okText="提交"
@@ -454,26 +458,26 @@ const MonitorPage = () => {
       <Modal
         title="绑定优产账号"
         visible={accountModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
         footer={null}
         centered={true}
+        onCancel={() => {
+          setaceousModalVisible(false)
+        }}
       >
         <Form
           name="basic"
           labelCol={{ span: 4 }}
           initialValues={{ remember: true }}
           onFinish={onFinishProduction}
-          onFinishFailed={onFinishFailedProduction}
           autoComplete="off"
         >
-          <Form.Item name="username">
+          <Form.Item name="password">
             <Input
               prefix={<Icon type="jack-gerenzhongxin1" />}
               placeholder="请输入账号"
             />
           </Form.Item>
-          <Form.Item name="password">
+          <Form.Item name="mobile">
             <Input
               prefix={<Icon type="jack-mima" />}
               placeholder="请输入密码"
@@ -483,12 +487,7 @@ const MonitorPage = () => {
             className={styles.binds}
             wrapperCol={{ offset: 8, span: 16 }}
           >
-            <Button
-              onClick={handleOk}
-              className={styles.bind}
-              type="primary"
-              htmlType="submit"
-            >
+            <Button className={styles.bind} type="primary" htmlType="submit">
               立即绑定
             </Button>
           </Form.Item>
@@ -515,17 +514,23 @@ const MonitorPage = () => {
         centered={true}
         footer={null}
         visible={judgment}
+        onCancel={() => {
+          setJudgment(false)
+        }}
       >
-        <p>
-          <Icon type="jack-chenggong" className={styles.menuIcon} />
-        </p>
-        <p>连接成功</p>
-        <p>设备连接成功，X秒后返回</p>
-        <p>
-          <Button type="primary" onClick={cancellation}>
-            立即返回
-          </Button>
-        </p>
+        <div className={styles.oksa}>
+          <div className={styles.connectok}></div>
+          <p>
+            <Icon type="jack-chenggong" className={styles.menuIcon} />
+          </p>
+          <p>连接成功</p>
+          <p>设备连接成功，X秒后返回</p>
+          <p>
+            <Button type="primary" onClick={cancellation}>
+              立即返回
+            </Button>
+          </p>
+        </div>
       </Modal>
       {/* 失败的 */}
       <Modal
@@ -535,21 +540,27 @@ const MonitorPage = () => {
         visible={failed}
         onCancel={ConnectionFailedCancel}
       >
-        <p>
-          <Icon type="jack-sptg1" className={styles.menuIcon} />
-        </p>
-        <p>连接失败</p>
-        <p>您所提交的信息有误，请确认序列号或验证码</p>
-        <p>
-          <Button type="primary" onClick={ConnectionFailedCancel}>
-            立即返回
-          </Button>
-        </p>
+        <div className={styles.oksa}>
+          <div className={styles.connectok}></div>
+
+          <p>
+            <Icon type="jack-sptg1" className={styles.menuIcon} />
+          </p>
+          <p>连接失败</p>
+          <p>您所提交的信息有误，请确认序列号或验证码</p>
+          <p>
+            <Button type="primary" onClick={ConnectionFailedCancel}>
+              立即返回
+            </Button>
+          </p>
+        </div>
       </Modal>
       {/* 删除设备 */}
       <Modal
         className={styles.ok}
-        onCancel={deleteDeviceCancel}
+        onCancel={() => {
+          setDeletionFailed(false)
+        }}
         centered={true}
         footer={null}
         visible={deletionFailed}

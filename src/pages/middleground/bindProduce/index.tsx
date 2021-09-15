@@ -3,7 +3,6 @@ import { Steps } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 import { useHistory } from 'react-router'
-import classNames from 'classnames'
 import BindSoftWare from './components/bindSoftWare'
 
 const { Step } = Steps

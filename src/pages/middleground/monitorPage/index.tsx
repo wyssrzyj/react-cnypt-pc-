@@ -8,7 +8,8 @@ import {
   listDataAPI,
   equipmentDepartmentAPI,
   moveAPI,
-  newlyAddedAPI
+  newlyAddedAPI,
+  searchAPI
 } from './services/nptice'
 import {
   Divider,
@@ -148,11 +149,22 @@ const MonitorPage = () => {
   ]
 
   const [form] = Form.useForm()
-
+  const [queryform] = Form.useForm()
   // 查询form
-  const onQueryFinish = (values: any) => {
-    console.log('Success:', values)
+  const onQueryFinish = async (v: any) => {
+    console.log(v.name)
+    if (v.name != '') {
+      const querydata = await searchAPI(v)
+      setList(querydata.data.records)
+    } else {
+      getFactoryInfo()
+    }
+
     form.resetFields()
+  } //查询
+  const querybtn = () => {
+    queryform.submit()
+    // queryform.resetFields()
   }
 
   //   连接成功
@@ -281,18 +293,18 @@ const MonitorPage = () => {
       <Divider />
       <Form
         className={styles.header}
-        form={form}
+        form={queryform}
         name="basic"
         labelCol={{ span: 2 }}
         initialValues={{ remember: true }}
         onFinish={onQueryFinish}
         autoComplete="off"
       >
-        <Form.Item colon={false} label="设备关键名字" name="Equipments">
+        <Form.Item colon={false} label="设备关键名字" name="name">
           <Input className={styles.Input} placeholder="请输入设备名称" />
         </Form.Item>
         <Form.Item>
-          <Button className={styles.query} type="primary" htmlType="submit">
+          <Button className={styles.query} type="primary" onClick={querybtn}>
             查询
           </Button>
         </Form.Item>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useStores } from '@/utils/mobx'
 
 import { Icon } from '@/components'
 import styles from './index.module.less'
@@ -16,7 +17,7 @@ import {
 
 const rowKey = 'id'
 const { TreeNode } = TreeSelect
-const dealTypeData = data => {
+const dealTypeData = (data: any[]) => {
   data.forEach(item => {
     item.label = item.deptName
     item.value = item.id
@@ -27,24 +28,23 @@ const dealTypeData = data => {
   })
   return data
 }
-import { useStores } from '@/utils/mobx'
 
 const MonitorPage = () => {
-  const { monitorPage } = useStores()
+  const { monitorPageStore, commonStore } = useStores()
   const {
-    searchAPI,
-    newlyAddedAPI,
-    listDataAPI,
-    insertModelAPI,
-    equipmentDepartmentAPI,
-    moveAPI,
-    connectingAPI,
-    youChanAPI,
-    bindZhAPI
-  } = monitorPage
+    queryData,
+    newDataList,
+    getDataList,
+    equipmentDepartment,
+    deleteEvent,
+    connectingEquipment,
+    bindSuperiorProductAccount,
+    productAccount
+  } = monitorPageStore
+  const { allDictionary } = commonStore
   //优产账号弹窗
   const [accountModalVisible, setaceousModalVisible] = useState(false)
-  const [isDisable, setIsDibble] = useState(true) //判断按钮是否可用
+  const [buttonIsAvailable, setButtonIsAvailable] = useState(true) //判断按钮是否可用
   const [isModalVisible, setIsModalVisible] = useState(false) //设备弹窗
   const [judgment, setJudgment] = useState(false) //连接成功
   const [failed, setFailed] = useState(false) //连接失败
@@ -60,41 +60,46 @@ const MonitorPage = () => {
   }
 
   // 获取设备品牌
-  const allDictionary = async () => {
-    const brand = await insertModelAPI([])
+  const allDictionarya = async () => {
+    const brand = await allDictionary([])
     setEquipmentbrand(brand.cameraBrand)
   }
   const getFactoryInfo = async () => {
-    const response = await listDataAPI()
+    const response = await getDataList()
     setList(response.records)
-    const equipment = await equipmentDepartmentAPI()
+    const equipment = await equipmentDepartment()
     setDepartment(dealTypeData(equipment.data))
   }
 
   useEffect(() => {
     getFactoryInfo()
-    allDictionary()
+    allDictionarya()
   }, [])
 
-  const columns = [
+  const columns: any = [
     {
       title: '设备名称',
       dataIndex: 'name',
+      align: 'center',
       key: 'name'
     },
     {
       title: '设备品牌',
       dataIndex: 'brand',
+      align: 'center',
       key: 'brand'
     },
     {
       title: '设备序列号',
       dataIndex: 'serialNumber',
-      key: 'serialNumber'
+      key: 'serialNumber',
+      align: 'center'
     },
     {
       title: '连接状态',
       key: 'status',
+      align: 'center',
+
       dataIndex: 'status',
       render(value) {
         console.log(value)
@@ -108,6 +113,8 @@ const MonitorPage = () => {
     },
     {
       title: '所属部门',
+      align: 'center',
+
       key: 'orgNameList',
       dataIndex: 'orgNameList',
       render: value => {
@@ -116,11 +123,14 @@ const MonitorPage = () => {
     },
     {
       title: '操作',
+      align: 'center',
+
       key: 'action',
 
       render: (c, rData) => (
         <Space size="middle">
-          <a
+          <span
+            className={styles.edit}
             onClick={() => {
               setIsModalVisible(true)
               console.log(c)
@@ -132,26 +142,22 @@ const MonitorPage = () => {
             }}
           >
             编辑
-          </a>
-          <a className={styles.vertical} href="">
-            |
-          </a>
-          <a
-            className={styles.line}
+          </span>
+          <span className={styles.vertical}>|</span>
+          <span
+            className={styles.edit}
             onClick={() => {
               DeleteDeviceDisplay(rData.id)
             }}
           >
             {' '}
             删除
-          </a>
-          <a className={styles.vertical} href="">
-            |
-          </a>
+          </span>
+          <span className={styles.vertical}>|</span>
 
-          <a className={styles.line} onClick={accountShowModal}>
+          <span className={styles.edit} onClick={accountShowModal}>
             绑定优产部门
-          </a>
+          </span>
         </Space>
       )
     }
@@ -163,7 +169,7 @@ const MonitorPage = () => {
   const onQueryFinish = async (v: any) => {
     console.log(v.name)
     if (v.name != '') {
-      const querydata = await searchAPI(v)
+      const querydata = await queryData(v)
       setList(querydata.records)
     } else {
       getFactoryInfo()
@@ -195,7 +201,7 @@ const MonitorPage = () => {
     setDeletionFailed(true)
   }
   const deleteDeviceCancel = async () => {
-    const deletion = await moveAPI(moved)
+    const deletion = await deleteEvent(moved)
 
     if (deletion.code == 200) {
       getFactoryInfo()
@@ -207,14 +213,14 @@ const MonitorPage = () => {
     setJudgment(false)
     setFailed(false)
     // setIsModalVisible(false)//关闭弹窗
-    setIsDibble(true)
+    setButtonIsAvailable(true)
     form.submit()
 
     // setIsModalVisible(false)
   }
   // 新增取消按钮事件
   const equipmentHandleCancel = () => {
-    setIsDibble(true)
+    setButtonIsAvailable(true)
     setIsModalVisible(false)
   }
   // 设备form
@@ -224,7 +230,7 @@ const MonitorPage = () => {
       const { serialNumber, verificationCode } = v
       console.log(serialNumber)
       console.log(verificationCode)
-      const ConnectingEquipment = await connectingAPI({
+      const ConnectingEquipment = await connectingEquipment({
         serialNumber,
         verificationCode
       })
@@ -234,7 +240,7 @@ const MonitorPage = () => {
         setSuccessFailure(false)
       }
     } else {
-      const newlywed = await newlyAddedAPI(v)
+      const newlywed = await newDataList(v)
       if (newlywed.code == 200) {
         setIsModalVisible(false)
         getFactoryInfo()
@@ -251,8 +257,9 @@ const MonitorPage = () => {
 
   const accountShowModal = async () => {
     form.resetFields()
-    const account = await youChanAPI()
+    const account = await bindSuperiorProductAccount()
     console.log(account)
+    // 因为当前账号已经绑定了  用于测试
     if (account.data == true) {
       setaceousModalVisible(true)
     }
@@ -260,7 +267,7 @@ const MonitorPage = () => {
   //优产账号form
   const onFinishProduction = async (values: any) => {
     console.log('优产账号form:', values)
-    const bindYo = await bindZhAPI(values)
+    const bindYo = await productAccount(values)
     console.log(bindYo)
     if (bindYo) {
       setaceousModalVisible(false)
@@ -277,7 +284,7 @@ const MonitorPage = () => {
       }
     }
     setConnection(false)
-    setIsDibble(false)
+    setButtonIsAvailable(false)
   }
 
   // 返回上一级
@@ -343,7 +350,7 @@ const MonitorPage = () => {
           <Button onClick={equipmentHandleCancel}>取消</Button>,
           <Button
             type="primary"
-            disabled={isDisable}
+            disabled={buttonIsAvailable}
             onClick={equipmentHandleOk}
             htmlType="submit"
           >
@@ -566,8 +573,9 @@ const MonitorPage = () => {
         visible={deletionFailed}
       >
         <p>
-          <Icon type="jack-sptg1" className={styles.menuIcon} />
+          <Icon type="jack-ts" className={styles.menuIcon} />
         </p>
+        <p style={{ fontSize: 18 }}>删除设备</p>
         <p className={styles.current}>确认将当前设备删除</p>
         <p>
           <Button

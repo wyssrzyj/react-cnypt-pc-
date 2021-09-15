@@ -9,7 +9,7 @@ export default class MonitorPage {
   }
 
   // 查询
-  @action searchAPI = async params => {
+  @action queryData = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/factory/factory-camera/list-camera-org-info`,
@@ -29,7 +29,7 @@ export default class MonitorPage {
     }
   }
   // 连接设备
-  @action connectingAPI = async params => {
+  @action connectingEquipment = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/factory/factory-camera/connect`,
@@ -49,7 +49,7 @@ export default class MonitorPage {
     }
   }
   // 删除事件
-  @action moveAPI = async id => {
+  @action deleteEvent = async id => {
     try {
       const res: ResponseProps = await axios.delete(
         `/api/factory/factory-camera/delete`,
@@ -61,15 +61,12 @@ export default class MonitorPage {
     }
   }
   // 获取设备部门
-  @action equipmentDepartmentAPI = async () => {
+  @action equipmentDepartment = async () => {
     try {
       const res: ResponseProps = await axios.get(
         '/api/basic/department/department-tree'
       )
-      const { data = {} } = res
-      if (data) {
-        localStorage.setItem('userInfo', JSON.stringify(data))
-      }
+
       if (res.code !== 200) {
         message.error(res.msg)
       }
@@ -79,7 +76,7 @@ export default class MonitorPage {
     }
   }
   // 检测是否绑定优产账号
-  @action youChanAPI = async () => {
+  @action bindSuperiorProductAccount = async () => {
     try {
       const res: ResponseProps = await axios.get(
         '/api/user/user-uchat/check-bind-uchat-account'
@@ -97,10 +94,11 @@ export default class MonitorPage {
     }
   }
   // 绑定优产账号
-  @action bindZhAPI = async params => {
+  @action productAccount = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/user/bind-uchat-account`,
+
         params
       )
       console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
@@ -117,7 +115,7 @@ export default class MonitorPage {
     }
   }
   // 获取数据列表
-  @action listDataAPI = async params => {
+  @action getDataList = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/factory/factory-camera/list-camera-org-info`,
@@ -127,18 +125,18 @@ export default class MonitorPage {
 
       if (res.code === 200) {
         message.success(res.msg)
+        return res.data
       }
       if (res.code !== 200) {
         message.error(res.msg)
       }
-      return res.data
     } catch (e) {
       console.log(e)
     }
   }
 
   // 获取设备品牌
-  @action insertModelAPI = async params => {
+  @action equipmentBrand = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/admin/manage/dict-item/list/dict-code`,
@@ -159,7 +157,8 @@ export default class MonitorPage {
   }
 
   // 新增数据
-  @action newlyAddedAPI = async params => {
+
+  @action newDataList = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/factory/factory-camera/save`,
@@ -180,4 +179,4 @@ export default class MonitorPage {
   }
 }
 
-export const monitorPage = new MonitorPage()
+export const monitorPageStore = new MonitorPage()

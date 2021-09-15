@@ -288,7 +288,7 @@ const Colour = () => {
 
   const exportTable = () => {
     exportColor('color').then(res => {
-      let blob = new Blob([res], { type: 'application/octet-stream' })
+      let blob = new Blob([res as any], { type: 'application/octet-stream' })
       let download = document.createElement('a')
       download.href = window.URL.createObjectURL(blob)
       download.download = `colorData.xls`

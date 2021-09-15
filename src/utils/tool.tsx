@@ -1,5 +1,6 @@
 import { useRef, useEffect, useCallback, useState } from 'react'
 import { isEmpty, isNil, isArray } from 'lodash'
+import { v4 as uuidv4 } from 'uuid'
 
 export const getToken = () => {
   return localStorage.getItem('token')
@@ -11,6 +12,10 @@ export const getRefresh = () => {
 
 export const getLastUrl = () => {
   return localStorage.getItem('lastUrl')
+}
+
+export const setLastUrl = path => {
+  return localStorage.setItem('lastUrl', path)
 }
 
 export const getCurrentUser = () => {
@@ -245,4 +250,60 @@ export const getProductClassMap = () => {
  */
 export const isAdd = value => {
   return isEmpty(value) || isNil(value) ? true : false
+}
+
+/**
+ * 获取url携带的参数信息
+ * @param {string} url
+ * @returns {Object}
+ */
+export function urlGet(search?) {
+  var parts = search ? search : window.location.search.substr(1).split('&')
+  var params = {}
+  for (var i = 0; i < parts.length; i++) {
+    var temp = parts[i].split('=')
+    params[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1])
+  }
+  return params
+}
+
+export const getUId = () => {
+  return uuidv4().split('-')[0]
+}
+// 获取日期差值
+export const dateDiff = (d1, d2?) => {
+  var oldDate = new Date(d1)
+  //判断有无d2(第二个日期)，如果有就拿来用，没有就按照今天的日期来计算
+  if (d2) {
+    var newDate = new Date(d2) //如果有就创建一个名为d2的new Date
+  } else {
+    var newDate = new Date() //如果没有就不传参(当前日期)
+  }
+
+  //可以直接让两个日期相减，但是有兼容问题
+  // var a = oldDate - newDate;
+  // console.log(a)
+
+  //这里我们用很保险的方法，获取两个日期的时间戳，然后相减，再加以换算，就可以得到想要的差值
+
+  //为了避免相减为负数，用Math.abs取绝对值
+  var t = oldDate.getTime() - newDate.getTime()
+  // 开始换算
+  // 用相减所得到的毫秒数除以1000得秒，除以60得分钟，除以60得小时，除以24再用parseInt取整得到具体的天数
+  var d = Math.round(t / 1000 / 60 / 60 / 24)
+  // 用相减所得到的毫秒数减去天数所用的毫秒数再除以1000得秒，除以60得分钟，除以60得到小时
+  var h = (t - d * 24 * 60 * 60 * 1000) / 1000 / 60 / 60
+  // 用相减所得到的毫秒数减去天和小时所用的毫秒数再除以1000得秒，除以60得到分钟
+  var m = (t - d * 24 * 60 * 60 * 1000 - h * 60 * 60 * 1000) / 1000 / 60
+  // 用相减所得到的毫秒数减去天和小时以及分钟所用的毫秒数再除以1000得到秒
+  var s =
+    (t - d * 24 * 60 * 60 * 1000 - h * 60 * 60 * 1000 - m * 60 * 1000) / 1000
+  // console.log(d,h,m,s)//测试一下看有没有得到数据
+
+  return {
+    day: d,
+    hours: h,
+    minutes: m,
+    seconds: s
+  }
 }

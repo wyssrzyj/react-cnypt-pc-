@@ -8,6 +8,7 @@ import { getUserInfo } from '@/utils/tool'
 const Factory = React.lazy(() => import('./enterpriseHome/factory'))
 const Business = React.lazy(() => import('./enterpriseHome/business'))
 const Issueabill = React.lazy(() => import('./Issueabilltwo'))
+const MonitorPage = React.lazy(() => import('./monitorPage'))
 const NewlyAdded = React.lazy(
   () => import('./Issueabilltwo/components/newlyAdded')
 )

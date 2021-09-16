@@ -83,7 +83,8 @@ const PutManage = () => {
   const searchRef = useRef()
 
   const { orderStore, factoryStore } = useStores()
-  const { getOrders, initOrderAndProduct, delOrders } = orderStore
+  const { getOrders, initOrderAndProduct, delOrders, getEnterpriseDepartment } =
+    orderStore
   const { productCategory } = factoryStore
 
   const [activeKey, setActiveKey] = useState<string>('all')
@@ -100,6 +101,7 @@ const PutManage = () => {
   useEffect(() => {
     ;(async () => {
       await productCategory()
+      await getEnterpriseDepartment()
     })()
   }, [])
 

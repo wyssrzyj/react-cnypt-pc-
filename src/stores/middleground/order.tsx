@@ -4,6 +4,7 @@ import axios from '@/utils/axios'
 // import { ResponseProps } from '@/utils/axios/types'
 import { message } from 'antd'
 import moment from 'moment'
+import { dealTypeData } from '@/utils/tool'
 
 interface ProductInfo {
   [key: string]: any
@@ -19,6 +20,7 @@ export default class OrderStore {
     makeAutoObservable(this)
   }
 
+  @observable enterpriseDepartment = [] // 企业部门
   @observable productInfo: ProductInfo = {} // 订单商品信息
   @observable orderInfo: OrderInfo = {} // 订单信息
   @observable orderGetInfo = true // 订单页面是否需要走接口刷新数据
@@ -156,6 +158,7 @@ export default class OrderStore {
             }))
             target[0].annex = target[0].annex.map(url => ({
               thumbUrl: url,
+              url: url,
               name: url.split('__')[1]
             }))
             this.setProductInfo(target[0])
@@ -369,6 +372,43 @@ export default class OrderStore {
       const res = await axios.get('/api/oms/order/get-supplier-list', { name })
       if (res && res.code === 200) {
         return res.data
+      } else {
+        message.error(res.msg)
+      }
+    } catch (err) {
+      message.error('服务器错误~')
+    }
+  }
+
+  // /api/basic/department/department-tree
+  // 企业部门
+  @action getEnterpriseDepartment = async () => {
+    try {
+      const res = await axios.get('/api/basic/department/department-tree')
+      if (res && res.code === 200) {
+        runInAction(() => {
+          const targetData = dealTypeData(res.data, ['deptName', 'id'])
+          this.enterpriseDepartment = targetData
+        })
+      } else {
+        message.error(res.msg)
+      }
+    } catch (err) {
+      message.error('服务器错误~')
+    }
+  }
+
+  // /api/oms/order/order-bind-department
+  // 加工厂关联平台部门
+  @action bindDepartment = async params => {
+    try {
+      const res = await axios.post(
+        '/api/oms/order/order-bind-department',
+        params
+      )
+      if (res && res.code === 200) {
+        message.success('部门绑定成功')
+        return true
       } else {
         message.error(res.msg)
       }

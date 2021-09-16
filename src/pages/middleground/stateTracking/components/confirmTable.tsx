@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Table } from 'antd'
 import styles from './confirmTable.module.less'
 import { ColumnType } from 'antd/lib/table'
-import { useStores } from '@/utils/mobx'
+import { useStores, observer } from '@/utils/mobx'
+import moment from '_moment@2.29.1@moment'
 
 interface Columns {
   align?: string
@@ -11,39 +12,51 @@ interface Columns {
   recordLogs: string
 }
 
-const ConfirmTable = () => {
+const ConfirmTable = props => {
+  const { curStep } = props
   const { orderStore } = useStores()
-  const { getStateTrack } = orderStore
+  const { getStateTrack, stateTrackData } = orderStore
 
   const [current, setCurrent] = useState<number>(1)
-  const [total, _setTotal] = useState<number>(100)
+  const [totalCount, setTotal] = useState<number>(0)
+  const [dataSource, setDataSource] = useState<any[]>([])
+
+  useEffect(() => {
+    const targetData = curStep
+      ? stateTrackData.finishLogsPage
+      : (stateTrackData.confirmLogsPage as any)
+    const { records = [], total = 0 } = targetData
+    setDataSource(records)
+    setTotal(total)
+  }, [curStep, stateTrackData])
 
   const columns: Array<ColumnType<Columns>> = [
     {
       title: '操作人',
-      dataIndex: 'operator',
+      dataIndex: 'updateBy',
       align: 'center'
     },
     {
       title: '记录时间',
-      dataIndex: 'recordTime',
-      align: 'center'
+      dataIndex: 'updateTime',
+      align: 'center',
+      render: val => (val ? moment(val).format('YYYY-MM-DD HH:mm:ss') : null)
     },
     {
       title: '日志记录',
-      dataIndex: 'recordLogs',
+      dataIndex: 'log',
       align: 'center'
     }
   ]
 
-  const dataSource = [
-    {
-      id: '1',
-      operator: '成都助战科技有限公司',
-      recordTime: '2021-05-31 14:17:25',
-      recordLogs: '新增订单，保存为草稿'
-    }
-  ]
+  // const dataSource = [
+  //   {
+  //     id: '1',
+  //     operator: '成都助战科技有限公司',
+  //     recordTime: '2021-05-31 14:17:25',
+  //     recordLogs: '新增订单，保存为草稿'
+  //   }
+  // ]
 
   const tableChange = (page, _pageSize) => {
     setCurrent(page)
@@ -61,7 +74,7 @@ const ConfirmTable = () => {
         pagination={{
           current,
           pageSize: 20,
-          total: total,
+          total: totalCount,
           onChange: tableChange
         }}
         rowKey={'id'}
@@ -70,4 +83,4 @@ const ConfirmTable = () => {
   )
 }
 
-export default ConfirmTable
+export default observer(ConfirmTable)

@@ -351,7 +351,6 @@ const OrderPage = () => {
       setFactoryOrderStatus(values['addedValueTax'])
     }
     if (keys.includes('supplierName')) {
-      //
       onSearch(values['supplierName'])
     }
 
@@ -364,12 +363,16 @@ const OrderPage = () => {
   }
 
   const submitClick = async status => {
+    if (loading) return
+    setLoading(true)
+    // 确认订单 是否通过
     try {
-      if (loading) return
-      setLoading(true)
-      const values = await validateFields()
       // 加工厂确认订单页面
       if (pageType === 'confirm') {
+        const values = await validateFields()
+        if (orderId) {
+          values.id = orderId
+        }
         const params = {
           passFailReason: values['passFailReason'],
           status: values['orderStatus'],
@@ -383,11 +386,40 @@ const OrderPage = () => {
         res && back()
         return
       }
-      // 发单商 新增/编辑订单
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
+    // 保存订单
+    try {
+      let values
+      if (status === -1) {
+        const orderName = form.getFieldValue('name')
+        if (!orderName) {
+          form.scrollToField('name')
+          form.validateFields(['name'])
+          return
+        }
+        values = form.getFieldsValue()
+        if (orderId) {
+          values.id = orderId
+        }
+        if (pageType === 'add') {
+          delete values.id
+        }
+      }
+
+      if (status === 1) {
+        values = await validateFields()
+      }
+
       values.status = status
       let times = ['materialArrivalTime', 'expectDeliveryTime']
       times.forEach(item => {
-        values[item] = moment(values[item]).valueOf()
+        if (values[item]) {
+          values[item] = moment(values[item]).valueOf()
+        }
       })
       if (orderId) {
         values.id = orderId
@@ -401,13 +433,12 @@ const OrderPage = () => {
       }
       // 商品信息为空
       if (
-        isEmpty(params.goodsInfoVOList[0]) ||
-        params.goodsInfoVOList[0].uid === 0
+        (status === 1 && isEmpty(params.goodsInfoVOList[0])) ||
+        (status === 1 && params.goodsInfoVOList[0].uid === 0)
       ) {
         message.error('请至少填写一条商品信息~')
         return
       }
-
       // 处理加工厂名称
       const targetEnterPrise =
         contactConfigs[0].options.find(
@@ -432,9 +463,9 @@ const OrderPage = () => {
             params.goodsInfoVOList[0].stylePicture.map(item => item.thumbUrl)
         }
       }
-
       await saveOrder(params, status)
       back()
+      return
     } catch (err) {
       console.log(err)
     } finally {
@@ -576,7 +607,7 @@ const OrderPage = () => {
         colon={false}
         onValuesChange={valuesChange}
         scrollToFirstError={true}
-        onFinish={() => submitClick(1)}
+        // onFinish={() => submitClick(1)}
         initialValues={orderInfo}
       >
         <div className={styles.header}>
@@ -722,6 +753,7 @@ const OrderPage = () => {
               type={'primary'}
               className={styles.submitBtn}
               htmlType={'submit'}
+              onClick={() => submitClick(1)}
             >
               提交
             </Button>
@@ -740,6 +772,7 @@ const OrderPage = () => {
               type={'primary'}
               className={styles.submitBtn}
               htmlType={'submit'}
+              onClick={() => submitClick(1)}
             >
               提交订单
             </Button>

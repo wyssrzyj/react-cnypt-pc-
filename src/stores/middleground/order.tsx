@@ -20,6 +20,14 @@ export default class OrderStore {
     makeAutoObservable(this)
   }
 
+  // 状态跟踪数据
+  @observable stateTrackData = {
+    confirmLogsPage: {},
+    finishLogsPage: {},
+    orderMsg: {},
+    totalOrderSchedule: {},
+    underwayLogsPage: {}
+  }
   @observable enterpriseDepartment = [] // 企业部门
   @observable productInfo: ProductInfo = {} // 订单商品信息
   @observable orderInfo: OrderInfo = {} // 订单信息
@@ -409,6 +417,24 @@ export default class OrderStore {
       if (res && res.code === 200) {
         message.success('部门绑定成功')
         return true
+      } else {
+        message.error(res.msg)
+      }
+    } catch (err) {
+      message.error('服务器错误~')
+    }
+  }
+
+  // /api/oms/order-log/state-track
+  // 状态跟踪接口
+  @action getTrackState = async params => {
+    try {
+      const res = await axios.post('/api/oms/order-log/state-track', params)
+      if (res && res.code === 200) {
+        runInAction(() => {
+          this.stateTrackData = res.data
+        })
+        return res.data
       } else {
         message.error(res.msg)
       }

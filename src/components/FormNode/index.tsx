@@ -143,7 +143,7 @@ const FormNode = (props: FormNodeProps) => {
   useEffect(() => {
     if (type !== 'img') return
     if (uploadRef.current) {
-      console.log(uploadRef.current.upload.props.onChange)
+      // console.log(uploadRef.current.upload.props.onChange)
     }
   }, [uploadRef])
 

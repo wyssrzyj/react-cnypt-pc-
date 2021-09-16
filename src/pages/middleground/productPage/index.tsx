@@ -5,7 +5,7 @@ import { Form, Col, Row, Table, Input, Button, Select } from 'antd'
 import FormNode from '@/components/FormNode'
 import { useHistory, useParams } from 'react-router'
 import styles from './index.module.less'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isNil } from 'lodash'
 import { useStores, observer, toJS } from '@/utils/mobx'
 import ProductModal from './productModal'
 import { getUId, urlGet } from '@/utils/tool'
@@ -370,12 +370,13 @@ const ProductPage = () => {
     let flag
     if (productData.length) {
       flag = !productData.every(item => {
-        return item.price > 0 && item.quantity > 0
+        return !isNil(item.price) && !isNil(item.quantity)
       })
     } else {
       flag = true
     }
     setProductDataError(flag)
+    if (flag) return
 
     try {
       const values = await form.validateFields()

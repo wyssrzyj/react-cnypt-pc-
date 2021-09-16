@@ -121,7 +121,8 @@ const ListCard = ({
     updateTime,
     pictureUrl = null,
     stickType = 0,
-    purchaserName
+    purchaserName,
+    code
   } = data
 
   const [departValue, setDepartValue] = useState()
@@ -287,23 +288,24 @@ const ListCard = ({
     }
   }
 
-  const showMoreAbout = target => {
+  const showMoreAbout = async target => {
     let option: { label: string; value: string } = { label: '', value: '' }
     if (type === 'put') {
       option = {
         label: target.supplierName,
         value: target.supplierTenantId
       }
-      searchBar.valuesChange(option.value, 'supplierTenantId')
+      await searchBar.valuesChange(option.value, 'supplierTenantId')
     }
     if (type === 'receive') {
       option = {
         label: target.purchaserName,
         value: target.purchaserTenantId
       }
-      searchBar.valuesChange(option.value, 'purchaserTenantId')
+      await searchBar.valuesChange(option.value, 'purchaserTenantId')
     }
-    searchBar.changeOptions(option)
+    await searchBar.changeOptions(option)
+    await searchBar.onSubmit()
   }
 
   const getEditBtns = (status, type?) => {
@@ -405,7 +407,7 @@ const ListCard = ({
               >
                 完成生产
               </Button>
-              <Button type={'text'} ghost className={styles.textBtn}>
+              <Button type={'text'} className={styles.textBtn}>
                 现场查看
               </Button>
             </>
@@ -788,13 +790,16 @@ const ListCard = ({
         <div className={styles.left}>
           <div className={styles.order}>
             <span className={styles.orderLabel}>订单号：</span>
-            <span className={styles.orderNum}>{id}</span>
+            <span className={styles.orderNum}>{code}</span>
           </div>
-          <div className={styles.cardTime}>
-            {confirmTime
-              ? moment(confirmTime).format('YYYY-MM-DD HH:mm:ss')
-              : null}
-          </div>
+          <Popover content={'订单确认时间'}>
+            <div className={styles.cardTime}>
+              {confirmTime
+                ? moment(confirmTime).format('YYYY-MM-DD HH:mm:ss')
+                : null}
+            </div>
+          </Popover>
+
           <div className={styles.showBox}>
             <Popover content={type === 'put' ? supplierName : purchaserName}>
               <div className={styles.companyName}>

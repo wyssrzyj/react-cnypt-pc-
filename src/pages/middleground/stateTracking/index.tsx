@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { Steps } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components'
-import { useHistory } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import ConfirmTable from './components/confirmTable'
 import OnGoing from './components/onGoing'
 import classNames from 'classnames'
+import { useStores, observer } from '@/utils/mobx'
+import moment from '_moment@2.29.1@moment'
+import { dateDiff } from '@/utils/tool'
 
 const { Step } = Steps
 
@@ -22,10 +25,71 @@ const FinishActiveIcon = (
   <Icon type={'jack-ywc_2'} className={styles.stepActiveIcon}></Icon>
 )
 
+const initConfigs = [
+  {
+    label: '发单商',
+    field: 'purchaserName',
+    value: ''
+  },
+  {
+    label: '订单数量',
+    field: 'totalAmount',
+    value: ''
+  },
+  {
+    label: '确认时间',
+    field: 'confirmTime',
+    value: ''
+  },
+  {
+    label: '交货时间',
+    field: 'expectDeliveryTime',
+    value: ''
+  }
+]
+
 const StateTracking = () => {
   const history = useHistory()
+  const routerParams: { id?: string } = useParams()
+  const { orderStore } = useStores()
+  const { getTrackState } = orderStore
+
   const title = '状态跟踪'
   const [curStep, setCurStep] = useState<number>(1)
+  const [configs, setConfigs] = useState<any>(initConfigs)
+  const [orderName, setOrderName] = useState<string>('')
+
+  useEffect(() => {
+    ;(async () => {
+      const data = await getTrackState({ id: routerParams.id })
+      if (data) {
+        const { orderMsg = {} } = data
+        let target = initConfigs.map(item => {
+          if (item.field === 'purchaserName') {
+            item.value = orderMsg['purchaserName']
+          }
+          if (item.field === 'totalAmount') {
+            item.value = orderMsg['totalAmount'] + '件'
+          }
+          if (item.field === 'confirmTime') {
+            item.value = orderMsg['confirmTime']
+              ? moment(orderMsg['confirmTime']).format('YYYY-MM-DD HH:mm:ss')
+              : null
+          }
+          if (item.field === 'expectDeliveryTime') {
+            item.value = orderMsg['expectDeliveryTime']
+              ? moment(orderMsg['expectDeliveryTime']).format('YYYY-MM-DD')
+              : null
+          }
+          return item
+        })
+        setConfigs(target)
+        setOrderName(orderMsg.name)
+        setCurStep(orderMsg.currentType - 1 || 0)
+      }
+    })()
+  }, [])
+
   const stepChange = (cur: number) => {
     setCurStep(cur)
   }
@@ -34,24 +98,13 @@ const StateTracking = () => {
     history.goBack()
   }
 
-  const configs = [
-    {
-      label: '发单商',
-      value: '成都助战科技有限公司a'
-    },
-    {
-      label: '订单数量',
-      value: '400件'
-    },
-    {
-      label: '确认时间',
-      value: '2021-05-31 14:17:27'
-    },
-    {
-      label: '交货时间',
-      value: '2021-07-31'
-    }
-  ]
+  const delayDay = useMemo(() => {
+    const targetTime = configs[3].value
+    const diffDay = targetTime ? dateDiff(targetTime).day : 0
+    return diffDay > 0 ? 0 : Math.abs(diffDay)
+  }, [configs])
+
+  console.log(curStep)
 
   return (
     <div>
@@ -90,18 +143,22 @@ const StateTracking = () => {
       <div className={styles.content}>
         <div className={styles.orderInfo}>
           <div className={styles.orderTop}>
-            <div className={styles.orderTopText}>女士梭织连衣裙</div>
+            <div className={styles.orderTopText}>{orderName}</div>
             <div className={styles.orderTopText}>
-              已延期&nbsp;
-              <span
-                className={classNames(
-                  styles.orderTopCount,
-                  true ? styles.orderTopRedCount : ''
-                )}
-              >
-                0
-              </span>
-              &nbsp;天
+              {curStep > 0 ? (
+                <>
+                  已延期&nbsp;
+                  <span
+                    className={classNames(
+                      styles.orderTopCount,
+                      true ? styles.orderTopRedCount : ''
+                    )}
+                  >
+                    {delayDay}
+                  </span>
+                  &nbsp;天
+                </>
+              ) : null}
             </div>
           </div>
           <div className={styles.orderBasic}>
@@ -115,11 +172,11 @@ const StateTracking = () => {
         </div>
       </div>
 
-      {+curStep === 0 ? <ConfirmTable></ConfirmTable> : null}
+      {+curStep === 0 ? <ConfirmTable curStep={+curStep}></ConfirmTable> : null}
       {+curStep === 1 ? <OnGoing></OnGoing> : null}
-      {+curStep === 2 ? <ConfirmTable></ConfirmTable> : null}
+      {+curStep === 2 ? <ConfirmTable curStep={+curStep}></ConfirmTable> : null}
     </div>
   )
 }
 
-export default StateTracking
+export default observer(StateTracking)

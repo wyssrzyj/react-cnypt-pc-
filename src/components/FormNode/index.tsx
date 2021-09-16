@@ -155,24 +155,19 @@ const FormNode = (props: FormNodeProps) => {
         file.type === 'image/png' ||
         file.type === 'image/jpeg'
 
-      const imgIsLtMaxSize = file.size / 1024 < maxSize
       const fileIsLtMaxSize = file.size / 1024 / 1024 < maxSize
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 158 ~ returnnewPromise ~ fileIsLtMaxSize',
-        fileIsLtMaxSize
-      )
 
       if (type === 'img' && !isJpgOrPng) {
         message.error('只能上传jpg/png格式文件!')
         return reject(file)
       }
 
-      if (type === 'img' && !imgIsLtMaxSize) {
-        message.error(`文件不能超过${maxSize}KB!`)
-        return reject(file)
-      }
+      // if (type === 'img' && !imgIsLtMaxSize) {
+      //   message.error(`文件不能超过${maxSize}KB!`)
+      //   return reject(file)
+      // }
 
-      if (type === 'annex' && !fileIsLtMaxSize) {
+      if (!fileIsLtMaxSize) {
         message.error(`文件不能超过${maxSize}MB!`)
         return reject(file)
       }
@@ -190,8 +185,7 @@ const FormNode = (props: FormNodeProps) => {
     )
     if (res) {
       const { url, name } = res
-      console.log('🚀 ~ file: index.tsx ~ line 193 ~ customRequest ~ url', url)
-      imgs.push({ thumbUrl: url, name: name.split('__')[1] })
+      imgs.push({ thumbUrl: url, name: name.split('__')[1], url })
       setNodeValue(imgs)
       valueChange && valueChange(imgs)
     }

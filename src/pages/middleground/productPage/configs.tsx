@@ -82,7 +82,7 @@ export const otherConfigs = [
     required: true,
     accept: '.jpg,.png,.jpeg',
     message: '请上传款图',
-    maxSize: 500,
+    maxSize: 20,
     span: 20,
     type: 'img',
     tips: '上传款图，只能上传jpg/png格式文件，文件不能超过20M，最多上传10个文件'

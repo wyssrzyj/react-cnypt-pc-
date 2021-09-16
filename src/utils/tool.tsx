@@ -307,3 +307,18 @@ export const dateDiff = (d1, d2?) => {
     seconds: s
   }
 }
+// 处理树型结构数据
+export const dealTypeData = (
+  data: any[],
+  fields = ['name', 'id'] as string[]
+) => {
+  data.forEach(item => {
+    item.label = item[fields[0] ? fields[0] : 'name']
+    item.value = item[fields[1] ? fields[1] : 'id']
+
+    if (Array.isArray(item.children) && item.children.length) {
+      dealTypeData(item.children, fields)
+    }
+  })
+  return data
+}

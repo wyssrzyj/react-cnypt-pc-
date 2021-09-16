@@ -5,7 +5,7 @@ import { useStores, observer, toJS } from '@/utils/mobx'
 import { cloneDeep, isNil } from 'lodash'
 import { setUpTimeMap, updateTimeMap } from '@/components/filterList'
 import moment from 'moment'
-import { useDebounceValue } from '@/utils/tool'
+import { dealTypeData, useDebounceValue } from '@/utils/tool'
 import Factorys from './factorys'
 import { useHistory } from 'react-router'
 
@@ -74,18 +74,6 @@ const SearchBar = props => {
     const target = dealTreeData(newTreeData)
     setAreaData(target)
   }, [allArea])
-
-  const dealTypeData = data => {
-    data.forEach(item => {
-      item.label = item.name
-      item.value = item.id
-
-      if (Array.isArray(item.children) && item.children.length) {
-        dealTypeData(item.children)
-      }
-    })
-    return data
-  }
 
   const dealTreeData = data => {
     if (Array.isArray(data) && data.length) {

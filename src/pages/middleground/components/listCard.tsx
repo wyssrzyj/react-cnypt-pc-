@@ -1,12 +1,15 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Icon } from '@/components'
-import { Popover, Button, Modal, Checkbox } from 'antd'
+import { Popover, Button, Modal, Checkbox, Radio, TreeSelect } from 'antd'
 import styles from './listCard.module.less'
 import classNames from 'classnames'
 import moment from 'moment'
 import { dateDiff } from '@/utils/tool'
 import { useHistory } from 'react-router'
 import { toJS, useStores, observer } from '@/utils/mobx'
+import { Title } from '../controlPanel/accountSafe'
+
+const { SHOW_PARENT } = TreeSelect
 
 const RECEIVE_STATUS = new Map()
 RECEIVE_STATUS.set(1, '待确认')
@@ -94,7 +97,9 @@ const ListCard = ({
     acceptanceOrder,
     reproduce,
     changeOrderStick,
-    initOrderAndProduct
+    initOrderAndProduct,
+    enterpriseDepartment,
+    bindDepartment
   } = orderStore
   const { dictionary } = commonStore
   const { productCategoryList } = factoryStore
@@ -119,7 +124,10 @@ const ListCard = ({
     purchaserName
   } = data
 
+  const [departValue, setDepartValue] = useState()
   const [visible, setVisible] = useState(false)
+  const [bindVisible, setBindVisible] = useState(false)
+  const [bindModalValue, setBindModalValue] = useState(false)
   const [modalType, setModalType] = useState()
   // 订单退回 原因
   const [failReasonText, setFailReasonText] = useState('')
@@ -132,9 +140,171 @@ const ListCard = ({
     }
   }, [])
 
+  const departmentChange = value => {
+    console.log('🚀 ~ file: listCard.tsx ~ line 143 ~ value', value)
+    setDepartValue(value)
+  }
+
   const diffDay = useMemo(() => {
     return dateDiff(expectDeliveryTime)
   }, [expectDeliveryTime])
+
+  const modalSubmit = async () => {
+    modalType === 'cancel' && (await putCancelOrder())
+    modalType === 'draft' && (await backDraft())
+    modalType === 'del' && (await doDelOrders())
+    modalType === 'complete' && (await finishOrder())
+    modalType === 'check' && (await checkOrder())
+    modalType === 'returnProduct' && (await reproduceOrder())
+    getData && (await getData())
+    showModal(null)
+  }
+  // 状态跟踪
+  const statusTrack = () => {
+    history.push(`/control-panel/state/${id}`)
+  }
+  // 绑定生产单
+  const toProduce = () => {
+    history.push(`/control-panel/bind-produce/${id}`)
+  }
+  // 返回生产
+  const reproduceOrder = async () => {
+    await reproduce(id)
+  }
+  const checkOrder = async () => {
+    await acceptanceOrder(id)
+  }
+  // 完成生产
+  const finishOrder = async () => {
+    await factoryFinishProduct(id)
+  }
+  // 删除订单
+  const doDelOrders = async () => {
+    await delOrders([id])
+  }
+  // 取消订单
+  const putCancelOrder = async () => {
+    await cancelOrder(id)
+  }
+  // 退回草稿
+  const backDraft = async () => {
+    await backToDraft(id)
+  }
+  // 确认订单
+  const confirmOrder = () => {
+    history.push(`/control-panel/order/confirm?id=${id}`)
+  }
+  // 编辑订单
+  const editOrder = async () => {
+    initOrderAndProduct()
+    history.push(`/control-panel/order/edit?id=${id}`)
+  }
+
+  // 再次下单
+  const restartOrder = async () => {
+    initOrderAndProduct()
+    history.push(`/control-panel/order/add?id=${id}`)
+  }
+  // 绑定生产单弹窗
+  const showBindModal = () => {
+    setBindVisible(f => !f)
+  }
+
+  const bindValueChange = event => {
+    const { value } = event.target
+    console.log(
+      '🚀 ~ file: listCard.tsx ~ line 139 ~ bindValueChange ~ value',
+      value
+    )
+    setBindModalValue(value)
+  }
+
+  // chooseProduceType
+  const chooseProduceType = async () => {
+    if (+bindModalValue === 1) {
+      toProduce()
+    }
+    if (+bindModalValue === 2) {
+      console.log(departValue, 'departValue')
+      const res = await bindDepartment({
+        platformDepartmentIdList: departValue,
+        platformOrderId: id,
+        status: 3
+      })
+
+      res && showBindModal()
+    }
+  }
+
+  const showModal = async type => {
+    setVisible(f => !f)
+    setModalType(type)
+    if (type === 'reason') {
+      const failReason = await getFailReason(id)
+      if (failReason) {
+        setFailReasonText(failReason.passFailReason)
+        setFailReasonAnnex(failReason.urlList)
+      }
+    }
+  }
+
+  const prodTypeText = useMemo(() => {
+    const target =
+      orderProcessType.find(item => item.value === processType) || {}
+    return target.label || ''
+  }, [orderProcessType, processType])
+
+  const matchTreeData = (data, value) => {
+    let target
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i]
+      if (item.id === value) {
+        target = item
+        return target
+      }
+      if (Array.isArray(item.children)) {
+        target = matchTreeData(item.children, value)
+        if (target) {
+          return target
+        }
+      }
+    }
+  }
+
+  const goodsCategory = useMemo(() => {
+    const target = matchTreeData(productCategoryList, goodsCategoryId) || {}
+    return target.name || ''
+  }, [])
+
+  const changeStickStatus = async () => {
+    // 1 置顶  0 取消置顶
+    const code = await changeOrderStick({
+      stickType: 1 - stickType,
+      id
+    })
+    if (+code === 200) {
+      getData && (await getData())
+    }
+  }
+
+  const showMoreAbout = target => {
+    let option: { label: string; value: string } = { label: '', value: '' }
+    if (type === 'put') {
+      option = {
+        label: target.supplierName,
+        value: target.supplierTenantId
+      }
+      searchBar.valuesChange(option.value, 'supplierTenantId')
+    }
+    if (type === 'receive') {
+      option = {
+        label: target.purchaserName,
+        value: target.purchaserTenantId
+      }
+      searchBar.valuesChange(option.value, 'purchaserTenantId')
+    }
+    searchBar.changeOptions(option)
+  }
 
   const getEditBtns = (status, type?) => {
     switch (+status) {
@@ -185,7 +355,7 @@ const ListCard = ({
               <Button
                 type={'primary'}
                 className={styles.btn}
-                onClick={toProduce}
+                onClick={showBindModal}
               >
                 绑定生产单
               </Button>
@@ -221,7 +391,11 @@ const ListCard = ({
         if (type === 'receive') {
           return (
             <>
-              <Button type={'primary'} className={styles.btn}>
+              <Button
+                type={'primary'}
+                className={styles.btn}
+                onClick={showBindModal}
+              >
                 编辑绑定
               </Button>
               <Button
@@ -448,6 +622,8 @@ const ListCard = ({
             </div>
           </div>
         )
+      case 5:
+        return <div>{moment(updateTime).format('YYYY-MM-DD HH:mm:ss')}</div>
     }
   }
 
@@ -543,135 +719,9 @@ const ListCard = ({
     )
   }
 
-  const modalSubmit = async () => {
-    modalType === 'cancel' && (await putCancelOrder())
-    modalType === 'draft' && (await backDraft())
-    modalType === 'del' && (await doDelOrders())
-    modalType === 'complete' && (await finishOrder())
-    modalType === 'check' && (await checkOrder())
-    modalType === 'returnProduct' && (await reproduceOrder())
-    getData && (await getData())
-    showModal(null)
-  }
-  // 状态跟踪
-  const statusTrack = () => {
-    history.push(`/control-panel/state/${id}`)
-  }
-  // 绑定生产单
-  const toProduce = () => {
-    history.push(`/control-panel/bind-produce/${id}`)
-  }
-  // 返回生产
-  const reproduceOrder = async () => {
-    await reproduce(id)
-  }
-  const checkOrder = async () => {
-    await acceptanceOrder(id)
-  }
-  // 完成生产
-  const finishOrder = async () => {
-    await factoryFinishProduct(id)
-  }
-  // 删除订单
-  const doDelOrders = async () => {
-    await delOrders([id])
-  }
-  // 取消订单
-  const putCancelOrder = async () => {
-    await cancelOrder(id)
-  }
-  // 退回草稿
-  const backDraft = async () => {
-    await backToDraft(id)
-  }
-  // 确认订单
-  const confirmOrder = () => {
-    history.push(`/control-panel/order/confirm?id=${id}`)
-  }
-  // 编辑订单
-  const editOrder = async () => {
-    initOrderAndProduct()
-    history.push(`/control-panel/order/edit?id=${id}`)
-  }
-
-  // 再次下单
-  const restartOrder = async () => {
-    initOrderAndProduct()
-    history.push(`/control-panel/order/add?id=${id}`)
-  }
-
-  const showModal = async type => {
-    setVisible(f => !f)
-    setModalType(type)
-    if (type === 'reason') {
-      const failReason = await getFailReason(id)
-      if (failReason) {
-        setFailReasonText(failReason.passFailReason)
-        setFailReasonAnnex(failReason.urlList)
-      }
-    }
-  }
-
-  const prodTypeText = useMemo(() => {
-    const target =
-      orderProcessType.find(item => item.value === processType) || {}
-    return target.label || ''
-  }, [orderProcessType, processType])
-
-  const matchTreeData = (data, value) => {
-    let target
-    for (let i = 0; i < data.length; i++) {
-      const item = data[i]
-      if (item.id === value) {
-        target = item
-        return target
-      }
-      if (Array.isArray(item.children)) {
-        target = matchTreeData(item.children, value)
-        if (target) {
-          return target
-        }
-      }
-    }
-  }
-
-  const goodsCategory = useMemo(() => {
-    const target = matchTreeData(productCategoryList, goodsCategoryId) || {}
-    return target.name || ''
-  }, [])
-
-  const changeStickStatus = async () => {
-    // 1 置顶  0 取消置顶
-    const code = await changeOrderStick({
-      stickType: 1 - stickType,
-      id
-    })
-    if (+code === 200) {
-      getData && (await getData())
-    }
-  }
-
-  const showMoreAbout = target => {
-    let option: { label: string; value: string } = { label: '', value: '' }
-    if (type === 'put') {
-      option = {
-        label: target.supplierName,
-        value: target.supplierTenantId
-      }
-      searchBar.valuesChange(option.value, 'supplierTenantId')
-    }
-    if (type === 'receive') {
-      option = {
-        label: target.purchaserName,
-        value: target.purchaserTenantId
-      }
-      searchBar.valuesChange(option.value, 'purchaserTenantId')
-    }
-    searchBar.changeOptions(option)
-  }
-
   return (
     <div className={styles.card}>
+      {/* 订单通用弹窗 */}
       <Modal
         visible={visible}
         footer={false}
@@ -680,6 +730,56 @@ const ListCard = ({
         maskClosable={false}
       >
         {getModalContent(modalType)}
+      </Modal>
+      {/* 订单绑定生产单前的确认弹窗 */}
+      <Modal
+        visible={bindVisible}
+        footer={false}
+        centered
+        onCancel={showBindModal}
+        maskClosable={false}
+      >
+        <Title title={'绑定生产'}></Title>
+        <Radio.Group onChange={bindValueChange}>
+          <div className={styles.bindText}>
+            <Radio value={1}>绑定软件</Radio>
+          </div>
+          <div className={styles.bindText}>
+            <Radio value={2}>绑定生产部门(没有使用信息化软件)</Radio>
+          </div>
+        </Radio.Group>
+        {+bindModalValue === 2 ? (
+          <div className={styles.departmentTree}>
+            <TreeSelect
+              onChange={departmentChange}
+              value={departValue}
+              style={{ width: '100%', minWidth: 100 }}
+              allowClear
+              treeData={enterpriseDepartment}
+              treeCheckable={true}
+              showCheckedStrategy={SHOW_PARENT}
+              placeholder={'请选择部门'}
+            />
+          </div>
+        ) : null}
+
+        <div className={styles.bindBtns}>
+          <Button
+            type={'primary'}
+            ghost
+            className={styles.bindBtn}
+            onClick={showBindModal}
+          >
+            取消
+          </Button>
+          <Button
+            type={'primary'}
+            className={styles.bindBtn}
+            onClick={chooseProduceType}
+          >
+            确认
+          </Button>
+        </div>
       </Modal>
 
       <div
@@ -784,20 +884,10 @@ const ListCard = ({
             </div>
           ) : (
             <div className={styles.statusTextBox}>
-              {/* 已完成状态  tab在完成页 */}
-              {+status === 5 && curKey === 'complete' ? (
-                <div>2021-08-30 09:20:35</div>
-              ) : null}
-
-              {/* 非退回 已完成tab页 */}
-              {!['complete'].includes(curKey) ? (
-                <>
-                  <div className={COLOR_CLASS_MAP2.get(+status)}>
-                    {PUT_STATUS.get(+status)}
-                  </div>
-                  {getPutstatus(+status)}
-                </>
-              ) : null}
+              <div className={COLOR_CLASS_MAP2.get(+status)}>
+                {PUT_STATUS.get(+status)}
+              </div>
+              {getPutstatus(+status)}
             </div>
           )}
         </div>

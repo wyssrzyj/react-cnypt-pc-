@@ -538,6 +538,7 @@ const ProductPage = () => {
             })}
           </Row>
         </section>
+
         {pageType === 'confirm' ? (
           <Button
             type={'primary'}

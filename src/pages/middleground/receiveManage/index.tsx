@@ -63,7 +63,7 @@ const ReceiveManage = () => {
   const searchRef = useRef()
 
   const { orderStore, factoryStore } = useStores()
-  const { getOrders, delOrders } = orderStore
+  const { getOrders, delOrders, getEnterpriseDepartment } = orderStore
   const { productCategory } = factoryStore
 
   const [activeKey, setActiveKey] = useState<string>('all')
@@ -80,6 +80,7 @@ const ReceiveManage = () => {
   useEffect(() => {
     ;(async () => {
       await productCategory()
+      await getEnterpriseDepartment()
     })()
   }, [])
 

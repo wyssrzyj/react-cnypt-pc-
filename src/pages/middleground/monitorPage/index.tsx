@@ -64,6 +64,7 @@ const MonitorPage = () => {
   const [total, setTotal] = useState<any>(null) //数据长度
   const [pageNum, setPageNum] = useState<number>(1) //当前页数
   const [connectionStatus, setConnectionStatus] = useState<number>(null) //连接状态
+  const [modify, setModify] = useState<number>(null) //修改
 
   const getFactoryInfo = async () => {
     const response = await getDataList({
@@ -85,6 +86,23 @@ const MonitorPage = () => {
     getFactoryInfo()
   }, [equipmentName, pageNum])
   // 用于显示成功还是失败
+  useEffect(() => {
+    if (!isModalVisible) {
+      console.log('清除')
+      setModify(null)
+    }
+  }, [isModalVisible])
+  // 修改
+  const modificationMethod = async rData => {
+    setModify(rData.id)
+    const equipment = await equipmentDepartment()
+    setDepartment(dealTypeData(equipment.data))
+    form.setFieldsValue({
+      ...rData,
+      id: rData.key
+    })
+    setIsModalVisible(true)
+  }
 
   const columns: any = [
     {
@@ -143,17 +161,15 @@ const MonitorPage = () => {
           <span
             className={styles.edit}
             onClick={() => {
-              setIsModalVisible(true)
               console.log(c)
               console.log(rData)
-              form.setFieldsValue({
-                ...rData,
-                id: rData.key
-              })
+
+              modificationMethod(rData)
             }}
           >
             编辑
           </span>
+
           <span className={styles.vertical}>|</span>
           <span
             className={styles.edit}
@@ -215,8 +231,8 @@ const MonitorPage = () => {
         verificationCode
       })
       console.log(ConnectingEquipment)
-
-      if (ConnectingEquipment != '200') {
+      // 测试
+      if (ConnectingEquipment == '200') {
         console.log('正确')
         setJudgment(true)
         setConnectionStatus(1)
@@ -228,17 +244,35 @@ const MonitorPage = () => {
       setConnection(false)
       setButtonIsAvailable(false)
     } else {
-      const newlywed = await newDataList({ ...v, status: connectionStatus })
-
-      console.log(newlywed)
-      if (newlywed.code == 200) {
-        setIsModalVisible(false)
-
-        getFactoryInfo()
-        setButtonIsAvailable(true)
+      if (modify != null) {
+        const newlywed = await newDataList({
+          ...v,
+          status: connectionStatus,
+          id: modify
+        })
+        if (newlywed.code == 200) {
+          setIsModalVisible(false)
+          getFactoryInfo()
+          setButtonIsAvailable(true)
+        } else {
+          setButtonIsAvailable(false)
+        }
+        console.log('修改')
+        console.log(newlywed)
       } else {
-        setButtonIsAvailable(false)
+        setModify(null)
+        const newlywed = await newDataList({ ...v, status: connectionStatus })
+        if (newlywed.code == 200) {
+          setIsModalVisible(false)
+          getFactoryInfo()
+          setButtonIsAvailable(true)
+        } else {
+          setButtonIsAvailable(false)
+        }
+        console.log('新增')
       }
+
+      setModify(null)
     }
   }
 

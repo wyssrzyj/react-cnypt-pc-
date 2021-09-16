@@ -2,16 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 import { Menu, Dropdown } from 'antd'
-// import { PartitionOutlined, AuditOutlined } from '@ant-design/icons'
 import { AuditOutlined } from '@ant-design/icons'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { getCurrentUser, getUserInfo } from '@/utils/tool'
 import { useStores } from '@/utils/mobx'
 import { Icon } from '@/components'
 import styles from './newHeader.module.less'
-
-// const logo =
-//   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
 
 const consoleOptions = [
   {
@@ -28,6 +24,14 @@ const consoleOptions = [
       {
         title: '企业证件认证',
         url: '/control-panel/panel/certificate'
+      },
+      {
+        title: '发单管理',
+        url: '/control-panel/put-manage'
+      },
+      {
+        title: '接单管理',
+        url: '/control-panel/receive-manage'
       }
     ]
   },
@@ -64,7 +68,7 @@ const Header = () => {
   const userInfo = getUserInfo() || {}
   const { loginStore } = useStores()
   const { logout } = loginStore
-  const { infoApprovalStatus, factoryAuditStatus } = userInfo
+  const { infoApprovalStatus, factoryAuditStatus, enterpriseType } = userInfo
   const newConsoleOptions = consoleOptions
     .filter(item => {
       return !(infoApprovalStatus != '1' && item.title === '资质认证')
@@ -84,10 +88,6 @@ const Header = () => {
   const toAccountSafe = () => {
     history.push('/control-panel/panel/account')
   }
-
-  // const toErp = () => {
-  //   history.push('/erp')
-  // }
 
   const logoutToLogin = async () => {
     const res = await logout()
@@ -122,6 +122,23 @@ const Header = () => {
             <div className={styles.titleContent}>
               {!isEmpty(children) &&
                 children.map((o, index) => {
+                  if (o.title === '首页' && isNil(enterpriseType)) {
+                    return null
+                  }
+                  if (
+                    o.title === '发单管理' &&
+                    !isNil(enterpriseType) &&
+                    +enterpriseType !== 1
+                  ) {
+                    return null
+                  }
+                  if (
+                    o.title === '接单管理' &&
+                    !isNil(enterpriseType) &&
+                    +enterpriseType !== 0
+                  ) {
+                    return null
+                  }
                   return (
                     <Link key={index} to={o.url} className={styles.routerItem}>
                       {o.title}

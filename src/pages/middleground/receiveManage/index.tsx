@@ -74,7 +74,7 @@ const ReceiveManage = () => {
   const [dataSource, setDataSource] = useState<any[]>([])
   const [allChecked, setAllChecked] = useState<boolean>(false)
   const [delBtnDisabled, setDelBtnDisabled] = useState<boolean>(false)
-  const [total, setTotal] = useState<number>(100)
+  const [total, setTotal] = useState<number>(0)
 
   // 获取产品类别
   useEffect(() => {
@@ -217,7 +217,7 @@ const ReceiveManage = () => {
                 getData={getData}
                 showCheck={DEL_CHECK_KEYS.includes(activeKey)}
                 data={card}
-                key={idx + card.status}
+                key={+card.id + +card.status}
                 curKey={activeKey}
                 callback={event => dataChoose(event.target.checked, idx)}
               ></ListCard>

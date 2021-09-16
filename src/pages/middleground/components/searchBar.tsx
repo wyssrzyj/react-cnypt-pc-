@@ -2,7 +2,9 @@ import React, {
   useEffect,
   useState,
   forwardRef,
-  useImperativeHandle
+  useImperativeHandle,
+  useCallback,
+  useRef
 } from 'react'
 import styles from './searchBar.module.less'
 import { Button, Input, DatePicker, Row, Col, Select } from 'antd'
@@ -30,10 +32,11 @@ interface Props {
   type?: string
 }
 
-// TODO: 字段修改
 const SearchBar = forwardRef(({ callback, type = 'put' }: Props, ref) => {
   const { orderStore } = useStores()
   const { getPurchasers, getSuppliers } = orderStore
+  const paramsRef = useRef<any>()
+
   const [params, setParams] = useState<Params>(initParams)
   const [searchOptions, setSearchOptions] = useState<any[]>([])
 
@@ -48,23 +51,27 @@ const SearchBar = forwardRef(({ callback, type = 'put' }: Props, ref) => {
     setSearchOptions(options)
   }
 
-  const valuesChange = (value, field) => {
-    const newParams = cloneDeep(params)
-    if (['minimunAmount', 'highestAmount'].includes(field)) {
-      value = isNaN(value) ? null : value.trim()
-    }
-    newParams[field] = value
-
-    setParams(filterNull(newParams))
-  }
+  const valuesChange = useCallback(
+    async (value, field) => {
+      const newParams = cloneDeep(params)
+      if (['minimunAmount', 'highestAmount'].includes(field)) {
+        value = isNaN(value) ? null : value.trim()
+      }
+      newParams[field] = value
+      paramsRef.current = newParams
+      await setParams(filterNull(paramsRef.current))
+    },
+    [params]
+  )
 
   const onSubmit = () => {
-    callback(filterNull(params))
+    callback && callback(filterNull(paramsRef.current))
   }
 
   const reset = () => {
     const init = cloneDeep(initParams)
-    setParams(init)
+    paramsRef.current = init
+    setParams(paramsRef.current)
     callback && callback(init)
   }
 
@@ -72,11 +79,15 @@ const SearchBar = forwardRef(({ callback, type = 'put' }: Props, ref) => {
     await getSearchOptions(value)
   }, 200)
 
-  const changeOptions = target => {
-    const newOptions = cloneDeep(searchOptions) || []
-    newOptions.push(target)
-    setSearchOptions(newOptions)
-  }
+  const changeOptions = useCallback(
+    async target => {
+      const newOptions = cloneDeep(searchOptions) || []
+      const flag = newOptions.some(item => item.value === target.value)
+      !flag && newOptions.push(target)
+      await setSearchOptions(newOptions)
+    },
+    [searchOptions]
+  )
 
   useEffect(() => {
     ;(async () => {
@@ -87,7 +98,8 @@ const SearchBar = forwardRef(({ callback, type = 'put' }: Props, ref) => {
   useImperativeHandle(ref, () => {
     return {
       changeOptions,
-      valuesChange
+      valuesChange,
+      onSubmit
     }
   })
 

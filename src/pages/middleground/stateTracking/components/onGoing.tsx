@@ -1,48 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import { Title } from '../../controlPanel/accountSafe'
 import styles from './onGoing.module.less'
-import { Table } from 'antd'
+import { Table, Col } from 'antd'
 import { getUId } from '@/utils/tool'
 import { Icon } from '@/components'
 import classNames from 'classnames'
+import { useStores, observer } from '@/utils/mobx'
 
-const data = [
-  {
-    color: '白色',
-    size: 'M',
-    num: 100
-  },
-  {
-    color: '花色',
-    size: 'L',
-    num: 100
-  },
-  {
-    color: '黄色',
-    size: 'XL',
-    num: 100
-  },
-  {
-    color: '白色',
-    size: 'XXL',
-    num: 100
-  },
-  {
-    color: '米色',
-    size: 'M',
-    num: 20
-  },
-  {
-    color: '米色',
-    size: 'XXXL',
-    num: 50
-  },
-  {
-    color: '黑色色',
-    size: 'XXXL',
-    num: 100
-  }
-]
+// const data = [
+//   {
+//     color: '白色',
+//     size: 'M',
+//     num: 100
+//   },
+//   {
+//     color: '花色',
+//     size: 'L',
+//     num: 100
+//   },
+//   {
+//     color: '黄色',
+//     size: 'XL',
+//     num: 100
+//   },
+//   {
+//     color: '白色',
+//     size: 'XXL',
+//     num: 100
+//   },
+//   {
+//     color: '米色',
+//     size: 'M',
+//     num: 20
+//   },
+//   {
+//     color: '米色',
+//     size: 'XXXL',
+//     num: 50
+//   },
+//   {
+//     color: '黑色色',
+//     size: 'XXXL',
+//     num: 100
+//   }
+// ]
 
 const formatData = data => {
   return data.reduce((prev, item) => {
@@ -86,7 +87,7 @@ const formatData = data => {
   }, [])
 }
 
-const dealColumns = data => {
+const dealColumns = (data, length) => {
   const initColumns = [
     {
       title: '颜色/尺码',
@@ -101,17 +102,48 @@ const dealColumns = data => {
     return prev
   }, [])
 
-  const cloumnsBody = Array.from(new Set(cloumnsFields)).map(item => ({
+  const cloumnsBody: any[] = Array.from(new Set(cloumnsFields)).map(item => ({
     title: item,
     align: 'center',
     dataIndex: item
   }))
+  if (Array.isArray(cloumnsBody) && cloumnsBody.length) {
+    cloumnsBody.forEach((column, index) => {
+      column.render = (val, row, idx) => {
+        const obj = {
+          children:
+            idx === length - 1 ? (
+              <Col span={4} className={styles.tableTotal}>
+                {row.total}
+              </Col>
+            ) : (
+              val
+            ),
+          props: { colSpan: 1 }
+        }
+        if (idx === length - 1) {
+          obj.props.colSpan = !index ? cloumnsBody.length + 1 : 0
+        }
+        return obj
+      }
+    })
+  }
 
   const columnsTotal = [
     {
       title: '小计',
-      align: 'center',
-      dataIndex: 'total'
+      align: length ? 'center' : 'left',
+      dataIndex: 'total',
+      render: (val, _row, idx) => {
+        const obj = {
+          children: val,
+          props: { colSpan: 1 }
+        }
+        if (idx === length - 1) {
+          obj.props.colSpan = 0
+        }
+        return obj
+      }
     }
   ]
   const targetColumns = [].concat(initColumns, cloumnsBody, columnsTotal)
@@ -119,18 +151,16 @@ const dealColumns = data => {
 }
 
 const OnGoing = () => {
+  const { orderStore } = useStores()
+  const { stateTrackData } = orderStore
+
   const [columns, setColumns] = useState([])
-  const [progressKey, setProgressKey] = useState(0)
+  const [progressKey, setProgressKey] = useState('productionDetail')
   const [dataSource, setDataSource] = useState([])
 
-  useEffect(() => {
-    setColumns(dealColumns(data))
-    setDataSource(formatData(data))
-  }, [])
-
   const logisticsConfigs = [
-    { label: '物流公司', field: 'a' },
-    { label: '订单号', field: 'b' },
+    { label: '物流公司', field: 'express' },
+    { label: '订单号', field: 'postid' },
     { label: '发货日期', field: 'c' },
     { label: '收货地址', field: 'd' }
   ]
@@ -143,62 +173,108 @@ const OnGoing = () => {
   }
 
   const progressConfigs = [
-    { label: '面辅料齐', field: 'a', icon: 'jack-textile-products' },
-    { label: '裁剪', field: 'b', icon: 'jack-cut' },
-    { label: '车缝', field: 'c', icon: 'jack-component' },
-    { label: '质检', field: 'd', icon: 'jack-banzhengfuwu' },
-    { label: '成衣入库', field: 'e', icon: 'jack-apparel' },
-    { label: '生产单完成', field: 'f', icon: 'jack-shouhuoicon' }
+    {
+      label: '生产单',
+      field: 'productionDetail',
+      icon: 'jack-textile-products',
+      totalField: 'totalProductionNum'
+    },
+    {
+      label: '裁剪',
+      field: 'cutDetail',
+      icon: 'jack-cut',
+      totalField: 'totalCutNum'
+    },
+    {
+      label: '车缝',
+      field: 'ticketDetail',
+      icon: 'jack-component',
+      totalField: 'totalTicketNum'
+    },
+    {
+      label: '质检',
+      field: 'qualifiedDetail',
+      icon: 'jack-banzhengfuwu',
+      totalField: 'totalQualifiedNum'
+    },
+    {
+      label: '成衣入库',
+      field: 'clothesDetail',
+      icon: 'jack-apparel',
+      totalField: 'totalClothesNum'
+    },
+    {
+      label: '生产单完成',
+      field: 'f',
+      icon: 'jack-shouhuoicon',
+      totalField: 'fNum'
+    }
   ]
 
-  const progressData = {
-    a: 700,
-    b: 600,
-    c: 600,
-    d: 0,
-    e: 0,
-    f: 0
+  const changeProgressKey = field => {
+    setProgressKey(field)
   }
 
-  const changeProgressKey = index => {
-    setProgressKey(index)
-    const random = Math.floor(Math.random() * 5 + 1)
-    const random2 = Math.floor(Math.random() * 6 + 1)
-    const targetData = data.slice(0, random2)
-    const target = formatData(targetData)
-    setDataSource(target.slice(0, random))
-    setColumns(dealColumns(targetData))
-  }
+  useEffect(() => {
+    const { totalOrderSchedule = {} } = stateTrackData
+    const targetData = totalOrderSchedule[progressKey] || []
+
+    const basicData = formatData(targetData)
+    basicData.length &&
+      basicData.push({
+        total: basicData.reduce((prev, item) => {
+          return prev + item.total
+        }, 0),
+        color: '总计',
+        uid: getUId()
+      })
+    setDataSource(basicData)
+    setColumns(dealColumns(targetData, basicData.length))
+  }, [progressKey])
 
   return (
     <div className={styles.goingContent}>
       <Title title={'生产进度'}></Title>
       <div className={styles.progressBox}>
         {progressConfigs.map((item, idx) => {
+          const count = stateTrackData.totalOrderSchedule[item.totalField]
+          let activeStatus1 = false
+          let activeStatus2 = false
+          if (idx < progressConfigs.length - 1) {
+            activeStatus1 = progressKey === item.field
+            activeStatus2 = count > 0 || progressKey === item.field
+          }
+          // TODO 订单是否完成
+          if (idx === progressConfigs.length - 1) {
+            activeStatus1 = progressKey === item.field
+            activeStatus2 =
+              stateTrackData.totalOrderSchedule['state'] === 1 ||
+              progressKey === item.field
+          }
           return (
             <div
               className={classNames(
                 styles.progressItem,
-                progressKey === idx ? styles.activeProgress : ''
+                activeStatus1 ? styles.activeProgress : ''
               )}
               key={idx}
-              onClick={() => changeProgressKey(idx)}
+              onClick={() => changeProgressKey(item.field)}
             >
               <Icon
                 type={item.icon}
                 className={classNames(
                   styles.progressIcon,
-                  idx % 2 ? styles.activeIcon : ''
+                  activeStatus2 ? styles.activeIcon : ''
                 )}
               ></Icon>
               <div className={styles.progressContent}>
                 <div className={styles.progressLabel}>{item.label}</div>
-                <div>
-                  <span className={styles.progressCount}>
-                    {progressData[item.field]}
-                  </span>
-                  &nbsp;件
-                </div>
+                {progressConfigs.length - 1 === idx ? null : (
+                  <div>
+                    <span className={styles.progressCount}>{count}</span>
+                    &nbsp;件
+                  </div>
+                )}
               </div>
             </div>
           )
@@ -228,4 +304,4 @@ const OnGoing = () => {
   )
 }
 
-export default OnGoing
+export default observer(OnGoing)

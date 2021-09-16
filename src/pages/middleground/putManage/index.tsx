@@ -74,7 +74,7 @@ SORT_TYPE.set(0, 'asc')
 SORT_TYPE.set(1, 'desc')
 
 const DEL_CHECK_KEYS = ['complete', 'return', 'draft']
-const defaultPageSize = 20
+const defaultPageSize = 10
 
 const PutManage = () => {
   const history = useHistory()
@@ -95,7 +95,7 @@ const PutManage = () => {
   const [dataSource, setDataSource] = useState<any[]>([])
   const [allChecked, setAllChecked] = useState<boolean>(false)
   const [delBtnDisabled, setDelBtnDisabled] = useState<boolean>(false)
-  const [total, setTotal] = useState<number>(100)
+  const [total, setTotal] = useState<number>(0)
 
   // 获取产品类别
   useEffect(() => {
@@ -259,7 +259,7 @@ const PutManage = () => {
                   getData={getData}
                   showCheck={DEL_CHECK_KEYS.includes(activeKey)}
                   data={card}
-                  key={idx + card.status}
+                  key={+card.id + +card.status}
                   curKey={activeKey}
                   callback={event => dataChoose(event.target.checked, idx)}
                 ></ListCard>
@@ -291,6 +291,7 @@ const PutManage = () => {
           pageSize={+params.pageSize}
           current={+params.pageNum}
           onChange={paginationChange}
+          showSizeChanger
           hideOnSinglePage
           pageSizeOptions={['5', '10', '20']}
         ></Pagination>

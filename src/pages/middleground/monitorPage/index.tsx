@@ -63,6 +63,7 @@ const MonitorPage = () => {
   const [accountModalVisible, setaceousModalVisible] = useState(false) //优产账号弹窗
   const [total, setTotal] = useState<any>(null) //数据长度
   const [pageNum, setPageNum] = useState<number>(1) //当前页数
+  const [connectionStatus, setConnectionStatus] = useState<number>(null) //连接状态
 
   const getFactoryInfo = async () => {
     const response = await getDataList({
@@ -117,7 +118,7 @@ const MonitorPage = () => {
         return value ? (
           <span className={styles.success}>成功</span>
         ) : (
-          <span className={styles.success}>失败</span>
+          <span className={styles.fail}>失败</span>
         )
       }
     },
@@ -193,7 +194,7 @@ const MonitorPage = () => {
   const equipmentHandleOk = () => {
     setJudgment(false)
     setFailed(false)
-    setButtonIsAvailable(true)
+
     form.submit()
   }
   // 新增取消按钮事件
@@ -201,6 +202,7 @@ const MonitorPage = () => {
     setButtonIsAvailable(true)
     setIsModalVisible(false)
   }
+
   // 设备form
   const onFinish = async (v: any) => {
     //  判断是测试还是提交
@@ -217,18 +219,25 @@ const MonitorPage = () => {
       if (ConnectingEquipment != '200') {
         console.log('正确')
         setJudgment(true)
+        setConnectionStatus(1)
       } else {
         console.log('错误')
         setFailed(true)
+        setConnectionStatus(0)
       }
       setConnection(false)
       setButtonIsAvailable(false)
     } else {
-      const newlywed = await newDataList(v)
+      const newlywed = await newDataList({ ...v, status: connectionStatus })
+
       console.log(newlywed)
       if (newlywed.code == 200) {
         setIsModalVisible(false)
+
         getFactoryInfo()
+        setButtonIsAvailable(true)
+      } else {
+        setButtonIsAvailable(false)
       }
     }
   }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 
@@ -29,7 +29,37 @@ const AddDevicePopUpd = props => {
     failed,
     ConnectionFailedCancel
   } = props
-  console.log(props)
+  const intervalRef = useRef<any>(null)
+
+  const [count, changeCount] = useState(0)
+
+  // 组件卸载时清除计时器
+  useEffect(() => {
+    return () => {
+      clearInterval(intervalRef.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (count === 5) {
+      intervalRef.current = setInterval(() => {
+        changeCount(preCount => preCount - 1)
+      }, 1000)
+    } else if (count === 0) {
+      clearInterval(intervalRef.current)
+      cancellation()
+    }
+  }, [count])
+
+  const onGetCaptcha = useCallback(() => {
+    changeCount(5)
+  }, [])
+
+  useEffect(() => {
+    if (judgment) {
+      onGetCaptcha()
+    }
+  }, [judgment])
   return (
     <div>
       {/* 新增设备弹窗 */}
@@ -159,7 +189,7 @@ const AddDevicePopUpd = props => {
             <Icon type="jack-chenggong" className={styles.menuIcon} />
           </p>
           <p>连接成功</p>
-          <p>设备连接成功，X秒后返回</p>
+          <p>设备连接成功，{count}秒后返回</p>
           <p>
             <Button type="primary" onClick={cancellation}>
               立即返回

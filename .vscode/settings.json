@@ -1,4 +1,12 @@
 {
   "workbench.colorTheme": "Snazzy Operator",
-  "cSpell.words": ["Equipmentbrand", "Lnglat", "Paginationclick"]
+  "cSpell.words": ["Equipmentbrand", "Lnglat", "Paginationclick"],
+  "cSpell.customDictionaries": {
+    "custom-dictionary-workspace": {
+      "name": "custom-dictionary-workspace",
+      "path": "${workspaceFolder:platform}/.cspell/custom-dictionary-workspace.txt",
+      "addWords": true,
+      "scope": "workspace"
+    }
+  }
 }

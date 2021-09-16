@@ -333,10 +333,14 @@ const MonitorPage = () => {
         rowKey={rowKey}
         pagination={{
           showQuickJumper: true,
-          pageSize: 10,
+          pageSize: 5,
+          total: 50,
           position: ['bottomCenter'],
-          onShowSizeChange(c, s) {
-            console.log(c, s)
+          onShowSizeChange(current, size) {
+            console.log(current, size)
+          },
+          onChange(page) {
+            console.log(page)
           }
         }}
       ></Table>

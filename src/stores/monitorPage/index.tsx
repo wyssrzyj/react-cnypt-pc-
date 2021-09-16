@@ -75,6 +75,21 @@ export default class MonitorPage {
       console.log(e)
     }
   }
+  // 单个搜索
+  @action singleSearch = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        '/api/factory/factory-camera/get-camera-org-info',
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      console.log(e)
+    }
+  }
   // 检测是否绑定优产账号
   @action bindSuperiorProductAccount = async () => {
     try {

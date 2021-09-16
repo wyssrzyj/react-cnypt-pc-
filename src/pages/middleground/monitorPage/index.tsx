@@ -44,7 +44,8 @@ const MonitorPage = () => {
     deleteEvent,
     connectingEquipment,
     bindSuperiorProductAccount,
-    productAccount
+    productAccount,
+    singleSearch
   } = monitorPageStore
   const { allDictionary } = commonStore
 
@@ -94,16 +95,16 @@ const MonitorPage = () => {
   }, [isModalVisible])
   // 修改
   const modificationMethod = async rData => {
-    setModify(rData.id)
+    const { id } = rData
+    console.log(id)
+    setModify(id)
+    const singly = await singleSearch({ id })
+    console.log(singly)
+    form.setFieldsValue(singly)
     const equipment = await equipmentDepartment()
     setDepartment(dealTypeData(equipment.data))
-    form.setFieldsValue({
-      ...rData,
-      id: rData.key
-    })
     setIsModalVisible(true)
   }
-
   const columns: any = [
     {
       title: '设备名称',
@@ -131,8 +132,6 @@ const MonitorPage = () => {
       sorter: (a, b) => a.status - b.status,
 
       render(value) {
-        console.log(value)
-
         return value ? (
           <span className={styles.success}>成功</span>
         ) : (
@@ -163,7 +162,6 @@ const MonitorPage = () => {
             onClick={() => {
               console.log(c)
               console.log(rData)
-
               modificationMethod(rData)
             }}
           >
@@ -221,6 +219,8 @@ const MonitorPage = () => {
 
   // 设备form
   const onFinish = async (v: any) => {
+    console.log(v)
+
     //  判断是测试还是提交
     if (connection) {
       const { serialNumber, verificationCode } = v
@@ -244,12 +244,16 @@ const MonitorPage = () => {
       setConnection(false)
       setButtonIsAvailable(false)
     } else {
+      // 判断是修改还是新增
       if (modify != null) {
+        console.log(modify)
+
         const newlywed = await newDataList({
           ...v,
           status: connectionStatus,
           id: modify
         })
+
         if (newlywed.code == 200) {
           setIsModalVisible(false)
           getFactoryInfo()
@@ -297,9 +301,8 @@ const MonitorPage = () => {
   const accountShowModal = async () => {
     form.resetFields()
     const account = await bindSuperiorProductAccount()
-    console.log(account)
-    // 因为当前账号已经绑定了  用于测试
 
+    // 因为当前账号已经绑定了  用于测试
     if (account.data == true) {
       setaceousModalVisible(true)
     } else {

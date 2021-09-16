@@ -124,7 +124,6 @@ export default class MonitorPage {
       console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
 
       if (res.code === 200) {
-        message.success(res.msg)
         return res.data
       }
       if (res.code !== 200) {

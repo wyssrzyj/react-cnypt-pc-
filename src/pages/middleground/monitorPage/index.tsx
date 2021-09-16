@@ -9,14 +9,16 @@ import {
   Input,
   Button,
   Table,
-  Space,
-  Modal,
-  TreeSelect
+  Space
   // message
 } from 'antd'
+// import AddDevicePopUp from './components/addDevicePopUp'
+import DeletePopup from './components/deletePopup'
+import BindingSuperiorProduct from './components/bindingSuperiorProduct'
+import AddDevicePopUpd from './components/addDevicePopUpd'
 
 const rowKey = 'id'
-const { TreeNode } = TreeSelect
+// const { TreeNode } = TreeSelect
 const dealTypeData = (data: any[]) => {
   data.forEach(item => {
     item.label = item.deptName
@@ -32,7 +34,7 @@ const dealTypeData = (data: any[]) => {
 const MonitorPage = () => {
   const { monitorPageStore, commonStore } = useStores()
   const {
-    queryData,
+    // queryData,
     newDataList,
     getDataList,
     equipmentDepartment,
@@ -55,26 +57,23 @@ const MonitorPage = () => {
   const [department, setDepartment] = useState<any>([]) // 设备部门
   const [equipmentbrand, setEquipmentbrand] = useState<any>([]) // 设备品牌
   const [moved, setMoved] = useState<any>(0) // 删除id
-  const onChangeset = value => {
-    console.log(value)
-  }
+  const [equipmentName, setEquipmentName] = useState<any>(null) //查询name
 
-  // 获取设备品牌
-  const allDictionarya = async () => {
-    const brand = await allDictionary([])
-    setEquipmentbrand(brand.cameraBrand)
-  }
   const getFactoryInfo = async () => {
-    const response = await getDataList()
+    const response = await getDataList({
+      name: equipmentName
+    })
+    console.log(response)
     setList(response.records)
-    const equipment = await equipmentDepartment()
-    setDepartment(dealTypeData(equipment.data))
+  }
+  const onSearch = value => {
+    console.log(value)
+    setEquipmentName(value)
   }
 
   useEffect(() => {
     getFactoryInfo()
-    allDictionarya()
-  }, [])
+  }, [equipmentName])
 
   const columns: any = [
     {
@@ -164,22 +163,7 @@ const MonitorPage = () => {
   ]
 
   const [form] = Form.useForm()
-  const [queryform] = Form.useForm()
-  // 查询form
-  const onQueryFinish = async (v: any) => {
-    console.log(v.name)
-    if (v.name != '') {
-      const querydata = await queryData(v)
-      setList(querydata.records)
-    } else {
-      getFactoryInfo()
-    }
-
-    form.resetFields()
-  } //查询
-  const querybtn = () => {
-    queryform.submit()
-  }
+  const { Search } = Input
 
   //   连接成功
   const showModals = () => {
@@ -250,8 +234,12 @@ const MonitorPage = () => {
     connections()
   }
   // 新增显示
-  const showModal = () => {
+  const showModal = async () => {
     setIsModalVisible(true)
+    const brand = await allDictionary([])
+    setEquipmentbrand(brand.cameraBrand)
+    const equipment = await equipmentDepartment()
+    setDepartment(dealTypeData(equipment.data))
     form.resetFields()
   }
 
@@ -292,6 +280,15 @@ const MonitorPage = () => {
     console.log('返回上一级')
   }
 
+  const tableChange = (pagination, filters, sorter, extra) => {
+    console.log('~~~~~~~~~~~~~~~~~~~~~~')
+    console.log(pagination) //页码改变
+    console.log(filters)
+    console.log(sorter)
+    console.log(extra) //获取table中所有的数据
+    console.log('~~~~~~~~~~~~~~~~~~~~~~')
+  }
+
   return (
     <div className={styles.monitor}>
       <div>
@@ -301,305 +298,86 @@ const MonitorPage = () => {
         <span className={styles.system}>监控系统</span>
       </div>
       <Divider />
-      <Form
-        className={styles.header}
-        form={queryform}
-        name="basic"
-        labelCol={{ span: 2 }}
-        initialValues={{ remember: true }}
-        onFinish={onQueryFinish}
-        autoComplete="off"
-      >
-        <Form.Item colon={false} label="设备关键名字" name="name">
-          <Input className={styles.Input} placeholder="请输入设备名称" />
-        </Form.Item>
-        <Form.Item>
-          <Button className={styles.query} type="primary" onClick={querybtn}>
-            查询
+      <div className={styles.header}>
+        <div className={styles.equipment}>
+          <span className={styles.keynote}>设备关键名字</span>
+          <span>
+            <Search
+              className={styles.inputsearch}
+              maxLength={5}
+              placeholder="请输入设备名字"
+              allowClear
+              enterButton="查询"
+              size="large"
+              onSearch={onSearch}
+            />
+          </span>
+
+          <Button
+            icon={<Icon type="jack-del" className={styles.del} />}
+            className={styles.added}
+            onClick={showModal}
+          >
+            新增设备
           </Button>
-        </Form.Item>
-        <Button
-          icon={<Icon type="jack-del" className={styles.del} />}
-          className={styles.added}
-          onClick={showModal}
-        >
-          新增设备
-        </Button>
-      </Form>
+        </div>
+      </div>
+
       <Table
-        className={styles.Table}
+        className={styles.table}
         columns={columns}
         dataSource={list}
         rowKey={rowKey}
+        onChange={tableChange}
         pagination={{
-          showQuickJumper: true,
-          pageSize: 5,
+          showQuickJumper: false,
+          pageSize: 10,
           total: 50,
           position: ['bottomCenter'],
           onShowSizeChange(current, size) {
+            console.log(123)
             console.log(current, size)
           },
-          onChange(page) {
+          onChange(page, pageSize) {
             console.log(page)
+            console.log(pageSize)
           }
         }}
       ></Table>
+
       {/* 新增设备弹窗 */}
-
-      <Modal
-        title="新增设备"
-        okText="提交"
-        onCancel={equipmentHandleCancel}
-        footer={[
-          <Button onClick={equipmentHandleCancel}>取消</Button>,
-          <Button
-            type="primary"
-            disabled={buttonIsAvailable}
-            onClick={equipmentHandleOk}
-            htmlType="submit"
-          >
-            提交
-          </Button>
-        ]}
-        confirmLoading={true}
-        visible={isModalVisible}
-        centered={true}
-      >
-        <Form
-          form={form}
-          name="basic"
-          labelCol={{ span: 5 }}
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          autoComplete="off"
-        >
-          <Form.Item
-            className={styles.item}
-            colon={false}
-            label="设备名称"
-            name="name"
-            rules={[{ required: true, message: `请输入设备名称` }]}
-          >
-            <Input placeholder={`请输入请输入设备名称`} />
-          </Form.Item>
-
-          <Form.Item
-            className={styles.item}
-            colon={false}
-            label="设备品牌 "
-            name="brand"
-            rules={[{ required: true, message: `请输入设备品牌` }]}
-          >
-            <TreeSelect
-              showSearch
-              style={{ width: '100%' }}
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              placeholder="请输入设备品牌"
-              allowClear
-              treeDefaultExpandAll
-            >
-              {equipmentbrand.map(item => {
-                return (
-                  <TreeNode
-                    key={item}
-                    value={item.value}
-                    title={item.label}
-                  ></TreeNode>
-                )
-              })}
-            </TreeSelect>
-          </Form.Item>
-
-          <Form.Item
-            className={styles.item}
-            colon={false}
-            label="设备部门 "
-            name="orgIdList"
-            rules={[{ required: true, message: `请输入设备部门` }]}
-          >
-            <TreeSelect
-              showSearch
-              treeData={department}
-              style={{ width: '100%' }}
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              placeholder="请输入设备部门"
-              allowClear
-              multiple
-              treeDefaultExpandAll
-              onChange={onChangeset}
-            ></TreeSelect>
-          </Form.Item>
-
-          <Form.Item
-            className={styles.item}
-            colon={false}
-            label="设备序列号"
-            name="serialNumber"
-            rules={[{ required: true, message: `请输入设备序列号` }]}
-          >
-            <Input placeholder={`请输入请输入设备序列号`} />
-          </Form.Item>
-          <Form.Item
-            className={styles.item}
-            colon={false}
-            label="验证码"
-            name="verificationCode"
-            rules={[{ required: true, message: `请输入验证码` }]}
-          >
-            <Input placeholder={`请输入请输入验证码`} />
-          </Form.Item>
-
-          <Form.Item
-            className={styles.submit}
-            wrapperCol={{ offset: 8, span: 16 }}
-          >
-            <Button
-              onClick={() => {
-                setConnection(true)
-              }}
-              type="primary"
-              htmlType="submit"
-            >
-              测试连接
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
+      <AddDevicePopUpd
+        buttonIsAvailable={buttonIsAvailable}
+        equipmentHandleCancel={equipmentHandleCancel}
+        equipmentHandleOk={equipmentHandleOk}
+        onFinish={onFinish}
+        isModalVisible={isModalVisible}
+        form={form}
+        equipmentbrand={equipmentbrand}
+        department={department}
+        setConnection={() => setConnection(true)}
+        judgment={judgment}
+        setJudgment={() => setJudgment(false)}
+        cancellation={cancellation}
+        failed={failed}
+        ConnectionFailedCancel={ConnectionFailedCancel}
+      />
       {/* 绑定优产账号弹窗 */}
-      <Modal
-        title="绑定优产账号"
+      <BindingSuperiorProduct
         visible={accountModalVisible}
-        footer={null}
-        centered={true}
+        onFinish={onFinishProduction}
         onCancel={() => {
           setaceousModalVisible(false)
         }}
-      >
-        <Form
-          name="basic"
-          labelCol={{ span: 4 }}
-          initialValues={{ remember: true }}
-          onFinish={onFinishProduction}
-          autoComplete="off"
-        >
-          <Form.Item name="password">
-            <Input
-              prefix={<Icon type="jack-gerenzhongxin1" />}
-              placeholder="请输入账号"
-            />
-          </Form.Item>
-          <Form.Item name="mobile">
-            <Input
-              prefix={<Icon type="jack-mima" />}
-              placeholder="请输入密码"
-            />
-          </Form.Item>
-          <Form.Item
-            className={styles.binds}
-            wrapperCol={{ offset: 8, span: 16 }}
-          >
-            <Button className={styles.bind} type="primary" htmlType="submit">
-              立即绑定
-            </Button>
-          </Form.Item>
-          <Form.Item
-            className={styles.cancel}
-            wrapperCol={{ offset: 8, span: 18 }}
-          >
-            <Button
-              className={styles.cancels}
-              onClick={() => {
-                setaceousModalVisible(false)
-              }}
-              htmlType="submit"
-            >
-              取消
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
-
-      {/* 成功的 */}
-      <Modal
-        className={styles.ok}
-        centered={true}
-        footer={null}
-        visible={judgment}
-        onCancel={() => {
-          setJudgment(false)
-        }}
-      >
-        <div className={styles.oksa}>
-          <div className={styles.connectok}></div>
-          <p>
-            <Icon type="jack-chenggong" className={styles.menuIcon} />
-          </p>
-          <p>连接成功</p>
-          <p>设备连接成功，X秒后返回</p>
-          <p>
-            <Button type="primary" onClick={cancellation}>
-              立即返回
-            </Button>
-          </p>
-        </div>
-      </Modal>
-      {/* 失败的 */}
-      <Modal
-        className={styles.ok}
-        centered={true}
-        footer={null}
-        visible={failed}
-        onCancel={ConnectionFailedCancel}
-      >
-        <div className={styles.oksa}>
-          <div className={styles.connectok}></div>
-
-          <p>
-            <Icon type="jack-sptg1" className={styles.menuIcon} />
-          </p>
-          <p>连接失败</p>
-          <p>您所提交的信息有误，请确认序列号或验证码</p>
-          <p>
-            <Button type="primary" onClick={ConnectionFailedCancel}>
-              立即返回
-            </Button>
-          </p>
-        </div>
-      </Modal>
+      />
       {/* 删除设备 */}
-      <Modal
-        className={styles.ok}
-        onCancel={() => {
+      <DeletePopup
+        deleteDeviceCancel={deleteDeviceCancel}
+        visible={deletionFailed}
+        onClick={() => {
           setDeletionFailed(false)
         }}
-        centered={true}
-        footer={null}
-        visible={deletionFailed}
-      >
-        <p>
-          <Icon type="jack-ts" className={styles.menuIcon} />
-        </p>
-        <p style={{ fontSize: 18 }}>删除设备</p>
-        <p className={styles.current}>确认将当前设备删除</p>
-        <p>
-          <Button
-            className={styles.cancels}
-            onClick={() => {
-              setDeletionFailed(false)
-            }}
-          >
-            取消
-          </Button>
-
-          <Button
-            className={styles.deleteDeviceCancels}
-            type="primary"
-            onClick={deleteDeviceCancel}
-          >
-            确认
-          </Button>
-        </p>
-      </Modal>
+      />
     </div>
   )
 }

@@ -9,7 +9,8 @@ import {
   Input,
   Button,
   Table,
-  Space
+  Space,
+  message
   // message
 } from 'antd'
 // import AddDevicePopUp from './components/addDevicePopUp'
@@ -32,6 +33,8 @@ const dealTypeData = (data: any[]) => {
 }
 
 const MonitorPage = () => {
+  const pageSize = 10
+
   const { monitorPageStore, commonStore } = useStores()
   const {
     // queryData,
@@ -44,36 +47,43 @@ const MonitorPage = () => {
     productAccount
   } = monitorPageStore
   const { allDictionary } = commonStore
-  //优产账号弹窗
-  const [accountModalVisible, setaceousModalVisible] = useState(false)
-  const [buttonIsAvailable, setButtonIsAvailable] = useState(true) //判断按钮是否可用
+
+  const [list, setList] = useState([]) //数据
+
   const [isModalVisible, setIsModalVisible] = useState(false) //设备弹窗
+  const [connection, setConnection] = useState(false) //判断是连接测试还是提交
   const [judgment, setJudgment] = useState(false) //连接成功
   const [failed, setFailed] = useState(false) //连接失败
-  const [deletionFailed, setDeletionFailed] = useState(false) //删除设备
-  const [successFailure, setSuccessFailure] = useState(false) //判断是成功还是失败
-  const [connection, setConnection] = useState(false) //判断是连接测试还是提交
-  const [list, setList] = useState([]) //数据
+  const [buttonIsAvailable, setButtonIsAvailable] = useState(true) //判断按钮是否可用
   const [department, setDepartment] = useState<any>([]) // 设备部门
   const [equipmentbrand, setEquipmentbrand] = useState<any>([]) // 设备品牌
+  const [deletionFailed, setDeletionFailed] = useState(false) //删除设备
   const [moved, setMoved] = useState<any>(0) // 删除id
   const [equipmentName, setEquipmentName] = useState<any>(null) //查询name
+  const [accountModalVisible, setaceousModalVisible] = useState(false) //优产账号弹窗
+  const [total, setTotal] = useState<any>(null) //数据长度
+  const [pageNum, setPageNum] = useState<number>(1) //当前页数
 
   const getFactoryInfo = async () => {
     const response = await getDataList({
-      name: equipmentName
+      name: equipmentName,
+      pageSize,
+      pageNum
     })
-    console.log(response)
+    setTotal(response.total) //数据长度
     setList(response.records)
   }
   const onSearch = value => {
-    console.log(value)
     setEquipmentName(value)
   }
-
+  // 当前页数
+  const Paginationclick = page => {
+    setPageNum(page)
+  }
   useEffect(() => {
     getFactoryInfo()
-  }, [equipmentName])
+  }, [equipmentName, pageNum])
+  // 用于显示成功还是失败
 
   const columns: any = [
     {
@@ -98,8 +108,9 @@ const MonitorPage = () => {
       title: '连接状态',
       key: 'status',
       align: 'center',
-
       dataIndex: 'status',
+      sorter: (a, b) => a.status - b.status,
+
       render(value) {
         console.log(value)
 
@@ -165,20 +176,6 @@ const MonitorPage = () => {
   const [form] = Form.useForm()
   const { Search } = Input
 
-  //   连接成功
-  const showModals = () => {
-    setJudgment(true)
-  }
-  const cancellation = () => {
-    setJudgment(false)
-  }
-  //连接失败
-  const connectionFailed = () => {
-    setFailed(true)
-  }
-  const ConnectionFailedCancel = () => {
-    setFailed(false)
-  }
   //删除设备
   const DeleteDeviceDisplay = id => {
     setMoved(id)
@@ -196,11 +193,8 @@ const MonitorPage = () => {
   const equipmentHandleOk = () => {
     setJudgment(false)
     setFailed(false)
-    // setIsModalVisible(false)//关闭弹窗
     setButtonIsAvailable(true)
     form.submit()
-
-    // setIsModalVisible(false)
   }
   // 新增取消按钮事件
   const equipmentHandleCancel = () => {
@@ -218,21 +212,36 @@ const MonitorPage = () => {
         serialNumber,
         verificationCode
       })
-      if (ConnectingEquipment === 200) {
-        setSuccessFailure(true)
+      console.log(ConnectingEquipment)
+
+      if (ConnectingEquipment != '200') {
+        console.log('正确')
+        setJudgment(true)
       } else {
-        setSuccessFailure(false)
+        console.log('错误')
+        setFailed(true)
       }
+      setConnection(false)
+      setButtonIsAvailable(false)
     } else {
       const newlywed = await newDataList(v)
+      console.log(newlywed)
       if (newlywed.code == 200) {
         setIsModalVisible(false)
         getFactoryInfo()
       }
     }
-
-    connections()
   }
+
+  //   连接成功的取消
+  const cancellation = () => {
+    setJudgment(false)
+  }
+  //连接失败的取消
+  const ConnectionFailedCancel = () => {
+    setFailed(false)
+  }
+
   // 新增显示
   const showModal = async () => {
     setIsModalVisible(true)
@@ -242,14 +251,16 @@ const MonitorPage = () => {
     setDepartment(dealTypeData(equipment.data))
     form.resetFields()
   }
-
   const accountShowModal = async () => {
     form.resetFields()
     const account = await bindSuperiorProductAccount()
     console.log(account)
     // 因为当前账号已经绑定了  用于测试
+
     if (account.data == true) {
       setaceousModalVisible(true)
+    } else {
+      message.success('已经绑定')
     }
   }
   //优产账号form
@@ -262,33 +273,10 @@ const MonitorPage = () => {
     }
   }
 
-  //   连接测试
-  const connections = () => {
-    if (connection) {
-      if (successFailure) {
-        showModals()
-      } else {
-        connectionFailed()
-      }
-    }
-    setConnection(false)
-    setButtonIsAvailable(false)
-  }
-
   // 返回上一级
   const previous = () => {
     console.log('返回上一级')
   }
-
-  const tableChange = (pagination, filters, sorter, extra) => {
-    console.log('~~~~~~~~~~~~~~~~~~~~~~')
-    console.log(pagination) //页码改变
-    console.log(filters)
-    console.log(sorter)
-    console.log(extra) //获取table中所有的数据
-    console.log('~~~~~~~~~~~~~~~~~~~~~~')
-  }
-
   return (
     <div className={styles.monitor}>
       <div>
@@ -328,20 +316,13 @@ const MonitorPage = () => {
         columns={columns}
         dataSource={list}
         rowKey={rowKey}
-        onChange={tableChange}
         pagination={{
-          showQuickJumper: false,
-          pageSize: 10,
-          total: 50,
-          position: ['bottomCenter'],
-          onShowSizeChange(current, size) {
-            console.log(123)
-            console.log(current, size)
-          },
-          onChange(page, pageSize) {
-            console.log(page)
-            console.log(pageSize)
-          }
+          showQuickJumper: false, //是否快速查找
+          pageSize, //每页条数
+          current: pageNum, //	当前页数
+          total, //数据总数
+          position: ['bottomCenter'], //居中
+          onChange: Paginationclick //获取当前页码是一个function
         }}
       ></Table>
 

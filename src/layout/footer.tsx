@@ -16,17 +16,17 @@ const Footer = () => {
     {
       label: '客服QQ',
       icon: 'jack-kefu',
-      value: '36049302'
+      value: '824216039'
     },
     {
       label: '商务热线',
       icon: 'jack-swrx',
-      value: '36049302'
+      value: '15620621977'
     },
     {
       label: '商务邮箱',
       icon: 'jack-swyx',
-      value: '36049302'
+      value: 'uchat@chinajack.com'
     }
   ]
 

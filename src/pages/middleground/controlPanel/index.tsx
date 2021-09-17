@@ -148,7 +148,7 @@ const ControlPanel = () => {
               <Link to="/control-panel/panel/enterprise">企业信息</Link>
             </Menu.Item>
             {/* infoApprovalStatus === 1 */}
-            {currentUser.enterpriseId ? (
+            {+currentUser.enterpriseType === 1 ? (
               <Menu.Item
                 key="issue-bill"
                 className={styles.item}

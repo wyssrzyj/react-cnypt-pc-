@@ -19,7 +19,7 @@ export const Title = props => {
   return (
     <div
       className={styles.title}
-      style={{ fontSize: `${fontSize ? fontSize : 20}px` }}
+      style={{ fontSize: `${fontSize ? fontSize : 18}px` }}
     >
       <div className={styles.titleLine}></div>
       {title}

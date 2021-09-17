@@ -58,7 +58,7 @@ const PlantSitePhoto = () => {
             <span className={styles.imageItemOperate}>
               <span>设为主图</span>
               <i className={styles.separator}>|</i>
-              <span>删除照片</span>{' '}
+              <span>删除照片</span>
             </span>
             <span className={styles.imageItemBottom}>
               <span className={styles.box}>(等待审批)</span>

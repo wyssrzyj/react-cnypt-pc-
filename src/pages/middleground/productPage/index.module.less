@@ -153,6 +153,16 @@
 }
 
 .footerNumber {
+  padding: 0 8px;
   color: #333;
   font-weight: bold;
+  font-size: 18px;
+}
+
+.grayTableHeader {
+  :global {
+    .ant-table-thead > tr > th {
+      color: #999999 !important;
+    }
+  }
 }

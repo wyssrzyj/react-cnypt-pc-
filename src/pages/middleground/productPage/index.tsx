@@ -9,6 +9,7 @@ import { cloneDeep, isNil } from 'lodash'
 import { useStores, observer, toJS } from '@/utils/mobx'
 import ProductModal from './productModal'
 import { getUId, urlGet } from '@/utils/tool'
+import classNames from 'classnames'
 import {
   keys,
   layout,
@@ -474,7 +475,14 @@ const ProductPage = () => {
             })}
           </Row>
         </section>
-        <section className={styles.productSection}>
+        <section
+          className={classNames(
+            styles.productSection,
+            ['confirm', 'detail'].includes(pageType)
+              ? styles.grayTableHeader
+              : ''
+          )}
+        >
           <Title title={'商品规格'}></Title>
           <Table
             pagination={false}
@@ -492,15 +500,24 @@ const ProductPage = () => {
 
           <div className={styles.productFooter}>
             <div className={styles.footerItem}>
-              合计数量 <span className={styles.footerNumber}>{count}</span>件
+              合计数量
+              <span className={styles.footerNumber}>{count}</span>件
             </div>
             <div className={styles.footerItem}>
-              合计总价 <span className={styles.footerNumber}>{amount}</span>元
+              合计总价
+              <span className={styles.footerNumber}>{amount}</span>元
             </div>
           </div>
         </section>
 
-        <section className={styles.productSection}>
+        <section
+          className={classNames(
+            styles.productSection,
+            ['confirm', 'detail'].includes(pageType)
+              ? styles.grayTableHeader
+              : ''
+          )}
+        >
           <Title title={'物料信息'}></Title>
           <Table
             pagination={false}

@@ -10,6 +10,7 @@ import moment from 'moment'
 import { useHistory, useParams } from 'react-router'
 import { urlGet } from '@/utils/tool'
 import { layout2 } from '../productPage/configs'
+import classNames from 'classnames'
 
 const FormItem = Form.Item
 
@@ -656,7 +657,14 @@ const OrderPage = () => {
           </Row>
         </section>
 
-        <section className={styles.goodsSection}>
+        <section
+          className={classNames(
+            styles.goodsSection,
+            ['confirm', 'detail'].includes(pageType)
+              ? styles.grayTableHeader
+              : ''
+          )}
+        >
           <Title title={'商品信息'}></Title>
           <Table
             footer={() => <Footer data={tableData[0]}></Footer>}

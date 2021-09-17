@@ -103,7 +103,7 @@ const CompaniesIntroduce = props => {
                 <span className={styles.label}>厂房面积 </span>
                 <span className={styles.strong}>
                   <span className={styles.strongNumber}>
-                    {checkValue(factoryArea)}{' '}
+                    {checkValue(factoryArea)}
                   </span>
                   平方米
                 </span>

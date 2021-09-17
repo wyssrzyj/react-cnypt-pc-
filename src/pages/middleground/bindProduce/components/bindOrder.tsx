@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import styles from './bindOrder.module.less'
 import { Input, Button, Table } from 'antd'
 import { Icon } from '@/components'
-import { useHistory } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import { ColumnType } from 'antd/lib/table'
 import { cloneDeep } from 'lodash'
+import { useStores } from '@/utils/mobx'
+import moment from 'moment'
 
 const INPUT_ICON = <Icon type={'jack-sousuo1'}></Icon>
 
@@ -20,23 +22,50 @@ interface Columns {
 }
 
 interface Params {
-  sortField: string
-  sortType: string
-  pageNum: number
-  pageSize: number
+  page: number
+  limit: number // 页大小,
+  keyword: string
+  deliveryDate: string
+  orderDate: string
 }
 
 const initParams = {
-  pageNum: 1,
-  pageSize: 20
+  page: 1,
+  limit: 10, // 页大小,
+  keyword: '', //关键词
+  deliveryDate: '',
+  orderDate: ''
 }
 
 const BindOrder = () => {
   const history = useHistory()
+  const { orderStore } = useStores()
+  const { getYOUCHANList, bindProcduce, getBindInfo } = orderStore
+  const routerParams: { id: string } = useParams()
+
   const [search, setSearch] = useState()
-  const [selectKeys, setSelectKeys] = useState<React.Key[]>([])
+  const [totalKeysArr, setTotalKeysArr] = useState<string[]>([])
   const [params, setParams] = useState<Partial<Params>>(initParams)
   const [dataSource, setDataSource] = useState<any[]>([])
+  const [total, setTotal] = useState<number>(0)
+
+  const [currentKeys, setCurrentKeys] = useState<any[]>([])
+  const [anotherKeys, setAnotherKeys] = useState<any[]>([])
+
+  useEffect(() => {
+    ;(async () => {
+      const bindInfo = await getBindInfo(routerParams.id)
+      if (bindInfo && Array.isArray(bindInfo.productionIdList)) {
+        setTotalKeysArr(bindInfo.productionIdList)
+      }
+    })()
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      await getDataList()
+    })()
+  }, [params])
 
   const valueChange = event => {
     const { value } = event.target
@@ -44,79 +73,124 @@ const BindOrder = () => {
   }
 
   const getSearch = () => {
-    const params = {
-      name: search
-    }
-    console.log(
-      '🚀 ~ file: bindOrder.tsx ~ line 20 ~ getSearch ~ params',
-      params
-    )
+    const newParams = cloneDeep(params)
+    newParams.keyword = `${search}`.trim()
+    newParams.page = 1
+    setParams(newParams)
   }
 
   const columns: ColumnType<Columns>[] = [
     {
       title: '款名',
       align: 'center',
-      dataIndex: 'a'
+      dataIndex: 'styleName'
     },
     {
       title: '单号',
       align: 'center',
-      dataIndex: 'b'
+      dataIndex: 'orderNo'
     },
     {
       title: '照片',
       align: 'center',
-      dataIndex: 'c',
+      dataIndex: 'styleImg',
       render: img => <img src={img} className={styles.orderImg} alt="" />
     },
     {
       title: '客户',
       align: 'center',
-      dataIndex: 'd'
+      dataIndex: 'name'
     },
     {
       title: '下单时间',
       align: 'center',
-      dataIndex: 'e',
-      sorter: true
+      dataIndex: 'orderDate',
+      sorter: true,
+      render: time => (time ? moment(time).format('YYYY-MM-DD HH:mm:ss') : null)
     },
     {
       title: '交期时间',
       align: 'center',
-      dataIndex: 'f',
-      sorter: true
+      dataIndex: 'deliveryDate',
+      sorter: true,
+      render: time => (time ? moment(time).format('YYYY-MM-DD HH:mm:ss') : null)
     }
   ]
 
   const rowSelection = {
+    selectedRowKeys: currentKeys,
     onChange: (selectedRowKeys: React.Key[], _selectedRows: DataType[]) => {
-      setSelectKeys(selectedRowKeys)
+      setCurrentKeys(selectedRowKeys)
+      setTotalKeysArr([...selectedRowKeys, ...anotherKeys])
     }
   }
 
-  const tableChange = (pagination, _filters, sorter, _extra) => {
+  const tableChange = async (pagination, _filters, sorter, _extra) => {
     const newParams = cloneDeep(params)
     const { field, order } = sorter
     const { current, pageSize } = pagination
-    newParams.sortType = order ? (order === 'ascend' ? 'asc' : 'desc') : null
-    newParams.sortField = field
-    newParams.pageSize = pageSize
-    newParams.pageNum = current
-    console.log(
-      '🚀 ~ file: bindOrder.tsx ~ line 103 ~ tableChange ~ newParams',
-      newParams
-    )
+    newParams[field] = order ? (order === 'ascend' ? 'asc' : 'desc') : null
+    newParams.limit = pageSize
+    newParams.page = current
+
     setParams(newParams)
   }
+
+  const findCurKeys = (data, keys) => {
+    let otherKeys = cloneDeep(keys)
+    const curKeys = []
+    if (Array.isArray(data)) {
+      data.forEach(item => {
+        const index = otherKeys.indexOf(item.orderId)
+        if (index > -1) {
+          curKeys.push(item.orderId)
+          otherKeys = otherKeys.filter(i => i !== item.orderId)
+        }
+      })
+    }
+    return {
+      otherKeys,
+      curKeys
+    }
+  }
+
+  const getDataList = async () => {
+    const data = await getYOUCHANList(params)
+    if (data) {
+      const { records = [], total = 0 } = data
+
+      setDataSource(records)
+      setTotal(total)
+    }
+  }
+
+  useEffect(() => {
+    if (Array.isArray(dataSource) && dataSource.length) {
+      const { otherKeys, curKeys } = findCurKeys(dataSource, totalKeysArr)
+      setCurrentKeys(curKeys)
+      setAnotherKeys(otherKeys)
+    }
+  }, [totalKeysArr, dataSource])
+
+  useEffect(() => {
+    console.log(currentKeys, 'currentKeys')
+  }, [currentKeys])
 
   const cancel = () => {
     history.goBack()
   }
 
-  useEffect(() => {
-    console.log(selectKeys, 'selectKeys')
-  }, [])
+  const bindYOUCHANOrder = async () => {
+    const params = {
+      productionIdList: [...currentKeys, ...anotherKeys],
+      platformOrderId: routerParams.id,
+      status: 3,
+      type: 1
+    }
+
+    const res = await bindProcduce(params)
+    res && history.goBack()
+  }
 
   useEffect(() => {
     setDataSource([])
@@ -150,14 +224,14 @@ const BindOrder = () => {
           }
           columns={columns}
           dataSource={dataSource}
-          rowKey={'id'}
+          rowKey={'orderId'}
           onChange={tableChange}
           pagination={{
             position: ['bottomCenter'],
-            current: params.pageNum,
-            pageSize: params.pageSize,
+            current: params.page,
+            pageSize: params.limit,
             pageSizeOptions: ['5', '10', '20', '50'],
-            total: 200
+            total: total
           }}
         />
       </div>
@@ -165,7 +239,11 @@ const BindOrder = () => {
         <Button type={'primary'} ghost className={styles.btn} onClick={cancel}>
           取消
         </Button>
-        <Button type={'primary'} className={styles.btn}>
+        <Button
+          type={'primary'}
+          className={styles.btn}
+          onClick={bindYOUCHANOrder}
+        >
           确定
         </Button>
       </div>

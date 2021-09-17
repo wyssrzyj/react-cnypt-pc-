@@ -36,7 +36,7 @@ SORT_TYPE.set(1, 'desc')
 const headerConfigs: Array<Partial<Config>> = [
   {
     label: '订单详情',
-    width: 400
+    width: 360
   },
   {
     label: '数量',

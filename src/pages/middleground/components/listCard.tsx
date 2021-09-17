@@ -1,6 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Icon } from '@/components'
-import { Popover, Button, Modal, Checkbox, Radio, TreeSelect } from 'antd'
+import {
+  Popover,
+  Button,
+  Modal,
+  Checkbox,
+  Radio,
+  TreeSelect,
+  message
+} from 'antd'
 import styles from './listCard.module.less'
 import classNames from 'classnames'
 import moment from 'moment'
@@ -8,6 +16,7 @@ import { dateDiff } from '@/utils/tool'
 import { useHistory } from 'react-router'
 import { toJS, useStores, observer } from '@/utils/mobx'
 import { Title } from '../controlPanel/accountSafe'
+import { cloneDeep, isNil } from 'lodash'
 
 const { SHOW_PARENT } = TreeSelect
 
@@ -60,6 +69,12 @@ interface Props {
   curKey?: string
   getData?: () => void
   searchBar: any
+  type: 'put' | 'receive'
+}
+
+interface BindInfo {
+  productionIdList: any[]
+  type: number | string
 }
 
 /**
@@ -83,7 +98,8 @@ const ListCard = ({
   showCheck,
   curKey,
   getData,
-  searchBar
+  searchBar,
+  type
 }: Props) => {
   const history = useHistory()
   const { orderStore, commonStore, factoryStore } = useStores()
@@ -99,14 +115,14 @@ const ListCard = ({
     changeOrderStick,
     initOrderAndProduct,
     enterpriseDepartment,
-    bindDepartment
+    bindProcduce,
+    getBindInfo
   } = orderStore
   const { dictionary } = commonStore
   const { productCategoryList } = factoryStore
   const { orderProcessType = [] } = toJS(dictionary)
 
   const {
-    type = 'receive',
     checked,
     confirmTime,
     supplierName,
@@ -125,11 +141,14 @@ const ListCard = ({
     code
   } = data
 
-  const [departValue, setDepartValue] = useState()
   const [visible, setVisible] = useState(false)
   const [bindVisible, setBindVisible] = useState(false)
-  const [bindModalValue, setBindModalValue] = useState(false)
   const [modalType, setModalType] = useState()
+  const [bindType, setBindType] = useState('add') // add 绑定 edit 编辑绑定
+  const [bindInfo, setBindInfo] = useState<Partial<BindInfo>>({
+    productionIdList: [],
+    type: null
+  }) // add 绑定 edit 编辑绑定
   // 订单退回 原因
   const [failReasonText, setFailReasonText] = useState('')
   // 订单退回 附件
@@ -141,9 +160,47 @@ const ListCard = ({
     }
   }, [])
 
-  const departmentChange = value => {
-    console.log('🚀 ~ file: listCard.tsx ~ line 143 ~ value', value)
-    setDepartValue(value)
+  useEffect(() => {
+    ;(async () => {
+      if (bindType === 'edit' && bindVisible) {
+        const bindInfo: Partial<BindInfo> = await getBindInfo(id)
+        setBindInfo(bindInfo)
+      }
+    })()
+  }, [bindType, bindVisible])
+
+  const bindValuesChange = (event, field) => {
+    const value = field === 'type' ? event.target.value : event
+    const newBindInfo = cloneDeep(bindInfo)
+    newBindInfo[field] = value
+
+    setBindInfo(newBindInfo)
+  }
+
+  // chooseProduceType
+  const chooseProduceType = async () => {
+    if (isNil(bindInfo.type)) {
+      message.warning('请选择绑定类型~')
+    }
+
+    if (+bindInfo.type === 1) {
+      toProduce()
+    }
+    if (!isNil(bindInfo.type) && +bindInfo.type === 0) {
+      if (!bindInfo.productionIdList || !bindInfo.productionIdList.length) {
+        message.warning('请选择生产部门~')
+        return
+      }
+      const res = await bindProcduce({
+        productionIdList: bindInfo.productionIdList,
+        platformOrderId: id,
+        status: 3,
+        type: bindInfo.type
+      })
+
+      res && showBindModal()
+      getData && (await getData())
+    }
   }
 
   const diffDay = useMemo(() => {
@@ -207,34 +264,18 @@ const ListCard = ({
     history.push(`/control-panel/order/add?id=${id}`)
   }
   // 绑定生产单弹窗
-  const showBindModal = () => {
-    setBindVisible(f => !f)
-  }
-
-  const bindValueChange = event => {
-    const { value } = event.target
-    console.log(
-      '🚀 ~ file: listCard.tsx ~ line 139 ~ bindValueChange ~ value',
-      value
-    )
-    setBindModalValue(value)
-  }
-
-  // chooseProduceType
-  const chooseProduceType = async () => {
-    if (+bindModalValue === 1) {
-      toProduce()
-    }
-    if (+bindModalValue === 2) {
-      console.log(departValue, 'departValue')
-      const res = await bindDepartment({
-        platformDepartmentIdList: departValue,
-        platformOrderId: id,
-        status: 3
+  const showBindModal = (type?) => {
+    bindVisible &&
+      setBindInfo({
+        productionIdList: [],
+        type: null
       })
-
-      res && showBindModal()
-    }
+    setBindVisible(f => !f)
+    type && setBindType(type)
+  }
+  // 查看订单
+  const viewOrder = () => {
+    history.push(`/control-panel/order/detail?id=${id}`)
   }
 
   const showModal = async type => {
@@ -357,7 +398,7 @@ const ListCard = ({
               <Button
                 type={'primary'}
                 className={styles.btn}
-                onClick={showBindModal}
+                onClick={() => showBindModal('add')}
               >
                 绑定生产单
               </Button>
@@ -396,7 +437,7 @@ const ListCard = ({
               <Button
                 type={'primary'}
                 className={styles.btn}
-                onClick={showBindModal}
+                onClick={() => showBindModal('edit')}
               >
                 编辑绑定
               </Button>
@@ -742,19 +783,22 @@ const ListCard = ({
         maskClosable={false}
       >
         <Title title={'绑定生产'}></Title>
-        <Radio.Group onChange={bindValueChange}>
+        <Radio.Group
+          onChange={event => bindValuesChange(event, 'type')}
+          value={bindInfo.type}
+        >
           <div className={styles.bindText}>
             <Radio value={1}>绑定软件</Radio>
           </div>
           <div className={styles.bindText}>
-            <Radio value={2}>绑定生产部门(没有使用信息化软件)</Radio>
+            <Radio value={0}>绑定生产部门(没有使用信息化软件)</Radio>
           </div>
         </Radio.Group>
-        {+bindModalValue === 2 ? (
+        {!isNil(bindInfo.type) && +bindInfo.type !== 1 ? (
           <div className={styles.departmentTree}>
             <TreeSelect
-              onChange={departmentChange}
-              value={departValue}
+              onChange={event => bindValuesChange(event, 'productionIdList')}
+              value={bindInfo.productionIdList}
               style={{ width: '100%', minWidth: 100 }}
               allowClear
               treeData={enterpriseDepartment}
@@ -845,13 +889,16 @@ const ListCard = ({
             ></Checkbox>
           ) : null}
           {/* ?x-oss-process=image/crop,limit_0,m_fill,w100,h_100/quality,q_100 */}
-          <img src={`${pictureUrl}`} alt="" className={styles.orderImg} />
-          <div className={styles.orderInfoRight}>
-            <div className={styles.orderTitle}>{name}</div>
-            <div className={styles.orderText}>加工类型：{prodTypeText}</div>
-            <div className={styles.orderText}>商品品类：{goodsCategory}</div>
+          <div className={styles.orderInfoContent} onClick={viewOrder}>
+            <img src={`${pictureUrl}`} alt="" className={styles.orderImg} />
+            <div className={styles.orderInfoRight}>
+              <div className={styles.orderTitle}>{name}</div>
+              <div className={styles.orderText}>加工类型：{prodTypeText}</div>
+              <div className={styles.orderText}>商品品类：{goodsCategory}</div>
+            </div>
           </div>
         </div>
+
         <div className={styles.orderCount}>{totalAmount}件</div>
         <div className={styles.orderAmount}>{totalPrice}</div>
         <div className={styles.status}>

@@ -29,9 +29,6 @@ module.exports = {
     new Dotenv({
       ignorSub: true
     }),
-    new webpack.ProvidePlugin({
-      process: 'process/browser'
-    }),
     new friendlyErrorsWebpackPlugin(),
     // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
@@ -41,6 +38,7 @@ module.exports = {
       favicon: path.resolve(__dirname, '../public/favicon.ico')
     }),
     new webpack.ProvidePlugin({
+      process: 'process/browser',
       Buffer: ['buffer', 'Buffer']
     })
   ],

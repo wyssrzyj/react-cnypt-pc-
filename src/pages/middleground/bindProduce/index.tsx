@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Steps } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components'
@@ -6,6 +6,7 @@ import { useHistory } from 'react-router'
 import BindSoftWare from './components/bindSoftWare'
 import BindAccount from './components/bindAccount'
 import BindOrder from './components/bindOrder'
+import { useStores } from '@/utils/mobx'
 
 const { Step } = Steps
 
@@ -31,9 +32,21 @@ const FinishActiveIcon = (
 const BindProduce = () => {
   const history = useHistory()
   const title = '状态跟踪'
-  const [curStep, setCurStep] = useState<number>(1)
+  const { orderStore } = useStores()
+  const { checkYOUCHAN } = orderStore
+
+  const [curStep, setCurStep] = useState<number>(0)
   const stepChange = useCallback((cur: number) => {
     setCurStep(cur)
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      const res = await checkYOUCHAN()
+      if (res) {
+        setCurStep(2)
+      }
+    })()
   }, [])
 
   const back = () => {

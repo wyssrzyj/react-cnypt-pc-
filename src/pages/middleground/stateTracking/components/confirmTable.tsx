@@ -49,15 +49,6 @@ const ConfirmTable = props => {
     }
   ]
 
-  // const dataSource = [
-  //   {
-  //     id: '1',
-  //     operator: '成都助战科技有限公司',
-  //     recordTime: '2021-05-31 14:17:25',
-  //     recordLogs: '新增订单，保存为草稿'
-  //   }
-  // ]
-
   const tableChange = (page, _pageSize) => {
     setCurrent(page)
   }

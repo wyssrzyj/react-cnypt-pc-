@@ -13,12 +13,19 @@ import moment from 'moment'
 import { cloneDeep } from 'lodash'
 import UploadFile from './upload'
 
-export const Title = ({ title }) => (
-  <div className={styles.title}>
-    <div className={styles.titleLine}></div>
-    {title}
-  </div>
-)
+export const Title = props => {
+  const { title, fontSize } = props
+
+  return (
+    <div
+      className={styles.title}
+      style={{ fontSize: `${fontSize ? fontSize : 20}px` }}
+    >
+      <div className={styles.titleLine}></div>
+      {title}
+    </div>
+  )
+}
 
 const AccountSafe = () => {
   const history = useHistory()

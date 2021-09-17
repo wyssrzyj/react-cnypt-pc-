@@ -57,6 +57,7 @@ const ProductPage = () => {
   const [materialData, setMaterialData] = useState<Array<Partial<Material>>>([])
   const [count, setCount] = useState<number>(0) // 产品总数
   const [amount, setAmount] = useState<number>(0) // 产品总价
+  const [disabled, setDisabled] = useState<boolean>(false)
 
   useEffect(() => {
     setFromProduct(false)
@@ -76,6 +77,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     const { type } = routerParams
+    setDisabled(['confirm', 'detail'].includes(type))
     setPageType(type)
     if (type !== 'add') {
       setProductData(productInfo.skuVOList)
@@ -129,10 +131,10 @@ const ProductPage = () => {
       width: 210,
       render: (val, _row, idx) => (
         <Input
-          placeholder={pageType === 'confirm' ? '' : '请输入SKU编号'}
+          placeholder={disabled ? '' : '请输入SKU编号'}
           value={val}
           onChange={event => productValuesChange(event, 'skuCode', idx)}
-          disabled={pageType === 'confirm'}
+          disabled={disabled}
         ></Input>
       )
     },
@@ -141,7 +143,7 @@ const ProductPage = () => {
         <TabelTitle
           title={'颜色'}
           callback={() => showProductModal('color')}
-          disabled={pageType === 'confirm'}
+          disabled={disabled}
         ></TabelTitle>
       ),
       align: 'center',
@@ -149,10 +151,10 @@ const ProductPage = () => {
       width: 210,
       render: (val, _row, idx) => (
         <Input
-          placeholder={pageType === 'confirm' ? '' : '请输入颜色'}
+          placeholder={disabled ? '' : '请输入颜色'}
           value={val}
           onChange={event => productValuesChange(event, 'color', idx)}
-          disabled={pageType === 'confirm'}
+          disabled={disabled}
         ></Input>
       )
     },
@@ -161,7 +163,7 @@ const ProductPage = () => {
         <TabelTitle
           title={'尺寸'}
           callback={() => showProductModal('size')}
-          disabled={pageType === 'confirm'}
+          disabled={disabled}
         ></TabelTitle>
       ),
       align: 'center',
@@ -169,10 +171,10 @@ const ProductPage = () => {
       width: 210,
       render: (val, _row, idx) => (
         <Input
-          placeholder={pageType === 'confirm' ? '' : '请输入尺寸'}
+          placeholder={disabled ? '' : '请输入尺寸'}
           value={val}
           onChange={event => productValuesChange(event, 'size', idx)}
-          disabled={pageType === 'confirm'}
+          disabled={disabled}
         ></Input>
       )
     },
@@ -183,10 +185,10 @@ const ProductPage = () => {
       width: 210,
       render: (val, _row, idx) => (
         <Input
-          placeholder={pageType === 'confirm' ? '' : '请输入数量'}
+          placeholder={disabled ? '' : '请输入数量'}
           value={val}
           onChange={event => productValuesChange(event, 'quantity', idx)}
-          disabled={pageType === 'confirm'}
+          disabled={disabled}
         ></Input>
       )
     },
@@ -197,10 +199,10 @@ const ProductPage = () => {
       width: 210,
       render: (val, _row, idx) => (
         <Input
-          placeholder={pageType === 'confirm' ? '' : '请输入单价'}
+          placeholder={disabled ? '' : '请输入单价'}
           value={val}
           onChange={event => productValuesChange(event, 'price', idx)}
-          disabled={pageType === 'confirm'}
+          disabled={disabled}
         ></Input>
       )
     },
@@ -455,7 +457,7 @@ const ProductPage = () => {
                   data[i] = item[i]
                 }
               })
-              data.disabled = pageType === 'confirm'
+              data.disabled = disabled
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem
@@ -477,7 +479,7 @@ const ProductPage = () => {
           <Table
             pagination={false}
             columns={
-              pageType === 'confirm'
+              disabled
                 ? productColumns.slice(0, productColumns.length - 1)
                 : productColumns
             }
@@ -503,7 +505,7 @@ const ProductPage = () => {
           <Table
             pagination={false}
             columns={
-              pageType === 'confirm'
+              disabled
                 ? materialColumns.slice(0, materialColumns.length - 1)
                 : materialColumns
             }
@@ -522,7 +524,7 @@ const ProductPage = () => {
                   data[i] = item[i]
                 }
               })
-              data.disabled = pageType === 'confirm'
+              data.disabled = disabled
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem
@@ -540,7 +542,7 @@ const ProductPage = () => {
           </Row>
         </section>
 
-        {pageType === 'confirm' ? (
+        {disabled ? (
           <Button
             type={'primary'}
             className={styles.saveBtn}

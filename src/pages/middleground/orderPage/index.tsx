@@ -45,6 +45,7 @@ const OrderTitleMap = new Map()
 OrderTitleMap.set('add', '新增订单')
 OrderTitleMap.set('edit', '编辑订单')
 OrderTitleMap.set('confirm', '确认订单')
+OrderTitleMap.set('detail', '订单详情')
 
 interface ProductInfo {
   [key: string]: any
@@ -348,7 +349,7 @@ const OrderPage = () => {
       setShowInvoiceCount(!!values['addedValueTax'])
     }
     if (keys.includes('orderStatus')) {
-      setFactoryOrderStatus(values['addedValueTax'])
+      setFactoryOrderStatus(values['orderStatus'])
     }
     if (keys.includes('supplierName')) {
       onSearch(values['supplierName'])
@@ -534,7 +535,7 @@ const OrderPage = () => {
       title: '操作',
       align: 'center',
       render: (_val, row) => {
-        if (pageType === 'confirm') {
+        if (['confirm', 'detail'].includes(pageType)) {
           return (
             <div className={styles.goodsBtns}>
               <span className={styles.goodsAddBtn} onClick={toConfirmProduct}>
@@ -570,7 +571,7 @@ const OrderPage = () => {
 
   const toConfirmProduct = () => {
     setOrderGetInfo()
-    const url = `/control-panel/product/confirm?id=${orderId}`
+    const url = `/control-panel/product/${pageType}?id=${orderId}`
     history.push(url)
   }
 
@@ -591,10 +592,6 @@ const OrderPage = () => {
     history.push(url)
   }
 
-  const backToBusiness = () => {
-    history.push('/control-panel/put-manage')
-  }
-
   const back = () => {
     history.goBack()
   }
@@ -612,7 +609,7 @@ const OrderPage = () => {
       >
         <div className={styles.header}>
           <Icon
-            onClick={backToBusiness}
+            onClick={back}
             type={'jack-left-copy'}
             className={styles.headerIcon}
           ></Icon>
@@ -640,7 +637,7 @@ const OrderPage = () => {
               ) {
                 initialValue = moment(initialValue)
               }
-              data.disabled = pageType === 'confirm'
+              data.disabled = ['confirm', 'detail'].includes(pageType)
 
               return (
                 <Col key={item.field} span={item.span}>
@@ -681,7 +678,7 @@ const OrderPage = () => {
                 }
               })
 
-              data.disabled = pageType === 'confirm'
+              data.disabled = ['confirm', 'detail'].includes(pageType)
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem
@@ -758,7 +755,8 @@ const OrderPage = () => {
               提交
             </Button>
           </div>
-        ) : (
+        ) : null}
+        {['add', 'edit'].includes(pageType) ? (
           <div className={styles.submitBtns}>
             <Button
               type={'primary'}
@@ -777,7 +775,7 @@ const OrderPage = () => {
               提交订单
             </Button>
           </div>
-        )}
+        ) : null}
       </Form>
     </div>
   )

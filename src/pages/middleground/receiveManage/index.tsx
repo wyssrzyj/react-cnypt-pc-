@@ -53,7 +53,7 @@ SORT_TYPE.set(1, 'desc')
 
 const DEL_CHECK_KEYS = ['complete', 'return']
 
-const defaultPageSize = 20
+const defaultPageSize = 10
 
 const ReceiveManage = () => {
   const history = useHistory()

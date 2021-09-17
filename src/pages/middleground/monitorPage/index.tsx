@@ -3,17 +3,7 @@ import { useStores } from '@/utils/mobx'
 
 import { Icon } from '@/components'
 import styles from './index.module.less'
-import {
-  Divider,
-  Form,
-  Input,
-  Button,
-  Table,
-  Space,
-  message
-  // message
-} from 'antd'
-// import AddDevicePopUp from './components/addDevicePopUp'
+import { Divider, Form, Input, Button, Table, Space, message } from 'antd'
 import DeletePopup from './components/deletePopup'
 import BindingSuperiorProduct from './components/bindingSuperiorProduct'
 import AddDevicePopUpd from './components/addDevicePopUpd'
@@ -37,7 +27,6 @@ const MonitorPage = () => {
 
   const { monitorPageStore, commonStore } = useStores()
   const {
-    // queryData,
     newDataList,
     getDataList,
     equipmentDepartment,
@@ -99,11 +88,15 @@ const MonitorPage = () => {
     console.log(id)
     setModify(id)
     const singly = await singleSearch({ id })
-    console.log(singly)
-    form.setFieldsValue(singly)
+    if (singly.code == 200) {
+      form.setFieldsValue(singly)
+    }
+
     const equipment = await equipmentDepartment()
-    setDepartment(dealTypeData(equipment.data))
-    setIsModalVisible(true)
+    if (equipment.code == 200) {
+      setDepartment(dealTypeData(equipment.data))
+      setIsModalVisible(true)
+    }
   }
   const columns: any = [
     {
@@ -155,14 +148,14 @@ const MonitorPage = () => {
 
       key: 'action',
 
-      render: (c, rData) => (
+      render: (text, record) => (
         <Space size="middle">
           <span
             className={styles.edit}
             onClick={() => {
-              console.log(c)
-              console.log(rData)
-              modificationMethod(rData)
+              console.log(text)
+              console.log(record)
+              modificationMethod(record)
             }}
           >
             编辑
@@ -172,7 +165,7 @@ const MonitorPage = () => {
           <span
             className={styles.edit}
             onClick={() => {
-              DeleteDeviceDisplay(rData.id)
+              DeleteDeviceDisplay(record.id)
             }}
           >
             {' '}
@@ -198,7 +191,6 @@ const MonitorPage = () => {
   }
   const deleteDeviceCancel = async () => {
     const deletion = await deleteEvent(moved)
-
     if (deletion.code == 200) {
       getFactoryInfo()
       setDeletionFailed(false)
@@ -224,15 +216,13 @@ const MonitorPage = () => {
     //  判断是测试还是提交
     if (connection) {
       const { serialNumber, verificationCode } = v
-      console.log(serialNumber)
-      console.log(verificationCode)
       const ConnectingEquipment = await connectingEquipment({
         serialNumber,
         verificationCode
       })
-      console.log(ConnectingEquipment)
-      // 测试
-      if (ConnectingEquipment == '200') {
+
+      // 测试弹窗
+      if (ConnectingEquipment !== '200') {
         console.log('正确')
         setJudgment(true)
         setConnectionStatus(1)
@@ -293,16 +283,19 @@ const MonitorPage = () => {
   const showModal = async () => {
     setIsModalVisible(true)
     const brand = await allDictionary([])
-    setEquipmentbrand(brand.cameraBrand)
+    if (brand) {
+      setEquipmentbrand(brand.cameraBrand)
+    }
     const equipment = await equipmentDepartment()
-    setDepartment(dealTypeData(equipment.data))
+    if (equipment.code == 200) {
+      setDepartment(dealTypeData(equipment.data))
+    }
     form.resetFields()
   }
   const accountShowModal = async () => {
     form.resetFields()
     const account = await bindSuperiorProductAccount()
-
-    // 因为当前账号已经绑定了  用于测试
+    // 优产绑定 因为当前账号已经绑定了  用于测试
     if (account.data == true) {
       setaceousModalVisible(true)
     } else {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 
@@ -33,12 +33,14 @@ const AddDevicePopUpd = props => {
 
   const [count, changeCount] = useState(0)
 
-  // 组件卸载时清除计时器
   useEffect(() => {
-    return () => {
+    if (judgment) {
+      console.log('是成功按钮')
+      changeCount(5)
+    } else {
       clearInterval(intervalRef.current)
     }
-  }, [])
+  }, [judgment])
 
   useEffect(() => {
     if (count === 5) {
@@ -51,15 +53,6 @@ const AddDevicePopUpd = props => {
     }
   }, [count])
 
-  const onGetCaptcha = useCallback(() => {
-    changeCount(5)
-  }, [])
-
-  useEffect(() => {
-    if (judgment) {
-      onGetCaptcha()
-    }
-  }, [judgment])
   return (
     <div>
       {/* 新增设备弹窗 */}
@@ -86,9 +79,7 @@ const AddDevicePopUpd = props => {
           form={form}
           name="basic"
           labelCol={{ span: 5 }}
-          initialValues={{ remember: true }}
           onFinish={onFinish}
-          autoComplete="off"
         >
           <Form.Item
             className={styles.item}

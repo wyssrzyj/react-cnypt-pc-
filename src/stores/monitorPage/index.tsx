@@ -8,26 +8,6 @@ export default class MonitorPage {
     makeAutoObservable(this)
   }
 
-  // 查询
-  @action queryData = async params => {
-    try {
-      const res: ResponseProps = await axios.post(
-        `/api/factory/factory-camera/list-camera-org-info`,
-        params
-      )
-      console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
-
-      if (res.code === 200) {
-        message.success(res.msg)
-      }
-      if (res.code !== 200) {
-        message.error(res.msg)
-      }
-      return res.data
-    } catch (e) {
-      console.log(e)
-    }
-  }
   // 连接设备
   @action connectingEquipment = async params => {
     try {
@@ -85,7 +65,7 @@ export default class MonitorPage {
       if (res.code !== 200) {
         message.error(res.msg)
       }
-      return res.data
+      return res
     } catch (e) {
       console.log(e)
     }

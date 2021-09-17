@@ -48,6 +48,55 @@ OrderTitleMap.set('edit', '编辑订单')
 OrderTitleMap.set('confirm', '确认订单')
 OrderTitleMap.set('detail', '订单详情')
 
+export const getViewText = (data: any, value) => {
+  if (['select', 'radio'].includes(data.type)) {
+    const target = data.options.find(i => i.value === value) || {}
+    return target.label || ''
+  }
+  if (data.type === 'datePicker') {
+    return value ? moment(value).format('YYYY-MM-DD') : null
+  }
+  if (data.type === 'img') {
+    if (Array.isArray(value)) {
+      return (
+        <div className={styles.imgsBox}>
+          {value.map((item, idx) => {
+            return (
+              <img
+                key={idx}
+                src={item.thumbUrl}
+                alt=""
+                className={styles.img}
+              />
+            )
+          })}
+        </div>
+      )
+    }
+  }
+  if (data.type === 'annex') {
+    if (Array.isArray(value)) {
+      return (
+        <div className={styles.annexBox}>
+          {value.map((item, idx) => {
+            if (!item) return
+            const arr = `${item.thumbUrl}`.split('__') || []
+            const target = arr.length > 0 ? arr[1] : ''
+            const text = decodeURI(target)
+            return (
+              <a key={idx} href={item.thumbUrl} type={'download'}>
+                <Icon type={'jack-fujian'} className={styles.icon}></Icon>
+                {item.thumbUrl ? text : '--'}
+              </a>
+            )
+          })}
+        </div>
+      )
+    }
+  }
+  return value
+}
+
 interface ProductInfo {
   [key: string]: any
   uid?: string | number
@@ -264,13 +313,15 @@ const OrderPage = () => {
   const [loading, setLoading] = useState(false) // 提交loading
   const [pageType, setPageType] = useState('add') // 页面类型 add edit confirm
   const [factoryOrderStatus, setFactoryOrderStatus] = useState(2) // 加工厂确认订单状态
+  const [disabled, setDisabled] = useState(false) // confirm确认订单 detail查看详情时为true
 
   useEffect(() => {
     // 编辑 查看时 需要初始化 showInvoiceCount
     const urlParams: { id?: string } = urlGet()
     const { id = '' } = urlParams
     const { type = '' } = routerParams
-
+    const flag = ['detail', 'confirm'].includes(type)
+    setDisabled(flag)
     setPageType(type)
     setOrderId(id)
     ;(async () => {
@@ -593,7 +644,8 @@ const OrderPage = () => {
     history.push(url)
   }
 
-  const back = () => {
+  const back = async () => {
+    await initOrderAndProduct()
     history.goBack()
   }
 
@@ -638,7 +690,18 @@ const OrderPage = () => {
               ) {
                 initialValue = moment(initialValue)
               }
-              data.disabled = ['confirm', 'detail'].includes(pageType)
+              data.disabled = disabled
+              if (disabled) {
+                return (
+                  <Col key={item.field} span={item.span}>
+                    <FormItem label={item.label} {...layout}>
+                      <div key={item.field}>
+                        {getViewText(item, orderInfo[item.field])}
+                      </div>
+                    </FormItem>
+                  </Col>
+                )
+              }
 
               return (
                 <Col key={item.field} span={item.span}>
@@ -686,7 +749,18 @@ const OrderPage = () => {
                 }
               })
 
-              data.disabled = ['confirm', 'detail'].includes(pageType)
+              data.disabled = disabled
+              if (disabled) {
+                return (
+                  <Col key={item.field} span={item.span}>
+                    <FormItem label={item.label} {...layout}>
+                      <div key={item.field}>
+                        {getViewText(item, orderInfo[item.field])}
+                      </div>
+                    </FormItem>
+                  </Col>
+                )
+              }
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem

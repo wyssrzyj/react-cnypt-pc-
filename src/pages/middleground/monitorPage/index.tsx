@@ -55,6 +55,11 @@ const MonitorPage = () => {
   const [pageNum, setPageNum] = useState<number>(1) //当前页数
   const [connectionStatus, setConnectionStatus] = useState<number>(null) //连接状态
   const [modify, setModify] = useState<number>(null) //修改
+  const [beforeModification, setBeforeModification] = useState({
+    serialNumber: '0',
+    verificationCode: '0'
+  }) //存放修改前的input数据
+  console.log(beforeModification)
 
   const getFactoryInfo = async () => {
     const response = await getDataList({
@@ -64,6 +69,7 @@ const MonitorPage = () => {
     })
     setTotal(response.total) //数据长度
     setList(response.records)
+    console.log(response.records)
   }
   const onSearch = value => {
     setEquipmentName(value)
@@ -88,8 +94,9 @@ const MonitorPage = () => {
     console.log(id)
     setModify(id)
     const singly = await singleSearch({ id })
+
     if (singly.code == 200) {
-      form.setFieldsValue(singly)
+      form.setFieldsValue(singly.data)
     }
 
     const equipment = await equipmentDepartment()
@@ -109,7 +116,10 @@ const MonitorPage = () => {
       title: '设备品牌',
       dataIndex: 'brand',
       align: 'center',
-      key: 'brand'
+      key: 'brand',
+      render() {
+        return <span>萤石</span>
+      }
     },
     {
       title: '设备序列号',
@@ -222,7 +232,7 @@ const MonitorPage = () => {
       })
 
       // 测试弹窗
-      if (ConnectingEquipment !== '200') {
+      if (ConnectingEquipment == '200') {
         console.log('正确')
         setJudgment(true)
         setConnectionStatus(1)
@@ -233,6 +243,7 @@ const MonitorPage = () => {
       }
       setConnection(false)
       setButtonIsAvailable(false)
+      setBeforeModification(v)
     } else {
       // 判断是修改还是新增
       if (modify != null) {
@@ -269,6 +280,27 @@ const MonitorPage = () => {
       setModify(null)
     }
   }
+  // 序列号的内容
+  const toeplateSerialNumber = e => {
+    if (e.target.value !== beforeModification.serialNumber) {
+      console.log('更改了序列号，按钮失效')
+      setButtonIsAvailable(true)
+    }
+    let value = e.target.value
+    if (/\S{1,14}$/.test(value)) {
+      console.log('正确')
+    } else {
+      console.log('错误')
+    }
+  }
+  // 验证码的内容
+  const toeplateVerificationCode = e => {
+    console.log(beforeModification.verificationCode)
+    if (e.target.value !== beforeModification.verificationCode) {
+      console.log('更改了验证码，按钮失效')
+      setButtonIsAvailable(true)
+    }
+  }
 
   //   连接成功的取消
   const cancellation = () => {
@@ -296,7 +328,7 @@ const MonitorPage = () => {
     form.resetFields()
     const account = await bindSuperiorProductAccount()
     // 优产绑定 因为当前账号已经绑定了  用于测试
-    if (account.data == true) {
+    if (account.data !== true) {
       setaceousModalVisible(true)
     } else {
       message.success('已经绑定')
@@ -367,6 +399,8 @@ const MonitorPage = () => {
 
       {/* 新增设备弹窗 */}
       <AddDevicePopUpd
+        toeplateSerialNumber={toeplateSerialNumber}
+        toeplateVerificationCode={toeplateVerificationCode}
         buttonIsAvailable={buttonIsAvailable}
         equipmentHandleCancel={equipmentHandleCancel}
         equipmentHandleOk={equipmentHandleOk}

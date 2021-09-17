@@ -18,10 +18,9 @@ export default class MonitorPage {
       console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
 
       if (res.code === 200) {
-        message.success(res.msg)
       }
       if (res.code !== 200) {
-        message.error(res.msg)
+        message.error('连接失败')
       }
       return res.data
     } catch (e) {

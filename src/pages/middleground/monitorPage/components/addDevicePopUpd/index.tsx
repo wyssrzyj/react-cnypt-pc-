@@ -16,6 +16,8 @@ const AddDevicePopUpd = props => {
   const {
     equipmentHandleCancel,
     buttonIsAvailable,
+    toeplateSerialNumber,
+    toeplateVerificationCode,
     equipmentHandleOk,
     onFinish,
     isModalVisible,
@@ -86,7 +88,10 @@ const AddDevicePopUpd = props => {
             colon={false}
             label="设备名称"
             name="name"
-            rules={[{ required: true, message: `请输入设备名称` }]}
+            rules={[
+              { max: 99, message: '名称不得超过99个字符' },
+              { required: true, message: `请输入设备名称` }
+            ]}
           >
             <Input placeholder={`请输入请输入设备名称`} />
           </Form.Item>
@@ -96,7 +101,10 @@ const AddDevicePopUpd = props => {
             colon={false}
             label="设备品牌 "
             name="brand"
-            rules={[{ required: true, message: `请输入设备品牌` }]}
+            rules={[
+              { max: 99, message: '名称不得超过99个字符' },
+              { required: true, message: `请输入设备品牌` }
+            ]}
           >
             <TreeSelect
               showSearch
@@ -123,7 +131,10 @@ const AddDevicePopUpd = props => {
             colon={false}
             label="设备部门 "
             name="orgIdList"
-            rules={[{ required: true, message: `请输入设备部门` }]}
+            rules={[
+              { max: 99, message: '名称不得超过99个字符' },
+              { required: true, message: `请输入设备部门` }
+            ]}
           >
             <TreeSelect
               showSearch
@@ -142,18 +153,31 @@ const AddDevicePopUpd = props => {
             colon={false}
             label="设备序列号"
             name="serialNumber"
-            rules={[{ required: true, message: `请输入设备序列号` }]}
+            rules={[
+              { max: 99, message: '名称不得超过99个字符' },
+              { required: true, message: `请输入设备序列号` }
+            ]}
           >
-            <Input placeholder={`请输入请输入设备序列号`} />
+            <Input
+              onChange={toeplateSerialNumber}
+              placeholder={`请输入请输入设备序列号`}
+            />
           </Form.Item>
           <Form.Item
             className={styles.item}
             colon={false}
             label="验证码"
             name="verificationCode"
-            rules={[{ required: true, message: `请输入验证码` }]}
+            rules={[
+              { max: 99, message: '名称不得超过99个字符' },
+              { required: true, message: `请输入验证码` }
+            ]}
           >
-            <Input placeholder={`请输入请输入验证码`} />
+            <Input
+              value="12345"
+              onChange={toeplateVerificationCode}
+              placeholder={`请输入请输入验证码`}
+            />
           </Form.Item>
 
           <Form.Item
@@ -179,10 +203,14 @@ const AddDevicePopUpd = props => {
           <p>
             <Icon type="jack-chenggong" className={styles.menuIcon} />
           </p>
-          <p>连接成功</p>
-          <p>设备连接成功，{count}秒后返回</p>
+          <p className={styles.text}>连接成功</p>
+          <p className={styles.textural}>设备连接成功，{count}秒后返回</p>
           <p>
-            <Button type="primary" onClick={cancellation}>
+            <Button
+              className={styles.bant}
+              type="primary"
+              onClick={cancellation}
+            >
               立即返回
             </Button>
           </p>
@@ -202,10 +230,16 @@ const AddDevicePopUpd = props => {
           <p>
             <Icon type="jack-sptg1" className={styles.menuIcon} />
           </p>
-          <p>连接失败</p>
-          <p>您所提交的信息有误，请确认序列号或验证码</p>
+          <p className={styles.text}>连接失败</p>
+          <p className={styles.textural}>
+            您所提交的信息有误，请确认序列号或验证码
+          </p>
           <p>
-            <Button type="primary" onClick={ConnectionFailedCancel}>
+            <Button
+              className={styles.bant}
+              type="primary"
+              onClick={ConnectionFailedCancel}
+            >
               立即返回
             </Button>
           </p>

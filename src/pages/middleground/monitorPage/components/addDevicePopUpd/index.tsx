@@ -101,10 +101,7 @@ const AddDevicePopUpd = props => {
             colon={false}
             label="设备品牌 "
             name="brand"
-            rules={[
-              { max: 99, message: '名称不得超过99个字符' },
-              { required: true, message: `请输入设备品牌` }
-            ]}
+            rules={[{ required: true, message: `请输入设备品牌` }]}
           >
             <TreeSelect
               showSearch
@@ -131,10 +128,7 @@ const AddDevicePopUpd = props => {
             colon={false}
             label="设备部门 "
             name="orgIdList"
-            rules={[
-              { max: 99, message: '名称不得超过99个字符' },
-              { required: true, message: `请输入设备部门` }
-            ]}
+            rules={[{ required: true, message: `请输入设备部门` }]}
           >
             <TreeSelect
               showSearch
@@ -232,15 +226,18 @@ const AddDevicePopUpd = props => {
           </p>
           <p className={styles.text}>连接失败</p>
           <p className={styles.textural}>
-            您所提交的信息有误，请确认序列号或验证码
+            您所提交的信息有误，请确认序列号或验证码!!!
           </p>
           <p>
+            <Button className={styles.bantams} onClick={ConnectionFailedCancel}>
+              取消
+            </Button>
             <Button
               className={styles.bant}
               type="primary"
               onClick={ConnectionFailedCancel}
             >
-              立即返回
+              重新编辑
             </Button>
           </p>
         </div>

@@ -232,7 +232,7 @@ const MonitorPage = () => {
       })
 
       // 测试弹窗
-      if (ConnectingEquipment == '200') {
+      if (ConnectingEquipment !== '200') {
         console.log('正确')
         setJudgment(true)
         setConnectionStatus(1)

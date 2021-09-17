@@ -10,6 +10,7 @@ import { useStores, observer, toJS } from '@/utils/mobx'
 import ProductModal from './productModal'
 import { getUId, urlGet } from '@/utils/tool'
 import classNames from 'classnames'
+import { getViewText } from '../orderPage'
 import {
   keys,
   layout,
@@ -130,14 +131,17 @@ const ProductPage = () => {
       align: 'center',
       dataIndex: 'skuCode',
       width: 210,
-      render: (val, _row, idx) => (
-        <Input
-          placeholder={disabled ? '' : '请输入SKU编号'}
-          value={val}
-          onChange={event => productValuesChange(event, 'skuCode', idx)}
-          disabled={disabled}
-        ></Input>
-      )
+      render: (val, _row, idx) =>
+        disabled ? (
+          val
+        ) : (
+          <Input
+            placeholder={disabled ? '' : '请输入SKU编号'}
+            value={val}
+            onChange={event => productValuesChange(event, 'skuCode', idx)}
+            disabled={disabled}
+          ></Input>
+        )
     },
     {
       title: (
@@ -150,14 +154,17 @@ const ProductPage = () => {
       align: 'center',
       dataIndex: 'color',
       width: 210,
-      render: (val, _row, idx) => (
-        <Input
-          placeholder={disabled ? '' : '请输入颜色'}
-          value={val}
-          onChange={event => productValuesChange(event, 'color', idx)}
-          disabled={disabled}
-        ></Input>
-      )
+      render: (val, _row, idx) =>
+        disabled ? (
+          val
+        ) : (
+          <Input
+            placeholder={disabled ? '' : '请输入颜色'}
+            value={val}
+            onChange={event => productValuesChange(event, 'color', idx)}
+            disabled={disabled}
+          ></Input>
+        )
     },
     {
       title: (
@@ -170,42 +177,51 @@ const ProductPage = () => {
       align: 'center',
       dataIndex: 'size',
       width: 210,
-      render: (val, _row, idx) => (
-        <Input
-          placeholder={disabled ? '' : '请输入尺寸'}
-          value={val}
-          onChange={event => productValuesChange(event, 'size', idx)}
-          disabled={disabled}
-        ></Input>
-      )
+      render: (val, _row, idx) =>
+        disabled ? (
+          val
+        ) : (
+          <Input
+            placeholder={disabled ? '' : '请输入尺寸'}
+            value={val}
+            onChange={event => productValuesChange(event, 'size', idx)}
+            disabled={disabled}
+          ></Input>
+        )
     },
     {
       title: <RequiredTitle title={'数量(件)'}></RequiredTitle>,
       align: 'center',
       dataIndex: 'quantity',
       width: 210,
-      render: (val, _row, idx) => (
-        <Input
-          placeholder={disabled ? '' : '请输入数量'}
-          value={val}
-          onChange={event => productValuesChange(event, 'quantity', idx)}
-          disabled={disabled}
-        ></Input>
-      )
+      render: (val, _row, idx) =>
+        disabled ? (
+          val
+        ) : (
+          <Input
+            placeholder={disabled ? '' : '请输入数量'}
+            value={val}
+            onChange={event => productValuesChange(event, 'quantity', idx)}
+            disabled={disabled}
+          ></Input>
+        )
     },
     {
       title: <RequiredTitle title={'单价'}></RequiredTitle>,
       align: 'center',
       dataIndex: 'price',
       width: 210,
-      render: (val, _row, idx) => (
-        <Input
-          placeholder={disabled ? '' : '请输入单价'}
-          value={val}
-          onChange={event => productValuesChange(event, 'price', idx)}
-          disabled={disabled}
-        ></Input>
-      )
+      render: (val, _row, idx) =>
+        disabled ? (
+          val
+        ) : (
+          <Input
+            placeholder={disabled ? '' : '请输入单价'}
+            value={val}
+            onChange={event => productValuesChange(event, 'price', idx)}
+            disabled={disabled}
+          ></Input>
+        )
     },
     {
       title: <TabelTitle callback={() => showProductModal('add')} />,
@@ -250,6 +266,11 @@ const ProductPage = () => {
       width: 265,
       align: 'center',
       render: (value, _row, idx) => {
+        if (disabled) {
+          const target =
+            materialOptions.find(item => item.value === value) || {}
+          return target.label || ''
+        }
         return (
           <Select
             value={value}
@@ -272,6 +293,9 @@ const ProductPage = () => {
       width: 265,
       align: 'center',
       render: (value, _row, idx) => {
+        if (disabled) {
+          return value
+        }
         return (
           <Input
             placeholder={'请输入名称'}
@@ -287,6 +311,9 @@ const ProductPage = () => {
       width: 265,
       align: 'center',
       render: (value, _row, idx) => {
+        if (disabled) {
+          return value
+        }
         return (
           <Input
             placeholder={'请输入其他说明'}
@@ -302,6 +329,10 @@ const ProductPage = () => {
       width: 265,
       align: 'center',
       render: (value, _row, idx) => {
+        if (disabled) {
+          const target = supplyType.find(item => item.value === value) || {}
+          return target.label || ''
+        }
         return (
           <Select
             value={value}
@@ -366,7 +397,7 @@ const ProductPage = () => {
   }
 
   const submitClick = async () => {
-    if (pageType === 'confrim') {
+    if (disabled) {
       back()
       return
     }
@@ -459,6 +490,19 @@ const ProductPage = () => {
                 }
               })
               data.disabled = disabled
+
+              if (disabled) {
+                return (
+                  <Col key={item.field} span={item.span}>
+                    <FormItem label={item.label} {...layout}>
+                      <div key={item.field}>
+                        {getViewText(item, productInfo[item.field])}
+                      </div>
+                    </FormItem>
+                  </Col>
+                )
+              }
+
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem
@@ -542,6 +586,19 @@ const ProductPage = () => {
                 }
               })
               data.disabled = disabled
+
+              if (disabled) {
+                return (
+                  <Col key={item.field} span={item.span}>
+                    <FormItem label={item.label} {...layout}>
+                      <div key={item.field}>
+                        {getViewText(item, productInfo[item.field])}
+                      </div>
+                    </FormItem>
+                  </Col>
+                )
+              }
+
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem

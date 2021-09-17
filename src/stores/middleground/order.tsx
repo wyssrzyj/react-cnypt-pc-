@@ -25,7 +25,14 @@ export default class OrderStore {
     confirmLogsPage: {},
     finishLogsPage: {},
     orderMsg: {},
-    totalOrderSchedule: {},
+    totalOrderSchedule: {
+      postList: [],
+      clothesDetail: [],
+      cutDetail: [],
+      productionDetail: [],
+      qualifiedDetail: [],
+      ticketDetail: []
+    },
     underwayLogsPage: {}
   }
   @observable enterpriseDepartment = [] // 企业部门
@@ -406,16 +413,16 @@ export default class OrderStore {
     }
   }
 
-  // /api/oms/order/order-bind-department
+  // /api/oms/order/order-bind-production
   // 加工厂关联平台部门
-  @action bindDepartment = async params => {
+  @action bindProcduce = async params => {
     try {
       const res = await axios.post(
-        '/api/oms/order/order-bind-department',
+        '/api/oms/order/order-bind-production',
         params
       )
       if (res && res.code === 200) {
-        message.success('部门绑定成功')
+        message.success('绑定生产成功')
         return true
       } else {
         message.error(res.msg)
@@ -437,6 +444,75 @@ export default class OrderStore {
         return res.data
       } else {
         message.error(res.msg)
+      }
+    } catch (err) {
+      message.error('服务器错误~')
+    }
+  }
+
+  // /api/user/bind-uchat-account
+  // 绑定优产账号
+  @action bindYOUCHAN = async params => {
+    try {
+      const res = await axios.post('/api/user/bind-uchat-account', params)
+      if (res && res.code === 200) {
+      } else {
+        message.error(res.msg)
+      }
+      return res
+    } catch (err) {
+      message.error('服务器错误~')
+    }
+  }
+
+  // /api/oms/order/order-bind-department-id
+  // 生产绑定回显
+  @action getBindInfo = async id => {
+    try {
+      const res = await axios.get('/api/oms/order/order-bind-department-id', {
+        id
+      })
+      if (res && res.code === 200) {
+        return res.data
+      } else {
+        message.error(res.msg)
+        return {}
+      }
+    } catch (err) {
+      message.error('服务器错误~')
+    }
+  }
+
+  // /api/user/user-uchat/check-bind-uchat-account
+  // 检测是否绑定了优产账号
+  @action checkYOUCHAN = async () => {
+    try {
+      const res = await axios.get(
+        '/api/user/user-uchat/check-bind-uchat-account'
+      )
+      console.log('🚀 ~ file: order.tsx ~ line 493 ~ OrderStore ~ res', res)
+      if (res && res.code === 200) {
+        return res.data
+      } else {
+        message.error(res.msg)
+        return {}
+      }
+    } catch (err) {
+      message.error('服务器错误~')
+    }
+  }
+
+  // /api/factory/uchat-order-info-list
+  // 获取优产订单列表
+  // asc desc
+  @action getYOUCHANList = async params => {
+    try {
+      const res = await axios.post('/api/factory/uchat-order-info-list', params)
+      if (res && res.code === 200) {
+        return res.data
+      } else {
+        message.error(res.msg)
+        return {}
       }
     } catch (err) {
       message.error('服务器错误~')

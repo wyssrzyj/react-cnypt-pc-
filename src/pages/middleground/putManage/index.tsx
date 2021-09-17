@@ -107,6 +107,12 @@ const PutManage = () => {
 
   useEffect(() => {
     const res: any = urlGet() || {}
+    const { key = 'all' } = res
+    setActiveKey(key)
+  }, [])
+
+  useEffect(() => {
+    const res: any = urlGet() || {}
     const { pageNum = 1, pageSize = defaultPageSize, key = 'all' } = res
     const keys = Reflect.ownKeys(res)
     const newParams = cloneDeep(params)
@@ -255,11 +261,12 @@ const PutManage = () => {
             dataSource.map((card, idx) => {
               return (
                 <ListCard
+                  type={'put'}
                   searchBar={searchRef.current}
                   getData={getData}
                   showCheck={DEL_CHECK_KEYS.includes(activeKey)}
                   data={card}
-                  key={+card.id + +card.status}
+                  key={idx}
                   curKey={activeKey}
                   callback={event => dataChoose(event.target.checked, idx)}
                 ></ListCard>
@@ -268,12 +275,13 @@ const PutManage = () => {
           ) : (
             <div className={styles.emptyBox}>
               <img src={ORDER_EMPTY} alt="" className={styles.orderEmpty} />
+              <div className={styles.emptyText}>您还没有订单哦~</div>
             </div>
           )}
           {DEL_CHECK_KEYS.includes(activeKey) &&
           Array.isArray(dataSource) &&
           dataSource.length > 0 ? (
-            <div>
+            <div className={styles.chooseAllBox}>
               <Checkbox onChange={allChoose} checked={allChecked}>
                 全选
               </Checkbox>

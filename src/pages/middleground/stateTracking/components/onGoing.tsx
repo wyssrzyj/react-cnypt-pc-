@@ -1,49 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Title } from '../../controlPanel/accountSafe'
 import styles from './onGoing.module.less'
-import { Table, Col } from 'antd'
+import { Table } from 'antd'
 import { getUId } from '@/utils/tool'
 import { Icon } from '@/components'
 import classNames from 'classnames'
 import { useStores, observer } from '@/utils/mobx'
-
-// const data = [
-//   {
-//     color: '白色',
-//     size: 'M',
-//     num: 100
-//   },
-//   {
-//     color: '花色',
-//     size: 'L',
-//     num: 100
-//   },
-//   {
-//     color: '黄色',
-//     size: 'XL',
-//     num: 100
-//   },
-//   {
-//     color: '白色',
-//     size: 'XXL',
-//     num: 100
-//   },
-//   {
-//     color: '米色',
-//     size: 'M',
-//     num: 20
-//   },
-//   {
-//     color: '米色',
-//     size: 'XXXL',
-//     num: 50
-//   },
-//   {
-//     color: '黑色色',
-//     size: 'XXXL',
-//     num: 100
-//   }
-// ]
 
 const formatData = data => {
   return data.reduce((prev, item) => {
@@ -107,17 +69,22 @@ const dealColumns = (data, length) => {
     align: 'center',
     dataIndex: item
   }))
+
   if (Array.isArray(cloumnsBody) && cloumnsBody.length) {
     cloumnsBody.forEach((column, index) => {
+      const width = (1139 - 100 - 119) / cloumnsBody.length
+      column.width = width
       column.render = (val, row, idx) => {
         const obj = {
           children:
             idx === length - 1 ? (
-              <Col span={4} className={styles.tableTotal}>
+              <div className={styles.tableTotal} style={{ width }}>
                 {row.total}
-              </Col>
-            ) : (
+              </div>
+            ) : val ? (
               val
+            ) : (
+              0
             ),
           props: { colSpan: 1 }
         }
@@ -134,6 +101,7 @@ const dealColumns = (data, length) => {
       title: '小计',
       align: length ? 'center' : 'left',
       dataIndex: 'total',
+      width: 119,
       render: (val, _row, idx) => {
         const obj = {
           children: val,
@@ -157,20 +125,6 @@ const OnGoing = () => {
   const [columns, setColumns] = useState([])
   const [progressKey, setProgressKey] = useState('productionDetail')
   const [dataSource, setDataSource] = useState([])
-
-  const logisticsConfigs = [
-    { label: '物流公司', field: 'express' },
-    { label: '订单号', field: 'postid' },
-    { label: '发货日期', field: 'c' },
-    { label: '收货地址', field: 'd' }
-  ]
-
-  const logisticsData = {
-    a: '百世汇通',
-    b: 'FHD00019',
-    c: '2021-05-25',
-    d: '北京市东城区和平里东街11号航星科技园航星3号楼5层'
-  }
 
   const progressConfigs = [
     {
@@ -229,12 +183,16 @@ const OnGoing = () => {
         uid: getUId()
       })
     setDataSource(basicData)
+    console.log(
+      dealColumns(targetData, basicData.length),
+      'dealColumns(targetData, basicData.length)'
+    )
     setColumns(dealColumns(targetData, basicData.length))
-  }, [progressKey])
+  }, [progressKey, stateTrackData])
 
   return (
     <div className={styles.goingContent}>
-      <Title title={'生产进度'}></Title>
+      <Title fontSize={18} title={'生产进度'}></Title>
       <div className={styles.progressBox}>
         {progressConfigs.map((item, idx) => {
           const count = stateTrackData.totalOrderSchedule[item.totalField]
@@ -281,25 +239,46 @@ const OnGoing = () => {
         })}
       </div>
       <div className={styles.tableBox}>
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          rowKey={'uid'}
-          pagination={false}
-        ></Table>
+        {progressKey !== 'f' ? (
+          <Table
+            dataSource={dataSource}
+            columns={columns}
+            rowKey={'uid'}
+            pagination={false}
+            bordered
+          ></Table>
+        ) : null}
       </div>
 
       <Title title={'物流信息'}></Title>
       <div className={styles.logistics}>
-        {logisticsConfigs.map((item, idx) => {
-          return (
-            <div className={styles.logisticsItem} key={idx}>
-              <div className={styles.label}>{item.label}</div>
-              <div className={styles.value}>{logisticsData[item.field]}</div>
-            </div>
-          )
-        })}
+        {Array.isArray(stateTrackData.totalOrderSchedule.postList) &&
+          stateTrackData.totalOrderSchedule.postList.map((item, idx) => {
+            if (item.express || item.postid) {
+              return (
+                <div className={styles.logisticsChunk} key={idx}>
+                  <div className={styles.logisticsItem}>
+                    <div className={styles.label}>物流公司</div>
+                    <div className={styles.value}>{item.express}</div>
+                  </div>
+                  <div className={styles.logisticsItem}>
+                    <div className={styles.label}>订单号</div>
+                    <div className={styles.value}>{item.postid}</div>
+                  </div>
+                  <div className={styles.logisticsItem}>
+                    <div className={styles.label}>发货日期</div>
+                    <div className={styles.value}>---</div>
+                  </div>
+                  <div className={styles.logisticsItem}>
+                    <div className={styles.label}>收货地址</div>
+                    <div className={styles.value}>---</div>
+                  </div>
+                </div>
+              )
+            }
+          })}
       </div>
+      <div id="demoID" className={styles.postContainer}></div>
     </div>
   )
 }

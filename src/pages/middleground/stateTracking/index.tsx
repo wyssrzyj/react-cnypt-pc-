@@ -7,7 +7,7 @@ import ConfirmTable from './components/confirmTable'
 import OnGoing from './components/onGoing'
 import classNames from 'classnames'
 import { useStores, observer } from '@/utils/mobx'
-import moment from '_moment@2.29.1@moment'
+import moment from 'moment'
 import { dateDiff } from '@/utils/tool'
 
 const { Step } = Steps
@@ -104,8 +104,6 @@ const StateTracking = () => {
     return diffDay > 0 ? 0 : Math.abs(diffDay)
   }, [configs])
 
-  console.log(curStep)
-
   return (
     <div>
       <div className={styles.header}>
@@ -151,7 +149,7 @@ const StateTracking = () => {
                   <span
                     className={classNames(
                       styles.orderTopCount,
-                      true ? styles.orderTopRedCount : ''
+                      styles.orderTopRedCount
                     )}
                   >
                     {delayDay}
@@ -161,13 +159,23 @@ const StateTracking = () => {
               ) : null}
             </div>
           </div>
-          <div className={styles.orderBasic}>
-            {configs.map((itme, idx) => (
-              <div className={styles.orderText} key={idx}>
-                {itme.label}
-                <span className={styles.orderValue}>{itme.value}</span>
-              </div>
-            ))}
+          <div
+            className={classNames(
+              styles.orderBasic,
+              +curStep ? styles.between : ''
+            )}
+          >
+            {configs.map((itme, idx) => {
+              if (!curStep && [2, 3].includes(idx)) {
+                return null
+              }
+              return (
+                <div className={styles.orderText} key={idx}>
+                  {itme.label}
+                  <span className={styles.orderValue}>{itme.value}</span>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

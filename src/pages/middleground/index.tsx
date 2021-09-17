@@ -80,7 +80,9 @@ const EnterpriseHome = () => {
                     '/control-panel/put-manage',
                     '/control-panel/receive-manage',
                     '/control-panel/order',
-                    '/control-panel/product'
+                    '/control-panel/product',
+                    '/control-panel/state',
+                    '/control-panel/bind-produce'
                   ].some(item => location.pathname.includes(item))
                     ? styles.activeNavItem
                     : ''
@@ -100,7 +102,9 @@ const EnterpriseHome = () => {
                     '/control-panel/put-manage',
                     '/control-panel/order',
                     '/control-panel/product',
-                    '/control-panel/receive-manage'
+                    '/control-panel/receive-manage',
+                    '/control-panel/state',
+                    '/control-panel/bind-produce'
                   ].some(item => location.pathname.includes(item))
                     ? styles.activeNavItem
                     : ''

@@ -39,7 +39,6 @@ const tabs: Array<OptionType> = [
   { label: '已完成', url: '', key: 'complete' },
   { label: '退回', url: '', key: 'return' },
   { label: '取消', url: '', key: 'cancel' }
-  // { label: '草稿箱', url: '', key: 'draft' }
 ]
 
 const SORT_ICON_MAP = new Map()
@@ -86,6 +85,12 @@ const ReceiveManage = () => {
 
   useEffect(() => {
     const res: any = urlGet() || {}
+    const { key = 'all' } = res
+    setActiveKey(key)
+  }, [])
+
+  useEffect(() => {
+    const res: any = urlGet() || {}
     const { pageNum = 1, pageSize = defaultPageSize, key = 'all' } = res
     const keys = Reflect.ownKeys(res)
     const newParams = cloneDeep(params)
@@ -101,7 +106,6 @@ const ReceiveManage = () => {
     if (targetUrl !== `${pathname}${search}`) {
       history.replace(targetUrl)
     }
-
     setActiveKey(key)
     // tab页签变化 页码变化 更改查询条件
     newParams.pageNum = +pageNum || 1
@@ -213,11 +217,12 @@ const ReceiveManage = () => {
           dataSource.map((card, idx) => {
             return (
               <ListCard
+                type={'receive'}
                 searchBar={searchRef.current}
                 getData={getData}
                 showCheck={DEL_CHECK_KEYS.includes(activeKey)}
                 data={card}
-                key={+card.id + +card.status}
+                key={idx}
                 curKey={activeKey}
                 callback={event => dataChoose(event.target.checked, idx)}
               ></ListCard>
@@ -226,10 +231,11 @@ const ReceiveManage = () => {
         ) : (
           <div className={styles.emptyBox}>
             <img src={ORDER_EMPTY} alt="" className={styles.orderEmpty} />
+            <div className={styles.emptyText}>您还没有订单哦~</div>
           </div>
         )}
         {DEL_CHECK_KEYS.includes(activeKey) ? (
-          <div>
+          <div className={styles.chooseAllBox}>
             <Checkbox onChange={allChoose} checked={allChecked}>
               全选
             </Checkbox>

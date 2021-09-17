@@ -1,8 +1,9 @@
 import { Icon } from '@/components'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './header.module.less'
 import { Select } from 'antd'
 import { getCurrentUser } from '@/utils/tool'
+import { useStores } from '@/utils/mobx'
 
 const { Option } = Select
 
@@ -19,7 +20,19 @@ const IconAndInfo = ({ data }) => {
 }
 
 const Header = ({ rightConfigs }) => {
+  const { controlPanelStore } = useStores()
+  const { getAccountInfo } = controlPanelStore
   const currentUser = getCurrentUser()
+  const [user, setUser] = useState<any>({})
+
+  useEffect(() => {
+    ;(async () => {
+      const u = await getAccountInfo({
+        userId: currentUser.userId
+      })
+      setUser(u)
+    })()
+  }, [])
 
   const daysOptions = [
     { label: '今日', value: 1 },
@@ -38,14 +51,14 @@ const Header = ({ rightConfigs }) => {
       {/* 左侧 */}
       <div className={styles.headerLeft}>
         {/* 头像 */}
-        <img src={currentUser.userFaceUrl} alt="" className={styles.avatar} />
+        <img src={user.userFaceUrl} alt="" className={styles.avatar} />
         {/* 信息 */}
         <div className={styles.userInfo}>
-          <div className={styles.name}>早安,李玉华</div>
+          <div className={styles.name}>{user.nickName}</div>
           <div className={styles.companyInfo}>
             <div className={styles.companyInfoL}>
               <Icon type={'jack-qymc'} className={styles.headerIcon}></Icon>
-              <span>杭州嘉庆服饰有限公司</span>
+              <span>{user.enterpriseName}</span>
             </div>
             <div className={styles.companyInfoR}>
               <Icon

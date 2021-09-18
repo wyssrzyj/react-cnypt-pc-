@@ -149,6 +149,10 @@ const ListCard = ({
     productionIdList: [],
     type: null
   }) // add 绑定 edit 编辑绑定
+  const [lastBindInfo, setLastBindInfo] = useState<Partial<BindInfo>>({
+    productionIdList: [],
+    type: null
+  }) // add 绑定 edit 编辑绑定
   // 订单退回 原因
   const [failReasonText, setFailReasonText] = useState('')
   // 订单退回 附件
@@ -165,6 +169,7 @@ const ListCard = ({
       if (bindType === 'edit' && bindVisible) {
         const bindInfo: Partial<BindInfo> = await getBindInfo(id)
         setBindInfo(bindInfo)
+        setLastBindInfo(bindInfo)
       }
     })()
   }, [bindType, bindVisible])
@@ -173,7 +178,12 @@ const ListCard = ({
     const value = field === 'type' ? event.target.value : event
     const newBindInfo = cloneDeep(bindInfo)
     newBindInfo[field] = value
-
+    if (field === 'type') {
+      newBindInfo['productionIdList'] =
+        +event.target.value === +lastBindInfo.type
+          ? cloneDeep(lastBindInfo['productionIdList'])
+          : []
+    }
     setBindInfo(newBindInfo)
   }
 

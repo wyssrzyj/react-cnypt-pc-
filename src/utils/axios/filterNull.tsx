@@ -44,17 +44,32 @@ export let rToken = ''
 
 // refresh axios
 export const refreshAxios = axios.create({
-  headers: {
-    authorization: getToken(),
-    refresh_token: getRefresh()
-  }
+  // headers: {
+  //   authorization: getToken(),
+  //   refresh_token: getRefresh()
+  // }
 })
+
+refreshAxios.interceptors.request.use(
+  async function (request) {
+    const aToken = getToken()
+    const rToken = getRefresh()
+    // 更新token
+    request.headers.authorization = aToken
+    request.headers.refresh_token = rToken
+    return request
+  },
+  function (error) {
+    return Promise.reject(error)
+  }
+)
 
 // 刷新token的处理
 export const dealRefresh = async () => {
   isRefreshing = true
 
   const url = `/api/user/account/refresh-token?accessToken=${getToken()}`
+
   refreshAxios
     .post(url)
     .then(refresData => {

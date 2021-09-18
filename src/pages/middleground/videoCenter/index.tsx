@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import styles from './index.module.less'
-import EZUIKit from 'ezuikit-js'
-import { Title } from '../controlPanel/accountSafe'
+// import EZUIKit from 'ezuikit-js'
 import { Button } from 'antd'
 import { Icon } from '@/components'
+import Title from '../controlPanel/components/title'
 
 const VideoCenter = () => {
   const [videoType, setVideoType] = useState('single')
   const [pageSize, setPagesize] = useState(1)
+
+  useEffect(() => {
+    // multipe
+    setVideoType('single')
+  }, [])
 
   const IconMap = new Map()
   IconMap.set('one', 'jack-dsp_1')
@@ -31,7 +36,7 @@ const VideoCenter = () => {
     <div>
       <div className={styles.header}>
         <Title title={'视频中心'}></Title>
-        <div>
+        <div className={styles.headerRight}>
           {videoType === 'single' ? (
             <Button>单个视频</Button>
           ) : (

@@ -469,7 +469,7 @@ export default class OrderStore {
   // 生产绑定回显
   @action getBindInfo = async id => {
     try {
-      const res = await axios.get('/api/oms/order/order-bind-department-id', {
+      const res = await axios.get('/api/oms/order/order-bind-production-id', {
         id
       })
       if (res && res.code === 200) {

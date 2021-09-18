@@ -228,7 +228,7 @@ const AddDevicePopUpd = props => {
           <p className={styles.textural}>
             您所提交的信息有误，请确认序列号或验证码!!!
           </p>
-          <p>
+          <p className={styles.bunas}>
             <Button className={styles.bantams} onClick={ConnectionFailedCancel}>
               取消
             </Button>

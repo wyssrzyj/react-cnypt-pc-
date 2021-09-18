@@ -15,7 +15,6 @@ export default class MonitorPage {
         `/api/factory/factory-camera/connect`,
         params
       )
-      console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
 
       if (res.code === 200) {
       }
@@ -95,7 +94,6 @@ export default class MonitorPage {
 
         params
       )
-      console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
 
       if (res.code === 200) {
         message.success(res.msg)
@@ -115,7 +113,6 @@ export default class MonitorPage {
         `/api/factory/factory-camera/list-camera-org-info`,
         params
       )
-      console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
 
       if (res.code === 200) {
         return res.data
@@ -135,7 +132,6 @@ export default class MonitorPage {
         `/api/admin/manage/dict-item/list/dict-code`,
         params
       )
-      console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
 
       if (res.code === 200) {
         message.success(res.msg)
@@ -157,7 +153,6 @@ export default class MonitorPage {
         `/api/factory/factory-camera/save`,
         params
       )
-      console.log('🚀 ~ file: loginStore.tsx ~ line 97 ~ LoginStore ~ res', res)
 
       if (res.code === 200) {
         message.success(res.msg)

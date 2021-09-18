@@ -23,8 +23,6 @@ const dealTypeData = (data: any[]) => {
 }
 
 const MonitorPage = () => {
-  const pageSize = 10
-
   const { monitorPageStore, commonStore } = useStores()
   const {
     newDataList,
@@ -55,6 +53,8 @@ const MonitorPage = () => {
   const [pageNum, setPageNum] = useState<number>(1) //当前页数
   const [connectionStatus, setConnectionStatus] = useState<number>(null) //连接状态
   const [modify, setModify] = useState<number>(null) //修改
+  const [pageSize, setPageSize] = useState(5) //
+  const [numberofequipment, setNumberofequipment] = useState(false) //
   const [beforeModification, setBeforeModification] = useState({
     serialNumber: '0',
     verificationCode: '0'
@@ -69,36 +69,39 @@ const MonitorPage = () => {
     })
     setTotal(response.total) //数据长度
     setList(response.records)
-    console.log(response.records)
   }
   const onSearch = value => {
     setEquipmentName(value)
+    if (value.length == 0) {
+      setNumberofequipment(false)
+    } else {
+      setNumberofequipment(true)
+    }
   }
   // 当前页数
-  const Paginationclick = page => {
+  const Paginationclick = (page, pageSize) => {
+    console.log(page)
+    setPageSize(pageSize)
+
     setPageNum(page)
   }
   useEffect(() => {
     getFactoryInfo()
-  }, [equipmentName, pageNum])
+  }, [equipmentName, pageNum, pageSize])
   // 用于显示成功还是失败
   useEffect(() => {
     if (!isModalVisible) {
-      console.log('清除')
       setModify(null)
     }
   }, [isModalVisible])
   // 修改
   const modificationMethod = async rData => {
     const { id } = rData
-    console.log(id)
     setModify(id)
     const singly = await singleSearch({ id })
-
     if (singly.code == 200) {
       form.setFieldsValue(singly.data)
     }
-
     const equipment = await equipmentDepartment()
     if (equipment.code == 200) {
       setDepartment(dealTypeData(equipment.data))
@@ -221,8 +224,6 @@ const MonitorPage = () => {
 
   // 设备form
   const onFinish = async (v: any) => {
-    console.log(v)
-
     //  判断是测试还是提交
     if (connection) {
       const { serialNumber, verificationCode } = v
@@ -232,12 +233,10 @@ const MonitorPage = () => {
       })
 
       // 测试弹窗
-      if (ConnectingEquipment !== '200') {
-        console.log('正确')
+      if (ConnectingEquipment == '200') {
         setJudgment(true)
         setConnectionStatus(1)
       } else {
-        console.log('错误')
         setFailed(true)
         setConnectionStatus(0)
       }
@@ -247,14 +246,11 @@ const MonitorPage = () => {
     } else {
       // 判断是修改还是新增
       if (modify != null) {
-        console.log(modify)
-
         const newlywed = await newDataList({
           ...v,
           status: connectionStatus,
           id: modify
         })
-
         if (newlywed.code == 200) {
           setIsModalVisible(false)
           getFactoryInfo()
@@ -262,8 +258,6 @@ const MonitorPage = () => {
         } else {
           setButtonIsAvailable(false)
         }
-        console.log('修改')
-        console.log(newlywed)
       } else {
         setModify(null)
         const newlywed = await newDataList({ ...v, status: connectionStatus })
@@ -274,7 +268,6 @@ const MonitorPage = () => {
         } else {
           setButtonIsAvailable(false)
         }
-        console.log('新增')
       }
 
       setModify(null)
@@ -283,21 +276,12 @@ const MonitorPage = () => {
   // 序列号的内容
   const toeplateSerialNumber = e => {
     if (e.target.value !== beforeModification.serialNumber) {
-      console.log('更改了序列号，按钮失效')
       setButtonIsAvailable(true)
-    }
-    let value = e.target.value
-    if (/\S{1,14}$/.test(value)) {
-      console.log('正确')
-    } else {
-      console.log('错误')
     }
   }
   // 验证码的内容
   const toeplateVerificationCode = e => {
-    console.log(beforeModification.verificationCode)
     if (e.target.value !== beforeModification.verificationCode) {
-      console.log('更改了验证码，按钮失效')
       setButtonIsAvailable(true)
     }
   }
@@ -336,24 +320,15 @@ const MonitorPage = () => {
   }
   //优产账号form
   const onFinishProduction = async (values: any) => {
-    console.log('优产账号form:', values)
     const bindYo = await productAccount(values)
-    console.log(bindYo)
     if (bindYo) {
       setaceousModalVisible(false)
     }
   }
 
-  // 返回上一级
-  const previous = () => {
-    console.log('返回上一级')
-  }
   return (
     <div className={styles.monitor}>
       <div>
-        <span onClick={previous}>
-          <Icon type="jack-left-copy" className={styles.previous} />
-        </span>
         <span className={styles.system}>监控系统</span>
       </div>
       <Divider />
@@ -381,21 +356,28 @@ const MonitorPage = () => {
           </Button>
         </div>
       </div>
-
-      <Table
-        className={styles.table}
-        columns={columns}
-        dataSource={list}
-        rowKey={rowKey}
-        pagination={{
-          showQuickJumper: false, //是否快速查找
-          pageSize, //每页条数
-          current: pageNum, //	当前页数
-          total, //数据总数
-          position: ['bottomCenter'], //居中
-          onChange: Paginationclick //获取当前页码是一个function
-        }}
-      ></Table>
+      <div className={styles.tableParent}>
+        <Table
+          className={styles.table}
+          columns={columns}
+          dataSource={list}
+          rowKey={rowKey}
+          pagination={{
+            showQuickJumper: false, //是否快速查找
+            pageSize, //每页条数
+            showSizeChanger: true, //展示切换器
+            current: pageNum, //	当前页数
+            total, //数据总数
+            position: ['bottomCenter'], //居中
+            onChange: Paginationclick //获取当前页码是一个function
+          }}
+        ></Table>
+        {numberofequipment ? (
+          <h3 className={styles.totalEquipment}>查询的设备共: {total} 件</h3>
+        ) : (
+          <h3 className={styles.totalEquipment}>设备数量共: {total} 件</h3>
+        )}
+      </div>
 
       {/* 新增设备弹窗 */}
       <AddDevicePopUpd

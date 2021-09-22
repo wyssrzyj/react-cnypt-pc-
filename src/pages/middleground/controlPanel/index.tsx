@@ -105,11 +105,17 @@ const ControlPanel = () => {
   console.log(location.pathname)
 
   const handleMenu = ({ keyPath }) => {
+    console.log(
+      '🚀 ~ file: index.tsx ~ line 108 ~ handleMenu ~ keyPath',
+      keyPath
+    )
+
     setCurrentMenu(keyPath)
   }
 
   const onOpenChange = keys => {
     console.log(openKeys)
+    console.log(keys, '~~~~~~~~~~~')
     setOpenKeys(keys)
   }
 
@@ -135,67 +141,102 @@ const ControlPanel = () => {
           <h2 className={styles.management}>会员中心</h2>
           <Menu
             // openKeys={['management']}
-            selectedKeys={currentMenu}
-            mode="inline"
+            selectedKeys={currentMenu} //当前选中的菜单项 key 数组
             onClick={handleMenu}
-            onOpenChange={onOpenChange}
+            mode="inline"
+            onOpenChange={onOpenChange} //	SubMenu 展开/关闭的回调
           >
-            <Menu.Item
-              className={styles.item}
-              key="account"
-              icon={<Icon className={styles.menuIcon} type={'jack-zhaq'} />}
+            <SubMenu
+              key="sub1"
+              className={styles.subItem}
+              icon={
+                <Icon className={styles.menuIcon} type="jack-zhanghaoanquan" />
+              }
+              title="账号管理"
             >
-              <Link to="/control-panel/panel/account">账号安全</Link>
-            </Menu.Item>
-
-            <Menu.Item
-              key="enterprise"
-              className={styles.item}
-              icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
-            >
-              <Link to="/control-panel/panel/enterprise">企业信息</Link>
-            </Menu.Item>
-
-            {+currentUser.enterpriseType === 1 ? (
-              <Menu.Item
-                key="issue-bill"
-                className={styles.item}
-                icon={<Icon className={styles.menuIcon} type="jack-qyxx" />}
-              >
-                <Link to="/control-panel/panel/issue-bill">发单信息</Link>
+              <Menu.Item className={styles.item} key="account">
+                <Link
+                  to="/control-panel/panel/account"
+                  className={styles.minutest}
+                >
+                  账号安全
+                </Link>
               </Menu.Item>
-            ) : null}
 
-            <Menu.Item
-              key="certificate"
-              className={styles.item}
-              icon={<Icon className={styles.menuIcon} type="jack-qyzjrz" />}
-            >
-              <Link to="/control-panel/panel/certificate">企业证件认证</Link>
-            </Menu.Item>
+              <Menu.Item key="enterprise" className={styles.item}>
+                <Link
+                  className={styles.minutest}
+                  to="/control-panel/panel/enterprise"
+                >
+                  企业信息
+                </Link>
+              </Menu.Item>
 
-            <Menu.Item
-              key="qualification"
-              className={styles.item}
-              icon={<Icon className={styles.menuIcon} type="jack-zzrz" />}
-            >
-              <Link to="/control-panel/panel/qualification">资质认证</Link>
-            </Menu.Item>
-
+              {+currentUser.enterpriseType === 1 ? (
+                <Menu.Item key="issue-bill" className={styles.item}>
+                  <Link
+                    className={styles.minutest}
+                    to="/control-panel/panel/issue-bill"
+                  >
+                    发单信息
+                  </Link>
+                </Menu.Item>
+              ) : null}
+            </SubMenu>
             <SubMenu
               key="sub2"
+              className={styles.subItem}
+              icon={<Icon className={styles.menuIcon} type="jack-qyzjrz" />}
+              title="企业认证管理"
+            >
+              <Menu.Item key="certificate" className={styles.item}>
+                <Link
+                  className={styles.minutest}
+                  to="/control-panel/panel/certificate"
+                >
+                  企业证件认证
+                </Link>
+              </Menu.Item>
+
+              <Menu.Item key="qualification" className={styles.item}>
+                <Link
+                  className={styles.minutest}
+                  to="/control-panel/panel/qualification"
+                >
+                  资质认证
+                </Link>
+              </Menu.Item>
+            </SubMenu>
+
+            <SubMenu
+              key="sub3"
               className={styles.subItem}
               icon={<Icon className={styles.menuIcon} type="jack-ycgl" />}
               title="验厂管理"
             >
               <Menu.Item key="report">
-                <Link to="/control-panel/panel/report">基础资料报告</Link>
+                <Link
+                  className={styles.minute}
+                  to="/control-panel/panel/report"
+                >
+                  基础资料报告
+                </Link>
               </Menu.Item>
               <Menu.Item key="equipment">
-                <Link to="/control-panel/panel/equipment">车间设备</Link>
+                <Link
+                  className={styles.minute}
+                  to="/control-panel/panel/equipment"
+                >
+                  车间设备
+                </Link>
               </Menu.Item>
               <Menu.Item key="photograph">
-                <Link to="/control-panel/panel/photograph">工厂照片</Link>
+                <Link
+                  className={styles.minute}
+                  to="/control-panel/panel/photograph"
+                >
+                  工厂照片
+                </Link>
               </Menu.Item>
             </SubMenu>
           </Menu>

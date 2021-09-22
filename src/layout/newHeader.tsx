@@ -70,7 +70,7 @@ const workbenchData = [
 ] //我的工作台
 const memberCenter = [
   {
-    title: '接单管理',
+    title: '账号管理',
     children: [
       {
         title: '账号安全',
@@ -93,13 +93,28 @@ const memberCenter = [
         title: '企业证件认证',
         url: '/control-panel/panel/certificate'
       },
+
       {
         title: '资质认证',
         url: '/control-panel/panel/qualification'
+      }
+    ]
+  },
+  {
+    title: '验厂管理',
+    children: [
+      {
+        title: '基础资料报告',
+        url: '/control-panel/panel/report'
+      },
+
+      {
+        title: '车间设备',
+        url: '/control-panel/panel/equipment'
       },
       {
-        title: '验厂管理',
-        url: '/control-panel/panel/report'
+        title: '工厂照片',
+        url: '/control-panel/panel/photograph'
       }
     ]
   }
@@ -125,11 +140,14 @@ const Header = () => {
   // 加工厂没有发单信息
 
   const memberCenterFiltering = memberCenter.filter(item => {
-    if (enterpriseType == '0' && item.children[2].title === '发单信息') {
-      item.children.splice(2, 1)
+    if (enterpriseType == '0') {
+      if (item.title == '账号管理') {
+        item.children.splice(2, 1)
+      }
+      return item
+    } else {
       return item
     }
-    return item
   })
 
   const history = useHistory()
@@ -253,7 +271,10 @@ const Header = () => {
           >
             <div className={styles.chunks}>
               <span className={styles.consoleBox}>
-                <AuditOutlined className={styles.icon} />
+                <Icon
+                  type={'jack-bussiness-man'}
+                  className={styles.icon}
+                ></Icon>
                 <span className={styles.headerChunk}>我的工作台</span>
               </span>
             </div>

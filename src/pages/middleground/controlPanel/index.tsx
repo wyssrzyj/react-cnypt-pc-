@@ -5,6 +5,7 @@ import { Menu } from 'antd'
 import { useStores } from '@/utils/mobx'
 import { useLocation } from 'react-router'
 import { Icon } from '@/components'
+
 import styles from './index.module.less'
 
 const AccountSafe = React.lazy(() => import('./accountSafe'))
@@ -64,7 +65,11 @@ menuKeys.set('/control-panel/panel/photograph', ['photograph', 'sub2'])
 menuKeys.set('/control-panel/panel/issue-bill', ['issue-bill', 'sub1'])
 
 const subsMap = new Map()
+console.log(subsMap)
+
 subsMap.set('/control-panel/panel/qualification', ['sub2', 'sub1'])
+console.log(subsMap)
+
 subsMap.set('/control-panel/panel/photo', ['sub1'])
 subsMap.set('/control-panel/panel/information', ['sub1'])
 subsMap.set('/control-panel/panel/enterprise', ['sub1'])
@@ -76,13 +81,13 @@ subsMap.set('/control-panel/panel/report', ['sub2'])
 subsMap.set('/control-panel/panel/equipment', ['sub2'])
 subsMap.set('/control-panel/panel/photograph', ['sub2'])
 subsMap.set('/control-panel/panel/issue-bill', ['sub1'])
+// 定义了一个键值对
 
 const ControlPanel = () => {
   const { factoryStore, loginStore } = useStores()
   const { productCategory } = factoryStore
   const { userInfo } = loginStore
   const [currentUser, setCurrentUser] = useState<any>({})
-
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
 
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
@@ -90,13 +95,14 @@ const ControlPanel = () => {
   useEffect(() => {
     ;(async () => {
       const res = await userInfo()
+      console.log(res)
       const { data } = res
       setCurrentUser(data)
-      console.log('🚀 ~ file: index.tsx ~ line 98 ~ data', data)
     })()
   }, [])
 
   const location = useLocation()
+  console.log(location.pathname)
 
   const handleMenu = ({ keyPath }) => {
     setCurrentMenu(keyPath)
@@ -109,7 +115,9 @@ const ControlPanel = () => {
 
   useEffect(() => {
     setCurrentMenu(menuKeys.get(location.pathname))
-    setOpenKeys(subsMap.get(location.pathname))
+    setOpenKeys(subsMap.get(location.pathname)) //往useState中存一个数据
+
+    // get() 方法用来获取一个 Map?对象中指定的元素。
   }, [location.pathname])
 
   useEffect(() => {
@@ -124,7 +132,7 @@ const ControlPanel = () => {
     <div className={styles.controlPanel}>
       <div className={styles.controlPanelContainer}>
         <div className={styles.controlPanelLeft}>
-          <h2 className={styles.management}>企业管理</h2>
+          <h2 className={styles.management}>会员中心</h2>
           <Menu
             // openKeys={['management']}
             selectedKeys={currentMenu}
@@ -137,7 +145,7 @@ const ControlPanel = () => {
               key="account"
               icon={<Icon className={styles.menuIcon} type={'jack-zhaq'} />}
             >
-              {/* <Link to="/control-panel/panel/account">账号安全</Link> */}
+              <Link to="/control-panel/panel/account">账号安全</Link>
             </Menu.Item>
 
             <Menu.Item
@@ -147,8 +155,8 @@ const ControlPanel = () => {
             >
               <Link to="/control-panel/panel/enterprise">企业信息</Link>
             </Menu.Item>
-            {/* infoApprovalStatus === 1 */}
-            {currentUser.enterpriseId ? (
+
+            {+currentUser.enterpriseType === 1 ? (
               <Menu.Item
                 key="issue-bill"
                 className={styles.item}
@@ -166,34 +174,30 @@ const ControlPanel = () => {
               <Link to="/control-panel/panel/certificate">企业证件认证</Link>
             </Menu.Item>
 
-            {+currentUser.infoApprovalStatus === 1 && (
-              <Menu.Item
-                key="qualification"
-                className={styles.item}
-                icon={<Icon className={styles.menuIcon} type="jack-zzrz" />}
-              >
-                <Link to="/control-panel/panel/qualification">资质认证</Link>
-              </Menu.Item>
-            )}
+            <Menu.Item
+              key="qualification"
+              className={styles.item}
+              icon={<Icon className={styles.menuIcon} type="jack-zzrz" />}
+            >
+              <Link to="/control-panel/panel/qualification">资质认证</Link>
+            </Menu.Item>
 
-            {+currentUser.factoryAuditStatus === 1 && (
-              <SubMenu
-                key="sub2"
-                className={styles.subItem}
-                icon={<Icon className={styles.menuIcon} type="jack-ycgl" />}
-                title="验厂管理"
-              >
-                <Menu.Item key="report">
-                  <Link to="/control-panel/panel/report">基础资料报告</Link>
-                </Menu.Item>
-                <Menu.Item key="equipment">
-                  <Link to="/control-panel/panel/equipment">车间设备</Link>
-                </Menu.Item>
-                <Menu.Item key="photograph">
-                  <Link to="/control-panel/panel/photograph">工厂照片</Link>
-                </Menu.Item>
-              </SubMenu>
-            )}
+            <SubMenu
+              key="sub2"
+              className={styles.subItem}
+              icon={<Icon className={styles.menuIcon} type="jack-ycgl" />}
+              title="验厂管理"
+            >
+              <Menu.Item key="report">
+                <Link to="/control-panel/panel/report">基础资料报告</Link>
+              </Menu.Item>
+              <Menu.Item key="equipment">
+                <Link to="/control-panel/panel/equipment">车间设备</Link>
+              </Menu.Item>
+              <Menu.Item key="photograph">
+                <Link to="/control-panel/panel/photograph">工厂照片</Link>
+              </Menu.Item>
+            </SubMenu>
           </Menu>
         </div>
         <div className={styles.controlPanelRight}>

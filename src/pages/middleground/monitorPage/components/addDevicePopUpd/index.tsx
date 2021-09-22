@@ -131,14 +131,14 @@ const AddDevicePopUpd = props => {
             rules={[{ required: true, message: `请输入设备部门` }]}
           >
             <TreeSelect
-              showSearch
-              treeData={department}
+              showSearch //	是否支持搜索框
+              treeData={department} //数据
               style={{ width: '100%' }}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
               placeholder="请输入设备部门"
-              allowClear
-              multiple
-              treeDefaultExpandAll
+              allowClear //显示清除按钮
+              multiple //支持多选
+              treeDefaultExpandAll //默认展开所有树节点
             ></TreeSelect>
           </Form.Item>
 

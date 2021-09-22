@@ -7,13 +7,13 @@ import { Divider, Form, Input, Button, Table, Space, message } from 'antd'
 import DeletePopup from './components/deletePopup'
 import BindingSuperiorProduct from './components/bindingSuperiorProduct'
 import AddDevicePopUpd from './components/addDevicePopUpd'
-
 const rowKey = 'id'
 // const { TreeNode } = TreeSelect
 const dealTypeData = (data: any[]) => {
   data.forEach(item => {
     item.label = item.deptName
     item.value = item.id
+    item.key = item.id
 
     if (Array.isArray(item.children) && item.children.length) {
       dealTypeData(item.children)
@@ -103,6 +103,8 @@ const MonitorPage = () => {
       form.setFieldsValue(singly.data)
     }
     const equipment = await equipmentDepartment()
+    console.log(equipment.data[0].children[0])
+
     if (equipment.code == 200) {
       setDepartment(dealTypeData(equipment.data))
       setIsModalVisible(true)
@@ -328,6 +330,7 @@ const MonitorPage = () => {
 
   return (
     <div className={styles.monitor}>
+      <div></div>
       <div>
         <span className={styles.system}>监控系统</span>
       </div>

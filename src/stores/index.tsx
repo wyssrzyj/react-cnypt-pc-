@@ -1,16 +1,31 @@
-import initHomeStore from './home/index'
-import { loginStore } from './login/loginStore'
-import { registerStore } from './register'
-import { factoryPageStore } from './factoryPage'
-import { factoryStore } from './factory'
-import { commonStore } from './common'
-import { controlPanelStore } from './controlPanel'
-import { factoryDetailStore } from './factoryDetail'
-import { erpModuleStore } from './erpModule'
-import { monitorPageStore } from './monitorPage'
+import MonitorPageStore, { monitorPageStore } from './monitorPage'
+import HomeStore, { homeStore } from './home/homeStore'
+import LoginStore, { loginStore } from './login/loginStore'
+import RegisterStore, { registerStore } from './register'
+import FactoryPageStore, { factoryPageStore } from './factoryPage'
+import FactoryStore, { factoryStore } from './factory'
+import CommonStore, { commonStore } from './common'
+import ControlPanelStore, { controlPanelStore } from './controlPanel'
+import FactoryDetailStore, { factoryDetailStore } from './factoryDetail'
+import ErpModuleStore, { erpModuleStore } from './erpModule'
+import OrderStore, { orderStore } from './middleground/order'
+
+export interface Stores {
+  homeStore: HomeStore
+  loginStore: LoginStore
+  registerStore: RegisterStore
+  factoryPageStore: FactoryPageStore
+  factoryStore: FactoryStore
+  commonStore: CommonStore
+  controlPanelStore: ControlPanelStore
+  factoryDetailStore: FactoryDetailStore
+  erpModuleStore: ErpModuleStore
+  monitorPageStore: MonitorPageStore
+  orderStore: OrderStore
+}
 
 export const stores = {
-  ...initHomeStore,
+  homeStore,
   loginStore,
   registerStore,
   factoryPageStore,
@@ -19,5 +34,6 @@ export const stores = {
   controlPanelStore,
   factoryDetailStore,
   erpModuleStore,
-  monitorPageStore
+  monitorPageStore,
+  orderStore
 }

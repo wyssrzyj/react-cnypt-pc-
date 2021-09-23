@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './index.module.less'
 
-const Title = ({ title }) => (
-  <div className={styles.title}>
+const Title = ({ title, size = 18 }) => (
+  <div className={styles.title} style={{ fontSize: `${size}px` }}>
     <div className={styles.titleLine}></div>
     {title}
   </div>

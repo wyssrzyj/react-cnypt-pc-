@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 import { Menu, Dropdown } from 'antd'
 import { AuditOutlined } from '@ant-design/icons'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { getCurrentUser, getUserInfo } from '@/utils/tool'
 import { useStores } from '@/utils/mobx'
 import { Icon } from '@/components'
@@ -131,8 +131,8 @@ const Header = () => {
   //我的工作台
   const workbenchDataFiltering = workbenchData.filter(item => {
     return (
-      (enterpriseType == '0' && item.title === '发单管理') ||
-      (enterpriseType == '1' && item.title === '接单管理')
+      (enterpriseType == '0' && item.title === '接单管理') ||
+      (enterpriseType == '1' && item.title === '发单管理')
     )
   })
 
@@ -223,6 +223,23 @@ const Header = () => {
             <div className={styles.titleContent}>
               {!isEmpty(children) &&
                 children.map((o, index) => {
+                  if (o.title === '首页' && isNil(enterpriseType)) {
+                    return null
+                  }
+                  if (
+                    o.title === '发单管理' &&
+                    !isNil(enterpriseType) &&
+                    +enterpriseType
+                  ) {
+                    return null
+                  }
+                  if (
+                    o.title === '接单管理' &&
+                    !isNil(enterpriseType) &&
+                    !+enterpriseType
+                  ) {
+                    return null
+                  }
                   return (
                     <Link key={index} to={o.url} className={styles.routerItem}>
                       {o.title}

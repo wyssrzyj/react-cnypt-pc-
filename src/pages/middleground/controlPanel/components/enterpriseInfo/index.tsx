@@ -195,6 +195,7 @@ const EnterpriseInfo = () => {
         })
     })
   }
+
   const getEnterpriseInfo = () => {
     axios
       .get('/api/factory/enterprise/get-enterprise-info-user-id', { userId })

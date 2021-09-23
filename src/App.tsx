@@ -11,6 +11,7 @@ import './css/reset.css'
 import Layout from './layout'
 // import 'antd/dist/antd.min.css'
 import { Loading } from './pages/home/renderHome'
+import './css/KDNWidget.css'
 
 const App = () => {
   return (

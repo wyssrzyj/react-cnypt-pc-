@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 0;
+  background: #ffffff;
+
+  :global {
+    .ant-radio-wrapper {
+      margin-right: 100px !important;
+
+      &:nth-last-child(1) {
+        margin-right: 0px !important;
+      }
+    }
+  }
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  width: 200px;
+  height: 80px;
+  padding-left: 16px;
+  color: #ffffff;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border-radius: 2px;
+}
+
+.btnsBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 120px;
+}
+
+.cancelBtn {
+  margin-right: 24px;
+}

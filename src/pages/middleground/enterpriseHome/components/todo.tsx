@@ -3,7 +3,7 @@ import { Title } from '../../controlPanel/accountSafe'
 import styles from './todo.module.less'
 
 const EMPTY =
-  'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/empty.png?x-oss-process=image/resize,limit_0,m_fill,w140,h_140/quality,q_100'
+  'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/zwyp_bg.png'
 
 const Todo = () => {
   const emptyFlag = true

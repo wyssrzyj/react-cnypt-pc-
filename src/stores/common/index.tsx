@@ -10,7 +10,7 @@ export default class CommonStore {
 
   @observable factoryName = undefined
 
-  @observable dictionary = {}
+  @observable dictionary: any = {}
 
   @observable allArea = []
   // 获取全部字典

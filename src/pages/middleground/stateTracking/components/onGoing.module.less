@@ -1,0 +1,110 @@
+.goingContent {
+  padding: 30px;
+  background: #ffffff;
+}
+
+.logistics {
+  // display: flex;
+  // flex-wrap: wrap;
+  padding-top: 30px;
+}
+
+.logisticsChunk  {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.logisticsItem {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 80px 20px 0;
+}
+
+.label {
+  padding-right: 20px;
+  color: #999999;
+}
+
+.value {
+  color: #333333;
+}
+
+.progressBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 0 40px;
+}
+
+.progressItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 20px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.progressIcon {
+  box-sizing: border-box;
+  margin-right: 16px;
+  padding: 5px;
+  color: #999999;
+  font-size: 26px;
+  background: #e9e9e9;
+  border-radius: 50%;
+}
+
+.activeProgress {
+  background: #ecf3ff;
+
+  &::after {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-top: 10px solid #ecf3ff;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid transparent;
+    transform: translateX(-50%);
+    content: '';
+  }
+
+  .progressIcon {
+    color: #ffffff;
+    background: #3b80ff;
+  }
+}
+
+.activeIcon {
+  color: #ffffff;
+  background: #3b80ff;
+}
+
+.progressContent {
+  color: #333333;
+}
+
+.progressLabel {
+  padding-bottom: 4px;
+}
+
+.progressCount {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.tableBox {
+  padding-bottom: 32px;
+}
+
+.tableTotal {
+    margin-left: -16px;
+}
+
+.postContainer {
+  text-align: center;
+}

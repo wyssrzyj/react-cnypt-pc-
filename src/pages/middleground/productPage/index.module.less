@@ -1,0 +1,169 @@
+.productPage {
+  padding-top: 30px;
+
+  :global {
+    .ant-form-item-no-colon {
+      padding-left: 12px !important;
+    }
+
+    .ant-form-item-required {
+      padding-left: 0px !important;
+    }
+
+    label {
+      color: #999999 !important;
+      font-weight: bold !important;
+    }
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 72px;
+  padding-left: 30px;
+  font-weight: bold;
+  font-size: 18px;
+  background: #ffffff;
+}
+
+.headerIcon {
+  margin-right: 16px;
+  color: #999999;
+  font-size: 16px;
+}
+
+.productSection {
+  margin-top: 20px;
+  padding: 30px 30px 0px 30px;
+  background: #ffffff;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.submitBtns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 50px;
+}
+
+.saveBtn {
+  width: 120px;
+  height: 40px;
+  margin-right: 20px;
+}
+
+.submitBtn {
+  width: 120px;
+  height: 40px;
+}
+
+.tableTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tableIcon {
+  padding-left: 8px;
+  color: #498afe;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.delIcon {
+  color: #498afe;
+  font-size: 16px;
+}
+
+.tableModalBtn {
+  width: 120px;
+  height: 40px;
+
+  &:nth-child(1) {
+    margin-right: 20px;
+  }
+}
+
+.productModalContent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  .label {
+    min-width: 64px;
+  }
+}
+
+.productModalBtns {
+  margin: 0 auto;
+  padding-top: 32px;
+  text-align: center;
+}
+
+.saveBtn {
+  display: block;
+  margin: 32px auto;
+}
+
+.requiredTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    display: inline-block;
+    margin-right: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+    content: '*';
+  }
+}
+
+.productErrorMsg {
+  padding: 8px;
+  color: #ff4d4f;
+
+  &::before {
+    display: inline-block;
+    margin-right: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+    content: '*';
+  }
+}
+
+.productFooter {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 0;
+  color: #999999;
+}
+
+.footerItem {
+  margin-left: 48px;
+}
+
+.footerNumber {
+  padding: 0 8px;
+  color: #333;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.grayTableHeader {
+  :global {
+    .ant-table-thead > tr > th {
+      color: #999999 !important;
+    }
+  }
+}

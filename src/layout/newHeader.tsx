@@ -9,35 +9,91 @@ import { useStores } from '@/utils/mobx'
 import { Icon } from '@/components'
 import styles from './newHeader.module.less'
 
-const consoleOptions = [
+// const logo =
+//   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
+
+const workbenchData = [
   {
-    title: '企业管理',
+    title: '接单管理',
     children: [
       {
-        title: '首页',
+        title: '待确认',
         url: '/control-panel/home'
+      },
+      {
+        title: '进行中',
+        url: '/control-panel/panel/enterprise'
+      },
+      {
+        title: '待验收',
+        url: '/control-panel/panel/certificate'
+      },
+      {
+        title: '退回',
+        url: '/control-panel/panel/enterprise'
+      },
+      {
+        title: '取消',
+        url: '/control-panel/panel/enterprise'
+      }
+    ]
+  },
+  {
+    title: '发单管理',
+    children: [
+      {
+        title: '待确认',
+        url: '/control-panel/home'
+      },
+      {
+        title: '进行中',
+        url: '/control-panel/panel/enterprise'
+      },
+      {
+        title: '待验收',
+        url: '/control-panel/panel/certificate'
+      },
+      {
+        title: '退回',
+        url: '/control-panel/panel/enterprise'
+      },
+      {
+        title: '取消',
+        url: '/control-panel/panel/enterprise'
+      },
+      {
+        title: '草稿',
+        url: '/control-panel/panel/enterprise'
+      }
+    ]
+  }
+] //我的工作台
+const memberCenter = [
+  {
+    title: '账号管理',
+    children: [
+      {
+        title: '账号安全',
+        url: '/control-panel/panel/account'
       },
       {
         title: '企业信息',
         url: '/control-panel/panel/enterprise'
       },
       {
-        title: '企业证件认证',
-        url: '/control-panel/panel/certificate'
-      },
-      {
-        title: '发单管理',
-        url: '/control-panel/put-manage'
-      },
-      {
-        title: '接单管理',
-        url: '/control-panel/receive-manage'
+        title: '发单信息',
+        url: '/control-panel/panel/issue-bill'
       }
     ]
   },
   {
-    title: '资质认证',
+    title: '企业认证管理',
     children: [
+      {
+        title: '企业证件认证',
+        url: '/control-panel/panel/certificate'
+      },
+
       {
         title: '资质认证',
         url: '/control-panel/panel/qualification'
@@ -51,6 +107,7 @@ const consoleOptions = [
         title: '基础资料报告',
         url: '/control-panel/panel/report'
       },
+
       {
         title: '车间设备',
         url: '/control-panel/panel/equipment'
@@ -61,19 +118,37 @@ const consoleOptions = [
       }
     ]
   }
-]
+] //会员中心
 
 const Header = () => {
   const currentUser = getCurrentUser() || {}
   const userInfo = getUserInfo() || {}
   const { loginStore } = useStores()
   const { logout } = loginStore
-  const { infoApprovalStatus, factoryAuditStatus, enterpriseType } = userInfo
-  const newConsoleOptions = consoleOptions
-    .filter(item => {
-      return !(infoApprovalStatus != '1' && item.title === '资质认证')
-    })
-    .filter(obj => !(factoryAuditStatus != '1' && obj.title === '验厂管理'))
+  const { enterpriseType } = userInfo
+
+  // 企业类型 0 加工厂 1 发单商
+  //我的工作台
+  const workbenchDataFiltering = workbenchData.filter(item => {
+    return (
+      (enterpriseType == '0' && item.title === '接单管理') ||
+      (enterpriseType == '1' && item.title === '发单管理')
+    )
+  })
+
+  //会员中心
+  // 加工厂没有发单信息
+
+  const memberCenterFiltering = memberCenter.filter(item => {
+    if (enterpriseType == '0') {
+      if (item.title == '账号管理') {
+        item.children.splice(2, 1)
+      }
+      return item
+    } else {
+      return item
+    }
+  })
 
   const history = useHistory()
 
@@ -112,9 +187,35 @@ const Header = () => {
       ) : null}
     </Menu>
   )
-  const consoleMenu = (
+
+  /* -----------------------------我的工作台----------------------------- */
+
+  const workbenchDataFilteringMethod = (
     <div className={styles.console}>
-      {newConsoleOptions.map((item, index) => {
+      {workbenchDataFiltering.map((item, index) => {
+        const { title, children } = item
+        return (
+          <div key={index}>
+            <div className={styles.title}>{title}</div>
+            <div className={styles.titleContent}>
+              {!isEmpty(children) &&
+                children.map((o, index) => {
+                  return (
+                    <Link key={index} to={o.url} className={styles.routerItems}>
+                      {o.title}
+                    </Link>
+                  )
+                })}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+  /* -----------------------------会员中心----------------------------- */
+  const memberCenterFilteringMethod = (
+    <div className={styles.console}>
+      {memberCenterFiltering.map((item, index) => {
         const { title, children } = item
         return (
           <div key={index}>
@@ -128,14 +229,14 @@ const Header = () => {
                   if (
                     o.title === '发单管理' &&
                     !isNil(enterpriseType) &&
-                    +enterpriseType !== 1
+                    +enterpriseType
                   ) {
                     return null
                   }
                   if (
                     o.title === '接单管理' &&
                     !isNil(enterpriseType) &&
-                    +enterpriseType !== 0
+                    !+enterpriseType
                   ) {
                     return null
                   }
@@ -151,16 +252,12 @@ const Header = () => {
       })}
     </div>
   )
-
   return (
     <header className={styles.header}>
       <div className={styles.headerLeft}>
         <Link to="/" className={styles.home}>
           <Icon type={'jack-shouye2'} className={styles.homeIcon}></Icon>
           <span className={styles.homeName}>优产云平台首页</span>
-          {/* <Icon type={'jack-logo1'} className={styles.logoIcon}></Icon> */}
-          {/* <img className={styles.logo} src={logo} alt="优产云平台" /> */}
-          {/* <span className={styles.verticalBar}>|</span> */}
         </Link>
 
         {currentUser.userId ? (
@@ -181,21 +278,34 @@ const Header = () => {
           </>
         )}
       </div>
-      <div className={styles.headerLeft}>
-        {/* {currentUser.userId ? (
-          <div className={styles.chunks}>
-            <span className={styles.consoleBox} onClick={toErp}>
-              <PartitionOutlined className={styles.icon} />
-              <span className={styles.headerChunk}>ERP管理系统</span>
-            </span>
-          </div>
-        ) : null} */}
+
+      {/* -----------------------------我的工作台----------------------------- */}
+      <div className={styles.headerRight}>
         {currentUser.userId ? (
-          <Dropdown overlay={consoleMenu}>
+          <Dropdown
+            className={styles.headerLeftest}
+            overlay={workbenchDataFilteringMethod}
+          >
             <div className={styles.chunks}>
               <span className={styles.consoleBox}>
+                <Icon
+                  type={'jack-bussiness-man'}
+                  className={styles.icon}
+                ></Icon>
+                <span className={styles.headerChunk}>我的工作台</span>
+              </span>
+            </div>
+          </Dropdown>
+        ) : null}
+      </div>
+      {/* -----------------------------会员中心----------------------------- */}
+      <div className={styles}>
+        {currentUser.userId ? (
+          <Dropdown overlay={memberCenterFilteringMethod}>
+            <div className={styles.chunks} onClick={toAccountSafe}>
+              <span className={styles.consoleBox}>
                 <AuditOutlined className={styles.icon} />
-                <span className={styles.headerChunk}>企业管理</span>
+                <span className={styles.headerChunk}>会员中心</span>
               </span>
             </div>
           </Dropdown>

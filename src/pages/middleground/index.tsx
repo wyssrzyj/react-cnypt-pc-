@@ -17,6 +17,8 @@ const LOGO =
   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
 
 const paths = ['/control-panel/home']
+const pathsIssuable = ['/control-panel/Issueabill']
+const pathsAccount = ['/control-panel/panel/account']
 const routeMap = new Map()
 routeMap.set(0, Factory)
 routeMap.set(1, Business)
@@ -27,6 +29,8 @@ const EnterpriseHome = () => {
   const location = useLocation()
   const history = useHistory()
   const flag = paths.includes(location.pathname)
+  const flagIssuable = pathsIssuable.includes(location.pathname)
+  const flagAccount = pathsAccount.includes(location.pathname)
   const [userInfo, setUserInfo] = useState({ enterpriseType: null })
 
   useEffect(() => {
@@ -63,7 +67,7 @@ const EnterpriseHome = () => {
             <div
               className={classNames(
                 styles.navItem,
-                !flag ? styles.activeNavItem : ''
+                flagIssuable ? styles.activeNavItem : ''
               )}
               onClick={() => toTarget('Issueabill')}
             >
@@ -72,7 +76,7 @@ const EnterpriseHome = () => {
             <div
               className={classNames(
                 styles.navItem,
-                !flag ? styles.activeNavItem : ''
+                flagAccount ? styles.activeNavItem : ''
               )}
               onClick={() => toTarget('control')}
             >

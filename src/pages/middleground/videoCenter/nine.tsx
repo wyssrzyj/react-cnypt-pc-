@@ -4,7 +4,7 @@ import EZUIKit from 'ezuikit-js'
 import { Pagination } from 'antd'
 import { useParams } from 'react-router'
 import { useStores } from '@/utils/mobx'
-import { isEmpty, cloneDeep } from 'lodash'
+import { isEmpty } from 'lodash'
 
 const IconMap = new Map()
 IconMap.set('one', 'jack-dsp_1')
@@ -31,25 +31,6 @@ videoDOMMap.set('nine_7', 'video-nine_7')
 videoDOMMap.set('nine_8', 'video-nine_8')
 videoDOMMap.set('nine_9', 'video-nine_9')
 
-const arr1 = [
-  { label: '车间组一号', key: 'four_1' },
-  { label: '车间组二号', key: 'four_2' },
-  { label: '车间组三号', key: 'four_3' },
-  { label: '车间组四号', key: 'four_4' }
-]
-
-const arr2 = [
-  { label: '车间组一号', key: 'nine_1' },
-  { label: '车间组二号', key: 'nine_2' },
-  { label: '车间组三号', key: 'nine_3' },
-  { label: '车间组四号', key: 'nine_4' },
-  { label: '车间组五号', key: 'nine_5' },
-  { label: '车间组六号', key: 'nine_6' },
-  { label: '车间组七号', key: 'nine_7' },
-  { label: '车间组八号', key: 'nine_8' },
-  { label: '车间组九号', key: 'nine_9' }
-]
-
 const Nine = () => {
   const routerParams: { platformOrderId: string; supplierId: string } =
     useParams()
@@ -59,12 +40,15 @@ const Nine = () => {
   const pageSize = 9
 
   const videoNineRef = useRef<HTMLDivElement>()
+  const successRef = useRef<any[]>([])
+  const errorRef = useRef<any[]>([])
 
   const [pageNum, setPageNum] = useState<number>(1)
   const [dataSource, setDatasource] = useState<any[]>([])
   const [total, setTotal] = useState<number>(0)
   const [videoPlayers, setVideoPlayers] = useState<any[]>([])
   const [errorList, setErrorList] = useState<any[]>([])
+  const [successList, setSuccessList] = useState<any[]>([])
 
   useEffect(() => {
     ;(async () => {
@@ -103,10 +87,13 @@ const Nine = () => {
             height: 272 - 48,
             templete: 'voice',
             footer: ['hd', 'fullScreen'],
+            handleSuccess: () => {
+              !successRef.current.includes(idx) && successRef.current.push(idx)
+              setSuccessList(successRef.current)
+            },
             handleError: () => {
-              const copyErrorList = cloneDeep(errorList)
-              copyErrorList.push({ idx })
-              setErrorList(copyErrorList)
+              !errorRef.current.includes(idx) && errorRef.current.push(idx)
+              setErrorList(errorRef.current)
               player.stop()
             }
           })
@@ -131,7 +118,7 @@ const Nine = () => {
         })
       })
     }
-  }, [dataSource, errorList, videoPlayers])
+  }, [dataSource, videoPlayers])
 
   const onPaginationChange = (page, pageSize) => {
     console.log(
@@ -144,16 +131,27 @@ const Nine = () => {
     )
   }
 
+  useEffect(() => {
+    // console.log(successList)
+  }, [successList])
+
+  useEffect(() => {
+    // console.log(errorList)
+  }, [errorList])
+
   return (
     <div className={styles.videoOutBoxNine}>
       <div className={styles.videoBoxNine} ref={videoNineRef}>
         {dataSource.map((_item, idx) => {
+          const flag = successRef.current.includes(idx)
           return (
             <div
               id={`video-nine_${idx + 1}`}
               key={idx}
               className={styles.videoNineItem}
-            ></div>
+            >
+              <div className={!flag ? styles.mask9 : ''}></div>
+            </div>
           )
         })}
         <Pagination

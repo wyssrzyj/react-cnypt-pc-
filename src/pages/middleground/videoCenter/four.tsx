@@ -4,7 +4,7 @@ import EZUIKit from 'ezuikit-js'
 import { Pagination } from 'antd'
 import { useParams } from 'react-router'
 import { useStores } from '@/utils/mobx'
-import { isEmpty, cloneDeep } from 'lodash'
+import { isEmpty } from 'lodash'
 
 const IconMap = new Map()
 IconMap.set('one', 'jack-dsp_1')
@@ -31,25 +31,6 @@ videoDOMMap.set('nine_7', 'video-nine_7')
 videoDOMMap.set('nine_8', 'video-nine_8')
 videoDOMMap.set('nine_9', 'video-nine_9')
 
-const arr1 = [
-  { label: '车间组一号', key: 'four_1' },
-  { label: '车间组二号', key: 'four_2' },
-  { label: '车间组三号', key: 'four_3' },
-  { label: '车间组四号', key: 'four_4' }
-]
-
-const arr2 = [
-  { label: '车间组一号', key: 'nine_1' },
-  { label: '车间组二号', key: 'nine_2' },
-  { label: '车间组三号', key: 'nine_3' },
-  { label: '车间组四号', key: 'nine_4' },
-  { label: '车间组五号', key: 'nine_5' },
-  { label: '车间组六号', key: 'nine_6' },
-  { label: '车间组七号', key: 'nine_7' },
-  { label: '车间组八号', key: 'nine_8' },
-  { label: '车间组九号', key: 'nine_9' }
-]
-
 const Four = () => {
   const routerParams: { platformOrderId: string; supplierId: string } =
     useParams()
@@ -59,12 +40,15 @@ const Four = () => {
   const pageSize = 4
 
   const videoFourRef = useRef<HTMLDivElement>()
+  const successRef = useRef<any[]>([])
+  const errorRef = useRef<any[]>([])
 
   const [pageNum, setPageNum] = useState<number>(1)
   const [dataSource, setDatasource] = useState<any[]>([])
   const [total, setTotal] = useState<number>(0)
   const [videoPlayers, setVideoPlayers] = useState<any[]>([])
   const [errorList, setErrorList] = useState<any[]>([])
+  const [successList, setSuccessList] = useState<any[]>([])
 
   useEffect(() => {
     ;(async () => {
@@ -89,6 +73,7 @@ const Four = () => {
     if (isEmpty(dataSource)) return
     if (isEmpty(videoPlayers)) {
       const arr = []
+      const success = []
       dataSource.forEach((item, idx) => {
         try {
           const player = new EZUIKit.EZUIKitPlayer({
@@ -99,15 +84,16 @@ const Four = () => {
             height: 417 - 48,
             templete: 'voice',
             footer: ['hd', 'fullScreen'],
+            handleSuccess: () => {
+              !successRef.current.includes(idx) && successRef.current.push(idx)
+              setSuccessList(successRef.current)
+            },
             handleError: () => {
-              console.log(22222222222222222222222)
-              const copyErrorList = cloneDeep(errorList)
-              copyErrorList.push({ idx })
-              setErrorList(copyErrorList)
+              !errorRef.current.includes(idx) && errorRef.current.push(idx)
+              setErrorList(errorRef.current)
               player.stop()
             }
           })
-          player.opt.videoLoading = false
 
           if (!item.playAddress || !item.accessToken) {
             player.stop()
@@ -118,6 +104,7 @@ const Four = () => {
         }
 
         setVideoPlayers(arr)
+        setSuccessList(Array.from(new Set(success)))
       })
     }
 
@@ -130,7 +117,7 @@ const Four = () => {
         })
       })
     }
-  }, [dataSource, errorList, videoPlayers])
+  }, [dataSource, videoPlayers])
 
   const onPaginationChange = (page, pageSize) => {
     console.log(
@@ -143,16 +130,27 @@ const Four = () => {
     )
   }
 
+  useEffect(() => {
+    // console.log(successList)
+  }, [successList])
+
+  useEffect(() => {
+    // console.log(errorList)
+  }, [errorList])
+
   return (
     <div className={styles.videoOutBoxFour}>
       <div className={styles.videoBoxFour} ref={videoFourRef}>
         {dataSource.map((_item, idx) => {
+          const flag = successRef.current.includes(idx)
           return (
             <div
               id={`video-four_${idx + 1}`}
               key={idx}
               className={styles.videoFourItem}
-            ></div>
+            >
+              <div className={!flag ? styles.mask : ''}></div>
+            </div>
           )
         })}
         <Pagination

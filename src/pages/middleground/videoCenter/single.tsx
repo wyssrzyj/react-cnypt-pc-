@@ -62,11 +62,15 @@ const Single = () => {
 
   return (
     <div className={styles.videoBoxOne}>
-      <div
-        id="video-container-single"
-        className={styles.videoSingle1}
-        ref={videoPlayerRef}
-      ></div>
+      {isEmpty(targetData) ? (
+        <div className={styles.singleEmpty}></div>
+      ) : (
+        <div
+          id="video-container-single"
+          className={styles.videoSingle1}
+          ref={videoPlayerRef}
+        ></div>
+      )}
     </div>
   )
 }

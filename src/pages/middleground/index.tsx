@@ -14,7 +14,7 @@ const ProductPage = React.lazy(() => import('./productPage'))
 const StateTracking = React.lazy(() => import('./stateTracking'))
 const BindProduce = React.lazy(() => import('./bindProduce'))
 const ControlPanel = React.lazy(() => import('./controlPanel'))
-const VideoCenter = React.lazy(() => import('./videoCenter'))
+const VideoCenter = React.lazy(() => import('./videoCenter/index2'))
 
 const LOGO =
   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
@@ -147,7 +147,7 @@ const EnterpriseHome = () => {
           <Route path="/control-panel/product/:type" component={ProductPage} />
           <Route path="/control-panel/state/:id" component={StateTracking} />
           <Route
-            path="/control-panel/video-center/:id"
+            path="/control-panel/video-center/:platformOrderId/:supplierId"
             component={VideoCenter}
           />
           <Route

@@ -153,7 +153,7 @@ const SearchBar = forwardRef(({ callback, type = 'put' }: Props, ref) => {
               onChange={event =>
                 valuesChange(event.target.value, 'minimunAmount')
               }
-              value={params.minAmount}
+              value={params.minimunAmount}
               placeholder={'最低金额'}
               className={styles.input}
             ></Input>
@@ -162,7 +162,7 @@ const SearchBar = forwardRef(({ callback, type = 'put' }: Props, ref) => {
               onChange={event =>
                 valuesChange(event.target.value, 'highestAmount')
               }
-              value={params.maxAmount}
+              value={params.highestAmount}
               placeholder={'最高金额'}
               className={styles.input}
             ></Input>

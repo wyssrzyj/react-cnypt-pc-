@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import styles from './index.module.less'
 import EZUIKit from 'ezuikit-js'
 import { Button } from 'antd'
@@ -37,23 +37,34 @@ const configs = [
   { field: 'nine', activeField: 'nineActive', value: 9 }
 ]
 
-const arr = [
+const arr1 = [
   { label: '车间组一号', key: 'four_1' },
   { label: '车间组二号', key: 'four_2' },
   { label: '车间组三号', key: 'four_3' },
-  { label: '车间组四号', key: 'four_4' },
-  { label: '车间组一号' },
-  { label: '车间组二号' },
-  { label: '车间组三号' },
-  { label: '车间组一号' }
+  { label: '车间组四号', key: 'four_4' }
+]
+
+const arr2 = [
+  { label: '车间组一号', key: 'nine_1' },
+  { label: '车间组二号', key: 'nine_2' },
+  { label: '车间组三号', key: 'nine_3' },
+  { label: '车间组四号', key: 'nine_4' },
+  { label: '车间组五号', key: 'nine_5' },
+  { label: '车间组六号', key: 'nine_6' },
+  { label: '车间组七号', key: 'nine_7' },
+  { label: '车间组八号', key: 'nine_8' },
+  { label: '车间组九号', key: 'nine_9' }
 ]
 
 const VideoCenter = () => {
   const history = useHistory()
 
   const videoFourRef = useRef<HTMLDivElement>()
+  const videoNineRef = useRef<HTMLDivElement>()
   const errorVideoRef = useRef<any>([])
   const videoPlayersRef = useRef<any>([])
+  const videoPlayerRef = useRef<any>(null)
+  const dataSourceRef = useRef<any>([])
 
   const [videoType, setVideoType] = useState<'multiple' | 'single'>('multiple')
   const [pageSize, setPagesize] = useState<1 | 4 | 9>(1)
@@ -64,80 +75,31 @@ const VideoCenter = () => {
 
   const [_errorList, setErrorList] = useState<any[]>([])
 
-  useEffect(() => {
-    // multiple single
-    setVideoType('multiple')
-    setDatasource(arr.slice(0, 4))
-  }, [])
-
-  useEffect(() => {
-    console.log(videoType, 'videoType')
-    if (
-      !videoPlayer &&
-      (videoType === 'single' || (videoType === 'multiple' && pageSize === 1))
-    ) {
-      console.log(999999999999999)
-      const player = new EZUIKit.EZUIKitPlayer({
-        id: 'video-container', // 视频容器ID
-        accessToken:
-          'at.dcsas5z03aqh25n1ak2h6hd800n3f6xc-2rtw1ujrr7-0x3mf0n-nhd8qkpwo',
-        url: 'ezopen://NWPREI@open.ys7.com/G41979864/1.hd.live',
-        width: 860,
-        height: 645 - 96,
-        templete: 'voice',
-        header: ['capturePicture', 'save', 'zoom'],
-        footer: ['talk', 'broadcast', 'hd', 'fullScreen'],
-        plugin: ['talk']
-      })
-      setVideoPlayer(player ? player : null)
-    }
-  }, [videoType, pageSize, videoPlayer])
-
-  useEffect(() => {
-    if (pageSize === 4 && !videoPlayers.length) {
-      const arr = []
-      dataSource.forEach((item, idx) => {
-        const player = new EZUIKit.EZUIKitPlayer({
-          id: videoDOMMap.get(item.key), // 视频容器ID
-          accessToken:
-            'at.dcsas5z03aqh25n1ak2h6hd800n3f6xc-2rtw1ujrr7-0x3mf0n-nhd8qkpwo',
-          url: 'ezopen://NWPREI@open.ys7.com/G41979864/1.hd.live',
-          width: 556,
-          height: 417 - 96,
-          templete: 'voice',
-          header: ['capturePicture', 'save', 'zoom'],
-          footer: ['talk', 'broadcast', 'hd', 'fullScreen'],
-          plugin: ['talk'],
-          handleError: () => {
-            errorVideoRef.current.push({ idx })
-            setErrorList(errorVideoRef.current)
-          }
-        })
-        arr.push(player)
-      })
-      videoPlayersRef.current = arr
-      setVideoPlayers(videoPlayersRef.current)
-    }
-  }, [dataSource, pageSize, videoPlayers])
-
   const changePageSize = async size => {
     if (size === pageSize) return
     let res
+
     if (videoPlayersRef.current && pageSize === 1) {
       res = [await videoPlayer.stop()]
-      setVideoPlayer(null)
     }
-    if (Array.isArray(videoPlayersRef.current) && pageSize === 4) {
+    if (Array.isArray(videoPlayersRef.current) && [4, 9].includes(pageSize)) {
       const arr = []
       videoPlayersRef.current.forEach(async (item, idx) => {
         !errorVideoRef.current.includes(idx) && arr.push(item.stop())
       })
-      setVideoPlayers([])
+
       res = await Promise.all(arr)
     }
-    console.log(res, '~~~~~~~~~~~~~~~~~~~~~`')
+
     const flag = Array.isArray(res) && res.every(item => item.type === 'stop')
-    flag && setPagesize(size)
+    setTimeout(() => {
+      flag && setPagesize(size)
+
+      videoPlayersRef.current = []
+      videoPlayerRef.current = null
+      setVideoPlayers(videoPlayersRef.current)
+      setVideoPlayer(videoPlayerRef.current)
+    })
   }
 
   const back = () => {
@@ -145,14 +107,115 @@ const VideoCenter = () => {
   }
 
   const changeVideoIndex = async (index, _data) => {
-    await videoPlayer.stop()
     setVideoIndex(index)
+    await videoPlayer.stop()
     setTimeout(() => {
       videoPlayer.play({
         url: 'ezopen://NWPREI@open.ys7.com/G41979864/1.hd.live'
       })
     }, 1000)
   }
+
+  useEffect(() => {
+    // multiple single
+    setVideoType('single')
+  }, [])
+
+  useLayoutEffect(() => {
+    let data
+    // TODO 切换4 9 时 target的子节点未变
+    if (pageSize === 9) {
+      data = arr2
+      dataSourceRef.current = data
+      setDatasource(data)
+    }
+    if (pageSize === 4) {
+      data = arr1
+      dataSourceRef.current = data
+      setDatasource(data)
+    }
+  }, [pageSize])
+
+  useLayoutEffect(() => {
+    let data = []
+    let childrenLength
+    let target
+    // TODO 切换4 9 时 target的子节点未变
+    // console.log(pageSize, 'pageSizepageSizepageSizepageSizepageSizepageSize')
+    if (pageSize === 9) {
+      data = arr2
+      childrenLength = videoNineRef.current.children.length
+      target = videoNineRef.current
+      dataSourceRef.current = data
+      setDatasource(data)
+    }
+    if (pageSize === 4) {
+      data = arr1
+      childrenLength = videoFourRef.current.children.length
+      target = videoFourRef.current
+      dataSourceRef.current = data
+      setDatasource(data)
+    }
+
+    if (
+      [4, 9].includes(pageSize) &&
+      !videoPlayersRef.current.length &&
+      target &&
+      childrenLength &&
+      Array.isArray(data)
+    ) {
+      const arr = []
+
+      data.forEach((item, idx) => {
+        console.log(item.key, 'item.key')
+
+        const player = new EZUIKit.EZUIKitPlayer({
+          id: videoDOMMap.get(item.key), // 视频容器ID
+          accessToken:
+            'at.20cwgt303mknqhhp209nlx7w46lfzd1s-1sdszo9p8e-1tqxarc-ji9a8joac',
+          url: 'ezopen://NWPREI@open.ys7.com/G41979864/1.hd.live',
+          width: pageSize === 4 ? 556 : 362,
+          height: pageSize === 4 ? 417 - 48 : 272 - 48,
+          templete: 'voice',
+          footer: ['broadcast', 'hd', 'fullScreen'],
+          // header: ['capturePicture', 'save', 'zoom'],
+          // footer: ['talk', 'broadcast', 'hd', 'fullScreen'],
+          // plugin: ['talk'],
+          handleError: () => {
+            errorVideoRef.current.push({ idx })
+            setErrorList(errorVideoRef.current)
+            player.stop()
+          }
+        })
+        arr.push(player)
+      })
+      videoPlayersRef.current = arr
+      setVideoPlayers(videoPlayersRef.current)
+    }
+  }, [pageSize, videoFourRef.current, videoNineRef.current])
+
+  useEffect(() => {
+    if (
+      !videoPlayerRef.current &&
+      (videoType === 'single' || (videoType === 'multiple' && pageSize === 1))
+    ) {
+      const player = new EZUIKit.EZUIKitPlayer({
+        id: 'video-container', // 视频容器ID
+        accessToken:
+          'at.20cwgt303mknqhhp209nlx7w46lfzd1s-1sdszo9p8e-1tqxarc-ji9a8joac',
+        url: 'ezopen://NWPREI@open.ys7.com/G41979864/1.hd.live',
+        width: 860,
+        height: 645 - 48,
+        templete: 'voice',
+        footer: ['broadcast', 'hd', 'fullScreen']
+        // header: ['capturePicture', 'save', 'zoom'],
+        // footer: ['talk', 'broadcast', 'hd', 'fullScreen'],
+        // plugin: ['talk']
+      })
+      videoPlayerRef.current = player
+      setVideoPlayer(videoPlayerRef.current)
+    }
+  }, [videoType, pageSize, videoPlayer])
 
   return (
     <div className={styles.container}>
@@ -171,6 +234,12 @@ const VideoCenter = () => {
           ) : (
             <Button>多个视频</Button>
           )}
+          {/* 单个视频 单个显示 */}
+          {videoType === 'single' ? (
+            <div className={styles.videoBoxOne}>
+              <div id="video-container" className={styles.videoSingle}></div>
+            </div>
+          ) : null}
           {/* 多个视频 显示模式*/}
           {videoType !== 'single' ? (
             <div className={styles.icons}>
@@ -195,7 +264,7 @@ const VideoCenter = () => {
         <div className={styles.videoBoxOne}>
           <div id="video-container" className={styles.videoSingle}></div>
           <div className={styles.videoList}>
-            {arr.map((item, idx) => {
+            {arr1.map((item, idx) => {
               return (
                 <div
                   key={idx}
@@ -223,12 +292,26 @@ const VideoCenter = () => {
       {/* 多个视频 4个显示 */}
       {videoType === 'multiple' && pageSize === 4 ? (
         <div className={styles.videoBoxFour} ref={videoFourRef}>
-          {dataSource.slice(0, 4).map((_item, idx) => {
+          {dataSourceRef.current.map((_item, idx) => {
             return (
               <div
                 id={`video-four_${idx + 1}`}
                 key={idx}
                 className={styles.videoFourItem}
+              ></div>
+            )
+          })}
+        </div>
+      ) : null}
+      {/* 多个视频 9个显示 */}
+      {videoType === 'multiple' && pageSize === 9 ? (
+        <div className={styles.videoBoxNine} ref={videoNineRef}>
+          {dataSourceRef.current.map((_item, idx) => {
+            return (
+              <div
+                id={`video-nine_${idx + 1}`}
+                key={idx}
+                className={styles.videoNineItem}
               ></div>
             )
           })}

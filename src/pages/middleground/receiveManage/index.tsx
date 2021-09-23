@@ -144,7 +144,7 @@ const ReceiveManage = () => {
     // 查询条件变更 发送请求
     const res = await getOrders(params)
     if (res) {
-      const { records = [] } = res
+      const { records = [], total } = res
       records.forEach(record => {
         record.type = 'receive'
         record.checked = false

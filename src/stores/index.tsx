@@ -1,3 +1,4 @@
+import MonitorPageStore, { monitorPageStore } from './monitorPage'
 import HomeStore, { homeStore } from './home/homeStore'
 import LoginStore, { loginStore } from './login/loginStore'
 import RegisterStore, { registerStore } from './register'
@@ -19,6 +20,7 @@ export interface Stores {
   controlPanelStore: ControlPanelStore
   factoryDetailStore: FactoryDetailStore
   erpModuleStore: ErpModuleStore
+  monitorPageStore: MonitorPageStore
   orderStore: OrderStore
 }
 
@@ -32,5 +34,6 @@ export const stores = {
   controlPanelStore,
   factoryDetailStore,
   erpModuleStore,
+  monitorPageStore,
   orderStore
 }

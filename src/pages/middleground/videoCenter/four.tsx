@@ -133,7 +133,7 @@ const Four = props => {
                 id={`video-four_${idx + 1}`}
                 className={styles.videoFourItem}
               ></div>
-              <div className={!flag ? styles.mask : styles.maskHidden}>
+              <div className={!flag ? styles.mask : ''}>
                 {item.playAddress && !flag && (
                   <>
                     <Icon

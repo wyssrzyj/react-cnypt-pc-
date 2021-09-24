@@ -18,10 +18,11 @@ export default class MonitorPage {
 
       if (res.code === 200) {
       }
+
       if (res.code !== 200) {
-        message.error('连接失败')
+        // message.error('连接失败')
       }
-      return res.data
+      return res
     } catch (e) {
       console.log(e)
     }

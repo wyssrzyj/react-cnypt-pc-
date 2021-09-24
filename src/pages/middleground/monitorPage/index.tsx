@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import { useStores } from '@/utils/mobx'
 
 import { Icon } from '@/components'
@@ -9,12 +9,12 @@ import BindingSuperiorProduct from './components/bindingSuperiorProduct'
 import AddDevicePopUpd from './components/addDevicePopUpd'
 const rowKey = 'id'
 // const { TreeNode } = TreeSelect
+
 const dealTypeData = (data: any[]) => {
   data.forEach(item => {
     item.label = item.deptName
     item.value = item.id
     item.key = item.id
-
     if (Array.isArray(item.children) && item.children.length) {
       dealTypeData(item.children)
     }
@@ -22,7 +22,7 @@ const dealTypeData = (data: any[]) => {
   return data
 }
 
-const MonitorPage = () => {
+const MonitorPage = memo(() => {
   const { monitorPageStore, commonStore } = useStores()
   const {
     newDataList,
@@ -53,13 +53,14 @@ const MonitorPage = () => {
   const [pageNum, setPageNum] = useState<number>(1) //当前页数
   const [connectionStatus, setConnectionStatus] = useState<number>(null) //连接状态
   const [modify, setModify] = useState<number>(null) //修改
-  const [pageSize, setPageSize] = useState(5) //
+  const [pageSize, setPageSize] = useState(10) //
   const [numberofequipment, setNumberofequipment] = useState(false) //
+  const [equipmentDepartmentValue, setEquipmentDepartmentValue] = useState()
+  const [errorStatus, setErrorstatus] = useState('')
   const [beforeModification, setBeforeModification] = useState({
     serialNumber: '0',
     verificationCode: '0'
   }) //存放修改前的input数据
-  console.log(beforeModification)
 
   const getFactoryInfo = async () => {
     const response = await getDataList({
@@ -80,7 +81,6 @@ const MonitorPage = () => {
   }
   // 当前页数
   const Paginationclick = (page, pageSize) => {
-    console.log(page)
     setPageSize(pageSize)
 
     setPageNum(page)
@@ -94,8 +94,12 @@ const MonitorPage = () => {
       setModify(null)
     }
   }, [isModalVisible])
-  // 修改
+  // 编辑
   const modificationMethod = async rData => {
+    const brand = await allDictionary([])
+    if (brand) {
+      setEquipmentbrand(brand.cameraBrand)
+    }
     const { id } = rData
     setModify(id)
     const singly = await singleSearch({ id })
@@ -103,7 +107,6 @@ const MonitorPage = () => {
       form.setFieldsValue(singly.data)
     }
     const equipment = await equipmentDepartment()
-    console.log(equipment.data[0].children[0])
 
     if (equipment.code == 200) {
       setDepartment(dealTypeData(equipment.data))
@@ -150,7 +153,6 @@ const MonitorPage = () => {
     {
       title: '所属部门',
       align: 'center',
-
       key: 'orgNameList',
       dataIndex: 'orgNameList',
       render: value => {
@@ -160,16 +162,14 @@ const MonitorPage = () => {
     {
       title: '操作',
       align: 'center',
-
+      width: 210,
       key: 'action',
 
-      render: (text, record) => (
+      render: record => (
         <Space size="middle">
           <span
             className={styles.edit}
             onClick={() => {
-              console.log(text)
-              console.log(record)
               modificationMethod(record)
             }}
           >
@@ -233,9 +233,15 @@ const MonitorPage = () => {
         serialNumber,
         verificationCode
       })
+      console.log(ConnectingEquipment.data)
 
-      // 测试弹窗
-      if (ConnectingEquipment == '200') {
+      if (ConnectingEquipment.data == 20014) {
+        setErrorstatus('您所提交的信息有误，请确认序列号或验证码!!!')
+      } else {
+        setErrorstatus(ConnectingEquipment.msg)
+      }
+      if (ConnectingEquipment.data == '200') {
+        // 测试弹窗
         setJudgment(true)
         setConnectionStatus(1)
       } else {
@@ -327,10 +333,13 @@ const MonitorPage = () => {
       setaceousModalVisible(false)
     }
   }
+  const onChange = value => {
+    setEquipmentDepartmentValue(value)
+  }
 
   return (
     <div className={styles.monitor}>
-      <div></div>
+      <div>{/* <TreeSelect {...tProps} /> */}</div>
       <div>
         <span className={styles.system}>监控系统</span>
       </div>
@@ -400,6 +409,9 @@ const MonitorPage = () => {
         cancellation={cancellation}
         failed={failed}
         ConnectionFailedCancel={ConnectionFailedCancel}
+        onChange={onChange}
+        numberofequivalue={equipmentDepartmentValue}
+        errorStatus={errorStatus}
       />
       {/* 绑定优产账号弹窗 */}
       <BindingSuperiorProduct
@@ -419,5 +431,5 @@ const MonitorPage = () => {
       />
     </div>
   )
-}
+})
 export default MonitorPage

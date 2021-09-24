@@ -11,6 +11,7 @@ import {
   // message
 } from 'antd'
 const { TreeNode } = TreeSelect
+const { SHOW_PARENT } = TreeSelect
 
 const AddDevicePopUpd = props => {
   const {
@@ -29,7 +30,10 @@ const AddDevicePopUpd = props => {
     setJudgment,
     cancellation,
     failed,
-    ConnectionFailedCancel
+    ConnectionFailedCancel,
+    numberofequivalue,
+    onChange,
+    errorStatus
   } = props
   const intervalRef = useRef<any>(null)
 
@@ -131,14 +135,14 @@ const AddDevicePopUpd = props => {
             rules={[{ required: true, message: `请输入设备部门` }]}
           >
             <TreeSelect
-              showSearch //	是否支持搜索框
+              onChange={onChange}
+              value={numberofequivalue}
+              treeCheckable={true}
+              showCheckedStrategy={SHOW_PARENT}
               treeData={department} //数据
               style={{ width: '100%' }}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
               placeholder="请输入设备部门"
-              allowClear //显示清除按钮
-              multiple //支持多选
-              treeDefaultExpandAll //默认展开所有树节点
             ></TreeSelect>
           </Form.Item>
 
@@ -148,6 +152,7 @@ const AddDevicePopUpd = props => {
             label="设备序列号"
             name="serialNumber"
             rules={[
+              { pattern: /^[^\s]*$/, message: '录入信息不能包含空格' },
               { max: 99, message: '名称不得超过99个字符' },
               { required: true, message: `请输入设备序列号` }
             ]}
@@ -163,6 +168,7 @@ const AddDevicePopUpd = props => {
             label="验证码"
             name="verificationCode"
             rules={[
+              { pattern: /^[^\s]*$/, message: '录入信息不能包含空格' },
               { max: 99, message: '名称不得超过99个字符' },
               { required: true, message: `请输入验证码` }
             ]}
@@ -225,9 +231,7 @@ const AddDevicePopUpd = props => {
             <Icon type="jack-sptg1" className={styles.menuIcon} />
           </p>
           <p className={styles.text}>连接失败</p>
-          <p className={styles.textural}>
-            您所提交的信息有误，请确认序列号或验证码!!!
-          </p>
+          <p className={styles.textural}>{errorStatus}</p>
           <p className={styles.bunas}>
             <Button className={styles.bantams} onClick={ConnectionFailedCancel}>
               取消

@@ -84,6 +84,11 @@ const ReceiveManage = () => {
   }, [])
 
   useEffect(() => {
+    const searchURL = new URLSearchParams(search)
+    setActiveKey(searchURL.get('key'))
+  }, [location])
+
+  useEffect(() => {
     const res: any = urlGet() || {}
     const { key = 'all' } = res
     setActiveKey(key)

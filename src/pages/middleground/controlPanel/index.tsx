@@ -13,6 +13,8 @@ const LoginLogs = React.lazy(() => import('./loginLogs'))
 const FactoryInformation = React.lazy(() => import('./factoryInformation'))
 const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
 const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
+const MonitorPage = React.lazy(() => import('../monitorPage'))
+
 const IssuerEnterpriseInfo = React.lazy(
   () => import('./components/issuerEnterpriseInfo')
 )
@@ -33,18 +35,18 @@ const FactoryPhotograph = React.lazy(
 
 const { SubMenu } = Menu
 
-const menusName = new Map()
-menusName.set('/control-panel/panel/qualification', '资质认证')
-menusName.set('/control-panel/panel/photo', '厂房现场照')
-menusName.set('/control-panel/panel/information', '工厂资料')
-menusName.set('/control-panel/panel/enterprise', '企业信息')
-menusName.set('/control-panel/panel/certificate', '企业证件认证')
-menusName.set('/control-panel/panel/report', '验厂报告')
-menusName.set('/control-panel/panel/account', '账号安全')
-menusName.set('/control-panel/panel/logs', '登录日志')
-menusName.set('/control-panel/panel/equipment', '车间设备')
-menusName.set('/control-panel/panel/photograph', '工厂照片')
-menusName.set('/control-panel/panel/issue-bill', '发单信息')
+// const menusName = new Map()
+// menusName.set('/control-panel/panel/qualification', '资质认证')
+// menusName.set('/control-panel/panel/photo', '厂房现场照')
+// menusName.set('/control-panel/panel/information', '工厂资料')
+// menusName.set('/control-panel/panel/enterprise', '企业信息')
+// menusName.set('/control-panel/panel/certificate', '企业证件认证')
+// menusName.set('/control-panel/panel/report', '验厂报告')
+// menusName.set('/control-panel/panel/account', '账号安全')
+// menusName.set('/control-panel/panel/logs', '登录日志')
+// menusName.set('/control-panel/panel/equipment', '车间设备')
+// menusName.set('/control-panel/panel/photograph', '工厂照片')
+// menusName.set('/control-panel/panel/issue-bill', '发单信息')
 
 const menuKeys = new Map()
 menuKeys.set('/control-panel/panel/qualification', [
@@ -63,6 +65,7 @@ menuKeys.set('/control-panel/panel/report', ['report', 'sub2'])
 menuKeys.set('/control-panel/panel/equipment', ['equipment', 'sub2'])
 menuKeys.set('/control-panel/panel/photograph', ['photograph', 'sub2'])
 menuKeys.set('/control-panel/panel/issue-bill', ['issue-bill', 'sub1'])
+menuKeys.set('/control-panel/panel/monitorPage', ['monitorPage', 'sub4'])
 
 const subsMap = new Map()
 console.log(subsMap)
@@ -115,7 +118,6 @@ const ControlPanel = () => {
 
   const onOpenChange = keys => {
     console.log(openKeys)
-    console.log(keys, '~~~~~~~~~~~')
     setOpenKeys(keys)
   }
 
@@ -239,6 +241,22 @@ const ControlPanel = () => {
                 </Link>
               </Menu.Item>
             </SubMenu>
+
+            <SubMenu
+              key="sub4"
+              className={styles.subItem}
+              icon={<Icon className={styles.menuIcon} type="jack-video1" />}
+              title="监控中心"
+            >
+              <Menu.Item key="monitorPage">
+                <Link
+                  className={styles.minute}
+                  to="/control-panel/panel/monitorPage"
+                >
+                  监控系统
+                </Link>
+              </Menu.Item>
+            </SubMenu>
           </Menu>
         </div>
         <div className={styles.controlPanelRight}>
@@ -297,6 +315,11 @@ const ControlPanel = () => {
               path="/control-panel/panel/photograph"
               component={FactoryPhotograph}
             />
+            <Route
+              path="/control-panel/panel/monitorPage"
+              component={MonitorPage}
+            />
+
             <Redirect to="/platform" />
           </Switch>
         </div>

@@ -7,7 +7,6 @@ import { getUserInfo } from '@/utils/tool'
 
 const Factory = React.lazy(() => import('./enterpriseHome/factory'))
 const Business = React.lazy(() => import('./enterpriseHome/business'))
-const MonitorPage = React.lazy(() => import('./monitorPage'))
 const PutManage = React.lazy(() => import('./putManage'))
 const ReceiveManage = React.lazy(() => import('./receiveManage'))
 const OrderPage = React.lazy(() => import('./orderPage'))
@@ -134,7 +133,6 @@ const EnterpriseHome = () => {
 
       <div className={styles.content}>
         <Switch>
-          <Route path="/control-panel/monitorPage" component={MonitorPage} />
           <Route path="/control-panel/panel" component={ControlPanel} />
           <Route path="/control-panel/put-manage" component={PutManage} />
           <Route

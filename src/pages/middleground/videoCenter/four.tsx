@@ -3,7 +3,6 @@ import styles from './index.module.less'
 import EZUIKit from 'ezuikit-js'
 import { Pagination } from 'antd'
 import { useParams } from 'react-router'
-import { useStores } from '@/utils/mobx'
 import { isEmpty } from 'lodash'
 import { FAIL_VIDEO, UN_ADD } from './index'
 import { Icon } from '@/components'
@@ -13,14 +12,18 @@ videoDOMMap.set('four_1', 'video-four_1')
 videoDOMMap.set('four_2', 'video-four_2')
 videoDOMMap.set('four_3', 'video-four_3')
 videoDOMMap.set('four_4', 'video-four_4')
+interface SearchParams {
+  platformOrderId: string
+  supplierId: string
+  pageNum: number
+  pageSize: number
+}
 
 const Four = props => {
-  const { callback } = props
+  const { callback, getData } = props
   const routerParams: { platformOrderId: string; supplierId: string } =
     useParams()
   const { platformOrderId, supplierId } = routerParams
-  const { orderStore } = useStores()
-  const { getVideos } = orderStore
   const pageSize = 4
 
   const videoFourRef = useRef<HTMLDivElement>()
@@ -35,12 +38,14 @@ const Four = props => {
 
   useEffect(() => {
     ;(async () => {
-      const data = await getVideos({
-        platformOrderId,
-        supplierId,
-        pageSize,
-        pageNum: pageNum
-      })
+      const params: Partial<SearchParams> = { pageSize, pageNum }
+      if (platformOrderId) {
+        params.platformOrderId = platformOrderId
+      }
+      if (supplierId) {
+        params.supplierId = supplierId
+      }
+      const data = await getData(params)
       if (data) {
         const { records, total } = data
         records.forEach((item, idx) => {
@@ -79,8 +84,8 @@ const Four = props => {
           id: videoDOMMap.get(item.key), // 视频容器ID
           url: item.playAddress ? item.playAddress : '',
           accessToken: item.accessToken ? item.accessToken : '',
-          width: 556,
-          height: 417,
+          width: platformOrderId ? 556 : 396,
+          height: platformOrderId ? 417 : 297,
           templete: 'simple', // simple：极简版;standard：标准版;security：安防版(预览回放);vioce：语音版
           footer: ['hd', 'fullScreen'],
           handleSuccess: () => {

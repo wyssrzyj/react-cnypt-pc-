@@ -3,7 +3,6 @@ import styles from './index.module.less'
 import EZUIKit from 'ezuikit-js'
 import { Pagination } from 'antd'
 import { useParams } from 'react-router'
-import { useStores } from '@/utils/mobx'
 import { isEmpty } from 'lodash'
 import { FAIL_VIDEO, UN_ADD } from './index'
 import { Icon } from '@/components'
@@ -19,13 +18,18 @@ videoDOMMap.set('nine_7', 'video-nine_7')
 videoDOMMap.set('nine_8', 'video-nine_8')
 videoDOMMap.set('nine_9', 'video-nine_9')
 
+interface SearchParams {
+  platformOrderId: string
+  supplierId: string
+  pageNum: number
+  pageSize: number
+}
+
 const Nine = props => {
-  const { callback } = props
+  const { callback, getData } = props
   const routerParams: { platformOrderId: string; supplierId: string } =
     useParams()
   const { platformOrderId, supplierId } = routerParams
-  const { orderStore } = useStores()
-  const { getVideos } = orderStore
   const pageSize = 9
 
   const videoNineRef = useRef<HTMLDivElement>()
@@ -40,12 +44,14 @@ const Nine = props => {
 
   useEffect(() => {
     ;(async () => {
-      const data = await getVideos({
-        platformOrderId,
-        supplierId,
-        pageSize,
-        pageNum: pageNum
-      })
+      const params: Partial<SearchParams> = { pageSize, pageNum }
+      if (platformOrderId) {
+        params.platformOrderId = platformOrderId
+      }
+      if (supplierId) {
+        params.supplierId = supplierId
+      }
+      const data = await getData(params)
       if (data) {
         const { records, total } = data
         // 处理模3余2情况的列表展示
@@ -87,8 +93,8 @@ const Nine = props => {
           id: videoDOMMap.get(item.key), // 视频容器ID
           url: item.playAddress ? item.playAddress : '',
           accessToken: item.accessToken ? item.accessToken : '',
-          width: 362,
-          height: 272,
+          width: platformOrderId ? 362 : 256,
+          height: platformOrderId ? 272 : 192,
           templete: 'voice',
           footer: ['hd', 'fullScreen'],
           handleSuccess: () => {

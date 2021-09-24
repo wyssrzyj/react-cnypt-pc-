@@ -5,22 +5,10 @@ import { Pagination } from 'antd'
 import { useParams } from 'react-router'
 import { useStores } from '@/utils/mobx'
 import { isEmpty } from 'lodash'
-
-const IconMap = new Map()
-IconMap.set('one', 'jack-dsp_1')
-IconMap.set('oneActive', 'jack-dsp_2')
-IconMap.set('four', 'jack-sgg_1')
-IconMap.set('fourActive', 'jack-sgg_2')
-IconMap.set('nine', 'jack-jgg_11')
-IconMap.set('nineActive', 'jack-jgg_2')
-IconMap.set('full', 'jack-qp')
+import { FAIL_VIDEO, UN_ADD } from './index'
+import { Icon } from '@/components'
 
 const videoDOMMap = new Map()
-videoDOMMap.set('one', 'video-container')
-videoDOMMap.set('four_1', 'video-four_1')
-videoDOMMap.set('four_2', 'video-four_2')
-videoDOMMap.set('four_3', 'video-four_3')
-videoDOMMap.set('four_4', 'video-four_4')
 videoDOMMap.set('nine_1', 'video-nine_1')
 videoDOMMap.set('nine_2', 'video-nine_2')
 videoDOMMap.set('nine_3', 'video-nine_3')
@@ -31,7 +19,8 @@ videoDOMMap.set('nine_7', 'video-nine_7')
 videoDOMMap.set('nine_8', 'video-nine_8')
 videoDOMMap.set('nine_9', 'video-nine_9')
 
-const Nine = () => {
+const Nine = props => {
+  const { callback } = props
   const routerParams: { platformOrderId: string; supplierId: string } =
     useParams()
   const { platformOrderId, supplierId } = routerParams
@@ -40,13 +29,12 @@ const Nine = () => {
   const pageSize = 9
 
   const videoNineRef = useRef<HTMLDivElement>()
-  const successRef = useRef<any[]>([])
-  const errorRef = useRef<any[]>([])
+  const successRef = useRef([])
+  const errorRef = useRef([])
 
   const [pageNum, setPageNum] = useState<number>(1)
   const [dataSource, setDatasource] = useState<any[]>([])
   const [total, setTotal] = useState<number>(0)
-  const [videoPlayers, setVideoPlayers] = useState<any[]>([])
   const [errorList, setErrorList] = useState<any[]>([])
   const [successList, setSuccessList] = useState<any[]>([])
 
@@ -60,75 +48,77 @@ const Nine = () => {
       })
       if (data) {
         const { records, total } = data
-
+        // 处理模3余2情况的列表展示
+        records.length % 3 === 2 ? records.push({}) : null
         records.forEach((item, idx) => {
+          if (isEmpty(item)) return
           item.key = `nine_${idx + 1}`
         })
+        callback && callback(total <= 9 ? 2 : 3)
         setDatasource(records)
         setTotal(total)
       }
     })()
-  }, [])
+  }, [pageNum])
+
+  useEffect(() => {
+    const list = Array.from(
+      document.getElementsByClassName(styles.videoNineItem)
+    )
+    // 清空视频节点
+    if (list.length) {
+      list.forEach(target => {
+        const targetChilds = Array.from(target.childNodes)
+        if (targetChilds.length) {
+          targetChilds.forEach(item => {
+            target.removeChild(item)
+          })
+        }
+      })
+    }
+  }, [dataSource])
 
   useEffect(() => {
     if (isEmpty(dataSource)) return
-    if (isEmpty(videoPlayers)) {
-      const arr = []
-      dataSource.forEach((item, idx) => {
-        try {
-          const player = new EZUIKit.EZUIKitPlayer({
-            id: videoDOMMap.get(item.key), // 视频容器ID
-            // accessToken:
-            //   'at.20cwgt303mknqhhp209nlx7w46lfzd1s-1sdszo9p8e-1tqxarc-ji9a8joac',
-            // url: 'ezopen://NWPREI@open.ys7.com/G41979864/1.hd.live',
-            url: item.playAddress ? item.playAddress : '',
-            accessToken: item.accessToken ? item.accessToken : '',
-            width: 362,
-            height: 272 - 48,
-            templete: 'voice',
-            footer: ['hd', 'fullScreen'],
-            handleSuccess: () => {
-              !successRef.current.includes(idx) && successRef.current.push(idx)
+    const arr = []
+    dataSource.forEach((item, idx) => {
+      try {
+        const player = new EZUIKit.EZUIKitPlayer({
+          id: videoDOMMap.get(item.key), // 视频容器ID
+          url: item.playAddress ? item.playAddress : '',
+          accessToken: item.accessToken ? item.accessToken : '',
+          width: 362,
+          height: 272,
+          templete: 'voice',
+          footer: ['hd', 'fullScreen'],
+          handleSuccess: () => {
+            successRef.current.push(idx)
+            setTimeout(() => {
               setSuccessList(successRef.current)
-            },
-            handleError: () => {
-              !errorRef.current.includes(idx) && errorRef.current.push(idx)
-              setErrorList(errorRef.current)
-              player.stop()
-            }
-          })
-          if (!item.playAddress || !item.accessToken) {
+            }, 500)
+          },
+          handleError: () => {
+            errorRef.current.push(idx)
+            setErrorList(errorRef.current)
             player.stop()
           }
-          arr.push(player)
-        } catch (err) {
-          console.log(err)
-        }
-
-        setVideoPlayers(arr)
-      })
-    }
-
-    if (!isEmpty(videoPlayers)) {
-      videoPlayers.forEach(async (item, idx) => {
-        await item.stop()
-        item.play({
-          url: dataSource[idx].playAddress,
-          accessToken: dataSource[idx].accessToken
         })
-      })
-    }
-  }, [dataSource, videoPlayers])
+        if (!item.playAddress || !item.accessToken) {
+          player.stop()
+        }
+        arr.push(player)
+      } catch (err) {
+        console.log(err)
+      }
+    })
+  }, [dataSource])
 
-  const onPaginationChange = (page, pageSize) => {
-    console.log(
-      '🚀 ~ file: index2.tsx ~ line 225 ~ onPaginationChange ~ page',
-      page
-    )
-    console.log(
-      '🚀 ~ file: index2.tsx ~ line 225 ~ onPaginationChange ~ pageSize',
-      pageSize
-    )
+  const onPaginationChange = page => {
+    setPageNum(page)
+    errorRef.current = []
+    successRef.current = []
+    setErrorList([])
+    setSuccessList([])
   }
 
   useEffect(() => {
@@ -142,26 +132,54 @@ const Nine = () => {
   return (
     <div className={styles.videoOutBoxNine}>
       <div className={styles.videoBoxNine} ref={videoNineRef}>
-        {dataSource.map((_item, idx) => {
-          const flag = successRef.current.includes(idx)
+        {dataSource.map((item, idx) => {
+          if (isEmpty(item)) {
+            return <div className={styles.videoNineItemBox} key={idx}></div>
+          }
+          const flag = successList.includes(idx)
           return (
-            <div
-              id={`video-nine_${idx + 1}`}
-              key={idx}
-              className={styles.videoNineItem}
-            >
-              <div className={!flag ? styles.mask9 : ''}></div>
+            <div className={styles.videoNineItemBox} key={idx}>
+              <div
+                id={`video-nine_${idx + 1}`}
+                key={idx}
+                className={styles.videoNineItem}
+              ></div>
+              <div className={!flag ? styles.mask9 : ''}>
+                {item.playAddress && !flag && (
+                  <>
+                    <Icon
+                      type={'jack-LoadingIndicator'}
+                      className={styles.loadingIcon}
+                    ></Icon>
+                    <div>视频加载中，请稍等 ~</div>
+                  </>
+                )}
+                {!item.playAddress && (
+                  <>
+                    <img src={FAIL_VIDEO} alt="" className={styles.emptyImg9} />
+                    <div>视频播放失败，请检测网络或设备 ~</div>
+                  </>
+                )}
+                {!item.id && (
+                  <>
+                    <img src={UN_ADD} alt="" className={styles.emptyImg9} />
+                    <div>还未添加设备~</div>
+                  </>
+                )}
+              </div>
             </div>
           )
         })}
-        <Pagination
-          current={pageNum}
-          pageSize={pageSize}
-          total={total}
-          showSizeChanger={false}
-          hideOnSinglePage
-          onChange={onPaginationChange}
-        ></Pagination>
+        <div className={styles.paginationBox}>
+          <Pagination
+            current={pageNum}
+            pageSize={pageSize}
+            total={total}
+            showSizeChanger={false}
+            hideOnSinglePage
+            onChange={onPaginationChange}
+          ></Pagination>
+        </div>
       </div>
     </div>
   )

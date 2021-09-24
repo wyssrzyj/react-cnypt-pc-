@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './index.module.less'
-import EZUIKit from 'ezuikit-js'
-import { Button } from 'antd'
 import { Icon } from '@/components'
 import { useHistory } from 'react-router'
-import classNames from 'classnames'
+import { useParams } from 'react-router'
+import { useStores } from '@/utils/mobx'
+import Single from './single'
+import MultipleSingle from './multipleSingle'
+import Four from './four'
+import Nine from './nine'
 
 const IconMap = new Map()
 IconMap.set('one', 'jack-dsp_1')
@@ -15,21 +18,12 @@ IconMap.set('nine', 'jack-jgg_11')
 IconMap.set('nineActive', 'jack-jgg_2')
 IconMap.set('full', 'jack-qp')
 
-const videoDOMMap = new Map()
-videoDOMMap.set('one', 'video-container')
-videoDOMMap.set('four_1', 'video-four_1')
-videoDOMMap.set('four_2', 'video-four_2')
-videoDOMMap.set('four_3', 'video-four_3')
-videoDOMMap.set('four_4', 'video-four_4')
-videoDOMMap.set('nine_1', 'video-nine_1')
-videoDOMMap.set('nine_2', 'video-nine_2')
-videoDOMMap.set('nine_3', 'video-nine_3')
-videoDOMMap.set('nine_4', 'video-nine_4')
-videoDOMMap.set('nine_5', 'video-nine_5')
-videoDOMMap.set('nine_6', 'video-nine_6')
-videoDOMMap.set('nine_7', 'video-nine_7')
-videoDOMMap.set('nine_8', 'video-nine_8')
-videoDOMMap.set('nine_9', 'video-nine_9')
+// 播放失败
+export const FAIL_VIDEO =
+  'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/bfsb.png'
+// 未添加设备
+export const UN_ADD =
+  'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/wtjsb.png'
 
 const configs = [
   { field: 'one', activeField: 'oneActive', value: 1 },
@@ -37,185 +31,60 @@ const configs = [
   { field: 'nine', activeField: 'nineActive', value: 9 }
 ]
 
-const arr1 = [
-  { label: '车间组一号', key: 'four_1' },
-  { label: '车间组二号', key: 'four_2' },
-  { label: '车间组三号', key: 'four_3' },
-  { label: '车间组四号', key: 'four_4' }
-]
+const tagNameMap = new Map()
+tagNameMap.set(0, '单个视频')
+tagNameMap.set(1, '多个视频')
+tagNameMap.set(2, '单页视频')
+tagNameMap.set(3, '多页视频')
 
-const arr2 = [
-  { label: '车间组一号', key: 'nine_1' },
-  { label: '车间组二号', key: 'nine_2' },
-  { label: '车间组三号', key: 'nine_3' },
-  { label: '车间组四号', key: 'nine_4' },
-  { label: '车间组五号', key: 'nine_5' },
-  { label: '车间组六号', key: 'nine_6' },
-  { label: '车间组七号', key: 'nine_7' },
-  { label: '车间组八号', key: 'nine_8' },
-  { label: '车间组九号', key: 'nine_9' }
-]
+const tagIconMap = new Map()
+tagIconMap.set(0, 'jack-dgsp_1')
+tagIconMap.set(1, 'jack-dgsp')
+tagIconMap.set(2, 'jack-dysp')
+tagIconMap.set(3, 'jack-dysp_1')
 
 const VideoCenter = () => {
   const history = useHistory()
+  const routerParams: { platformOrderId: string; supplierId: string } =
+    useParams()
+  const { platformOrderId, supplierId } = routerParams
+  const { orderStore } = useStores()
+  const { getVideos } = orderStore
 
-  const videoFourRef = useRef<HTMLDivElement>()
-  const videoNineRef = useRef<HTMLDivElement>()
-  const errorVideoRef = useRef<any>([])
-  const videoPlayersRef = useRef<any>([])
-  const videoPlayerRef = useRef<any>(null)
-  const dataSourceRef = useRef<any>([])
-
-  const [videoType, setVideoType] = useState<'multiple' | 'single'>('multiple')
+  const [videoType, setVideoType] = useState<'multiple' | 'single' | undefined>(
+    undefined
+  )
   const [pageSize, setPagesize] = useState<1 | 4 | 9>(1)
-  const [videoPlayer, setVideoPlayer] = useState(null)
-  const [videoPlayers, setVideoPlayers] = useState([])
-  const [videoIndex, setVideoIndex] = useState<number>(0)
-  const [dataSource, setDatasource] = useState<any[]>([])
+  const [tag, setTag] = useState<number>(0)
 
-  const [_errorList, setErrorList] = useState<any[]>([])
-
-  const changePageSize = async size => {
-    if (size === pageSize) return
-    let res
-
-    if (videoPlayersRef.current && pageSize === 1) {
-      res = [await videoPlayer.stop()]
-    }
-    if (Array.isArray(videoPlayersRef.current) && [4, 9].includes(pageSize)) {
-      const arr = []
-      videoPlayersRef.current.forEach(async (item, idx) => {
-        !errorVideoRef.current.includes(idx) && arr.push(item.stop())
+  useEffect(() => {
+    // 初始化请求数据 判断数据量显示单个或者多个
+    ;(async () => {
+      const res = await getVideos({
+        supplierId,
+        platformOrderId,
+        pageNum: 1,
+        pageSize: pageSize === 1 ? 99 : pageSize
       })
+      if (res) {
+        const { total } = res
+        // setVideoType('single')
+        setVideoType(total <= 1 ? 'single' : 'multiple')
+      }
+    })()
+  }, [])
 
-      res = await Promise.all(arr)
-    }
-
-    const flag = Array.isArray(res) && res.every(item => item.type === 'stop')
-    setTimeout(() => {
-      flag && setPagesize(size)
-
-      videoPlayersRef.current = []
-      videoPlayerRef.current = null
-      setVideoPlayers(videoPlayersRef.current)
-      setVideoPlayer(videoPlayerRef.current)
-    })
+  const pageReset = async size => {
+    setPagesize(size)
   }
-
+  // 返回上页
   const back = () => {
     history.goBack()
   }
 
-  const changeVideoIndex = async (index, _data) => {
-    setVideoIndex(index)
-    await videoPlayer.stop()
-    setTimeout(() => {
-      videoPlayer.play({
-        url: 'ezopen://NWPREI@open.ys7.com/G41979864/1.hd.live'
-      })
-    }, 1000)
+  const changeTag = num => {
+    setTag(num)
   }
-
-  useEffect(() => {
-    // multiple single
-    setVideoType('single')
-  }, [])
-
-  useLayoutEffect(() => {
-    let data
-    // TODO 切换4 9 时 target的子节点未变
-    if (pageSize === 9) {
-      data = arr2
-      dataSourceRef.current = data
-      setDatasource(data)
-    }
-    if (pageSize === 4) {
-      data = arr1
-      dataSourceRef.current = data
-      setDatasource(data)
-    }
-  }, [pageSize])
-
-  useLayoutEffect(() => {
-    let data = []
-    let childrenLength
-    let target
-    // TODO 切换4 9 时 target的子节点未变
-    // console.log(pageSize, 'pageSizepageSizepageSizepageSizepageSizepageSize')
-    if (pageSize === 9) {
-      data = arr2
-      childrenLength = videoNineRef.current.children.length
-      target = videoNineRef.current
-      dataSourceRef.current = data
-      setDatasource(data)
-    }
-    if (pageSize === 4) {
-      data = arr1
-      childrenLength = videoFourRef.current.children.length
-      target = videoFourRef.current
-      dataSourceRef.current = data
-      setDatasource(data)
-    }
-
-    if (
-      [4, 9].includes(pageSize) &&
-      !videoPlayersRef.current.length &&
-      target &&
-      childrenLength &&
-      Array.isArray(data)
-    ) {
-      const arr = []
-
-      data.forEach((item, idx) => {
-        console.log(item.key, 'item.key')
-
-        const player = new EZUIKit.EZUIKitPlayer({
-          id: videoDOMMap.get(item.key), // 视频容器ID
-          accessToken:
-            'at.20cwgt303mknqhhp209nlx7w46lfzd1s-1sdszo9p8e-1tqxarc-ji9a8joac',
-          url: 'ezopen://NWPREI@open.ys7.com/G41979864/1.hd.live',
-          width: pageSize === 4 ? 556 : 362,
-          height: pageSize === 4 ? 417 - 48 : 272 - 48,
-          templete: 'voice',
-          footer: ['broadcast', 'hd', 'fullScreen'],
-          // header: ['capturePicture', 'save', 'zoom'],
-          // footer: ['talk', 'broadcast', 'hd', 'fullScreen'],
-          // plugin: ['talk'],
-          handleError: () => {
-            errorVideoRef.current.push({ idx })
-            setErrorList(errorVideoRef.current)
-            player.stop()
-          }
-        })
-        arr.push(player)
-      })
-      videoPlayersRef.current = arr
-      setVideoPlayers(videoPlayersRef.current)
-    }
-  }, [pageSize, videoFourRef.current, videoNineRef.current])
-
-  useEffect(() => {
-    if (
-      !videoPlayerRef.current &&
-      (videoType === 'single' || (videoType === 'multiple' && pageSize === 1))
-    ) {
-      const player = new EZUIKit.EZUIKitPlayer({
-        id: 'video-container', // 视频容器ID
-        accessToken:
-          'at.20cwgt303mknqhhp209nlx7w46lfzd1s-1sdszo9p8e-1tqxarc-ji9a8joac',
-        url: 'ezopen://NWPREI@open.ys7.com/G41979864/1.hd.live',
-        width: 860,
-        height: 645 - 48,
-        templete: 'voice',
-        footer: ['broadcast', 'hd', 'fullScreen']
-        // header: ['capturePicture', 'save', 'zoom'],
-        // footer: ['talk', 'broadcast', 'hd', 'fullScreen'],
-        // plugin: ['talk']
-      })
-      videoPlayerRef.current = player
-      setVideoPlayer(videoPlayerRef.current)
-    }
-  }, [videoType, pageSize, videoPlayer])
 
   return (
     <div className={styles.container}>
@@ -229,17 +98,10 @@ const VideoCenter = () => {
           视频中心
         </div>
         <div className={styles.headerRight}>
-          {videoType === 'single' ? (
-            <Button>单个视频</Button>
-          ) : (
-            <Button>多个视频</Button>
-          )}
-          {/* 单个视频 单个显示 */}
-          {videoType === 'single' ? (
-            <div className={styles.videoBoxOne}>
-              <div id="video-container" className={styles.videoSingle}></div>
-            </div>
-          ) : null}
+          <div className={styles.tagBox}>
+            <Icon type={tagIconMap.get(tag)} className={styles.tagIcon}></Icon>
+            {tagNameMap.get(tag)}
+          </div>
           {/* 多个视频 显示模式*/}
           {videoType !== 'single' ? (
             <div className={styles.icons}>
@@ -251,7 +113,7 @@ const VideoCenter = () => {
                       ? IconMap.get(item.activeField)
                       : IconMap.get(item.field)
                   }
-                  onClick={() => changePageSize(item.value)}
+                  onClick={() => pageReset(item.value)}
                   className={styles.headerIcon}
                 ></Icon>
               ))}
@@ -259,63 +121,17 @@ const VideoCenter = () => {
           ) : null}
         </div>
       </div>
+      {/* 单个视频 单个显示 */}
+      {videoType === 'single' ? <Single callback={changeTag}></Single> : null}
       {/* 多个视频 单个显示 */}
       {videoType === 'multiple' && pageSize === 1 ? (
-        <div className={styles.videoBoxOne}>
-          <div id="video-container" className={styles.videoSingle}></div>
-          <div className={styles.videoList}>
-            {arr1.map((item, idx) => {
-              return (
-                <div
-                  key={idx}
-                  className={classNames(
-                    styles.videoListItem,
-                    videoIndex === idx ? styles.activeVideoItem : ''
-                  )}
-                  onClick={() => changeVideoIndex(idx, item)}
-                >
-                  <Icon
-                    type={'jack-video'}
-                    className={
-                      videoIndex === idx
-                        ? styles.activeVideoIcon
-                        : styles.videoIcon
-                    }
-                  ></Icon>
-                  <span>{item.label}</span>
-                </div>
-              )
-            })}
-          </div>
-        </div>
+        <MultipleSingle callback={changeTag}></MultipleSingle>
       ) : null}
-      {/* 多个视频 4个显示 */}
       {videoType === 'multiple' && pageSize === 4 ? (
-        <div className={styles.videoBoxFour} ref={videoFourRef}>
-          {dataSourceRef.current.map((_item, idx) => {
-            return (
-              <div
-                id={`video-four_${idx + 1}`}
-                key={idx}
-                className={styles.videoFourItem}
-              ></div>
-            )
-          })}
-        </div>
+        <Four callback={changeTag}></Four>
       ) : null}
-      {/* 多个视频 9个显示 */}
       {videoType === 'multiple' && pageSize === 9 ? (
-        <div className={styles.videoBoxNine} ref={videoNineRef}>
-          {dataSourceRef.current.map((_item, idx) => {
-            return (
-              <div
-                id={`video-nine_${idx + 1}`}
-                key={idx}
-                className={styles.videoNineItem}
-              ></div>
-            )
-          })}
-        </div>
+        <Nine callback={changeTag}></Nine>
       ) : null}
     </div>
   )

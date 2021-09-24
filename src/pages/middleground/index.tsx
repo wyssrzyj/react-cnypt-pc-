@@ -15,7 +15,7 @@ const ProductPage = React.lazy(() => import('./productPage'))
 const StateTracking = React.lazy(() => import('./stateTracking'))
 const BindProduce = React.lazy(() => import('./bindProduce'))
 const ControlPanel = React.lazy(() => import('./controlPanel'))
-const VideoCenter = React.lazy(() => import('./videoCenter/index2'))
+const VideoCenter = React.lazy(() => import('./videoCenter'))
 
 const LOGO =
   'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
@@ -84,7 +84,8 @@ const EnterpriseHome = () => {
                     '/control-panel/order',
                     '/control-panel/product',
                     '/control-panel/state',
-                    '/control-panel/bind-produce'
+                    '/control-panel/bind-produce',
+                    '/control-panel/video-center'
                   ].some(item => location.pathname.includes(item))
                     ? styles.activeNavItem
                     : ''
@@ -106,7 +107,8 @@ const EnterpriseHome = () => {
                     '/control-panel/product',
                     '/control-panel/receive-manage',
                     '/control-panel/state',
-                    '/control-panel/bind-produce'
+                    '/control-panel/bind-produce',
+                    '/control-panel/video-center'
                   ].some(item => location.pathname.includes(item))
                     ? styles.activeNavItem
                     : ''

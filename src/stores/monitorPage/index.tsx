@@ -87,6 +87,7 @@ export default class MonitorPage {
       console.log(e)
     }
   }
+
   // 绑定优产账号
   @action productAccount = async params => {
     try {
@@ -132,6 +133,25 @@ export default class MonitorPage {
       const res: ResponseProps = await axios.post(
         `/api/admin/manage/dict-item/list/dict-code`,
         params
+      )
+
+      if (res.code === 200) {
+        message.success(res.msg)
+      }
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 获取设备品牌
+  @action obtainEquipmentBrand = async () => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/factory/uchat-dept-info`
       )
 
       if (res.code === 200) {

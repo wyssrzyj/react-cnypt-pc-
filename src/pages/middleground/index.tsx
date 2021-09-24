@@ -127,7 +127,7 @@ const EnterpriseHome = () => {
               )}
               onClick={() => toTarget('control')}
             >
-              设置
+              会员中心
             </div>
           </div>
         </div>

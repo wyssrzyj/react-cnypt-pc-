@@ -1,5 +1,6 @@
 import React, { useState, useEffect, memo } from 'react'
 import { useStores } from '@/utils/mobx'
+import { isEmpty, isArray } from 'lodash'
 
 import { Icon } from '@/components'
 import styles from './index.module.less'
@@ -7,6 +8,7 @@ import { Divider, Form, Input, Button, Table, Space, message } from 'antd'
 import DeletePopup from './components/deletePopup'
 import BindingSuperiorProduct from './components/bindingSuperiorProduct'
 import AddDevicePopUpd from './components/addDevicePopUpd'
+import Ceshi from './components/ceshi'
 const rowKey = 'id'
 // const { TreeNode } = TreeSelect
 
@@ -32,7 +34,8 @@ const MonitorPage = memo(() => {
     connectingEquipment,
     bindSuperiorProductAccount,
     productAccount,
-    singleSearch
+    singleSearch,
+    obtainEquipmentBrand
   } = monitorPageStore
   const { allDictionary } = commonStore
 
@@ -57,11 +60,12 @@ const MonitorPage = memo(() => {
   const [numberofequipment, setNumberofequipment] = useState(false) //
   const [equipmentDepartmentValue, setEquipmentDepartmentValue] = useState()
   const [errorStatus, setErrorstatus] = useState('')
+  const [departmentPop, setDepartmentPop] = useState(false) //选择部门弹窗
+
   const [beforeModification, setBeforeModification] = useState({
     serialNumber: '0',
     verificationCode: '0'
   }) //存放修改前的input数据
-
   const getFactoryInfo = async () => {
     const response = await getDataList({
       name: equipmentName,
@@ -154,6 +158,8 @@ const MonitorPage = memo(() => {
       title: '所属部门',
       align: 'center',
       key: 'orgNameList',
+      width: 180,
+
       dataIndex: 'orgNameList',
       render: value => {
         return value.join('、')
@@ -223,11 +229,39 @@ const MonitorPage = memo(() => {
     setButtonIsAvailable(true)
     setIsModalVisible(false)
   }
-
   // 设备form
   const onFinish = async (v: any) => {
-    //  判断是测试还是提交
+    const findTarget = (val, data) => {
+      for (let i = 0; i < data.length; i++) {
+        const item = data[i]
+        console.log(item)
+        if (item.id === val) {
+          //当传过来的id和当前id一样返回
+          return item
+        }
+        if (isArray(item.children) && item.children.length) {
+          const res = findTarget(val, item.children) //
+          if (!isEmpty(res)) {
+            return res
+          }
+        }
+      }
+    }
+    const getValues = data => {
+      const target = [] //空数组
+      if (!isEmpty(data)) {
+        target.push(data.id) //数据的id传递给数组
+        if (isArray(data.children)) {
+          data.children.forEach(item => {
+            target.push(...getValues(item))
+          })
+        }
+      }
+      return target
+    }
+
     if (connection) {
+      //  判断是测试还是提交
       const { serialNumber, verificationCode } = v
       const ConnectingEquipment = await connectingEquipment({
         serialNumber,
@@ -235,12 +269,12 @@ const MonitorPage = memo(() => {
       })
       console.log(ConnectingEquipment.data)
 
-      if (ConnectingEquipment.data == 20014) {
+      if (+ConnectingEquipment.data === 20014) {
         setErrorstatus('您所提交的信息有误，请确认序列号或验证码!!!')
       } else {
         setErrorstatus(ConnectingEquipment.msg)
       }
-      if (ConnectingEquipment.data == '200') {
+      if (+ConnectingEquipment.data === 200) {
         // 测试弹窗
         setJudgment(true)
         setConnectionStatus(1)
@@ -254,6 +288,12 @@ const MonitorPage = memo(() => {
     } else {
       // 判断是修改还是新增
       if (modify != null) {
+        console.log('这是修改')
+        if (+v.orgIdList.length === 1) {
+          const a = findTarget(v.orgIdList.toString(), department)
+          const val = getValues(a)
+          v.orgIdList = val
+        }
         const newlywed = await newDataList({
           ...v,
           status: connectionStatus,
@@ -267,6 +307,12 @@ const MonitorPage = memo(() => {
           setButtonIsAvailable(false)
         }
       } else {
+        console.log('这是新增')
+        if (+v.orgIdList.length === 1) {
+          const a = findTarget(v.orgIdList.toString(), department)
+          const val = getValues(a)
+          v.orgIdList = val
+        }
         setModify(null)
         const newlywed = await newDataList({ ...v, status: connectionStatus })
         if (newlywed.code == 200) {
@@ -319,12 +365,22 @@ const MonitorPage = memo(() => {
   const accountShowModal = async () => {
     form.resetFields()
     const account = await bindSuperiorProductAccount()
+
     // 优产绑定 因为当前账号已经绑定了  用于测试
     if (account.data !== true) {
       setaceousModalVisible(true)
     } else {
-      message.success('已经绑定')
+      // message.success('已经绑定')
+      setDepartmentPop(true)
+      const productionDep = await obtainEquipmentBrand()
+      console.log(productionDep)
     }
+  }
+  const DepartmentPopOk = () => {
+    setDepartmentPop(false)
+  }
+  const DepartmentPopCancel = () => {
+    setDepartmentPop(false)
   }
   //优产账号form
   const onFinishProduction = async (values: any) => {
@@ -334,6 +390,7 @@ const MonitorPage = memo(() => {
     }
   }
   const onChange = value => {
+    console.log('🚀 ~ file: index.tsx ~ line 347 ~ MonitorPage ~ value', value)
     setEquipmentDepartmentValue(value)
   }
 
@@ -347,14 +404,14 @@ const MonitorPage = memo(() => {
       <div className={styles.header}>
         <div className={styles.equipment}>
           <span className={styles.keynote}>设备关键名字</span>
-          <span>
+          <span className={styles.pmentkeynote}>
             <Search
               className={styles.inputsearch}
               maxLength={5}
               placeholder="请输入设备名字"
               allowClear
               enterButton="查询"
-              size="large"
+              size="middle"
               onSearch={onSearch}
             />
           </span>
@@ -390,6 +447,7 @@ const MonitorPage = memo(() => {
           <h3 className={styles.totalEquipment}>设备数量共: {total} 件</h3>
         )}
       </div>
+      <Ceshi />
 
       {/* 新增设备弹窗 */}
       <AddDevicePopUpd
@@ -415,12 +473,16 @@ const MonitorPage = memo(() => {
       />
       {/* 绑定优产账号弹窗 */}
       <BindingSuperiorProduct
+        departmentPop={departmentPop}
         visible={accountModalVisible}
+        DepartmentPopCancel={DepartmentPopCancel}
+        DepartmentPopOk={DepartmentPopOk}
         onFinish={onFinishProduction}
         onCancel={() => {
           setaceousModalVisible(false)
         }}
       />
+
       {/* 删除设备 */}
       <DeletePopup
         deleteDeviceCancel={deleteDeviceCancel}

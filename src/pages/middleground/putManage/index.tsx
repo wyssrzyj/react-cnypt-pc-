@@ -9,6 +9,7 @@ import { cloneDeep } from 'lodash'
 import ListHeader from '../components/listHeader'
 import ListCard from '../components/listCard'
 import { useStores, observer } from '@/utils/mobx'
+import { isEmpty } from 'lodash'
 
 const { TabPane } = Tabs
 export const ORDER_EMPTY =
@@ -96,6 +97,7 @@ const PutManage = () => {
   const [allChecked, setAllChecked] = useState<boolean>(false)
   const [delBtnDisabled, setDelBtnDisabled] = useState<boolean>(false)
   const [total, setTotal] = useState<number>(0)
+  const [loading, setLoading] = useState<boolean>(false)
 
   // 获取产品类别
   useEffect(() => {
@@ -144,23 +146,31 @@ const PutManage = () => {
   }, [search, activeKey])
 
   const getData = async () => {
-    // 查询条件变更 发送请求
-    const res = await getOrders(params)
-    if (res) {
-      const { records = [], total } = res
-      records.forEach(record => {
-        record.type = 'put'
-        record.checked = false
-      })
-      setTotal(total)
-      setDataSource(records)
+    setLoading(true)
+
+    try {
+      // 查询条件变更 发送请求
+      const res = await getOrders(params)
+      if (res) {
+        const { records = [], total } = res
+        records.forEach(record => {
+          record.type = 'put'
+          record.checked = false
+        })
+        setTotal(total)
+        setDataSource(records)
+      }
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
     }
   }
 
   useEffect(() => {
-    setTimeout(async () => {
+    ;(async () => {
       await getData()
-    })
+    })()
   }, [params])
 
   useEffect(() => {
@@ -257,27 +267,28 @@ const PutManage = () => {
         ></ListHeader>
         {/* 加工厂 退回 已完成 列表显示全选 */}
         <div>
-          {Array.isArray(dataSource) && dataSource.length > 0 ? (
-            dataSource.map((card, idx) => {
-              return (
-                <ListCard
-                  type={'put'}
-                  searchBar={searchRef.current}
-                  getData={getData}
-                  showCheck={DEL_CHECK_KEYS.includes(activeKey)}
-                  data={card}
-                  key={idx}
-                  curKey={activeKey}
-                  callback={event => dataChoose(event.target.checked, idx)}
-                ></ListCard>
-              )
-            })
-          ) : (
+          {Array.isArray(dataSource) && dataSource.length > 0
+            ? dataSource.map((card, idx) => {
+                return (
+                  <ListCard
+                    type={'put'}
+                    searchBar={searchRef.current}
+                    getData={getData}
+                    showCheck={DEL_CHECK_KEYS.includes(activeKey)}
+                    data={card}
+                    key={idx}
+                    curKey={activeKey}
+                    callback={event => dataChoose(event.target.checked, idx)}
+                  ></ListCard>
+                )
+              })
+            : null}
+          {isEmpty(dataSource) && !loading ? (
             <div className={styles.emptyBox}>
               <img src={ORDER_EMPTY} alt="" className={styles.orderEmpty} />
               <div className={styles.emptyText}>您还没有订单哦~</div>
             </div>
-          )}
+          ) : null}
           {DEL_CHECK_KEYS.includes(activeKey) &&
           Array.isArray(dataSource) &&
           dataSource.length > 0 ? (

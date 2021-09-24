@@ -11,7 +11,6 @@ import {
   // message
 } from 'antd'
 const { Option } = Select
-const { TreeNode } = TreeSelect
 const { SHOW_PARENT } = TreeSelect
 
 const AddDevicePopUpd = props => {

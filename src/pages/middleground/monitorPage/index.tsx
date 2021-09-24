@@ -4,7 +4,7 @@ import { isEmpty, isArray } from 'lodash'
 
 import { Icon } from '@/components'
 import styles from './index.module.less'
-import { Divider, Form, Input, Button, Table, Space, message } from 'antd'
+import { Divider, Form, Input, Button, Table, Space } from 'antd'
 import DeletePopup from './components/deletePopup'
 import BindingSuperiorProduct from './components/bindingSuperiorProduct'
 import AddDevicePopUpd from './components/addDevicePopUpd'

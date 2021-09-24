@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './index.module.less'
 import { useParams } from 'react-router'
-import { useStores } from '@/utils/mobx'
 import EZUIKit from 'ezuikit-js'
 import { isEmpty } from 'lodash'
 import { Icon } from '@/components'
@@ -12,12 +11,17 @@ interface RouteParams {
   supplierId: string
 }
 
+interface SearchParams {
+  platformOrderId: string
+  supplierId: string
+  pageNum: number
+  pageSize: number
+}
+
 const Single = props => {
-  const { callback } = props
+  const { callback, getData } = props
   const routerParams: RouteParams = useParams()
   const { platformOrderId, supplierId } = routerParams
-  const { orderStore } = useStores()
-  const { getVideos } = orderStore
 
   const videoPlayerRef = useRef<any>(null)
   const [targetData, setTargetData] = useState<any>({})
@@ -27,12 +31,17 @@ const Single = props => {
 
   useEffect(() => {
     ;(async () => {
-      const data = await getVideos({
-        platformOrderId,
-        supplierId,
+      const params: Partial<SearchParams> = {
         pageSize: 9999,
         pageNum: 1
-      })
+      }
+      if (platformOrderId) {
+        params.platformOrderId = platformOrderId
+      }
+      if (supplierId) {
+        params.supplierId = supplierId
+      }
+      const data = await getData(params)
       if (data) {
         const { records } = data
         const target = records[records.length - 1] || {}
@@ -48,8 +57,8 @@ const Single = props => {
       id: 'video-container-single', // 视频容器ID
       accessToken: targetData.accessToken,
       url: targetData.playAddress,
-      width: 1136,
-      height: 852,
+      width: platformOrderId ? 1136 : 834,
+      height: platformOrderId ? 852 : 625,
       templete: 'voice',
       footer: ['hd', 'fullScreen'],
       handleSuccess: () => {

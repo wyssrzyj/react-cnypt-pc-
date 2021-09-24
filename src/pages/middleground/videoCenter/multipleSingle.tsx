@@ -3,7 +3,6 @@ import styles from './index.module.less'
 import classNames from 'classnames'
 import { Icon } from '@/components'
 import { useParams } from 'react-router'
-import { useStores } from '@/utils/mobx'
 import EZUIKit from 'ezuikit-js'
 import { isEmpty } from 'lodash'
 import { FAIL_VIDEO, UN_ADD } from './index'
@@ -13,15 +12,19 @@ interface RouteParams {
   supplierId: string
 }
 
+interface SearchParams {
+  platformOrderId: string
+  supplierId: string
+  pageNum: number
+  pageSize: number
+}
+
 const MultipleSingle = props => {
-  const { callback } = props
-  const videoPlayerRef = useRef<any>(null)
+  const { callback, getData } = props
   const videoBoxRef = useRef<HTMLDivElement>(null)
 
   const routerParams: RouteParams = useParams()
   const { platformOrderId, supplierId } = routerParams
-  const { orderStore } = useStores()
-  const { getVideos } = orderStore
 
   const [videoIndex, setVideoIndex] = useState<number>(0)
   const [dataSource, setDatasource] = useState<any[]>([])
@@ -30,12 +33,17 @@ const MultipleSingle = props => {
 
   useEffect(() => {
     ;(async () => {
-      const data = await getVideos({
-        platformOrderId,
-        supplierId,
+      const params: Partial<SearchParams> = {
         pageSize: 9999,
         pageNum: 1
-      })
+      }
+      if (platformOrderId) {
+        params.platformOrderId = platformOrderId
+      }
+      if (supplierId) {
+        params.supplierId = supplierId
+      }
+      const data = await getData(params)
       if (data) {
         const { records } = data
         callback && callback(1)
@@ -55,8 +63,8 @@ const MultipleSingle = props => {
       id: 'video-container-multiple', // 视频容器ID
       accessToken: target.accessToken,
       url: target.playAddress,
-      width: 860,
-      height: 645,
+      width: platformOrderId ? 860 : 540,
+      height: platformOrderId ? 645 : 405,
       templete: 'voice',
       footer: ['hd', 'fullScreen'],
       handleSuccess: () => {
@@ -65,6 +73,7 @@ const MultipleSingle = props => {
         }, 500)
       },
       handleError: () => {
+        console.log(555555555555555555555)
         setError(true)
         player.stop()
       }
@@ -73,8 +82,6 @@ const MultipleSingle = props => {
 
   useEffect(() => {
     return () => {
-      videoPlayerRef.current && videoPlayerRef.current.stop()
-      videoPlayerRef.current = null
       setDatasource([])
     }
   }, [])
@@ -101,7 +108,9 @@ const MultipleSingle = props => {
           ref={videoBoxRef}
         ></div>
         <div className={!success ? styles.maskSingle : ''}>
-          {dataSource.length && dataSource[videoIndex].playAddress && !success && (
+          {dataSource.length &&
+          dataSource[videoIndex].playAddress &&
+          !success ? (
             <>
               <Icon
                 type={'jack-LoadingIndicator'}
@@ -109,19 +118,19 @@ const MultipleSingle = props => {
               ></Icon>
               <div>视频加载中，请稍等 ~</div>
             </>
-          )}
-          {dataSource.length && !dataSource[videoIndex].playAddress && (
+          ) : null}
+          {dataSource.length && !dataSource[videoIndex].playAddress ? (
             <>
               <img src={FAIL_VIDEO} alt="" className={styles.emptyImg9} />
               <div>视频播放失败，请检测网络或设备 ~</div>
             </>
-          )}
-          {dataSource.length && !dataSource[videoIndex].id && (
+          ) : null}
+          {dataSource.length && !dataSource[videoIndex].id ? (
             <>
               <img src={UN_ADD} alt="" className={styles.emptyImg9} />
               <div>还未添加设备~</div>
             </>
-          )}
+          ) : null}
         </div>
       </div>
       <div className={styles.videoList}>

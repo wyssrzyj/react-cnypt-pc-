@@ -26,6 +26,10 @@
   }
 }
 
+.container2 {
+  margin-top: 0px;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -65,10 +69,6 @@
 .headerRight {
   display: flex;
   align-items: center;
-}
-
-.video {
-  // height: 852px;
 }
 
 .videoBoxOne {
@@ -131,11 +131,11 @@
 }
 
 .videoOutBoxFour {
-  min-height: 882px;
+  // min-height: 882px;
 }
 
 .videoOutBoxNine {
-  min-height: 864px;
+  // min-height: 864px;
 }
 
 .videoBoxNine {
@@ -203,7 +203,7 @@
 
 .videoSingleBox {
   position: relative;
-  min-height: 693px;
+  // min-height: 693px;
 }
 
 .maskSingle {
@@ -284,4 +284,59 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+
+.videoContent {
+  min-height: 400px;
+  background: #FFF;
+
+  .videoList, .maskSingle, .videoSingleBox {
+    height: 405px;
+    // min-height: 405px;
+  }
+
+  .mask, .videoFourItemBox {
+    height: 297px;
+  }
+
+  .videoNineItemBox, .mask9 {
+    height: 192px;
+  }
+
+  .videoOutBoxFour, .videoBoxNine, .videoOutBoxFour, videoOutBoxNine {
+    min-height: none !important;
+  }
+
+  .videoSingle1 {
+    width: 834px;
+    height: 625px;
+  }
+
+  .videoSingle {
+    width: 540px;
+  }
+
+  .videoFourItemBox {
+    margin-bottom: 20px;
+    width: 396px;
+    position: relative;
+  }
+
+  .videoFourItem {
+    width: 396px;
+    margin-bottom: 24px;
+  }
+
+  .videoNineItemBox {
+    margin-bottom: 20px;
+    width: 256px;
+    position: relative;
+  }
+
+  .videoNineItem {
+    width: 256px;
+    margin-bottom: 24px;
+  }
+
 }

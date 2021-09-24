@@ -18,23 +18,27 @@ const workbenchData = [
     children: [
       {
         title: '待确认',
-        url: '/control-panel/home'
+        url: '/control-panel/receive-manage?key=confirm&pageNum=1&pageSize=10'
       },
       {
         title: '进行中',
-        url: '/control-panel/panel/enterprise'
+        url: '/control-panel/receive-manage?key=doing&pageNum=1&pageSize=10'
       },
       {
         title: '待验收',
-        url: '/control-panel/panel/certificate'
+        url: '/control-panel/receive-manage?key=checked&pageNum=1&pageSize=10'
+      },
+      {
+        title: '已完成',
+        url: '/control-panel/receive-manage?key=complete&pageNum=1&pageSize=10'
       },
       {
         title: '退回',
-        url: '/control-panel/panel/enterprise'
+        url: '/control-panel/receive-manage?key=return&pageNum=1&pageSize=10'
       },
       {
         title: '取消',
-        url: '/control-panel/panel/enterprise'
+        url: '/control-panel/receive-manage?key=cancel&pageNum=1&pageSize=10'
       }
     ]
   },
@@ -43,24 +47,29 @@ const workbenchData = [
     children: [
       {
         title: '待确认',
-        url: '/control-panel/home'
+        url: '/control-panel/receive-manage?key=confirm&pageNum=1&pageSize=10'
       },
       {
         title: '进行中',
-        url: '/control-panel/panel/enterprise'
+        url: '/control-panel/receive-manage?key=doing&pageNum=1&pageSize=10'
       },
       {
         title: '待验收',
-        url: '/control-panel/panel/certificate'
+        url: '/control-panel/receive-manage?key=checked&pageNum=1&pageSize=10'
+      },
+      {
+        title: '已完成',
+        url: '/control-panel/receive-manage?key=complete&pageNum=1&pageSize=10'
       },
       {
         title: '退回',
-        url: '/control-panel/panel/enterprise'
+        url: '/control-panel/receive-manage?key=return&pageNum=1&pageSize=10'
       },
       {
         title: '取消',
-        url: '/control-panel/panel/enterprise'
+        url: '/control-panel/receive-manage?key=cancel&pageNum=1&pageSize=10'
       },
+
       {
         title: '草稿',
         url: '/control-panel/panel/enterprise'
@@ -117,6 +126,24 @@ const memberCenter = [
         url: '/control-panel/panel/photograph'
       }
     ]
+  },
+  {
+    title: '监控中心',
+    children: [
+      {
+        title: '监控列表',
+        url: '/control-panel/panel/monitorPage'
+      },
+
+      {
+        title: '待添加',
+        url: '/control-panel/panel/monitorPage'
+      },
+      {
+        title: '待添加',
+        url: '/control-panel/panel/monitorPage'
+      }
+    ]
   }
 ] //会员中心
 
@@ -124,6 +151,7 @@ const Header = () => {
   const currentUser = getCurrentUser() || {}
   const userInfo = getUserInfo() || {}
   const { loginStore } = useStores()
+
   const { logout } = loginStore
   const { enterpriseType } = userInfo
 
@@ -162,6 +190,15 @@ const Header = () => {
 
   const toAccountSafe = () => {
     history.push('/control-panel/panel/account')
+  }
+  const toAccountRight = () => {
+    if (+enterpriseType) {
+      console.log('真')
+      history.push('/control-panel/put-manage')
+    } else {
+      console.log('假')
+      history.push('/control-panel/receive-manage')
+    }
   }
 
   const logoutToLogin = async () => {
@@ -236,7 +273,7 @@ const Header = () => {
                   if (
                     o.title === '接单管理' &&
                     !isNil(enterpriseType) &&
-                    !+enterpriseType
+                    +enterpriseType
                   ) {
                     return null
                   }
@@ -286,7 +323,7 @@ const Header = () => {
             className={styles.headerLeftest}
             overlay={workbenchDataFilteringMethod}
           >
-            <div className={styles.chunks}>
+            <div className={styles.chunks} onClick={toAccountRight}>
               <span className={styles.consoleBox}>
                 <Icon
                   type={'jack-bussiness-man'}

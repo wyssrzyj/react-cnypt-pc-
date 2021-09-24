@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './index.module.less'
 import { Icon } from '@/components'
-
+import { Select } from 'antd'
 import {
   Form,
   Input,
@@ -10,6 +10,7 @@ import {
   TreeSelect
   // message
 } from 'antd'
+const { Option } = Select
 const { TreeNode } = TreeSelect
 const { SHOW_PARENT } = TreeSelect
 
@@ -107,24 +108,19 @@ const AddDevicePopUpd = props => {
             name="brand"
             rules={[{ required: true, message: `请输入设备品牌` }]}
           >
-            <TreeSelect
-              showSearch
-              style={{ width: '100%' }}
-              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              placeholder="请输入设备品牌"
-              allowClear
-              treeDefaultExpandAll
+            <Select
+              defaultValue="请输入设备品牌"
+              style={{ width: 373 }}
+              // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
             >
-              {equipmentbrand.map(item => {
+              {equipmentbrand.map((item, index) => {
                 return (
-                  <TreeNode
-                    key={item}
-                    value={item.value}
-                    title={item.label}
-                  ></TreeNode>
+                  <Option key={index} value={item.value}>
+                    {item.label}
+                  </Option>
                 )
               })}
-            </TreeSelect>
+            </Select>
           </Form.Item>
 
           <Form.Item
@@ -135,6 +131,7 @@ const AddDevicePopUpd = props => {
             rules={[{ required: true, message: `请输入设备部门` }]}
           >
             <TreeSelect
+              key={department.id}
               onChange={onChange}
               value={numberofequivalue}
               treeCheckable={true}

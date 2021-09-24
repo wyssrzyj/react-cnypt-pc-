@@ -189,15 +189,15 @@ const Header = () => {
   }
 
   const toAccountSafe = () => {
-    history.push('/control-panel/panel/account')
+    // history.push('/control-panel/panel/account')
   }
   const toAccountRight = () => {
     if (+enterpriseType) {
       console.log('真')
-      history.push('/control-panel/put-manage')
+      history.push('/control-panel/home')
     } else {
       console.log('假')
-      history.push('/control-panel/receive-manage')
+      history.push('/control-panel/home')
     }
   }
 

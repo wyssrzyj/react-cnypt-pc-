@@ -1,0 +1,153 @@
+import React, { useRef, useState, useEffect } from 'react'
+import styles from './index.module.less'
+import classNames from 'classnames'
+import { Icon } from '@/components'
+import { useParams } from 'react-router'
+import { useStores } from '@/utils/mobx'
+import EZUIKit from 'ezuikit-js'
+import { isEmpty } from 'lodash'
+import { FAIL_VIDEO, UN_ADD } from './index'
+
+interface RouteParams {
+  platformOrderId: string
+  supplierId: string
+}
+
+const MultipleSingle = props => {
+  const { callback } = props
+  const videoPlayerRef = useRef<any>(null)
+  const videoBoxRef = useRef<HTMLDivElement>(null)
+
+  const routerParams: RouteParams = useParams()
+  const { platformOrderId, supplierId } = routerParams
+  const { orderStore } = useStores()
+  const { getVideos } = orderStore
+
+  const [videoIndex, setVideoIndex] = useState<number>(0)
+  const [dataSource, setDatasource] = useState<any[]>([])
+  const [error, setError] = useState<boolean>(false)
+  const [success, setSuccess] = useState<boolean>(false)
+
+  useEffect(() => {
+    ;(async () => {
+      const data = await getVideos({
+        platformOrderId,
+        supplierId,
+        pageSize: 9999,
+        pageNum: 1
+      })
+      if (data) {
+        const { records } = data
+        callback && callback(1)
+        setDatasource(records)
+      }
+    })()
+  }, [])
+
+  useEffect(() => {
+    if (isEmpty(dataSource)) return
+    setVideo()
+  }, [dataSource, videoIndex])
+
+  const setVideo = () => {
+    const target = dataSource[videoIndex]
+    const player = new EZUIKit.EZUIKitPlayer({
+      id: 'video-container-multiple', // 视频容器ID
+      accessToken: target.accessToken,
+      url: target.playAddress,
+      width: 860,
+      height: 645,
+      templete: 'voice',
+      footer: ['hd', 'fullScreen'],
+      handleSuccess: () => {
+        setTimeout(() => {
+          setSuccess(true)
+        }, 500)
+      },
+      handleError: () => {
+        setError(true)
+        player.stop()
+      }
+    })
+  }
+
+  useEffect(() => {
+    return () => {
+      videoPlayerRef.current && videoPlayerRef.current.stop()
+      videoPlayerRef.current = null
+      setDatasource([])
+    }
+  }, [])
+
+  useEffect(() => {}, [error])
+
+  // 单个视频列表下的视频序号
+  const changeVideoIndex = async index => {
+    setVideoIndex(index)
+    setSuccess(false)
+    setError(false)
+    const child = Array.from(videoBoxRef.current.childNodes)
+    if (!isEmpty(child) && Array.isArray(child)) {
+      child.forEach(item => videoBoxRef.current.removeChild(item))
+    }
+  }
+
+  return (
+    <div className={styles.videoBoxOne}>
+      <div className={styles.videoSingleBox}>
+        <div
+          id="video-container-multiple"
+          className={styles.videoSingle}
+          ref={videoBoxRef}
+        ></div>
+        <div className={!success ? styles.maskSingle : ''}>
+          {dataSource.length && dataSource[videoIndex].playAddress && !success && (
+            <>
+              <Icon
+                type={'jack-LoadingIndicator'}
+                className={styles.loadingIcon}
+              ></Icon>
+              <div>视频加载中，请稍等 ~</div>
+            </>
+          )}
+          {dataSource.length && !dataSource[videoIndex].playAddress && (
+            <>
+              <img src={FAIL_VIDEO} alt="" className={styles.emptyImg9} />
+              <div>视频播放失败，请检测网络或设备 ~</div>
+            </>
+          )}
+          {dataSource.length && !dataSource[videoIndex].id && (
+            <>
+              <img src={UN_ADD} alt="" className={styles.emptyImg9} />
+              <div>还未添加设备~</div>
+            </>
+          )}
+        </div>
+      </div>
+      <div className={styles.videoList}>
+        {dataSource.map((item, idx) => {
+          return (
+            <div
+              key={idx}
+              className={classNames(
+                styles.videoListItem,
+                videoIndex === idx ? styles.activeVideoItem : ''
+              )}
+              onClick={() => changeVideoIndex(idx)}
+            >
+              <Icon
+                type={'jack-video'}
+                className={
+                  videoIndex === idx ? styles.activeVideoIcon : styles.videoIcon
+                }
+              ></Icon>
+              <span>{item.name}</span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export default React.memo(MultipleSingle)

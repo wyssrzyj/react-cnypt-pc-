@@ -83,7 +83,8 @@ const EnterpriseHome = () => {
                     '/control-panel/order',
                     '/control-panel/product',
                     '/control-panel/state',
-                    '/control-panel/bind-produce'
+                    '/control-panel/bind-produce',
+                    '/control-panel/video-center'
                   ].some(item => location.pathname.includes(item))
                     ? styles.activeNavItem
                     : ''
@@ -105,7 +106,8 @@ const EnterpriseHome = () => {
                     '/control-panel/product',
                     '/control-panel/receive-manage',
                     '/control-panel/state',
-                    '/control-panel/bind-produce'
+                    '/control-panel/bind-produce',
+                    '/control-panel/video-center'
                   ].some(item => location.pathname.includes(item))
                     ? styles.activeNavItem
                     : ''
@@ -147,7 +149,7 @@ const EnterpriseHome = () => {
           <Route path="/control-panel/product/:type" component={ProductPage} />
           <Route path="/control-panel/state/:id" component={StateTracking} />
           <Route
-            path="/control-panel/video-center/:id"
+            path="/control-panel/video-center/:platformOrderId/:supplierId"
             component={VideoCenter}
           />
           <Route

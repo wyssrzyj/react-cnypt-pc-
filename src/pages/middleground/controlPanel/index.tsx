@@ -241,22 +241,24 @@ const ControlPanel = () => {
                 </Link>
               </Menu.Item>
             </SubMenu>
-
-            <SubMenu
-              key="sub4"
-              className={styles.subItem}
-              icon={<Icon className={styles.menuIcon} type="jack-video1" />}
-              title="监控中心"
-            >
-              <Menu.Item key="monitorPage">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/monitorPage"
-                >
-                  监控系统
-                </Link>
-              </Menu.Item>
-            </SubMenu>
+            {/* 加单商才能看到  测试修改 */}
+            {+currentUser.enterpriseType !== 1 ? (
+              <SubMenu
+                key="sub4"
+                className={styles.subItem}
+                icon={<Icon className={styles.menuIcon} type="jack-video1" />}
+                title="监控中心"
+              >
+                <Menu.Item key="monitorPage">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/monitorPage"
+                  >
+                    监控系统
+                  </Link>
+                </Menu.Item>
+              </SubMenu>
+            ) : null}
           </Menu>
         </div>
         <div className={styles.controlPanelRight}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 import { Select } from 'antd'
@@ -10,8 +10,10 @@ import {
   TreeSelect
   // message
 } from 'antd'
+
+// setIsModalVisible(true)
+
 const { Option } = Select
-const { TreeNode } = TreeSelect
 const { SHOW_PARENT } = TreeSelect
 
 const AddDevicePopUpd = props => {
@@ -24,6 +26,7 @@ const AddDevicePopUpd = props => {
     onFinish,
     isModalVisible,
     form,
+    codeAvailable,
     equipmentbrand,
     department,
     setConnection,
@@ -34,20 +37,25 @@ const AddDevicePopUpd = props => {
     ConnectionFailedCancel,
     numberofequivalue,
     onChange,
-    errorStatus
+    errorStatus,
+    modify,
+    count,
+    changeCount
   } = props
+  console.log('🚀 ~ file: index.tsx ~ line 40 ~ judgment', judgment)
   const intervalRef = useRef<any>(null)
-
-  const [count, changeCount] = useState(0)
+  // setIsModalVisible(false)
 
   useEffect(() => {
-    if (judgment) {
-      console.log('是成功按钮')
+    clearInterval(intervalRef.current)
+  }, [])
+  useEffect(() => {
+    if (codeAvailable) {
       changeCount(5)
     } else {
       clearInterval(intervalRef.current)
     }
-  }, [judgment])
+  }, [codeAvailable])
 
   useEffect(() => {
     if (count === 5) {
@@ -64,7 +72,7 @@ const AddDevicePopUpd = props => {
     <div>
       {/* 新增设备弹窗 */}
       <Modal
-        title="新增设备"
+        title={modify ? '编辑设备' : '新增设备'}
         okText="提交"
         onCancel={equipmentHandleCancel}
         footer={[
@@ -171,7 +179,8 @@ const AddDevicePopUpd = props => {
             ]}
           >
             <Input
-              value="12345"
+              value="请输入请输入验证码"
+              disabled={codeAvailable}
               onChange={toeplateVerificationCode}
               placeholder={`请输入请输入验证码`}
             />
@@ -206,7 +215,10 @@ const AddDevicePopUpd = props => {
             <Button
               className={styles.bant}
               type="primary"
-              onClick={cancellation}
+              onClick={() => {
+                cancellation()
+                clearInterval(intervalRef.current)
+              }}
             >
               立即返回
             </Button>

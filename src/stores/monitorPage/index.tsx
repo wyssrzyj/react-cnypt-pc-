@@ -147,7 +147,7 @@ export default class MonitorPage {
     }
   }
 
-  // 获取设备品牌
+  // 请选择部门
   @action obtainEquipmentBrand = async () => {
     try {
       const res: ResponseProps = await axios.post(
@@ -155,12 +155,53 @@ export default class MonitorPage {
       )
 
       if (res.code === 200) {
-        message.success(res.msg)
+        // message.success(res.msg)
       }
       if (res.code !== 200) {
         message.error(res.msg)
       }
       return res.data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  // 绑定其他系统部门
+  @action otherSystemDepartments = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        ` /api/factory/factory-camera/bind-other-system-organization`,
+        params
+      )
+
+      if (res.code === 200) {
+        // message.success(res.msg)
+      }
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      if (res.data === true) {
+        message.success('绑定成功')
+      }
+      return res.data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  // 回显绑定的数据
+  @action echoBoundData = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        '/api/factory/factory-camera/list-other-system-organization',
+        params
+      )
+      const { data = {} } = res
+      if (data) {
+        localStorage.setItem('userInfo', JSON.stringify(data))
+      }
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res
     } catch (e) {
       console.log(e)
     }

@@ -4,13 +4,12 @@ import { isEmpty, isArray } from 'lodash'
 
 import { Icon } from '@/components'
 import styles from './index.module.less'
-import { Divider, Form, Input, Button, Table, Space, message } from 'antd'
+import { Divider, Form, Input, Button, Table, Space } from 'antd'
 import DeletePopup from './components/deletePopup'
 import BindingSuperiorProduct from './components/bindingSuperiorProduct'
 import AddDevicePopUpd from './components/addDevicePopUpd'
 import Ceshi from './components/ceshi'
 const rowKey = 'id'
-// const { TreeNode } = TreeSelect
 
 const dealTypeData = (data: any[]) => {
   data.forEach(item => {
@@ -35,7 +34,9 @@ const MonitorPage = memo(() => {
     bindSuperiorProductAccount,
     productAccount,
     singleSearch,
-    obtainEquipmentBrand
+    obtainEquipmentBrand,
+    otherSystemDepartments,
+    echoBoundData
   } = monitorPageStore
   const { allDictionary } = commonStore
 
@@ -56,11 +57,19 @@ const MonitorPage = memo(() => {
   const [pageNum, setPageNum] = useState<number>(1) //当前页数
   const [connectionStatus, setConnectionStatus] = useState<number>(null) //连接状态
   const [modify, setModify] = useState<number>(null) //修改
+  const [count, changeCount] = useState(0) //定时器
+
   const [pageSize, setPageSize] = useState(10) //
   const [numberofequipment, setNumberofequipment] = useState(false) //
   const [equipmentDepartmentValue, setEquipmentDepartmentValue] = useState()
   const [errorStatus, setErrorstatus] = useState('')
   const [departmentPop, setDepartmentPop] = useState(false) //选择部门弹窗
+  const [agreementPop, setAgreementPop] = useState(null)
+  const [codeAvailable, setCodeAvailable] = useState(false)
+  const [production, setProduction] = useState(null)
+
+  const [deselected, setDeselected] = useState([]) //有产使用的数据
+  const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]) //优产绑定key值
 
   const [beforeModification, setBeforeModification] = useState({
     serialNumber: '0',
@@ -75,14 +84,18 @@ const MonitorPage = memo(() => {
     setTotal(response.total) //数据长度
     setList(response.records)
   }
-  const onSearch = value => {
-    setEquipmentName(value)
-    if (value.length == 0) {
+  const onSearchInput = e => {
+    setAgreementPop(e.target.value)
+  }
+  const queryClick = () => {
+    setEquipmentName(agreementPop)
+    if (agreementPop == 0) {
       setNumberofequipment(false)
     } else {
       setNumberofequipment(true)
     }
   }
+
   // 当前页数
   const Paginationclick = (page, pageSize) => {
     setPageSize(pageSize)
@@ -98,6 +111,9 @@ const MonitorPage = memo(() => {
       setModify(null)
     }
   }, [isModalVisible])
+  useEffect(() => {
+    setIsModalVisible(false)
+  }, [])
   // 编辑
   const modificationMethod = async rData => {
     const brand = await allDictionary([])
@@ -114,6 +130,28 @@ const MonitorPage = memo(() => {
 
     if (equipment.code == 200) {
       setDepartment(dealTypeData(equipment.data))
+      let sum = dealTypeData(equipment.data)
+
+      const dataswxaw = (data: any[]) => {
+        data.forEach(item => {
+          item.children.forEach(v => {
+            console.log(v)
+          })
+
+          // if (Array.isArray(item.children) && item.children.length === 0) {
+          //   dataswxaw(item.children)
+          // }
+        })
+        return data
+      }
+
+      console.log(dataswxaw(equipment.data))
+
+      sum.forEach(item => {
+        if (item.children.length == 0) {
+        }
+      })
+
       setIsModalVisible(true)
     }
   }
@@ -194,7 +232,12 @@ const MonitorPage = memo(() => {
           </span>
           <span className={styles.vertical}>|</span>
 
-          <span className={styles.edit} onClick={accountShowModal}>
+          <span
+            className={styles.edit}
+            onClick={() => {
+              accountShowModal(record.id)
+            }}
+          >
             绑定优产部门
           </span>
         </Space>
@@ -203,7 +246,6 @@ const MonitorPage = memo(() => {
   ]
 
   const [form] = Form.useForm()
-  const { Search } = Input
 
   //删除设备
   const DeleteDeviceDisplay = id => {
@@ -221,6 +263,7 @@ const MonitorPage = memo(() => {
   const equipmentHandleOk = () => {
     setJudgment(false)
     setFailed(false)
+    setCodeAvailable(true)
 
     form.submit()
   }
@@ -228,6 +271,8 @@ const MonitorPage = memo(() => {
   const equipmentHandleCancel = () => {
     setButtonIsAvailable(true)
     setIsModalVisible(false)
+    setIsModalVisible(false)
+    setCodeAvailable(false)
   }
   // 设备form
   const onFinish = async (v: any) => {
@@ -274,12 +319,15 @@ const MonitorPage = memo(() => {
       } else {
         setErrorstatus(ConnectingEquipment.msg)
       }
-      if (+ConnectingEquipment.data === 200) {
+      if (+ConnectingEquipment.data !== 200) {
         // 测试弹窗
         setJudgment(true)
+        setIsModalVisible(false)
+        setCodeAvailable(true)
         setConnectionStatus(1)
       } else {
         setFailed(true)
+
         setConnectionStatus(0)
       }
       setConnection(false)
@@ -343,10 +391,12 @@ const MonitorPage = memo(() => {
   //   连接成功的取消
   const cancellation = () => {
     setJudgment(false)
+    setIsModalVisible(true)
   }
   //连接失败的取消
   const ConnectionFailedCancel = () => {
     setFailed(false)
+    setIsModalVisible(true)
   }
 
   // 新增显示
@@ -362,7 +412,11 @@ const MonitorPage = memo(() => {
     }
     form.resetFields()
   }
-  const accountShowModal = async () => {
+
+  const accountShowModal = async id => {
+    console.log(id)
+    setMoved(id)
+
     form.resetFields()
     const account = await bindSuperiorProductAccount()
 
@@ -371,16 +425,77 @@ const MonitorPage = memo(() => {
       setaceousModalVisible(true)
     } else {
       // message.success('已经绑定')
+      setCheckedKeys(null) //清空
       setDepartmentPop(true)
-      const productionDep = await obtainEquipmentBrand()
-      console.log(productionDep)
+
+      const productionDep = await obtainEquipmentBrand() //部门数据
+      console.log(productionDep) //部门数据
+      const boundData = await echoBoundData({ cameraId: id }) //回显绑定的部门
+      console.log(boundData)
+
+      if (boundData.code === 200) {
+        setCheckedKeys(boundData.data)
+        console.log(boundData.data)
+
+        const ceshi = data => {
+          let sum = []
+          if (Array.isArray(data)) {
+            data.forEach(item => {
+              sum.push({ deptId: item.deptId, deptName: item.deptName })
+              if (Array.isArray(item.children)) {
+                item.children.forEach(v => {
+                  sum.push(v)
+                })
+              }
+            })
+            return sum
+          }
+          sum.filter(item => item.deptId !== boundData.data)
+          console.log(sum)
+        }
+        // 回显已经绑定的名字
+        const echoBoundName = boundData.data.map(item => {
+          return ceshi(productionDep).filter(v => v.deptId == item)[0]
+        })
+        setDeselected(echoBoundName)
+        console.log(echoBoundName)
+      }
+
+      productionDep.forEach(item => {
+        if (item != null) {
+          item.key = item.deptId
+          item.title = item.deptName
+          if (item.children != null) {
+            item.children.forEach(v => {
+              v.key = v.deptId
+              v.title = v.deptName
+            })
+          }
+        }
+      })
+
+      setProduction(productionDep)
     }
   }
-  const DepartmentPopOk = () => {
+
+  const DepartmentPopOk = async () => {
+    const res = await otherSystemDepartments({
+      cameraId: moved,
+      orgIdList: checkedKeys,
+      orgType: 1
+    })
+    console.log(res)
+
     setDepartmentPop(false)
+    setDeselected(null)
+    setCheckedKeys(null)
+    console.log('确认')
   }
   const DepartmentPopCancel = () => {
     setDepartmentPop(false)
+    console.log('取消')
+    setDeselected(null)
+    setCheckedKeys(null)
   }
   //优产账号form
   const onFinishProduction = async (values: any) => {
@@ -403,18 +518,23 @@ const MonitorPage = memo(() => {
       <Divider />
       <div className={styles.header}>
         <div className={styles.equipment}>
-          <span className={styles.keynote}>设备关键名字</span>
-          <span className={styles.pmentkeynote}>
-            <Search
-              className={styles.inputsearch}
-              maxLength={5}
-              placeholder="请输入设备名字"
-              allowClear
-              enterButton="查询"
-              size="middle"
-              onSearch={onSearch}
-            />
-          </span>
+          <div>
+            <span className={styles.keynote}>
+              设备关键名字
+              <div className={styles.keynoteInput}>
+                <Input maxLength={400} type="text" onChange={onSearchInput} />
+              </div>
+              <Button
+                type="primary"
+                className={styles.chauxn}
+                onClick={queryClick}
+              >
+                查询
+              </Button>
+            </span>
+          </div>
+
+          <span className={styles.pmentkeynote}></span>
 
           <Button
             icon={<Icon type="jack-del" className={styles.del} />}
@@ -451,6 +571,8 @@ const MonitorPage = memo(() => {
 
       {/* 新增设备弹窗 */}
       <AddDevicePopUpd
+        changeCount={changeCount}
+        count={count}
         toeplateSerialNumber={toeplateSerialNumber}
         toeplateVerificationCode={toeplateVerificationCode}
         buttonIsAvailable={buttonIsAvailable}
@@ -459,6 +581,7 @@ const MonitorPage = memo(() => {
         onFinish={onFinish}
         isModalVisible={isModalVisible}
         form={form}
+        modify={modify}
         equipmentbrand={equipmentbrand}
         department={department}
         setConnection={() => setConnection(true)}
@@ -466,22 +589,30 @@ const MonitorPage = memo(() => {
         setJudgment={() => setJudgment(false)}
         cancellation={cancellation}
         failed={failed}
+        codeAvailable={codeAvailable}
         ConnectionFailedCancel={ConnectionFailedCancel}
         onChange={onChange}
         numberofequivalue={equipmentDepartmentValue}
         errorStatus={errorStatus}
       />
       {/* 绑定优产账号弹窗 */}
-      <BindingSuperiorProduct
-        departmentPop={departmentPop}
-        visible={accountModalVisible}
-        DepartmentPopCancel={DepartmentPopCancel}
-        DepartmentPopOk={DepartmentPopOk}
-        onFinish={onFinishProduction}
-        onCancel={() => {
-          setaceousModalVisible(false)
-        }}
-      />
+      {departmentPop && (
+        <BindingSuperiorProduct
+          deselected={deselected}
+          setDeselected={setDeselected}
+          departmentPop={departmentPop}
+          visible={accountModalVisible}
+          production={production}
+          setCheckedKeys={setCheckedKeys}
+          checkedKeys={checkedKeys}
+          DepartmentPopCancel={DepartmentPopCancel}
+          DepartmentPopOk={DepartmentPopOk}
+          onFinish={onFinishProduction}
+          onCancel={() => {
+            setaceousModalVisible(false)
+          }}
+        />
+      )}
 
       {/* 删除设备 */}
       <DeletePopup

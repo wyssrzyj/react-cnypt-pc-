@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 import { Select } from 'antd'
@@ -39,34 +39,8 @@ const AddDevicePopUpd = props => {
     onChange,
     errorStatus,
     modify,
-    count,
-    changeCount
+    count
   } = props
-  console.log('🚀 ~ file: index.tsx ~ line 40 ~ judgment', judgment)
-  const intervalRef = useRef<any>(null)
-  // setIsModalVisible(false)
-
-  useEffect(() => {
-    clearInterval(intervalRef.current)
-  }, [])
-  useEffect(() => {
-    if (codeAvailable) {
-      changeCount(5)
-    } else {
-      clearInterval(intervalRef.current)
-    }
-  }, [codeAvailable])
-
-  useEffect(() => {
-    if (count === 5) {
-      intervalRef.current = setInterval(() => {
-        changeCount(preCount => preCount - 1)
-      }, 1000)
-    } else if (count === 0) {
-      clearInterval(intervalRef.current)
-      cancellation()
-    }
-  }, [count])
 
   return (
     <div>
@@ -215,10 +189,7 @@ const AddDevicePopUpd = props => {
             <Button
               className={styles.bant}
               type="primary"
-              onClick={() => {
-                cancellation()
-                clearInterval(intervalRef.current)
-              }}
+              onClick={cancellation}
             >
               立即返回
             </Button>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react'
+import React, { useState, useEffect, memo, useRef } from 'react'
 import { useStores } from '@/utils/mobx'
 import { isEmpty, isArray } from 'lodash'
 
@@ -39,6 +39,7 @@ const MonitorPage = memo(() => {
     echoBoundData
   } = monitorPageStore
   const { allDictionary } = commonStore
+  const intervalRef = useRef<any>(null)
 
   const [list, setList] = useState([]) //数据
 
@@ -57,7 +58,7 @@ const MonitorPage = memo(() => {
   const [pageNum, setPageNum] = useState<number>(1) //当前页数
   const [connectionStatus, setConnectionStatus] = useState<number>(null) //连接状态
   const [modify, setModify] = useState<number>(null) //修改
-  const [count, changeCount] = useState(0) //定时器
+  const [count, changeCount] = useState(5) //定时器
 
   const [pageSize, setPageSize] = useState(10) //
   const [numberofequipment, setNumberofequipment] = useState(false) //
@@ -102,6 +103,15 @@ const MonitorPage = memo(() => {
 
     setPageNum(page)
   }
+  // 定时器
+  useEffect(() => {
+    if (count < 1) {
+      console.log('准备清除定时器')
+      clearInterval(intervalRef.current)
+      setJudgment(false)
+      setIsModalVisible(true)
+    }
+  }, [count])
   useEffect(() => {
     getFactoryInfo()
   }, [equipmentName, pageNum, pageSize])
@@ -271,7 +281,6 @@ const MonitorPage = memo(() => {
   const equipmentHandleCancel = () => {
     setButtonIsAvailable(true)
     setIsModalVisible(false)
-    setIsModalVisible(false)
     setCodeAvailable(false)
   }
   // 设备form
@@ -325,6 +334,11 @@ const MonitorPage = memo(() => {
         setIsModalVisible(false)
         setCodeAvailable(true)
         setConnectionStatus(1)
+        console.log('测试的弹窗')
+        changeCount(5)
+        intervalRef.current = setInterval(() => {
+          changeCount(count => count - 1)
+        }, 1000)
       } else {
         setFailed(true)
 
@@ -581,6 +595,7 @@ const MonitorPage = memo(() => {
         onFinish={onFinish}
         isModalVisible={isModalVisible}
         form={form}
+        setFailed={setFailed}
         modify={modify}
         equipmentbrand={equipmentbrand}
         department={department}

@@ -328,13 +328,13 @@ const MonitorPage = memo(() => {
       } else {
         setErrorstatus(ConnectingEquipment.msg)
       }
-      if (+ConnectingEquipment.data !== 200) {
+      if (+ConnectingEquipment.data == 200) {
         // 测试弹窗
         setJudgment(true)
         setIsModalVisible(false)
         setCodeAvailable(true)
         setConnectionStatus(1)
-        console.log('测试的弹窗')
+
         changeCount(5)
         intervalRef.current = setInterval(() => {
           changeCount(count => count - 1)
@@ -450,8 +450,8 @@ const MonitorPage = memo(() => {
       if (boundData.code === 200) {
         setCheckedKeys(boundData.data)
         console.log(boundData.data)
-
-        const ceshi = data => {
+        // 获取所有的数据
+        const cesta = data => {
           let sum = []
           if (Array.isArray(data)) {
             data.forEach(item => {
@@ -467,14 +467,16 @@ const MonitorPage = memo(() => {
           sum.filter(item => item.deptId !== boundData.data)
           console.log(sum)
         }
-        // 回显已经绑定的名字
+        // 根据接口传过来的id进行过滤
         const echoBoundName = boundData.data.map(item => {
-          return ceshi(productionDep).filter(v => v.deptId == item)[0]
+          return cesta(productionDep).filter(v => v.deptId == item)[0]
         })
+        console.log(echoBoundName)
+
         setDeselected(echoBoundName)
         console.log(echoBoundName)
       }
-
+      // 修改接口的数据名称
       productionDep.forEach(item => {
         if (item != null) {
           item.key = item.deptId
@@ -500,10 +502,10 @@ const MonitorPage = memo(() => {
     })
     console.log(res)
 
-    setDepartmentPop(false)
-    setDeselected(null)
-    setCheckedKeys(null)
-    console.log('确认')
+    if (res === true) {
+      setDepartmentPop(false)
+      console.log('确认')
+    }
   }
   const DepartmentPopCancel = () => {
     setDepartmentPop(false)

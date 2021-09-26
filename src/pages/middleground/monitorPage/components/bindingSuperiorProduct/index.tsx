@@ -19,49 +19,38 @@ const BindingSuperiorProduct = props => {
   } = props
   console.log(props)
   const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
-
-  //  const onCheck = (checkedKeysValue: React.Key[]) => {
-  //    console.log('onCheck', checkedKeysValue)
-  //    setCheckedKeys(checkedKeysValue)
-  //  }
-
   const onSelect = (selectedKeysValue: React.Key[], info: any) => {
     console.log('onSelect', info)
     setSelectedKeys(selectedKeysValue)
   }
-
-  // const onExpand = (expandedKeysValue: React.Key[]) => {
-  //   console.log('onExpand', expandedKeysValue)
-  //   // setAutoExpandParent(false)
-  // }
-
   const onCheck = (checkedKeysValue, event) => {
     let sum = event.checkedNodes
-
     setDeselected(sum)
     console.log(event.checkedNodes)
     setCheckedKeys(checkedKeysValue)
   }
-  // const onSelect = (selectedKeysValue: React.Key[], info: any) => {
-  //   console.log('onSelect', info)
-  //   console.log(selectedKeysValue)
-
-  //   setSelectedKeys(selectedKeysValue)
-  // }
 
   const move = item => {
+    console.log(item)
+    console.log(checkedKeys)
+
     {
       if (item.parentId != 0) {
         setCheckedKeys(
-          checkedKeys.filter(l => l !== item.key && l !== item.parentId)
+          checkedKeys.filter(l => l !== item.deptId && l !== item.parentId)
         )
       } else {
-        setCheckedKeys(checkedKeys.filter(l => l !== item.key))
+        setCheckedKeys(checkedKeys.filter(l => l !== item.deptId))
       }
-
+      //删除名字
       setDeselected(deselected.filter(s => s.deptName !== item.deptName))
-
-      console.log(deselected)
+      // setCheckedKeys(deselected.filter(s => s.deptId !== checkedKeys))
+      {
+        console.log(checkedKeys) //key
+      }
+      {
+        console.log(deselected)
+      }
     }
   }
 
@@ -156,6 +145,7 @@ const BindingSuperiorProduct = props => {
             : null}
         </div>
         {console.log(checkedKeys)}
+        {console.log(deselected)}
       </Modal>
     </div>
   )

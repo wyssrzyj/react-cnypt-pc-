@@ -1,7 +1,6 @@
 import React, { useState, useEffect, memo, useRef } from 'react'
 import { useStores } from '@/utils/mobx'
-import { isEmpty, isArray } from 'lodash'
-
+import { findTarget, convenience } from './method'
 import { Icon } from '@/components'
 import styles from './index.module.less'
 import { Divider, Form, Input, Button, Table, Space } from 'antd'
@@ -135,7 +134,16 @@ const MonitorPage = memo(() => {
     if (brand) {
       setEquipmentbrand(brand.cameraBrand)
     }
-    const { id } = rData
+    const { id, status } = rData
+    console.log(status) //用于判断是成功还是失败
+    if (status) {
+      console.log('成功显示可用')
+      setButtonIsAvailable(false)
+    } else {
+      console.log('失败显示不可用')
+      setButtonIsAvailable(true)
+    }
+
     setModify(id)
     const singly = await singleSearch({ id })
     if (singly.code == 200) {
@@ -282,36 +290,15 @@ const MonitorPage = memo(() => {
   }
   // 设备form
   const onFinish = async (v: any) => {
-    const findTarget = (val, data) => {
-      for (let i = 0; i < data.length; i++) {
-        const item = data[i]
-        console.log(item)
-        if (item.id === val) {
-          //当传过来的id和当前id一样返回
-          return item
-        }
-        if (isArray(item.children) && item.children.length) {
-          const res = findTarget(val, item.children) //
-          if (!isEmpty(res)) {
-            return res
-          }
-        }
-      }
-    }
-    const getValues = data => {
-      const target = [] //空数组
-      if (!isEmpty(data)) {
-        target.push(data.id) //数据的id传递给数组
-        if (isArray(data.children)) {
-          data.children.forEach(item => {
-            target.push(...getValues(item))
-          })
-        }
-      }
-      return target
-    }
-    // setIsModalVisible 弹窗
-    // setConnection  判断是测试还是提交
+    // 因为可能传递的是多个参数利用累加器
+    const arr = v.orgIdList.reduce((prev, item) => {
+      prev.push(findTarget(item, department))
+      return prev
+    }, [])
+    console.log(convenience(arr).join(',').split(','))
+    v.orgIdList = convenience(arr).join(',').split(',')
+    console.log(v)
+
     if (connection) {
       //  判断是测试还是提交
       const { serialNumber, verificationCode } = v
@@ -355,11 +342,7 @@ const MonitorPage = memo(() => {
       // 判断是修改还是新增
       if (modifyAndAdd) {
         console.log('这是修改')
-        if (+v.orgIdList.length === 1) {
-          const a = findTarget(v.orgIdList.toString(), department)
-          const val = getValues(a)
-          v.orgIdList = val
-        }
+
         const newlywed = await newDataList({
           ...v,
           status: connectionStatus,
@@ -374,11 +357,11 @@ const MonitorPage = memo(() => {
         }
       } else {
         console.log('这是新增')
-        if (+v.orgIdList.length === 1) {
-          const a = findTarget(v.orgIdList.toString(), department)
-          const val = getValues(a)
-          v.orgIdList = val
-        }
+        // if (+v.orgIdList.length === 1) {
+        //   const a = findTarget(v.orgIdList.toString(), department)
+        //   const val = getValues(a)
+        //   v.orgIdList = val
+        // }
         setModify(null)
         const newlywed = await newDataList({ ...v, status: connectionStatus })
         console.log(newlywed)
@@ -432,6 +415,7 @@ const MonitorPage = memo(() => {
       setEquipmentbrand(brand.cameraBrand)
     }
     const equipment = await equipmentDepartment()
+
     if (equipment.code == 200) {
       setDepartment(dealTypeData(equipment.data))
     }

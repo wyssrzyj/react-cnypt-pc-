@@ -58,6 +58,8 @@ const MonitorPage = memo(() => {
   const [pageNum, setPageNum] = useState<number>(1) //当前页数
   const [connectionStatus, setConnectionStatus] = useState<number>(null) //连接状态
   const [modify, setModify] = useState<number>(null) //修改
+  const [modifyAndAdd, setModifyAndAdd] = useState(true) //用于判断是修改还是新增
+
   const [count, changeCount] = useState(5) //定时器
 
   const [pageSize, setPageSize] = useState(10) //
@@ -103,29 +105,32 @@ const MonitorPage = memo(() => {
 
     setPageNum(page)
   }
-  // 定时器
+  // 关闭清除倒计时
   useEffect(() => {
-    if (count < 1) {
-      console.log('准备清除定时器')
+    if (judgment === false) {
       clearInterval(intervalRef.current)
-      setJudgment(false)
-      // setIsModalVisible(true)
+    }
+  }, [judgment])
+  // 数值清零 清除倒计时
+  useEffect(() => {
+    if (count === 0) {
+      clearInterval(intervalRef.current)
+      cancellation()
     }
   }, [count])
+
   useEffect(() => {
     getFactoryInfo()
   }, [equipmentName, pageNum, pageSize])
-  // 用于显示成功还是失败
-  // useEffect(() => {
-  //   if (!isModalVisible) {
-  //     setModify(null)
-  //   }
-  // }, [isModalVisible])
+
   useEffect(() => {
     setIsModalVisible(false)
   }, [])
   // 编辑
   const modificationMethod = async rData => {
+    setModifyAndAdd(true)
+    console.log('这是编辑设备')
+
     const brand = await allDictionary([])
     if (brand) {
       setEquipmentbrand(brand.cameraBrand)
@@ -141,20 +146,6 @@ const MonitorPage = memo(() => {
     if (equipment.code == 200) {
       setDepartment(dealTypeData(equipment.data))
       let sum = dealTypeData(equipment.data)
-      // ----------------------------------------------------------
-      const dataswxaw = (data: any[]) => {
-        data.forEach(item => {
-          item.children.forEach(v => {
-            console.log(v)
-          })
-          // if (Array.isArray(item.children) && item.children.length === 0) {
-          //   dataswxaw(item.children)
-          // }
-        })
-        return data
-      }
-      console.log(dataswxaw(equipment.data))
-      // ----------------------------------------------------------
       sum.forEach(item => {
         if (item.children.length == 0) {
         }
@@ -322,26 +313,34 @@ const MonitorPage = memo(() => {
         serialNumber,
         verificationCode
       })
-      console.log(ConnectingEquipment.data)
+      console.log(ConnectingEquipment)
 
       if (+ConnectingEquipment.data === 20014) {
         setErrorstatus('您所提交的信息有误，请确认序列号或验证码!!!')
       } else {
         setErrorstatus(ConnectingEquipment.msg)
       }
-
+      // 200 代表连接成功
       if (+ConnectingEquipment.data === 200) {
         // 测试弹窗
         setJudgment(true)
         setIsModalVisible(false)
         setCodeAvailable(true)
         setConnectionStatus(1)
+        // 启动定时器
+        console.log('先清除定时器')
 
+        clearInterval(intervalRef.current)
+        console.log(' 准备启动定时器')
         changeCount(5)
+
         intervalRef.current = setInterval(() => {
           changeCount(count => count - 1)
+
+          console.log('当前倒计时', count)
         }, 1000)
       } else {
+        setIsModalVisible(false)
         setFailed(true)
 
         setConnectionStatus(0)
@@ -351,7 +350,7 @@ const MonitorPage = memo(() => {
       setBeforeModification(v)
     } else {
       // 判断是修改还是新增
-      if (modify != null) {
+      if (modifyAndAdd) {
         console.log('这是修改')
         if (+v.orgIdList.length === 1) {
           const a = findTarget(v.orgIdList.toString(), department)
@@ -417,6 +416,7 @@ const MonitorPage = memo(() => {
 
   // 新增显示
   const showModal = async () => {
+    setModifyAndAdd(false)
     setIsModalVisible(true)
     const brand = await allDictionary([])
     if (brand) {
@@ -605,12 +605,13 @@ const MonitorPage = memo(() => {
         department={department}
         setConnection={() => setConnection(true)}
         judgment={judgment}
-        setJudgment={() => setJudgment(false)}
+        setJudgment={() => cancellation()}
         cancellation={cancellation}
         failed={failed}
         codeAvailable={codeAvailable}
         ConnectionFailedCancel={ConnectionFailedCancel}
         onChange={onChange}
+        modifyAndAdd={modifyAndAdd}
         numberofequivalue={equipmentDepartmentValue}
         errorStatus={errorStatus}
       />

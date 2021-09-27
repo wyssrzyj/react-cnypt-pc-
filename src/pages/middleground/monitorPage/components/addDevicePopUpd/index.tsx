@@ -38,7 +38,7 @@ const AddDevicePopUpd = props => {
     numberofequivalue,
     onChange,
     errorStatus,
-    modify,
+    modifyAndAdd,
     count
   } = props
 
@@ -46,7 +46,7 @@ const AddDevicePopUpd = props => {
     <div>
       {/* 新增设备弹窗 */}
       <Modal
-        title={modify ? '编辑设备' : '新增设备'}
+        title={modifyAndAdd ? '编辑设备' : '新增设备'}
         okText="提交"
         onCancel={equipmentHandleCancel}
         footer={[
@@ -91,7 +91,7 @@ const AddDevicePopUpd = props => {
             rules={[{ required: true, message: `请输入设备品牌` }]}
           >
             <Select
-              defaultValue="请输入设备品牌"
+              placeholder="请输入设备品牌"
               style={{ width: 373 }}
               // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
             >
@@ -186,6 +186,7 @@ const AddDevicePopUpd = props => {
           <p className={styles.text}>连接成功</p>
           <p className={styles.textural}>设备连接成功，{count}秒后返回</p>
           <p>
+            {/* cancellation() */}
             <Button
               className={styles.bant}
               type="primary"
@@ -197,6 +198,9 @@ const AddDevicePopUpd = props => {
         </div>
       </Modal>
       {/* 失败的 */}
+      {/* // const [judgment, setJudgment] = useState(false) //连接成功 // const
+      [failed, setFailed] = useState(false) //连接失败 // const [isModalVisible,
+      setIsModalVisible] = useState(false) //设备弹窗 */}
       <Modal
         className={styles.ok}
         centered={true}

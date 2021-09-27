@@ -109,18 +109,18 @@ const MonitorPage = memo(() => {
       console.log('准备清除定时器')
       clearInterval(intervalRef.current)
       setJudgment(false)
-      setIsModalVisible(true)
+      // setIsModalVisible(true)
     }
   }, [count])
   useEffect(() => {
     getFactoryInfo()
   }, [equipmentName, pageNum, pageSize])
   // 用于显示成功还是失败
-  useEffect(() => {
-    if (!isModalVisible) {
-      setModify(null)
-    }
-  }, [isModalVisible])
+  // useEffect(() => {
+  //   if (!isModalVisible) {
+  //     setModify(null)
+  //   }
+  // }, [isModalVisible])
   useEffect(() => {
     setIsModalVisible(false)
   }, [])
@@ -141,22 +141,20 @@ const MonitorPage = memo(() => {
     if (equipment.code == 200) {
       setDepartment(dealTypeData(equipment.data))
       let sum = dealTypeData(equipment.data)
-
+      // ----------------------------------------------------------
       const dataswxaw = (data: any[]) => {
         data.forEach(item => {
           item.children.forEach(v => {
             console.log(v)
           })
-
           // if (Array.isArray(item.children) && item.children.length === 0) {
           //   dataswxaw(item.children)
           // }
         })
         return data
       }
-
       console.log(dataswxaw(equipment.data))
-
+      // ----------------------------------------------------------
       sum.forEach(item => {
         if (item.children.length == 0) {
         }
@@ -273,6 +271,7 @@ const MonitorPage = memo(() => {
   const equipmentHandleOk = () => {
     setJudgment(false)
     setFailed(false)
+    setIsModalVisible(false)
     setCodeAvailable(true)
 
     form.submit()
@@ -280,6 +279,7 @@ const MonitorPage = memo(() => {
   // 新增取消按钮事件
   const equipmentHandleCancel = () => {
     setButtonIsAvailable(true)
+
     setIsModalVisible(false)
     setCodeAvailable(false)
   }
@@ -313,7 +313,8 @@ const MonitorPage = memo(() => {
       }
       return target
     }
-
+    // setIsModalVisible 弹窗
+    // setConnection  判断是测试还是提交
     if (connection) {
       //  判断是测试还是提交
       const { serialNumber, verificationCode } = v
@@ -328,7 +329,8 @@ const MonitorPage = memo(() => {
       } else {
         setErrorstatus(ConnectingEquipment.msg)
       }
-      if (+ConnectingEquipment.data == 200) {
+
+      if (+ConnectingEquipment.data === 200) {
         // 测试弹窗
         setJudgment(true)
         setIsModalVisible(false)

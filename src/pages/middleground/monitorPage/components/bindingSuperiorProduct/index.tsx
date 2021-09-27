@@ -125,6 +125,7 @@ const BindingSuperiorProduct = props => {
           blockNode={false} //是否节点占据一行
           // fieldNames={{title:deptName}}
         />
+        <div className={styles.cax}></div>
 
         <div className={styles.treeName}>
           {Array.isArray(deselected)

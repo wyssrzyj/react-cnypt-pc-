@@ -68,7 +68,7 @@ const MonitorPage = memo(() => {
   const [errorStatus, setErrorstatus] = useState('')
   const [departmentPop, setDepartmentPop] = useState(false) //选择部门弹窗
   const [agreementPop, setAgreementPop] = useState(null)
-  const [codeAvailable, setCodeAvailable] = useState(false)
+  const [codeAvailable, setCodeAvailable] = useState(false) //验证码
   const [production, setProduction] = useState(null)
 
   const [deselected, setDeselected] = useState([]) //有产使用的数据
@@ -198,8 +198,15 @@ const MonitorPage = memo(() => {
       width: 180,
 
       dataIndex: 'orgNameList',
-      render: value => {
-        return value.join('、')
+      render: (value, record) => {
+        if (record.orgNameList.length > 2) {
+          console.log('修改')
+          let sum =
+            record.orgNameList[0] + '、' + record.orgNameList[1] + ' ' + '.....'
+          return sum
+        } else {
+          return value
+        }
       }
     },
     {
@@ -262,8 +269,7 @@ const MonitorPage = memo(() => {
   const equipmentHandleOk = () => {
     setJudgment(false)
     setFailed(false)
-    setIsModalVisible(false)
-    setCodeAvailable(true)
+    setCodeAvailable(false)
 
     form.submit()
   }
@@ -336,8 +342,6 @@ const MonitorPage = memo(() => {
 
         intervalRef.current = setInterval(() => {
           changeCount(count => count - 1)
-
-          console.log('当前倒计时', count)
         }, 1000)
       } else {
         setIsModalVisible(false)
@@ -378,6 +382,12 @@ const MonitorPage = memo(() => {
         }
         setModify(null)
         const newlywed = await newDataList({ ...v, status: connectionStatus })
+        console.log(newlywed)
+        if (newlywed.code == 200) {
+          console.log('可以去除弹框')
+        } else {
+          console.log('不能去除弹框')
+        }
         if (newlywed.code == 200) {
           setIsModalVisible(false)
           getFactoryInfo()

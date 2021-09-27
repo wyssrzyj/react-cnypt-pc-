@@ -194,10 +194,7 @@ export default class MonitorPage {
         '/api/factory/factory-camera/list-other-system-organization',
         params
       )
-      const { data = {} } = res
-      if (data) {
-        localStorage.setItem('userInfo', JSON.stringify(data))
-      }
+
       if (res.code !== 200) {
         message.error(res.msg)
       }

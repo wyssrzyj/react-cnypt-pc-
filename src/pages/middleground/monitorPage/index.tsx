@@ -244,7 +244,7 @@ const MonitorPage = memo(() => {
               accountShowModal(record.id)
             }}
           >
-            绑定优产部门
+            绑定工票部门
           </span>
         </Space>
       )
@@ -339,7 +339,6 @@ const MonitorPage = memo(() => {
         clearInterval(intervalRef.current)
         console.log(' 准备启动定时器')
         changeCount(5)
-
         intervalRef.current = setInterval(() => {
           changeCount(count => count - 1)
         }, 1000)
@@ -541,7 +540,7 @@ const MonitorPage = memo(() => {
     <div className={styles.monitor}>
       <div>{/* <TreeSelect {...tProps} /> */}</div>
       <div>
-        <span className={styles.system}>监控系统</span>
+        <span className={styles.system}>监控列表</span>
       </div>
       <Divider />
       <div className={styles.header}>

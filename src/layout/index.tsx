@@ -18,14 +18,14 @@ const Layout = (props: LayoutProps) => {
   const { location } = props
   const { pathname } = location
   const noUseHeaders = [
-    '/user/login',
+    // '/user/login',
     '/user/register',
     '/user/reset',
     '/mapSearch'
     // '/control-panel'
   ] // 不展示header的路由列表
   const noUseFooters = [
-    '/user/login',
+    // '/user/login',
     '/user/register',
     '/user/reset',
     '/mapSearch'

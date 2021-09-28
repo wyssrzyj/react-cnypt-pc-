@@ -52,7 +52,7 @@ const BindModal = props => {
     onCancel && onCancel()
   }
 
-  const onFinish = async res => {
+  const onFinish = async () => {
     try {
       const values = await validateFields()
       const bindRes = await productAccount(values)
@@ -162,9 +162,6 @@ const BindModal = props => {
             <div className={styles.selectTrees}>
               {Array.isArray(checkedKeys)
                 ? checkedKeys.map(item => {
-                    console.log(checkedKeys, 'checkedKeys')
-                    console.log(item, department, 'checkedKeys')
-
                     const target = findTreeTarget(item, department, 'deptId')
 
                     return (

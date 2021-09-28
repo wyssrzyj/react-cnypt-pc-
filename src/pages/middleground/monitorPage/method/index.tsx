@@ -1,11 +1,7 @@
 import { isEmpty, isArray } from 'lodash'
-
-// --------------------用于获取数据树中的没有子项的id---------------结束-------------------------------------
-
-// --------------------用于获取数据树中的没有子项的id---------------开始-------------------------------------
 /**
  *  把数据一些名重洗复制一个名字
- * @param data //数据
+ * @param data
  *
  * @returns
  */
@@ -21,8 +17,8 @@ export const dealTypeData = data => {
 }
 /**
  *  根据传递过来的值获取data的具体数据
- * @param val 判断的id
- * @param data 数据
+ * @param val
+ * @param data
  * @returns
  */
 export const findTarget = (val, data) => {
@@ -46,8 +42,8 @@ export const findTarget = (val, data) => {
   }
 }
 /**
- *  循环获取没有子项的id 没有就push
- * @param data 数据
+ *  循环获取没有子项的id
+ * @param data
  * @returns
  */
 export const convenience = data => {
@@ -63,4 +59,3 @@ export const convenience = data => {
   }
   return sum
 }
-// --------------------用于获取数据树中的没有子项的id---------------结束-------------------------------------

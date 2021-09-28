@@ -166,15 +166,14 @@ const Header = () => {
   // 发单商没有监控列表
 
   const memberCenterFiltering = memberCenter.filter(item => {
-    if (enterpriseType == '0') {
+    if (enterpriseType === '0') {
       if (item.title == '账号管理') {
         item.children.splice(2, 1)
       }
       return item
-    } else {
-      if (item.title !== '监控中心') {
-        return item
-      }
+    }
+    if (item.title !== '监控中心' && item.title !== '验厂管理') {
+      return item
     }
   })
 
@@ -299,9 +298,6 @@ const Header = () => {
               src="http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png"
               alt=""
             />
-            <Link to="/user/login">
-              <span className={styles.sign}>登录</span>
-            </Link>
           </div>
         </div>
       ) : (

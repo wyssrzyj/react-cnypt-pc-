@@ -136,12 +136,8 @@ const memberCenter = [
       },
 
       {
-        title: '待添加',
-        url: '/control-panel/panel/monitorPage'
-      },
-      {
-        title: '待添加',
-        url: '/control-panel/panel/monitorPage'
+        title: '视频中心',
+        url: '/control-panel/panel/video-center'
       }
     ]
   }
@@ -154,6 +150,7 @@ const Header = () => {
 
   const { logout } = loginStore
   const { enterpriseType } = userInfo
+  console.log(enterpriseType)
 
   // 企业类型 0 加工厂 1 发单商
   //我的工作台
@@ -166,6 +163,7 @@ const Header = () => {
 
   //会员中心
   // 加工厂没有发单信息
+  // 发单商没有监控列表
 
   const memberCenterFiltering = memberCenter.filter(item => {
     if (enterpriseType == '0') {
@@ -174,7 +172,9 @@ const Header = () => {
       }
       return item
     } else {
-      return item
+      if (item.title !== '监控中心') {
+        return item
+      }
     }
   })
 

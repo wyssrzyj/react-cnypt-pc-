@@ -5,7 +5,8 @@ import { getCurrentUser } from '@/utils/tool'
 
 const footerLogo =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/footerLogo.png'
-
+const NotLogged =
+  'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/logoF.png'
 const Footer = () => {
   const list = [
     { label: '帮助', url: '' },
@@ -42,7 +43,11 @@ const Footer = () => {
       <div className={styles.footerTopBox}>
         <div className={styles.footerTop}>
           <div className={styles.leftLogo}>
-            <img src={footerLogo} alt="" className={styles.logo} />
+            <img
+              src={currentUser.userId === undefined ? NotLogged : footerLogo}
+              alt=""
+              className={styles.logo}
+            />
             <div className={styles.logoText}>优产云平台</div>
           </div>
 

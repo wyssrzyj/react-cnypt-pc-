@@ -84,8 +84,8 @@ const Four = props => {
           id: videoDOMMap.get(item.key), // 视频容器ID
           url: item.playAddress ? item.playAddress : '',
           accessToken: item.accessToken ? item.accessToken : '',
-          width: platformOrderId ? 556 : 396,
-          height: platformOrderId ? 417 : 297,
+          width: platformOrderId ? 556 : 476,
+          height: platformOrderId ? 417 : 357,
           templete: 'simple', // simple：极简版;standard：标准版;security：安防版(预览回放);vioce：语音版
           footer: ['hd', 'fullScreen'],
           handleSuccess: () => {

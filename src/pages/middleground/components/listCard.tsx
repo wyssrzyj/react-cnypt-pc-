@@ -261,7 +261,9 @@ const ListCard = ({
   }
   // 在线跟单
   const toViewPage = () => {
-    history.push(`/control-panel/video-center/${id}/${supplierTenantId}`)
+    history.push(
+      `/control-panel/video-center/${id}/${supplierTenantId}/${type}`
+    )
   }
   // 确认订单
   const confirmOrder = () => {

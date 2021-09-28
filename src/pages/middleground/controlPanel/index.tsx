@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 import { useStores } from '@/utils/mobx'
 import { useLocation } from 'react-router'
-import { Icon } from '@/components'
+// import { Icon } from '@/components'
 
 import styles from './index.module.less'
 
@@ -31,8 +31,6 @@ const FactoryEquipment = React.lazy(
 const FactoryPhotograph = React.lazy(
   () => import('./components/factoryPhotograph')
 )
-
-const { SubMenu } = Menu
 
 const menuKeys = new Map()
 menuKeys.set('/control-panel/panel/qualification', [
@@ -119,7 +117,7 @@ const ControlPanel = () => {
     <div className={styles.controlPanel}>
       <div className={styles.controlPanelContainer}>
         <div className={styles.controlPanelLeft}>
-          <h2 className={styles.management}>会员中心</h2>
+          <h2 className={styles.managementCenter}>会员中心</h2>
           <Menu
             openKeys={openKeys}
             selectedKeys={currentMenu} //当前选中的菜单项 key 数组
@@ -127,15 +125,13 @@ const ControlPanel = () => {
             mode="inline"
             onOpenChange={onOpenChange} //	SubMenu 展开/关闭的回调
           >
-            <SubMenu
-              key="sub1"
-              className={styles.subItem}
-              icon={
-                <Icon className={styles.menuIcon} type="jack-zhanghaoanquan" />
-              }
-              title="账号管理"
-            >
-              <Menu.Item className={styles.item} key="account">
+            {/* <div className={styles.management} key={'accountManage'}>
+              <Icon className={styles.del} type="jack-bussiness-man" />
+              <span>账号管理</span>
+            </div> */}
+
+            <Menu.ItemGroup key="g1" title="账号管理">
+              <Menu.Item className={styles.items} key="account">
                 <Link
                   to="/control-panel/panel/account"
                   className={styles.minutest}
@@ -144,7 +140,7 @@ const ControlPanel = () => {
                 </Link>
               </Menu.Item>
 
-              <Menu.Item key="enterprise" className={styles.item}>
+              <Menu.Item key="enterprise" className={styles.items}>
                 <Link
                   className={styles.minutest}
                   to="/control-panel/panel/enterprise"
@@ -152,9 +148,8 @@ const ControlPanel = () => {
                   企业信息
                 </Link>
               </Menu.Item>
-
               {+currentUser.enterpriseType === 1 ? (
-                <Menu.Item key="issue-bill" className={styles.item}>
+                <Menu.Item key="jack-company" className={styles.items}>
                   <Link
                     className={styles.minutest}
                     to="/control-panel/panel/issue-bill"
@@ -163,14 +158,15 @@ const ControlPanel = () => {
                   </Link>
                 </Menu.Item>
               ) : null}
-            </SubMenu>
-            <SubMenu
-              key="sub2"
-              className={styles.subItem}
-              icon={<Icon className={styles.menuIcon} type="jack-qyzjrz" />}
-              title="企业认证管理"
-            >
-              <Menu.Item key="certificate" className={styles.item}>
+            </Menu.ItemGroup>
+
+            {/* <div className={styles.management} key={'enterpriseKey'}>
+              <Icon className={styles.menuIcon} type="jack-company" />
+              <span className={styles.enterprise}>企业认证管理</span>
+            </div> */}
+
+            <Menu.ItemGroup key="g2" title="企业认证管理">
+              <Menu.Item key="certificate" className={styles.items}>
                 <Link
                   className={styles.minutest}
                   to="/control-panel/panel/certificate"
@@ -179,7 +175,7 @@ const ControlPanel = () => {
                 </Link>
               </Menu.Item>
 
-              <Menu.Item key="qualification" className={styles.item}>
+              <Menu.Item key="qualification" className={styles.items}>
                 <Link
                   className={styles.minutest}
                   to="/control-panel/panel/qualification"
@@ -187,14 +183,14 @@ const ControlPanel = () => {
                   资质认证
                 </Link>
               </Menu.Item>
-            </SubMenu>
+            </Menu.ItemGroup>
 
-            <SubMenu
-              key="sub3"
-              className={styles.subItem}
-              icon={<Icon className={styles.menuIcon} type="jack-ycgl" />}
-              title="验厂管理"
-            >
+            {/* <div className={styles.management} key={'checkKey'}>
+              <Icon className={styles.menuIcon} type="jack-banzhengfuwu" />
+              <span>验厂管理</span>
+            </div> */}
+
+            <Menu.ItemGroup key="g3" title="验厂管理">
               <Menu.Item key="report">
                 <Link
                   className={styles.minute}
@@ -203,6 +199,7 @@ const ControlPanel = () => {
                   基础资料报告
                 </Link>
               </Menu.Item>
+
               <Menu.Item key="equipment">
                 <Link
                   className={styles.minute}
@@ -219,31 +216,38 @@ const ControlPanel = () => {
                   工厂照片
                 </Link>
               </Menu.Item>
-            </SubMenu>
+            </Menu.ItemGroup>
 
-            <SubMenu
-              key="sub4"
-              className={styles.subItem}
-              icon={<Icon className={styles.menuIcon} type="jack-video1" />}
-              title="监控中心"
-            >
-              <Menu.Item key="monitorPage">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/monitorPage"
-                >
-                  监控系统
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="videoCenter">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/video-center"
-                >
-                  视频中心
-                </Link>
-              </Menu.Item>
-            </SubMenu>
+            {/* 加单商才能看到  测试修改 */}
+            {/* {+currentUser.enterpriseType !== 1 ? (
+              <div className={styles.management} key={'videoKey'}>
+                <Icon className={styles.menuIcon} type="jack-video1" />
+                <span>监控列表</span>
+              </div>
+            ) : null} */}
+
+            <Menu.ItemGroup key="g4" title="监控列表">
+              {+currentUser.enterpriseType !== 1 ? (
+                <Menu.Item key="monitorPage">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/monitorPage"
+                  >
+                    监控列表
+                  </Link>
+                </Menu.Item>
+              ) : null}
+              {+currentUser.enterpriseType !== 1 ? (
+                <Menu.Item key="videoCenter">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/video-center"
+                  >
+                    视频中心
+                  </Link>
+                </Menu.Item>
+              ) : null}
+            </Menu.ItemGroup>
           </Menu>
         </div>
 
@@ -299,6 +303,7 @@ const ControlPanel = () => {
               path="/control-panel/panel/photograph"
               component={FactoryPhotograph}
             />
+            {/* 监控列表 */}
             <Route
               path="/control-panel/panel/monitorPage"
               component={MonitorPage}

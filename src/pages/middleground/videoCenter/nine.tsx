@@ -93,8 +93,8 @@ const Nine = props => {
           id: videoDOMMap.get(item.key), // 视频容器ID
           url: item.playAddress ? item.playAddress : '',
           accessToken: item.accessToken ? item.accessToken : '',
-          width: platformOrderId ? 362 : 256,
-          height: platformOrderId ? 272 : 192,
+          width: platformOrderId ? 362 : 310,
+          height: platformOrderId ? 272 : 233,
           templete: 'voice',
           footer: ['hd', 'fullScreen'],
           handleSuccess: () => {

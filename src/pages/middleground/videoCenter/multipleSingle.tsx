@@ -63,8 +63,8 @@ const MultipleSingle = props => {
       id: 'video-container-multiple', // 视频容器ID
       accessToken: target.accessToken,
       url: target.playAddress,
-      width: platformOrderId ? 860 : 540,
-      height: platformOrderId ? 645 : 405,
+      width: platformOrderId ? 860 : 680,
+      height: platformOrderId ? 645 : 510,
       templete: 'voice',
       footer: ['hd', 'fullScreen'],
       handleSuccess: () => {
@@ -73,7 +73,6 @@ const MultipleSingle = props => {
         }, 500)
       },
       handleError: () => {
-        console.log(555555555555555555555)
         setError(true)
         player.stop()
       }

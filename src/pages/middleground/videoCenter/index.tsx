@@ -45,11 +45,15 @@ tagIconMap.set(3, 'jack-dysp_1')
 
 const VideoCenter = () => {
   const history = useHistory()
-  const routerParams: { platformOrderId: string; supplierId: string } =
-    useParams()
-  const { platformOrderId, supplierId } = routerParams
+  const routerParams: {
+    platformOrderId: string
+    supplierId: string
+    type: string
+  } = useParams()
+  const { platformOrderId, supplierId, type } = routerParams
   const { orderStore } = useStores()
-  const { getVideos } = orderStore
+  const { orderTrackVideos, factoryTrackVideos } = orderStore
+  const getVideos = type === 'put' ? orderTrackVideos : factoryTrackVideos
 
   const [videoType, setVideoType] = useState<'multiple' | 'single' | undefined>(
     undefined

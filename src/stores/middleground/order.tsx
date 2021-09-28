@@ -519,12 +519,29 @@ export default class OrderStore {
     }
   }
 
-  // /api/oms/order-log/online-view-order
-  // 在线跟单 视频列表接口
-  @action getVideos = async params => {
+  // 加工厂 在线跟单 视频列表接口
+  @action factoryTrackVideos = async params => {
     try {
       const res = await axios.post(
-        '/api/oms/order-log/order-online-video',
+        '/api/oms/order-log/supplier-order-online-video',
+        params
+      )
+      if (res && res.code === 200) {
+        return res.data
+      } else {
+        message.error(res.msg)
+        return {}
+      }
+    } catch (err) {
+      message.error('服务器错误~')
+    }
+  }
+
+  // 发单商 在线跟单 视频列表接口
+  @action orderTrackVideos = async params => {
+    try {
+      const res = await axios.post(
+        '/api/oms/order-log/purchaser-order-online-video',
         params
       )
       if (res && res.code === 200) {

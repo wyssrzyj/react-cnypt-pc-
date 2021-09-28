@@ -17,7 +17,7 @@ const ControlPanel = React.lazy(() => import('./controlPanel'))
 const VideoCenter = React.lazy(() => import('./videoCenter'))
 
 const LOGO =
-  'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png'
+  'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/newLogo.png'
 
 const routeMap = new Map()
 routeMap.set(0, Factory)
@@ -149,7 +149,7 @@ const EnterpriseHome = () => {
           <Route path="/control-panel/product/:type" component={ProductPage} />
           <Route path="/control-panel/state/:id" component={StateTracking} />
           <Route
-            path="/control-panel/video-center/:platformOrderId/:supplierId"
+            path="/control-panel/video-center/:platformOrderId/:supplierId/:type"
             component={VideoCenter}
           />
           <Route

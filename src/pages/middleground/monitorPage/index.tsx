@@ -1,6 +1,5 @@
 import React, { useState, useEffect, memo } from 'react'
 import { useStores } from '@/utils/mobx'
-
 import { Icon } from '@/components'
 import styles from './index.module.less'
 import { Divider, Input, Button, Table, Space } from 'antd'
@@ -9,7 +8,6 @@ import EquipmentModal from './components/equpimentModal'
 import BindModal from './components/bindModal'
 
 const rowKey = 'id'
-
 const dealTypeData = (data: any[]) => {
   data.forEach(item => {
     item.label = item.deptName
@@ -21,7 +19,6 @@ const dealTypeData = (data: any[]) => {
   })
   return data
 }
-
 const MonitorPage = memo(() => {
   const { monitorPageStore } = useStores()
   const { getDataList, deleteEvent, checkBind } = monitorPageStore
@@ -42,7 +39,6 @@ const MonitorPage = memo(() => {
   const [pageSize, setPageSize] = useState(10) //
   const [numberofequipment, setNumberofequipment] = useState(false) //
   const [agreementPop, setAgreementPop] = useState(null)
-
   const getFactoryInfo = async () => {
     const response = await getDataList({
       name: equipmentName,
@@ -65,13 +61,11 @@ const MonitorPage = memo(() => {
       setNumberofequipment(true)
     }
   }
-
   // 当前页数
   const Paginationclick = (page, pageSize) => {
     setPageSize(pageSize)
     setPageNum(page)
   }
-
   const columns: any = [
     {
       title: '设备名称',
@@ -116,8 +110,15 @@ const MonitorPage = memo(() => {
       width: 180,
 
       dataIndex: 'orgNameList',
-      render: value => {
-        return value.join('、')
+      render: (value, record) => {
+        if (record.orgNameList.length > 2) {
+          console.log('修改')
+          let sum =
+            record.orgNameList[0] + '、' + record.orgNameList[1] + ' ' + '.....'
+          return sum
+        } else {
+          return value
+        }
       }
     },
     {
@@ -148,7 +149,7 @@ const MonitorPage = memo(() => {
             className={styles.edit}
             onClick={() => bindModalChange(record.id)}
           >
-            绑定优产部门
+            绑定工票部门
           </span>
         </Space>
       )
@@ -179,6 +180,9 @@ const MonitorPage = memo(() => {
 
   const equipmentModalChange = () => {
     setEquipmentVisible(f => !f)
+    if (equipmentVisible) {
+      setTargetId('')
+    }
   }
 
   const addEquipment = () => {
@@ -203,7 +207,7 @@ const MonitorPage = memo(() => {
     <div className={styles.monitor}>
       <div>{/* <TreeSelect {...tProps} /> */}</div>
       <div>
-        <span className={styles.system}>监控系统</span>
+        <span className={styles.system}>监控列表</span>
       </div>
       <Divider />
       <div className={styles.header}>
@@ -275,6 +279,7 @@ const MonitorPage = memo(() => {
           onCancel={bindModalChange}
           id={targetId}
           status={bindStatus}
+          // key={targetId}
         ></BindModal>
       ) : null}
 

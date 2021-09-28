@@ -7,9 +7,7 @@ import { Divider, Form, Input, Button, Table, Space } from 'antd'
 import DeletePopup from './components/deletePopup'
 import BindingSuperiorProduct from './components/bindingSuperiorProduct'
 import AddDevicePopUpd from './components/addDevicePopUpd'
-import Ceshi from './components/ceshi'
 const rowKey = 'id'
-
 const dealTypeData = (data: any[]) => {
   data.forEach(item => {
     item.label = item.deptName
@@ -21,7 +19,6 @@ const dealTypeData = (data: any[]) => {
   })
   return data
 }
-
 const MonitorPage = memo(() => {
   const { monitorPageStore, commonStore } = useStores()
   const {
@@ -58,9 +55,7 @@ const MonitorPage = memo(() => {
   const [connectionStatus, setConnectionStatus] = useState<number>(null) //连接状态
   const [modify, setModify] = useState<number>(null) //修改
   const [modifyAndAdd, setModifyAndAdd] = useState(true) //用于判断是修改还是新增
-
   const [count, changeCount] = useState(5) //定时器
-
   const [pageSize, setPageSize] = useState(10) //
   const [numberofequipment, setNumberofequipment] = useState(false) //
   const [equipmentDepartmentValue, setEquipmentDepartmentValue] = useState()
@@ -69,10 +64,8 @@ const MonitorPage = memo(() => {
   const [agreementPop, setAgreementPop] = useState(null)
   const [codeAvailable, setCodeAvailable] = useState(false) //验证码
   const [production, setProduction] = useState(null)
-
   const [deselected, setDeselected] = useState([]) //有产使用的数据
   const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]) //优产绑定key值
-
   const [beforeModification, setBeforeModification] = useState({
     serialNumber: '0',
     verificationCode: '0'
@@ -97,11 +90,9 @@ const MonitorPage = memo(() => {
       setNumberofequipment(true)
     }
   }
-
   // 当前页数
   const Paginationclick = (page, pageSize) => {
     setPageSize(pageSize)
-
     setPageNum(page)
   }
   // 关闭清除倒计时
@@ -117,11 +108,9 @@ const MonitorPage = memo(() => {
       cancellation()
     }
   }, [count])
-
   useEffect(() => {
     getFactoryInfo()
   }, [equipmentName, pageNum, pageSize])
-
   useEffect(() => {
     setIsModalVisible(false)
   }, [])
@@ -129,7 +118,6 @@ const MonitorPage = memo(() => {
   const modificationMethod = async rData => {
     setModifyAndAdd(true)
     console.log('这是编辑设备')
-
     const brand = await allDictionary([])
     if (brand) {
       setEquipmentbrand(brand.cameraBrand)
@@ -137,20 +125,16 @@ const MonitorPage = memo(() => {
     const { id, status } = rData
     console.log(status) //用于判断是成功还是失败
     if (status) {
-      console.log('成功显示可用')
       setButtonIsAvailable(false)
     } else {
-      console.log('失败显示不可用')
       setButtonIsAvailable(true)
     }
-
     setModify(id)
     const singly = await singleSearch({ id })
     if (singly.code == 200) {
       form.setFieldsValue(singly.data)
     }
     const equipment = await equipmentDepartment()
-
     if (equipment.code == 200) {
       setDepartment(dealTypeData(equipment.data))
       let sum = dealTypeData(equipment.data)
@@ -158,7 +142,6 @@ const MonitorPage = memo(() => {
         if (item.children.length == 0) {
         }
       })
-
       setIsModalVisible(true)
     }
   }
@@ -258,9 +241,7 @@ const MonitorPage = memo(() => {
       )
     }
   ]
-
   const [form] = Form.useForm()
-
   //删除设备
   const DeleteDeviceDisplay = id => {
     setMoved(id)
@@ -278,13 +259,11 @@ const MonitorPage = memo(() => {
     setJudgment(false)
     setFailed(false)
     setCodeAvailable(false)
-
     form.submit()
   }
   // 新增取消按钮事件
   const equipmentHandleCancel = () => {
     setButtonIsAvailable(true)
-
     setIsModalVisible(false)
     setCodeAvailable(false)
   }
@@ -297,8 +276,6 @@ const MonitorPage = memo(() => {
     }, [])
     console.log(convenience(arr).join(',').split(','))
     v.orgIdList = convenience(arr).join(',').split(',')
-    console.log(v)
-
     if (connection) {
       //  判断是测试还是提交
       const { serialNumber, verificationCode } = v
@@ -306,8 +283,6 @@ const MonitorPage = memo(() => {
         serialNumber,
         verificationCode
       })
-      console.log(ConnectingEquipment)
-
       if (+ConnectingEquipment.data === 20014) {
         setErrorstatus('您所提交的信息有误，请确认序列号或验证码!!!')
       } else {
@@ -321,10 +296,7 @@ const MonitorPage = memo(() => {
         setCodeAvailable(true)
         setConnectionStatus(1)
         // 启动定时器
-        console.log('先清除定时器')
-
         clearInterval(intervalRef.current)
-        console.log(' 准备启动定时器')
         changeCount(5)
         intervalRef.current = setInterval(() => {
           changeCount(count => count - 1)
@@ -332,7 +304,6 @@ const MonitorPage = memo(() => {
       } else {
         setIsModalVisible(false)
         setFailed(true)
-
         setConnectionStatus(0)
       }
       setConnection(false)
@@ -342,7 +313,6 @@ const MonitorPage = memo(() => {
       // 判断是修改还是新增
       if (modifyAndAdd) {
         console.log('这是修改')
-
         const newlywed = await newDataList({
           ...v,
           status: connectionStatus,
@@ -357,19 +327,9 @@ const MonitorPage = memo(() => {
         }
       } else {
         console.log('这是新增')
-        // if (+v.orgIdList.length === 1) {
-        //   const a = findTarget(v.orgIdList.toString(), department)
-        //   const val = getValues(a)
-        //   v.orgIdList = val
-        // }
         setModify(null)
         const newlywed = await newDataList({ ...v, status: connectionStatus })
-        console.log(newlywed)
-        if (newlywed.code == 200) {
-          console.log('可以去除弹框')
-        } else {
-          console.log('不能去除弹框')
-        }
+
         if (newlywed.code == 200) {
           setIsModalVisible(false)
           getFactoryInfo()
@@ -378,7 +338,6 @@ const MonitorPage = memo(() => {
           setButtonIsAvailable(false)
         }
       }
-
       setModify(null)
     }
   }
@@ -394,7 +353,6 @@ const MonitorPage = memo(() => {
       setButtonIsAvailable(true)
     }
   }
-
   //   连接成功的取消
   const cancellation = () => {
     setJudgment(false)
@@ -405,7 +363,6 @@ const MonitorPage = memo(() => {
     setFailed(false)
     setIsModalVisible(true)
   }
-
   // 新增显示
   const showModal = async () => {
     setModifyAndAdd(false)
@@ -415,37 +372,44 @@ const MonitorPage = memo(() => {
       setEquipmentbrand(brand.cameraBrand)
     }
     const equipment = await equipmentDepartment()
-
     if (equipment.code == 200) {
       setDepartment(dealTypeData(equipment.data))
     }
     form.resetFields()
   }
-
   const accountShowModal = async id => {
-    console.log(id)
     setMoved(id)
-
     form.resetFields()
     const account = await bindSuperiorProductAccount()
-
     // 优产绑定 因为当前账号已经绑定了  用于测试
     if (account.data !== true) {
       setaceousModalVisible(true)
     } else {
-      // message.success('已经绑定')
       setCheckedKeys(null) //清空
       setDepartmentPop(true)
-
       const productionDep = await obtainEquipmentBrand() //部门数据
-      console.log(productionDep) //部门数据
       const boundData = await echoBoundData({ cameraId: id }) //回显绑定的部门
-      console.log(boundData)
+      console.log(boundData.data) //接口犯返回来的数据
 
       if (boundData.code === 200) {
+        // 修改接口的数据名称
+        const ModifyDataName = data => {
+          data.forEach(item => {
+            if (item != null) {
+              item.key = item.deptId
+              item.title = item.deptName
+              if (Array.isArray(item.children) && item.children.length) {
+                ModifyDataName(item.children)
+              }
+            }
+          })
+          return data
+        }
+
+        setProduction(ModifyDataName(productionDep))
+
         setCheckedKeys(boundData.data)
-        console.log(boundData.data)
-        // 获取所有的数据
+        // 获取所有的数据，包括子项
         const cesta = data => {
           let sum = []
           if (Array.isArray(data)) {
@@ -459,33 +423,15 @@ const MonitorPage = memo(() => {
             })
             return sum
           }
-          sum.filter(item => item.deptId !== boundData.data)
-          console.log(sum)
         }
-        // 根据接口传过来的id进行过滤
+        console.log(cesta(productionDep))
+
+        // 根据接口传过来的id进行过滤，获取对应的对象
         const echoBoundName = boundData.data.map(item => {
           return cesta(productionDep).filter(v => v.deptId == item)[0]
         })
-        console.log(echoBoundName)
-
-        setDeselected(echoBoundName)
-        console.log(echoBoundName)
+        setDeselected(echoBoundName) //因为我要获取的是id对应的名字
       }
-      // 修改接口的数据名称
-      productionDep.forEach(item => {
-        if (item != null) {
-          item.key = item.deptId
-          item.title = item.deptName
-          if (item.children != null) {
-            item.children.forEach(v => {
-              v.key = v.deptId
-              v.title = v.deptName
-            })
-          }
-        }
-      })
-
-      setProduction(productionDep)
     }
   }
 
@@ -495,16 +441,12 @@ const MonitorPage = memo(() => {
       orgIdList: checkedKeys,
       orgType: 1
     })
-    console.log(res)
-
     if (res === true) {
       setDepartmentPop(false)
-      console.log('确认')
     }
   }
   const DepartmentPopCancel = () => {
     setDepartmentPop(false)
-    console.log('取消')
     setDeselected(null)
     setCheckedKeys(null)
   }
@@ -516,7 +458,6 @@ const MonitorPage = memo(() => {
     }
   }
   const onChange = value => {
-    console.log('🚀 ~ file: index.tsx ~ line 347 ~ MonitorPage ~ value', value)
     setEquipmentDepartmentValue(value)
   }
 
@@ -578,8 +519,6 @@ const MonitorPage = memo(() => {
           <h3 className={styles.totalEquipment}>设备数量共: {total} 件</h3>
         )}
       </div>
-      <Ceshi />
-
       {/* 新增设备弹窗 */}
       <AddDevicePopUpd
         changeCount={changeCount}
@@ -625,8 +564,8 @@ const MonitorPage = memo(() => {
             setaceousModalVisible(false)
           }}
         />
+        // git merge
       )}
-
       {/* 删除设备 */}
       <DeletePopup
         deleteDeviceCancel={deleteDeviceCancel}

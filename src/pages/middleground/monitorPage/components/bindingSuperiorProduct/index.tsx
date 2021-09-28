@@ -126,7 +126,6 @@ const BindingSuperiorProduct = props => {
           // fieldNames={{title:deptName}}
         />
         <div className={styles.cax}></div>
-
         <div className={styles.treeName}>
           {Array.isArray(deselected)
             ? deselected.map(item => {

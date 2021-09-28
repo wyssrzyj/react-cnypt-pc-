@@ -42,8 +42,6 @@ const AddDevicePopUpd = props => {
     count
   } = props
 
-  // console.log('这是修改')
-  // console.log(v.orgIdList, 'v.orgIdList')
   return (
     <div>
       {/* 新增设备弹窗 */}

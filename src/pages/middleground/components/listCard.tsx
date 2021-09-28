@@ -12,7 +12,7 @@ import {
 import styles from './listCard.module.less'
 import classNames from 'classnames'
 import moment from 'moment'
-import { dateDiff } from '@/utils/tool'
+import { dateDiff, findTreeTarget, getTreeChildValues } from '@/utils/tool'
 import { useHistory } from 'react-router'
 import { toJS, useStores, observer } from '@/utils/mobx'
 import { Title } from '../controlPanel/accountSafe'
@@ -205,8 +205,17 @@ const ListCard = ({
         message.warning('请选择生产部门~')
         return
       }
+
+      const arr = []
+      if (+bindInfo.productionIdList.length) {
+        bindInfo.productionIdList.forEach(item => {
+          const t = findTreeTarget(item, enterpriseDepartment)
+          const val = getTreeChildValues(t)
+          arr.push(...val)
+        })
+      }
       const res = await bindProcduce({
-        productionIdList: bindInfo.productionIdList,
+        productionIdList: arr,
         platformOrderId: id,
         status: 3,
         type: bindInfo.type

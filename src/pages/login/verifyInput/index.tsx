@@ -16,7 +16,6 @@ const VerifyInput = props => {
   const [lastTime, setLastTime] = useState<number>(verifyTime)
   const [sending, setSending] = useState<boolean>(false)
   const [timer, setTimer] = useState<any>(null)
-
   const valueChange = (event: InputEvent) => {
     onChange && onChange(event.target.value)
   }

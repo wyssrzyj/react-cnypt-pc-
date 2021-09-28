@@ -166,16 +166,17 @@ const Header = () => {
   // 发单商没有监控列表
 
   const memberCenterFiltering = memberCenter.filter(item => {
-    if (enterpriseType == '0') {
+    if (enterpriseType === '0') {
       if (item.title == '账号管理') {
         item.children.splice(2, 1)
       }
       return item
-    } else {
-      if (item.title !== '监控中心') {
-        return item
-      }
     }
+
+    if (item.title !== '监控中心') {
+      return item
+    }
+    return item
   })
 
   const history = useHistory()

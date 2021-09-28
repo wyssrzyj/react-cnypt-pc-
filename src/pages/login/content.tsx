@@ -34,7 +34,6 @@ const LoginContent = () => {
 
   const errorTexts = new Map()
   errorTexts.set(0, '登录名或登录密码不正确')
-
   const [activeTab, setActiveTab] = useState<string>('1')
   const [phoneNumer, setPhoneNumber] = useState<string>()
   const [error, setError] = useState<boolean>(false)
@@ -105,7 +104,12 @@ const LoginContent = () => {
             scrollToFirstError={true}
             className={styles.form}
           >
-            <Tabs activeKey={activeTab} onChange={callback} centered>
+            <Tabs
+              className={styles.appropriate}
+              activeKey={activeTab}
+              onChange={callback}
+              centered
+            >
               <TabPane
                 className={styles.rightContent}
                 tab="帐户密码登录"

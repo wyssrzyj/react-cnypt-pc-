@@ -33,7 +33,6 @@ const BindingSuperiorProduct = props => {
   const move = item => {
     console.log(item)
     console.log(checkedKeys)
-
     {
       if (item.parentId != 0) {
         console.log('有父节点')
@@ -50,6 +49,7 @@ const BindingSuperiorProduct = props => {
         setCheckedKeys(checkedKeys.filter(l => l !== item.deptId))
       }
       //删除名字
+
       setDeselected(deselected.filter(s => s.deptName !== item.deptName))
 
       {

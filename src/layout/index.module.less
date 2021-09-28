@@ -11,58 +11,61 @@
 }
 
 .header {
-    // border-bottom: 1px solid @borderColor;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 1200px;
-    height: 40px;
-    margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  // border-bottom: 1px solid @borderColor;
+  box-sizing: border-box;
+  width: 1200px;
+  height: 40px;
+  margin: 0 auto;
 }
 
 .content {
-  flex: 1;
   display: flex;
+  flex: 1;
   width: 100%;
   background: #f2f2f2;
   // min-height: calc(100% - 160px);
-//   background-color: rgb(219, 218, 216);
+  //   background-color: rgb(219, 218, 216);
 }
 
 .headerSelect {
-    min-width: 80px;
-    margin: 0 16px 0 0 !important;
+  min-width: 80px;
+  margin: 0 16px 0 0 !important;
 }
 
 .left {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .tips {
-    cursor: pointer;
+  cursor: pointer;
 
-    &:hover {
-        color: @hoverColor;
-    }
+  &:hover {
+    color: @hoverColor;
+  }
 }
 
 .center {
-    flex: 1;
+  flex: 1;
 }
 
 .link {
-    margin-right: 12px;
-    color: @baseColor;
+  margin-right: 12px;
+  color: @baseColor;
 
-    &:hover {
-        color: @hoverColor;
-    }
+  &:hover {
+    color: @hoverColor;
+  }
 }
 
 .footerBox {
   background: #e9e9e9;
+}
+.sign {
+  background: #ffffff;
 }
 
 .footer {
@@ -76,7 +79,6 @@
   color: #999999;
 }
 
-
 .footerItems {
   display: flex;
   justify-content: center;
@@ -87,31 +89,32 @@
   margin-right: 40px;
 }
 
-
-
 .footerTopBox {
-  border-bottom: 1px solid #CFCFCF;
+  border-bottom: 1px solid #cfcfcf;
 }
 
 .footerTop {
   display: flex;
-  padding: 24px 84px 32px 12px;
+  justify-content: space-between;
   width: 1200px;
   margin: 0 auto;
-  justify-content: space-between;
+  padding: 24px 84px 32px 12px;
 }
 
 .logo {
+  position: absolute;
   width: 160px;
   height: 32px;
+  line-height: 78px;
+  background: #ffffff;
 }
 
 .logoText {
-  padding-top: 8px;
   width: 185px;
-  font-size: 12px;
-  font-weight: 500;
+  padding-top: 8px;
   color: #999999;
+  font-weight: 500;
+  font-size: 12px;
   letter-spacing: 25px;
 }
 
@@ -121,24 +124,24 @@
 }
 
 .topItem {
-  margin-left: 114px;
   display: flex;
   align-items: center;
+  margin-left: 114px;
 }
 
 .topItemIcon {
-  font-size: 36px;
   margin-right: 20px;
+  font-size: 36px;
 }
 
 .topItemLabel {
-  font-size: 12px;
-  font-weight: 400;
   color: #666666;
+  font-weight: 400;
+  font-size: 12px;
 }
 
 .topItemValue {
-  font-size: 16px;
-  font-weight: 500;
   color: #333333;
+  font-weight: 500;
+  font-size: 16px;
 }

@@ -1,27 +1,49 @@
 @import '@/css/common.less';
 
 @rightWidth: 700px;
-@banner: 'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/login_bg.jpg';
+@banner: 'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/loginBg.png';
 
 .content {
   display: flex;
-  width: 100vw;
-}
-
-.banner {
-  flex: 1;
+  width: 1200px;
+  height: 810px;
+  margin: 0 auto;
+  background: pink;
   background: url(@banner) center center no-repeat;
   background-size: cover;
   cursor: pointer;
 }
+.external {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(95deg, #edeff4 0%, #d4dbe1 100%);
+}
 
+.banner {
+  flex: 1;
+  width: 1200px;
+  height: 810px;
+}
+
+.log {
+  width: 332px;
+  margin-left: 37px;
+}
+.center {
+  width: 500px;
+  height: 440px;
+  margin-left: 10px;
+}
 .right {
-  width: @rightWidth;
-  padding: 200px 80px 0;
+  width: 400px;
+  height: 464px;
+  margin-top: 174px;
+  /* margin: 0px auto; */
+  margin-left: 100px;
+  padding-top: 27px;
   background: #ffffff;
 
   :global {
-
     input:-internal-autofill-selected {
       background: #ffffff !important;
     }
@@ -33,7 +55,7 @@
       box-shadow: none !important;
     }
 
-    .ant-form-item-has-error .ant-input-affix-wrapper{
+    .ant-form-item-has-error .ant-input-affix-wrapper {
       border-bottom: 1px solid #ff4d4f !important;
     }
 
@@ -42,9 +64,9 @@
     // }
 
     .ant-input {
+      height: 48px !important;
       padding-left: 12px !important;
       line-height: 48px !important;
-      height: 48px !important;
       border: none !important;
       outline: none !important;
       box-shadow: none !important;
@@ -90,7 +112,7 @@
 .userLogin {
   :global {
     .ant-tabs-ink-bar {
-      transform: translateX(88px);
+      transform: translateX(30px);
     }
   }
 }
@@ -98,7 +120,7 @@
 .phoneLogin {
   :global {
     .ant-tabs-ink-bar {
-      transform: translateX(88px);
+      transform: translateX(40px);
     }
   }
 }
@@ -196,10 +218,11 @@
 }
 
 .resetBox {
-  width: 700px;
-  padding: 160px 80px;
+  width: 400px;
+  height: 440px;
+  margin-top: 174px;
+  padding: 47px 42px;
   background: #ffffff;
-
   :global {
     .ant-input-affix-wrapper {
       border: none !important;

@@ -14,14 +14,16 @@ const LoginAndRegister = () => {
   }
 
   return (
-    <div className={styles.content}>
-      <div onClick={toHome} className={styles.banner}></div>
-      <Switch>
-        <Route path="/user/login" component={LoginContent} />
-        <Route path="/user/register" component={Register} />
-        <Route path="/user/reset" component={Reset} />
-        <Redirect to="/user/login" />
-      </Switch>
+    <div className={styles.external}>
+      <div className={styles.content}>
+        <div onClick={toHome} className={styles.banner}></div>
+        <Switch>
+          <Route path="/user/login" component={LoginContent} />
+          <Route path="/user/register" component={Register} />
+          <Route path="/user/reset" component={Reset} />
+          <Redirect to="/user/login" />
+        </Switch>
+      </div>
     </div>
   )
 }

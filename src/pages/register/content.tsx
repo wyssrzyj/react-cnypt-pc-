@@ -26,7 +26,7 @@ const hasEmpty = (obj: CommonObj) => {
   })
 }
 
-const UserIcon = () => <Icon type="jack-yonghuming" className={styles.icon} />
+// const UserIcon = () => <Icon type="jack-yonghuming" className={styles.icon} />
 const PwdIcon = () => <Icon type="jack-mima" className={styles.icon} />
 const PhoneIcon = () => <Icon type="jack-shouji1" className={styles.icon} />
 const CodeIcon = () => <Icon type="jack-yanzhengma" className={styles.icon} />
@@ -75,7 +75,7 @@ const Register = () => {
   const handleSubmit = async () => {
     try {
       const values = await validateFields()
-
+      console.log(values)
       delete values.pwd2
 
       const encode = encodeURI(values.pwd)
@@ -85,9 +85,11 @@ const Register = () => {
         code: values.code,
         mobilePhone: values.mobilePhone,
         password: base64,
-        userName: values.userName
+        userName: values.mobilePhone
       }
       const registerRes = await register(params)
+      console.log(registerRes)
+
       if (registerRes && registerRes.success) {
         history.push('/user/login')
         localStorage.setItem('currentUser', JSON.stringify({}))
@@ -194,15 +196,33 @@ const Register = () => {
         onValuesChange={onValuesChange}
       >
         <Form.Item
-          name="userName"
+          name="mobilePhone"
           label=""
-          rules={[{ required: true, message: '请输入用户名~' }]}
+          trigger={'onChange'}
+          rules={[{ required: true, message: '请输入正确的手机号~' }]}
+          validateStatus={errors.mobilePhone ? 'error' : 'success'}
+          help={helps.mobilePhone}
           getValueFromEvent={getValueFromEvent}
-          validateStatus={errors.userName ? 'error' : 'success'}
-          help={helps.userName}
         >
-          <Input placeholder="用户名" prefix={<UserIcon />}></Input>
+          <Input placeholder="手机号" prefix={<PhoneIcon />}></Input>
+          {/* <ConcatInput prefix={<PhoneIcon />} /> */}
         </Form.Item>
+        <Form.Item
+          name="code"
+          label=""
+          trigger={'onChange'}
+          getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}
+        >
+          <VerifyInput
+            prefix={<CodeIcon />}
+            code={'register'}
+            tel={mobilePhone}
+            checkCallback={checkUser}
+            placeholder={'验证码'}
+          />
+        </Form.Item>
+        {/* 滑动验证 */}
+        <div id="your-dom-id" className="nc-container"></div>
         <Form.Item
           name="pwd"
           label=""
@@ -231,34 +251,6 @@ const Register = () => {
             type="password"
           ></Input>
         </Form.Item>
-        <Form.Item
-          name="mobilePhone"
-          label=""
-          trigger={'onChange'}
-          rules={[{ required: true, message: '请输入正确的手机号~' }]}
-          validateStatus={errors.mobilePhone ? 'error' : 'success'}
-          help={helps.mobilePhone}
-          getValueFromEvent={getValueFromEvent}
-        >
-          <Input placeholder="手机号" prefix={<PhoneIcon />}></Input>
-          {/* <ConcatInput prefix={<PhoneIcon />} /> */}
-        </Form.Item>
-        <Form.Item
-          name="code"
-          label=""
-          trigger={'onChange'}
-          getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}
-        >
-          <VerifyInput
-            prefix={<CodeIcon />}
-            code={'register'}
-            tel={mobilePhone}
-            checkCallback={checkUser}
-            placeholder={'验证码'}
-          />
-        </Form.Item>
-        {/* 滑动验证 */}
-        <div id="your-dom-id" className="nc-container"></div>
         <Button
           className={classNames(styles.agreeBtn, !disabled && styles.blueBtn)}
           // disabled={disabled}

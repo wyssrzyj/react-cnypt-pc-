@@ -518,6 +518,44 @@ export default class OrderStore {
       message.error('服务器错误~')
     }
   }
+
+  // /api/oms/order-log/online-view-order
+  // 在线跟单 视频列表接口
+  @action getVideos = async params => {
+    try {
+      const res = await axios.post(
+        '/api/oms/order-log/order-online-video',
+        params
+      )
+      if (res && res.code === 200) {
+        return res.data
+      } else {
+        message.error(res.msg)
+        return {}
+      }
+    } catch (err) {
+      message.error('服务器错误~')
+    }
+  }
+
+  // /api/oms/order-log/order-online-video
+  // 在线跟单 视频列表接口
+  @action factoryGetVideos = async params => {
+    try {
+      const res = await axios.post(
+        '/api/factory/factory-camera/monitoring-center-video',
+        params
+      )
+      if (res && res.code === 200) {
+        return res.data
+      } else {
+        message.error(res.msg)
+        return {}
+      }
+    } catch (err) {
+      message.error('服务器错误~')
+    }
+  }
 }
 
 export const orderStore = new OrderStore()

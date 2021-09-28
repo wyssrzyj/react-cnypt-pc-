@@ -3,7 +3,7 @@ import { useStores } from '@/utils/mobx'
 import { findTarget, convenience } from './method'
 import { Icon } from '@/components'
 import styles from './index.module.less'
-import { Divider, Form, Input, Button, Table, Space } from 'antd'
+import { Divider, Form, Input, Button, Table, Space, Tooltip } from 'antd'
 import DeletePopup from './components/deletePopup'
 import BindingSuperiorProduct from './components/bindingSuperiorProduct'
 import AddDevicePopUpd from './components/addDevicePopUpd'
@@ -70,6 +70,13 @@ const MonitorPage = memo(() => {
     serialNumber: '0',
     verificationCode: '0'
   }) //存放修改前的input数据
+  const [tooltipText, setTooltipText] = useState()
+  //  useEffect(() => {
+
+  //  }, [tooltipText])
+  const text = <span>{tooltipText}</span>
+
+  // const buttonWidth = 70
   const getFactoryInfo = async () => {
     const response = await getDataList({
       name: equipmentName,
@@ -187,15 +194,25 @@ const MonitorPage = memo(() => {
       align: 'center',
       key: 'orgNameList',
       width: 180,
-
       dataIndex: 'orgNameList',
       render: (value, record) => {
-        if (record.orgNameList.length > 2) {
-          console.log('修改')
+        if (record.orgNameList.length > 1) {
           let sum =
             record.orgNameList[0] + '、' + record.orgNameList[1] + ' ' + '.....'
-          return sum
+          return (
+            <Tooltip placement="top" title={text}>
+              <span
+                onMouseEnter={() => {
+                  setTooltipText(value.join('、'))
+                }}
+              >
+                {' '}
+                {sum}
+              </span>
+            </Tooltip>
+          )
         } else {
+          // setTooltipText(value)
           return value
         }
       }
@@ -563,7 +580,6 @@ const MonitorPage = memo(() => {
             setaceousModalVisible(false)
           }}
         />
-        // git merge
       )}
       {/* 删除设备 */}
       <DeletePopup

@@ -30,14 +30,17 @@ const Layout = (props: LayoutProps) => {
     '/user/reset',
     '/mapSearch'
   ] // 不展示footer的路由列表
+  const noNeedUserInfo = [
+    '/user/login',
+    '/user/register',
+    '/user/reset',
+    '/mapSearch'
+  ]
 
   useEffect(() => {
-    // ;(window as any).requestIdleCallback(async () => {
-    //   await allDictionary([])
-    //   await getAllArea()
-    // })
+    const infoFlag = noNeedUserInfo.some(item => pathname.includes(item))
     ;(async () => {
-      currentUser.userId && (await userInfo())
+      currentUser.userId && !infoFlag && (await userInfo())
       await allDictionary([])
       await getAllArea()
     })()

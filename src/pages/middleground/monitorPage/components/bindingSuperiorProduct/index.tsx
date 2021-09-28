@@ -35,19 +35,29 @@ const BindingSuperiorProduct = props => {
     console.log(checkedKeys)
     {
       if (item.parentId != 0) {
-        console.log(item.parentId)
-
+        console.log('有父节点')
         setCheckedKeys(
           checkedKeys.filter(l => l !== item.deptId && l !== item.parentId)
         )
+        // setDeselected(
+        //   deselected.filter(
+        //     s => s.deptName !== item.deptName && s.deptId !== item.deptId
+        //   )
+        // )
       } else {
+        console.log('没有父节点')
         setCheckedKeys(checkedKeys.filter(l => l !== item.deptId))
       }
       //删除名字
 
       setDeselected(deselected.filter(s => s.deptName !== item.deptName))
-      console.log(checkedKeys) //key
-      console.log(deselected)
+
+      {
+        console.log(checkedKeys) //key
+      }
+      {
+        console.log(deselected) //所有的数据
+      }
     }
   }
 
@@ -100,7 +110,6 @@ const BindingSuperiorProduct = props => {
 
       <Modal
         destroyOnClose={true}
-        width={600}
         title="请选择部门"
         visible={departmentPop}
         onOk={DepartmentPopOk}

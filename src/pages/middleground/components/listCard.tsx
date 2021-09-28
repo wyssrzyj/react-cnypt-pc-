@@ -138,7 +138,8 @@ const ListCard = ({
     pictureUrl = null,
     stickType = 0,
     purchaserName,
-    code
+    code,
+    supplierTenantId
   } = data
 
   const [visible, setVisible] = useState(false)
@@ -257,6 +258,10 @@ const ListCard = ({
   // 退回草稿
   const backDraft = async () => {
     await backToDraft(id)
+  }
+  // 在线跟单
+  const toViewPage = () => {
+    history.push(`/control-panel/video-center/${id}/${supplierTenantId}`)
   }
   // 确认订单
   const confirmOrder = () => {
@@ -433,7 +438,12 @@ const ListCard = ({
               >
                 状态跟踪
               </Button>
-              <Button type={'primary'} ghost className={styles.btn2}>
+              <Button
+                onClick={toViewPage}
+                type={'primary'}
+                ghost
+                className={styles.btn2}
+              >
                 在线跟单
               </Button>
             </>
@@ -458,7 +468,11 @@ const ListCard = ({
               >
                 完成生产
               </Button>
-              <Button type={'text'} className={styles.textBtn}>
+              <Button
+                onClick={toViewPage}
+                type={'text'}
+                className={styles.textBtn}
+              >
                 现场查看
               </Button>
             </>
@@ -474,7 +488,12 @@ const ListCard = ({
               >
                 状态跟踪
               </Button>
-              <Button type={'primary'} ghost className={styles.btn2}>
+              <Button
+                onClick={toViewPage}
+                type={'primary'}
+                ghost
+                className={styles.btn2}
+              >
                 在线跟单
               </Button>
             </>

@@ -10,15 +10,14 @@ import styles from './index.module.less'
 
 const AccountSafe = React.lazy(() => import('./accountSafe'))
 const LoginLogs = React.lazy(() => import('./loginLogs'))
-const FactoryInformation = React.lazy(() => import('./factoryInformation'))
+// const FactoryInformation = React.lazy(() => import('./factoryInformation'))
 const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
 const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
 const MonitorPage = React.lazy(() => import('../monitorPage'))
-
+const VideoCenter = React.lazy(() => import('../videoCenter/factoryVideo'))
 const IssuerEnterpriseInfo = React.lazy(
   () => import('./components/issuerEnterpriseInfo')
 )
-
 const QualificationCertification = React.lazy(
   () => import('./components/qualificationCertification')
 )
@@ -52,36 +51,35 @@ menuKeys.set('/control-panel/panel/qualification', [
   'sub2',
   'sub1'
 ])
-menuKeys.set('/control-panel/panel/photo', ['photo', 'sub1'])
-menuKeys.set('/control-panel/panel/information', ['information', 'sub1'])
-menuKeys.set('/control-panel/panel/enterprise', ['enterprise', 'sub1'])
-menuKeys.set('/control-panel/panel/certificate', ['certificate', 'sub1'])
-menuKeys.set('/control-panel/panel/report', ['report', 'sub1'])
+// 对应修改菜单的key值
 menuKeys.set('/control-panel/panel/account', ['account', 'sub1'])
-menuKeys.set('/control-panel/panel/logs', ['account', 'sub1'])
-menuKeys.set('/control-panel/panel/report', ['report', 'sub2'])
-menuKeys.set('/control-panel/panel/equipment', ['equipment', 'sub2'])
-menuKeys.set('/control-panel/panel/photograph', ['photograph', 'sub2'])
+menuKeys.set('/control-panel/panel/enterprise', ['enterprise', 'sub1'])
 menuKeys.set('/control-panel/panel/issue-bill', ['issue-bill', 'sub1'])
+menuKeys.set('/control-panel/panel/logs', ['account', 'sub1'])
+menuKeys.set('/control-panel/panel/qualification', ['qualification', 'sub2'])
+menuKeys.set('/control-panel/panel/certificate', ['certificate', 'sub2'])
+menuKeys.set('/control-panel/panel/photo', ['photo', 'sub3'])
+menuKeys.set('/control-panel/panel/report', ['report', 'sub3'])
+menuKeys.set('/control-panel/panel/equipment', ['equipment', 'sub3'])
+menuKeys.set('/control-panel/panel/photograph', ['photograph', 'sub3'])
 menuKeys.set('/control-panel/panel/monitorPage', ['monitorPage', 'sub4'])
+menuKeys.set('/control-panel/panel/video-center', ['videoCenter', 'sub4'])
+menuKeys.set('/control-panel/panel/information', ['information', 'sub1'])
 
 const subsMap = new Map()
-console.log(subsMap)
-
-subsMap.set('/control-panel/panel/qualification', ['sub2', 'sub1'])
-console.log(subsMap)
-
-subsMap.set('/control-panel/panel/photo', ['sub1'])
-subsMap.set('/control-panel/panel/information', ['sub1'])
-subsMap.set('/control-panel/panel/enterprise', ['sub1'])
-subsMap.set('/control-panel/panel/certificate', ['sub1'])
-subsMap.set('/control-panel/panel/report', ['sub1'])
 subsMap.set('/control-panel/panel/account', ['sub1'])
-subsMap.set('/control-panel/panel/logs', ['sub1'])
-subsMap.set('/control-panel/panel/report', ['sub2'])
-subsMap.set('/control-panel/panel/equipment', ['sub2'])
-subsMap.set('/control-panel/panel/photograph', ['sub2'])
+subsMap.set('/control-panel/panel/enterprise', ['sub1'])
 subsMap.set('/control-panel/panel/issue-bill', ['sub1'])
+subsMap.set('/control-panel/panel/logs', ['sub1'])
+subsMap.set('/control-panel/panel/qualification', ['sub2'])
+subsMap.set('/control-panel/panel/certificate', ['sub2'])
+subsMap.set('/control-panel/panel/photo', ['sub3'])
+subsMap.set('/control-panel/panel/report', ['sub3'])
+subsMap.set('/control-panel/panel/equipment', ['sub3'])
+subsMap.set('/control-panel/panel/photograph', ['sub3'])
+subsMap.set('/control-panel/panel/video-center', ['sub4'])
+subsMap.set('/control-panel/panel/monitorPage', ['sub4'])
+// subsMap.set('/control-panel/panel/information', ['sub1'])
 // 定义了一个键值对
 
 const ControlPanel = () => {
@@ -106,16 +104,10 @@ const ControlPanel = () => {
   console.log(location.pathname)
 
   const handleMenu = ({ keyPath }) => {
-    console.log(
-      '🚀 ~ file: index.tsx ~ line 108 ~ handleMenu ~ keyPath',
-      keyPath
-    )
-
     setCurrentMenu(keyPath)
   }
 
   const onOpenChange = keys => {
-    console.log(openKeys)
     setOpenKeys(keys)
   }
 
@@ -140,7 +132,7 @@ const ControlPanel = () => {
         <div className={styles.controlPanelLeft}>
           <h2 className={styles.managementCenter}>会员中心</h2>
           <Menu
-            // openKeys={['management']}
+            openKeys={openKeys}
             selectedKeys={currentMenu} //当前选中的菜单项 key 数组
             onClick={handleMenu}
             mode="inline"
@@ -232,6 +224,7 @@ const ControlPanel = () => {
                 <span>监控列表</span>
               </div>
             ) : null}
+
             {+currentUser.enterpriseType !== 1 ? (
               <Menu.Item key="monitorPage">
                 <Link
@@ -242,14 +235,20 @@ const ControlPanel = () => {
                 </Link>
               </Menu.Item>
             ) : null}
+            {+currentUser.enterpriseType !== 1 ? (
+              <Menu.Item key="videoCenter">
+                <Link
+                  className={styles.minute}
+                  to="/control-panel/panel/video-center"
+                >
+                  视频中心
+                </Link>
+              </Menu.Item>
+            ) : null}
           </Menu>
         </div>
+
         <div className={styles.controlPanelRight}>
-          {/* <header className={styles.contentTitle}>
-            <div className={styles.contentLeft}>
-              {menusName.get(location.pathname)}
-            </div>
-          </header> */}
           <Switch>
             {/* 发单信息 */}
             <Route
@@ -266,10 +265,11 @@ const ControlPanel = () => {
               path="/control-panel/panel/certificate"
               component={CertificateAuthentication}
             />
-            <Route
+            {/* <Route
               path="/control-panel/panel/information"
               component={FactoryInformation}
-            />
+            /> */}
+            {/* 工厂照片 */}
             <Route
               path="/control-panel/panel/photo"
               component={PlantSitePhoto}
@@ -305,7 +305,10 @@ const ControlPanel = () => {
               path="/control-panel/panel/monitorPage"
               component={MonitorPage}
             />
-
+            <Route
+              path="/control-panel/panel/video-center"
+              component={VideoCenter}
+            />
             <Redirect to="/platform" />
           </Switch>
         </div>

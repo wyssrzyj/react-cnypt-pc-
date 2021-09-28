@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import styles from './index.module.less'
 import { Icon } from '@/components'
-import { useHistory } from 'react-router'
-import { useParams } from 'react-router'
 import { useStores } from '@/utils/mobx'
 import Single from './single'
 import MultipleSingle from './multipleSingle'
 import Four from './four'
 import Nine from './nine'
+import classNames from 'classnames'
 
 const IconMap = new Map()
 IconMap.set('one', 'jack-dsp_1')
@@ -44,12 +43,8 @@ tagIconMap.set(2, 'jack-dysp')
 tagIconMap.set(3, 'jack-dysp_1')
 
 const VideoCenter = () => {
-  const history = useHistory()
-  const routerParams: { platformOrderId: string; supplierId: string } =
-    useParams()
-  const { platformOrderId, supplierId } = routerParams
   const { orderStore } = useStores()
-  const { getVideos } = orderStore
+  const { factoryGetVideos } = orderStore
 
   const [videoType, setVideoType] = useState<'multiple' | 'single' | undefined>(
     undefined
@@ -60,26 +55,17 @@ const VideoCenter = () => {
   useEffect(() => {
     // 初始化请求数据 判断数据量显示单个或者多个
     ;(async () => {
-      const res = await getVideos({
-        supplierId,
-        platformOrderId,
+      const res = await factoryGetVideos({
         pageNum: 1,
         pageSize: pageSize === 1 ? 99 : pageSize
       })
-      if (res) {
-        const { total } = res
-        // setVideoType('single')
-        setVideoType(total <= 1 ? 'single' : 'multiple')
-      }
+      const { total } = res
+      setVideoType(total <= 1 ? 'single' : 'multiple')
     })()
   }, [])
 
   const pageReset = async size => {
     setPagesize(size)
-  }
-  // 返回上页
-  const back = () => {
-    history.goBack()
   }
 
   const changeTag = num => {
@@ -87,16 +73,9 @@ const VideoCenter = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={classNames(styles.container, styles.container2)}>
       <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <Icon
-            onClick={back}
-            type={'jack-left-copy'}
-            className={styles.headerLeftIcon}
-          ></Icon>
-          视频中心
-        </div>
+        <div className={styles.headerLeft}></div>
         <div className={styles.headerRight}>
           <div className={styles.tagBox}>
             <Icon type={tagIconMap.get(tag)} className={styles.tagIcon}></Icon>
@@ -121,23 +100,25 @@ const VideoCenter = () => {
           ) : null}
         </div>
       </div>
-      {/* 单个视频 单个显示 */}
-      {videoType === 'single' ? (
-        <Single callback={changeTag} getData={getVideos}></Single>
-      ) : null}
-      {/* 多个视频 单个显示 */}
-      {videoType === 'multiple' && pageSize === 1 ? (
-        <MultipleSingle
-          callback={changeTag}
-          getData={getVideos}
-        ></MultipleSingle>
-      ) : null}
-      {videoType === 'multiple' && pageSize === 4 ? (
-        <Four callback={changeTag} getData={getVideos}></Four>
-      ) : null}
-      {videoType === 'multiple' && pageSize === 9 ? (
-        <Nine callback={changeTag} getData={getVideos}></Nine>
-      ) : null}
+      <div className={styles.videoContent}>
+        {/* 单个视频 单个显示 */}
+        {videoType === 'single' ? (
+          <Single callback={changeTag} getData={factoryGetVideos}></Single>
+        ) : null}
+        {/* 多个视频 单个显示 */}
+        {videoType === 'multiple' && pageSize === 1 ? (
+          <MultipleSingle
+            callback={changeTag}
+            getData={factoryGetVideos}
+          ></MultipleSingle>
+        ) : null}
+        {videoType === 'multiple' && pageSize === 4 ? (
+          <Four callback={changeTag} getData={factoryGetVideos}></Four>
+        ) : null}
+        {videoType === 'multiple' && pageSize === 9 ? (
+          <Nine callback={changeTag} getData={factoryGetVideos}></Nine>
+        ) : null}
+      </div>
     </div>
   )
 }

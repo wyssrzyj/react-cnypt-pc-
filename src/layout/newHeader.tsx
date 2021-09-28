@@ -300,9 +300,6 @@ const Header = () => {
               src="http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png"
               alt=""
             />
-            <Link to="/user/login">
-              <span className={styles.sign}>登录</span>
-            </Link>
           </div>
         </div>
       ) : (

@@ -5,8 +5,9 @@ import { getCurrentUser } from '@/utils/tool'
 
 const footerLogo =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/footerLogo.png'
+const unlistedPictures = 'https://s3.bmp.ovh/imgs/2021/09/74478139d6713a55.png'
 
-const Footer = () => {
+https: const Footer = () => {
   const list = [
     { label: '帮助', url: '' },
     { label: '隐私', url: '' },
@@ -42,7 +43,11 @@ const Footer = () => {
       <div className={styles.footerTopBox}>
         <div className={styles.footerTop}>
           <div className={styles.leftLogo}>
-            <img src={footerLogo} alt="" className={styles.logo} />
+            <img
+              src={currentUser.userId ? footerLogo : unlistedPictures}
+              alt=""
+              className={styles.logo}
+            />
             <div className={styles.logoText}>优产云平台</div>
           </div>
 

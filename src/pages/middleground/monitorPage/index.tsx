@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo } from 'react'
 import { useStores } from '@/utils/mobx'
 import { Icon } from '@/components'
 import styles from './index.module.less'
-import { Divider, Input, Button, Table, Space } from 'antd'
+import { Divider, Form, Input, Button, Table, Space, Tooltip } from 'antd'
 import DeletePopup from './components/deletePopup'
 import EquipmentModal from './components/equpimentModal'
 import BindModal from './components/bindModal'
@@ -108,15 +108,22 @@ const MonitorPage = memo(() => {
       align: 'center',
       key: 'orgNameList',
       width: 180,
-
       dataIndex: 'orgNameList',
       render: (value, record) => {
-        if (record.orgNameList.length > 2) {
-          console.log('修改')
-          let sum =
-            record.orgNameList[0] + '、' + record.orgNameList[1] + ' ' + '.....'
-          return sum
+        console.log(
+          '🚀 ~ file: index.tsx ~ line 113 ~ MonitorPage ~ record',
+          record
+        )
+        if (record.orgNameList.length > 1) {
+          return (
+            <Tooltip placement="top" title={record.orgNameList.join('、')}>
+              <span className={styles.departments}>
+                {record.orgNameList.join('、')}
+              </span>
+            </Tooltip>
+          )
         } else {
+          // setTooltipText(value)
           return value
         }
       }

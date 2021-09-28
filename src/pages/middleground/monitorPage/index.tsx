@@ -274,7 +274,6 @@ const MonitorPage = memo(() => {
       prev.push(findTarget(item, department))
       return prev
     }, [])
-    console.log(convenience(arr).join(',').split(','))
     v.orgIdList = convenience(arr).join(',').split(',')
     if (connection) {
       //  判断是测试还是提交

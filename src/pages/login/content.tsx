@@ -91,126 +91,137 @@ const LoginContent = () => {
   }
 
   return (
-    <div
-      className={classNamess(
-        styles.right,
-        +activeTab === 1 ? styles.userLogin : styles.phoneLogin
-      )}
-    >
-      <Form
-        form={form}
-        onValuesChange={valueChange}
-        scrollToFirstError={true}
-        className={styles.form}
-      >
-        <Tabs activeKey={activeTab} onChange={callback} centered>
-          <TabPane
-            className={styles.rightContent}
-            tab="帐户密码登录"
-            key="1"
-          ></TabPane>
-          <TabPane
-            className={styles.rightContent}
-            tab="手机号登录"
-            key="2"
-          ></TabPane>
-        </Tabs>
-        {+activeTab === 1 ? (
-          <section>
-            <Form.Item
-              name="userName"
-              label=""
-              rules={[{ required: true, message: '请输入用户名~' }]}
-            >
-              <Input prefix={<UserIcon />} placeholder={userPlaceholder} />
-            </Form.Item>
-
-            <Form.Item
-              name="passWord"
-              label=""
-              rules={[
-                {
-                  required: true,
-                  message: '请输入正确格式的密码~',
-                  pattern: pwdReg
-                }
-              ]}
-            >
-              <Input.Password
-                prefix={<PwdIcon />}
-                placeholder={pwdPlaceholder}
-                // type="password"
-                size={'middle'}
-              />
-            </Form.Item>
-          </section>
-        ) : (
-          <>
-            <Form.Item
-              name="mobilePhone"
-              label=""
-              rules={[
-                {
-                  required: true,
-                  message: '请输入11位手机号~',
-                  pattern: phoneReg
-                }
-              ]}
-            >
-              <Input
-                prefix={<PhoneIcon />}
-                className={styles.input}
-                placeholder="请输入手机号"
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="code"
-              label=""
-              rules={[
-                {
-                  required: true,
-                  message: '请输入六位验证码~',
-                  min: 6,
-                  max: 6
-                }
-              ]}
-            >
-              <VerifyInput
-                prefix={<PwdIcon />}
-                className={styles.verification}
-                placeholder="请输入验证码"
-                tel={phoneNumer}
-                checkCallback={checkUser}
-                code={'loginVerify'}
-              />
-            </Form.Item>
-          </>
+    <div className={styles.center}>
+      <div
+        className={classNamess(
+          styles.right,
+          +activeTab === 1 ? styles.userLogin : styles.phoneLogin
         )}
-      </Form>
+      >
+        <div className={styles.log}>
+          <Form
+            form={form}
+            onValuesChange={valueChange}
+            scrollToFirstError={true}
+            className={styles.form}
+          >
+            <Tabs activeKey={activeTab} onChange={callback} centered>
+              <TabPane
+                className={styles.rightContent}
+                tab="帐户密码登录"
+                key="1"
+              ></TabPane>
+              <TabPane
+                className={styles.rightContent}
+                tab="手机号登录"
+                key="2"
+              ></TabPane>
+            </Tabs>
+            {+activeTab === 1 ? (
+              <section>
+                <Form.Item
+                  name="userName"
+                  label=""
+                  rules={[{ required: true, message: '请输入用户名~' }]}
+                >
+                  <Input prefix={<UserIcon />} placeholder={userPlaceholder} />
+                </Form.Item>
 
-      <div className={styles.loginOperation}>
-        <div
-          className={classNamess(styles.errorText, error && styles.showError)}
-        >
-          <Icon type={'jack-error'} className={styles.errorIcon} />
-          {errorTexts.get(0)}
+                <Form.Item
+                  name="passWord"
+                  label=""
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入正确格式的密码~',
+                      pattern: pwdReg
+                    }
+                  ]}
+                >
+                  <Input.Password
+                    prefix={<PwdIcon />}
+                    placeholder={pwdPlaceholder}
+                    // type="password"
+                    size={'middle'}
+                  />
+                </Form.Item>
+              </section>
+            ) : (
+              <>
+                <Form.Item
+                  name="mobilePhone"
+                  label=""
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入11位手机号~',
+                      pattern: phoneReg
+                    }
+                  ]}
+                >
+                  <Input
+                    prefix={<PhoneIcon />}
+                    className={styles.input}
+                    placeholder="请输入手机号"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="code"
+                  label=""
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入六位验证码~',
+                      min: 6,
+                      max: 6
+                    }
+                  ]}
+                >
+                  <VerifyInput
+                    prefix={<PwdIcon />}
+                    className={styles.verification}
+                    placeholder="请输入验证码"
+                    tel={phoneNumer}
+                    checkCallback={checkUser}
+                    code={'loginVerify'}
+                  />
+                </Form.Item>
+              </>
+            )}
+          </Form>
+
+          <div className={styles.loginOperation}>
+            <div
+              className={classNamess(
+                styles.errorText,
+                error && styles.showError
+              )}
+            >
+              <Icon type={'jack-error'} className={styles.errorIcon} />
+              {errorTexts.get(0)}
+            </div>
+            <span className={styles.forgetPwd} onClick={toReset}>
+              忘记密码
+            </span>
+          </div>
+
+          <Button type={'primary'} className={styles.btn} onClick={submit}>
+            登录
+          </Button>
+          <Button
+            type={'text'}
+            className={styles.registerBtn}
+            onClick={toRegister}
+          >
+            注册
+          </Button>
         </div>
-        <span className={styles.forgetPwd} onClick={toReset}>
-          忘记密码
-        </span>
-      </div>
-
-      <Button type={'primary'} className={styles.btn} onClick={submit}>
-        登录
-      </Button>
-      <Button type={'text'} className={styles.registerBtn} onClick={toRegister}>
-        注册
-      </Button>
-      {/* <div className={styles.otherLogin}>其他登录方式</div>
+        {/* <div className={styles.otherLogin}>其他登录方式</div>
       <div className={styles.otherBox}>
         <Icon type={'jack-weixin1'} className={styles.otherIcon}></Icon>
       </div> */}
+      </div>
     </div>
   )
 }

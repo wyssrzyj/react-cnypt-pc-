@@ -1,6 +1,7 @@
 import { Icon } from '@/components'
 import React from 'react'
 import styles from './index.module.less'
+import { getCurrentUser } from '@/utils/tool'
 
 const footerLogo =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/footerLogo.png'
@@ -29,9 +30,15 @@ const Footer = () => {
       value: 'uchat@chinajack.com'
     }
   ]
+  const currentUser = getCurrentUser() || {}
+  console.log(currentUser.userId)
 
   return (
-    <div className={styles.footerBox}>
+    <div
+      className={
+        currentUser.userId === undefined ? styles.sign : styles.footerBox
+      }
+    >
       <div className={styles.footerTopBox}>
         <div className={styles.footerTop}>
           <div className={styles.leftLogo}>

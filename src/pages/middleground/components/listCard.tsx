@@ -796,8 +796,6 @@ const ListCard = ({
     )
   }
 
-  console.log(bindInfo, 'bindInfo')
-
   return (
     <div className={styles.card}>
       {/* 订单通用弹窗 */}

@@ -45,7 +45,7 @@ const MultipleSingle = props => {
       }
       const data = await getData(params)
       if (data) {
-        const { records } = data
+        const { records = [] } = data
         callback && callback(1)
         setDatasource(records)
       }
@@ -107,7 +107,8 @@ const MultipleSingle = props => {
           ref={videoBoxRef}
         ></div>
         <div className={!success ? styles.maskSingle : ''}>
-          {dataSource.length &&
+          {Array.isArray(dataSource) &&
+          dataSource.length &&
           dataSource[videoIndex].playAddress &&
           !success ? (
             <>

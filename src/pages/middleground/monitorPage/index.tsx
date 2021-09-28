@@ -110,10 +110,6 @@ const MonitorPage = memo(() => {
       width: 180,
       dataIndex: 'orgNameList',
       render: (value, record) => {
-        console.log(
-          '🚀 ~ file: index.tsx ~ line 113 ~ MonitorPage ~ record',
-          record
-        )
         if (record.orgNameList.length > 1) {
           return (
             <Tooltip placement="top" title={record.orgNameList.join('、')}>

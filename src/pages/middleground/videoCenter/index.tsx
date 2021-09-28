@@ -72,6 +72,7 @@ const VideoCenter = () => {
       })
       if (res) {
         const { total } = res
+        console.log('🚀 ~ file: index.tsx ~ line 75 ~ ; ~ total', total)
         // setVideoType('single')
         setVideoType(total <= 1 ? 'single' : 'multiple')
       }

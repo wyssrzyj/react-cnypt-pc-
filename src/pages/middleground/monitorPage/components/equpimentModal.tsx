@@ -5,7 +5,7 @@ import { Col, Row, Form, Button, Modal } from 'antd'
 import Title from '../../controlPanel/components/title'
 import FormNode from '@/components/FormNode'
 import { observer, useStores } from '@/utils/mobx'
-import { dealTypeData, findTreeTarget, getTreeValues } from '@/utils/tool'
+import { dealTypeData, findTreeTarget, getTreeChildValues } from '@/utils/tool'
 
 const FormItem = Form.Item
 
@@ -148,10 +148,16 @@ const EquipmentModal = props => {
   const submit = async () => {
     try {
       const values = await validateFields()
+
       if (+values.orgIdList.length) {
-        const a = findTreeTarget(values.orgIdList.toString(), department)
-        const val = getTreeValues(a)
-        values.orgIdList = val
+        const arr = []
+        values.orgIdList.forEach(item => {
+          const t = findTreeTarget(item, department)
+          const val = getTreeChildValues(t)
+          arr.push(...val)
+        })
+
+        values.orgIdList = arr
       }
       if (id) {
         values.id = id

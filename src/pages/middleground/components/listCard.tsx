@@ -168,7 +168,10 @@ const ListCard = ({
   useEffect(() => {
     ;(async () => {
       if (bindType === 'edit' && bindVisible) {
-        const bindInfo: Partial<BindInfo> = await getBindInfo(id)
+        const bindInfo: Partial<BindInfo> = (await getBindInfo(id)) || {
+          productionIdList: [],
+          type: null
+        }
         setBindInfo(bindInfo)
         setLastBindInfo(bindInfo)
       }
@@ -792,6 +795,8 @@ const ListCard = ({
       </div>
     )
   }
+
+  console.log(bindInfo, 'bindInfo')
 
   return (
     <div className={styles.card}>

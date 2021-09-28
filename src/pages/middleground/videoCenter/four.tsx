@@ -47,7 +47,7 @@ const Four = props => {
       }
       const data = await getData(params)
       if (data) {
-        const { records, total } = data
+        const { records = [], total } = data
         records.forEach((item, idx) => {
           item.key = `four_${idx + 1}`
         })
@@ -130,40 +130,45 @@ const Four = props => {
   return (
     <div className={styles.videoOutBoxFour}>
       <div className={styles.videoBoxFour} ref={videoFourRef}>
-        {dataSource.map((item, idx) => {
-          const flag = successList.includes(idx)
-          return (
-            <div className={styles.videoFourItemBox} key={idx}>
-              <div
-                id={`video-four_${idx + 1}`}
-                className={styles.videoFourItem}
-              ></div>
-              <div className={!flag ? styles.mask : ''}>
-                {item.playAddress && !flag && (
-                  <>
-                    <Icon
-                      type={'jack-LoadingIndicator'}
-                      className={styles.loadingIcon}
-                    ></Icon>
-                    <div>视频加载中，请稍等 ~</div>
-                  </>
-                )}
-                {!item.playAddress && (
-                  <>
-                    <img src={FAIL_VIDEO} alt="" className={styles.emptyImg9} />
-                    <div>视频播放失败，请检测网络或设备 ~</div>
-                  </>
-                )}
-                {!item.id && (
-                  <>
-                    <img src={UN_ADD} alt="" className={styles.emptyImg9} />
-                    <div>还未添加设备~</div>
-                  </>
-                )}
+        {Array.isArray(dataSource) &&
+          dataSource.map((item, idx) => {
+            const flag = successList.includes(idx)
+            return (
+              <div className={styles.videoFourItemBox} key={idx}>
+                <div
+                  id={`video-four_${idx + 1}`}
+                  className={styles.videoFourItem}
+                ></div>
+                <div className={!flag ? styles.mask : ''}>
+                  {item.playAddress && !flag && (
+                    <>
+                      <Icon
+                        type={'jack-LoadingIndicator'}
+                        className={styles.loadingIcon}
+                      ></Icon>
+                      <div>视频加载中，请稍等 ~</div>
+                    </>
+                  )}
+                  {!item.playAddress && (
+                    <>
+                      <img
+                        src={FAIL_VIDEO}
+                        alt=""
+                        className={styles.emptyImg9}
+                      />
+                      <div>视频播放失败，请检测网络或设备 ~</div>
+                    </>
+                  )}
+                  {!item.id && (
+                    <>
+                      <img src={UN_ADD} alt="" className={styles.emptyImg9} />
+                      <div>还未添加设备~</div>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
         <div className={styles.paginationBox}>
           <Pagination
             current={pageNum}

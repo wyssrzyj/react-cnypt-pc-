@@ -7,6 +7,7 @@ import { useLocation } from 'react-router'
 // import { Icon } from '@/components'
 
 import styles from './index.module.less'
+import { Icon } from '@/components'
 
 const AccountSafe = React.lazy(() => import('./accountSafe'))
 const LoginLogs = React.lazy(() => import('./loginLogs'))
@@ -69,6 +70,15 @@ subsMap.set('/control-panel/panel/monitorPage', ['sub4'])
 // subsMap.set('/control-panel/panel/information', ['sub1'])
 // 定义了一个键值对
 
+const Title = ({ title, icon }) => {
+  return (
+    <div className={styles.menuTitle}>
+      <Icon type={icon} className={styles.menuIcon}></Icon>
+      {title}
+    </div>
+  )
+}
+
 const ControlPanel = () => {
   const { factoryStore, loginStore } = useStores()
   const { productCategory } = factoryStore
@@ -81,7 +91,6 @@ const ControlPanel = () => {
   useEffect(() => {
     ;(async () => {
       const res = await userInfo()
-      console.log(res)
       const { data } = res
       setCurrentUser(data)
     })()
@@ -125,12 +134,12 @@ const ControlPanel = () => {
             mode="inline"
             onOpenChange={onOpenChange} //	SubMenu 展开/关闭的回调
           >
-            {/* <div className={styles.management} key={'accountManage'}>
-              <Icon className={styles.del} type="jack-bussiness-man" />
-              <span>账号管理</span>
-            </div> */}
-
-            <Menu.ItemGroup key="g1" title="账号管理">
+            <Menu.ItemGroup
+              key="g1"
+              title={
+                <Title title={'账号管理'} icon={'jack-bussiness-man'}></Title>
+              }
+            >
               <Menu.Item className={styles.items} key="account">
                 <Link
                   to="/control-panel/panel/account"
@@ -149,7 +158,7 @@ const ControlPanel = () => {
                 </Link>
               </Menu.Item>
               {+currentUser.enterpriseType === 1 ? (
-                <Menu.Item key="jack-company" className={styles.items}>
+                <Menu.Item key="issue-bill" className={styles.items}>
                   <Link
                     className={styles.minutest}
                     to="/control-panel/panel/issue-bill"
@@ -160,12 +169,12 @@ const ControlPanel = () => {
               ) : null}
             </Menu.ItemGroup>
 
-            {/* <div className={styles.management} key={'enterpriseKey'}>
-              <Icon className={styles.menuIcon} type="jack-company" />
-              <span className={styles.enterprise}>企业认证管理</span>
-            </div> */}
-
-            <Menu.ItemGroup key="g2" title="企业认证管理">
+            <Menu.ItemGroup
+              key="g2"
+              title={
+                <Title title={'企业认证管理'} icon={'jack-company'}></Title>
+              }
+            >
               <Menu.Item key="certificate" className={styles.items}>
                 <Link
                   className={styles.minutest}
@@ -185,49 +194,47 @@ const ControlPanel = () => {
               </Menu.Item>
             </Menu.ItemGroup>
 
-            {/* <div className={styles.management} key={'checkKey'}>
-              <Icon className={styles.menuIcon} type="jack-banzhengfuwu" />
-              <span>验厂管理</span>
-            </div> */}
+            {+currentUser.enterpriseType !== 1 ? (
+              <Menu.ItemGroup
+                key="g3"
+                title={
+                  <Title title={'验厂管理'} icon={'jack-banzhengfuwu'}></Title>
+                }
+              >
+                <Menu.Item key="report">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/report"
+                  >
+                    基础资料报告
+                  </Link>
+                </Menu.Item>
 
-            <Menu.ItemGroup key="g3" title="验厂管理">
-              <Menu.Item key="report">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/report"
-                >
-                  基础资料报告
-                </Link>
-              </Menu.Item>
-
-              <Menu.Item key="equipment">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/equipment"
-                >
-                  车间设备
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="photograph">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/photograph"
-                >
-                  工厂照片
-                </Link>
-              </Menu.Item>
-            </Menu.ItemGroup>
+                <Menu.Item key="equipment">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/equipment"
+                  >
+                    车间设备
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="photograph">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/photograph"
+                  >
+                    工厂照片
+                  </Link>
+                </Menu.Item>
+              </Menu.ItemGroup>
+            ) : null}
 
             {/* 加单商才能看到  测试修改 */}
-            {/* {+currentUser.enterpriseType !== 1 ? (
-              <div className={styles.management} key={'videoKey'}>
-                <Icon className={styles.menuIcon} type="jack-video1" />
-                <span>监控列表</span>
-              </div>
-            ) : null} */}
-
-            <Menu.ItemGroup key="g4" title="监控列表">
-              {+currentUser.enterpriseType !== 1 ? (
+            {+currentUser.enterpriseType !== 1 ? (
+              <Menu.ItemGroup
+                key="g4"
+                title={<Title title={'监控列表'} icon={'jack-video1'}></Title>}
+              >
                 <Menu.Item key="monitorPage">
                   <Link
                     className={styles.minute}
@@ -236,8 +243,6 @@ const ControlPanel = () => {
                     监控列表
                   </Link>
                 </Menu.Item>
-              ) : null}
-              {+currentUser.enterpriseType !== 1 ? (
                 <Menu.Item key="videoCenter">
                   <Link
                     className={styles.minute}
@@ -246,8 +251,8 @@ const ControlPanel = () => {
                     视频中心
                   </Link>
                 </Menu.Item>
-              ) : null}
-            </Menu.ItemGroup>
+              </Menu.ItemGroup>
+            ) : null}
           </Menu>
         </div>
 

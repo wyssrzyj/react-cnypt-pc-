@@ -55,6 +55,8 @@ const BindModal = props => {
   const onFinish = async () => {
     try {
       const values = await validateFields()
+      console.log(values, 'values')
+
       const bindRes = await productAccount(values)
       setBindStatus(bindRes)
     } catch (err) {

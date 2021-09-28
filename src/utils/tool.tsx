@@ -324,15 +324,14 @@ export const dealTypeData = (
   return data
 }
 
-export const findTreeTarget = (val, data, key = 'id') => {
+export const findTreeTarget = (values, data, key = 'id') => {
   for (let i = 0; i < data.length; i++) {
     const item = data[i]
-    if (item[key] === val) {
-      //当传过来的id和当前id一样返回
+    if (values.includes(item[key])) {
       return item
     }
     if (isArray(item.children) && item.children.length) {
-      const res = findTreeTarget(val, item.children, key) //
+      const res = findTreeTarget(values, item.children, key) //
       if (!isEmpty(res)) {
         return res
       }
@@ -347,6 +346,21 @@ export const getTreeValues = (data, key = 'id') => {
     if (isArray(data.children)) {
       data.children.forEach(item => {
         target.push(...getTreeValues(item, key))
+      })
+    }
+  }
+  return target
+}
+
+export const getTreeChildValues = (data, key = 'id') => {
+  const target = [] //空数组
+  if (!isEmpty(data)) {
+    if (isEmpty(data.children)) {
+      target.push(data[key])
+    } else {
+      data.children.forEach(item => {
+        const res = getTreeChildValues(item, key)
+        target.push(...res)
       })
     }
   }

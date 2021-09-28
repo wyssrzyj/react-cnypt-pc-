@@ -53,7 +53,7 @@ const Nine = props => {
       }
       const data = await getData(params)
       if (data) {
-        const { records, total } = data
+        const { records = [], total } = data
         // 处理模3余2情况的列表展示
         records.length % 3 === 2 ? records.push({}) : null
         records.forEach((item, idx) => {
@@ -138,44 +138,49 @@ const Nine = props => {
   return (
     <div className={styles.videoOutBoxNine}>
       <div className={styles.videoBoxNine} ref={videoNineRef}>
-        {dataSource.map((item, idx) => {
-          if (isEmpty(item)) {
-            return <div className={styles.videoNineItemBox} key={idx}></div>
-          }
-          const flag = successList.includes(idx)
-          return (
-            <div className={styles.videoNineItemBox} key={idx}>
-              <div
-                id={`video-nine_${idx + 1}`}
-                key={idx}
-                className={styles.videoNineItem}
-              ></div>
-              <div className={!flag ? styles.mask9 : ''}>
-                {item.playAddress && !flag && (
-                  <>
-                    <Icon
-                      type={'jack-LoadingIndicator'}
-                      className={styles.loadingIcon}
-                    ></Icon>
-                    <div>视频加载中，请稍等 ~</div>
-                  </>
-                )}
-                {!item.playAddress && (
-                  <>
-                    <img src={FAIL_VIDEO} alt="" className={styles.emptyImg9} />
-                    <div>视频播放失败，请检测网络或设备 ~</div>
-                  </>
-                )}
-                {!item.id && (
-                  <>
-                    <img src={UN_ADD} alt="" className={styles.emptyImg9} />
-                    <div>还未添加设备~</div>
-                  </>
-                )}
+        {Array.isArray(dataSource) &&
+          dataSource.map((item, idx) => {
+            if (isEmpty(item)) {
+              return <div className={styles.videoNineItemBox} key={idx}></div>
+            }
+            const flag = successList.includes(idx)
+            return (
+              <div className={styles.videoNineItemBox} key={idx}>
+                <div
+                  id={`video-nine_${idx + 1}`}
+                  key={idx}
+                  className={styles.videoNineItem}
+                ></div>
+                <div className={!flag ? styles.mask9 : ''}>
+                  {item.playAddress && !flag && (
+                    <>
+                      <Icon
+                        type={'jack-LoadingIndicator'}
+                        className={styles.loadingIcon}
+                      ></Icon>
+                      <div>视频加载中，请稍等 ~</div>
+                    </>
+                  )}
+                  {!item.playAddress && (
+                    <>
+                      <img
+                        src={FAIL_VIDEO}
+                        alt=""
+                        className={styles.emptyImg9}
+                      />
+                      <div>视频播放失败，请检测网络或设备 ~</div>
+                    </>
+                  )}
+                  {!item.id && (
+                    <>
+                      <img src={UN_ADD} alt="" className={styles.emptyImg9} />
+                      <div>还未添加设备~</div>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
         <div className={styles.paginationBox}>
           <Pagination
             current={pageNum}

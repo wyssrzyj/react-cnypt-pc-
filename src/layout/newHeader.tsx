@@ -172,11 +172,9 @@ const Header = () => {
       }
       return item
     }
-
-    if (item.title !== '监控中心') {
+    if (item.title !== '监控中心' && item.title !== '验厂管理') {
       return item
     }
-    return item
   })
 
   const history = useHistory()

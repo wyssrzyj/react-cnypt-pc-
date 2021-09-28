@@ -95,7 +95,6 @@ const FilterList = props => {
     setActiveProcessing({})
   }
   const cutMainCategory = id => {
-    console.log('🚀 ~ file: index.tsx ~ line 98 ~ id', id)
     if (id) {
       const current =
         find(mainCategory, function (o) {

@@ -97,7 +97,6 @@ const ControlPanel = () => {
   }, [])
 
   const location = useLocation()
-  console.log(location.pathname)
 
   const handleMenu = ({ keyPath }) => {
     setCurrentMenu(keyPath)

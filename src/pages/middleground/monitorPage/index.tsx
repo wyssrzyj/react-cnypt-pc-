@@ -143,7 +143,6 @@ const MonitorPage = memo(() => {
               deleteDeviceDisplay(record.id)
             }}
           >
-            {' '}
             删除
           </span>
           <span className={styles.vertical}>|</span>

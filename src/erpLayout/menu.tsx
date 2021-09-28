@@ -21,8 +21,8 @@ const MenuBox = () => {
   }
 
   useEffect(() => {
-    const target = document.getElementsByClassName('ant-menu')
-    console.log('🚀 ~ file: menu.tsx ~ line 21 ~ useEffect ~ target', target)
+    // const target = document.getElementsByClassName('ant-menu')
+    // console.log('🚀 ~ file: menu.tsx ~ line 21 ~ useEffect ~ target', target)
   }, [collapsed])
 
   const menus = [

@@ -327,7 +327,7 @@ const Header = () => {
               <span className={styles.consoleBox}>
                 <Icon
                   type={'jack-bussiness-man'}
-                  className={styles.icon}
+                  className={styles.workbench}
                 ></Icon>
                 <span className={styles.headerChunk}>我的工作台</span>
               </span>
@@ -341,7 +341,7 @@ const Header = () => {
           <Dropdown overlay={memberCenterFilteringMethod}>
             <div className={styles.chunks} onClick={toAccountSafe}>
               <span className={styles.consoleBox}>
-                <AuditOutlined className={styles.icon} />
+                <AuditOutlined className={styles.member} />
                 <span className={styles.headerChunk}>会员中心</span>
               </span>
             </div>

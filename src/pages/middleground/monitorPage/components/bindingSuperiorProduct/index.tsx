@@ -10,76 +10,48 @@ const BindingSuperiorProduct = props => {
     onCancel,
     DepartmentPopCancel,
     departmentPop,
-    DepartmentPopOk
+    DepartmentPopOk,
+    production,
+    setDeselected,
+    deselected,
+    checkedKeys,
+    setCheckedKeys
   } = props
   console.log(props)
-  const treeData = [
-    {
-      title: '0-0',
-      key: '0-0',
-      children: [
-        {
-          title: '0-0-0',
-          key: '0-0-0',
-          children: [
-            { title: '0-0-0-0', key: '0-0-0-0' },
-            { title: '0-0-0-1', key: '0-0-0-1' },
-            { title: '0-0-0-2', key: '0-0-0-2' }
-          ]
-        },
-        {
-          title: '0-0-1',
-          key: '0-0-1',
-          children: [
-            { title: '0-0-1-0', key: '0-0-1-0' },
-            { title: '0-0-1-1', key: '0-0-1-1' },
-            { title: '0-0-1-2', key: '0-0-1-2' }
-          ]
-        },
-        {
-          title: '0-0-2',
-          key: '0-0-2'
-        }
-      ]
-    },
-    {
-      title: '0-1',
-      key: '0-1',
-      children: [
-        { title: '0-1-0-0', key: '0-1-0-0' },
-        { title: '0-1-0-1', key: '0-1-0-1' },
-        { title: '0-1-0-2', key: '0-1-0-2' }
-      ]
-    },
-    {
-      title: '0-2',
-      key: '0-2'
-    }
-  ]
-  const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([
-    '0-0-0',
-    '0-0-1'
-  ])
-  const [checkedKeys, setCheckedKeys] = useState<React.Key[]>(['0-0-0'])
   const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
-  const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true)
-
-  const onExpand = (expandedKeysValue: React.Key[]) => {
-    console.log('onExpand', expandedKeysValue)
-    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // or, you can remove all expanded children keys.
-    setExpandedKeys(expandedKeysValue)
-    setAutoExpandParent(false)
-  }
-
-  const onCheck = (checkedKeysValue: React.Key[]) => {
-    console.log('onCheck', checkedKeysValue)
-    setCheckedKeys(checkedKeysValue)
-  }
-
   const onSelect = (selectedKeysValue: React.Key[], info: any) => {
     console.log('onSelect', info)
     setSelectedKeys(selectedKeysValue)
+  }
+  const onCheck = (checkedKeysValue, event) => {
+    let sum = event.checkedNodes
+    setDeselected(sum)
+    console.log(event.checkedNodes)
+    setCheckedKeys(checkedKeysValue)
+  }
+
+  const move = item => {
+    console.log(item)
+    console.log(checkedKeys)
+
+    {
+      if (item.parentId != 0) {
+        setCheckedKeys(
+          checkedKeys.filter(l => l !== item.deptId && l !== item.parentId)
+        )
+      } else {
+        setCheckedKeys(checkedKeys.filter(l => l !== item.deptId))
+      }
+      //删除名字
+      setDeselected(deselected.filter(s => s.deptName !== item.deptName))
+      // setCheckedKeys(deselected.filter(s => s.deptId !== checkedKeys))
+      {
+        console.log(checkedKeys) //key
+      }
+      {
+        console.log(deselected)
+      }
+    }
   }
 
   return (
@@ -130,6 +102,8 @@ const BindingSuperiorProduct = props => {
       </Modal>
 
       <Modal
+        destroyOnClose={true}
+        width={600}
         title="请选择部门"
         visible={departmentPop}
         onOk={DepartmentPopOk}
@@ -137,16 +111,41 @@ const BindingSuperiorProduct = props => {
         onCancel={DepartmentPopCancel}
       >
         <Tree
+          className={styles.tree}
           checkable
-          onExpand={onExpand}
-          expandedKeys={expandedKeys}
-          autoExpandParent={autoExpandParent}
-          onCheck={onCheck}
-          checkedKeys={checkedKeys}
-          onSelect={onSelect}
-          selectedKeys={selectedKeys}
-          treeData={treeData}
+          // onExpand={onExpand} //	展开/收起节点时触发
+          // expandedKeys={expandedKeys} //	（受控）展开指定的树节点
+          // autoExpandParent={autoExpandParent} //	是否自动展开父节点
+          onCheck={onCheck} //点击复选框触发
+          checkedKeys={checkedKeys} //选中复选框的树节点
+          onSelect={onSelect} //点击树节点触发
+          selectedKeys={selectedKeys} //（受控）设置选中的树节点
+          treeData={production} //数据
+          height={200}
+          blockNode={false} //是否节点占据一行
+          // fieldNames={{title:deptName}}
         />
+
+        <div className={styles.treeName}>
+          {Array.isArray(deselected)
+            ? deselected.map(item => {
+                return (
+                  <div
+                    className={styles.guanbi}
+                    onClick={() => move(item)}
+                    key={item.key}
+                  >
+                    <span>{item.deptName}</span>
+                    <span>
+                      <Icon type="jack-guanbi" className={styles.del} />
+                    </span>
+                  </div>
+                )
+              })
+            : null}
+        </div>
+        {console.log(checkedKeys)}
+        {console.log(deselected)}
       </Modal>
     </div>
   )

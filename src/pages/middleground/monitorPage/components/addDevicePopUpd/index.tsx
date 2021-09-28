@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React from 'react'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 import { Select } from 'antd'
@@ -10,6 +10,9 @@ import {
   TreeSelect
   // message
 } from 'antd'
+
+// setIsModalVisible(true)
+
 const { Option } = Select
 const { SHOW_PARENT } = TreeSelect
 
@@ -23,6 +26,7 @@ const AddDevicePopUpd = props => {
     onFinish,
     isModalVisible,
     form,
+    codeAvailable,
     equipmentbrand,
     department,
     setConnection,
@@ -33,37 +37,16 @@ const AddDevicePopUpd = props => {
     ConnectionFailedCancel,
     numberofequivalue,
     onChange,
-    errorStatus
+    errorStatus,
+    modify,
+    count
   } = props
-  const intervalRef = useRef<any>(null)
-
-  const [count, changeCount] = useState(0)
-
-  useEffect(() => {
-    if (judgment) {
-      console.log('是成功按钮')
-      changeCount(5)
-    } else {
-      clearInterval(intervalRef.current)
-    }
-  }, [judgment])
-
-  useEffect(() => {
-    if (count === 5) {
-      intervalRef.current = setInterval(() => {
-        changeCount(preCount => preCount - 1)
-      }, 1000)
-    } else if (count === 0) {
-      clearInterval(intervalRef.current)
-      cancellation()
-    }
-  }, [count])
 
   return (
     <div>
       {/* 新增设备弹窗 */}
       <Modal
-        title="新增设备"
+        title={modify ? '编辑设备' : '新增设备'}
         okText="提交"
         onCancel={equipmentHandleCancel}
         footer={[
@@ -170,7 +153,8 @@ const AddDevicePopUpd = props => {
             ]}
           >
             <Input
-              value="12345"
+              value="请输入请输入验证码"
+              disabled={codeAvailable}
               onChange={toeplateVerificationCode}
               placeholder={`请输入请输入验证码`}
             />

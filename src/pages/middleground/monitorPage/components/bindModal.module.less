@@ -1,0 +1,78 @@
+.btns {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 260px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.btn {
+  width: 120px;
+  height: 40px;
+}
+
+.icon {
+  font-size: 16px;
+}
+
+.content {
+  display: flex;
+}
+
+.rightContent {
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tree {
+  flex: 1;
+  padding-right: 20px;
+  border-right: 2px solid #efefef;
+}
+
+.selectTrees {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  padding-left: 20px;
+}
+
+.delIcon {
+  margin-left: 8px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.selectTreeNode {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  margin: 0 12px 12px 0;
+  padding: 0 4px;
+  border: 1px solid #efefef;
+
+  &:hover {
+    color: #1890ff;
+    border: 1px solid #1890ff;
+
+    .delIcon {
+      color: #1890ff;
+    }
+  }
+}
+
+.btns2 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 20px;
+}
+
+.btn2 {
+  width: 120px;
+  height: 40px;
+  margin-right: 20px;
+}

@@ -310,15 +310,45 @@ export const dateDiff = (d1, d2?) => {
 // 处理树型结构数据
 export const dealTypeData = (
   data: any[],
-  fields = ['name', 'id'] as string[]
+  fields = ['name', 'id'] as string[],
+  target = ['label', 'value']
 ) => {
   data.forEach(item => {
-    item.label = item[fields[0] ? fields[0] : 'name']
-    item.value = item[fields[1] ? fields[1] : 'id']
+    item[target[0]] = item[fields[0] ? fields[0] : 'name']
+    item[target[1]] = item[fields[1] ? fields[1] : 'id']
 
     if (Array.isArray(item.children) && item.children.length) {
-      dealTypeData(item.children, fields)
+      dealTypeData(item.children, fields, target)
     }
   })
   return data
+}
+
+export const findTreeTarget = (val, data, key = 'id') => {
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i]
+    if (item[key] === val) {
+      //当传过来的id和当前id一样返回
+      return item
+    }
+    if (isArray(item.children) && item.children.length) {
+      const res = findTreeTarget(val, item.children, key) //
+      if (!isEmpty(res)) {
+        return res
+      }
+    }
+  }
+}
+
+export const getTreeValues = (data, key = 'id') => {
+  const target = [] //空数组
+  if (!isEmpty(data)) {
+    target.push(data[key]) //数据的id传递给数组
+    if (isArray(data.children)) {
+      data.children.forEach(item => {
+        target.push(...getTreeValues(item, key))
+      })
+    }
+  }
+  return target
 }

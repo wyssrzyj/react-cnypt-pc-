@@ -70,15 +70,12 @@ export default class MonitorPage {
     }
   }
   // 检测是否绑定优产账号
-  @action bindSuperiorProductAccount = async () => {
+  @action checkBind = async () => {
     try {
       const res: ResponseProps = await axios.get(
         '/api/user/user-uchat/check-bind-uchat-account'
       )
-      const { data = {} } = res
-      if (data) {
-        localStorage.setItem('userInfo', JSON.stringify(data))
-      }
+
       if (res.code !== 200) {
         message.error(res.msg)
       }
@@ -147,7 +144,7 @@ export default class MonitorPage {
     }
   }
 
-  // 获取设备品牌
+  // 请选择部门
   @action obtainEquipmentBrand = async () => {
     try {
       const res: ResponseProps = await axios.post(
@@ -155,7 +152,7 @@ export default class MonitorPage {
       )
 
       if (res.code === 200) {
-        message.success(res.msg)
+        // message.success(res.msg)
       }
       if (res.code !== 200) {
         message.error(res.msg)
@@ -165,10 +162,51 @@ export default class MonitorPage {
       console.log(e)
     }
   }
+  // 绑定其他系统部门
+  @action otherSystemDepartments = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        ` /api/factory/factory-camera/bind-other-system-organization`,
+        params
+      )
+
+      if (res.code === 200) {
+        // message.success(res.msg)
+      }
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      if (res.data === true) {
+        message.success('绑定成功')
+      }
+      return res.data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  // 回显绑定的数据
+  @action echoBoundData = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        '/api/factory/factory-camera/list-other-system-organization',
+        params
+      )
+      const { data = {} } = res
+      if (data) {
+        localStorage.setItem('userInfo', JSON.stringify(data))
+      }
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   // 新增数据
 
-  @action newDataList = async params => {
+  @action saveVideoEquipment = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/factory/factory-camera/save`,

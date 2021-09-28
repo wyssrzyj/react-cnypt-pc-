@@ -1,15 +1,10 @@
 import React from 'react'
 import styles from './index.module.less'
 import { Icon } from '@/components'
+import { Button, Modal } from 'antd'
 
-import {
-  Button,
-  Modal
-  // message
-} from 'antd'
 const DeletePopup = props => {
   const { deleteDeviceCancel, visible, onClick } = props
-  console.log(props)
   return (
     <div>
       {/* 删除设备 */}

@@ -17,7 +17,8 @@ import './index.less'
 import InputConcatSelect from './InputConcatSelect'
 import { cloneDeep, isEmpty } from 'lodash'
 import OSS from '@/utils/oss'
-import { Icon } from '..'
+import { Icon } from '../index'
+import Viewer from 'react-viewer'
 
 const CheckboxGroup = Checkbox.Group
 const { Option } = Select
@@ -105,6 +106,8 @@ const FormNode = (props: FormNodeProps) => {
   const uploadRef = useRef<any>()
 
   const [nodeValue, setNodeValue] = useState<any>(value)
+  const [imgVisible, setImgVisible] = useState(false)
+  const [previewImage, setPreviewImage] = useState('')
 
   useEffect(() => {
     if (['img', 'annex'].includes(type)) {
@@ -202,6 +205,11 @@ const FormNode = (props: FormNodeProps) => {
     const target = arrList.filter(item => item.thumbUrl !== file.thumbUrl)
     setNodeValue(target)
     onChange && onChange(target)
+  }
+
+  const onPreview = file => {
+    setImgVisible(true)
+    setPreviewImage(file.thumbUrl)
   }
 
   switch (type) {
@@ -342,6 +350,17 @@ const FormNode = (props: FormNodeProps) => {
     case 'img':
       return (
         <div>
+          <Viewer
+            visible={imgVisible}
+            noFooter={true}
+            onMaskClick={() => {
+              setImgVisible(false)
+            }}
+            onClose={() => {
+              setImgVisible(false)
+            }}
+            images={[{ src: previewImage }]}
+          />
           <Upload
             ref={uploadRef}
             fileList={nodeValue}
@@ -353,6 +372,7 @@ const FormNode = (props: FormNodeProps) => {
             customRequest={customRequest}
             onRemove={fileRemove}
             disabled={disabled}
+            onPreview={onPreview}
             {...other}
           >
             {!disabled && (isEmpty(nodeValue) || nodeValue.length) < maxImgs
@@ -370,6 +390,17 @@ const FormNode = (props: FormNodeProps) => {
     case 'annex': // 附件
       return (
         <div>
+          <Viewer
+            visible={imgVisible}
+            noFooter={true}
+            onMaskClick={() => {
+              setImgVisible(false)
+            }}
+            onClose={() => {
+              setImgVisible(false)
+            }}
+            images={[{ src: previewImage }]}
+          />
           <Upload
             ref={uploadRef}
             fileList={nodeValue}
@@ -380,6 +411,7 @@ const FormNode = (props: FormNodeProps) => {
             customRequest={customRequest}
             onRemove={fileRemove}
             disabled={disabled}
+            onPreview={onPreview}
             {...other}
           >
             <Button

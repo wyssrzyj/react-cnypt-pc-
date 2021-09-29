@@ -5,12 +5,13 @@ import styles from './index.module.less'
 import { Form, Col, Row, Table, Button, message } from 'antd'
 import FormNode from '@/components/FormNode'
 import { observer, toJS, useStores } from '@/utils/mobx'
-import { cloneDeep, isEmpty, debounce } from 'lodash'
+import { cloneDeep, isEmpty, debounce, isArray } from 'lodash'
 import moment from 'moment'
 import { useHistory, useParams } from 'react-router'
 import { urlGet } from '@/utils/tool'
 import { layout2 } from '../productPage/configs'
 import classNames from 'classnames'
+import Viewer from 'react-viewer'
 
 const FormItem = Form.Item
 
@@ -48,7 +49,7 @@ OrderTitleMap.set('edit', '编辑订单')
 OrderTitleMap.set('confirm', '确认订单')
 OrderTitleMap.set('detail', '订单详情')
 
-export const getViewText = (data: any, value) => {
+export const getViewText = (data: any, value, imgClick?) => {
   if (['select', 'radio'].includes(data.type)) {
     const target = data.options.find(i => i.value === value) || {}
     return target.label || ''
@@ -67,6 +68,7 @@ export const getViewText = (data: any, value) => {
                 src={item.thumbUrl}
                 alt=""
                 className={styles.img}
+                onClick={() => imgClick(item.thumbUrl)}
               />
             )
           })}
@@ -314,6 +316,8 @@ const OrderPage = () => {
   const [pageType, setPageType] = useState('add') // 页面类型 add edit confirm
   const [factoryOrderStatus, setFactoryOrderStatus] = useState(2) // 加工厂确认订单状态
   const [disabled, setDisabled] = useState(false) // confirm确认订单 detail查看详情时为true
+  const [imgVisible, setImgVisible] = useState(false)
+  const [previewImage, setPreviewImage] = useState('')
 
   useEffect(() => {
     // 编辑 查看时 需要初始化 showInvoiceCount
@@ -379,7 +383,7 @@ const OrderPage = () => {
   }, [productInfo])
 
   const onSearch = debounce(async value => {
-    const target = cloneDeep(contactConfigs)
+    const target = cloneDeep(contactConfigs) || []
     const data = (await getSearchEnterprises(value)) || {}
     const { records } = data
     if (Array.isArray(records)) {
@@ -455,12 +459,6 @@ const OrderPage = () => {
           return
         }
         values = form.getFieldsValue()
-        if (orderId) {
-          values.id = orderId
-        }
-        if (pageType === 'add') {
-          delete values.id
-        }
       }
 
       if (status === 1) {
@@ -479,7 +477,7 @@ const OrderPage = () => {
       }
       if (pageType === 'add') {
         delete values.id
-        delete values.goodsInfoVOList[0]?.id
+        delete productInfo.id
       }
       const params = {
         orderVO: values,
@@ -527,6 +525,12 @@ const OrderPage = () => {
     }
   }
 
+  const imgClick = data => {
+    const url = isArray(data) && data.length > 0 ? data[0].thumbUrl : null
+    setImgVisible(true)
+    setPreviewImage(url)
+  }
+
   const layout = {
     labelCol: {
       span: 5
@@ -559,6 +563,7 @@ const OrderPage = () => {
               src={row.stylePicture[0].thumbUrl}
               alt=""
               className={styles.tableImg}
+              onClick={() => imgClick(row.stylePicture)}
             />
           )
         }
@@ -860,6 +865,18 @@ const OrderPage = () => {
           </div>
         ) : null}
       </Form>
+
+      <Viewer
+        visible={imgVisible}
+        noFooter={true}
+        onMaskClick={() => {
+          setImgVisible(false)
+        }}
+        onClose={() => {
+          setImgVisible(false)
+        }}
+        images={[{ src: previewImage }]}
+      />
     </div>
   )
 }

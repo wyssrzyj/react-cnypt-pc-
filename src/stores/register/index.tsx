@@ -24,9 +24,10 @@ export default class RegisterStore {
       const res: ResponseProps = await axios.get(`/api/sms/send-code/${mobile}`)
       return res
     } catch (err) {
-      const { response } = err
-      const { code } = response
-      console.log('🚀444444444444444444444', code)
+      console.log(err)
+
+      // const { response } = err
+      // const { code } = response
     }
   }
 

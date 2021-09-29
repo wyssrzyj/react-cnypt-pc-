@@ -15,7 +15,7 @@ import {
 import FormSwitch from './FormSwitch'
 import './index.less'
 import InputConcatSelect from './InputConcatSelect'
-import { cloneDeep, isEmpty } from 'lodash'
+import { cloneDeep, isArray, isEmpty } from 'lodash'
 import OSS from '@/utils/oss'
 import { Icon } from '../index'
 import Viewer from 'react-viewer'
@@ -111,6 +111,13 @@ const FormNode = (props: FormNodeProps) => {
 
   useEffect(() => {
     if (['img', 'annex'].includes(type)) {
+      !Array.isArray(value) && setNodeValue([])
+      console.log(value, 'value')
+      if (isArray(value)) {
+        value.forEach(item => {
+          item.name = decodeURI(item.name)
+        })
+      }
       // 头像上传初始化值为数组类型
       !Array.isArray(value) && setNodeValue([])
     }
@@ -165,11 +172,6 @@ const FormNode = (props: FormNodeProps) => {
         return reject(file)
       }
 
-      // if (type === 'img' && !imgIsLtMaxSize) {
-      //   message.error(`文件不能超过${maxSize}KB!`)
-      //   return reject(file)
-      // }
-
       if (!fileIsLtMaxSize) {
         message.error(`文件不能超过${maxSize}MB!`)
         return reject(file)
@@ -210,6 +212,26 @@ const FormNode = (props: FormNodeProps) => {
   const onPreview = file => {
     setImgVisible(true)
     setPreviewImage(file.thumbUrl)
+  }
+
+  const onAnnexPreview = async file => {
+    const targetUrl = file.thumbUrl.replace(
+      'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com',
+      ''
+    )
+    try {
+      let result = await OSS.get(decodeURI(targetUrl))
+      let blob = new Blob([result.content as any], {
+        type: 'application/octet-stream'
+      })
+      let download = document.createElement('a')
+      download.href = window.URL.createObjectURL(blob)
+      download.download = file.name
+      download.click()
+      window.URL.revokeObjectURL(download.href)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   switch (type) {
@@ -390,17 +412,6 @@ const FormNode = (props: FormNodeProps) => {
     case 'annex': // 附件
       return (
         <div>
-          <Viewer
-            visible={imgVisible}
-            noFooter={true}
-            onMaskClick={() => {
-              setImgVisible(false)
-            }}
-            onClose={() => {
-              setImgVisible(false)
-            }}
-            images={[{ src: previewImage }]}
-          />
           <Upload
             ref={uploadRef}
             fileList={nodeValue}
@@ -411,7 +422,7 @@ const FormNode = (props: FormNodeProps) => {
             customRequest={customRequest}
             onRemove={fileRemove}
             disabled={disabled}
-            onPreview={onPreview}
+            onPreview={onAnnexPreview}
             {...other}
           >
             <Button

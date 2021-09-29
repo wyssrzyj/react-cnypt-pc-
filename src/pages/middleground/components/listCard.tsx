@@ -17,6 +17,7 @@ import { useHistory } from 'react-router'
 import { toJS, useStores, observer } from '@/utils/mobx'
 import { Title } from '../controlPanel/accountSafe'
 import { cloneDeep, isNil } from 'lodash'
+import OSS from '@/utils/oss'
 
 const { SHOW_PARENT } = TreeSelect
 
@@ -376,6 +377,26 @@ const ListCard = ({
     }
     await searchBar.changeOptions(option)
     await searchBar.onSubmit()
+  }
+
+  const download = async (url, name) => {
+    url = url.replace(
+      'http://capacity-platform.oss-cn-hangzhou.aliyuncs.com',
+      ''
+    )
+    try {
+      let result = await OSS.get(decodeURI(url))
+      let blob = new Blob([result.content as any], {
+        type: 'application/octet-stream'
+      })
+      let download = document.createElement('a')
+      download.href = window.URL.createObjectURL(blob)
+      download.download = name
+      download.click()
+      window.URL.revokeObjectURL(download.href)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const getEditBtns = (status, type?) => {
@@ -768,14 +789,26 @@ const ListCard = ({
               附件：
               {Array.isArray(failReasonAnnex) &&
                 failReasonAnnex.map((item, idx) => {
+                  const name = decodeURI(item.split('__')[1])
                   return (
-                    <a href={item} className={styles.reasonFile} key={idx}>
+                    <span
+                      onClick={() => download(item, name)}
+                      className={styles.reasonFile}
+                      key={idx}
+                    >
                       <Icon
                         type={'jack-fujian'}
                         className={styles.reasonIcon}
                       ></Icon>
-                      {item.split('__')[1]}
-                    </a>
+                      {name}
+                    </span>
+                    // <a href={item} className={styles.reasonFile} key={idx}>
+                    //   <Icon
+                    //     type={'jack-fujian'}
+                    //     className={styles.reasonIcon}
+                    //   ></Icon>
+                    //   {decodeURI(item.split('__')[1])}
+                    // </a>
                   )
                 })}
             </div>

@@ -98,12 +98,11 @@ const Nine = props => {
           templete: 'voice',
           footer: ['hd', 'fullScreen'],
           handleSuccess: () => {
-            successRef.current.push(idx)
             setTimeout(() => {
               setSuccessList(successRef.current)
             }, 500)
           },
-          handleError: () => {
+          handleError: _error => {
             errorRef.current.push(idx)
             setErrorList(errorRef.current)
             player.stop()
@@ -143,9 +142,14 @@ const Nine = props => {
             if (isEmpty(item)) {
               return <div className={styles.videoNineItemBox} key={idx}></div>
             }
-            const flag = successList.includes(idx)
+            const flag = successRef.current.includes(idx)
             return (
               <div className={styles.videoNineItemBox} key={idx}>
+                {flag ? (
+                  <div className={styles.departmentNames2}>
+                    {item.orgNameList?.join('-')}
+                  </div>
+                ) : null}
                 <div
                   id={`video-nine_${idx + 1}`}
                   key={idx}

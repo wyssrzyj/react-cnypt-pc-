@@ -479,6 +479,7 @@ const OrderPage = () => {
       }
       if (pageType === 'add') {
         delete values.id
+        delete values.goodsInfoVOList[0]?.id
       }
       const params = {
         orderVO: values,

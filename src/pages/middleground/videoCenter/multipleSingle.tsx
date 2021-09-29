@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useMemo } from 'react'
 import styles from './index.module.less'
 import classNames from 'classnames'
 import { Icon } from '@/components'
@@ -87,6 +87,11 @@ const MultipleSingle = props => {
 
   useEffect(() => {}, [error])
 
+  const departmentNames = useMemo(() => {
+    const target = dataSource[videoIndex] || { orgNameList: [] }
+    return target.orgNameList?.join('-')
+  }, [dataSource, videoIndex])
+
   // 单个视频列表下的视频序号
   const changeVideoIndex = async index => {
     setVideoIndex(index)
@@ -101,6 +106,9 @@ const MultipleSingle = props => {
   return (
     <div className={styles.videoBoxOne}>
       <div className={styles.videoSingleBox}>
+        {success ? (
+          <div className={styles.departmentNames}>{departmentNames}</div>
+        ) : null}
         <div
           id="video-container-multiple"
           className={styles.videoSingle}

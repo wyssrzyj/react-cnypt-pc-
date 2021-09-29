@@ -54,7 +54,7 @@ const ConfirmTable = props => {
   }
 
   useEffect(() => {
-    console.log(current)
+    // console.log(current)
   }, [current, getStateTrack])
 
   return (

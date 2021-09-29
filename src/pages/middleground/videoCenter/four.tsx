@@ -135,6 +135,11 @@ const Four = props => {
             const flag = successList.includes(idx)
             return (
               <div className={styles.videoFourItemBox} key={idx}>
+                {flag ? (
+                  <div className={styles.departmentNames2}>
+                    {item.orgNameList?.join('-')}
+                  </div>
+                ) : null}
                 <div
                   id={`video-four_${idx + 1}`}
                   className={styles.videoFourItem}

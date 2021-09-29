@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import styles from './index.module.less'
 import { useParams } from 'react-router'
 import EZUIKit from 'ezuikit-js'
@@ -86,8 +86,15 @@ const Single = props => {
 
   useEffect(() => {}, [error])
 
+  const departmentNames = useMemo(() => {
+    return targetData.orgNameList?.join('-')
+  }, [targetData])
+
   return (
     <div className={styles.videoBoxOne}>
+      {success ? (
+        <div className={styles.departmentNames}>{departmentNames}</div>
+      ) : null}
       {isEmpty(targetData) ? (
         <div className={styles.singleEmpty}></div>
       ) : (

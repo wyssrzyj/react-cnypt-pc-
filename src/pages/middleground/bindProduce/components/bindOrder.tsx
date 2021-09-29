@@ -55,7 +55,11 @@ const BindOrder = () => {
   useEffect(() => {
     ;(async () => {
       const bindInfo = await getBindInfo(routerParams.id)
-      if (bindInfo && Array.isArray(bindInfo.productionIdList)) {
+      if (
+        bindInfo &&
+        bindInfo.type &&
+        Array.isArray(bindInfo.productionIdList)
+      ) {
         setTotalKeysArr(bindInfo.productionIdList)
       }
     })()
@@ -173,7 +177,7 @@ const BindOrder = () => {
   }, [totalKeysArr, dataSource])
 
   useEffect(() => {
-    console.log(currentKeys, 'currentKeys')
+    // console.log(currentKeys, 'currentKeys')
   }, [currentKeys])
 
   const cancel = () => {

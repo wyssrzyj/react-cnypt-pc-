@@ -59,7 +59,7 @@ const AccountSafe = () => {
   }
 
   const showLogs = () => {
-    history.push(`/control-panel/logs/${currentUser.userId}`)
+    history.push(`/control-panel/panel/logs/${currentUser.userId}`)
   }
 
   const nameChange = event => {

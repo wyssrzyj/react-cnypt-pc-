@@ -6,6 +6,30 @@ import { getUId } from '@/utils/tool'
 import { Icon } from '@/components'
 import classNames from 'classnames'
 import { useStores, observer } from '@/utils/mobx'
+import JsonP from 'jsonp'
+
+const targetUrl =
+  'http://www.kuaidi.com/index-ajaxselectcourierinfo-872047814861041-shentong-KUAIDICOM1631784660906.html'
+
+class Fetch {
+  static jsonp(options) {
+    return new Promise((resolve, reject) => {
+      JsonP(
+        options.url,
+        {
+          param: 'callback'
+        },
+        function (err, res) {
+          if (res.status === 'success') {
+            resolve(res)
+          } else {
+            reject(err)
+          }
+        }
+      )
+    })
+  }
+}
 
 const formatData = data => {
   return data.reduce((prev, item) => {
@@ -126,6 +150,12 @@ const OnGoing = () => {
   const [progressKey, setProgressKey] = useState('productionDetail')
   const [dataSource, setDataSource] = useState([])
 
+  useEffect(() => {
+    Fetch.jsonp({ url: targetUrl }).then(response => {
+      console.log(response, 'response')
+    })
+  }, [])
+
   const progressConfigs = [
     {
       label: '生产单',
@@ -183,10 +213,6 @@ const OnGoing = () => {
         uid: getUId()
       })
     setDataSource(basicData)
-    console.log(
-      dealColumns(targetData, basicData.length),
-      'dealColumns(targetData, basicData.length)'
-    )
     setColumns(dealColumns(targetData, basicData.length))
   }, [progressKey, stateTrackData])
 

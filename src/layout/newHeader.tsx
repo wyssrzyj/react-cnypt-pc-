@@ -150,7 +150,6 @@ const Header = () => {
 
   const { logout } = loginStore
   const { enterpriseType } = userInfo
-  console.log(enterpriseType)
 
   // 企业类型 0 加工厂 1 发单商
   //我的工作台

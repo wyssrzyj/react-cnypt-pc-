@@ -55,7 +55,7 @@ const StateTracking = () => {
   const { getTrackState } = orderStore
 
   const title = '状态跟踪'
-  const [curStep, setCurStep] = useState<number>(1)
+  const [curStep, setCurStep] = useState<number>(0)
   const [configs, setConfigs] = useState<any>(initConfigs)
   const [orderName, setOrderName] = useState<string>('')
 

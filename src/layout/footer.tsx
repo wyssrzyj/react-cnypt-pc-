@@ -1,11 +1,15 @@
 import { Icon } from '@/components'
 import React from 'react'
 import styles from './index.module.less'
+import { getCurrentUser } from '@/utils/tool'
 
 const footerLogo =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/footerLogo.png'
 
+const transparentLogo = 'https://s3.bmp.ovh/imgs/2021/09/74478139d6713a55.png'
+
 const Footer = () => {
+  const currentUser = getCurrentUser() || {}
   const list = [
     { label: '帮助', url: '' },
     { label: '隐私', url: '' },
@@ -29,13 +33,18 @@ const Footer = () => {
       value: 'uchat@chinajack.com'
     }
   ]
+  console.log()
 
   return (
-    <div className={styles.footerBox}>
+    <div className={currentUser.userId ? styles.footerBox : styles.footerBoxst}>
       <div className={styles.footerTopBox}>
         <div className={styles.footerTop}>
           <div className={styles.leftLogo}>
-            <img src={footerLogo} alt="" className={styles.logo} />
+            <img
+              src={currentUser.userId ? footerLogo : transparentLogo}
+              alt=""
+              className={styles.logo}
+            />
             <div className={styles.logoText}>优产云平台</div>
           </div>
 

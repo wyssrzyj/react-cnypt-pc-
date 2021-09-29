@@ -128,7 +128,7 @@ const memberCenter = [
     ]
   },
   {
-    title: '监控中心',
+    title: '监控列表',
     children: [
       {
         title: '监控列表',
@@ -150,7 +150,6 @@ const Header = () => {
 
   const { logout } = loginStore
   const { enterpriseType } = userInfo
-  console.log(enterpriseType)
 
   // 企业类型 0 加工厂 1 发单商
   //我的工作台
@@ -166,13 +165,13 @@ const Header = () => {
   // 发单商没有监控列表
 
   const memberCenterFiltering = memberCenter.filter(item => {
-    if (enterpriseType == '0') {
+    if (enterpriseType === '0') {
       if (item.title == '账号管理') {
         item.children.splice(2, 1)
       }
       return item
     } else {
-      if (item.title !== '监控中心') {
+      if (item.title !== '监控列表' && item.title !== '验厂管理') {
         return item
       }
     }
@@ -189,7 +188,7 @@ const Header = () => {
   }
 
   const toAccountSafe = () => {
-    // history.push('/control-panel/panel/account')
+    history.push('/control-panel/panel/account')
   }
   const toAccountRight = () => {
     if (+enterpriseType) {
@@ -226,9 +225,10 @@ const Header = () => {
   )
 
   /* -----------------------------我的工作台----------------------------- */
+  //
 
   const workbenchDataFilteringMethod = (
-    <div className={styles.console}>
+    <div className={enterpriseType !== null ? styles.console : null}>
       {workbenchDataFiltering.map((item, index) => {
         const { title, children } = item
         return (
@@ -290,64 +290,87 @@ const Header = () => {
     </div>
   )
   return (
-    <header className={styles.header}>
-      <div className={styles.headerLeft}>
-        <Link to="/" className={styles.home}>
-          <Icon type={'jack-shouye2'} className={styles.homeIcon}></Icon>
-          <span className={styles.homeName}>优产云平台首页</span>
-        </Link>
+    <header>
+      {currentUser.userId ? (
+        <div className={styles.header}>
+          <div className={styles.headerLeft}>
+            <Link to="/" className={styles.home}>
+              <Icon type={'jack-shouye2'} className={styles.homeIcon}></Icon>
+              <span className={styles.homeName}>优产云平台首页</span>
+            </Link>
 
-        {currentUser.userId ? (
-          <Dropdown overlay={menu}>
-            <span className={styles.user}>
-              <Icon type={'jack-yonghu2'} className={styles.userIcon}></Icon>
-              您好，{currentUser.nickName || currentUser.username}
-            </span>
-          </Dropdown>
-        ) : (
-          <>
-            <span style={{ cursor: 'pointer' }} onClick={toRegister}>
-              <Icon type={'jack-yonghu2'} className={styles.userIcon}></Icon>
-              注册
-            </span>
-            <span>&nbsp;/ &nbsp;</span>
-            <a onClick={toLogin}>登录</a>
-          </>
-        )}
-      </div>
+            {currentUser.userId ? (
+              <Dropdown overlay={menu}>
+                <span className={styles.user}>
+                  <Icon
+                    type={'jack-yonghu2'}
+                    className={styles.userIcon}
+                  ></Icon>
+                  您好，{currentUser.nickName || currentUser.username}
+                </span>
+              </Dropdown>
+            ) : (
+              <>
+                <span style={{ cursor: 'pointer' }} onClick={toRegister}>
+                  <Icon
+                    type={'jack-yonghu2'}
+                    className={styles.userIcon}
+                  ></Icon>
+                  注册
+                </span>
+                <span>&nbsp;/ &nbsp;</span>
+                <a onClick={toLogin}>登录</a>
+              </>
+            )}
+          </div>
 
-      {/* -----------------------------我的工作台----------------------------- */}
-      <div className={styles.headerRight}>
-        {currentUser.userId ? (
-          <Dropdown
-            className={styles.headerLeftest}
-            overlay={workbenchDataFilteringMethod}
-          >
-            <div className={styles.chunks} onClick={toAccountRight}>
-              <span className={styles.consoleBox}>
-                <Icon
-                  type={'jack-bussiness-man'}
-                  className={styles.workbench}
-                ></Icon>
-                <span className={styles.headerChunk}>我的工作台</span>
-              </span>
+          {/* -----------------------------我的工作台----------------------------- */}
+          <div className={styles.headerRight}>
+            {currentUser.userId ? (
+              <Dropdown
+                className={styles.headerLeftest}
+                overlay={workbenchDataFilteringMethod}
+              >
+                <div className={styles.chunks} onClick={toAccountRight}>
+                  <span className={styles.consoleBox}>
+                    <Icon
+                      type={'jack-bussiness-man'}
+                      className={styles.workbench}
+                    ></Icon>
+                    <span className={styles.headerChunk}>我的工作台</span>
+                  </span>
+                </div>
+              </Dropdown>
+            ) : null}
+          </div>
+          {/* -----------------------------会员中心----------------------------- */}
+          <div className={styles}>
+            {currentUser.userId ? (
+              <Dropdown overlay={memberCenterFilteringMethod}>
+                <div className={styles.chunks} onClick={toAccountSafe}>
+                  <span className={styles.consoleBox}>
+                    <AuditOutlined className={styles.member} />
+                    <span className={styles.headerChunk}>会员中心</span>
+                  </span>
+                </div>
+              </Dropdown>
+            ) : null}
+          </div>
+        </div>
+      ) : (
+        <div className={styles.father}>
+          <div className={styles.topCenter}>
+            <img
+              className={styles.topCenterImg}
+              src="http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png"
+              alt=""
+            />
+            <div onClick={toLogin} className={styles.landing}>
+              登录
             </div>
-          </Dropdown>
-        ) : null}
-      </div>
-      {/* -----------------------------会员中心----------------------------- */}
-      <div className={styles}>
-        {currentUser.userId ? (
-          <Dropdown overlay={memberCenterFilteringMethod}>
-            <div className={styles.chunks} onClick={toAccountSafe}>
-              <span className={styles.consoleBox}>
-                <AuditOutlined className={styles.member} />
-                <span className={styles.headerChunk}>会员中心</span>
-              </span>
-            </div>
-          </Dropdown>
-        ) : null}
-      </div>
+          </div>
+        </div>
+      )}
     </header>
   )
 }

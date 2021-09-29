@@ -9,9 +9,8 @@ import VerifyInput from './verifyInput'
 import { phoneReg, pwdReg } from '../register/content'
 
 const { TabPane } = Tabs
-
 const UserIcon = () => <Icon type="jack-yonghuming" className={styles.icon} />
-const PwdIcon = () => <Icon type="jack-yanzhengma" className={styles.icon} />
+const PwdIcon = () => <Icon type="jack-mima" className={styles.icon} />
 const PhoneIcon = () => <Icon type="jack-shouji1" className={styles.icon} />
 
 const pathMap = new Map()

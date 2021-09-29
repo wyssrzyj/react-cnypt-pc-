@@ -88,8 +88,6 @@ const ControlPanel = () => {
   }, [])
 
   const location = useLocation()
-  console.log(location.pathname)
-
   const handleMenu = ({ keyPath }) => {
     setCurrentMenu(keyPath)
   }
@@ -184,39 +182,60 @@ const ControlPanel = () => {
                 </Link>
               </Menu.Item>
             </Menu.ItemGroup>
+            {currentUser.enterpriseType !== null ? (
+              <div>
+                {+currentUser.enterpriseType === 0 ? (
+                  <Menu.ItemGroup key="g3" title={'验厂管理'}>
+                    <Menu.Item key="report">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/report"
+                      >
+                        基础资料报告
+                      </Link>
+                    </Menu.Item>
 
-            {/* <div className={styles.management} key={'checkKey'}>
-              <Icon className={styles.menuIcon} type="jack-banzhengfuwu" />
-              <span>验厂管理</span>
-            </div> */}
+                    <Menu.Item key="equipment">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/equipment"
+                      >
+                        车间设备
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item key="photograph">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/photograph"
+                      >
+                        工厂照片
+                      </Link>
+                    </Menu.Item>
+                  </Menu.ItemGroup>
+                ) : null}
+                {+currentUser.enterpriseType === 0 ? (
+                  <Menu.ItemGroup key="g4" title="监控列表">
+                    <Menu.Item key="monitorPage">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/monitorPage"
+                      >
+                        监控列表
+                      </Link>
+                    </Menu.Item>
 
-            <Menu.ItemGroup key="g3" title="验厂管理">
-              <Menu.Item key="report">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/report"
-                >
-                  基础资料报告
-                </Link>
-              </Menu.Item>
-
-              <Menu.Item key="equipment">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/equipment"
-                >
-                  车间设备
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="photograph">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/photograph"
-                >
-                  工厂照片
-                </Link>
-              </Menu.Item>
-            </Menu.ItemGroup>
+                    <Menu.Item key="videoCenter">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/video-center"
+                      >
+                        视频中心
+                      </Link>
+                    </Menu.Item>
+                  </Menu.ItemGroup>
+                ) : null}
+              </div>
+            ) : null}
 
             {/* 加单商才能看到  测试修改 */}
             {/* {+currentUser.enterpriseType !== 1 ? (
@@ -225,29 +244,6 @@ const ControlPanel = () => {
                 <span>监控列表</span>
               </div>
             ) : null} */}
-
-            <Menu.ItemGroup key="g4" title="监控列表">
-              {+currentUser.enterpriseType !== 1 ? (
-                <Menu.Item key="monitorPage">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/monitorPage"
-                  >
-                    监控列表
-                  </Link>
-                </Menu.Item>
-              ) : null}
-              {+currentUser.enterpriseType !== 1 ? (
-                <Menu.Item key="videoCenter">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/video-center"
-                  >
-                    视频中心
-                  </Link>
-                </Menu.Item>
-              ) : null}
-            </Menu.ItemGroup>
           </Menu>
         </div>
 

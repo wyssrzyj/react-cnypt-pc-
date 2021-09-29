@@ -60,20 +60,19 @@ const EnterpriseHome = () => {
         <div className={styles.navBar}>
           <img src={LOGO} alt="" className={styles.navLogo} />
           <div className={styles.navs}>
-            {userInfo.enterpriseType !== null ? (
-              <div
-                className={classNames(
-                  styles.navItem,
-                  location.pathname === '/control-panel/home'
-                    ? styles.activeNavItem
-                    : ''
-                )}
-                onClick={() => toTarget('home')}
-              >
-                首页
-              </div>
-            ) : null}
-            {+userInfo.enterpriseType === 0 ? (
+            <div
+              className={classNames(
+                styles.navItem,
+                location.pathname === '/control-panel/home'
+                  ? styles.activeNavItem
+                  : ''
+              )}
+              onClick={() => toTarget('home')}
+            >
+              首页
+            </div>
+            {+userInfo.enterpriseType === 0 &&
+            userInfo.enterpriseType !== null ? (
               <div
                 className={classNames(
                   styles.navItem,
@@ -95,7 +94,8 @@ const EnterpriseHome = () => {
               </div>
             ) : null}
 
-            {+userInfo.enterpriseType === 1 ? (
+            {+userInfo.enterpriseType === 1 &&
+            userInfo.enterpriseType !== null ? (
               <div
                 className={classNames(
                   styles.navItem,

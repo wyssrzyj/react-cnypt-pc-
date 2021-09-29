@@ -22,6 +22,7 @@ import {
   RequiredTitle,
   TabelTitle
 } from './configs'
+import Viewer from 'react-viewer'
 
 const FormItem = Form.Item
 const { Option } = Select
@@ -60,6 +61,13 @@ const ProductPage = () => {
   const [count, setCount] = useState<number>(0) // 产品总数
   const [amount, setAmount] = useState<number>(0) // 产品总价
   const [disabled, setDisabled] = useState<boolean>(false)
+  const [imgVisible, setImgVisible] = useState(false)
+  const [previewImage, setPreviewImage] = useState('')
+
+  const imgClick = url => {
+    setImgVisible(true)
+    setPreviewImage(url)
+  }
 
   useEffect(() => {
     setFromProduct(false)
@@ -592,7 +600,7 @@ const ProductPage = () => {
                   <Col key={item.field} span={item.span}>
                     <FormItem label={item.label} {...layout}>
                       <div key={item.field}>
-                        {getViewText(item, productInfo[item.field])}
+                        {getViewText(item, productInfo[item.field], imgClick)}
                       </div>
                     </FormItem>
                   </Col>
@@ -605,7 +613,6 @@ const ProductPage = () => {
                     name={item.field}
                     label={item.label}
                     rules={[{ required: item.required, message: item.message }]}
-                    // initialValue={productInfo[item.field]}
                     {...layout2}
                   >
                     <FormNode {...data}></FormNode>
@@ -634,6 +641,18 @@ const ProductPage = () => {
           </Button>
         )}
       </Form>
+
+      <Viewer
+        visible={imgVisible}
+        noFooter={true}
+        onMaskClick={() => {
+          setImgVisible(false)
+        }}
+        onClose={() => {
+          setImgVisible(false)
+        }}
+        images={[{ src: previewImage }]}
+      />
     </div>
   )
 }

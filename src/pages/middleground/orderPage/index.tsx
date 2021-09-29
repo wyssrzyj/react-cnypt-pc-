@@ -379,7 +379,7 @@ const OrderPage = () => {
   }, [productInfo])
 
   const onSearch = debounce(async value => {
-    const target = cloneDeep(contactConfigs)
+    const target = cloneDeep(contactConfigs) || []
     const data = (await getSearchEnterprises(value)) || {}
     const { records } = data
     if (Array.isArray(records)) {
@@ -455,12 +455,6 @@ const OrderPage = () => {
           return
         }
         values = form.getFieldsValue()
-        if (orderId) {
-          values.id = orderId
-        }
-        if (pageType === 'add') {
-          delete values.id
-        }
       }
 
       if (status === 1) {
@@ -479,7 +473,7 @@ const OrderPage = () => {
       }
       if (pageType === 'add') {
         delete values.id
-        delete values.goodsInfoVOList[0]?.id
+        delete productInfo.id
       }
       const params = {
         orderVO: values,

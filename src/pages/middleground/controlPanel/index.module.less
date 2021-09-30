@@ -26,6 +26,10 @@
   flex-direction: column;
   min-width: 160px;
   background-color: #ffffff;
+  max-height: calc(100vh - 104px - 195px);
+  height: fit-content;
+  overflow: auto;
+
   :global {
     .ant-menu-item-group {
       margin-bottom: 3px;
@@ -74,6 +78,24 @@
       color: #333333 !important;
     }
   }
+}
+
+.controlPanelLeft::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.controlPanelLeft::-webkit-scrollbar-track {
+  background: rgb(239, 239, 239);
+  border-radius: 2px;
+}
+
+.controlPanelLeft::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 10px;
+}
+
+.controlPanelLeft::-webkit-scrollbar-thumb:hover {
+  background: #333;
 }
 
 .slideBar {

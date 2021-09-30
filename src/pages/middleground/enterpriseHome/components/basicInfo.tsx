@@ -16,9 +16,16 @@ const InfoCard = ({ data }) => {
   )
 }
 
-const AddCrad = ({ data }) => {
+const AddCrad = props => {
+  const { data } = props
+  const { callback } = data
+  console.log('🚀 ~ file: basicInfo.tsx ~ line 21 ~ callback', callback)
+  const addClick = () => {
+    callback && callback()
+  }
+
   return (
-    <div className={styles.addCard}>
+    <div className={styles.addCard} onClick={addClick}>
       <Icon type={'jack-jian'} className={styles.addIcon}></Icon>
       <div>{data.label}</div>
     </div>

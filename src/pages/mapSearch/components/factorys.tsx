@@ -5,6 +5,7 @@ import { toJS, useStores, observer } from '@/utils/mobx'
 import { Icon } from '@/components'
 import moment from 'moment'
 import classNames from 'classnames'
+import { isEmpty } from 'lodash'
 
 const EMPTY_IMG =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/factoryEmpty.png'
@@ -135,9 +136,11 @@ const Factorys = props => {
   }, [throttleScrollTop])
 
   const factoryClick = data => {
-    console.log('🚀 ~ file: factorys.tsx ~ line 138 ~ data', data)
     const { factoryLnglat } = data
-    if (Array.isArray(factoryLnglat) && !factoryLnglat.includes('null')) {
+    if (
+      Array.isArray(factoryLnglat) &&
+      !factoryLnglat.some(item => isEmpty(item) || item === 'null')
+    ) {
       map && map.panTo(factoryLnglat)
     }
     setCurrentFactory(toJS(data))

@@ -516,7 +516,11 @@ const OrderPage = () => {
         }
       }
       await saveOrder(params, status)
-      back()
+      history.push(
+        pageType === 'add'
+          ? '/control-panel/put-manage?key=all&pageNum=1&pageSize=10' // 新增跳到全部页签
+          : '/control-panel/put-manage?key=draft&pageNum=1&pageSize=10' // 保存跳到草稿箱
+      )
       return
     } catch (err) {
       console.log(err)

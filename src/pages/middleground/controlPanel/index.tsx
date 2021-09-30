@@ -32,6 +32,7 @@ const FactoryEquipment = React.lazy(
 const FactoryPhotograph = React.lazy(
   () => import('./components/factoryPhotograph')
 )
+const Department = React.lazy(() => import('../department'))
 
 const menuKeys = new Map()
 menuKeys.set('/control-panel/panel/qualification', [
@@ -52,6 +53,7 @@ menuKeys.set('/control-panel/panel/equipment', ['equipment', 'sub3'])
 menuKeys.set('/control-panel/panel/photograph', ['photograph', 'sub3'])
 menuKeys.set('/control-panel/panel/monitorPage', ['monitorPage', 'sub4'])
 menuKeys.set('/control-panel/panel/video-center', ['videoCenter', 'sub4'])
+menuKeys.set('/control-panel/panel/department', ['department', 'sub4'])
 menuKeys.set('/control-panel/panel/information', ['information', 'sub1'])
 
 const subsMap = new Map()
@@ -67,6 +69,7 @@ subsMap.set('/control-panel/panel/equipment', ['sub3'])
 subsMap.set('/control-panel/panel/photograph', ['sub3'])
 subsMap.set('/control-panel/panel/video-center', ['sub4'])
 subsMap.set('/control-panel/panel/monitorPage', ['sub4'])
+subsMap.set('/control-panel/panel/department', ['sub4'])
 // subsMap.set('/control-panel/panel/information', ['sub1'])
 // 定义了一个键值对
 
@@ -123,8 +126,8 @@ const ControlPanel = () => {
   return (
     <div className={styles.controlPanel}>
       <div className={styles.controlPanelContainer}>
-        <div style={{ height: 70 }} className={styles.controlPanelLeft}>
-          <h2 className={styles.managementCenter}></h2>
+        <div className={styles.controlPanelLeft}>
+          <h2 className={styles.managementCenter}>会员中心</h2>
           <Menu
             openKeys={openKeys}
             selectedKeys={currentMenu} //当前选中的菜单项 key 数组
@@ -237,6 +240,14 @@ const ControlPanel = () => {
                       <Title title={'监控列表'} icon={'jack-video1'}></Title>
                     }
                   >
+                    <Menu.Item key="department">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/department"
+                      >
+                        部门管理
+                      </Link>
+                    </Menu.Item>
                     <Menu.Item key="monitorPage">
                       <Link
                         className={styles.minute}
@@ -266,19 +277,15 @@ const ControlPanel = () => {
                 ) : null}
               </div>
             ) : null}
-
-            {/* 加单商才能看到  测试修改 */}
-            {/* {+currentUser.enterpriseType !== 1 ? (
-              <div className={styles.management} key={'videoKey'}>
-                <Icon className={styles.menuIcon} type="jack-video1" />
-                <span>监控列表</span>
-              </div>
-            ) : null} */}
           </Menu>
         </div>
-
         <div className={styles.controlPanelRight}>
           <Switch>
+            {/* 发单信息 */}
+            <Route
+              path="/control-panel/panel/department"
+              component={Department}
+            />
             {/* 发单信息 */}
             <Route
               path="/control-panel/panel/issue-bill"
@@ -294,10 +301,6 @@ const ControlPanel = () => {
               path="/control-panel/panel/certificate"
               component={CertificateAuthentication}
             />
-            {/* <Route
-              path="/control-panel/panel/information"
-              component={FactoryInformation}
-            /> */}
             {/* 工厂照片 */}
             <Route
               path="/control-panel/panel/photo"

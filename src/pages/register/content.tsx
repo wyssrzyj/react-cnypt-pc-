@@ -218,20 +218,7 @@ const Register = () => {
           <Input placeholder="手机号" prefix={<PhoneIcon />}></Input>
           {/* <ConcatInput prefix={<PhoneIcon />} /> */}
         </Form.Item>
-        <Form.Item
-          name="code"
-          label=""
-          trigger={'onChange'}
-          getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}
-        >
-          <VerifyInput
-            prefix={<CodeIcon />}
-            code={'register'}
-            tel={mobilePhone}
-            checkCallback={checkUser}
-            placeholder={'验证码'}
-          />
-        </Form.Item>
+
         <Form.Item
           name="code"
           label=""

@@ -170,14 +170,24 @@ const Header = () => {
 
   const memberCenterFiltering = memberCenter.filter(item => {
     if (enterpriseType === '0') {
+      console.log(enterpriseType)
       if (item.title == '账号管理') {
         item.children.splice(2, 1)
       }
       return item
-    } else {
+    }
+    if (enterpriseType === '1') {
+      console.log(enterpriseType)
       if (item.title !== '监控列表' && item.title !== '验厂管理') {
         return item
       }
+    }
+    if (enterpriseType === null) {
+      console.log(enterpriseType)
+      if (item.title == '账号管理') {
+        item.children.splice(2, 1)
+      }
+      return item
     }
   })
 

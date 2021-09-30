@@ -191,89 +191,74 @@ const ControlPanel = () => {
                 </Link>
               </Menu.Item>
             </Menu.ItemGroup>
-            {currentUser.enterpriseType !== null ? (
-              <div>
-                {+currentUser.enterpriseType === 0 ? (
-                  <Menu.ItemGroup
-                    key="g3"
-                    title={
-                      <Title
-                        title={'验厂管理'}
-                        icon={'jack-banzhengfuwu'}
-                      ></Title>
-                    }
+            {currentUser.enterpriseType !== null &&
+            +currentUser.enterpriseType === 0 ? (
+              <Menu.ItemGroup
+                key="g3"
+                title={
+                  <Title title={'验厂管理'} icon={'jack-banzhengfuwu'}></Title>
+                }
+              >
+                <Menu.Item key="report">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/report"
                   >
-                    <Menu.Item key="report">
-                      <Link
-                        className={styles.minute}
-                        to="/control-panel/panel/report"
-                      >
-                        基础资料报告
-                      </Link>
-                    </Menu.Item>
+                    基础资料报告
+                  </Link>
+                </Menu.Item>
 
-                    <Menu.Item key="equipment">
-                      <Link
-                        className={styles.minute}
-                        to="/control-panel/panel/equipment"
-                      >
-                        车间设备
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item key="photograph">
-                      <Link
-                        className={styles.minute}
-                        to="/control-panel/panel/photograph"
-                      >
-                        工厂照片
-                      </Link>
-                    </Menu.Item>
-                  </Menu.ItemGroup>
-                ) : null}
-                {+currentUser.enterpriseType === 0 ? (
-                  <Menu.ItemGroup
-                    key="g4"
-                    title={
-                      <Title title={'监控列表'} icon={'jack-video1'}></Title>
-                    }
+                <Menu.Item key="equipment">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/equipment"
                   >
-                    <Menu.Item key="monitorPage">
-                      <Link
-                        className={styles.minute}
-                        to="/control-panel/panel/monitorPage"
-                      >
-                        监控列表
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item key="DepartmentManagement">
-                      <Link
-                        className={styles.minute}
-                        to="/control-panel/panel/monitorPage"
-                      >
-                        部门管理
-                      </Link>
-                    </Menu.Item>
-
-                    <Menu.Item key="videoCenter">
-                      <Link
-                        className={styles.minute}
-                        to="/control-panel/panel/video-center"
-                      >
-                        视频中心
-                      </Link>
-                    </Menu.Item>
-                  </Menu.ItemGroup>
-                ) : null}
-              </div>
+                    车间设备
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="photograph">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/photograph"
+                  >
+                    工厂照片
+                  </Link>
+                </Menu.Item>
+              </Menu.ItemGroup>
             ) : null}
+            {currentUser.enterpriseType !== null &&
+            +currentUser.enterpriseType === 0 ? (
+              <Menu.ItemGroup
+                key="g4"
+                title={<Title title={'监控列表'} icon={'jack-video1'}></Title>}
+              >
+                <Menu.Item key="monitorPage">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/monitorPage"
+                  >
+                    监控列表
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="DepartmentManagement">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/monitorPage"
+                  >
+                    部门管理
+                  </Link>
+                </Menu.Item>
 
-            {/* 加单商才能看到  测试修改 */}
-            {/* {+currentUser.enterpriseType !== 1 ? (
-              <div className={styles.management} key={'videoKey'}>
-                <Icon className={styles.menuIcon} type="jack-video1" />
-                <span>监控列表</span>
-              </div>
-            ) : null} */}
+                <Menu.Item key="videoCenter">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/video-center"
+                  >
+                    视频中心
+                  </Link>
+                </Menu.Item>
+              </Menu.ItemGroup>
+            ) : null}
           </Menu>
         </div>
 

@@ -123,7 +123,7 @@ const ControlPanel = () => {
   return (
     <div className={styles.controlPanel}>
       <div className={styles.controlPanelContainer}>
-        <div className={styles.controlPanelLeft}>
+        <div style={{ height: 70 }} className={styles.controlPanelLeft}>
           <h2 className={styles.managementCenter}>会员中心</h2>
           <Menu
             openKeys={openKeys}
@@ -194,7 +194,15 @@ const ControlPanel = () => {
             {currentUser.enterpriseType !== null ? (
               <div>
                 {+currentUser.enterpriseType === 0 ? (
-                  <Menu.ItemGroup key="g3" title={'验厂管理'}>
+                  <Menu.ItemGroup
+                    key="g3"
+                    title={
+                      <Title
+                        title={'验厂管理'}
+                        icon={'jack-banzhengfuwu'}
+                      ></Title>
+                    }
+                  >
                     <Menu.Item key="report">
                       <Link
                         className={styles.minute}
@@ -223,7 +231,12 @@ const ControlPanel = () => {
                   </Menu.ItemGroup>
                 ) : null}
                 {+currentUser.enterpriseType === 0 ? (
-                  <Menu.ItemGroup key="g4" title="监控列表">
+                  <Menu.ItemGroup
+                    key="g4"
+                    title={
+                      <Title title={'监控列表'} icon={'jack-video1'}></Title>
+                    }
+                  >
                     <Menu.Item key="monitorPage">
                       <Link
                         className={styles.minute}

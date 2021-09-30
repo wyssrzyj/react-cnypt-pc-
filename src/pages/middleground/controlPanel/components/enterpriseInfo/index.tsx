@@ -346,7 +346,7 @@ const EnterpriseInfo = () => {
             name="enterpriseName"
             rules={[{ required: true, message: '请输入企业名称！' }]}
           >
-            <Input placeholder="请输入企业名称" />
+            <Input className={styles.input} placeholder="请输入企业名称" />
           </Form.Item>
           <Row className={styles.nameTip}>
             <Col className="gutter-row" span={3}></Col>
@@ -385,26 +385,33 @@ const EnterpriseInfo = () => {
             name="contactsName"
             rules={[{ required: true, message: '请填写联系人姓名' }]}
           >
-            <Input placeholder="请填写联系人姓名" />
+            <Input className={styles.input} placeholder="请填写联系人姓名" />
           </Form.Item>
           <Form.Item
             label="手机号"
             name="mobilePhone"
             rules={[{ required: true, message: '请填写手机号' }]}
           >
-            <Input placeholder="请填写手机号" disabled />
+            <Input
+              className={styles.input}
+              placeholder="请填写手机号"
+              disabled
+            />
           </Form.Item>
           <Form.Item
             label={<span className={styles.formLabel}>电话号码</span>}
             name="contactPhone"
           >
-            <Input placeholder="请输入座机号码  如：0571-8******" />
+            <Input
+              className={styles.input}
+              placeholder="请输入座机号码  如：0571-8******"
+            />
           </Form.Item>
           <Form.Item
             label={<span className={styles.formLabel}>电子邮箱</span>}
             name="email"
           >
-            <Input placeholder="请填写电子邮箱" />
+            <Input className={styles.input} placeholder="请填写电子邮箱" />
           </Form.Item>
 
           <Form.Item
@@ -420,7 +427,11 @@ const EnterpriseInfo = () => {
             name="businessAddress"
             rules={[{ required: true, message: '请选择企业地址！' }]}
           >
-            <BusinessAddressCom getFieldValue={getFieldValue} field={'area'} />
+            <BusinessAddressCom
+              className={styles.input}
+              getFieldValue={getFieldValue}
+              field={'area'}
+            />
           </Form.Item>
           <Form.Item
             label="企业简介"

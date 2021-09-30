@@ -139,7 +139,7 @@ const Factorys = props => {
     const { factoryLnglat } = data
     if (
       Array.isArray(factoryLnglat) &&
-      !factoryLnglat.some(item => isEmpty(item))
+      !factoryLnglat.some(item => isEmpty(item) || item === 'null')
     ) {
       map && map.panTo(factoryLnglat)
     }

@@ -113,7 +113,7 @@ const MapSearch = () => {
       // 创建点实例
       var labelOffset = new _AMap.Pixel(0, -5)
 
-      if (factoryLnglat.some(item => isEmpty(item))) {
+      if (factoryLnglat.some(item => isEmpty(item) || item === 'null')) {
         // 返回的工厂经纬度包含null字符串时
         continue
       }

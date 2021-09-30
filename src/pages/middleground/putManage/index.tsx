@@ -153,6 +153,9 @@ const PutManage = () => {
     setLoading(true)
     try {
       // 查询条件变更 发送请求
+      if (+params.status === 0) {
+        delete params.status
+      }
       const res = await getOrders(params)
       if (res) {
         const { records = [], total } = res

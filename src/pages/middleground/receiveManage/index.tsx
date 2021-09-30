@@ -66,10 +66,15 @@ const ReceiveManage = () => {
   const { getOrders, delOrders, getEnterpriseDepartment } = orderStore
   const { productCategory } = factoryStore
 
+  const urlParams: any = urlGet()
+
+  const initStatus = tabsStatus.get(urlParams.key)
+
   const [activeKey, setActiveKey] = useState<string>('all')
   const [params, setParams] = useState<Params>({
     pageNum: 1,
-    pageSize: defaultPageSize
+    pageSize: defaultPageSize,
+    status: initStatus
   })
   const [dataSource, setDataSource] = useState<any[]>([])
   const [allChecked, setAllChecked] = useState<boolean>(false)

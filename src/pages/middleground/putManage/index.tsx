@@ -80,6 +80,10 @@ const defaultPageSize = 10
 const PutManage = () => {
   const history = useHistory()
   const location = useLocation()
+  console.log(
+    '🚀 ~ file: index.tsx ~ line 84 ~ PutManage ~ rputerParams',
+    location
+  )
   const { pathname, search } = location
   const searchRef = useRef()
 
@@ -87,11 +91,15 @@ const PutManage = () => {
   const { getOrders, initOrderAndProduct, delOrders, getEnterpriseDepartment } =
     orderStore
   const { productCategory } = factoryStore
+  const urlParams: any = urlGet()
+
+  const initStatus = tabsStatus.get(urlParams.key)
 
   const [activeKey, setActiveKey] = useState<string>('all')
   const [params, setParams] = useState<Params>({
     pageNum: 1,
-    pageSize: defaultPageSize
+    pageSize: defaultPageSize,
+    status: initStatus
   })
   const [dataSource, setDataSource] = useState<any[]>([])
   const [allChecked, setAllChecked] = useState<boolean>(false)
@@ -146,6 +154,8 @@ const PutManage = () => {
   }, [search, activeKey])
 
   const getData = async () => {
+    console.log(params, 'newParams')
+
     setLoading(true)
 
     try {
@@ -169,6 +179,8 @@ const PutManage = () => {
 
   useEffect(() => {
     ;(async () => {
+      console.log(params, '3333333333333')
+
       await getData()
     })()
   }, [params])

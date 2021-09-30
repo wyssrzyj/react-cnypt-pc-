@@ -363,9 +363,11 @@ const Header = () => {
               src="http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png"
               alt=""
             />
-            <div onClick={toLogin} className={styles.landing}>
-              登录
-            </div>
+            {!location.pathname.includes('/user/login') && (
+              <div onClick={toLogin} className={styles.landing}>
+                登录
+              </div>
+            )}
           </div>
         </div>
       )}

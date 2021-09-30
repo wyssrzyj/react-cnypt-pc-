@@ -5,9 +5,11 @@ import { getCurrentUser } from '@/utils/tool'
 
 const footerLogo =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/footerLogo.png'
-const NotLogged =
-  'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/logoF.png'
+
+const transparentLogo = 'https://s3.bmp.ovh/imgs/2021/09/74478139d6713a55.png'
+
 const Footer = () => {
+  const currentUser = getCurrentUser() || {}
   const list = [
     { label: '帮助', url: '' },
     { label: '隐私', url: '' },
@@ -31,20 +33,15 @@ const Footer = () => {
       value: 'uchat@chinajack.com'
     }
   ]
-  const currentUser = getCurrentUser() || {}
-  console.log(currentUser.userId)
+  console.log()
 
   return (
-    <div
-      className={
-        currentUser.userId === undefined ? styles.sign : styles.footerBox
-      }
-    >
+    <div className={currentUser.userId ? styles.footerBox : styles.footerBoxst}>
       <div className={styles.footerTopBox}>
         <div className={styles.footerTop}>
           <div className={styles.leftLogo}>
             <img
-              src={currentUser.userId === undefined ? NotLogged : footerLogo}
+              src={currentUser.userId ? footerLogo : transparentLogo}
               alt=""
               className={styles.logo}
             />

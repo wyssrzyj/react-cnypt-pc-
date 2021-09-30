@@ -195,6 +195,17 @@ const Register = () => {
         className={styles.form}
         onValuesChange={onValuesChange}
       >
+        {/* <Form.Item
+          name="userName"
+          label=""
+          trigger={'onChange'}
+          rules={[{ required: true, message: '请输入正确的手机号~' }]}
+          validateStatus={errors.mobilePhone ? 'error' : 'success'}
+          help={helps.mobilePhone}
+          getValueFromEvent={getValueFromEvent}
+        >
+          <Input placeholder="用户名" prefix={<UserIcon />}></Input>
+        </Form.Item> */}
         <Form.Item
           name="mobilePhone"
           label=""
@@ -206,6 +217,20 @@ const Register = () => {
         >
           <Input placeholder="手机号" prefix={<PhoneIcon />}></Input>
           {/* <ConcatInput prefix={<PhoneIcon />} /> */}
+        </Form.Item>
+        <Form.Item
+          name="code"
+          label=""
+          trigger={'onChange'}
+          getValueFromEvent={event => getValueFromEvent(event, 'verifyCode')}
+        >
+          <VerifyInput
+            prefix={<CodeIcon />}
+            code={'register'}
+            tel={mobilePhone}
+            checkCallback={checkUser}
+            placeholder={'验证码'}
+          />
         </Form.Item>
         <Form.Item
           name="code"
@@ -251,6 +276,9 @@ const Register = () => {
             type="password"
           ></Input>
         </Form.Item>
+
+        {/* 滑动验证 */}
+        <div id="your-dom-id" className="nc-container"></div>
         <Button
           className={classNames(styles.agreeBtn, !disabled && styles.blueBtn)}
           // disabled={disabled}

@@ -128,7 +128,7 @@ const memberCenter = [
     ]
   },
   {
-    title: '监控中心',
+    title: '监控列表',
     children: [
       {
         title: '监控列表',
@@ -170,9 +170,10 @@ const Header = () => {
         item.children.splice(2, 1)
       }
       return item
-    }
-    if (item.title !== '监控中心' && item.title !== '验厂管理') {
-      return item
+    } else {
+      if (item.title !== '监控列表' && item.title !== '验厂管理') {
+        return item
+      }
     }
   })
 
@@ -187,7 +188,7 @@ const Header = () => {
   }
 
   const toAccountSafe = () => {
-    // history.push('/control-panel/panel/account')
+    history.push('/control-panel/panel/account')
   }
   const toAccountRight = () => {
     if (+enterpriseType) {
@@ -222,9 +223,10 @@ const Header = () => {
   )
 
   /* -----------------------------我的工作台----------------------------- */
+  //
 
   const workbenchDataFilteringMethod = (
-    <div className={styles.console}>
+    <div className={enterpriseType !== null ? styles.console : null}>
       {workbenchDataFiltering.map((item, index) => {
         const { title, children } = item
         return (
@@ -287,20 +289,9 @@ const Header = () => {
   )
   return (
     <header>
-      {currentUser.userId === undefined ? (
-        <div className={styles.headerNotLogged}>
-          <div className={styles.headerNotLoggedCenter}>
-            <img
-              className={styles.signImg}
-              src="http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png"
-              alt=""
-            />
-          </div>
-        </div>
-      ) : (
+      {currentUser.userId ? (
         <div className={styles.header}>
           <div className={styles.headerLeft}>
-            {console.log(currentUser.userId)}
             <Link to="/" className={styles.home}>
               <Icon type={'jack-shouye2'} className={styles.homeIcon}></Icon>
               <span className={styles.homeName}>优产云平台首页</span>
@@ -362,6 +353,19 @@ const Header = () => {
                 </div>
               </Dropdown>
             ) : null}
+          </div>
+        </div>
+      ) : (
+        <div className={styles.father}>
+          <div className={styles.topCenter}>
+            <img
+              className={styles.topCenterImg}
+              src="http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png"
+              alt=""
+            />
+            <div onClick={toLogin} className={styles.landing}>
+              登录
+            </div>
           </div>
         </div>
       )}

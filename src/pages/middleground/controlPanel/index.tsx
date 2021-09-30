@@ -97,7 +97,6 @@ const ControlPanel = () => {
   }, [])
 
   const location = useLocation()
-
   const handleMenu = ({ keyPath }) => {
     setCurrentMenu(keyPath)
   }
@@ -192,66 +191,68 @@ const ControlPanel = () => {
                 </Link>
               </Menu.Item>
             </Menu.ItemGroup>
+            {currentUser.enterpriseType !== null ? (
+              <div>
+                {+currentUser.enterpriseType === 0 ? (
+                  <Menu.ItemGroup key="g3" title={'验厂管理'}>
+                    <Menu.Item key="report">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/report"
+                      >
+                        基础资料报告
+                      </Link>
+                    </Menu.Item>
 
-            {+currentUser.enterpriseType !== 1 ? (
-              <Menu.ItemGroup
-                key="g3"
-                title={
-                  <Title title={'验厂管理'} icon={'jack-banzhengfuwu'}></Title>
-                }
-              >
-                <Menu.Item key="report">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/report"
-                  >
-                    基础资料报告
-                  </Link>
-                </Menu.Item>
+                    <Menu.Item key="equipment">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/equipment"
+                      >
+                        车间设备
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item key="photograph">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/photograph"
+                      >
+                        工厂照片
+                      </Link>
+                    </Menu.Item>
+                  </Menu.ItemGroup>
+                ) : null}
+                {+currentUser.enterpriseType === 0 ? (
+                  <Menu.ItemGroup key="g4" title="监控列表">
+                    <Menu.Item key="monitorPage">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/monitorPage"
+                      >
+                        监控列表
+                      </Link>
+                    </Menu.Item>
 
-                <Menu.Item key="equipment">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/equipment"
-                  >
-                    车间设备
-                  </Link>
-                </Menu.Item>
-                <Menu.Item key="photograph">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/photograph"
-                  >
-                    工厂照片
-                  </Link>
-                </Menu.Item>
-              </Menu.ItemGroup>
+                    <Menu.Item key="videoCenter">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/video-center"
+                      >
+                        视频中心
+                      </Link>
+                    </Menu.Item>
+                  </Menu.ItemGroup>
+                ) : null}
+              </div>
             ) : null}
 
             {/* 加单商才能看到  测试修改 */}
-            {+currentUser.enterpriseType !== 1 ? (
-              <Menu.ItemGroup
-                key="g4"
-                title={<Title title={'监控列表'} icon={'jack-video1'}></Title>}
-              >
-                <Menu.Item key="monitorPage">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/monitorPage"
-                  >
-                    监控列表
-                  </Link>
-                </Menu.Item>
-                <Menu.Item key="videoCenter">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/video-center"
-                  >
-                    视频中心
-                  </Link>
-                </Menu.Item>
-              </Menu.ItemGroup>
-            ) : null}
+            {/* {+currentUser.enterpriseType !== 1 ? (
+              <div className={styles.management} key={'videoKey'}>
+                <Icon className={styles.menuIcon} type="jack-video1" />
+                <span>监控列表</span>
+              </div>
+            ) : null} */}
           </Menu>
         </div>
 

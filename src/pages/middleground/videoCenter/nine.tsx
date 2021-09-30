@@ -99,6 +99,7 @@ const Nine = props => {
           footer: ['hd', 'fullScreen'],
           handleSuccess: () => {
             setTimeout(() => {
+              successRef.current.push(idx)
               setSuccessList(successRef.current)
             }, 500)
           },
@@ -143,6 +144,10 @@ const Nine = props => {
               return <div className={styles.videoNineItemBox} key={idx}></div>
             }
             const flag = successRef.current.includes(idx)
+            console.log(
+              '🚀 ~ file: nine.tsx ~ line 147 ~ dataSource.map ~ flag',
+              flag
+            )
             return (
               <div className={styles.videoNineItemBox} key={idx}>
                 {flag ? (

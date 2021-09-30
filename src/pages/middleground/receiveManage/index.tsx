@@ -66,10 +66,15 @@ const ReceiveManage = () => {
   const { getOrders, delOrders, getEnterpriseDepartment } = orderStore
   const { productCategory } = factoryStore
 
+  const urlParams: any = urlGet()
+
+  const initStatus = tabsStatus.get(urlParams.key)
+
   const [activeKey, setActiveKey] = useState<string>('all')
   const [params, setParams] = useState<Params>({
     pageNum: 1,
-    pageSize: defaultPageSize
+    pageSize: defaultPageSize,
+    status: initStatus
   })
   const [dataSource, setDataSource] = useState<any[]>([])
   const [allChecked, setAllChecked] = useState<boolean>(false)
@@ -151,6 +156,9 @@ const ReceiveManage = () => {
     // 查询条件变更 发送请求
     setLoading(true)
     try {
+      if (+params.status === 0) {
+        delete params.status
+      }
       const res = await getOrders(params)
       if (res) {
         const { records = [], total } = res

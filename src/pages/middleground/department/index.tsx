@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Popconfirm } from 'antd'
+import { Table, Popconfirm, Button } from 'antd'
 import styles from './index.module.less'
 import EditModal from './editModal'
 import { useStores, observer } from '@/utils/mobx'
@@ -148,6 +148,13 @@ const Department = () => {
 
   return (
     <div className={styles.departmentBox}>
+      <Button
+        type="primary"
+        className={styles.addDepartment}
+        onClick={() => setVisible(true)}
+      >
+        新建部门
+      </Button>
       <Table
         onChange={tableChange}
         pagination={{

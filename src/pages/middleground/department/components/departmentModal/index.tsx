@@ -26,6 +26,7 @@ const DepartmentModal = props => {
       visible={visible}
       onOk={handleModalOk}
       onCancel={handleCancel}
+      maskClosable={false}
     >
       <Form {...layout} ref={refForm} name="departmentForm">
         {type !== 'modify' && (

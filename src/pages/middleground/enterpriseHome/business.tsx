@@ -5,8 +5,12 @@ import Header from './components/header'
 import Memorandum from './components/memorandum'
 import Todo from './components/todo'
 import styles from './index.module.less'
+import { useHistory } from 'react-router'
+import { message } from 'antd'
 
 const BusinessHome = () => {
+  const history = useHistory()
+
   const rightConfigs = [
     {
       icon: 'jack-shoucang',
@@ -47,12 +51,16 @@ const BusinessHome = () => {
     {
       label: '新增需求',
       type: 'add',
-      callback: () => {}
+      callback: () => {
+        message.warn('此功能暂未开放~')
+      }
     },
     {
       label: '新增订单',
       type: 'add',
-      callback: () => {}
+      callback: () => {
+        history.push('/control-panel/order/add')
+      }
     }
   ]
 

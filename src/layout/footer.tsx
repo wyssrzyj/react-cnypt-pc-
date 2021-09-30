@@ -18,15 +18,15 @@ const Footer = () => {
   const configs = [
     {
       icon: 'jack-kefu',
-      value: '36049302'
+      value: '824216039'
     },
     {
       icon: 'jack-swrx',
-      value: '0521-2914241'
+      value: '15620621977'
     },
     {
       icon: 'jack-swyx',
-      value: 'jiaqing@163.com'
+      value: 'uchat@chinajack.com'
     }
   ]
   console.log()

@@ -124,7 +124,7 @@ const ControlPanel = () => {
     <div className={styles.controlPanel}>
       <div className={styles.controlPanelContainer}>
         <div style={{ height: 70 }} className={styles.controlPanelLeft}>
-          <h2 className={styles.managementCenter}>会员中心</h2>
+          <h2 className={styles.managementCenter}></h2>
           <Menu
             openKeys={openKeys}
             selectedKeys={currentMenu} //当前选中的菜单项 key 数组
@@ -243,6 +243,14 @@ const ControlPanel = () => {
                         to="/control-panel/panel/monitorPage"
                       >
                         监控列表
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item key="DepartmentManagement">
+                      <Link
+                        className={styles.minute}
+                        to="/control-panel/panel/monitorPage"
+                      >
+                        部门管理
                       </Link>
                     </Menu.Item>
 

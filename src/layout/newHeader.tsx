@@ -134,6 +134,10 @@ const memberCenter = [
         title: '监控列表',
         url: '/control-panel/panel/monitorPage'
       },
+      {
+        title: '部门管理',
+        url: '/control-panel/panel/video-center'
+      },
 
       {
         title: '视频中心',

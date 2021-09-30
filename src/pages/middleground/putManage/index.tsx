@@ -80,10 +80,6 @@ const defaultPageSize = 10
 const PutManage = () => {
   const history = useHistory()
   const location = useLocation()
-  console.log(
-    '🚀 ~ file: index.tsx ~ line 84 ~ PutManage ~ rputerParams',
-    location
-  )
   const { pathname, search } = location
   const searchRef = useRef()
 
@@ -154,10 +150,7 @@ const PutManage = () => {
   }, [search, activeKey])
 
   const getData = async () => {
-    console.log(params, 'newParams')
-
     setLoading(true)
-
     try {
       // 查询条件变更 发送请求
       const res = await getOrders(params)
@@ -179,8 +172,6 @@ const PutManage = () => {
 
   useEffect(() => {
     ;(async () => {
-      console.log(params, '3333333333333')
-
       await getData()
     })()
   }, [params])

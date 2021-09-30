@@ -125,7 +125,7 @@ const FactoryReport = () => {
               { title: memberText }
             )}
           于
-          {validationTime ? moment(validationTime).format('YYYY/MM/DD') : '--'}{' '}
+          {validationTime ? moment(validationTime).format('YYYY/MM/DD') : '--'}
           经过实地验厂
         </div>
         <div className={styles.button} onClick={applyInspection}>
@@ -168,8 +168,7 @@ const FactoryReport = () => {
               <b className={styles.strong}> {currentFactory.productLineNum} </b>
               条 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;有效车位
               <b className={styles.strong}>
-                {' '}
-                {currentFactory.effectiveLocation}{' '}
+                {currentFactory.effectiveLocation}
               </b>
               台
             </div>

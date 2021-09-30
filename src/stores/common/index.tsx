@@ -10,7 +10,7 @@ export default class CommonStore {
 
   @observable factoryName = undefined
 
-  @observable dictionary = {}
+  @observable dictionary: any = {}
 
   @observable allArea = []
   // 获取全部字典
@@ -42,14 +42,6 @@ export default class CommonStore {
         `/api/factory/district/list-tree`
       )
       if (res) {
-        // const newArea = res.data.map(item => {
-        //   const { value, label, children } = item
-        //   return {
-        //     id,
-        //     name,
-        //     children
-        //   }
-        // })
         runInAction(() => {
           this.allArea = res.data
         })

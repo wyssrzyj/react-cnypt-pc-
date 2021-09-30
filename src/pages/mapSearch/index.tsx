@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useStores, observer, toJS } from '@/utils/mobx'
 import SearchBar from './components/searchBar'
 import styles from './index.module.less'
+import { isEmpty } from 'lodash'
 
 const MapSearch = () => {
   const _AMap = window.AMap as any
@@ -108,10 +109,11 @@ const MapSearch = () => {
     const target = lnglats.filter(item => item.factoryLnglat)
     for (var i = 0; i < target.length; i++) {
       var { factoryLnglat, factoryName, factoryId, idx } = target[i]
+
       // 创建点实例
       var labelOffset = new _AMap.Pixel(0, -5)
 
-      if (factoryLnglat.includes('null')) {
+      if (factoryLnglat.some(item => isEmpty(item) || item === 'null')) {
         // 返回的工厂经纬度包含null字符串时
         continue
       }

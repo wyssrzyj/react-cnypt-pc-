@@ -1,0 +1,367 @@
+.container {
+  margin-top: 30px;
+  padding: 24px 30px;
+  background: #ffffff;
+
+  :global {
+    .audio-controls {
+      top: -48px !important;
+      background: transparent !important;
+
+      .contros {
+        z-index: 2;
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.3) !important;
+        backdrop-filter: blur(5px) !important;
+      }
+    }
+  }
+}
+
+.container2 {
+  margin-top: 0px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-bottom: 30px;
+  padding-bottom: 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #efefef;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  // padding-left: 30px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.headerLeftIcon {
+  margin-right: 16px;
+  color: #999999;
+  font-size: 16px;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+}
+
+.headerIcon {
+  margin-left: 20px;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.videoBoxOne {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+.videoSingle1 {
+  width: 1136px;
+}
+
+.videoSingle {
+  width: 860px;
+}
+
+.videoList {
+  width: 256px;
+  height: 645px;
+  background: rgba(59, 128, 255, 0.05);
+  padding: 45px 16px;
+  overflow-y: auto;
+}
+
+.videoListItem {
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.activeVideoItem {
+  color: #3B80FF;
+  background: #E5ECFF
+}
+
+.videoIcon {
+  margin-right: 10px;
+  font-size: 16px;
+  color: #999999;
+}
+
+.activeVideoIcon {
+  margin-right: 10px;
+  font-size: 16px;
+  color: #3B80FF;
+}
+
+.videoBoxFour{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  min-height: 400px;
+}
+
+.videoFourItem {
+  width: 556px;
+  // height: 417px;
+  margin-bottom: 24px;
+}
+
+.videoOutBoxFour {
+  // min-height: 882px;
+}
+
+.videoOutBoxNine {
+  // min-height: 864px;
+}
+
+.videoBoxNine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  min-height: 400px;
+}
+
+.videoNineItem {
+  width: 362px;
+  // height: 272px;
+  margin-bottom: 24px;
+}
+
+.singleEmpty {
+  width: 1136px;
+  height: 852px;
+}
+
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 417px;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #999999;
+}
+
+.mask9 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 272px;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #999999;
+
+}
+
+.videoNineItemBox {
+  margin-bottom: 20px;
+  width: 362px;
+  height: 272px;
+  position: relative;
+}
+
+.videoFourItemBox {
+  margin-bottom: 20px;
+  width: 556px;
+  height: 417px;
+  position: relative;
+}
+
+.videoSingleBox {
+  position: relative;
+  // min-height: 693px;
+}
+
+.maskSingle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 645px;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #999999;
+}
+
+.maskSingle2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 852px;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #999999;
+}
+
+.paginationBox {
+  padding: 24px 0;
+  position: relative;
+  z-index: 99;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tagBox {
+  width: 100px;
+  height: 32px;
+  box-sizing: border-box;
+  border-radius: 2px;
+  border: 1px solid #E9E9E9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+  cursor: default;
+}
+
+.tagIcon {
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+.emptyImg9 {
+  width: 80px;
+  margin-bottom: 4px;
+}
+
+.loadingIcon {
+  margin-bottom: 8px;
+  font-size: 40px;
+  transform: rotate(180deg);
+  animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+.videoContent {
+  min-height: 500px;
+  background: #FFF;
+
+  .videoList, .maskSingle, .videoSingleBox {
+    height: 510px;
+    // min-height: 405px;
+  }
+
+  .mask, .videoFourItemBox {
+    height: 357px;
+  }
+
+  .videoNineItemBox, .mask9 {
+    height: 233px;
+  }
+
+  .videoOutBoxFour, .videoBoxNine, .videoOutBoxFour, videoOutBoxNine {
+    min-height: none !important;
+  }
+
+  .videoSingle1 {
+    width: 834px;
+    height: 625px;
+  }
+
+  .videoSingle {
+    width: 680px;
+  }
+
+  .videoFourItemBox {
+    margin-bottom: 20px;
+    width: 476px;
+    position: relative;
+  }
+
+  .videoFourItem {
+    width: 476px;
+    margin-bottom: 24px;
+  }
+
+  .videoNineItemBox {
+    margin-bottom: 20px;
+    width: 310px;
+    position: relative;
+  }
+
+  .videoNineItem {
+    width: 310px;
+    margin-bottom: 24px;
+  }
+
+}
+
+.departmentNames {
+  position: absolute;
+  height: 48px;
+  line-height: 48px;
+  left: 28px;
+  bottom: 48px;
+  color: #FFFFFF;
+  z-index: 5;
+  font-size: 12px;
+}
+
+.departmentNames2 {
+  position: absolute;
+  height: 48px;
+  line-height: 48px;
+  left: 28px;
+  bottom: 0;
+  color: #FFFFFF;
+  z-index: 5;
+  font-size: 12px;
+}

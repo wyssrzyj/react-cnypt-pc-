@@ -18,6 +18,7 @@ const FactoryPhotograph = () => {
 
   const getFactoryImage = () => {
     setIsLoading(true)
+
     axios
       .get('/api/factory/info/get-factory-images', {
         factoryId

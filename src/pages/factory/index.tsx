@@ -142,11 +142,6 @@ const Factory = () => {
         <FilterList types={factoryTypes} onFilterChange={onFilterChange} />
         <div className={styles.factoryContent}>
           <div className={styles.contentLeft}>
-            {/* <HeaderFilter
-              sortList={sortList}
-              current={sort}
-              handleFilter={handleFilter}
-            /> */}
             <Spin size="large" spinning={isLoading}>
               {isEmpty(factoryArray) ? (
                 <Empty className={styles.nodata} />

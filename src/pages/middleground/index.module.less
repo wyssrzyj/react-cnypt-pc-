@@ -1,5 +1,7 @@
 .container {
   width: 100%;
+  // min-height: calc(100vh - 104px - 195px);
+  // overflow: auto;
 }
 
 .main {
@@ -10,17 +12,20 @@
 .navBarOut {
   box-sizing: border-box;
   width: 100%;
-  height: 80px;
-  background: #ffffff;
-  border-top: 1px solid #efefef;
+  height: 72px;
+  background: #3b80ff;
+  border-top: 1px solid #3b80ff;
 }
 
 .navBar {
   display: flex;
   align-items: center;
   width: 1200px;
-  height: 80px;
+  height: 72px;
   margin: 0 auto;
+
+  // background: #3B80dff;
+  // background: rgb(3B80dff);
 }
 
 .navLogo {
@@ -41,20 +46,20 @@
 }
 
 .navItem {
-  margin-right: 168px;
+  margin-right: 68px;
   padding-bottom: 8px;
+  color: #ffffff;
   font-weight: bold;
   font-size: 16px;
   border-bottom: 2px solid transparent;
   cursor: pointer;
 
   &:hover {
-    color: #3b80ff;
-    border-bottom: 2px solid #3b80ff;
+    color: #ffffff;
+    border-bottom: 2px solid #ffffff;
   }
 }
-
 .activeNavItem {
-  color: #3b80ff;
-  border-bottom: 2px solid #3b80ff;
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff;
 }

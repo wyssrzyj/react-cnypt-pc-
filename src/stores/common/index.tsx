@@ -42,14 +42,6 @@ export default class CommonStore {
         `/api/factory/district/list-tree`
       )
       if (res) {
-        // const newArea = res.data.map(item => {
-        //   const { value, label, children } = item
-        //   return {
-        //     id,
-        //     name,
-        //     children
-        //   }
-        // })
         runInAction(() => {
           this.allArea = res.data
         })

@@ -3,8 +3,7 @@ import React from 'react'
 import styles from './index.module.less'
 import { getCurrentUser } from '@/utils/tool'
 
-const footerLogo =
-  'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/footerLogo.png'
+const footerLogo = 'https://s3.bmp.ovh/imgs/2021/09/74478139d6713a55.png'
 
 const transparentLogo = 'https://s3.bmp.ovh/imgs/2021/09/74478139d6713a55.png'
 
@@ -18,19 +17,16 @@ const Footer = () => {
 
   const configs = [
     {
-      label: '客服QQ',
       icon: 'jack-kefu',
-      value: '824216039'
+      value: '36049302'
     },
     {
-      label: '商务热线',
       icon: 'jack-swrx',
-      value: '15620621977'
+      value: '0521-2914241'
     },
     {
-      label: '商务邮箱',
       icon: 'jack-swyx',
-      value: 'uchat@chinajack.com'
+      value: 'jiaqing@163.com'
     }
   ]
   console.log()
@@ -54,7 +50,6 @@ const Footer = () => {
                 <div key={idx} className={styles.topItem}>
                   <Icon type={item.icon} className={styles.topItemIcon}></Icon>
                   <div className={styles.topItemR}>
-                    <div className={styles.topItemLabel}>{item.label}</div>
                     <div className={styles.topItemValue}>{item.value}</div>
                   </div>
                 </div>
@@ -70,8 +65,8 @@ const Footer = () => {
               {item.label}
             </div>
           ))}
+          <div>copyright@2015 杰克保留所有权利。</div>
         </div>
-        <div>copyright@2015 杰克保留所有权利。</div>
       </div>
     </div>
   )

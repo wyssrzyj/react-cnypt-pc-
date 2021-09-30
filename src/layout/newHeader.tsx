@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import { Menu, Dropdown } from 'antd'
 import { AuditOutlined } from '@ant-design/icons'
 import { isEmpty, isNil } from 'lodash'
@@ -151,6 +151,29 @@ const Header = () => {
   const currentUser = getCurrentUser() || {}
   const userInfo = getUserInfo() || {}
   const { loginStore } = useStores()
+  const [address, setAddress] = useState(false)
+  const history = useHistory()
+  const location = useLocation()
+  useEffect(() => {
+    console.log(location.pathname)
+
+    // '/user/login'
+    // address !== '/user/reset' ||
+    // address !== '/user/register'
+    if (
+      location.pathname !== '/user/login' &&
+      location.pathname !== '/user/reset' &&
+      location.pathname !== '/user/register'
+    ) {
+      setAddress(true)
+    } else {
+      setAddress(false)
+    }
+  }, [location])
+
+  const toHome = () => {
+    history.push('/')
+  }
 
   const { logout } = loginStore
   const { enterpriseType } = userInfo
@@ -190,8 +213,6 @@ const Header = () => {
       return item
     }
   })
-
-  const history = useHistory()
 
   const toLogin = () => {
     history.push('/user/login')
@@ -303,7 +324,8 @@ const Header = () => {
   )
   return (
     <header>
-      {currentUser.userId ? (
+      {console.log(address)}
+      {address ? (
         <div className={styles.header}>
           <div className={styles.headerLeft}>
             <Link to="/" className={styles.home}>
@@ -328,10 +350,12 @@ const Header = () => {
                     type={'jack-yonghu2'}
                     className={styles.userIcon}
                   ></Icon>
-                  注册
+                  <span className={styles.registerLogin}>注册</span>
                 </span>
                 <span>&nbsp;/ &nbsp;</span>
-                <a onClick={toLogin}>登录</a>
+                <a className={styles.login} onClick={toLogin}>
+                  登录
+                </a>
               </>
             )}
           </div>
@@ -373,6 +397,7 @@ const Header = () => {
         <div className={styles.father}>
           <div className={styles.topCenter}>
             <img
+              onClick={toHome}
               className={styles.topCenterImg}
               src="http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png"
               alt=""

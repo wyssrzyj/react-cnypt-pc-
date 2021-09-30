@@ -142,9 +142,9 @@ const ReceiveManage = () => {
     history.push(`${location.pathname}?key=${key}`)
   }
 
-  const changeParams = values => {
+  const changeParams = (values = {}) => {
     // 查询条件变更时 点击查询按钮的回调
-    const newParams = cloneDeep(params)
+    const newParams = cloneDeep(params) || {}
     const keys = Reflect.ownKeys(values)
     keys.forEach(item => {
       newParams[item] = values[item]

@@ -243,10 +243,10 @@ const ControlPanel = () => {
                     监控列表
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="DepartmentManagement">
+                <Menu.Item key="department">
                   <Link
                     className={styles.minute}
-                    to="/control-panel/panel/monitorPage"
+                    to="/control-panel/panel/department"
                   >
                     部门管理
                   </Link>

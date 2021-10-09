@@ -4,14 +4,12 @@ import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 import { useStores } from '@/utils/mobx'
 import { useLocation } from 'react-router'
-// import { Icon } from '@/components'
-
 import styles from './index.module.less'
 import { Icon } from '@/components'
+import { menuKeys, subsMap } from './routeConfig'
 
 const AccountSafe = React.lazy(() => import('./accountSafe'))
 const LoginLogs = React.lazy(() => import('./loginLogs'))
-// const FactoryInformation = React.lazy(() => import('./factoryInformation'))
 const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
 const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
 const MonitorPage = React.lazy(() => import('../monitorPage'))
@@ -33,45 +31,6 @@ const FactoryPhotograph = React.lazy(
   () => import('./components/factoryPhotograph')
 )
 const Department = React.lazy(() => import('../department'))
-
-const menuKeys = new Map()
-menuKeys.set('/control-panel/panel/qualification', [
-  'qualification',
-  'sub2',
-  'sub1'
-])
-// 对应修改菜单的key值
-menuKeys.set('/control-panel/panel/account', ['account', 'sub1'])
-menuKeys.set('/control-panel/panel/enterprise', ['enterprise', 'sub1'])
-menuKeys.set('/control-panel/panel/issue-bill', ['issue-bill', 'sub1'])
-menuKeys.set('/control-panel/panel/logs', ['account', 'sub1'])
-menuKeys.set('/control-panel/panel/qualification', ['qualification', 'sub2'])
-menuKeys.set('/control-panel/panel/certificate', ['certificate', 'sub2'])
-menuKeys.set('/control-panel/panel/photo', ['photo', 'sub3'])
-menuKeys.set('/control-panel/panel/report', ['report', 'sub3'])
-menuKeys.set('/control-panel/panel/equipment', ['equipment', 'sub3'])
-menuKeys.set('/control-panel/panel/photograph', ['photograph', 'sub3'])
-menuKeys.set('/control-panel/panel/monitorPage', ['monitorPage', 'sub4'])
-menuKeys.set('/control-panel/panel/video-center', ['videoCenter', 'sub4'])
-menuKeys.set('/control-panel/panel/department', ['department', 'sub4'])
-menuKeys.set('/control-panel/panel/information', ['information', 'sub1'])
-
-const subsMap = new Map()
-subsMap.set('/control-panel/panel/account', ['sub1'])
-subsMap.set('/control-panel/panel/enterprise', ['sub1'])
-subsMap.set('/control-panel/panel/issue-bill', ['sub1'])
-subsMap.set('/control-panel/panel/logs', ['sub1'])
-subsMap.set('/control-panel/panel/qualification', ['sub2'])
-subsMap.set('/control-panel/panel/certificate', ['sub2'])
-subsMap.set('/control-panel/panel/photo', ['sub3'])
-subsMap.set('/control-panel/panel/report', ['sub3'])
-subsMap.set('/control-panel/panel/equipment', ['sub3'])
-subsMap.set('/control-panel/panel/photograph', ['sub3'])
-subsMap.set('/control-panel/panel/video-center', ['sub4'])
-subsMap.set('/control-panel/panel/monitorPage', ['sub4'])
-subsMap.set('/control-panel/panel/department', ['sub4'])
-// subsMap.set('/control-panel/panel/information', ['sub1'])
-// 定义了一个键值对
 
 const Title = ({ title, icon }) => {
   return (
@@ -120,7 +79,6 @@ const ControlPanel = () => {
       await productCategory()
     })()
     setCurrentMenu(menuKeys.get(location.pathname))
-    // setOpenKeys(subsMap.get(location.pathname))
   }, [])
 
   return (

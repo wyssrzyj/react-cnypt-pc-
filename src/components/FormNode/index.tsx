@@ -47,6 +47,7 @@ export type FormNodeProps = {
     | 'datePicker'
     | 'rangePicker'
     | 'annex' // 附件上传
+
   /**
    * @description 是否禁用
    */

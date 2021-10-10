@@ -15,6 +15,7 @@ const LoginLogs = React.lazy(() => import('./loginLogs'))
 const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
 const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
 const MonitorPage = React.lazy(() => import('../monitorPage'))
+const DemandSheet = React.lazy(() => import('./demandSheet'))
 const VideoCenter = React.lazy(() => import('../videoCenter/factoryVideo'))
 const IssuerEnterpriseInfo = React.lazy(
   () => import('./components/issuerEnterpriseInfo')
@@ -55,6 +56,7 @@ menuKeys.set('/control-panel/panel/monitorPage', ['monitorPage', 'sub4'])
 menuKeys.set('/control-panel/panel/video-center', ['videoCenter', 'sub4'])
 menuKeys.set('/control-panel/panel/department', ['department', 'sub4'])
 menuKeys.set('/control-panel/panel/information', ['information', 'sub1'])
+menuKeys.set('/control-panel/panel/demand-sheet', ['DemandSheet', 'sub5'])
 
 const subsMap = new Map()
 subsMap.set('/control-panel/panel/account', ['sub1'])
@@ -70,6 +72,7 @@ subsMap.set('/control-panel/panel/photograph', ['sub3'])
 subsMap.set('/control-panel/panel/video-center', ['sub4'])
 subsMap.set('/control-panel/panel/monitorPage', ['sub4'])
 subsMap.set('/control-panel/panel/department', ['sub4'])
+subsMap.set('/control-panel/panel/demand-sheet', ['sub5'])
 // subsMap.set('/control-panel/panel/information', ['sub1'])
 // 定义了一个键值对
 
@@ -262,6 +265,19 @@ const ControlPanel = () => {
                 </Menu.Item>
               </Menu.ItemGroup>
             ) : null}
+            <Menu.ItemGroup
+              key="g5"
+              title={<Title title={'发布需求单'} icon={'jack-video1'}></Title>}
+            >
+              <Menu.Item key="DemandSheet">
+                <Link
+                  className={styles.minute}
+                  to="/control-panel/panel/demand-sheet"
+                >
+                  发布需求单
+                </Link>
+              </Menu.Item>
+            </Menu.ItemGroup>
           </Menu>
         </div>
         <div className={styles.controlPanelRight}>
@@ -326,6 +342,12 @@ const ControlPanel = () => {
               path="/control-panel/panel/video-center"
               component={VideoCenter}
             />
+            {/* 发布需求单 */}
+            <Route
+              path="/control-panel/panel/demand-sheet"
+              component={DemandSheet}
+            />
+
             <Redirect to="/platform" />
           </Switch>
         </div>

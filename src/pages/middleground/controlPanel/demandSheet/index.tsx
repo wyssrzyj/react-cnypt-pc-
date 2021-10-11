@@ -1,5 +1,5 @@
 import React from 'react'
-import Title from '../../controlPanel/components/title'
+import Title from './title/index'
 import { Form, Button } from 'antd'
 import styles from './index.module.less'
 import Basics from './components/basics'

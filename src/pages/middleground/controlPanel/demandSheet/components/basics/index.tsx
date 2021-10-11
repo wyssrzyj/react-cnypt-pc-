@@ -42,8 +42,9 @@ function Basics() {
       label: '企业信息',
       field: 'invoice',
       required: true,
-      message: '请选择是否有增值税发票',
+      message: '请选择是否公开',
       type: 'radio',
+
       span: 13,
       options: [
         { label: '公开', value: 1 },
@@ -53,9 +54,9 @@ function Basics() {
     {
       label: '地区要求',
       required: true,
-      message: '不限',
+      message: '请选择地区',
       placeholder: '请选择地区',
-      type: 'select',
+      type: 'multipleSelect',
       field: 'regional',
       span: 12,
       options: paymentType

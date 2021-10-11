@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Col, Row } from 'antd'
+import { Form, Col, Row, Input } from 'antd'
 import { toJS, useStores } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 const FormItem = Form.Item
@@ -8,7 +8,7 @@ const layout = {
     span: 5
   },
   wrapperCol: {
-    span: 12
+    span: 24
   }
 }
 const keys = [
@@ -49,13 +49,6 @@ function Basics() {
       options: deliveryType
     },
     {
-      label: '交货期',
-      field: 'orderQuantity',
-      span: 13,
-
-      options: deliveryType
-    },
-    {
       label: '期望收货日期',
       type: 'rangePicker',
       message: '请输入目标单价',
@@ -90,6 +83,15 @@ function Basics() {
             </Col>
           )
         })}
+        <Col span={13}>
+          <FormItem {...layout} name="delivery" label={'交货期'}>
+            <Input
+              placeholder={'请输入'}
+              addonBefore={'自下单后'}
+              addonAfter={'天内交货至指定地址'}
+            ></Input>
+          </FormItem>
+        </Col>
       </Row>
     </div>
   )

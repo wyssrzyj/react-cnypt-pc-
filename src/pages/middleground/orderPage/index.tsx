@@ -706,6 +706,14 @@ const OrderPage = () => {
               ) {
                 initialValue = moment(initialValue)
               }
+              if (item.field === 'materialArrivalTime') {
+                if (+form.getFieldValue('processType') === 1) {
+                  item.required = true
+                }
+                if (+form.getFieldValue('processType') === 0) {
+                  item.required = false
+                }
+              }
               data.disabled = disabled
               if (disabled) {
                 return (

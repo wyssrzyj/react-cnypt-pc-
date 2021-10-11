@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect } from 'react'
 import { useStores } from '@/utils/mobx'
-import Header from './newHeader'
+import Header from './header'
 import styles from './index.module.less'
 import { withRouter, RouteComponentProps } from 'react-router'
 import Footer from './footer'

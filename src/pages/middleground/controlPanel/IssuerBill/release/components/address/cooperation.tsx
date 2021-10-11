@@ -15,7 +15,7 @@ function cooperation() {
     // 调取接口
     console.log(selectedRowKeys)
     setSelectedRowKeys([])
-    // setIsModalVisible(false)
+    setIsModalVisible(false)
   }
 
   const handleCancel = () => {
@@ -104,9 +104,8 @@ function cooperation() {
         title="选择合作伙伴"
         visible={isModalVisible}
         width={800}
-        onOk={handleOk}
         footer={[
-          <Button type="primary" onClick={handleOk}>
+          <Button type="primary" onClick={handleOk} key={'submit'}>
             邀请
           </Button>
         ]}
@@ -128,7 +127,7 @@ function cooperation() {
         </div>
         <div>
           <Table
-            rowKey={record => record.id}
+            rowKey={'id'}
             className={styles.searchItem}
             rowSelection={rowSelection}
             dataSource={dataSource}

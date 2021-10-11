@@ -13,7 +13,13 @@ const LoginLogs = React.lazy(() => import('./loginLogs'))
 const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
 const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
 const MonitorPage = React.lazy(() => import('../monitorPage'))
-const DemandSheet = React.lazy(() => import('./demandSheet'))
+const DemandList = React.lazy(
+  () => import('../controlPanel/IssuerBill/demandList')
+)
+
+const DemandSheet = React.lazy(
+  () => import('../controlPanel/IssuerBill/release')
+)
 const VideoCenter = React.lazy(() => import('../videoCenter/factoryVideo'))
 const IssuerEnterpriseInfo = React.lazy(
   () => import('./components/issuerEnterpriseInfo')
@@ -233,6 +239,14 @@ const ControlPanel = () => {
                   发布需求单
                 </Link>
               </Menu.Item>
+              <Menu.Item key="DemandList">
+                <Link
+                  className={styles.minute}
+                  to="/control-panel/panel/demand-demand-list"
+                >
+                  需求单列表
+                </Link>
+              </Menu.Item>
             </Menu.ItemGroup>
           </Menu>
         </div>
@@ -302,6 +316,11 @@ const ControlPanel = () => {
             <Route
               path="/control-panel/panel/demand-sheet"
               component={DemandSheet}
+            />
+            {/* {需求单列表} */}
+            <Route
+              path="/control-panel/panel/demand-demand-list"
+              component={DemandList}
             />
 
             <Redirect to="/platform" />

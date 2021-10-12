@@ -66,7 +66,7 @@ const OverflowCard = props => {
     if (pictureUrl) {
       return (
         pictureUrl +
-        '?x-oss-process=image/resize,limit_0,m_fill,w80,h_80/quality,q_100'
+        '?x-oss-process=image/resize,limit_0,m_fill,w150,h_150/quality,q_100'
       )
     }
     return 'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/noData.png'

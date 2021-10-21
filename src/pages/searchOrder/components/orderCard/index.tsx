@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { isNil } from 'lodash'
 import { Icon } from '@/components'
 import styles from './index.module.less'
 
@@ -16,7 +17,12 @@ const demandList = [
   { label: '有效车位', value: '不限' }
 ]
 
-const OrderCard = () => {
+const OrderCard = props => {
+  const { headerConfig, contentConfig, footerConfig } = props
+  console.log(
+    '🚀 ~ file: index.tsx ~ line 22 ~ OrderCard ~ contentConfig',
+    contentConfig
+  )
   const [demand, setDemand] = useState<string>('up')
   const [above, setAbove] = useState<number>(177)
 
@@ -32,13 +38,16 @@ const OrderCard = () => {
   }
   return (
     <div className={styles.orderCard}>
-      <header className={styles.cardHeader}>
-        <span>广州某某有限公司</span>
-        <span>
-          <Icon type="jack-weizhi" className={styles.headerIcon} />
-          广州市
-        </span>
-      </header>
+      {!isNil(headerConfig) && (
+        <header className={styles.cardHeader}>
+          <span>广州某某有限公司</span>
+          <span>
+            <Icon type="jack-weizhi" className={styles.headerIcon} />
+            广州市
+          </span>
+        </header>
+      )}
+
       <div className={styles.cardContent}>
         <div className={styles.left}>
           <img
@@ -55,28 +64,30 @@ const OrderCard = () => {
           ))}
         </ul>
         <div className={styles.obscuration} style={{ top: above }}>
-          {demandList.map(item => (
-            <div key={item.value} className={styles.demandItem}>
+          {demandList.map((item, index) => (
+            <div key={index} className={styles.demandItem}>
               <div className={styles.demandLabel}>{item.label}</div>
               <div className={styles.demandValue}>{item.value}</div>
             </div>
           ))}
         </div>
       </div>
-      <footer className={styles.orderFooter}>
-        <span
-          className={styles.requirements}
-          onMouseEnter={showDemand}
-          onMouseLeave={showDemand}
-        >
-          <span>接单要求</span>
-          <Icon
-            type={`jack-Icon_${demand}`}
-            className={styles.requirementsIcon}
-          />
-        </span>
-        <span className={styles.deadline}>5个月后截止</span>
-      </footer>
+      {!isNil(footerConfig) && (
+        <footer className={styles.orderFooter}>
+          <span
+            className={styles.requirements}
+            onMouseEnter={showDemand}
+            onMouseLeave={showDemand}
+          >
+            <span>接单要求</span>
+            <Icon
+              type={`jack-Icon_${demand}`}
+              className={styles.requirementsIcon}
+            />
+          </span>
+          <span className={styles.deadline}>5个月后截止</span>
+        </footer>
+      )}
     </div>
   )
 }

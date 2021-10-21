@@ -1,37 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Pagination } from 'antd'
 import { observer, useStores } from '@/utils/mobx'
-import { SimpleSearch, FilterList, Icon } from '@/components'
+import { SimpleSearch, FilterList } from '@/components'
 import { OrderSearchHeader, OrderCard } from './components'
 import styles from './index.module.less'
-
-const factoryTypes = [
-  {
-    type: '所有工厂',
-    key: 'all',
-    icon: <Icon type="jack-quanbu" className={styles.dressIcon} />
-  },
-  {
-    type: '小单快返',
-    key: 'XD',
-    icon: <Icon type="jack-dingdan" className={styles.dressIcon} />
-  },
-  {
-    type: '外贸工厂',
-    key: 'WM',
-    icon: <Icon type="jack-diqiu" className={styles.dressIcon} />
-  },
-  {
-    type: '清加工工厂',
-    key: 'QJG',
-    icon: <Icon type="jack-ziyuan" className={styles.dressIcon} />
-  },
-  {
-    type: '贴牌工厂',
-    key: 'TP',
-    icon: <Icon type="jack-biaoqian" className={styles.dressIcon} />
-  }
-]
 
 const cardList = new Array(12).fill(0)
 
@@ -54,6 +26,10 @@ const SearchOrder = () => {
     setPageNum(1)
   }
 
+  const goDetail = () => {
+    window.open(`/order-search/1`)
+  }
+
   useEffect(() => {
     ;(async () => {
       await getProductCategory()
@@ -65,14 +41,14 @@ const SearchOrder = () => {
       <SimpleSearch />
       <div className={styles.orderContent}>
         {/* 搜索 */}
-        <FilterList types={factoryTypes} onFilterChange={onFilterChange} />
+        <FilterList onFilterChange={onFilterChange} />
         {/* 列表头 */}
         <OrderSearchHeader />
         {/* 卡片列表 */}
         <Row gutter={16}>
           {cardList.map(item => (
-            <Col key={item} span={8}>
-              <OrderCard />
+            <Col key={item} span={8} onClick={goDetail}>
+              <OrderCard headerConfig={{}} footerConfig={{}} />
             </Col>
           ))}
         </Row>

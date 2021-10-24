@@ -37,10 +37,10 @@ const SearchBar = () => {
       url: '/factory-search'
     },
     {
-      label: '订单找厂',
+      label: '找订单',
       icon: 'jack-home_dingdan',
       iconActive: 'jack-dingdanActive',
-      url: '/factory-search'
+      url: '/order-search'
     }
   ]
 

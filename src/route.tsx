@@ -12,7 +12,8 @@ const FactoryPage = React.lazy(() => import('@/pages/factoryPage'))
 const ErpModule = React.lazy(() => import('@/pages/erpModule'))
 const Excel = React.lazy(() => import('@/pages/homePage/excel'))
 const MiddleGround = React.lazy(() => import('@/pages/middleground'))
-const DemandDocQuery = React.lazy(() => import('@/pages/demandDocQuery'))
+const SearchOrder = React.lazy(() => import('@/pages/searchOrder'))
+const SearchOrderDetail = React.lazy(() => import('@/pages/searchOrderDetail'))
 
 // const ControlPanel = React.lazy(() => import('@/pages/controlPanel'))
 // const GDMap = React.lazy(() => import('@/pages/homePage/GDMap'))
@@ -30,8 +31,9 @@ const RouteList = () => {
       <Route path="/erp" component={ErpModule} />
       <Route path="/excel" component={Excel} />
       <Route path="/control-panel" component={MiddleGround} />
-      <Route path="/demandDocQuery" component={DemandDocQuery} />
 
+      <Route path="/order-search" exact component={SearchOrder} />
+      <Route path="/order-search/:id" component={SearchOrderDetail} />
       <Route path="*" component={NotFound} />
       {/* <Route path="/GDMap" component={GDMap} /> */}
       {/* <Route path="/control-panel" component={ControlPanel} /> */}

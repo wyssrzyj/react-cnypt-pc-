@@ -45,11 +45,18 @@ export const updateTimeMap = [
 
 const FilterList = props => {
   const history = useHistory()
+  const { location } = history
   // const { types, onFilterChange } = props
   const { onFilterChange } = props
   const { factoryStore, commonStore } = useStores()
   const { dictionary, allArea } = commonStore
-  const { prodType = [], factoryEffectiveLocation = [] } = toJS(dictionary)
+  const {
+    prodType = [],
+    factoryEffectiveLocation = [],
+    inquiryProcessType = [],
+    plusMaterialType = [],
+    goodsNum = []
+  } = toJS(dictionary)
   const { productCategoryList } = factoryStore
   // const [factoryType, setFactoryType] = useState('all')
   const [modalVisible, setModalVisible] = useState<boolean>(false)
@@ -71,6 +78,11 @@ const FilterList = props => {
   const [factorySize, setFactorySize] = useState<string>(null)
   const [setUpTime, setSetUpTime] = useState<string>(null)
   const [updateTime, setUpdateTime] = useState<string>(null)
+
+  const newTypeList =
+    location.pathname === '/factory-search' ? prodType : inquiryProcessType
+  const newTitle =
+    location.pathname === '/factory-search' ? '加工类型' : '接单类型'
 
   const emptyFn = () => {
     // const newData = toJS(productCategoryList)
@@ -379,7 +391,7 @@ const FilterList = props => {
         </div>
       </div>
       <div className={styles.classification}>
-        <div className={styles.classificationLabel}>加工类型</div>
+        <div className={styles.classificationLabel}>{newTitle}</div>
         <div className={styles.classificationItem}>
           <span
             className={classNames(
@@ -390,7 +402,7 @@ const FilterList = props => {
           >
             全部
           </span>
-          {prodType.map(item => (
+          {newTypeList.map(item => (
             <span
               key={item.id}
               className={classNames(
@@ -424,7 +436,9 @@ const FilterList = props => {
           </Select>
           <Select
             allowClear
-            placeholder="有效车位"
+            placeholder={
+              location.pathname === '/factory-search' ? '有效车位' : '工厂规模'
+            }
             className={styles.moreSelect}
             value={factorySize}
             onChange={onFactorySizeChange}
@@ -435,6 +449,36 @@ const FilterList = props => {
               </Option>
             ))}
           </Select>
+          {location.pathname === '/order-search' && (
+            <Select
+              allowClear
+              placeholder="面料类型"
+              className={styles.moreSelect}
+              value={factorySize}
+              onChange={onFactorySizeChange}
+            >
+              {plusMaterialType.map(item => (
+                <Option key={item.id} value={item.value}>
+                  {item.label}
+                </Option>
+              ))}
+            </Select>
+          )}
+          {location.pathname === '/order-search' && (
+            <Select
+              allowClear
+              placeholder="订单数量"
+              className={styles.moreSelect}
+              value={factorySize}
+              onChange={onFactorySizeChange}
+            >
+              {goodsNum.map(item => (
+                <Option key={item.id} value={item.value}>
+                  {item.label}
+                </Option>
+              ))}
+            </Select>
+          )}
           <Select
             allowClear
             value={updateTime}

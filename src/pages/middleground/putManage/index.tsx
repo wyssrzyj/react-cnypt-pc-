@@ -90,6 +90,7 @@ const PutManage = () => {
   const urlParams: any = urlGet()
 
   const initStatus = tabsStatus.get(urlParams.key)
+  console.log(initStatus)
 
   const [activeKey, setActiveKey] = useState<string>('all')
   const [params, setParams] = useState<Params>({
@@ -198,6 +199,8 @@ const PutManage = () => {
     keys.forEach(item => {
       newParams[item] = values[item]
     })
+    console.log(newParams)
+
     setParams(newParams)
   }
 

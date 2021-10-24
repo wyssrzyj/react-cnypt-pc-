@@ -54,6 +54,8 @@ const EnterpriseInfo = () => {
   const { userInfo } = loginStore
   const { uploadFiles } = factoryPageStore
   const { allArea } = commonStore
+  console.log(toJS(allArea))
+
   // const [enterpriseType, setEnterpriseType] = useState<string>('')
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imageUrlList, setImageUrlList] = useState<any[]>([])

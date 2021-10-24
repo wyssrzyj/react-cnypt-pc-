@@ -1,28 +1,247 @@
-import React from 'react'
-import Tab from './Tab'
-import Query from './query'
+import React, { useEffect, useState } from 'react'
+import Tab from './components/Tab'
+import Query from './components/query'
 import styles from './index.module.less'
-import Sort from './sort'
-import MultipleChoice from './multipleChoice'
+import Sort from './components/sort'
+import MultipleChoice from './components/multipleChoice'
+import { Checkbox, Pagination, message, Button, Popconfirm } from 'antd'
+import { cloneDeep } from 'lodash'
+import { useStores, toJS, observer } from '@/utils/mobx'
+import { timestampToTime, remainingTime } from './components/time'
+import { getTrees } from './method/'
+import { useHistory } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
-function DemandList() {
-  const sortCallback = value => {
-    console.log(value)
+export const ORDER_EMPTY =
+  'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/order_empty.png'
+
+const DemandList = () => {
+  const { push } = useHistory()
+  const location = useLocation()
+  const { search } = location
+  const searchURL = new URLSearchParams(search)
+  const initialKey = searchURL.get('key')
+
+  const defaultCurrent = 1
+  const defaultPageSize = 10
+
+  const { demandListStore, factoryStore, commonStore } = useStores()
+  const { productCategoryList } = factoryStore
+  const { dictionary } = commonStore
+  const { inquiryProcessType = [] } = toJS(dictionary)
+
+  const { ListData, DeleteDemandDoc, ToppingFunction, EndInterfaceInAdvance } =
+    demandListStore
+
+  const [reallylists, setReallyLists] = useState([]) //数据
+  const [allChecked, setAllChecked] = useState(false) //全选的状态
+  const [numberLength, setNumberLength] = useState(1) //页码长度
+  const [noOrders, setNoOrders] = useState(0) //没有订单
+  const [pageNumber, setPageNumber] = useState(1) //路由数据
+
+  const [params, setParams] = useState<any>({
+    pageNum: pageNumber,
+    pageSize: defaultPageSize,
+    status: initialKey
+  })
+
+  useEffect(() => {
+    listsAPI()
+  }, [params])
+
+  const filterData = value => {
+    //  过滤出需要的数据 并返回
+    const res = inquiryProcessType.filter(item => item.value === value)
+    return res
   }
+  const handle = v => {
+    let sum = [] //定义一个空数组
+    v.forEach(item => {
+      const res = item.processTypeList.reduce((total, current) => {
+        total.push(filterData(current)[0])
+        return total // 将过滤后的数据放到一起 并return出去
+      }, [])
+      res.forEach(element => {
+        sum.push(element.label) //获取主要的数据
+      })
+    })
+    return sum
+  }
+
+  const listsAPI = async () => {
+    const res = await ListData(params) //待会设置页码之类的
+    const treeData = productCategoryList //商品品类
+    setNumberLength(res.total)
+
+    if (Array.isArray(res.records)) {
+      res.records.forEach(item => {
+        item.checked = false
+        item.processing = handle(res.records)
+        item.time = timestampToTime(item.inquiryEffectiveDate)
+        item.releaseTime = timestampToTime(item.releaseTime)
+
+        item.categoryIdList = getTrees(item.categoryIdList, treeData)
+        item.surplus = remainingTime(item.inquiryEffectiveDate)
+        if (item.surplus.day < 0) {
+          item.status = -3
+        }
+      })
+      setNoOrders(res.records.length)
+      setReallyLists(res.records)
+    }
+  }
+  // 路由数据
+  const routingData = value => {
+    setParams({ ...params, status: value })
+  }
+  //  排序
+  const sortCallback = value => {
+    const newParams = cloneDeep(params)
+    const keys = Reflect.ownKeys(value)
+    keys.forEach(item => {
+      newParams[item] = value[item]
+    })
+    setParams(newParams)
+  }
+  // 查询
   const queryMethod = value => {
-    console.log(value)
+    if (value.DemandSheet || value.password.length > 0) {
+      const res = {
+        name: value.DemandSheet,
+        releaseTimeStart: new Date(value.password[0]).getTime(),
+        releaseTimeEnd: new Date(value.password[1]).getTime()
+      }
+      const newParams = cloneDeep(params)
+      const keys = Reflect.ownKeys(res)
+      keys.forEach(item => {
+        newParams[item] = res[item]
+      })
+      setParams(newParams)
+    } else {
+      setParams({ pageNum: 1, pageSize: defaultPageSize })
+    }
+  }
+  // 全选
+  const onChange = e => {
+    setAllChecked(!allChecked)
+    reallylists.forEach(item => {
+      item.checked = e.target.checked
+    })
+  }
+  // 单选
+  const dataChoose = (checked, index) => {
+    const newDataSource = cloneDeep(reallylists)
+    newDataSource[index].checked = checked //
+    setReallyLists(newDataSource)
+    const flag = newDataSource.every(item => item.checked === true) //
+    setAllChecked(flag)
+  }
+  // 分页
+  const paging = pageNumber => {
+    setPageNumber(pageNumber)
+  }
+  //置顶
+  const topping = async value => {
+    await ToppingFunction(value)
+    listsAPI()
+  }
+  //再来一单
+  const oneMoreOrder = async e => {
+    push({ pathname: '/control-panel/panel/demand-sheet', search: 'id=' + e })
+  }
+  //提前结束
+  const earlyEnd = async e => {
+    const res = await EndInterfaceInAdvance({ id: e, status: -3 })
+    if (res.code === 200) {
+      listsAPI()
+    }
+  }
+  // 结束订单
+  const deleteRecord = async value => {
+    const res = await DeleteDemandDoc({ id: value })
+    if (res.code === 200) {
+      listsAPI()
+    }
+  }
+  //批量结束
+  const BatchEnd = async () => {
+    //  点记得时候获取勾选的数据，获取id掉接口进行操作
+    const reduceIds = reallylists.filter(item => item.checked) //用选中的数据来过滤出
+    const ids = reduceIds.reduce((prev, item) => {
+      prev.push(item.id)
+      return prev
+    }, [])
+
+    if (ids.length > 0) {
+      console.log(ids)
+
+      const res = await DeleteDemandDoc({ id: ids })
+      if (res.code === 200) {
+        listsAPI()
+      }
+    } else {
+      message.error('请至少选择一个')
+    }
   }
   return (
     <div className={styles.demand}>
-      <h1>需求单列表</h1>
+      <div className={styles.top}>订单列表</div>
       <section>
-        <Tab />
+        <Tab routing={routingData} />
         <Query query={queryMethod} />
         <Sort callback={sortCallback} />
-        <MultipleChoice />
+        {noOrders > 0 ? (
+          <>
+            {reallylists.map((item, index) => {
+              return (
+                <MultipleChoice
+                  earlyEnd={earlyEnd}
+                  oneMoreOrder={oneMoreOrder}
+                  toppingMethod={topping}
+                  callback={event => dataChoose(event.target.checked, index)}
+                  key={index}
+                  data={item}
+                  deleteRecord={deleteRecord}
+                />
+              )
+            })}
+            <div className={styles.selectric}>
+              <Checkbox onChange={onChange} checked={allChecked} />
+              <div className={styles.eatchEnd}>
+                <Popconfirm
+                  onConfirm={() => {
+                    BatchEnd()
+                  }}
+                  title="是否确认删除？"
+                  okText="是"
+                  cancelText="否"
+                >
+                  <Button type="primary">批量结束</Button>
+                </Popconfirm>
+              </div>
+            </div>
+            <div className={styles.paginationBox}>
+              <Pagination
+                style={{
+                  height: '32px',
+                  lineHeight: '32px',
+                  textAlign: 'center'
+                }}
+                defaultCurrent={defaultCurrent}
+                total={numberLength}
+                onChange={paging}
+              />
+            </div>
+          </>
+        ) : (
+          <div className={styles.emptyBox}>
+            <img src={ORDER_EMPTY} alt="" className={styles.orderEmpty} />
+            <div className={styles.emptyText}>您还没有订单哦~</div>
+          </div>
+        )}
       </section>
     </div>
   )
 }
 
-export default DemandList
+export default observer(DemandList)

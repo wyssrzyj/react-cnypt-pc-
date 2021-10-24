@@ -5,8 +5,12 @@ import { Form, Input, Button, Col, Space, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
 
 function Query({ query }) {
+  const [form] = Form.useForm()
+
   const [dateString, setDateString] = useState([])
   const onFinish = (values: any) => {
+    console.log(values)
+
     {
       values.password = dateString
     }
@@ -14,13 +18,19 @@ function Query({ query }) {
   }
   const handleSelectTime = (value, dateString) => {
     console.log(value)
+    console.log(dateString)
     setDateString(dateString)
+  }
+  const reset = () => {
+    setDateString([])
+    form.resetFields()
   }
 
   return (
     <div className={styles.off}>
       <Form
         className={styles.form}
+        form={form}
         name="basic"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 24 }}
@@ -29,12 +39,12 @@ function Query({ query }) {
         autoComplete="off"
       >
         <Col className={styles.username}>
-          <Form.Item label="需求单名称" name="username">
+          <Form.Item label="需求单名称" name="DemandSheet">
             <Input placeholder="请输入需求单名称" />
           </Form.Item>
         </Col>
         <Col className={styles.username}>
-          <Form.Item label="发单时间" name="password">
+          <Form.Item label="发单时间" name="issuingTime">
             <Space direction="vertical" size={12}>
               <RangePicker onChange={handleSelectTime} />
             </Space>
@@ -42,9 +52,10 @@ function Query({ query }) {
         </Col>
 
         <Form.Item className={styles.btn} wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button className={styles.query} type="primary" htmlType="submit">
             查询
           </Button>
+          <Button onClick={reset}>重置</Button>
         </Form.Item>
       </Form>
     </div>

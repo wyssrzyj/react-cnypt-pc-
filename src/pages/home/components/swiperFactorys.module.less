@@ -1,6 +1,7 @@
 .swaiperContainer {
   position: relative;
-  width: 1200px;
+  z-index: 99;
+  width: 1256px;
   margin: 0 auto;
   padding: 36px 0 36px !important;
   background: #f0f0f0;
@@ -16,30 +17,30 @@
 }
 
 .factorysSwiper {
+  display: flex;
   width: 1032px !important;
   height: 246px;
   margin: 0 auto;
-  display: flex;
   overflow: hidden;
 }
 
 .swaperCard {
-  padding: 12px;
-  width: 328px;
-  height: 150px;
   display: flex;
   align-items: flex-start;
-  background: #FFFFFF;
-  cursor: pointer;
+  width: 328px;
+  height: 150px;
+  padding: 12px;
   color: #333333;
+  background: #ffffff;
+  cursor: pointer;
 
   .factoryInfoIcon {
-    color: #3B80FF;
+    color: #3b80ff;
   }
 
   &:hover {
-    background: #3B80FF;
     color: #ffffff;
+    background: #3b80ff;
 
     .factoryInfoIcon {
       color: #ffffff;
@@ -51,37 +52,38 @@
     min-width: 80px;
     height: 80px;
     margin-right: 12px;
-    background: url(http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png) center center;
-    background-size: contain;
+    background: url(http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png)
+      center center;
     background-repeat: no-repeat;
+    background-size: contain;
   }
 
   .factoryName {
     width: 200px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    padding-bottom: 12px;
     width: 207px;
-    font-size: 16px;
-    text-align: left;
+    padding-bottom: 12px;
+    overflow: hidden;
     font-weight: bold;
+    font-size: 16px;
+    white-space: nowrap;
+    text-align: left;
+    text-overflow: ellipsis;
     // color: #FFFFFF;
   }
 
   .factoryInfo {
     display: flex;
-    font-size: 14px;
     font-weight: 400;
+    font-size: 14px;
     // color: #FFFFFF;
     line-height: 32px;
   }
 
   .label {
-    min-width: 52px;
-    margin-right: 12px;
     display: inline-flex;
     align-items: center;
+    min-width: 52px;
+    margin-right: 12px;
   }
 
   .factoryInfoIcon {
@@ -91,10 +93,10 @@
 
   .text {
     width: 154px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
+    white-space: nowrap;
     text-align: left;
+    text-overflow: ellipsis;
   }
 }
 
@@ -102,22 +104,20 @@
   position: absolute;
   top: 50%;
   left: 8px;
-  transform: translateY(-50%);
+  color: #3b80ff !important;
   font-size: 40px;
-  color: #3B80FF !important;
+  transform: translateY(-50%);
 }
 
 .rightIcon {
   position: absolute;
   top: 50%;
   right: 16px;
-  transform: translateY(-50%);
+  color: #3b80ff !important;
   font-size: 40px;
-  color: #3B80FF !important;
+  transform: translateY(-50%);
 }
 
 .disableIcon {
-  color: #C4C4C4 !important;
+  color: #c4c4c4 !important;
 }
-
-

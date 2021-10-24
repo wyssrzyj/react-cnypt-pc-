@@ -7,6 +7,7 @@ import { useLocation } from 'react-router'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 import { menuKeys, subsMap } from './routeConfig'
+import { getCurrentUser } from '@/utils/tool'
 
 const AccountSafe = React.lazy(() => import('./accountSafe'))
 const LoginLogs = React.lazy(() => import('./loginLogs'))
@@ -20,6 +21,10 @@ const DemandList = React.lazy(
 const DemandSheet = React.lazy(
   () => import('../controlPanel/IssuerBill/release')
 )
+const applicationList = React.lazy(
+  () => import('../controlPanel/IssuerBill/applicationList')
+)
+
 const VideoCenter = React.lazy(() => import('../videoCenter/factoryVideo'))
 const IssuerEnterpriseInfo = React.lazy(
   () => import('./components/issuerEnterpriseInfo')
@@ -49,21 +54,11 @@ const Title = ({ title, icon }) => {
 }
 
 const ControlPanel = () => {
-  const { factoryStore, loginStore } = useStores()
+  const currentUser = getCurrentUser()
+  const { factoryStore } = useStores()
   const { productCategory } = factoryStore
-  const { userInfo } = loginStore
-  const [currentUser, setCurrentUser] = useState<any>({})
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
-
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
-
-  useEffect(() => {
-    ;(async () => {
-      const res = await userInfo()
-      const { data } = res
-      setCurrentUser(data)
-    })()
-  }, [])
 
   const location = useLocation()
   const handleMenu = ({ keyPath }) => {
@@ -92,7 +87,7 @@ const ControlPanel = () => {
     <div className={styles.controlPanel}>
       <div className={styles.controlPanelContainer}>
         <div className={styles.controlPanelLeft}>
-          <h2 className={styles.managementCenter}>会员中心</h2>
+          <div className={styles.managementCenter}>会员中心</div>
           <Menu
             openKeys={openKeys}
             selectedKeys={currentMenu} //当前选中的菜单项 key 数组
@@ -228,23 +223,31 @@ const ControlPanel = () => {
               </Menu.ItemGroup>
             ) : null}
             <Menu.ItemGroup
-              key="g5"
-              title={<Title title={'发布需求单'} icon={'jack-video1'}></Title>}
+              key="g6"
+              title={<Title title={'发布订单'} icon={'jack-video1'}></Title>}
             >
-              <Menu.Item key="DemandSheet">
+              <Menu.Item key="demandSheet">
                 <Link
                   className={styles.minute}
                   to="/control-panel/panel/demand-sheet"
                 >
-                  发布需求单
+                  发布订单
                 </Link>
               </Menu.Item>
-              <Menu.Item key="DemandList">
+              <Menu.Item key="demandList">
                 <Link
                   className={styles.minute}
-                  to="/control-panel/panel/demand-demand-list"
+                  to="/control-panel/panel/demand-list"
                 >
-                  需求单列表
+                  订单列表
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="applicationList">
+                <Link
+                  className={styles.minute}
+                  to="/control-panel/panel/demand-applicationList"
+                >
+                  申请列表
                 </Link>
               </Menu.Item>
             </Menu.ItemGroup>
@@ -312,15 +315,20 @@ const ControlPanel = () => {
               path="/control-panel/panel/video-center"
               component={VideoCenter}
             />
-            {/* 发布需求单 */}
+            {/* 发布订单 */}
             <Route
               path="/control-panel/panel/demand-sheet"
               component={DemandSheet}
             />
-            {/* {需求单列表} */}
+            {/* {订单列表} */}
             <Route
-              path="/control-panel/panel/demand-demand-list"
+              path="/control-panel/panel/demand-list"
               component={DemandList}
+            />
+            {/* 申请列表 */}
+            <Route
+              path="/control-panel/panel/demand-applicationList"
+              component={applicationList}
             />
 
             <Redirect to="/platform" />

@@ -1,7 +1,10 @@
 import React from 'react'
 import { Form, Col, Row } from 'antd'
-import { toJS, useStores } from '@/utils/mobx'
+import { useStores } from '@/utils/mobx'
+import { toJS } from 'mobx'
+
 import FormNode from '@/components/FormNode'
+import Regional from './regional'
 const FormItem = Form.Item
 const layout = {
   labelCol: {
@@ -28,52 +31,39 @@ const keys = [
 function Basics() {
   const { commonStore } = useStores()
   const { dictionary } = commonStore
-  const { paymentType = [], deliveryType = [] } = toJS(dictionary)
+
+  const { factoryEffectiveLocation = [] } = toJS(dictionary)
+
   const orderConfigs = [
     {
-      label: '需求单名称',
+      label: '订单标题',
       required: true,
-      message: '请输入需求单名称',
-      placeholder: '请输入需求单名称',
+      message: '输入所要发布订单标题',
+      placeholder: '输入所要发布订单标题',
       field: 'name',
       span: 13
     },
     {
+      label: '有效车位',
+      message: '请选择有效车位',
+      required: true,
+      placeholder: '请选择有效车位',
+      type: 'select',
+      field: 'effectiveLocationValue',
+      span: 10,
+      options: factoryEffectiveLocation
+    },
+    {
       label: '企业信息',
-      field: 'invoice',
+      field: 'isEnterpriseInfoPublic',
       required: true,
       message: '请选择是否公开',
       type: 'radio',
-
       span: 13,
       options: [
         { label: '公开', value: 1 },
         { label: '不公开', value: 0 }
       ]
-    },
-    {
-      label: '地区要求',
-      required: true,
-      message: '请选择地区',
-      placeholder: '请选择地区',
-      type: 'multipleSelect',
-      field: 'regional',
-      span: 12,
-      options: paymentType
-    },
-    {
-      label: '有效车位',
-      message: '请选择交货方式',
-      type: 'select',
-      field: 'parking',
-      span: 10,
-      options: deliveryType
-    },
-    {
-      label: '其他要求',
-      field: 'requirement',
-      type: 'textarea',
-      span: 12
     }
   ]
   return (
@@ -92,6 +82,7 @@ function Basics() {
           return (
             <Col key={item.field} span={item.span}>
               <FormItem
+                key={item.field}
                 name={item.field}
                 label={item.label}
                 rules={[{ required: item.required, message: item.message }]}
@@ -103,6 +94,7 @@ function Basics() {
           )
         })}
       </Row>
+      <Regional />
     </div>
   )
 }

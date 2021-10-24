@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 import { cloneDeep } from 'lodash'
+import { Row, Col } from 'antd'
 
 interface Config {
   label: string
@@ -9,35 +10,45 @@ interface Config {
   field: string
   width: number
   marginLift: number
+  span: number
 }
 const SORT_ICON_MAP = new Map()
 SORT_ICON_MAP.set(-1, 'jack-shengjiangxu-morenzhuangtai')
 SORT_ICON_MAP.set(0, 'jack-shengjiangxu-shengxu')
 SORT_ICON_MAP.set(1, 'jack-shengjiangxu-jiangxu')
 const state = new Map()
-state.set(-1, '没有选择')
-state.set(0, '升序')
-state.set(1, '降序')
+state.set(-1, null)
+state.set(0, 'desc')
+state.set(1, 'asc')
 
 const headerConfigs: Array<Partial<Config>> = [
   {
-    label: '需求单信息',
-    width: 250,
-    marginLift: 150
+    span: 4
+    // width: 250,
+    // marginLift: 150
+  },
+  {
+    label: '订单信息',
+    span: 8
+    // width: 250,
+    // marginLift: 150
   },
   {
     label: '反馈情况',
-    field: 'total_amount',
-    width: 200
+    // width: 200
+    span: 6
   },
   {
     label: '状态',
     sort: -1,
-    field: 'total_price',
-    width: 200
+    span: 4,
+    field: 'status'
+
+    // width: 200
   },
   {
-    label: '操作'
+    label: '操作',
+    span: 1
   }
 ]
 
@@ -67,28 +78,32 @@ function Sort({ callback }) {
 
   return (
     <div className={styles.store}>
-      {configs.map((item, idx) => {
-        return (
-          <div
-            key={idx}
-            className={styles.listHeaderItem}
-            style={{
-              width: item.width,
-              marginLeft: item.marginLift,
-              flex: idx === configs.length - 1 ? 1 : null
-            }}
-          >
-            {item.label}
-            {typeof item.sort === 'number' ? (
-              <Icon
-                onClick={() => changeSort(idx)}
-                type={SORT_ICON_MAP.get(item.sort)}
-                className={styles.listHeaderSortIcon}
-              ></Icon>
-            ) : null}
-          </div>
-        )
-      })}
+      <Row>
+        {configs.map((item, idx) => {
+          return (
+            <Col key={idx} span={item.span}>
+              <div
+                key={idx}
+                className={styles.listHeaderItem}
+                style={{
+                  width: item.width,
+                  marginLeft: item.marginLift,
+                  flex: idx === configs.length - 1 ? 1 : null
+                }}
+              >
+                {item.label}
+                {typeof item.sort === 'number' ? (
+                  <Icon
+                    onClick={() => changeSort(idx)}
+                    type={SORT_ICON_MAP.get(item.sort)}
+                    className={styles.listHeaderSortIcon}
+                  ></Icon>
+                ) : null}
+              </div>
+            </Col>
+          )
+        })}
+      </Row>
     </div>
   )
 }

@@ -2,6 +2,9 @@ import React from 'react'
 import { Form, Col, Row } from 'antd'
 import { toJS, useStores } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
+import Category from './category'
+import styles from './index.module.less'
+
 const FormItem = Form.Item
 const layout = {
   labelCol: {
@@ -25,70 +28,75 @@ const keys = [
   'allowClear',
   'width'
 ]
+
 function Basics() {
   const { commonStore } = useStores()
   const { dictionary } = commonStore
-  const { paymentType = [], deliveryType = [] } = toJS(dictionary)
+  const {
+    deliveryType = [],
+    materialType = [],
+    inquiryProcessType = [],
+    productType = []
+  } = toJS(dictionary)
+
   const orderConfigs = [
-    {
-      label: '商品品类',
-      required: true,
-      message: '请选择商品品类',
-      placeholder: '请选择商品品类',
-      type: 'multipleSelect',
-      field: 'category',
-      span: 12,
-      options: paymentType
-    },
     {
       label: '面料类型',
       required: true,
       message: '请选择面料类型',
       placeholder: '请选择面料类型',
       type: 'select',
-      field: 'processingType',
+      field: 'plusMaterialType',
       span: 12,
-      options: deliveryType
+      options: materialType
     },
-    {
-      label: '发单量',
-      required: true,
-      placeholder: '最少数量 ~ 最大数量 件',
-      message: '请输入发单量',
-      field: 'orderQuantity',
-      span: 12,
 
-      options: deliveryType
-    },
     {
       label: '目标单价',
       type: 'number',
       message: '请输入目标单价',
-      field: 'unitPrice',
+      field: 'goodsPrice',
       span: 12,
       options: deliveryType
     },
     {
-      label: '款图',
-      type: 'img',
-      field: 'paymentMap',
-      span: 13
+      label: '加工类型',
+      required: true,
+      message: '请选择加工类型',
+      placeholder: '请选择加工类型',
+      type: 'multipleSelect',
+      mode: 'multiple',
+      field: 'processTypeList',
+      span: 12,
+      options: inquiryProcessType
     },
     {
-      label: '附件上传',
-      type: 'annex',
-      field: 'attachment',
-      span: 13
+      label: '生产方式',
+      required: true,
+      message: '请选择生产方式',
+      placeholder: '请选择生产方式',
+      type: 'multipleSelect',
+      mode: 'multiple',
+      field: 'productTypeList',
+      span: 12,
+      options: productType
     },
     {
       label: '备注说明',
-      field: 'remarks',
+      field: 'goodsRemark',
       type: 'textarea',
       span: 12
+    },
+    {
+      label: '款图',
+      type: 'img',
+      field: 'stylePicture',
+      span: 13
     }
   ]
   return (
     <div>
+      <Category />
       <Row>
         {orderConfigs.map(item => {
           //orderConfigs form的数据
@@ -101,7 +109,7 @@ function Basics() {
           })
 
           return (
-            <Col key={item.field} span={item.span}>
+            <Col key={item.field} span={item.span} className={styles.modify}>
               <FormItem
                 name={item.field}
                 label={item.label}

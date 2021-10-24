@@ -113,7 +113,6 @@ const FormNode = (props: FormNodeProps) => {
   useEffect(() => {
     if (['img', 'annex'].includes(type)) {
       !Array.isArray(value) && setNodeValue([])
-      console.log(value, 'value')
       if (isArray(value)) {
         value.forEach(item => {
           item.name = decodeURI(item.name)

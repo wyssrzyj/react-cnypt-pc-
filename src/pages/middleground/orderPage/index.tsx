@@ -127,12 +127,14 @@ const OrderPage = () => {
   } = orderStore
   const { getProductCategoryName } = factoryStore
   const { dictionary } = commonStore
+
   const {
     paymentType = [],
     deliveryType = [],
     salesMarket = [],
     orderProcessType = []
   } = toJS(dictionary)
+  console.log(toJS(dictionary))
 
   const orderConfigs = [
     {
@@ -683,15 +685,19 @@ const OrderPage = () => {
           <Title title={'订单信息'}></Title>
           <Row className={styles.row}>
             {orderConfigs.map(item => {
-              const data: any = {}
+              //orderConfigs form的数据
+              const data: any = {} //定义一个空对象
               keys.forEach(i => {
                 if (![null, undefined].includes(item[i])) {
+                  //当不等于null和undefined
                   data[i] = item[i]
                 }
               })
+              // 发票点数(%)
               if (item.field === 'invoiceCount' && !showInvoiceCount) {
                 return null
               }
+              // 时间
               let initialValue = orderInfo[item.field]
               if (
                 ['materialArrivalTime', 'expectDeliveryTime'].includes(
@@ -720,7 +726,6 @@ const OrderPage = () => {
                   </Col>
                 )
               }
-
               return (
                 <Col key={item.field} span={item.span}>
                   <FormItem

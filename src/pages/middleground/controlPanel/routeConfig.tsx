@@ -20,6 +20,12 @@ menuKeys.set('/control-panel/panel/video-center', ['videoCenter', 'sub4'])
 menuKeys.set('/control-panel/panel/department', ['department', 'sub4'])
 menuKeys.set('/control-panel/panel/receiveOrder', ['receiveOrder', 'sub5'])
 menuKeys.set('/control-panel/panel/ordersManage', ['ordersManage', 'sub5'])
+menuKeys.set('/control-panel/panel/demand-sheet', ['demandSheet', 'sub6'])
+menuKeys.set('/control-panel/panel/demand-list', ['demandList', 'sub6'])
+menuKeys.set('/control-panel/panel/demand-applicationList', [
+  'applicationList',
+  'sub6'
+])
 menuKeys.set('/control-panel/panel/information', ['information', 'sub1'])
 
 export const subsMap = new Map()
@@ -38,3 +44,6 @@ subsMap.set('/control-panel/panel/monitorPage', ['sub4'])
 subsMap.set('/control-panel/panel/department', ['sub4'])
 subsMap.set('/control-panel/panel/receiveOrder', ['sub5'])
 subsMap.set('/control-panel/panel/ordersManage', ['sub5'])
+subsMap.set('/control-panel/panel/demand-sheet', ['sub6'])
+subsMap.set('/control-panel/panel/demand-list', ['sub6'])
+subsMap.set('/control-panel/panel/demand-applicationList', ['sub6'])

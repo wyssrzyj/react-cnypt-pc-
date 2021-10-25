@@ -9,7 +9,7 @@ import 'nprogress/nprogress.css'
 import { AliveScope } from './components/keepAlive'
 import './css/reset.css'
 import Layout from './layout'
-// import 'antd/dist/antd.min.css'
+import 'antd/dist/antd.css'
 import { Loading } from './pages/home/renderHome'
 
 const App = () => {

@@ -82,7 +82,11 @@ const OrderCard = props => {
             <span>接单要求</span>
             <Icon
               type={`jack-Icon_${demand}`}
-              className={styles.requirementsIcon}
+              className={
+                demand === 'up'
+                  ? styles.requirementsUpIcon
+                  : styles.requirementsDownIcon
+              }
             />
           </span>
           <span className={styles.deadline}>5个月后截止</span>

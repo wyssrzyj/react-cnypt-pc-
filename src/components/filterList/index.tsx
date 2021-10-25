@@ -79,10 +79,35 @@ const FilterList = props => {
   const [setUpTime, setSetUpTime] = useState<string>(null)
   const [updateTime, setUpdateTime] = useState<string>(null)
 
-  const newTypeList =
-    location.pathname === '/factory-search' ? prodType : inquiryProcessType
-  const newTitle =
-    location.pathname === '/factory-search' ? '加工类型' : '接单类型'
+  const [fabricType, setFabricType] = useState<string>(null)
+  const [orderCount, setOrderCount] = useState<string>(null)
+
+  const onFabricTypeChange = type => {
+    setFabricType(type)
+    // TODO: 字段待确认
+    onFilterChange({
+      fabricType: type
+    })
+  }
+
+  const onOrderCountChange = count => {
+    setOrderCount(count)
+    // TODO: 字段待确认
+    onFilterChange({
+      orderCount: count
+    })
+  }
+
+  const newTypeList = ['/factory-search', '/producer-search'].includes(
+    location.pathname
+  )
+    ? prodType
+    : inquiryProcessType
+  const newTitle = ['/factory-search', '/producer-search'].includes(
+    location.pathname
+  )
+    ? '加工类型'
+    : '接单类型'
 
   const emptyFn = () => {
     // const newData = toJS(productCategoryList)
@@ -452,8 +477,8 @@ const FilterList = props => {
               allowClear
               placeholder="面料类型"
               className={styles.moreSelect}
-              value={factorySize}
-              onChange={onFactorySizeChange}
+              value={fabricType}
+              onChange={onFabricTypeChange}
             >
               {plusMaterialType.map(item => (
                 <Option key={item.id} value={item.value}>
@@ -467,8 +492,8 @@ const FilterList = props => {
               allowClear
               placeholder="订单数量"
               className={styles.moreSelect}
-              value={factorySize}
-              onChange={onFactorySizeChange}
+              value={orderCount}
+              onChange={onOrderCountChange}
             >
               {goodsNum.map(item => (
                 <Option key={item.id} value={item.value}>
@@ -516,20 +541,7 @@ const FilterList = props => {
           )}
         </div>
       </div>
-      {/* <Tabs type="card" size="large" activeKey={factoryType} onChange={onTabChange}>
-        {types.map(dressType => (
-          <TabPane
-            tab={
-              <span>
-                {dressType.icon}
-                {dressType.type}
-              </span>
-            }
-            key={dressType.key}
-          >
-          </TabPane>
-        ))}
-      </Tabs> */}
+
       {modalVisible && (
         <AreaModal
           visible={modalVisible}

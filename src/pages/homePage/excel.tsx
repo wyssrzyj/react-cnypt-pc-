@@ -23,6 +23,7 @@ const Excel = () => {
           // esline-disable-next-line
           if (workbook.Sheets.hasOwnProperty(sheet)) {
             // 利用 sheet_to_json 方法将 excel 转成 json 数据
+            console.log(workbook.Sheets[sheet], 'workbook.Sheets[sheet]')
             data = data.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]))
             console.log(JSON.stringify(data))
             localStorage.setItem('countyInfo', JSON.stringify(data))

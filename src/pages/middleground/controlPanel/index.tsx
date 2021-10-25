@@ -31,6 +31,8 @@ const FactoryPhotograph = React.lazy(
   () => import('./components/factoryPhotograph')
 )
 const Department = React.lazy(() => import('../department'))
+const ReceiveOrders = React.lazy(() => import('./receiveOrders'))
+const OrderManage = React.lazy(() => import('./receiveOrders/orderManage'))
 
 const Title = ({ title, icon }) => {
   return (
@@ -220,10 +222,44 @@ const ControlPanel = () => {
                 </Menu.Item>
               </Menu.ItemGroup>
             ) : null}
+            {currentUser.enterpriseType !== null &&
+            +currentUser.enterpriseType === 0 ? (
+              <Menu.ItemGroup
+                key="g5"
+                title={<Title title={'接单管理'} icon={'jack-video1'}></Title>}
+              >
+                <Menu.Item key="receiveOrder">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/receiveOrder?key=all"
+                  >
+                    接订单
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="ordersManage">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/ordersManage"
+                  >
+                    订单管理
+                  </Link>
+                </Menu.Item>
+              </Menu.ItemGroup>
+            ) : null}
           </Menu>
         </div>
+
         <div className={styles.controlPanelRight}>
           <Switch>
+            {/* 发单信息 */}
+            <Route
+              path="/control-panel/panel/receiveOrder"
+              component={ReceiveOrders}
+            />
+            <Route
+              path="/control-panel/panel/ordersManage"
+              component={OrderManage}
+            />
             {/* 发单信息 */}
             <Route
               path="/control-panel/panel/department"

@@ -75,14 +75,17 @@ const FilterList = props => {
     name: '全部'
   })
 
-  const [factorySize, setFactorySize] = useState<string>(null)
+  const [moreParams, setMoreParams] = useState<any>({})
   const [setUpTime, setSetUpTime] = useState<string>(null)
   const [updateTime, setUpdateTime] = useState<string>(null)
 
   const newTypeList =
     location.pathname === '/factory-search' ? prodType : inquiryProcessType
   const newTitle =
-    location.pathname === '/factory-search' ? '加工类型' : '接单类型'
+    location.pathname === '/factory-search' ? '接单类型' : '加工类型'
+
+  const newTime =
+    location.pathname === '/factory-search' ? '更新时间' : '发布时间'
 
   const emptyFn = () => {
     // const newData = toJS(productCategoryList)
@@ -169,10 +172,13 @@ const FilterList = props => {
     setActiveProcessing({ ...params })
     onFilterChange({ prodType: params.id })
   }
-  const onFactorySizeChange = value => {
-    setFactorySize(value)
+  const onFactorySizeChange = (value, field) => {
+    setMoreParams({
+      ...moreParams,
+      [field]: value
+    })
     onFilterChange({
-      effectiveLocation: value
+      [field]: value
     })
   }
 
@@ -199,16 +205,24 @@ const FilterList = props => {
 
   //更新时间
   const onUpdateTimeChange = value => {
+    const start =
+      location.pathname === '/factory-search'
+        ? 'updateTimeStart'
+        : 'releaseTimeStart'
+    const end =
+      location.pathname === '/factory-search'
+        ? 'updateTimeEnd'
+        : 'releaseTimeEnd'
     setUpdateTime(value)
     if (!isNil(value)) {
       onFilterChange({
-        updateTimeStart: moment().subtract('days', value).format('x'),
-        updateTimeEnd: moment().format('x')
+        [start]: moment().subtract('days', value).format('x'),
+        [end]: moment().format('x')
       })
     } else {
       onFilterChange({
-        updateTimeStart: undefined,
-        updateTimeEnd: undefined
+        [start]: undefined,
+        [end]: undefined
       })
     }
   }
@@ -421,27 +435,29 @@ const FilterList = props => {
       <div className={styles.classification}>
         <div className={styles.classificationLabel}>更多选项</div>
         <div className={styles.classificationItem}>
-          <Select
-            allowClear
-            placeholder="成立时间"
-            value={setUpTime}
-            className={styles.moreSelect}
-            onChange={onSetUpTimeChange}
-          >
-            {setUpTimeMap.map(item => (
-              <Option key={item.value} value={item.value}>
-                {item.label}
-              </Option>
-            ))}
-          </Select>
+          {location.pathname === '/factory-search' && (
+            <Select
+              allowClear
+              placeholder="成立时间"
+              value={setUpTime}
+              className={styles.moreSelect}
+              onChange={onSetUpTimeChange}
+            >
+              {setUpTimeMap.map(item => (
+                <Option key={item.value} value={item.value}>
+                  {item.label}
+                </Option>
+              ))}
+            </Select>
+          )}
           <Select
             allowClear
             placeholder={
               location.pathname === '/factory-search' ? '有效车位' : '工厂规模'
             }
             className={styles.moreSelect}
-            value={factorySize}
-            onChange={onFactorySizeChange}
+            value={moreParams.effectiveLocation}
+            onChange={value => onFactorySizeChange(value, 'effectiveLocation')}
           >
             {factoryEffectiveLocation.map(item => (
               <Option key={item.id} value={item.value}>
@@ -454,25 +470,10 @@ const FilterList = props => {
               allowClear
               placeholder="面料类型"
               className={styles.moreSelect}
-              value={factorySize}
-              onChange={onFactorySizeChange}
+              value={moreParams.plusMaterialType}
+              onChange={value => onFactorySizeChange(value, 'plusMaterialType')}
             >
               {plusMaterialType.map(item => (
-                <Option key={item.id} value={item.value}>
-                  {item.label}
-                </Option>
-              ))}
-            </Select>
-          )}
-          {location.pathname === '/order-search' && (
-            <Select
-              allowClear
-              placeholder="订单数量"
-              className={styles.moreSelect}
-              value={factorySize}
-              onChange={onFactorySizeChange}
-            >
-              {goodsNum.map(item => (
                 <Option key={item.id} value={item.value}>
                   {item.label}
                 </Option>
@@ -483,7 +484,7 @@ const FilterList = props => {
             allowClear
             value={updateTime}
             onChange={onUpdateTimeChange}
-            placeholder="更新时间"
+            placeholder={newTime}
             className={styles.moreSelect}
           >
             {updateTimeMap.map(item => (
@@ -492,6 +493,22 @@ const FilterList = props => {
               </Option>
             ))}
           </Select>
+          {location.pathname === '/order-search' && (
+            <Select
+              allowClear
+              style={{ width: 140 }}
+              placeholder="订单数量"
+              className={styles.moreSelect}
+              value={moreParams.goodsNum}
+              onChange={value => onFactorySizeChange(value, 'goodsNum')}
+            >
+              {goodsNum.map(item => (
+                <Option key={item.id} value={item.value}>
+                  {item.label}
+                </Option>
+              ))}
+            </Select>
+          )}
         </div>
       </div>
       <div className={styles.classification}>

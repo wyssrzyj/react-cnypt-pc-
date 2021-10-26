@@ -83,6 +83,7 @@ const DemandSheet = () => {
     if (isArray(v.annex)) {
       v.annex = v.annex.map(item => item.url)
     }
+    // lyj
     // 图片
     if (isArray(v.stylePicture)) {
       v.stylePicture = v.stylePicture.map(item => item.url)

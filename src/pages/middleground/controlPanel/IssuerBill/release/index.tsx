@@ -9,9 +9,9 @@ import Terms from './components/terms'
 import Address from './components/address'
 import { useStores, observer } from '@/utils/mobx'
 import { useHistory } from 'react-router-dom'
-import { timestampToTime } from './components/time'
+// import { timestampToTime } from './components/time'
 import { useLocation } from 'react-router-dom'
-import moment from 'moment' //引入moment
+// import moment from 'moment' //引入moment
 
 const DemandSheet = () => {
   const location = useLocation()
@@ -35,7 +35,7 @@ const DemandSheet = () => {
   }, [])
   const echoData = async v => {
     const { data } = await AnotherSingleInterface({ id: v })
-    console.log(data)
+
     if (data) {
       data.stylePicture = data.stylePicture.map(url => ({
         thumbUrl: url,
@@ -47,11 +47,14 @@ const DemandSheet = () => {
         url: url,
         name: url.split('__')[1]
       }))
-      data.processingType = moment(timestampToTime(data.inquiryEffectiveDate))
-      data.unitPrice = moment(timestampToTime(data.deliveryDate))
+      if (data.regionalIdList) {
+      } else {
+        data.regionalIdList = ['0'] //全国
+      }
+      // data.processingType = moment(timestampToTime(data.inquiryEffectiveDate))//时间的回显
+      // data.unitPrice = moment(timestampToTime(data.deliveryDate))
     }
-    console.log(data.regionalIdList)
-    // data.regionalIdList = []
+
     setInitialValues(data)
   }
   useEffect(() => {
@@ -90,11 +93,14 @@ const DemandSheet = () => {
     } else {
       v.status = -1
     }
+    v.provinceId = v.location[1]
+    v.cityId = v.location[0]
+    v.districtId = v.location[2]
     const res = await ewDemandDoc(v)
-    console.log(res)
     if (res.code === 200) {
       push({ pathname: '/control-panel/panel/demand-list' })
     }
+    console.log(v)
   }
 
   return (
@@ -113,11 +119,8 @@ const DemandSheet = () => {
           </span>
         </section>
         <section>
-          <Title title={'交易条件'}></Title>
+          <Title title={'其他'}></Title>
           <Terms data={data} />
-        </section>
-        <section>
-          <Title title={'地址与联系人'}></Title>
           <Address />
         </section>
 

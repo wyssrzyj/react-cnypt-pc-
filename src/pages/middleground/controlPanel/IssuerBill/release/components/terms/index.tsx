@@ -9,7 +9,7 @@ const layout = {
     span: 5
   },
   wrapperCol: {
-    span: 24
+    span: 12
   }
 }
 const keys = [
@@ -39,7 +39,7 @@ function Basics({ data }) {
       message: '请输入付款方式',
       placeholder: '请输入付款方式',
       field: 'payDetails',
-      span: 13,
+      span: 12,
       options: paymentType
     }
   ]
@@ -74,9 +74,7 @@ function Basics({ data }) {
           )
         })}
       </Row>
-      <Row>
-        <Date validity={unitPrice} />
-      </Row>
+      <Date validity={unitPrice} />
     </div>
   )
 }

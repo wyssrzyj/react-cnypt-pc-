@@ -41,7 +41,7 @@ function Basics() {
       message: '输入所要发布订单标题',
       placeholder: '输入所要发布订单标题',
       field: 'name',
-      span: 13
+      span: 12
     },
     {
       label: '有效车位',
@@ -49,8 +49,8 @@ function Basics() {
       required: true,
       placeholder: '请选择有效车位',
       type: 'select',
-      field: 'effectiveLocationValue',
-      span: 10,
+      field: 'effectiveLocation',
+      span: 12,
       options: factoryEffectiveLocation
     },
     {
@@ -59,7 +59,8 @@ function Basics() {
       required: true,
       message: '请选择是否公开',
       type: 'radio',
-      span: 13,
+      span: 12,
+      defaultValue: 1,
       options: [
         { label: '公开', value: 1 },
         { label: '不公开', value: 0 }

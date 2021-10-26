@@ -4,6 +4,7 @@
   line-height: 32px;
   background-color: rgba(232, 242, 255, 1);
 }
+
 .noTopping {
   height: 32px;
   margin-top: 20px;
@@ -14,11 +15,47 @@
   margin-left: 10px;
 }
 .theme {
-  height: 100px;
   padding: 20px;
 }
+.delContent {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+}
+.modal {
+  padding-top: 48px;
+  text-align: center;
+}
+
+.delIcon {
+  margin-bottom: 24px;
+  font-size: 68px;
+}
+.cancelBtn {
+  width: 120px;
+  height: 40px;
+  margin-right: 20px;
+  border-radius: 2px;
+}
+
+.submitBtn {
+  width: 120px;
+  height: 40px;
+  border-radius: 2px;
+}
+
+.delTitle {
+  color: #333333;
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+}
+.delText {
+  color: #333333;
+  font-size: 14px;
+  text-align: center;
+}
 .bos {
-  padding-bottom: 20px;
   font-size: 12px;
   border-bottom: 1px solid #5c5c5c42;
 }
@@ -27,15 +64,19 @@
 }
 .img {
   float: left;
-  width: 80px;
-  height: 80px;
-  margin-right: 10px;
+  width: 100px;
+  height: 100px;
+  margin-right: 20px;
 }
 .subject {
+  font-size: 14px;
   line-height: 12px;
 }
 .toppingStyle {
   color: #40a9ff;
+  font-size: 14px;
+}
+.font {
   font-size: 14px;
 }
 .hidden {
@@ -46,9 +87,10 @@
 }
 .category {
   width: 173px;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 14px;
   overflow: hidden;
+
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -57,7 +99,7 @@
 }
 
 .feedback {
-  margin-top: 12px;
+  margin-top: 24px;
   text-align: center;
 }
 .feedback p {
@@ -76,9 +118,11 @@
   text-align: center;
 }
 .moreOrder {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 .fontColor {
+  margin-right: 5px;
+  margin-left: 5px;
   color: red;
 }
 .cursor {
@@ -95,26 +139,35 @@
 .draft {
   line-height: 50px;
 }
+.tina {
+  margin-right: 5px;
+  margin-left: 5px;
+  color: red;
+}
 .already {
-  color: #bfbfbf;
+  color: rgb(0 0 0 / 52%);
 }
 .validity {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+.mov {
+  color: #40a9ff;
+  border: 1px solid #1890ff;
+}
 .listHeaderSortIcon {
-  margin-top: 8px;
   margin-right: 5px;
   font-size: 18px;
 }
 .name {
+  margin-bottom: 14px;
   font-weight: 700;
 }
 .subject {
   line-height: 12px;
 }
 .color {
-  margin-right: 5px;
+  margin-right: 15px;
   color: #bfbfbf;
   font-size: 14px;
 }

@@ -96,6 +96,9 @@ export default class DemandList {
       if (res.code !== 200) {
         message.error(res.msg)
       }
+      if (res.code === 200) {
+        // message.success(res.msg)
+      }
       // runInAction(() => {
       //   this.zhiding = res.data
       // })
@@ -237,6 +240,53 @@ export default class DemandList {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/inquiry-application-list`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res
+    } catch (e) {
+      return e
+    }
+  }
+
+  // 判断是否超过发单商最大订单
+  @action OrderQuantity = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/oms/inquiry-quote/judge-goods-num`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res
+    } catch (e) {
+      return e
+    }
+  }
+  // 供应商主动申请需求单  formti提交
+  @action SubmitRequisition = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/oms/inquiry-quote/active-application-inquiry`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res
+    } catch (e) {
+      return e
+    }
+  }
+
+  // 供应商主动申请需求单  formti提交
+  @action RejectSubmission = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/oms/inquiry-quote/refuse-take-inquiry`,
         params
       )
       if (res.code !== 200) {

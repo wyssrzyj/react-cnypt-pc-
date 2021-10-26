@@ -31,6 +31,7 @@ const RouteList = () => {
       <Route path="/erp" component={ErpModule} />
       <Route path="/excel" component={Excel} />
       <Route path="/control-panel" component={MiddleGround} />
+
       <Route path="/order-search" exact component={SearchOrder} />
       <Route path="/order-search/:id" component={SearchOrderDetail} />
       <Route path="*" component={NotFound} />

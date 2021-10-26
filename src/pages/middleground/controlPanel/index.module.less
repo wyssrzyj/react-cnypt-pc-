@@ -25,56 +25,15 @@
   flex-direction: column;
   min-width: 160px;
   height: fit-content;
-  max-height: calc(100vh - 104px - 195px);
   overflow: auto;
   background-color: #ffffff;
 
   :global {
-    .ant-menu-item-group {
-      margin-bottom: 3px;
+    .ant-menu-item:after {
+      border-right: none !important; //杠杠
     }
-
-    .ant-menu-item-icon {
-      font-size: 16px !important;
-    }
-
-    .ant-menu-inline .ant-menu-item {
-      height: 32px !important;
-      line-height: 32px !important;
-    }
-
-    .ant-menu-submenu-title {
-      color: #888888 !important;
-      font-weight: bold !important;
-    }
-
-    .ant-menu-submenu-selected .ant-menu-title-content {
-      // color: #333333 !important;
-      font-weight: bold !important;
-    }
-
-    .ant-menu-item:active {
-      background: #ffffff !important;
-    }
-
-    .ant-menu-item-selected:active {
-      background: #e6f7ff;
-    }
-
-    .ant-menu-item a {
-      color: #888888 !important;
-      // font-weight: bold !important;
-    }
-    .ant-menu-item .ant-menu-item-icon {
-      color: #888888 !important;
-    }
-    .ant-menu-item-selected a {
-      color: #333333 !important;
-      // font-weight: bold !important;
-    }
-
-    .ant-menu-item .ant-menu-item-icon {
-      color: #333333 !important;
+    .ant-menu-item-selected {
+      background: transparent !important; //背景颜色
     }
   }
 }
@@ -206,6 +165,7 @@
 
 .management {
   margin-bottom: 8px;
+  margin-bottom: 5px;
   padding-top: 20px;
   padding-left: 21px;
   color: #333333;
@@ -213,8 +173,14 @@
   font-size: 15px;
 }
 .managementCenter {
-  margin-top: 10px;
-  text-align: center;
+  width: 103px;
+  margin-left: 24px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  color: #333333;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #66666642;
 }
 .items {
   margin: 0 !important;

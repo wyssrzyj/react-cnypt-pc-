@@ -44,6 +44,7 @@ export default class CommonStore {
       if (res) {
         runInAction(() => {
           this.allArea = res.data
+          localStorage.setItem('allArea', JSON.stringify(res.data))
         })
 
         return res.data || []

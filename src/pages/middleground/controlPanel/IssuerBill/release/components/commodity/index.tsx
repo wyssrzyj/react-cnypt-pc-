@@ -1,10 +1,11 @@
 import React from 'react'
-import { Form, Col, Row } from 'antd'
+import { Form, Col, Row, Input } from 'antd'
 import { toJS, useStores } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 import Category from './category'
 import styles from './index.module.less'
-import TextArea from '_antd@4.17.0-alpha.6@antd/lib/input/TextArea'
+
+const { TextArea } = Input
 
 const FormItem = Form.Item
 const layout = {

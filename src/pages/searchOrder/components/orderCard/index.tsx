@@ -46,8 +46,16 @@ const OrderCard = props => {
         <ul className={styles.right}>
           <li className={styles.rightTitle}>{name}</li>
           {cardList.map((item, index) => (
-            <li key={index}>
-              {item.label}：{item.value}
+            <li key={index} className={styles.cardItem}>
+              <span className={styles.cardValue}>{item.label}：</span>
+              {autoAddTooltip(
+                ref => (
+                  <span ref={ref} className={styles.tooltipBpx}>
+                    {item.value}
+                  </span>
+                ),
+                { title: item.value }
+              )}
             </li>
           ))}
         </ul>

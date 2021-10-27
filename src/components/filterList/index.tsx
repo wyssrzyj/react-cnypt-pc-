@@ -323,7 +323,7 @@ const FilterList = props => {
       })
     }
     setActiveArea(targetArea)
-    onFilterChange({ cityIds: targetCitys })
+    !isEmpty(targetCitys) && onFilterChange({ cityIds: targetCitys })
   }, [])
 
   return (

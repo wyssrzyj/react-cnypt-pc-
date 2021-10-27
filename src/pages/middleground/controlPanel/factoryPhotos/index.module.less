@@ -1,0 +1,65 @@
+.container {
+  padding: 20px;
+  background: #ffffff;
+}
+
+.upload {
+  :global {
+    .ant-upload {
+      // width: 128px;
+      // height: 128px;
+    }
+  }
+}
+
+.uploadTips {
+  color: #999999;
+  font-size: 14px;
+}
+
+.item {
+  display: flex;
+  margin-bottom: 24px;
+}
+
+.label {
+  min-width: 108px;
+  padding-right: 20px;
+  text-align: right;
+}
+
+.photos {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.uploadText {
+  color: #999999;
+}
+
+.icon {
+  margin-bottom: 8px;
+  color: #999999;
+  font-size: 20px;
+}
+
+.btnBox {
+  text-align: center;
+  padding: 32px 0 60px;
+}
+
+.errorText {
+  color: #ff4d4f;
+}
+
+.required {
+  &::before {
+    content: '';
+    display: inline-block;
+    margin-right: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    line-height: 1;
+    content: "*";
+  }
+}

@@ -6,7 +6,7 @@ import Factory from '@/pages/factory'
 const Platform = () => {
   return (
     <div className={styles.platformContent}>
-      <Search></Search>
+      {/* <Search></Search> */}
       <Factory />
     </div>
   )

@@ -3,7 +3,7 @@ import { Pagination, Empty, Spin } from 'antd'
 import { isEmpty } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores, observer } from '@/utils/mobx'
-import { FilterList, Icon } from '@/components'
+import { FilterList, Icon, SimpleSearch } from '@/components'
 import { OverflowCard, FactoryCard } from './components'
 import { getCurrentUser } from '@/utils/tool'
 import styles from './index.module.less'
@@ -137,40 +137,44 @@ const Factory = () => {
   }, [])
 
   return (
-    <div className={styles.factory}>
-      <div className={styles.factoryContainer}>
-        <FilterList types={factoryTypes} onFilterChange={onFilterChange} />
-        <div className={styles.factoryContent}>
-          <div className={styles.contentLeft}>
-            <Spin size="large" spinning={isLoading}>
-              {isEmpty(factoryArray) ? (
-                <Empty className={styles.nodata} />
-              ) : (
-                factoryArray.map((item, index) => (
-                  <OverflowCard key={index} {...item} />
-                ))
-              )}
-            </Spin>
-            <div className={styles.factoryPage}>
-              <Pagination
-                current={pageNum}
-                pageSize={10}
-                total={total}
-                showSizeChanger={false}
-                onChange={onPaginationChange}
-              />
+    <div>
+      <SimpleSearch onFilterChange={onFilterChange} field={'factoryName'} />
+
+      <div className={styles.factory}>
+        <div className={styles.factoryContainer}>
+          <FilterList types={factoryTypes} onFilterChange={onFilterChange} />
+          <div className={styles.factoryContent}>
+            <div className={styles.contentLeft}>
+              <Spin size="large" spinning={isLoading}>
+                {isEmpty(factoryArray) ? (
+                  <Empty className={styles.nodata} />
+                ) : (
+                  factoryArray.map((item, index) => (
+                    <OverflowCard key={index} {...item} />
+                  ))
+                )}
+              </Spin>
+              <div className={styles.factoryPage}>
+                <Pagination
+                  current={pageNum}
+                  pageSize={10}
+                  total={total}
+                  showSizeChanger={false}
+                  onChange={onPaginationChange}
+                />
+              </div>
             </div>
-          </div>
-          <div className={styles.contentRight}>
-            <div className={styles.newFactory}>
-              <img
-                className={styles.newFactoryImg}
-                src={require('@/static/images/ruzhu_bg.png')}
-              />
-              {/* <div className={styles.newFactoryTitle}>工厂入驻</div> */}
+            <div className={styles.contentRight}>
+              <div className={styles.newFactory}>
+                <img
+                  className={styles.newFactoryImg}
+                  src={require('@/static/images/ruzhu_bg.png')}
+                />
+                {/* <div className={styles.newFactoryTitle}>工厂入驻</div> */}
+              </div>
+              <FactoryCard title="推荐好工厂" list={factoryList} />
+              <FactoryCard title="最近浏览记录" list={browsingList} />
             </div>
-            <FactoryCard title="推荐好工厂" list={factoryList} />
-            <FactoryCard title="最近浏览记录" list={browsingList} />
           </div>
         </div>
       </div>

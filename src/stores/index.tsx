@@ -10,8 +10,8 @@ import FactoryDetailStore, { factoryDetailStore } from './factoryDetail'
 import ErpModuleStore, { erpModuleStore } from './erpModule'
 import OrderStore, { orderStore } from './middleground/order'
 import DepartmentStore, { departmentStore } from './department'
-import SearchOrderStore, { searchOrderStore } from './searchOrder'
 import DemandListStore, { demandListStore } from './demandList'
+import SearchOrderStore, { searchOrderStore } from './searchOrder'
 
 export interface Stores {
   homeStore: HomeStore
@@ -26,8 +26,8 @@ export interface Stores {
   monitorPageStore: MonitorPageStore
   orderStore: OrderStore
   departmentStore: DepartmentStore
-  searchOrderStore: SearchOrderStore
   demandListStore: DemandListStore
+  searchOrderStore: SearchOrderStore
 }
 
 export const stores = {

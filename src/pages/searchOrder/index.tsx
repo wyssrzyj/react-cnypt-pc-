@@ -10,11 +10,11 @@ import { OrderSearchHeader, OrderCard } from './components'
 import styles from './index.module.less'
 
 const SearchOrder = () => {
-  const pageSize = 12
   const { searchOrderStore, commonStore, factoryStore } = useStores()
+  const { getOrderList, inquiryList } = searchOrderStore
+  const pageSize = 12
   const { dictionary } = commonStore
   const { productCategory } = factoryStore
-  const { inquiryList } = searchOrderStore
 
   const {
     goodsNum = [],
@@ -153,6 +153,7 @@ const SearchOrder = () => {
 
   useEffect(() => {
     ;(async () => {
+      await getOrderList({ pageNum: 1, pageSize: 12 })
       await getProductCategory()
     })()
   }, [])
@@ -163,7 +164,7 @@ const SearchOrder = () => {
 
   return (
     <div className={styles.searchOrder}>
-      <SimpleSearch />
+      <SimpleSearch onFilterChange={onFilterChange} />
       <div className={styles.orderContent}>
         {/* 搜索 */}
         <FilterList onFilterChange={onFilterChange} />

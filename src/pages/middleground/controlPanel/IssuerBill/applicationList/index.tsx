@@ -48,8 +48,6 @@ function DemandList() {
   const InterfaceData = async () => {
     const res = await ApplicationList(params)
     if (res.code === 200) {
-      console.log(res.data.records)
-
       setDataLength(res.data.total)
       setLists(res.data.records)
     }

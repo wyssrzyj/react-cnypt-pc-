@@ -6,7 +6,7 @@ import { useStores } from '@/utils/mobx'
 function index({ stated }) {
   const { id, source } = stated
   const [button, setButton] = useState(true)
-  console.log(id)
+  console.log(source)
 
   const { demandListStore } = useStores()
   const { OrderQuantity, SubmitRequisition, RejectSubmission } = demandListStore
@@ -19,8 +19,6 @@ function index({ stated }) {
     }
   }
   const onFinish = async (values: any) => {
-    console.log('斩灭剑')
-
     if (button) {
       console.log('接受')
       const quantitativeJudgment = await OrderQuantity({
@@ -96,20 +94,20 @@ function index({ stated }) {
         </Row>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          {source == 2 ? (
+          {source == 2 ? null : (
             <Button
               onClick={() => {
                 setButton(false)
               }}
-              className={styles.noBtn}
               size="large"
               htmlType="submit"
             >
               拒绝接单
             </Button>
-          ) : null}
+          )}
 
           <Button
+            className={styles.noBtn}
             size="large"
             onClick={() => {
               setButton(true)

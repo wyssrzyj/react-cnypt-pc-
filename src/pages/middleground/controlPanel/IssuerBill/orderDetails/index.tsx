@@ -37,10 +37,14 @@ const OrderDetails = () => {
     <div>
       <h1>订单详情</h1>
       <div className={styles.subject}>
-        <section>
-          <Title title={'基础信息'}></Title>
-          <Basics initialValues={initialValues} />
-        </section>
+        {/* 基础信息是否公开 */}
+        {initialValues.isEnterpriseInfoPublic === 1 ? (
+          <section>
+            <Title title={'基础信息'}></Title>
+
+            <Basics initialValues={initialValues} />
+          </section>
+        ) : null}
         <section>
           <Title title={'商品信息'}></Title>
           <Commodity initialValues={initialValues} />
@@ -48,6 +52,7 @@ const OrderDetails = () => {
         <section>
           <Title title={'其他'}></Title>
           <Terms initialValues={initialValues} />
+          {/* 地址是否公开 */}
           {initialValues.isContactPublic === 1 ? (
             <Address initialValues={initialValues} />
           ) : null}

@@ -52,7 +52,7 @@ const OverviewCard = props => {
           ))}
         </Row>
 
-        {enterpriseType === 1 && (
+        {+enterpriseType === 0 && (
           <div className={styles.contentRight}>
             <div className={styles.offer}>
               <div>

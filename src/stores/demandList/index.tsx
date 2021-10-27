@@ -273,7 +273,28 @@ export default class DemandList {
         `/api/oms/inquiry-quote/active-application-inquiry`,
         params
       )
-      if (res.code !== 200) {
+      if (res.code === 200) {
+        message.success('操作成功')
+      } else {
+        message.error(res.msg)
+      }
+      return res
+    } catch (e) {
+      message.error('服务器错误')
+      return e
+    }
+  }
+
+  // 供应商主动申请需求单  form提交
+  @action RejectSubmission = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/oms/inquiry-quote/refuse-take-inquiry`,
+        params
+      )
+      if (res.code === 200) {
+        message.success('操作成功')
+      } else {
         message.error(res.msg)
       }
       return res
@@ -282,19 +303,21 @@ export default class DemandList {
     }
   }
 
-  // 供应商主动申请需求单  formti提交
-  @action RejectSubmission = async params => {
+  // /api/oms/inquiry-quote/get
+  // 接单详情
+  @action getInquiryQuote = async params => {
     try {
-      const res: ResponseProps = await axios.post(
-        `/api/oms/inquiry-quote/refuse-take-inquiry`,
+      const res: ResponseProps = await axios.get(
+        `/api/oms/inquiry-quote/get`,
         params
       )
       if (res.code !== 200) {
         message.error(res.msg)
       }
-      return res
+      return res.data
     } catch (e) {
-      return e
+      message.error('服务器错误')
+      console.log(e)
     }
   }
 }

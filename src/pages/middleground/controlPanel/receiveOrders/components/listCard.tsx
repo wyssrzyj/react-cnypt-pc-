@@ -145,9 +145,10 @@ const ListCard = props => {
 
   const reply = () => {
     history.push({
-      pathname: '/control-panel/panel/orderDetails',
+      pathname: '/control-panel/orderDetails',
       state: {
-        id: data.purchaserInquiryId
+        id: data.purchaserInquiryId,
+        supplierInquiryId: data.supplierInquiryId
       }
     })
   }

@@ -19,6 +19,8 @@ function index({ stated }) {
     }
   }
   const onFinish = async (values: any) => {
+    console.log('斩灭剑')
+
     if (button) {
       console.log('接受')
       const quantitativeJudgment = await OrderQuantity({

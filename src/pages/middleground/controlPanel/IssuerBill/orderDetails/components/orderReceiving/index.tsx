@@ -19,7 +19,7 @@ function index({ stated }) {
     }
   }
   const onFinish = async (values: any) => {
-    console.log('斩灭剑')
+    console.log('斩灭')
 
     if (button) {
       console.log('接受')

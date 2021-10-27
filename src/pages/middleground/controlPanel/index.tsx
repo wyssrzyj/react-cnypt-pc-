@@ -7,7 +7,7 @@ import { useLocation } from 'react-router'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 import { menuKeys, subsMap } from './routeConfig'
-import { getCurrentUser } from '@/utils/tool'
+import { getCurrentUser, getUserInfo } from '@/utils/tool'
 
 const AccountSafe = React.lazy(() => import('./accountSafe'))
 const LoginLogs = React.lazy(() => import('./loginLogs'))
@@ -43,6 +43,9 @@ const FactoryPhotograph = React.lazy(
   () => import('./components/factoryPhotograph')
 )
 const Department = React.lazy(() => import('../department'))
+const ReceiveOrders = React.lazy(() => import('./receiveOrders'))
+const OrderManage = React.lazy(() => import('./receiveOrders/orderManage'))
+const FactoryPhotos = React.lazy(() => import('./factoryPhotos'))
 const orderDetails = React.lazy(() => import('./IssuerBill/orderDetails'))
 
 const Title = ({ title, icon }) => {
@@ -56,6 +59,8 @@ const Title = ({ title, icon }) => {
 
 const ControlPanel = () => {
   const currentUser = getCurrentUser()
+  const userInfo = getUserInfo() || {}
+
   const { factoryStore } = useStores()
   const { productCategory } = factoryStore
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
@@ -110,13 +115,20 @@ const ControlPanel = () => {
                   账号安全
                 </Link>
               </Menu.Item>
-
               <Menu.Item key="enterprise" className={styles.items}>
                 <Link
                   className={styles.minutest}
                   to="/control-panel/panel/enterprise"
                 >
                   企业信息
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="enterprise-photos" className={styles.items}>
+                <Link
+                  className={styles.minutest}
+                  to="/control-panel/panel/enterprise-photos"
+                >
+                  企业照片
                 </Link>
               </Menu.Item>
               {+currentUser.enterpriseType === 1 ? (
@@ -155,8 +167,8 @@ const ControlPanel = () => {
                 </Link>
               </Menu.Item>
             </Menu.ItemGroup>
-            {currentUser.enterpriseType !== null &&
-            +currentUser.enterpriseType === 0 ? (
+            {userInfo.enterpriseType !== null &&
+            +userInfo.enterpriseType === 0 ? (
               <Menu.ItemGroup
                 key="g3"
                 title={
@@ -190,8 +202,8 @@ const ControlPanel = () => {
                 </Menu.Item>
               </Menu.ItemGroup>
             ) : null}
-            {currentUser.enterpriseType !== null &&
-            +currentUser.enterpriseType === 0 ? (
+            {userInfo.enterpriseType !== null &&
+            +userInfo.enterpriseType === 0 ? (
               <Menu.ItemGroup
                 key="g4"
                 title={<Title title={'监控列表'} icon={'jack-video1'}></Title>}
@@ -223,39 +235,73 @@ const ControlPanel = () => {
                 </Menu.Item>
               </Menu.ItemGroup>
             ) : null}
-            <Menu.ItemGroup
-              key="g6"
-              title={<Title title={'发布订单'} icon={'jack-video1'}></Title>}
-            >
-              <Menu.Item key="demandSheet">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/demand-sheet"
-                >
-                  发布订单
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="demandList">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/demand-list"
-                >
-                  订单列表
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="applicationList">
-                <Link
-                  className={styles.minute}
-                  to="/control-panel/panel/demand-applicationList"
-                >
-                  申请列表
-                </Link>
-              </Menu.Item>
-            </Menu.ItemGroup>
+            {userInfo.enterpriseType !== null &&
+            +userInfo.enterpriseType === 0 ? (
+              <Menu.ItemGroup
+                key="g5"
+                title={<Title title={'接单管理'} icon={'jack-video1'}></Title>}
+              >
+                <Menu.Item key="receiveOrder">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/receiveOrder?key=all"
+                  >
+                    订单管理
+                  </Link>
+                </Menu.Item>
+              </Menu.ItemGroup>
+            ) : null}
+            {userInfo.enterpriseType !== null &&
+            +userInfo.enterpriseType === 1 ? (
+              <Menu.ItemGroup
+                key="g6"
+                title={<Title title={'发布订单'} icon={'jack-video1'}></Title>}
+              >
+                <Menu.Item key="demandSheet">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/demand-sheet"
+                  >
+                    发布订单
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="demandList">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/demand-list"
+                  >
+                    订单列表
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="applicationList">
+                  <Link
+                    className={styles.minute}
+                    to="/control-panel/panel/demand-applicationList"
+                  >
+                    申请列表
+                  </Link>
+                </Menu.Item>
+              </Menu.ItemGroup>
+            ) : null}
           </Menu>
         </div>
+
         <div className={styles.controlPanelRight}>
           <Switch>
+            {/* 企业照片 */}
+            <Route
+              path="/control-panel/panel/enterprise-photos"
+              component={FactoryPhotos}
+            />
+            {/* 发单信息 */}
+            <Route
+              path="/control-panel/panel/receiveOrder"
+              component={ReceiveOrders}
+            />
+            <Route
+              path="/control-panel/panel/ordersManage"
+              component={OrderManage}
+            />
             {/* 发单信息 */}
             <Route
               path="/control-panel/panel/department"

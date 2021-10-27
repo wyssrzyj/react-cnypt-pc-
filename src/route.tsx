@@ -12,6 +12,7 @@ const FactoryPage = React.lazy(() => import('@/pages/factoryPage'))
 const ErpModule = React.lazy(() => import('@/pages/erpModule'))
 const Excel = React.lazy(() => import('@/pages/homePage/excel'))
 const MiddleGround = React.lazy(() => import('@/pages/middleground'))
+const ProducerOrder = React.lazy(() => import('@/pages/searchProducer'))
 const SearchOrder = React.lazy(() => import('@/pages/searchOrder'))
 const SearchOrderDetail = React.lazy(() => import('@/pages/searchOrderDetail'))
 
@@ -31,7 +32,7 @@ const RouteList = () => {
       <Route path="/erp" component={ErpModule} />
       <Route path="/excel" component={Excel} />
       <Route path="/control-panel" component={MiddleGround} />
-
+      <Route path="/producer-search" component={ProducerOrder} />
       <Route path="/order-search" exact component={SearchOrder} />
       <Route path="/order-search/:id" component={SearchOrderDetail} />
       <Route path="*" component={NotFound} />

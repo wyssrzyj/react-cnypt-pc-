@@ -79,11 +79,12 @@ const FilterList = props => {
   const [setUpTime, setSetUpTime] = useState<string>(null)
   const [updateTime, setUpdateTime] = useState<string>(null)
 
-  const newTypeList =
-    location.pathname === '/factory-search' ? prodType : inquiryProcessType
-  const newTitle =
-    location.pathname === '/factory-search' ? '接单类型' : '加工类型'
-
+  const newTypeList = ['/factory-search', '/producer-search'].includes(
+    location.pathname
+  )
+    ? prodType
+    : inquiryProcessType
+  const newTitle = '加工类型'
   const newTime =
     location.pathname === '/factory-search' ? '更新时间' : '发布时间'
 
@@ -154,7 +155,11 @@ const FilterList = props => {
 
   const selectAllProcessing = () => {
     setActiveProcessing({})
-    onFilterChange({ prodType: '' })
+    onFilterChange({
+      [location.pathname === '/factory-search'
+        ? 'prodType'
+        : 'processTypeValues']: ''
+    })
   }
 
   // const onTabChange = activeKey => {
@@ -170,7 +175,11 @@ const FilterList = props => {
   }
   const onProcessingChange = params => {
     setActiveProcessing({ ...params })
-    onFilterChange({ prodType: params.id })
+    onFilterChange({
+      [location.pathname === '/factory-search'
+        ? 'prodType'
+        : 'processTypeValues']: params.id
+    })
   }
   const onFactorySizeChange = (value, field) => {
     setMoreParams({
@@ -453,7 +462,8 @@ const FilterList = props => {
           <Select
             allowClear
             placeholder={
-              location.pathname === '/factory-search' ? '有效车位' : '工厂规模'
+              '有效车位'
+              // location.pathname === '/factory-search' ? '有效车位' : '工厂规模'
             }
             className={styles.moreSelect}
             value={moreParams.effectiveLocation}
@@ -535,20 +545,7 @@ const FilterList = props => {
           )}
         </div>
       </div>
-      {/* <Tabs type="card" size="large" activeKey={factoryType} onChange={onTabChange}>
-        {types.map(dressType => (
-          <TabPane
-            tab={
-              <span>
-                {dressType.icon}
-                {dressType.type}
-              </span>
-            }
-            key={dressType.key}
-          >
-          </TabPane>
-        ))}
-      </Tabs> */}
+
       {modalVisible && (
         <AreaModal
           visible={modalVisible}

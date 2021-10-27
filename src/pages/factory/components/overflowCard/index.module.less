@@ -1,111 +1,159 @@
 @import '@/css/common.less';
 
 .overflowCard {
-    padding: 20px;
-    color: rgba(0, 0, 0, 0.6);
-    border-bottom: 1px solid @borderColor;
-    cursor: pointer;
-    &:hover{
-        background-color: rgba(59, 129, 255, 0.05);
-    }
+  padding: 20px;
+  color: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid @borderColor;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(59, 129, 255, 0.05);
+  }
 }
 
 .factoryInfo {
-    margin-bottom: 20px;
-    overflow: hidden;
+  margin-bottom: 20px;
+  overflow: hidden;
 }
-.imgBox{
-    float: left;
-    width: 150px;
-    height: 150px;
-    margin-right: 24px;
-		overflow: hidden;
+.imgBox {
+  float: left;
+  width: 150px;
+  height: 150px;
+  margin-right: 24px;
+  overflow: hidden;
 }
 .factoryImg {
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
-	background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-repeat: no-repeat;
   background-size: contain;
-	border: 1px solid #f2f2f2;
+  border: 1px solid #f2f2f2;
 }
-.detail{
-    overflow: hidden;
+.detail {
+  overflow: hidden;
 }
-.addressBox{
-	display: flex;
-    align-items: center
+.addressBox {
+  display: flex;
+  align-items: center;
 }
-.detailTop{
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+.detailTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .factoryName {
   padding-right: 8px;
-	font-size: 18px;
-	font-weight: 500;
-	color: #333333;
+  color: #333333;
+  font-weight: 500;
+  font-size: 18px;
 }
-.tagIcon{
-	font-size: 14px;
-	margin-right: 4px;
+.tagIcon {
+  margin-right: 4px;
+  font-size: 14px;
 }
-.address{
-	font-size: 20px;
-	margin-right: 6px;
+.address {
+  margin-right: 6px;
+  font-size: 20px;
 }
-.ulIcon{
-	font-size: 20px;
-	margin-right: 6px;
+.ulIcon {
+  margin-right: 6px;
+  font-size: 20px;
 }
-.ulName{
-	display: flex;
-	align-items: center;
-	margin-right: 12px;
-    white-space: nowrap;
+.ulName {
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+  white-space: nowrap;
 }
 .factoryTag {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 
 .factoryIcon {
-    margin: 0 8px;
+  margin: 0 8px;
 }
 
 .factoryScore {
-    margin-left: 12px;
-    font-size: 20px;
-    color: #000;
+  margin-left: 12px;
+  color: #000;
+  font-size: 20px;
+}
+
+.factoryInfoBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .factoryInfoList {
-    padding: 8px 0;
-    margin: 0;
-    list-style: none;
-    :global {
-        li {
-            padding: 6px 0;
-						display: flex;
-        }
+  margin: 0;
+  padding: 8px 0;
+  list-style: none;
+  :global {
+    li {
+      display: flex;
+      padding: 6px 0;
     }
+  }
 }
 
 .swiperBox {
-    width: 70%;
-    margin: 0 auto 20px;
+  width: 70%;
+  margin: 0 auto 20px;
 }
 
 .mySwiper {
-    height: 200px;
+  height: 200px;
 }
 
 .swiperItem {
-    // width: 1200px;
-    height: 200px;
-    background: greenyellow;
+  height: 200px;
+  background: greenyellow;
 }
 
 .mySwiper {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+.requestCard {
+  display: flex;
+  width: 310px;
+  margin-bottom: 16px;
+}
+
+.totalListBox {
+  height: 464px;
+  overflow-y: auto;
+}
+
+.totalList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.modalBtn {
+  width: 90px;
+}
+
+.modalImg {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 100px;
+  height: 100px;
+  margin-right: 20px;
+  background: burlywood;
+}
+
+.modalOrderInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.modalTitle {
+  width: 190px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

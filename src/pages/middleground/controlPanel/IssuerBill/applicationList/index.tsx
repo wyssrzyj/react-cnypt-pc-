@@ -32,7 +32,7 @@ function DemandList() {
 
   const [lists, setLists] = useState([]) //数据
   const [dataLength, setDataLength] = useState(0) //数据总数量
-  const [pageNumber, setPageNumber] = useState(1) //路由数据
+  const [pageNumber, setPageNumber] = useState(1) //路由数
 
   const searchURL = new URLSearchParams(search)
   const initialKey = searchURL.get('key')

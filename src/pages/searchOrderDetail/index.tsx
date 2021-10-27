@@ -45,6 +45,7 @@ const SearchOrderDetail = props => {
   const [overviewData, setOverviewData] = useState<any>({})
   const [infoData, setInfoData] = useState<any>({})
   const [productCategoryList, setProductCategoryList] = useState<any>([])
+  const [tenantId, setTenantId] = useState<string>(undefined)
 
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
 
@@ -73,6 +74,7 @@ const SearchOrderDetail = props => {
         'all'
       )
     }
+    setTenantId(data.tenantId)
     setOverviewData({
       id: data.id,
       name: data.name,
@@ -199,7 +201,7 @@ const SearchOrderDetail = props => {
         {/* 商品信息 */}
         <InfoCard {...infoData} />
         {/* 该商家其它订单 */}
-        <OtherCard SwiperCore={SwiperCore} />
+        <OtherCard tenantId={tenantId} />
       </div>
     </div>
   )

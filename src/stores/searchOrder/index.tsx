@@ -7,7 +7,13 @@ export default class SearchOrderStore {
     makeAutoObservable(this)
   }
 
+  @observable orderName = undefined
+
   @observable orderDetail = {}
+
+  @action updateOrderName = name => {
+    this.orderName = name
+  }
 
   // 需求单列表查询
   @action getOrderList = async params => {

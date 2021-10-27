@@ -15,14 +15,14 @@ const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
 const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
 const MonitorPage = React.lazy(() => import('../monitorPage'))
 const DemandList = React.lazy(
-  () => import('../controlPanel/IssuerBill/demandList')
+  () => import('../controlPanel/issuerBill/demandList')
 )
 
 const DemandSheet = React.lazy(
-  () => import('../controlPanel/IssuerBill/release')
+  () => import('../controlPanel/issuerBill/release')
 )
 const applicationList = React.lazy(
-  () => import('../controlPanel/IssuerBill/applicationList')
+  () => import('../controlPanel/issuerBill/applicationList')
 )
 
 const VideoCenter = React.lazy(() => import('../videoCenter/factoryVideo'))
@@ -46,7 +46,6 @@ const Department = React.lazy(() => import('../department'))
 const ReceiveOrders = React.lazy(() => import('./receiveOrders'))
 const OrderManage = React.lazy(() => import('./receiveOrders/orderManage'))
 const FactoryPhotos = React.lazy(() => import('./factoryPhotos'))
-const orderDetails = React.lazy(() => import('./IssuerBill/orderDetails'))
 
 const Title = ({ title, icon }) => {
   return (
@@ -376,11 +375,6 @@ const ControlPanel = () => {
             <Route
               path="/control-panel/panel/demand-applicationList"
               component={applicationList}
-            />
-            {/* 订单列表 订单详情 */}
-            <Route
-              path="/control-panel/panel/orderDetails"
-              component={orderDetails}
             />
 
             <Redirect to="/platform" />

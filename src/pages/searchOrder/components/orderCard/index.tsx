@@ -17,7 +17,7 @@ const OrderCard = props => {
   const showDemand = () => {
     if (demand === 'up') {
       setDemand('down')
-      setAbove(62)
+      setAbove(40)
     }
     if (demand === 'down') {
       setDemand('up')

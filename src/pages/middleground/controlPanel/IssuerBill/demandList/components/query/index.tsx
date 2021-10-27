@@ -50,7 +50,6 @@ function Query({ query }) {
             </Space>
           </Form.Item>
         </Col>
-
         <Form.Item className={styles.btn} wrapperCol={{ offset: 8, span: 16 }}>
           <Button className={styles.query} type="primary" htmlType="submit">
             查询

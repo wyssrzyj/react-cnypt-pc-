@@ -29,7 +29,7 @@ function index({ initialValues }) {
       <Row>
         <Col span={12}>
           <div className={styles.title}>
-            收货地址
+            收货地址:
             <span className={styles.content}>
               {treeData.join('-')}-{address}
             </span>
@@ -39,13 +39,13 @@ function index({ initialValues }) {
       <Row>
         <Col span={12}>
           <div className={styles.title}>
-            订单联系人
-            <span className={styles.content}>{contactPerson}</span>
+            订单联系人:
+            <span className={styles.contents}>{contactPerson}</span>
           </div>
         </Col>
         <Col span={12}>
           <div className={styles.title}>
-            联系人电话
+            联系人电话:
             <span className={styles.content}>{contactPersonMobile}</span>
           </div>
         </Col>

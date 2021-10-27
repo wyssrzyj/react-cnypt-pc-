@@ -59,44 +59,44 @@ function index({ initialValues }) {
       <Row>
         <Col span={12}>
           <div className={styles.title}>
-            商品品类
+            商品品类:
             <span className={styles.content}>{productCategory.join('、')}</span>
           </div>
         </Col>
         <Col span={12}>
           <div className={styles.title}>
-            发单量 <span className={styles.content}>{issue}</span>
+            发单量: <span className={styles.contents}>{issue}</span>
           </div>
         </Col>
       </Row>
       <Row>
         <Col span={12}>
           <div className={styles.title}>
-            面料类型
+            面料类型:
             <span className={styles.content}>{fabric}</span>
           </div>
         </Col>
         <Col span={12}>
           <div className={styles.title}>
-            目标单价 <span className={styles.content}>{goodsPrice}</span>
+            目标单价: <span className={styles.content}>{goodsPrice}</span>
           </div>
         </Col>
       </Row>
       <Row>
         <Col span={12}>
           <div className={styles.title}>
-            接单类型
+            接单类型:
             <span className={styles.content}>{orderReceiving.join('、')}</span>
           </div>
         </Col>
         <Col span={12}>
           <div className={styles.title}>
-            备注说明 <span className={styles.content}>{goodsRemark}</span>
+            备注说明: <span className={styles.content}>{goodsRemark}</span>
           </div>
         </Col>
       </Row>
       <div className={styles.title}>
-        款图
+        款图:
         <span className={styles.content}>
           {stylePicture !== undefined && stylePicture.length > 0 ? (
             stylePicture.map((v, i) => (

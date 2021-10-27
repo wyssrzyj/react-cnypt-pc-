@@ -10,14 +10,14 @@ function index({ initialValues }) {
       <Row>
         <Col span={12}>
           <div className={styles.title}>
-            付款信息 <span className={styles.content}>{payDetails}</span>
+            付款信息: <span className={styles.content}>{payDetails}</span>
           </div>
         </Col>
       </Row>
       <Row>
         <Col span={12}>
           <div className={styles.title}>
-            交货期
+            交货期:
             <span className={styles.delivery}>
               {timestampToTime(initialValues.deliveryDate)}
             </span>
@@ -25,7 +25,7 @@ function index({ initialValues }) {
         </Col>
         <Col span={12}>
           <div className={styles.title}>
-            订单有效期
+            订单有效期:
             <span className={styles.content}>
               {timestampToTime(initialValues.inquiryEffectiveDate)}
             </span>

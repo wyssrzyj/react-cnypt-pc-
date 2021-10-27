@@ -126,7 +126,13 @@ function Basics() {
         </span>
         <Col span={20} className={styles.textArea}>
           <FormItem name="goodsRemark" label="备注说明">
-            <TextArea allowClear={true} showCount maxLength={999} />
+            <TextArea
+              style={{ width: '100%', resize: 'none' }}
+              rows={4}
+              allowClear={true}
+              showCount
+              maxLength={999}
+            />
           </FormItem>
         </Col>
       </Row>

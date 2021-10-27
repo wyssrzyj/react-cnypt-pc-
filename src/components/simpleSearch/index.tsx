@@ -1,13 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Input, Divider } from 'antd'
 import { isEmpty } from 'lodash'
+import { useStores } from '@/utils/mobx'
 import styles from './index.module.less'
 
 const { Search } = Input
 
 const SimpleSearch = props => {
   const { config, onFilterChange, field = 'name' } = props
+
+  const { searchOrderStore } = useStores()
+  const { updateOrderName, orderName } = searchOrderStore
+
+  const [searchWord, setSearchWord] = useState<string>(orderName)
+
   const onSearch = value => {
+    updateOrderName(value)
     onFilterChange({
       [field]: value
     })
@@ -29,10 +37,12 @@ const SimpleSearch = props => {
         </div>
         <Search
           style={{ width: 500 }}
-          placeholder="请输入发单信息"
+          placeholder="请输入订单信息"
           allowClear
           enterButton="搜索"
           size="large"
+          value={searchWord}
+          onChange={e => setSearchWord(e.target.value)}
           onSearch={onSearch}
         />
       </div>

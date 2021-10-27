@@ -11,7 +11,7 @@ import styles from './index.module.less'
 
 const SearchOrder = () => {
   const { searchOrderStore, commonStore, factoryStore } = useStores()
-  const { getOrderList, inquiryList } = searchOrderStore
+  const { getOrderList, inquiryList, orderName } = searchOrderStore
   const pageSize = 12
   const { dictionary } = commonStore
   const { productCategory } = factoryStore
@@ -51,6 +51,7 @@ const SearchOrder = () => {
     inquiryList({
       pageSize,
       pageNum,
+      name: orderName,
       ...factoryParams,
       ...sortParams
     }).then(response => {
@@ -148,6 +149,8 @@ const SearchOrder = () => {
   useEffect(() => {
     if (!isEmpty(dataList)) {
       transformData()
+    } else {
+      setCardList([])
     }
   }, [dataList])
 
@@ -160,7 +163,7 @@ const SearchOrder = () => {
 
   useEffect(() => {
     getDemandList()
-  }, [pageNum, factoryParams, sortParams])
+  }, [pageNum, factoryParams, sortParams, orderName])
 
   return (
     <div className={styles.searchOrder}>

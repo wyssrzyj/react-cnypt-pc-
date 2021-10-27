@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { toJS } from 'mobx'
 import { isEmpty } from 'lodash'
 import moment from 'moment'
+import { useHistory } from 'react-router'
 import { useStores } from '@/utils/mobx'
 import {
   matchValue,
@@ -20,6 +21,7 @@ const SearchOrderDetail = props => {
   } = props
   const { id } = params
 
+  const history = useHistory()
   const { searchOrderStore, commonStore, factoryStore } = useStores()
   const { inquiryPurchase } = searchOrderStore
   const { dictionary } = commonStore
@@ -156,6 +158,9 @@ const SearchOrderDetail = props => {
       imgList: data.stylePicture
     })
   }
+  const onFilterChange = () => {
+    history.push('/order-search')
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -181,6 +186,7 @@ const SearchOrderDetail = props => {
           title: dataSource.enterpriseName,
           imgSrc: dataSource.enterpriseUrl
         }}
+        onFilterChange={onFilterChange}
       />
       {/* 广告位 */}
       <Advertising />

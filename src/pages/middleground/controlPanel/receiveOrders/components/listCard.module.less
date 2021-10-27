@@ -37,8 +37,19 @@
 }
 
 .orderNum {
+  display: inline-block;
+  width: 140px;
   margin-right: 80px;
+  overflow: hidden;
   color: #333333;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.orderDate {
+  display: inline-block;
+  width: 80px;
+  margin-right: 40px;
 }
 
 .cardTime {
@@ -149,6 +160,7 @@
 .btnBox {
   display: flex;
   flex: 1;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding-left: 16px;
@@ -227,4 +239,8 @@
 
 .topRight {
   color: #3b80ff;
+}
+
+.delBtn {
+  margin-top: 12px;
 }

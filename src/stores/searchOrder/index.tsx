@@ -127,6 +127,88 @@ export default class SearchOrderStore {
       console.log(e)
     }
   }
+
+  // 加工厂 企业照片接口
+  // /api/factory/info/save-factory-images-info
+  @action saveFactoryPhotos = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/factory/info/save-factory-images-info`,
+        params
+      )
+      if (res.code === 200) {
+        message.success('保存成功')
+      } else {
+        message.error(res.msg)
+      }
+      return res
+    } catch (e) {
+      message.error('服务器错误')
+      console.log(e)
+    }
+  }
+
+  // 加工厂图片
+  // /api/factory/info/get-factory-images
+  @action getFactoryPhotos = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/info/get-factory-images`,
+        params
+      )
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 发单商 企业照片接口
+  // /api/factory/purchaser-info/save-purchaser-images
+  @action savePurchaserPhotos = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/factory/purchaser-info/save-purchaser-images`,
+        params
+      )
+      if (res.code === 200) {
+        message.success('保存成功')
+      } else {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      console.log(e)
+      message.error('服务器错误')
+    }
+  }
+
+  // /api/factory/purchaser-info/get-purchaser-images
+  // 发单商 获取企业照片接口
+  @action getPurchaserPhotos = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/purchaser-info/get-purchaser-images`,
+        params
+      )
+      return res.data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 加工厂 订单管理 删除记录
+  // /api/oms/inquiry-supplier/delete-inquiry-record
+  @action factoryDelOrder = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/oms/inquiry-supplier/delete-inquiry-record`,
+        params
+      )
+      return res.data
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 
 export const searchOrderStore = new SearchOrderStore()

@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import moment from 'moment'
 import { dateDiff, findTreeTarget } from '@/utils/tool'
 import { isEmpty } from 'lodash'
+import { useHistory } from 'react-router'
 
 const STICK_TIPS = new Map()
 STICK_TIPS.set(1, '取消置顶')
@@ -31,13 +32,15 @@ STATUS_TEXT.set(-1, '已取消')
 STATUS_TEXT.set(-2, '已谢绝')
 
 const ListCard = props => {
+  const history = useHistory()
   const { commonStore, factoryStore, searchOrderStore } = useStores()
   const { dictionary } = commonStore
   const { inquiryProcessType, goodsNum } = dictionary
   const { productCategoryList } = factoryStore
-  const { changeOrderStick } = searchOrderStore
+  const { changeOrderStick, factoryDelOrder } = searchOrderStore
 
   const { data, getData } = props
+  console.log('🚀 ~ file: listCard.tsx ~ line 43 ~ data', data)
   const { stickType = 0 } = data
   const diffDay = dateDiff(data.inquiryEffectiveDate)
 
@@ -82,7 +85,7 @@ const ListCard = props => {
     // 1 置顶  0 取消置顶
     const code = await changeOrderStick({
       stickType: 1 - stickType,
-      id: data.purchaserInquiryId
+      id: data.supplierInquiryId
     })
     if (+code === 200) {
       getData && (await getData())
@@ -114,18 +117,48 @@ const ListCard = props => {
 
   const getEdit = () => {
     if (data.status === 1) {
-      return <Button type={'primary'}>立即回复</Button>
+      return (
+        <Button type={'primary'} onClick={reply}>
+          立即回复
+        </Button>
+      )
     }
     if (data.status === 2) {
       return (
-        <div>
-          <Button type={'primary'}>立即回复</Button>
-          <Button type={'text'}>删除记录</Button>
-        </div>
+        <>
+          <Button type={'primary'} onClick={reply}>
+            修改回复
+          </Button>
+          <Button type={'text'} onClick={del} className={styles.delBtn}>
+            删除记录
+          </Button>
+        </>
       )
     }
 
-    return <Button type={'primary'}>立即回复</Button>
+    return (
+      <Button type={'primary'} onClick={del}>
+        删除记录
+      </Button>
+    )
+  }
+
+  const reply = () => {
+    history.push({
+      pathname: '/control-panel/orderDetails',
+      state: {
+        id: data.purchaserInquiryId,
+        supplierInquiryId: data.supplierInquiryId
+      }
+    })
+  }
+
+  const del = async () => {
+    await factoryDelOrder({
+      supplierInquiryId: data.supplierInquiryId
+    })
+
+    getData && getData()
   }
 
   return (
@@ -136,7 +169,9 @@ const ListCard = props => {
         <div className={styles.left}>
           <div className={styles.order}>
             <span className={styles.orderLabel}>发单商:</span>
-            <span className={styles.orderNum}>{data.enterpriseName}</span>
+            <Popover content={data.enterpriseName}>
+              <span className={styles.orderNum}>{data.enterpriseName}</span>
+            </Popover>
           </div>
           <Popover content={'发布时间'}>
             <div className={styles.order}>
@@ -153,7 +188,7 @@ const ListCard = props => {
             <span className={styles.orderLabel}>
               {diffDay.day > 0 ? '剩余时间:' : '已超出'}
             </span>
-            <span className={styles.orderNum}>{Math.abs(diffDay.day)}天</span>
+            <span className={styles.orderDate}>{Math.abs(diffDay.day)}天</span>
           </div>
 
           <div className={styles.order}>

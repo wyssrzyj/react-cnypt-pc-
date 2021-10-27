@@ -14,16 +14,6 @@ import { SimpleSearch } from '@/components'
 import { Advertising, OverviewCard, InfoCard, OtherCard } from './components'
 import styles from './index.module.less'
 
-import SwiperCore, {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay,
-  EffectFade
-} from 'swiper'
-SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectFade])
-
 const SearchOrderDetail = props => {
   const {
     match: { params = {} }

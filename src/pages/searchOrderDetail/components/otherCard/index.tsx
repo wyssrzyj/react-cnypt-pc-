@@ -13,12 +13,12 @@ import SwiperCore, {
   Autoplay,
   EffectFade
 } from 'swiper'
+import Swiper from 'swiper'
 import { useStores, observer } from '@/utils/mobx'
 import { matchValue, matchGoodValue, matchArrayValue } from '@/utils/tool'
 import { OrderCard } from '../../../searchOrder/components'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
-// import './style.less'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectFade])
 
@@ -109,10 +109,6 @@ const OtherCard = props => {
         }
       }
     })
-    console.log(
-      '🚀 ~ file: index.tsx ~ line 112 ~ transformData ~ newCardList',
-      newCardList
-    )
     setCardList([...newCardList])
   }
 
@@ -125,28 +121,29 @@ const OtherCard = props => {
       const { success, data } = response
       if (success) {
         const { records } = data
-        // setTotal(total)
         setList([...records])
       }
     })
   }
 
   useEffect(() => {
-    new SwiperCore('.orderSwiper', {
-      slidesPerView: 3,
-      spaceBetween: 20,
-      centeredSlides: true,
-      centeredSlidesBounds: true,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      },
-      loop: false,
-      on: {
-        slideChange: keyChange
-      }
-    })
-  }, [])
+    if (cardList.length) {
+      new Swiper('.orderSwiper', {
+        slidesPerView: 3,
+        spaceBetween: 20,
+        centeredSlides: true,
+        centeredSlidesBounds: true,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        loop: false,
+        on: {
+          slideChange: keyChange
+        }
+      })
+    }
+  }, [cardList])
 
   const toLeft = () => {
     rightRef.current.click()

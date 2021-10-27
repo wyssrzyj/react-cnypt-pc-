@@ -20,7 +20,10 @@ const DemandSheet = () => {
 
   const [validity, setValidity] = useState<any>()
   const [confirm, setConfirm] = useState<any>(true)
-  const [initialValues, setInitialValues] = useState<any>({})
+  const [initialValues, setInitialValues] = useState<any>({
+    isEnterpriseInfoPublic: 1,
+    isContactPublic: 1
+  })
 
   const { push } = useHistory()
   const [form] = Form.useForm()
@@ -83,7 +86,7 @@ const DemandSheet = () => {
     if (isArray(v.annex)) {
       v.annex = v.annex.map(item => item.url)
     }
-    // lyj
+    // ly
     // 图片
     if (isArray(v.stylePicture)) {
       v.stylePicture = v.stylePicture.map(item => item.url)
@@ -103,11 +106,11 @@ const DemandSheet = () => {
     }
     console.log(v)
   }
+  console.log(initialValues)
 
   return (
     <div className={styles.demand}>
       <Form form={form} onFinish={onFinish} initialValues={initialValues}>
-        <h1>发布订单</h1>
         <section>
           <Title title={'基础信息'}></Title>
           <Basics />
@@ -115,9 +118,6 @@ const DemandSheet = () => {
         <section className={styles.commodity}>
           <Title title={'产品信息'}></Title>
           <Commodity />
-          <span className={styles.payment}>
-            上传款图，只能上传jpg/png格式文件，文件不能超过20M，最多上传10个文件
-          </span>
         </section>
         <section>
           <Title title={'其他'}></Title>

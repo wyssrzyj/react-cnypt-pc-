@@ -90,29 +90,31 @@ const MultipleChoice = ({
               }}
               className={styles.details}
             >
-              查看订单详情{'>'}
+              查看订单详情
+              <span className={styles.zuo}>
+                <Icon type="jack-you_31" className={styles.prev} />
+              </span>
             </span>
           </Col>
-          <Col span={5} className={styles.lin}>
+          <Col span={3} className={styles.lin}>
             <div className={sortColor.get(+data.status)}>
               <span className={styles.spot}>
                 <span>•</span>
               </span>
 
               <span className={styles.states}>{map.get(data.status)}</span>
-
-              <span>
-                <Icon
-                  onClick={() => changeSort(data.id)}
-                  type={
-                    data.purchaserStickType
-                      ? 'jack-zhiding_1'
-                      : 'jack-zhiding_2'
-                  }
-                  className={styles.listHeaderSortIcon}
-                ></Icon>
-              </span>
             </div>
+          </Col>
+          <Col span={1}>
+            <span>
+              <Icon
+                onClick={() => changeSort(data.id)}
+                type={
+                  data.purchaserStickType ? 'jack-zhiding_1' : 'jack-zhiding_2'
+                }
+                className={styles.listHeaderSortIcon}
+              ></Icon>
+            </span>
           </Col>
         </Row>
       </div>

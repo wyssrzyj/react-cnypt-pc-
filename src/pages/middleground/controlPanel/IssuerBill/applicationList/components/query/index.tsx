@@ -38,15 +38,15 @@ function Query({ query }) {
             </Form.Item>
           </Col>
           <Col span={12} className={styles.username}>
-            <Form.Item label="加工厂名称" name="enterpriseName">
-              <Input placeholder="请输入加工厂名称" />
-            </Form.Item>
-          </Col>
-          <Col span={12} className={styles.username}>
             <Form.Item label="发单时间" name="issuingTime">
               <Space direction="vertical" size={12}>
                 <RangePicker onChange={handleSelectTime} />
               </Space>
+            </Form.Item>
+          </Col>
+          <Col span={12} className={styles.username}>
+            <Form.Item label="加工厂名称" name="enterpriseName">
+              <Input placeholder="请输入加工厂名称" />
             </Form.Item>
           </Col>
           <Col span={8}>
@@ -54,16 +54,18 @@ function Query({ query }) {
               className={styles.btn}
               wrapperCol={{ offset: 8, span: 16 }}
             >
-              <Button className={styles.query} type="primary" htmlType="submit">
-                查询
-              </Button>
               <Button
+                ghost
+                type="primary"
                 onClick={() => {
                   setDateString([])
                   form.resetFields()
                 }}
               >
                 重置
+              </Button>
+              <Button className={styles.query} type="primary" htmlType="submit">
+                查询
               </Button>
             </Form.Item>
           </Col>

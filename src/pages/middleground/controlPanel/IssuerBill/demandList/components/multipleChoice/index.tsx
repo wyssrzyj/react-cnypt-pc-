@@ -125,13 +125,13 @@ const MultipleChoice = ({
                     {data.categoryIdList.join('、')}
                   </div>
                 </Tooltip>
-                <p>
+                <p className={styles.ddl}>
                   订单量：{data.totalOrderAmount ? data.totalOrderAmount : 0} 件
                 </p>
               </div>
             </div>
           </Col>
-          <Col span={8}>
+          <Col span={7}>
             <div className={styles.feedback}>
               <p>
                 共
@@ -176,7 +176,7 @@ const MultipleChoice = ({
               </p>
             </div>
           </Col>
-          <Col className={styles.state} span={5}>
+          <Col className={styles.state} span={6}>
             {/* -1 草稿箱 1 提交需求单 -2审核失败 -3已结束 */}
             {/* 生效中 */}
             {data.status === 1 && data.surplus.day > 0 ? (

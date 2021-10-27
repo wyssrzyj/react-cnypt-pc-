@@ -3,13 +3,15 @@ import { Form, Col, Row } from 'antd'
 import { toJS, useStores } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 import Date from './date'
+import styles from './index.module.less'
+
 const FormItem = Form.Item
 const layout = {
   labelCol: {
-    span: 5
+    span: 2
   },
   wrapperCol: {
-    span: 12
+    span: 18
   }
 }
 const keys = [
@@ -39,7 +41,7 @@ function Basics({ data }) {
       message: '请输入付款方式',
       placeholder: '请输入付款方式',
       field: 'payDetails',
-      span: 12,
+      span: 24,
       options: paymentType
     }
   ]
@@ -61,7 +63,7 @@ function Basics({ data }) {
           })
 
           return (
-            <Col key={item.field} span={item.span}>
+            <Col key={item.field} span={item.span} className={styles.message}>
               <FormItem
                 name={item.field}
                 label={item.label}

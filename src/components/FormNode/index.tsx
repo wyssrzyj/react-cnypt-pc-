@@ -103,6 +103,7 @@ const FormNode = (props: FormNodeProps) => {
     rows = 4,
     ...other
   } = props
+  console.log(props.value)
 
   const uploadRef = useRef<any>()
 

@@ -41,6 +41,7 @@ const OrderDetails = () => {
     <div>
       <h1>订单详情</h1>
       <div className={styles.subject}>
+        {console.log(initialValues)}
         <section>
           <Title title={'基础信息'}></Title>
           <Basics initialValues={initialValues} />

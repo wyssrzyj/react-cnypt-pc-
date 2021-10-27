@@ -60,7 +60,6 @@ function Basics() {
       message: '请选择是否公开',
       type: 'radio',
       span: 12,
-      defaultValue: 1,
       options: [
         { label: '公开', value: 1 },
         { label: '不公开', value: 0 }

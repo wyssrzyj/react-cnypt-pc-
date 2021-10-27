@@ -4,6 +4,7 @@ import { toJS, useStores } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 import Category from './category'
 import styles from './index.module.less'
+import TextArea from '_antd@4.17.0-alpha.6@antd/lib/input/TextArea'
 
 const FormItem = Form.Item
 const layout = {
@@ -81,17 +82,12 @@ function Basics() {
       span: 12,
       options: productType
     },
-    {
-      label: '备注说明',
-      field: 'goodsRemark',
-      type: 'textarea',
-      span: 12
-    },
+
     {
       label: '款图',
       type: 'img',
       field: 'stylePicture',
-      span: 13
+      span: 12
     }
   ]
   return (
@@ -122,6 +118,16 @@ function Basics() {
             </Col>
           )
         })}
+      </Row>
+      <Row className={styles.goodsRemark}>
+        <span className={styles.payment}>
+          上传款图，只能上传jpg/png格式文件，文件不能超过20M，最多上传10个文件
+        </span>
+        <Col span={20} className={styles.textArea}>
+          <FormItem name="goodsRemark" label="备注说明">
+            <TextArea allowClear={true} showCount maxLength={999} />
+          </FormItem>
+        </Col>
       </Row>
     </div>
   )

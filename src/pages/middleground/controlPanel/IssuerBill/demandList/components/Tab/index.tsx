@@ -48,7 +48,12 @@ const Tab = ({ routing }) => {
       </Tabs>
 
       <div className={styles.added}>
-        <Button className={styles.newly} icon={<PlusCircleTwoTone />}>
+        <Button
+          type="primary"
+          ghost
+          className={styles.newly}
+          icon={<PlusCircleTwoTone />}
+        >
           <Link to={'/control-panel/panel/demand-sheet'}> 新增订单</Link>
         </Button>
       </div>

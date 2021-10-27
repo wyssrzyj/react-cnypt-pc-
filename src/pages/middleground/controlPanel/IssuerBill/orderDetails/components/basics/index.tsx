@@ -7,6 +7,7 @@ import styles from './index.module.less'
 
 function index({ initialValues }) {
   const { name, effectiveLocation, otherRequirement } = initialValues
+
   const { commonStore } = useStores()
   const { allArea, dictionary } = commonStore
   const { factoryEffectiveLocation = [] } = toJS(dictionary) //有效车位

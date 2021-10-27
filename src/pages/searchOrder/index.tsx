@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash'
 import moment from 'moment'
 import { toJS } from 'mobx'
 import { useStores, observer } from '@/utils/mobx'
+import { matchValue, matchGoodValue, matchArrayValue } from '@/utils/tool'
 import { SimpleSearch, FilterList } from '@/components'
 import { OrderSearchHeader, OrderCard } from './components'
 import styles from './index.module.less'
@@ -35,29 +36,6 @@ const SearchOrder = () => {
     setProductCategoryList([...data])
   }
 
-  const matchValue = (dataSource, target) => {
-    const current = dataSource.find(item => item.value === target) || {}
-    return current.label || '--'
-  }
-
-  const matchGoodValue = (dataSource, target) => {
-    const current = dataSource
-      .filter(item => target.find(o => o === item.id))
-      .map(value => value.name)
-      .join('、')
-    return current || '--'
-  }
-
-  const matchArrayValue = (dataSource, target, field) => {
-    const current = target
-      .map(item => {
-        const current = dataSource.find(o => o.value === item) || {}
-        return current.label
-      })
-      .join('、')
-    return current || field || '--'
-  }
-
   const onFilterChange = params => {
     const newFactoryParams = { ...factoryParams, ...params }
     setFactoryParams({ ...newFactoryParams })
@@ -85,8 +63,8 @@ const SearchOrder = () => {
     })
   }
 
-  const goDetail = () => {
-    window.open(`/order-search/1`)
+  const goDetail = id => {
+    window.open(`/order-search/${id}`)
   }
 
   const onPaginationChange = page => {
@@ -96,6 +74,7 @@ const SearchOrder = () => {
   const transformData = () => {
     const newCardList = dataList.map(record => {
       return {
+        id: record.id,
         headerConfig: {
           title: record.enterpriseName,
           address: record.enterpriseAreaName
@@ -196,7 +175,7 @@ const SearchOrder = () => {
             <Empty className={styles.orderEmpty} />
           ) : (
             cardList.map((item, index) => (
-              <Col key={index} span={8} onClick={goDetail}>
+              <Col key={index} span={8} onClick={() => goDetail(item.id)}>
                 <OrderCard {...item} />
               </Col>
             ))

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useCallback, useState } from 'react'
-import { isEmpty, isNil, isArray } from 'lodash'
+import { isEmpty, isNil, isArray, get } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 
 export const getToken = () => {
@@ -365,4 +365,57 @@ export const getTreeChildValues = (data, key = 'id') => {
     }
   }
   return target
+}
+
+export const matchValue = (dataSource, target) => {
+  const current = dataSource.find(item => item.value === target) || {}
+  return current.label || '--'
+}
+
+export const matchGoodValue = (dataSource, target) => {
+  const current = dataSource
+    .filter(item => target.find(o => o === item.id))
+    .map(value => value.name)
+    .join('、')
+  return current || '--'
+}
+
+export const matchArrayValue = (dataSource, target, field) => {
+  if (isArray(target)) {
+    const current = target
+      .map(item => {
+        const current = dataSource.find(o => o.value === item) || {}
+        return current.label
+      })
+      .join('、')
+    return current || field || '--'
+  }
+  return field || '--'
+}
+
+// 翻译省市区
+export const getRegion = (allArea, province, city, district, field) => {
+  if (province && city && district) {
+    const currentProvince = allArea.find(item => item.value == province) || {
+      children: [],
+      label: ''
+    }
+    const currentCity = currentProvince.children.find(
+      item => item.value == city
+    ) || { children: [], label: '' }
+    const currentDistrict = currentCity.children.find(
+      item => item.value == district
+    ) || { children: [], label: '' }
+    const newRegion = {
+      province: currentProvince.label,
+      city: currentCity.label,
+      district: currentDistrict.label
+    }
+    if (field === 'all') {
+      return `${currentProvince.label}/${currentCity.label}/${currentDistrict.label}`
+    }
+    return get(newRegion, field)
+  } else {
+    return '--'
+  }
 }

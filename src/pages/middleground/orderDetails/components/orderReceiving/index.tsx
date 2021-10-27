@@ -9,9 +9,9 @@ function index({ stated }) {
   const { id, source, supplierInquiryId } = stated
   const { demandListStore } = useStores()
   const {
-    OrderQuantity,
-    SubmitRequisition,
-    RejectSubmission,
+    orderQuantity,
+    submitRequisition,
+    rejectSubmission,
     getInquiryQuote
   } = demandListStore
 
@@ -44,12 +44,12 @@ function index({ stated }) {
       if (flag) {
         const values = await validateFields()
 
-        const res = await OrderQuantity({
+        const res = await orderQuantity({
           goodsNum: values.receiveGoodsNum,
           id: id
         })
         if (res.code === 200) {
-          const submitRes = await SubmitRequisition({
+          const submitRes = await submitRequisition({
             ...values,
             purchaserInquiryId: id,
             status: 2
@@ -62,7 +62,7 @@ function index({ stated }) {
         }
       } else {
         const values = await getFieldsValue()
-        const res = await RejectSubmission({
+        const res = await rejectSubmission({
           ...values,
           supplierId: supplierInquiryId,
           status: -1

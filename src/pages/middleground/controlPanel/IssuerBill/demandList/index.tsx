@@ -30,7 +30,7 @@ const DemandList = () => {
   const { dictionary } = commonStore
   const { inquiryProcessType = [] } = toJS(dictionary)
 
-  const { ListData, DeleteDemandDoc, ToppingFunction, EndInterfaceInAdvance } =
+  const { listData, deleteDemandDoc, toppingFunction, endInterfaceInAdvance } =
     demandListStore
 
   const [reallylists, setReallyLists] = useState([]) //数据
@@ -71,7 +71,7 @@ const DemandList = () => {
   }
 
   const listsAPI = async () => {
-    const res = await ListData(params) //待会设置页码之类的
+    const res = await listData(params) //待会设置页码之类的
     const treeData = productCategoryList //商品品类
     setNumberLength(res.total)
 
@@ -161,7 +161,7 @@ const DemandList = () => {
   const topping = async value => {
     // console.log('置顶', value)
 
-    await ToppingFunction(value)
+    await toppingFunction(value)
     listsAPI()
   }
   //再来一单
@@ -175,14 +175,14 @@ const DemandList = () => {
   }
   //提前结束
   const earlyEnd = async e => {
-    const res = await EndInterfaceInAdvance({ id: e, status: -3 })
+    const res = await endInterfaceInAdvance({ id: e, status: -3 })
     if (res.code === 200) {
       listsAPI()
     }
   }
   // 结束订单
   const deleteRecord = async value => {
-    const res = await DeleteDemandDoc({ id: value })
+    const res = await deleteDemandDoc({ id: value })
     if (res.code === 200) {
       listsAPI()
     }
@@ -199,7 +199,7 @@ const DemandList = () => {
   //   if (ids.length > 0) {
   //     console.log(ids)
 
-  //     const res = await DeleteDemandDoc({ id: ids })
+  //     const res = await deleteDemandDoc({ id: ids })
   //     if (res.code === 200) {
   //       listsAPI()
   //     }

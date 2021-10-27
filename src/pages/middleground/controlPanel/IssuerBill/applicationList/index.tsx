@@ -20,12 +20,12 @@ function DemandList() {
 
   const { demandListStore } = useStores()
   const {
-    ApplicationList,
-    TopOfApplicationList,
-    DeleteIssuer,
-    DeclineRequisition,
-    ConfirmCooperation,
-    CancelCooperation
+    applicationList,
+    topOfapplicationList,
+    deleteIssuer,
+    declineRequisition,
+    confirmCooperation,
+    cancelCooperation
   } = demandListStore
   const location = useLocation()
   const { search } = location
@@ -46,7 +46,7 @@ function DemandList() {
   }, [params])
 
   const InterfaceData = async () => {
-    const res = await ApplicationList(params)
+    const res = await applicationList(params)
     if (res.code === 200) {
       setDataLength(res.data.total)
       setLists(res.data.records)
@@ -83,7 +83,7 @@ function DemandList() {
   }
   //置
   const toppingMethod = async value => {
-    const res = await TopOfApplicationList(value)
+    const res = await topOfapplicationList(value)
     console.log(res)
     if (res.code === 200) {
       InterfaceData()
@@ -92,7 +92,7 @@ function DemandList() {
   // 谢绝
   const earlyEnd = async e => {
     console.log(e)
-    const res = await DeclineRequisition({ id: e, status: -2 })
+    const res = await declineRequisition({ id: e, status: -2 })
     console.log(res)
     if (res.code === 200) {
       InterfaceData()
@@ -100,14 +100,14 @@ function DemandList() {
   }
   //确认合作
   const InitiateOrder = async e => {
-    const res = await ConfirmCooperation({ id: e, status: 3 })
+    const res = await confirmCooperation({ id: e, status: 3 })
     if (res.code === 200) {
       InterfaceData()
     }
   }
   // 取消合作
   const reOrder = async e => {
-    const res = await CancelCooperation({ id: e, status: 2 })
+    const res = await cancelCooperation({ id: e, status: 2 })
     if (res.code === 200) {
       InterfaceData()
     }
@@ -116,7 +116,7 @@ function DemandList() {
   const deleteMethod = async id => {
     console.log('删除', id)
 
-    const res = await DeleteIssuer({ supplierInquiryId: id })
+    const res = await deleteIssuer({ supplierInquiryId: id })
     if (res.code === 200) {
       InterfaceData()
     }

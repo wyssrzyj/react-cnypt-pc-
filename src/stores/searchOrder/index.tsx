@@ -1,8 +1,7 @@
 import { makeAutoObservable, action, observable, runInAction } from 'mobx'
 import axios from '@/utils/axios'
 import { ResponseProps } from '@/utils/axios/types'
-import { message } from '_antd@4.16.13@antd'
-
+import { message } from 'antd'
 export default class SearchOrderStore {
   constructor() {
     makeAutoObservable(this)
@@ -95,6 +94,31 @@ export default class SearchOrderStore {
     } catch (e) {
       console.log(e)
       message.error('服务器错误~')
+    }
+  }
+
+  @action inquiryList = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/oms/inquiry-purchase/list-inquiry-search`,
+        params
+      )
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  //
+  @action inquiryPurchase = async id => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/oms/inquiry-purchase/get`,
+        { id }
+      )
+      return res
+    } catch (e) {
+      console.log(e)
     }
   }
 }

@@ -79,7 +79,7 @@ const index = () => {
           </Form.Item>
         </Col>
       </Row>
-      <Col span={13}>
+      <Col span={13} className={styles.isContactPublic}>
         <Form.Item
           {...layout}
           label=" 公开方式"

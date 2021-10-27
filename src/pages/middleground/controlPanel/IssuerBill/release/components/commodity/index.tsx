@@ -1,9 +1,11 @@
 import React from 'react'
-import { Form, Col, Row } from 'antd'
+import { Form, Col, Row, Input } from 'antd'
 import { toJS, useStores } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 import Category from './category'
 import styles from './index.module.less'
+
+const { TextArea } = Input
 
 const FormItem = Form.Item
 const layout = {
@@ -81,22 +83,18 @@ function Basics() {
       span: 12,
       options: productType
     },
-    {
-      label: '备注说明',
-      field: 'goodsRemark',
-      type: 'textarea',
-      span: 12
-    },
+
     {
       label: '款图',
       type: 'img',
       field: 'stylePicture',
-      span: 13
+      span: 12
     }
   ]
   return (
     <div>
       <Category />
+
       <Row>
         {orderConfigs.map(item => {
           //orderConfigs form的数据
@@ -121,6 +119,16 @@ function Basics() {
             </Col>
           )
         })}
+      </Row>
+      <Row className={styles.goodsRemark}>
+        <span className={styles.payment}>
+          上传款图，只能上传jpg/png格式文件，文件不能超过20M，最多上传10个文件
+        </span>
+        <Col span={20} className={styles.textArea}>
+          <FormItem name="goodsRemark" label="备注说明">
+            <TextArea allowClear={true} showCount maxLength={999} />
+          </FormItem>
+        </Col>
       </Row>
     </div>
   )

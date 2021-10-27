@@ -9,9 +9,9 @@ import Terms from './components/terms'
 import Address from './components/address'
 import { useStores, observer } from '@/utils/mobx'
 import { useHistory } from 'react-router-dom'
-import { timestampToTime } from './components/time'
+// import { timestampToTime } from './components/time'//
 import { useLocation } from 'react-router-dom'
-import moment from 'moment' //引入moment
+// import moment from 'moment' //引入moment
 
 const DemandSheet = () => {
   const location = useLocation()
@@ -20,7 +20,10 @@ const DemandSheet = () => {
 
   const [validity, setValidity] = useState<any>()
   const [confirm, setConfirm] = useState<any>(true)
-  const [initialValues, setInitialValues] = useState<any>({})
+  const [initialValues, setInitialValues] = useState<any>({
+    isEnterpriseInfoPublic: 1,
+    isContactPublic: 1
+  })
 
   const { push } = useHistory()
   const [form] = Form.useForm()
@@ -35,7 +38,7 @@ const DemandSheet = () => {
   }, [])
   const echoData = async v => {
     const { data } = await AnotherSingleInterface({ id: v })
-    console.log(data)
+
     if (data) {
       data.stylePicture = data.stylePicture.map(url => ({
         thumbUrl: url,
@@ -47,11 +50,14 @@ const DemandSheet = () => {
         url: url,
         name: url.split('__')[1]
       }))
-      data.processingType = moment(timestampToTime(data.inquiryEffectiveDate))
-      data.unitPrice = moment(timestampToTime(data.deliveryDate))
+      if (data.regionalIdList) {
+      } else {
+        data.regionalIdList = ['0'] //全国
+      }
+      // data.processingType = moment(timestampToTime(data.inquiryEffectiveDate))//时间的回显
+      // data.unitPrice = moment(timestampToTime(data.deliveryDate))
     }
-    console.log(data.regionalIdList)
-    // data.regionalIdList = []
+
     setInitialValues(data)
   }
   useEffect(() => {
@@ -80,6 +86,7 @@ const DemandSheet = () => {
     if (isArray(v.annex)) {
       v.annex = v.annex.map(item => item.url)
     }
+    // ly
     // 图片
     if (isArray(v.stylePicture)) {
       v.stylePicture = v.stylePicture.map(item => item.url)
@@ -90,17 +97,20 @@ const DemandSheet = () => {
     } else {
       v.status = -1
     }
+    v.provinceId = v.location[1]
+    v.cityId = v.location[0]
+    v.districtId = v.location[2]
     const res = await ewDemandDoc(v)
-    console.log(res)
     if (res.code === 200) {
       push({ pathname: '/control-panel/panel/demand-list' })
     }
+    console.log(v)
   }
+  console.log(initialValues)
 
   return (
     <div className={styles.demand}>
       <Form form={form} onFinish={onFinish} initialValues={initialValues}>
-        <h1>发布订单</h1>
         <section>
           <Title title={'基础信息'}></Title>
           <Basics />
@@ -108,16 +118,10 @@ const DemandSheet = () => {
         <section className={styles.commodity}>
           <Title title={'产品信息'}></Title>
           <Commodity />
-          <span className={styles.payment}>
-            上传款图，只能上传jpg/png格式文件，文件不能超过20M，最多上传10个文件
-          </span>
         </section>
         <section>
-          <Title title={'交易条件'}></Title>
+          <Title title={'其他'}></Title>
           <Terms data={data} />
-        </section>
-        <section>
-          <Title title={'地址与联系人'}></Title>
           <Address />
         </section>
 

@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { Row, Col, Button, Popconfirm, Tooltip } from 'antd'
+import { Row, Col, Button, Tooltip, Modal } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components' //路径
 import { timestampToTime } from '../../time'
+
+let Simg = 'http://dev.uchat.com.cn:8002/images/b140ef.png'
 
 const MultipleChoice = ({
   data,
@@ -10,9 +12,10 @@ const MultipleChoice = ({
   deleteMethod,
   earlyEnd,
   InitiateOrder,
-  reOrder
+  reOrder,
+  demandSheetDetails
 }) => {
-  const [topping, setTopping] = useState(false) //置顶
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   const sortColor = new Map()
   sortColor.set(2, styles.red)
@@ -36,20 +39,27 @@ const MultipleChoice = ({
   examine.set(true, 'jack-check-success')
   // 置顶事件
   const changeSort = e => {
-    setTopping(!topping)
-    const stickType = topping ? 0 : 1
+    let stickType = data.purchaserStickType > 0 ? 0 : 1
+
     toppingMethod({ id: e, purchaserstickType: stickType })
   }
 
-  // 删除记录
-  const deleteRecord = e => {
-    console.log(e)
-    console.log('删除记录')
-    deleteMethod(e)
+  // // 删除记录
+  // const deleteRecord = e => {
+  //   console.log(e)
+  //   console.log('删除记录')
+  //   deleteMethod(e)
+  // }
+  const handleOk = id => {
+    deleteMethod(id)
+    setIsModalVisible(false)
   }
 
-  const demandSheetDetails = e => {
-    console.log(e)
+  const handleCancel = () => {
+    setIsModalVisible(false)
+  }
+  const showModal = () => {
+    setIsModalVisible(true)
   }
 
   return (
@@ -76,33 +86,35 @@ const MultipleChoice = ({
           <Col span={4}>
             <span
               onClick={() => {
-                demandSheetDetails(data.id)
+                demandSheetDetails(data.purchaserInquiryId)
               }}
               className={styles.details}
             >
-              查看订单详情{'>'}
+              查看订单详情
+              <span className={styles.zuo}>
+                <Icon type="jack-you_31" className={styles.prev} />
+              </span>
             </span>
           </Col>
-          <Col span={5} className={styles.lin}>
+          <Col span={3} className={styles.lin}>
             <div className={sortColor.get(+data.status)}>
               <span className={styles.spot}>
                 <span>•</span>
               </span>
 
               <span className={styles.states}>{map.get(data.status)}</span>
-
-              <span>
-                <Icon
-                  onClick={() => changeSort(data.id)}
-                  type={
-                    data.purchaserStickType
-                      ? 'jack-zhiding_1'
-                      : 'jack-zhiding_2'
-                  }
-                  className={styles.listHeaderSortIcon}
-                ></Icon>
-              </span>
             </div>
+          </Col>
+          <Col span={1}>
+            <span>
+              <Icon
+                onClick={() => changeSort(data.id)}
+                type={
+                  data.purchaserStickType ? 'jack-zhiding_1' : 'jack-zhiding_2'
+                }
+                className={styles.listHeaderSortIcon}
+              ></Icon>
+            </span>
           </Col>
         </Row>
       </div>
@@ -111,7 +123,11 @@ const MultipleChoice = ({
         <Row>
           <Col span={11} className={styles.names}>
             <div>
-              <img className={styles.img} src={data.img} alt="" />
+              <img
+                className={styles.img}
+                src={data.img ? data.img : Simg}
+                alt=""
+              />
             </div>
 
             <div className={styles.imgRight}>
@@ -121,7 +137,7 @@ const MultipleChoice = ({
                 </span>
                 <span className={styles.diqu_bai}>
                   <Icon type="jack-diqu_bai" className={styles.previous} />
-                  {data.address}
+                  {data.address ? data.address : '暂无'}
                 </span>
               </p>
               <p>人数：{data.staffNumber}人</p>
@@ -214,21 +230,49 @@ const MultipleChoice = ({
             ) : null}
 
             {[1, -1, -2].includes(+data.status) ? (
-              <Popconfirm
-                title="是否确认删除?"
-                onConfirm={() => {
-                  deleteRecord(data.id)
-                }}
-                okText="确认"
-                cancelText="取消"
+              <Button
+                type={'primary'}
+                onClick={showModal}
+                className={styles.btn}
               >
-                <Button type={'primary'} className={styles.btn}>
-                  删除记录
-                </Button>
-              </Popconfirm>
+                删除记录
+              </Button>
             ) : null}
           </Col>
         </Row>
+        <Modal
+          visible={isModalVisible}
+          centered={true}
+          footer={null}
+          // maskClosable={false}
+        >
+          <div className={styles.delContent}>
+            <Icon type={'jack-sptg1'} className={styles.delIcon}></Icon>
+            <div className={styles.delTitle}>删除订单</div>
+            <div className={styles.delText}>确定删除订单？</div>
+            <div className={styles.modal}>
+              <Button
+                className={styles.cancelBtn}
+                size="large"
+                type="primary"
+                ghost
+                onClick={handleCancel}
+              >
+                取消
+              </Button>
+              <Button
+                type="primary"
+                className={styles.submitBtn}
+                onClick={() => {
+                  handleOk(data.id)
+                }}
+                size="large"
+              >
+                确认
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </div>
     </div>
   )

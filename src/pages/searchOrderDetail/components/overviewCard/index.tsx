@@ -1,26 +1,47 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Row, Col, Button } from 'antd'
+import { useHistory } from 'react-router-dom'
+import moment from 'moment'
 import styles from './index.module.less'
 
-const details = [
-  { label: '需求单编号', value: '166641' },
-  { label: '需求单编号', value: '166641' },
-  { label: '需求单编号', value: '166641' },
-  { label: '需求单编号', value: '166641' },
-  { label: '需求单编号', value: '166641' },
-  { label: '需求单编号', value: '166641' }
-]
+const OverviewCard = props => {
+  const { id, name, deliveryDate, releaseTime, details = [] } = props
+  const { push } = useHistory()
 
-const OverviewCard = () => {
+  const [dayDiff, setDayDiff] = useState<number>(0)
+  const [hourDiff, setHourDiff] = useState<number>(0)
+
+  const goOrderDetail = () => {
+    push({
+      pathname: '/control-panel/panel/orderDetails',
+      state: { id: id, source: 2 }
+    })
+  }
+
+  const getTimeDifference = () => {
+    const a = moment(deliveryDate)
+    const b = moment(releaseTime)
+    const dateDiff = a.diff(b)
+    const day = Math.floor(dateDiff / (24 * 3600 * 1000)) //计算出相差天数
+    const leave1 = dateDiff % (24 * 3600 * 1000)
+    const hours = Math.floor(leave1 / (3600 * 1000)) //计算出小时数
+    setDayDiff(day)
+    setHourDiff(hours)
+  }
+
+  useEffect(() => {
+    if (deliveryDate && releaseTime) {
+      getTimeDifference()
+    }
+  }, [deliveryDate, releaseTime])
+
   return (
     <div className={styles.overviewCard}>
-      <div className={styles.title}>
-        鸿星尔克女生2020年夏季上新运动短袖简约透气上衣百搭舒适运动服
-      </div>
+      <div className={styles.title}>{name}</div>
       <div className={styles.content}>
         <Row gutter={16} className={styles.contentLeft}>
-          {details.map(detail => (
-            <Col key={detail.value} className={styles.leftItem} span={12}>
+          {details.map((detail, index) => (
+            <Col key={index} className={styles.leftItem} span={detail.span}>
               {detail.label}：{detail.value}
             </Col>
           ))}
@@ -31,10 +52,12 @@ const OverviewCard = () => {
             <div>
               <div>剩余时间</div>
               <div>
-                <strong>07</strong>天<strong>23</strong>小时
+                <strong>{dayDiff}</strong>天<strong>{hourDiff}</strong>小时
               </div>
             </div>
-            <Button type="primary">立即报价</Button>
+            <Button type="primary" onClick={goOrderDetail}>
+              立即报价
+            </Button>
           </div>
         </div>
       </div>

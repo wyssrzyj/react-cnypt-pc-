@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Col, DatePicker } from 'antd'
+import { Form, Row, Col, DatePicker } from 'antd'
+import styles from './index.module.less'
+
 const FormItem = Form.Item
 const layout = {
   labelCol: {
     span: 5
   },
   wrapperCol: {
-    span: 12
+    span: 20
   }
 }
 
@@ -30,26 +32,30 @@ const date = ({ validity }) => {
 
   return (
     <>
-      <Col span={13}>
-        <FormItem
-          {...layout}
-          name="processingType"
-          label="订单有效期"
-          rules={[{ required: true, message: '请选择日期' }]}
-        >
-          <DatePicker onChange={onChange} />
-        </FormItem>
-      </Col>
-      <Col span={13}>
-        <FormItem
-          {...layout}
-          name="unitPrice"
-          label="交货期"
-          rules={[{ required: true, message: '请选择日期' }]}
-        >
-          <DatePicker onChange={onChanges} />
-        </FormItem>
-      </Col>
+      <Row>
+        <Col span={12}>
+          <FormItem
+            {...layout}
+            className={styles.processingType}
+            name="processingType"
+            label="订单有效期"
+            rules={[{ required: true, message: '请选择日期' }]}
+          >
+            <DatePicker onChange={onChange} />
+          </FormItem>
+        </Col>
+        <Col span={12}>
+          <FormItem
+            {...layout}
+            name="unitPrice"
+            className={styles.processingType}
+            label="交货期"
+            rules={[{ required: true, message: '请选择日期' }]}
+          >
+            <DatePicker onChange={onChanges} />
+          </FormItem>
+        </Col>
+      </Row>
     </>
   )
 }

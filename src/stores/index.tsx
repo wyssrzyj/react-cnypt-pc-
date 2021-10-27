@@ -43,6 +43,6 @@ export const stores = {
   monitorPageStore,
   orderStore,
   departmentStore,
-  demandListStore,
-  searchOrderStore
+  searchOrderStore,
+  demandListStore
 }

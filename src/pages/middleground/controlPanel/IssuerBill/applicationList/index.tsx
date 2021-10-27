@@ -7,11 +7,14 @@ import MultipleChoice from './components/multipleChoice'
 import { Pagination } from 'antd'
 import { useStores, observer } from '@/utils/mobx'
 import { useLocation } from 'react-router'
+import { useHistory } from 'react-router-dom'
 
 export const ORDER_EMPTY =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/order_empty.png'
 
 function DemandList() {
+  const { push } = useHistory()
+
   const defaultPageSize = 10
   const defaultCurrent = 1
 
@@ -44,6 +47,8 @@ function DemandList() {
   const InterfaceData = async () => {
     const res = await ApplicationList(params)
     if (res.code === 200) {
+      console.log(res.data.records)
+
       setDataLength(res.data.total)
       setLists(res.data.records)
     }
@@ -102,10 +107,17 @@ function DemandList() {
   }
   // 删除
   const deleteMethod = async id => {
+    console.log('删除', id)
+
     const res = await DeleteIssuer({ supplierInquiryId: id })
     if (res.code === 200) {
       InterfaceData()
     }
+  }
+  // 详情
+  const demandSheetDetails = e => {
+    console.log('查看订单信息')
+    push({ pathname: '/control-panel/panel/orderDetails', search: 'id=' + e })
   }
 
   return (
@@ -123,6 +135,7 @@ function DemandList() {
                   deleteMethod={deleteMethod}
                   InitiateOrder={InitiateOrder}
                   earlyEnd={earlyEnd}
+                  demandSheetDetails={demandSheetDetails}
                   reOrder={reOrder}
                   toppingMethod={toppingMethod}
                   // callback={event => dataChoose(event.target.checked, index)}

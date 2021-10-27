@@ -4,11 +4,11 @@ import Query from './components/query'
 import styles from './index.module.less'
 import Sort from './components/sort'
 import MultipleChoice from './components/multipleChoice'
-import { Checkbox, Pagination, message, Button, Popconfirm } from 'antd'
+import { Pagination } from 'antd'
 import { cloneDeep } from 'lodash'
 import { useStores, toJS, observer } from '@/utils/mobx'
 import { timestampToTime, remainingTime } from './components/time'
-import { getTrees } from './method/'
+import { getTrees } from './method'
 import { useHistory } from 'react-router-dom'
 import { useLocation } from 'react-router'
 
@@ -34,7 +34,7 @@ const DemandList = () => {
     demandListStore
 
   const [reallylists, setReallyLists] = useState([]) //数据
-  const [allChecked, setAllChecked] = useState(false) //全选的状态
+  // const [allChecked, setAllChecked] = useState(false) //全选的状态
   const [numberLength, setNumberLength] = useState(1) //页码长度
   const [noOrders, setNoOrders] = useState(0) //没有订单
   const [pageNumber, setPageNumber] = useState(1) //路由数据
@@ -49,23 +49,26 @@ const DemandList = () => {
     listsAPI()
   }, [params])
 
-  const filterData = value => {
-    //  过滤出需要的数据 并返回
-    const res = inquiryProcessType.filter(item => item.value === value)
-    return res
-  }
+  // const filterData = value => {
+  //   //  过滤出需要的数据 并返回
+  //   const res = inquiryProcessType.filter(item => item.value === value)
+  //   return res
+  // }
+  // const handle = v => {
+  //   let sum = [] //定义一个空数组
+  //   v.forEach(item => {
+  //     const res = item.processTypeList.reduce((total, current) => {
+  //       total.push(filterData(current)[0])
+  //       return total // 将过滤后的数据放到一起 并return出去
+  //     }, [])
+  //     res.forEach(element => {
+  //       sum.push(element.label) //获取主要的数据
+  //     })
+  //   })
+  //   return sum
+  // }
   const handle = v => {
-    let sum = [] //定义一个空数组
-    v.forEach(item => {
-      const res = item.processTypeList.reduce((total, current) => {
-        total.push(filterData(current)[0])
-        return total // 将过滤后的数据放到一起 并return出去
-      }, [])
-      res.forEach(element => {
-        sum.push(element.label) //获取主要的数据
-      })
-    })
-    return sum
+    return getTrees(v, inquiryProcessType, 'value', 'label')
   }
 
   const listsAPI = async () => {
@@ -76,11 +79,15 @@ const DemandList = () => {
     if (Array.isArray(res.records)) {
       res.records.forEach(item => {
         item.checked = false
-        item.processing = handle(res.records)
+        item.processing = handle(item.processTypeList)
         item.time = timestampToTime(item.inquiryEffectiveDate)
         item.releaseTime = timestampToTime(item.releaseTime)
-
-        item.categoryIdList = getTrees(item.categoryIdList, treeData)
+        item.categoryIdList = getTrees(
+          item.categoryIdList,
+          toJS(treeData),
+          'id',
+          'name'
+        )
         item.surplus = remainingTime(item.inquiryEffectiveDate)
         if (item.surplus.day < 0) {
           item.status = -3
@@ -88,6 +95,7 @@ const DemandList = () => {
       })
       setNoOrders(res.records.length)
       setReallyLists(res.records)
+      console.log(res.records)
     }
   }
   // 路由数据
@@ -121,33 +129,40 @@ const DemandList = () => {
       setParams({ pageNum: 1, pageSize: defaultPageSize })
     }
   }
-  // 全选
-  const onChange = e => {
-    setAllChecked(!allChecked)
-    reallylists.forEach(item => {
-      item.checked = e.target.checked
-    })
-  }
-  // 单选
-  const dataChoose = (checked, index) => {
-    const newDataSource = cloneDeep(reallylists)
-    newDataSource[index].checked = checked //
-    setReallyLists(newDataSource)
-    const flag = newDataSource.every(item => item.checked === true) //
-    setAllChecked(flag)
-  }
+  // // 全选
+  // const onChange = e => {
+  //   setAllChecked(!allChecked)
+  //   reallylists.forEach(item => {
+  //     item.checked = e.target.checked
+  //   })
+  // }
+  // // 单选
+  // const dataChoose = (checked, index) => {
+  //   const newDataSource = cloneDeep(reallylists)
+  //   newDataSource[index].checked = checked //
+  //   setReallyLists(newDataSource)
+  //   const flag = newDataSource.every(item => item.checked === true) //
+  //   setAllChecked(flag)
+  // }
   // 分页
   const paging = pageNumber => {
     setPageNumber(pageNumber)
   }
   //置顶
   const topping = async value => {
+    // console.log('置顶', value)
+
     await ToppingFunction(value)
     listsAPI()
   }
   //再来一单
   const oneMoreOrder = async e => {
     push({ pathname: '/control-panel/panel/demand-sheet', search: 'id=' + e })
+  }
+  // 查看订单信息
+  const DemandOrderDetail = e => {
+    console.log('查看订单信息')
+    push({ pathname: '/control-panel/panel/orderDetails', state: { id: e } })
   }
   //提前结束
   const earlyEnd = async e => {
@@ -163,29 +178,28 @@ const DemandList = () => {
       listsAPI()
     }
   }
-  //批量结束
-  const BatchEnd = async () => {
-    //  点记得时候获取勾选的数据，获取id掉接口进行操作
-    const reduceIds = reallylists.filter(item => item.checked) //用选中的数据来过滤出
-    const ids = reduceIds.reduce((prev, item) => {
-      prev.push(item.id)
-      return prev
-    }, [])
+  // //批量结束
+  // const BatchEnd = async () => {
+  //   //  点记得时候获取勾选的数据，获取id掉接口进行操作
+  //   const reduceIds = reallylists.filter(item => item.checked) //用选中的数据来过滤出
+  //   const ids = reduceIds.reduce((prev, item) => {
+  //     prev.push(item.id)
+  //     return prev
+  //   }, [])
 
-    if (ids.length > 0) {
-      console.log(ids)
+  //   if (ids.length > 0) {
+  //     console.log(ids)
 
-      const res = await DeleteDemandDoc({ id: ids })
-      if (res.code === 200) {
-        listsAPI()
-      }
-    } else {
-      message.error('请至少选择一个')
-    }
-  }
+  //     const res = await DeleteDemandDoc({ id: ids })
+  //     if (res.code === 200) {
+  //       listsAPI()
+  //     }
+  //   } else {
+  //     message.error('请至少选择一个')
+  //   }
+  // }
   return (
     <div className={styles.demand}>
-      <div className={styles.top}>订单列表</div>
       <section>
         <Tab routing={routingData} />
         <Query query={queryMethod} />
@@ -196,16 +210,17 @@ const DemandList = () => {
               return (
                 <MultipleChoice
                   earlyEnd={earlyEnd}
+                  DemandOrderDetail={DemandOrderDetail}
                   oneMoreOrder={oneMoreOrder}
                   toppingMethod={topping}
-                  callback={event => dataChoose(event.target.checked, index)}
+                  // callback={event => dataChoose(event.target.checked, index)}
                   key={index}
                   data={item}
                   deleteRecord={deleteRecord}
                 />
               )
             })}
-            <div className={styles.selectric}>
+            {/* <div className={styles.selectric}>
               <Checkbox onChange={onChange} checked={allChecked} />
               <div className={styles.eatchEnd}>
                 <Popconfirm
@@ -219,7 +234,7 @@ const DemandList = () => {
                   <Button type="primary">批量结束</Button>
                 </Popconfirm>
               </div>
-            </div>
+            </div> */}
             <div className={styles.paginationBox}>
               <Pagination
                 style={{

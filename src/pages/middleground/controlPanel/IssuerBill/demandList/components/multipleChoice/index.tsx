@@ -1,31 +1,33 @@
 import React, { useState } from 'react'
-import { Checkbox, Row, Col, Button, Popconfirm, Tooltip } from 'antd'
+import { Row, Col, Button, Tooltip, Modal } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components' //路径
 
 const MultipleChoice = ({
   data,
-  callback,
   deleteRecord,
   toppingMethod,
   earlyEnd,
-  oneMoreOrder
+  oneMoreOrder,
+  DemandOrderDetail
 }) => {
-  const { checked, id, stickType } = data
-  const [topping, setTopping] = useState(false) //置顶
+  const { id, stickType } = data
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
+  // const [topping, setTopping] = useState() //置顶
 
   const Topping = new Map()
   Topping.set(1, 'jack-zhiding_1')
   Topping.set(0, 'jack-zhiding_2')
   const examine = new Map()
-  examine.set(0, 'jack-check-fail')
-  examine.set(1, 'jack-check-success')
+  examine.set(0, 'jack-shenhe-copy')
+  examine.set(1, 'jack-shenhe')
+  let Simg = 'http://dev.uchat.com.cn:8002/images/b140ef.png'
+
   // 置顶事件
   const changeSort = async value => {
-    setTopping(!topping)
-    const stickType = topping ? 0 : 1
-
-    toppingMethod({ id: value, stickType })
+    let ccc = stickType == 0 ? 1 : 0
+    toppingMethod({ id: value, stickType: ccc })
   }
 
   // 失败原因
@@ -34,9 +36,17 @@ const MultipleChoice = ({
     console.log('失败原因')
   }
 
-  const DemandOrderDetail = e => {
-    console.log('查看订单信息')
-    console.log(e)
+  const showModal = () => {
+    setIsModalVisible(true)
+  }
+
+  const handleOk = () => {
+    deleteRecord(id)
+    setIsModalVisible(false)
+  }
+
+  const handleCancel = () => {
+    setIsModalVisible(false)
   }
 
   return (
@@ -44,20 +54,20 @@ const MultipleChoice = ({
       {/* 头部 */}
       <div className={stickType === 1 ? styles.topping : styles.noTopping}>
         <Row>
-          <Col span={6}>
+          <Col span={8}>
             <span className={styles.requisition}>
               <span className={styles.color}>订单编号 :</span>
-              <span>{data.code}</span>
+              <span className={styles.font}>{data.code}</span>
             </span>
           </Col>
 
-          <Col span={7}>
+          <Col span={8}>
             <span>
               <span className={styles.color}> 发布时间 :</span>
-              <span>{data.releaseTime}</span>
+              <span className={styles.font}>{data.releaseTime}</span>
             </span>
           </Col>
-          <Col span={9} className={styles.examine}>
+          <Col span={6} className={styles.examine}>
             <span>
               <Icon
                 type={examine.get(data.systemApprovalStatus)}
@@ -88,40 +98,51 @@ const MultipleChoice = ({
       <div className={styles.theme}>
         <Row>
           <Col span={1}>
-            <Checkbox
+            {/* <Checkbox
               className={styles.checked}
-              onChange={callback}
+              // onChange={callback}
               checked={checked}
-            />
+            /> */}
           </Col>
           <Col span={8}>
             <div className={styles.subject}>
-              <img className={styles.img} src={data.pictureUrl} alt="" />
+              <img
+                className={styles.img}
+                src={data.pictureUrl ? data.pictureUrl : Simg}
+                alt=""
+              />
               <div>
                 <p className={styles.name}>{data.name}</p>
-                <div className={styles.hidden}>
-                  加工类型：
-                  <Tooltip placement="top" title={data.processing.join('、')}>
+                <Tooltip placement="top" title={data.processing.join('、')}>
+                  <div className={styles.hidden}>
+                    加工类型：
                     {data.processing.join('、')}
-                  </Tooltip>
-                </div>
+                  </div>
+                </Tooltip>
                 <Tooltip placement="top" title={data.categoryIdList.join('、')}>
                   <div className={styles.category}>
                     商品品类：
                     {data.categoryIdList.join('、')}
                   </div>
                 </Tooltip>
-                <p>订单量：{data.totalOrderAmount} 件</p>
+                <p className={styles.ddl}>
+                  订单量：{data.totalOrderAmount ? data.totalOrderAmount : 0} 件
+                </p>
               </div>
             </div>
           </Col>
-          <Col span={8}>
+          <Col span={7}>
             <div className={styles.feedback}>
               <p>
-                共<span className={styles.fontColor}>{data.enterpriseNum}</span>
+                共
+                <span className={styles.fontColor}>
+                  {data.enterpriseNum ? data.enterpriseNum : 0}
+                </span>
                 家，
                 <span className={styles.fontColor}>
-                  {data.enterpriseRefuseTotalNum}
+                  {data.enterpriseRefuseTotalNum
+                    ? data.enterpriseRefuseTotalNum
+                    : 0}
                 </span>
                 家已谢绝
                 {/* <span className={styles.fontColor}>1</span> 家已反馈 */}
@@ -155,7 +176,7 @@ const MultipleChoice = ({
               </p>
             </div>
           </Col>
-          <Col className={styles.state} span={5}>
+          <Col className={styles.state} span={6}>
             {/* -1 草稿箱 1 提交需求单 -2审核失败 -3已结束 */}
             {/* 生效中 */}
             {data.status === 1 && data.surplus.day > 0 ? (
@@ -175,7 +196,13 @@ const MultipleChoice = ({
                 <p className={styles.already}>已结束</p>
                 <p className={styles.validity}>有效期：{data.time}</p>
                 {data.surplus.day < 0 ? (
-                  <p>已经超时{Math.abs(data.surplus.day)}天</p>
+                  <p>
+                    已经超时
+                    <span className={styles.tina}>
+                      {Math.abs(data.surplus.day)}
+                    </span>
+                    天
+                  </p>
                 ) : null}
               </div>
             ) : null}
@@ -214,19 +241,53 @@ const MultipleChoice = ({
               </div>
             ) : (
               <div className={styles.btn}>
-                <Popconfirm
+                {/* <Popconfirm
                   onConfirm={() => {
                     deleteRecord(id)
                   }}
                   title="是否确认删除？"
                   okText="是"
                   cancelText="否"
-                >
-                  <Button>删除记录</Button>
-                </Popconfirm>
+                > */}
+                <Button className={styles.mov} onClick={showModal}>
+                  删除记录
+                </Button>
+                {/* </Popconfirm> */}
               </div>
             )}
           </Col>
+
+          <Modal
+            visible={isModalVisible}
+            centered={true}
+            footer={null}
+            // maskClosable={false}
+          >
+            <div className={styles.delContent}>
+              <Icon type={'jack-sptg1'} className={styles.delIcon}></Icon>
+              <div className={styles.delTitle}>删除订单</div>
+              <div className={styles.delText}>确定删除订单？</div>
+              <div className={styles.modal}>
+                <Button
+                  className={styles.cancelBtn}
+                  size="large"
+                  type="primary"
+                  ghost
+                  onClick={handleCancel}
+                >
+                  取消
+                </Button>
+                <Button
+                  type="primary"
+                  className={styles.submitBtn}
+                  onClick={handleOk}
+                  size="large"
+                >
+                  确认
+                </Button>
+              </div>
+            </div>
+          </Modal>
         </Row>
       </div>
     </div>

@@ -6,6 +6,7 @@ import styles from './index.module.less'
 
 interface Config {
   label: string
+  value: string
   sort: number
   field: string
 }
@@ -13,13 +14,13 @@ interface Config {
 const headerConfigs: Array<Partial<Config>> = [
   {
     label: '最新发布',
-    field: 'newPublish',
+    value: 'releaseTime',
     sort: -1
   },
   {
     label: '有效日期',
-    sort: -1,
-    field: 'effectiveDate'
+    value: 'inquiryEffectiveDate',
+    sort: -1
   }
 ]
 
@@ -33,14 +34,27 @@ SORT_ICON_MAP.set(-1, 'jack-shengjiangxu-morenzhuangtai')
 SORT_ICON_MAP.set(0, 'jack-shengjiangxu-shengxu')
 SORT_ICON_MAP.set(1, 'jack-shengjiangxu-jiangxu')
 
-const OrderSearchHeader = () => {
+const OrderSearchHeader = props => {
+  const { onChange } = props
   const [configs, setConfigs] = useState<Array<Partial<Config>>>(headerConfigs)
 
   const changeSort = index => {
     const newConfigs = cloneDeep(configs)
     const target = newConfigs[index]
+
     target.sort = target.sort > 0 ? -1 : target.sort === 0 ? 1 : 0
-    setConfigs(newConfigs)
+    const currentConfig = newConfigs.map((config, idx) => {
+      if (idx === index) {
+        return { ...config }
+      } else {
+        return { ...config, sort: -1 }
+      }
+    })
+    setConfigs(currentConfig)
+    onChange({
+      sortField: target.value,
+      sortType: SORT_TYPE.get(target.sort)
+    })
   }
 
   return (
@@ -49,6 +63,7 @@ const OrderSearchHeader = () => {
         <span className={styles.sortItem}>排序方式</span>
         {configs.map((item, index) => (
           <span
+            key={index}
             className={classNames(
               styles.sortItem,
               item.sort !== -1 && styles.active

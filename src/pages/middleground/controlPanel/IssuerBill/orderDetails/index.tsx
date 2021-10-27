@@ -14,20 +14,16 @@ const OrderDetails = () => {
   const userInfo = getUserInfo() || {}
   const { enterpriseType } = userInfo //0 加工厂 1 发单商
   const location = useLocation()
-  const { search } = location
+  const { state } = location
 
   const { demandListStore } = useStores()
   const { AnotherSingleInterface } = demandListStore
-
   const [initialValues, setInitialValues] = useState<any>({})
-  const [dataId, setDataId] = useState<any>()
+  const [stated, setStated] = useState<any>(state)
   useEffect(() => {
-    const searchURL = new URLSearchParams(search)
-    const id = searchURL.get('id')
-
-    if (id) {
-      echoData(id)
-      setDataId(id)
+    setStated(state)
+    if (stated.id) {
+      echoData(stated.id)
     }
   }, [])
 
@@ -41,7 +37,6 @@ const OrderDetails = () => {
     <div>
       <h1>订单详情</h1>
       <div className={styles.subject}>
-        {console.log(initialValues)}
         <section>
           <Title title={'基础信息'}></Title>
           <Basics initialValues={initialValues} />
@@ -63,7 +58,7 @@ const OrderDetails = () => {
         <div className={styles.form}>
           <section>
             <Title title={'填写接单内容'}></Title>
-            <OrderReceiving dataId={dataId} />
+            <OrderReceiving stated={stated} />
           </section>
         </div>
       ) : null}

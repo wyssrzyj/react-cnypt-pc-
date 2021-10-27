@@ -162,7 +162,7 @@ const DemandList = () => {
   // 查看订单信息
   const DemandOrderDetail = e => {
     console.log('查看订单信息')
-    push({ pathname: '/control-panel/panel/orderDetails', search: 'id=' + e })
+    push({ pathname: '/control-panel/panel/orderDetails', state: { id: e } })
   }
   //提前结束
   const earlyEnd = async e => {

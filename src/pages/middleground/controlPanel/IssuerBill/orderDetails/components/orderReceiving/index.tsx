@@ -3,9 +3,10 @@ import { Form, Input, Button, Col, Row } from 'antd'
 import styles from './index.module.less'
 import { useStores } from '@/utils/mobx'
 
-function index({ dataId }) {
+function index({ stated }) {
+  const { id, source } = stated
   const [button, setButton] = useState(true)
-  console.log(dataId)
+  console.log(id)
 
   const { demandListStore } = useStores()
   const { OrderQuantity, SubmitRequisition, RejectSubmission } = demandListStore
@@ -18,19 +19,19 @@ function index({ dataId }) {
     }
   }
   const onFinish = async (values: any) => {
-    console.log('Success:', values)
-    console.log(button)
     if (button) {
       console.log('接受')
       const quantitativeJudgment = await OrderQuantity({
-        goodsNum: values.available,
-        id: dataId
+        goodsNum: values.receiveGoodsNum,
+        id: id
       })
+      console.log('数量接口~~~~~~~~~~', quantitativeJudgment)
+
       if (quantitativeJudgment.code === 200) {
         console.log('可以执行form')
         const res = await SubmitRequisition({
           ...values,
-          purchaserInquiryId: dataId,
+          purchaserInquiryId: id,
           status: 2
         })
         console.log(res)
@@ -38,7 +39,7 @@ function index({ dataId }) {
     } else {
       const res = await RejectSubmission({
         ...values,
-        supplierId: dataId,
+        supplierId: id,
         status: -2
       })
       console.log(res)
@@ -93,16 +94,19 @@ function index({ dataId }) {
         </Row>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button
-            onClick={() => {
-              setButton(false)
-            }}
-            className={styles.noBtn}
-            size="large"
-            htmlType="submit"
-          >
-            拒绝接单
-          </Button>
+          {source == 2 ? (
+            <Button
+              onClick={() => {
+                setButton(false)
+              }}
+              className={styles.noBtn}
+              size="large"
+              htmlType="submit"
+            >
+              拒绝接单
+            </Button>
+          ) : null}
+
           <Button
             size="large"
             onClick={() => {

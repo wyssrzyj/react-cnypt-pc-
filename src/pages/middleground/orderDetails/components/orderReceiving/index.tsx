@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { Form, Input, Button, Col, Row } from 'antd'
 import styles from './index.module.less'
 import { useStores } from '@/utils/mobx'
+import { useHistory } from 'react-router-dom'
 
 function index({ stated }) {
+  const { push } = useHistory()
   const { id, source } = stated
   const [button, setButton] = useState(true)
-  console.log(source)
-
   const { demandListStore } = useStores()
   const { OrderQuantity, SubmitRequisition, RejectSubmission } = demandListStore
   const layout = {
@@ -18,23 +18,27 @@ function index({ stated }) {
       span: 12
     }
   }
+  console.log(id)
+
   const onFinish = async (values: any) => {
     if (button) {
-      console.log('接受')
-      const quantitativeJudgment = await OrderQuantity({
+      const res = await OrderQuantity({
         goodsNum: values.receiveGoodsNum,
         id: id
       })
-      console.log('数量接口~~~~~~~~~~', quantitativeJudgment)
-
-      if (quantitativeJudgment.code === 200) {
-        console.log('可以执行form')
-        const res = await SubmitRequisition({
+      if (res.code === 200) {
+        const submitRes = await SubmitRequisition({
           ...values,
           purchaserInquiryId: id,
           status: 2
         })
-        console.log(res)
+        if (submitRes.code === 200) {
+          push({
+            pathname: '/control-panel/panel/receiveOrder'
+          })
+        }
+
+        // /control-panel/panel/receiveOrder
       }
     } else {
       const res = await RejectSubmission({
@@ -81,7 +85,10 @@ function index({ stated }) {
               {...layout}
               label="可接订单数"
               name="receiveGoodsNum"
-              rules={[{ required: true, message: '请输入可接订单数' }]}
+              rules={[
+                { pattern: /^[0-9]*$/, message: '请输入数字' },
+                { required: true, message: `请输入可接订单数` }
+              ]}
             >
               <Input placeholder={'请输入可接订单数'} />
             </Form.Item>
@@ -93,31 +100,33 @@ function index({ stated }) {
           </Col>
         </Row>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <div className={styles.noBtn}>
           {source == 2 ? null : (
             <Button
+              ghost
+              type="primary"
               onClick={() => {
                 setButton(false)
               }}
               size="large"
-              htmlType="submit"
             >
               拒绝接单
             </Button>
           )}
-
-          <Button
-            className={styles.noBtn}
-            size="large"
-            onClick={() => {
-              setButton(true)
-            }}
-            type="primary"
-            htmlType="submit"
-          >
-            提交订单
-          </Button>
-        </Form.Item>
+          <Form.Item>
+            <Button
+              className={styles.placeOrder}
+              size="large"
+              onClick={() => {
+                setButton(true)
+              }}
+              type="primary"
+              htmlType="submit"
+            >
+              提交订单
+            </Button>
+          </Form.Item>
+        </div>
       </Form>
     </div>
   )

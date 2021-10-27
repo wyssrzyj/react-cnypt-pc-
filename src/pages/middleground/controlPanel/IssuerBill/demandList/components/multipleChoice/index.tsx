@@ -13,6 +13,7 @@ const MultipleChoice = ({
 }) => {
   const { id, stickType } = data
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [windowType, setWindowType] = useState<any>({}) //弹窗类型
 
   // const [topping, setTopping] = useState() //置顶
 
@@ -37,18 +38,31 @@ const MultipleChoice = ({
   }
 
   const showModal = () => {
+    setWindowType({ type: 'mov' })
     setIsModalVisible(true)
   }
-
+  //  点击确认 判断是删除还是提前结束
   const handleOk = () => {
-    deleteRecord(id)
+    console.log(windowType)
+    if (windowType.type === 'advance') {
+      earlyEnd(id)
+    }
+    if (windowType.type === 'mov') {
+      deleteRecord(id)
+    }
     setIsModalVisible(false)
   }
 
   const handleCancel = () => {
     setIsModalVisible(false)
   }
-
+  const advance = () => {
+    setWindowType({ type: 'advance' })
+    setIsModalVisible(true)
+  }
+  const onCancel = () => {
+    setIsModalVisible(false)
+  }
   return (
     <div className={styles.bos}>
       {/* 头部 */}
@@ -62,23 +76,29 @@ const MultipleChoice = ({
           </Col>
 
           <Col span={8}>
-            <span>
-              <span className={styles.color}> 发布时间 :</span>
-              <span className={styles.font}>{data.releaseTime}</span>
-            </span>
+            {data.status !== -1 ? (
+              <span>
+                <span className={styles.color}> 发布时间 :</span>
+                <span className={styles.font}>{data.releaseTime}</span>
+              </span>
+            ) : null}
           </Col>
           <Col span={6} className={styles.examine}>
-            <span>
-              <Icon
-                type={examine.get(data.systemApprovalStatus)}
-                className={styles.listHeaderSortIcon}
-              ></Icon>
-            </span>
-            {data.systemApprovalStatus ? (
-              <span>审核通过</span>
-            ) : (
-              <span>审核不通过</span>
-            )}
+            {data.status !== -1 ? (
+              <div>
+                <span>
+                  <Icon
+                    type={examine.get(data.systemApprovalStatus)}
+                    className={styles.listHeaderSortIcon}
+                  ></Icon>
+                </span>
+                {data.systemApprovalStatus ? (
+                  <span>审核通过</span>
+                ) : (
+                  <span>审核不通过</span>
+                )}
+              </div>
+            ) : null}
           </Col>
           <Col span={1} className={styles.toppingFather}>
             <span
@@ -230,25 +250,12 @@ const MultipleChoice = ({
           <Col className={styles.state} span={2}>
             {data.status === 1 && data.surplus.day > 0 ? (
               <div className={styles.btn}>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    earlyEnd(id)
-                  }}
-                >
+                <Button type="primary" onClick={advance}>
                   提前结束
                 </Button>
               </div>
             ) : (
               <div className={styles.btn}>
-                {/* <Popconfirm
-                  onConfirm={() => {
-                    deleteRecord(id)
-                  }}
-                  title="是否确认删除？"
-                  okText="是"
-                  cancelText="否"
-                > */}
                 <Button className={styles.mov} onClick={showModal}>
                   删除记录
                 </Button>
@@ -261,12 +268,23 @@ const MultipleChoice = ({
             visible={isModalVisible}
             centered={true}
             footer={null}
+            onCancel={onCancel}
             // maskClosable={false}
           >
             <div className={styles.delContent}>
-              <Icon type={'jack-sptg1'} className={styles.delIcon}></Icon>
-              <div className={styles.delTitle}>删除订单</div>
-              <div className={styles.delText}>确定删除订单？</div>
+              {windowType.type === 'mov' ? (
+                <div className={styles.delContent}>
+                  <Icon type={'jack-sptg1'} className={styles.delIcon}></Icon>
+                  <div className={styles.delText}>确定删除订单？</div>
+                </div>
+              ) : null}
+              {windowType.type === 'advance' ? (
+                <div className={styles.delContent}>
+                  <Icon type={'jack-ts'} className={styles.delIcon}></Icon>
+                  <div className={styles.delText}>确定提前结束？</div>
+                </div>
+              ) : null}
+
               <div className={styles.modal}>
                 <Button
                   className={styles.cancelBtn}

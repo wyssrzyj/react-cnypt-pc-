@@ -6,9 +6,8 @@ import OSS from '@/utils/oss'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 
 const CusUpload = props => {
-  const { tips, maxCount = 999, btnText, valuesChange } = props
+  const { tips, maxCount = 999, btnText, valuesChange, fileList = [] } = props
 
-  const [fileList, setFileList] = useState([])
   const [loading, setLoading] = useState(false)
 
   const beforeUpload: any = file => {
@@ -36,7 +35,6 @@ const CusUpload = props => {
     if (res) {
       const { url, name } = res
       imgs.push({ thumbUrl: url, name: name.split('__')[1], url })
-      setFileList(imgs)
       valuesChange && valuesChange(imgs)
     }
   }
@@ -44,7 +42,6 @@ const CusUpload = props => {
   const fileRemove = file => {
     const oldData = cloneDeep(fileList) || []
     const imgs = oldData.filter(item => item.thumbUrl !== file.thumbUrl)
-    setFileList(imgs)
     valuesChange && valuesChange(imgs)
   }
 

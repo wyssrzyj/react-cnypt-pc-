@@ -291,6 +291,10 @@ const EnterpriseInfo = () => {
         const { success, data } = response
         if (success) {
           const { infoApprovalStatus, approvalDesc = '' } = data
+          console.log(
+            '🚀 ~ file: index.tsx ~ line 294 ~ getApprovalResult ~ infoApprovalStatus',
+            infoApprovalStatus
+          )
           setCurrentType(infoApprovalStatus)
           setMessageMap({
             0: (

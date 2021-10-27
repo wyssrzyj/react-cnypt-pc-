@@ -33,6 +33,7 @@ const OrderDetails = () => {
 
     setInitialValues(data)
   }
+
   return (
     <div>
       <h1>订单详情</h1>
@@ -59,7 +60,7 @@ const OrderDetails = () => {
         </section>
       </div>
       {/* 0 加工厂 1 发单商   只有加工厂才能看到form */}
-      {+enterpriseType === 1 ? (
+      {+enterpriseType === 0 ? (
         <div className={styles.form}>
           <section>
             <Title title={'填写接单内容'}></Title>

@@ -22,14 +22,14 @@ const RequestCard = observer(props => {
   const { commonStore, searchOrderStore } = useStores()
   const { dictionary } = commonStore
   const { sendToFactory } = searchOrderStore
-  const { data, factoryId } = props
+  const { data, enterpriseId } = props
 
   const goods =
     dictionary.goodsNum.find(item => item.value === data.goodsNum) || {}
 
   const send = () => {
     const params = {
-      supplierTenantId: factoryId,
+      supplierTenantId: enterpriseId,
       purchaseInquiryId: data.id,
       status: 1
     }
@@ -61,7 +61,8 @@ const OverflowCard = props => {
     factoryCategoryList = [],
     prodTypeList = [],
     pictureUrl,
-    factoryTagList = []
+    factoryTagList = [],
+    enterpriseId
   } = props
 
   // const history = useHistory()
@@ -212,6 +213,7 @@ const OverflowCard = props => {
               )
               return (
                 <RequestCard
+                  enterpriseId={enterpriseId}
                   factoryId={factoryId}
                   key={idx}
                   data={data}

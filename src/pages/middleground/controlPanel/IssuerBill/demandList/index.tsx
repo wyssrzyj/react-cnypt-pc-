@@ -37,10 +37,10 @@ const DemandList = () => {
   // const [allChecked, setAllChecked] = useState(false) //全选的状态
   const [numberLength, setNumberLength] = useState(1) //页码长度
   const [noOrders, setNoOrders] = useState(0) //没有订单
-  const [pageNumber, setPageNumber] = useState(1) //路由数据
+  const [pageNumber, setPageNumber] = useState(1) //分页
 
   const [params, setParams] = useState<any>({
-    pageNum: pageNumber,
+    pageNum: 1,
     pageSize: defaultPageSize,
     status: initialKey
   })
@@ -48,7 +48,6 @@ const DemandList = () => {
   useEffect(() => {
     listsAPI()
   }, [params])
-
   // const filterData = value => {
   //   //  过滤出需要的数据 并返回
   //   const res = inquiryProcessType.filter(item => item.value === value)
@@ -100,7 +99,12 @@ const DemandList = () => {
   }
   // 路由数据
   const routingData = value => {
-    setParams({ ...params, status: value })
+    setParams({
+      pageNum: 1,
+      pageSize: defaultPageSize,
+      status: value
+    })
+    setPageNumber(1)
   }
   //  排序
   const sortCallback = value => {
@@ -147,6 +151,11 @@ const DemandList = () => {
   // 分页
   const paging = pageNumber => {
     setPageNumber(pageNumber)
+    setParams({
+      pageNum: pageNumber,
+      pageSize: defaultPageSize,
+      status: initialKey
+    })
   }
   //置顶
   const topping = async value => {
@@ -242,6 +251,7 @@ const DemandList = () => {
                   lineHeight: '32px',
                   textAlign: 'center'
                 }}
+                current={pageNumber}
                 defaultCurrent={defaultCurrent}
                 total={numberLength}
                 onChange={paging}

@@ -32,11 +32,12 @@ function DemandList() {
 
   const [lists, setLists] = useState([]) //数据
   const [dataLength, setDataLength] = useState(0) //数据总数量
+  const [pageNumber, setPageNumber] = useState(1) //路由数据
 
   const searchURL = new URLSearchParams(search)
   const initialKey = searchURL.get('key')
   const [params, setParams] = useState({
-    pageNum: 1,
+    pageNum: pageNumber,
     pageSize: defaultPageSize,
     status: initialKey
   })
@@ -65,14 +66,22 @@ function DemandList() {
     setParams({ ...params, ...value })
   }
   //分页
-  const pageChange = (page, pageSize) => {
-    console.log('page: ', page)
-    console.log('pageSize: ', pageSize)
+  const pageChange = page => {
+    setPageNumber(page)
+    setParams({
+      pageNum: page,
+      pageSize: defaultPageSize,
+      status: initialKey
+    })
   }
   // 路由数据
   const routingData = value => {
-    const res = { status: value }
-    setParams({ ...params, ...res })
+    setParams({
+      pageNum: 1,
+      pageSize: defaultPageSize,
+      status: value
+    })
+    setPageNumber(1)
   }
   //置
   const toppingMethod = async value => {
@@ -154,6 +163,7 @@ function DemandList() {
                 }}
                 defaultCurrent={defaultCurrent}
                 total={dataLength}
+                current={pageNumber}
                 onChange={pageChange}
               />
             </div>

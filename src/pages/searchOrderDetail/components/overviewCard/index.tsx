@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Row, Col, Button } from 'antd'
 import { useHistory } from 'react-router-dom'
 import moment from 'moment'
+import { getUserInfo } from '@/utils/tool'
 import styles from './index.module.less'
 
 const OverviewCard = props => {
@@ -10,6 +11,9 @@ const OverviewCard = props => {
 
   const [dayDiff, setDayDiff] = useState<number>(0)
   const [hourDiff, setHourDiff] = useState<number>(0)
+
+  const userInfo = getUserInfo() || {}
+  const { enterpriseType } = userInfo
 
   const goOrderDetail = () => {
     push({
@@ -48,20 +52,22 @@ const OverviewCard = props => {
           ))}
         </Row>
 
-        <div className={styles.contentRight}>
-          <div className={styles.offer}>
-            <div>
-              <div>{dayDiff >= 0 ? '剩余' : '超出'}时间</div>
+        {enterpriseType === 1 && (
+          <div className={styles.contentRight}>
+            <div className={styles.offer}>
               <div>
-                <strong>{Math.abs(dayDiff)}</strong>天
-                <strong>{Math.abs(hourDiff)}</strong>小时
+                <div>{dayDiff >= 0 ? '剩余' : '超出'}时间</div>
+                <div>
+                  <strong>{Math.abs(dayDiff)}</strong>天
+                  <strong>{Math.abs(hourDiff)}</strong>小时
+                </div>
               </div>
+              <Button type="primary" onClick={goOrderDetail}>
+                立即报价
+              </Button>
             </div>
-            <Button type="primary" onClick={goOrderDetail}>
-              立即报价
-            </Button>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )

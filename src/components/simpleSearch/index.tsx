@@ -20,7 +20,9 @@ const SimpleSearch = props => {
           {!isEmpty(config) && (
             <>
               <Divider className={styles.verticalLine} type="vertical" />
-              <img className={styles.image} src={config.imgSrc} />
+              {config.imgSrc && (
+                <img className={styles.image} src={config.imgSrc} />
+              )}
               <span className={styles.title}>{config.title}</span>
             </>
           )}

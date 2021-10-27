@@ -188,9 +188,8 @@ const SearchOrderDetail = props => {
       {/* 搜索栏 */}
       <SimpleSearch
         config={{
-          title: '鸿星尔克实业有限公司',
-          imgSrc:
-            'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/rc-upload-1632899522906-3__png.png'
+          title: dataSource.enterpriseName,
+          imgSrc: dataSource.enterpriseUrl
         }}
       />
       {/* 广告位 */}

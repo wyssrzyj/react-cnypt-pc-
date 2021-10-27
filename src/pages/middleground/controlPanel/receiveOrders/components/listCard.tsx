@@ -1,13 +1,12 @@
-import React, { useState, useMemo, useEffect } from 'react'
-import { Icon, Title } from '@/components'
-import { Popover, Button, Modal, Checkbox, Radio } from 'antd'
+import React from 'react'
+import { Icon } from '@/components'
+import { Popover, Button } from 'antd'
 import styles from './listCard.module.less'
-import { observer, toJS, useStores } from '@/utils/mobx'
-import { useHistory } from 'react-router'
+import { observer, useStores } from '@/utils/mobx'
 import classNames from 'classnames'
 import moment from 'moment'
 import { dateDiff, findTreeTarget } from '@/utils/tool'
-import { isArray, isEmpty, isNil } from 'lodash'
+import { isEmpty } from 'lodash'
 
 const STICK_TIPS = new Map()
 STICK_TIPS.set(1, '取消置顶')
@@ -32,8 +31,6 @@ STATUS_TEXT.set(-1, '已取消')
 STATUS_TEXT.set(-2, '已谢绝')
 
 const ListCard = props => {
-  const history = useHistory()
-
   const { commonStore, factoryStore, searchOrderStore } = useStores()
   const { dictionary } = commonStore
   const { inquiryProcessType, goodsNum } = dictionary

@@ -42,7 +42,8 @@ const OverviewCard = props => {
         <Row gutter={16} className={styles.contentLeft}>
           {details.map((detail, index) => (
             <Col key={index} className={styles.leftItem} span={detail.span}>
-              {detail.label}：{detail.value}
+              <span className={styles.cardValue}>{detail.label}：</span>
+              <span>{detail.value}</span>
             </Col>
           ))}
         </Row>
@@ -50,9 +51,10 @@ const OverviewCard = props => {
         <div className={styles.contentRight}>
           <div className={styles.offer}>
             <div>
-              <div>剩余时间</div>
+              <div>{dayDiff >= 0 ? '剩余' : '超出'}时间</div>
               <div>
-                <strong>{dayDiff}</strong>天<strong>{hourDiff}</strong>小时
+                <strong>{Math.abs(dayDiff)}</strong>天
+                <strong>{Math.abs(hourDiff)}</strong>小时
               </div>
             </div>
             <Button type="primary" onClick={goOrderDetail}>

@@ -413,7 +413,7 @@ export const getRegion = (allArea, province, city, district, field) => {
       district: currentDistrict.label
     }
     if (field === 'all') {
-      return `${currentProvince.label}/${currentCity.label}/${currentDistrict.label}`
+      return `${currentProvince.label} ${currentCity.label} ${currentDistrict.label}`
     }
     return get(newRegion, field)
   } else {

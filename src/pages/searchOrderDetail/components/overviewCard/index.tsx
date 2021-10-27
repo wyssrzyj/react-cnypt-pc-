@@ -13,7 +13,7 @@ const OverviewCard = props => {
 
   const goOrderDetail = () => {
     push({
-      pathname: '/control-panel/panel/orderDetails',
+      pathname: '/control-panel/orderDetails',
       state: { id: id, source: 2 }
     })
   }

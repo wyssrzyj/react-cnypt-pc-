@@ -103,11 +103,7 @@ const FilterList = props => {
   )
     ? prodType
     : inquiryProcessType
-  const newTitle = ['/factory-search', '/producer-search'].includes(
-    location.pathname
-  )
-    ? '加工类型'
-    : '接单类型'
+  const newTitle = '加工类型'
 
   const emptyFn = () => {
     // const newData = toJS(productCategoryList)
@@ -176,7 +172,11 @@ const FilterList = props => {
 
   const selectAllProcessing = () => {
     setActiveProcessing({})
-    onFilterChange({ prodType: '' })
+    onFilterChange({
+      [location.pathname === '/factory-search'
+        ? 'prodType'
+        : 'processTypeValues']: ''
+    })
   }
 
   // const onTabChange = activeKey => {
@@ -192,7 +192,11 @@ const FilterList = props => {
   }
   const onProcessingChange = params => {
     setActiveProcessing({ ...params })
-    onFilterChange({ prodType: params.id })
+    onFilterChange({
+      [location.pathname === '/factory-search'
+        ? 'prodType'
+        : 'processTypeValues']: params.id
+    })
   }
   const onFactorySizeChange = value => {
     setFactorySize(value)
@@ -462,7 +466,8 @@ const FilterList = props => {
           <Select
             allowClear
             placeholder={
-              location.pathname === '/factory-search' ? '有效车位' : '工厂规模'
+              '有效车位'
+              // location.pathname === '/factory-search' ? '有效车位' : '工厂规模'
             }
             className={styles.moreSelect}
             value={factorySize}

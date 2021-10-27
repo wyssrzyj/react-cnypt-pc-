@@ -25,6 +25,15 @@
   padding-bottom: 12px;
   border-bottom: 1px solid #d9d9d9;
 }
+.disable {
+  color: rgba(37, 38, 39, 0.25);
+  background-color: rgba(205, 204, 202, 0.2);
+  cursor: no-drop;
+}
+.active {
+  color: black;
+  background-color: @white;
+}
 .asterisk {
   margin-right: 4px;
   color: #ff4d4f;
@@ -33,12 +42,20 @@
 .arrow {
   color: rgba(0, 0, 0, 0.35);
 }
-.typeConfirm {
-  float: right;
-  margin-top: 12px;
-}
 .checkedBox {
   margin: 4px;
   padding: 0 8px;
   background-color: #f0f0f0;
+}
+.down {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.tip {
+  color: red;
+}
+.typeConfirm {
+  margin-left: 20px;
 }

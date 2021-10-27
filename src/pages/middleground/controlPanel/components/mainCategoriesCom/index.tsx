@@ -1,15 +1,28 @@
-import React, { useState } from 'react'
-import { Modal, Button, Checkbox, Tag, message } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Modal, Button, Checkbox, Tag } from 'antd'
 import { DownOutlined, DeleteOutlined } from '@ant-design/icons'
-import { isFunction } from 'lodash'
-import mainCategories from '@/static/mainCategories'
+import { isFunction, filter, find, isEmpty, isArray } from 'lodash'
+import { toJS } from 'mobx'
+import classNames from 'classnames'
+import { useStores, observer } from '@/utils/mobx'
 import styles from './index.module.less'
 
 const MainCategoriesCom = props => {
-  const { onChange } = props
-  const [checkedCategories, setCheckedCategories] = useState<any>([])
+  const { onChange, value, state } = props
+  const { factoryStore } = useStores()
+  const { productCategoryList } = factoryStore
+  const newList = toJS(productCategoryList)
+  const childList = newList.reduce((prev, item) => {
+    prev.push(...item.children)
+    return prev
+  }, [])
+  const [checkedCategories, setCheckedCategories] = useState<any>(
+    isArray(value) ? [...value] : []
+  )
   const [modalVisible, setModalVisible] = useState<boolean>(false)
-  const [checkedObject, setCheckedObject] = useState({})
+  const [checkedObject, setCheckedObject] = useState<any>({})
+  const [checkedLabel, setCheckedLabel] = useState<any>([])
+  // const [childList, setChildList] = useState<any>([])
 
   const handleOk = () => {
     setModalVisible(false)
@@ -25,27 +38,54 @@ const MainCategoriesCom = props => {
     const flat = newArray.reduce((prev, next) => {
       return [...prev, ...next]
     }, [])
-    if (flat.length > 5) {
-      message.warning('最多可选5个')
-    } else {
-      setCheckedCategories([...flat])
-    }
+    const newLabel = filter(childList, function (o) {
+      return find(flat, function (item) {
+        return item === o.id
+      })
+    }).map(item => item.name)
+    setCheckedLabel([...newLabel])
+    // if (flat.length > 5) {
+    //   message.warning('最多可选5个')
+    // } else {
+    //   setCheckedCategories([...flat])
+    // }
+    setCheckedCategories([...flat])
   }
 
   const emptyCategories = () => {
     setCheckedCategories([])
     setCheckedObject({})
+    setCheckedLabel([])
   }
+  const handleCom = () => {
+    if (state === 'check') return false
+    setModalVisible(!modalVisible)
+  }
+
+  useEffect(() => {
+    if (value && !isEmpty(childList)) {
+      setCheckedCategories([...value])
+      const newLabel = filter(childList, function (o) {
+        return find(value, function (item) {
+          return item === o.id
+        })
+      }).map(item => item.name)
+      setCheckedLabel([...newLabel])
+    }
+  }, [value, productCategoryList])
 
   return (
     <div className={styles.mainCategoriesCom}>
       <div
-        onClick={() => setModalVisible(!modalVisible)}
-        className={styles.trigger}
+        onClick={handleCom}
+        className={classNames(
+          styles.trigger,
+          state === 'check' ? styles.disable : styles.active
+        )}
       >
         <div>
-          {checkedCategories.map(type => (
-            <span key={type} className={styles.checkedBox}>
+          {checkedLabel.map((type, index) => (
+            <span key={index} className={styles.checkedBox}>
               {type}
             </span>
           ))}
@@ -53,7 +93,7 @@ const MainCategoriesCom = props => {
         <DownOutlined className={styles.arrow} />
       </div>
       <Modal
-        title="选择主营类别（最多可选5个）"
+        title="选择主营类别"
         visible={modalVisible}
         width={892}
         onOk={handleOk}
@@ -61,8 +101,8 @@ const MainCategoriesCom = props => {
       >
         <div className={styles.checkedCategories}>
           <div>
-            {checkedCategories.map(type => (
-              <Tag key={type} color="orange">
+            {checkedLabel.map((type, index) => (
+              <Tag key={index} color="orange">
                 {type}
               </Tag>
             ))}
@@ -72,16 +112,20 @@ const MainCategoriesCom = props => {
           </Button>
         </div>
         <ul className={styles.allCategories}>
-          {mainCategories.map(category => {
-            const { value, label, children } = category
+          {newList.map(category => {
+            const { id, name, children } = category
+            const newChildren = children.map(item => ({
+              value: item.id,
+              label: item.name
+            }))
             return (
-              <li key={value} className={styles.categoriesRow}>
-                <div className={styles.labelName}>{label}</div>
+              <li key={id} className={styles.categoriesRow}>
+                <div className={styles.labelName}>{name}</div>
                 <Checkbox.Group
                   className={styles.labelValue}
-                  options={children}
+                  options={newChildren}
                   value={checkedCategories}
-                  onChange={checkedValue => onGroupChange(checkedValue, label)}
+                  onChange={checkedValue => onGroupChange(checkedValue, name)}
                 />
               </li>
             )
@@ -92,4 +136,4 @@ const MainCategoriesCom = props => {
   )
 }
 
-export default MainCategoriesCom
+export default observer(MainCategoriesCom)

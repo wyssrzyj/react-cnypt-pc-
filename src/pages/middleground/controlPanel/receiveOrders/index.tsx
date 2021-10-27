@@ -3,10 +3,11 @@ import { Tabs, Pagination } from 'antd'
 import { useHistory, useLocation } from 'react-router'
 import { urlGet } from '@/utils/tool'
 import styles from './index.module.less'
-import { cloneDeep, isEmpty } from 'lodash'
+import { cloneDeep, isArray, isEmpty } from 'lodash'
 import SearchBar from './components/searchBar'
 import ListHeader from './components/listHeader'
 import ListCard from './components/listCard'
+import { useStores } from '@/utils/mobx'
 
 const { TabPane } = Tabs
 
@@ -21,8 +22,9 @@ type OptionType = {
 
 const tabs: Array<OptionType> = [
   { label: '全部', url: '', key: 'all' },
-  { label: '新需求', url: '', key: 'confirm' },
+  { label: '新需求', url: '', key: 'request' },
   { label: '待反馈', url: '', key: 'doing' },
+  { label: '已确认', url: '', key: 'confirm' },
   { label: '被谢绝', url: '', key: 'checked' },
   { label: '已取消', url: '', key: 'complete' }
 ]
@@ -32,6 +34,9 @@ const ReceiveOrder = () => {
   const location = useLocation()
 
   const searchRef = useRef()
+
+  const { searchOrderStore } = useStores()
+  const { supplierGetOrders } = searchOrderStore
 
   const defaultPageSize = 10
   const [activeKey, setActiveKey] = useState<string>('all')
@@ -48,6 +53,14 @@ const ReceiveOrder = () => {
     const { key = 'all' } = res
     setActiveKey(key)
   }, [])
+
+  const getData = async () => {
+    setLoading(true)
+    const res = await supplierGetOrders(params)
+    setTotal(res.total || 0)
+    setDataSource(res.records || [])
+    setLoading(false)
+  }
 
   const paginationChange = (page, pageSize) => {
     history.replace(
@@ -71,10 +84,10 @@ const ReceiveOrder = () => {
     setParams(newParams)
   }
 
-  const getData = () => {}
-
   useEffect(() => {
-    console.log(params)
+    ;(async () => {
+      await getData()
+    })()
   }, [params])
 
   return (
@@ -88,12 +101,18 @@ const ReceiveOrder = () => {
       <SearchBar callback={changeParams} ref={searchRef}></SearchBar>
       <ListHeader callback={changeParams}></ListHeader>
 
-      <ListCard
-        searchBar={searchRef.current}
-        getData={getData}
-        data={{}}
-        curKey={activeKey}
-      ></ListCard>
+      {isArray(dataSource) &&
+        dataSource.map((item, idx) => {
+          return (
+            <ListCard
+              searchBar={searchRef.current}
+              getData={getData}
+              data={item}
+              curKey={activeKey}
+              key={idx}
+            ></ListCard>
+          )
+        })}
 
       {isEmpty(dataSource) && !loading ? (
         <div className={styles.emptyBox}>

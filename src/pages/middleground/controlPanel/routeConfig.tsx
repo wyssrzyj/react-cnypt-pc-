@@ -8,6 +8,10 @@ menuKeys.set('/control-panel/panel/qualification', [
 menuKeys.set('/control-panel/panel/account', ['account', 'sub1'])
 menuKeys.set('/control-panel/panel/enterprise', ['enterprise', 'sub1'])
 menuKeys.set('/control-panel/panel/issue-bill', ['issue-bill', 'sub1'])
+menuKeys.set('/control-panel/panel/enterprise-photos', [
+  'enterprise-photos',
+  'sub1'
+])
 menuKeys.set('/control-panel/panel/logs', ['account', 'sub1'])
 menuKeys.set('/control-panel/panel/qualification', ['qualification', 'sub2'])
 menuKeys.set('/control-panel/panel/certificate', ['certificate', 'sub2'])
@@ -33,6 +37,7 @@ subsMap.set('/control-panel/panel/account', ['sub1'])
 subsMap.set('/control-panel/panel/enterprise', ['sub1'])
 subsMap.set('/control-panel/panel/issue-bill', ['sub1'])
 subsMap.set('/control-panel/panel/logs', ['sub1'])
+subsMap.set('/control-panel/panel/enterprise-photos', ['sub1'])
 subsMap.set('/control-panel/panel/qualification', ['sub2'])
 subsMap.set('/control-panel/panel/certificate', ['sub2'])
 subsMap.set('/control-panel/panel/photo', ['sub3'])

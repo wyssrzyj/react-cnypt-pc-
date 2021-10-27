@@ -80,7 +80,7 @@ const SearchOrder = () => {
         <div className={styles.content}>
           <div className={styles.contentLeft}>
             {cardList.map(item => (
-              <Row key={item}>
+              <Row key={item} onClick={goDetail}>
                 <OrderCard headerConfig={{}} footerConfig={{}} />
               </Row>
             ))}

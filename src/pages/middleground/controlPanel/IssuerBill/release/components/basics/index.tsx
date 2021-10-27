@@ -49,7 +49,7 @@ function Basics() {
       required: true,
       placeholder: '请选择有效车位',
       type: 'select',
-      field: 'effectiveLocationValue',
+      field: 'effectiveLocation',
       span: 10,
       options: factoryEffectiveLocation
     },

@@ -40,13 +40,12 @@ const headerConfigs: Array<Partial<Config>> = [
   },
   {
     label: '反馈情况',
-    field: 'total_amount',
     width: 320
   },
   {
     label: '来源',
     sort: -1,
-    field: 'total_price',
+    field: 'source',
     width: 108
   },
   {

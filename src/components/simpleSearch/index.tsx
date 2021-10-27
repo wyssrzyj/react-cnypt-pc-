@@ -6,8 +6,12 @@ import styles from './index.module.less'
 const { Search } = Input
 
 const SimpleSearch = props => {
-  const { config } = props
-  const onSearch = value => console.log(value)
+  const { config, onFilterChange, field = 'name' } = props
+  const onSearch = value => {
+    onFilterChange({
+      [field]: value
+    })
+  }
   return (
     <div className={styles.simpleSearch}>
       <div className={styles.content}>

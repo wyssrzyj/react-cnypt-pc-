@@ -8,7 +8,8 @@ import styles from './index.module.less'
 const cardList = new Array(12).fill(0)
 
 const SearchOrder = () => {
-  const { factoryStore } = useStores()
+  const { factoryStore, searchOrderStore } = useStores()
+  const { getOrderList } = searchOrderStore
   const { productCategory } = factoryStore
   const [factoryParams, setFactoryParams] = useState<any>({})
 
@@ -32,13 +33,18 @@ const SearchOrder = () => {
 
   useEffect(() => {
     ;(async () => {
+      await getOrderList({ pageNum: 1, pageSize: 12 })
       await getProductCategory()
     })()
   }, [])
 
+  useEffect(() => {
+    console.log(factoryParams, 'factoryParams')
+  }, [factoryParams])
+
   return (
     <div className={styles.searchOrder}>
-      <SimpleSearch />
+      <SimpleSearch onFilterChange={onFilterChange} />
       <div className={styles.orderContent}>
         {/* 搜索 */}
         <FilterList onFilterChange={onFilterChange} />

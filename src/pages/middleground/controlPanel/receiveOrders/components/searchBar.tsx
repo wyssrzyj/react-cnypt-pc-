@@ -12,9 +12,9 @@ import moment from 'moment'
 import { filterNull } from '@/utils/axios/filterNull'
 
 const initParams = {
-  orderName: null,
-  commitStartTime: null,
-  commitEndTime: null
+  name: null,
+  releaseTimeStart: null,
+  releaseTimeEnd: null
 }
 
 interface Props {
@@ -72,7 +72,7 @@ const SearchBar = forwardRef(({ callback }: Props, ref) => {
       <Col span={10} className={styles.searchBarItem}>
         <span className={styles.label}>订单标题</span>
         <Input
-          onChange={event => valuesChange(event.target.value, 'orderName')}
+          onChange={event => valuesChange(event.target.value, 'name')}
           value={params.orderName}
           placeholder={'请输入订单标题'}
           className={styles.input}
@@ -85,11 +85,11 @@ const SearchBar = forwardRef(({ callback }: Props, ref) => {
             onChange={value =>
               valuesChange(
                 value ? moment(value).valueOf() : null,
-                'commitStartTime'
+                'releaseTimeStart'
               )
             }
             value={
-              params.commitStartTime ? moment(params.commitStartTime) : null
+              params.releaseTimeStart ? moment(params.releaseTimeStart) : null
             }
             placeholder={'起始时间'}
           ></DatePicker>
@@ -98,10 +98,10 @@ const SearchBar = forwardRef(({ callback }: Props, ref) => {
             onChange={value =>
               valuesChange(
                 value ? moment(value).valueOf() : null,
-                'commitEndTime'
+                'releaseTimeEnd'
               )
             }
-            value={params.commitEndTime ? moment(params.commitEndTime) : null}
+            value={params.releaseTimeEnd ? moment(params.releaseTimeEnd) : null}
             placeholder={'结束时间'}
           ></DatePicker>
         </div>

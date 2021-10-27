@@ -11,6 +11,7 @@ import ErpModuleStore, { erpModuleStore } from './erpModule'
 import OrderStore, { orderStore } from './middleground/order'
 import DepartmentStore, { departmentStore } from './department'
 import DemandListStore, { demandListStore } from './demandList'
+import SearchOrderStore, { searchOrderStore } from './searchOrder'
 
 export interface Stores {
   homeStore: HomeStore
@@ -26,6 +27,7 @@ export interface Stores {
   orderStore: OrderStore
   departmentStore: DepartmentStore
   demandListStore: DemandListStore
+  searchOrderStore: SearchOrderStore
 }
 
 export const stores = {
@@ -41,5 +43,6 @@ export const stores = {
   monitorPageStore,
   orderStore,
   departmentStore,
-  demandListStore
+  demandListStore,
+  searchOrderStore
 }

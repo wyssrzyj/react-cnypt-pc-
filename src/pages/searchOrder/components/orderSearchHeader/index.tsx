@@ -7,16 +7,19 @@ import styles from './index.module.less'
 interface Config {
   label: string
   sort: number
+  field: string
 }
 
 const headerConfigs: Array<Partial<Config>> = [
   {
     label: '最新发布',
+    field: 'newPublish',
     sort: -1
   },
   {
     label: '有效日期',
-    sort: -1
+    sort: -1,
+    field: 'effectiveDate'
   }
 ]
 
@@ -39,6 +42,7 @@ const OrderSearchHeader = () => {
     target.sort = target.sort > 0 ? -1 : target.sort === 0 ? 1 : 0
     setConfigs(newConfigs)
   }
+
   return (
     <div className={styles.orderSearchHeader}>
       <div>

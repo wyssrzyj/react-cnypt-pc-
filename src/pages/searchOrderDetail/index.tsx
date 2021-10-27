@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SimpleSearch } from '@/components'
 import { Advertising, OverviewCard, InfoCard, OtherCard } from './components'
 import styles from './index.module.less'
@@ -11,9 +11,17 @@ import SwiperCore, {
   Autoplay,
   EffectFade
 } from 'swiper'
+import { useStores } from '@/utils/mobx'
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectFade])
 
 const SearchOrderDetail = () => {
+  const { searchOrderStore } = useStores()
+  const { getOrderDetail } = searchOrderStore
+
+  useEffect(() => {
+    getOrderDetail('1450753236783980546')
+  }, [])
+
   return (
     <div className={styles.searchOrderDetail}>
       {/* 搜索栏 */}

@@ -6,7 +6,13 @@ import { getTrees } from '../../method'
 import styles from './index.module.less'
 
 function index({ initialValues, enterpriseType }) {
-  const { name, effectiveLocation, otherRequirement } = initialValues
+  const {
+    isEnterpriseInfoPublic,
+    name,
+    effectiveLocation,
+    otherRequirement,
+    enterpriseName
+  } = initialValues
 
   const { commonStore } = useStores()
   const { allArea, dictionary } = commonStore
@@ -44,20 +50,9 @@ function index({ initialValues, enterpriseType }) {
       <Row>
         <Col span={12}>
           {/* 0 加工厂 1 发单商  发单商可以看到所有的信息，加工厂需要根据是否公开才能看 */}
-          {console.log('当前的角色', enterpriseType)}
-          {+enterpriseType === 1 ? (
-            <div className={styles.title}>
-              订单标题： <span className={styles.contents}>{name}</span>
-            </div>
-          ) : (
-            <div>
-              {initialValues.isEnterpriseInfoPublic === 1 ? (
-                <div className={styles.title}>
-                  订单标题： <span className={styles.contents}>{name}</span>
-                </div>
-              ) : null}
-            </div>
-          )}
+          <div className={styles.title}>
+            订单标题： <span className={styles.contents}>{name}</span>
+          </div>
         </Col>
         <Col span={12}>
           <div className={styles.title}>
@@ -67,6 +62,28 @@ function index({ initialValues, enterpriseType }) {
         </Col>
       </Row>
       <Row>
+        {+enterpriseType === 1 ? (
+          <Col span={12}>
+            <div className={styles.title}>
+              企业名称:
+              <span className={styles.content}>
+                {enterpriseName ? enterpriseName : '暂无'}
+              </span>
+            </div>
+          </Col>
+        ) : (
+          <Col span={12}>
+            <div className={styles.title}>
+              企业名称:
+              {isEnterpriseInfoPublic === 1 ? (
+                <span className={styles.content}>{enterpriseName}</span>
+              ) : (
+                <span className={styles.content}>暂不公开</span>
+              )}
+            </div>
+          </Col>
+        )}
+
         <Col span={12}>
           <Tooltip placement="top" title={treeData.join('、')}>
             <div className={styles.hidden}>
@@ -77,11 +94,12 @@ function index({ initialValues, enterpriseType }) {
             </div>
           </Tooltip>
         </Col>
+      </Row>
+      <Row>
         <Col span={12}>
           <div className={styles.title}>
             其他要求:
             <span className={styles.content}>
-              {' '}
               {otherRequirement ? otherRequirement : '暂无'}
             </span>
           </div>

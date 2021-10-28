@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { TreeSelect, Form, Col, Row } from 'antd'
-import { toJS, useStores } from '@/utils/mobx'
+import { observer, toJS, useStores } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 
 // import Inputs from './inputs'
@@ -57,7 +57,7 @@ const Category = () => {
       const res = cloneDeep(productCategoryList)
       setTreeData(dealTypeData(res))
     })()
-  }, [])
+  }, [productCategoryList])
 
   const onChange = value => {
     //获取所有的父节点
@@ -127,4 +127,4 @@ const Category = () => {
   )
 }
 
-export default Category
+export default observer(Category)

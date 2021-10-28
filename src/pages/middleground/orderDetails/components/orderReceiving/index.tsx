@@ -26,7 +26,6 @@ function index({ stated }) {
       span: 12
     }
   }
-  console.log(id)
 
   const [initialValues, setInitialValues] = useState<any>({})
 

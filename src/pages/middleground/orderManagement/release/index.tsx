@@ -116,11 +116,10 @@ const DemandSheet = () => {
 
     const res = await ewDemandDoc(v)
     if (res.code === 200) {
-      push({ pathname: '/control-panel/demand-list' })
+      push({ pathname: '/control-panel/issuerBill/demand-list' })
     }
     console.log(v)
   }
-  console.log(initialValues)
 
   return (
     <div className={styles.demand}>

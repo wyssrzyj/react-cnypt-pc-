@@ -13,7 +13,6 @@ function index({ initialValues }) {
     goodsRemark,
     stylePicture
   } = initialValues
-  console.log(initialValues)
 
   const { factoryStore, commonStore } = useStores()
   const { productCategoryList } = factoryStore
@@ -44,8 +43,6 @@ function index({ initialValues }) {
     }
     //面料
     if (plusMaterialType) {
-      console.log(plusMaterialType)
-      console.log(initialValues.plusMaterialType)
       let res = plusMaterialType.filter(
         item => item.value === initialValues.plusMaterialType
       )[0]

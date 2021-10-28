@@ -21,7 +21,6 @@ const index = () => {
   const { allArea } = commonStore
   useEffect(() => {
     setTreeData(toJS(allArea))
-    console.log(toJS(allArea))
   }, [allArea])
 
   return (

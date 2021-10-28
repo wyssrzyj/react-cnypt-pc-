@@ -9,9 +9,9 @@ import Terms from './components/terms'
 import Address from './components/address'
 import { useStores, observer } from '@/utils/mobx'
 import { useHistory } from 'react-router-dom'
-// import { timestampToTime } from './components/time'//
+import { timestampToTime } from './components/time' //
 import { useLocation } from 'react-router-dom'
-// import moment from 'moment' //引入moment
+import moment from 'moment' //引入moment
 
 const DemandSheet = () => {
   const location = useLocation()
@@ -29,6 +29,15 @@ const DemandSheet = () => {
     isContactPublic: 1
   })
   const [stated, setStated] = useState<any>(state) //url 数据
+  const { factoryStore } = useStores()
+
+  const { productCategory } = factoryStore
+  useEffect(() => {
+    api()
+  }, [])
+  let api = async () => {
+    await productCategory()
+  }
 
   useEffect(() => {
     setStated(state)
@@ -56,9 +65,13 @@ const DemandSheet = () => {
       } else {
         data.regionalIdList = ['0'] //全国
       }
-      // data.processingType = moment(timestampToTime(data.inquiryEffectiveDate))//时间的回显
-      // data.unitPrice = moment(timestampToTime(data.deliveryDate))
+      if (data.location[0] === 0) {
+        data.location = null
+      }
+      data.processingType = moment(timestampToTime(data.inquiryEffectiveDate)) //时间的回显
+      data.unitPrice = moment(timestampToTime(data.deliveryDate))
     }
+    console.log(data)
 
     setInitialValues(data)
   }
@@ -116,11 +129,10 @@ const DemandSheet = () => {
 
     const res = await ewDemandDoc(v)
     if (res.code === 200) {
-      push({ pathname: '/control-panel/demand-list' })
+      push({ pathname: '/control-panel/issuerBill/demand-list' })
     }
     console.log(v)
   }
-  console.log(initialValues)
 
   return (
     <div className={styles.demand}>

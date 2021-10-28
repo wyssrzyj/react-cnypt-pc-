@@ -4,6 +4,8 @@ import { Route, Switch } from 'react-router'
 
 import { Menu } from 'antd'
 import { Link } from 'react-router-dom'
+import { observer } from '@/utils/mobx'
+
 // import { getCurrentUser, getUserInfo } from '@/utils/tool'
 
 const DemandList = React.lazy(() => import('./demandList'))
@@ -18,6 +20,8 @@ function index() {
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
 
   const handleMenu = ({ keyPath }) => {
+    console.log(keyPath)
+
     setCurrentMenu(keyPath)
   }
   const onOpenChange = keys => {
@@ -88,4 +92,4 @@ function index() {
   )
 }
 
-export default index
+export default observer(index)

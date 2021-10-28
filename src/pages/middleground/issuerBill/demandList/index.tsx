@@ -7,7 +7,7 @@ import MultipleChoice from './components/multipleChoice'
 import { Pagination } from 'antd'
 import { cloneDeep } from 'lodash'
 import { useStores, toJS, observer } from '@/utils/mobx'
-import { timestampToTime, remainingTime } from './components/time'
+import { timestampToTime, remainingTime, TpoTime } from './components/time'
 import { getTrees } from './method'
 import { useHistory } from 'react-router-dom'
 import { useLocation } from 'react-router'
@@ -79,7 +79,7 @@ const DemandList = () => {
       res.records.forEach(item => {
         item.checked = false
         item.processing = handle(item.processTypeList)
-        item.time = timestampToTime(item.inquiryEffectiveDate)
+        item.time = TpoTime(item.inquiryEffectiveDate)
         item.releaseTime = timestampToTime(item.releaseTime)
         item.categoryIdList = getTrees(
           item.categoryIdList,
@@ -88,10 +88,14 @@ const DemandList = () => {
           'name'
         )
         item.surplus = remainingTime(item.inquiryEffectiveDate)
+        if (item.surplus.day < 0) {
+          item.status = -3
+        }
       })
+      console.log(res.records)
+
       setNoOrders(res.records.length)
       setReallyLists(res.records)
-      console.log(res.records)
     }
   }
   // 路由数据
@@ -163,7 +167,7 @@ const DemandList = () => {
   }
   //再来一单
   const oneMoreOrder = async e => {
-    push({ pathname: '/control-panel/panel/demand-sheet', state: { id: e } })
+    push({ pathname: '/control-panel/demand-sheet', search: 'id=' + e })
   }
   // 查看订单信息
   const DemandOrderDetail = e => {

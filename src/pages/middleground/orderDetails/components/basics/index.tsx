@@ -80,7 +80,10 @@ function index({ initialValues, enterpriseType }) {
         <Col span={12}>
           <div className={styles.title}>
             其他要求:
-            <span className={styles.content}> {otherRequirement}</span>
+            <span className={styles.content}>
+              {' '}
+              {otherRequirement ? otherRequirement : '暂无'}
+            </span>
           </div>
         </Col>
       </Row>

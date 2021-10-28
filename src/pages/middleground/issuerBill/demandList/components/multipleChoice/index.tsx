@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Row, Col, Button, Tooltip, Modal } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components' //路径
-import { useHistory } from 'react-router-dom'
 
 const MultipleChoice = ({
   data,
@@ -12,8 +11,6 @@ const MultipleChoice = ({
   oneMoreOrder,
   DemandOrderDetail
 }) => {
-  const { push } = useHistory()
-
   const { id, stickType } = data
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
@@ -65,12 +62,6 @@ const MultipleChoice = ({
   }
   const onCancel = () => {
     setIsModalVisible(false)
-  }
-  const modify = e => {
-    push({
-      pathname: '/control-panel/panel/demand-sheet',
-      state: { id: e, modify: 'modify' }
-    })
   }
   return (
     <div className={styles.bos}>
@@ -208,25 +199,30 @@ const MultipleChoice = ({
           <Col className={styles.state} span={6}>
             {/* -1 草稿箱 1 提交需求单 -2审核失败 -3已结束 */}
             {/* 生效中 */}
-            {+data.status === 1 ? (
+            {data.status === 1 ? (
               <div>
                 <p className={styles.effect}>生效中</p>
-                <p className={styles.validity}>
-                  有效期：<span> {data.time}</span>
-                </p>
-                <p>
-                  剩余{data.surplus.day}天{data.surplus.hour}小时
-                </p>
+                <div>
+                  <p className={styles.validity}>
+                    有效期：
+                    <span className={styles.validities}> {data.time}</span>
+                  </p>
+                  <p>
+                    剩余{data.surplus.day}天{data.surplus.hour}小时
+                  </p>
+                </div>
               </div>
             ) : null}
             {/* 已结束 */}
-            {console.log(data.status)}
             {data.status === -3 ? (
               <div>
                 <p className={styles.already}>已结束</p>
-                <p className={styles.validity}>有效期：{data.time}</p>
+                <p className={styles.validity}>
+                  有效期：
+                  <span className={styles.validities}>{data.time}</span>
+                </p>
                 {data.surplus.day < 0 ? (
-                  <p>
+                  <p className={styles.overtime}>
                     已经超时
                     <span className={styles.tina}>
                       {Math.abs(data.surplus.day)}
@@ -237,7 +233,7 @@ const MultipleChoice = ({
               </div>
             ) : null}
             {/* 审核失败 */}
-            {+data.status === -2 ? (
+            {data.status === -2 ? (
               <div>
                 <p className={styles.end}>审核失败</p>
                 <p
@@ -251,7 +247,7 @@ const MultipleChoice = ({
               </div>
             ) : null}
             {/* 草稿 */}
-            {+data.status === -1 ? (
+            {data.status === -1 ? (
               <div>
                 <p className={styles.draft}>草稿</p>
               </div>
@@ -265,36 +261,11 @@ const MultipleChoice = ({
                 </Button>
               </div>
             ) : (
-              <div>
-                {data.status === -1 ? (
-                  <div className={styles.btn}>
-                    <Button
-                      ghost
-                      type="primary"
-                      className={styles.mov}
-                      onClick={showModal}
-                    >
-                      删除记录
-                    </Button>
-                    <Button
-                      type="primary"
-                      className={styles.mov}
-                      onClick={() => {
-                        modify(id)
-                      }}
-                    >
-                      修改草稿
-                    </Button>
-                    {/* </Popconfirm> */}
-                  </div>
-                ) : (
-                  <div className={styles.btn}>
-                    <Button className={styles.mov} onClick={showModal}>
-                      删除记录
-                    </Button>
-                    {/* </Popconfirm> */}
-                  </div>
-                )}
+              <div className={styles.btn}>
+                <Button className={styles.mov} onClick={showModal}>
+                  删除记录
+                </Button>
+                {/* </Popconfirm> */}
               </div>
             )}
           </Col>

@@ -1,0 +1,225 @@
+@import '@/css/common.less';
+
+.controlPanel {
+  width: 100%;
+  padding-top: 20px;
+}
+
+.controlPanelContainer {
+  display: flex;
+  width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.controlHeader {
+  background: #ffffff;
+}
+.report {
+  color: black;
+}
+
+.controlPanelLeft {
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  height: fit-content;
+  overflow: auto;
+  background-color: #ffffff;
+
+  :global {
+    .ant-menu-item:after {
+      border-right: none !important; //杠杠
+    }
+    .ant-menu-item-selected {
+      background: transparent !important; //背景颜色
+    }
+  }
+}
+
+.controlPanelLeft::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.controlPanelLeft::-webkit-scrollbar-track {
+  background: rgb(239, 239, 239);
+  border-radius: 2px;
+}
+
+.controlPanelLeft::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 10px;
+}
+
+.controlPanelLeft::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+
+.slideBar {
+  width: 100px;
+  height: 100%;
+  padding-top: 60px;
+  color: #ffffff;
+  text-align: center;
+  background: #3b80ff;
+}
+
+.logoIcon {
+  margin-bottom: 200px;
+  font-size: 36px;
+}
+
+.slideIconBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+}
+
+.slideIcon {
+  font-size: 30px;
+}
+
+.activeIconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 48px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.activeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 48px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+  }
+}
+
+.controlPanelRight {
+  flex: 1;
+  width: auto;
+  margin-left: 20px;
+}
+
+.contentTitle {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 0;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.contentLeft {
+  width: 125px;
+  height: 40px;
+  padding-left: 8px;
+  line-height: 40px;
+  text-align: left;
+  border-radius: 8px;
+  // background: #ffffff;
+}
+
+.headerIcon {
+  margin-right: 24px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.controlPanelLeft {
+  padding-bottom: 20px;
+  font-size: 16px;
+
+  .menuIcon {
+    margin-right: 5px;
+    font-size: 18px !important;
+  }
+}
+.menuIconxwxa {
+  font-size: 20px !important;
+}
+.zhanghaoguanli {
+  font-size: 50px !important;
+}
+.del {
+  margin-right: 3px;
+  font-size: 20px !important;
+}
+.enterprise {
+  font-size: 15px;
+}
+
+.management {
+  margin-bottom: 8px;
+  margin-bottom: 5px;
+  padding-top: 20px;
+  padding-left: 21px;
+  color: #333333;
+  // font-weight: bold;
+  font-size: 15px;
+}
+.managementCenter {
+  width: 103px;
+  margin-left: 24px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  color: #333333;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #66666642;
+}
+.items {
+  margin: 0 !important;
+  padding: 10px 14px !important;
+  color: #666666;
+  font-weight: 500;
+  font-size: 14px;
+  border-image: linear-gradient(
+      to right,
+      transparent 2%,
+      #dadada,
+      transparent 98%
+    )
+    1 10;
+}
+.minute {
+  margin-left: 19px;
+  font-size: 14px;
+}
+.minutest {
+  height: 30px;
+  margin-left: 27px;
+  color: #666666;
+  font-size: 14px;
+}
+.subItem {
+  color: #333333;
+  font-weight: 500;
+  font-size: 14px;
+}
+.monitorPage {
+  margin-left: 43px;
+}
+
+.menuTitle {
+  display: flex;
+  align-items: center;
+  padding-left: 2px;
+  color: #333333;
+  font-weight: bold;
+  font-size: 14px;
+}

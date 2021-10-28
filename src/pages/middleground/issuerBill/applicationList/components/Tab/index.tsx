@@ -36,7 +36,11 @@ const Tab = ({ routing }) => {
     <div className={styles.table}>
       <Tabs size={'large'} activeKey={activeKey} onChange={callback}>
         {tabs.map(item => (
-          <TabPane tab={item.label} key={item.key}></TabPane>
+          <TabPane
+            className={styles.taipans}
+            tab={item.label}
+            key={item.key}
+          ></TabPane>
         ))}
       </Tabs>
     </div>

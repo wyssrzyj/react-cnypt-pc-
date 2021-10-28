@@ -78,7 +78,10 @@ function index({ initialValues }) {
         </Col>
         <Col span={12}>
           <div className={styles.title}>
-            目标单价: <span className={styles.content}>{goodsPrice}</span>
+            目标单价:{' '}
+            <span className={styles.content}>
+              {goodsPrice ? goodsPrice : '暂无'}
+            </span>
           </div>
         </Col>
       </Row>
@@ -91,7 +94,10 @@ function index({ initialValues }) {
         </Col>
         <Col span={12}>
           <div className={styles.title}>
-            备注说明: <span className={styles.content}>{goodsRemark}</span>
+            备注说明:{' '}
+            <span className={styles.content}>
+              {goodsRemark ? goodsRemark : '暂无'}
+            </span>
           </div>
         </Col>
       </Row>

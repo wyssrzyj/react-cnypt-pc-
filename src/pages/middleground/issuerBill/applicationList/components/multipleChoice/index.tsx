@@ -149,20 +149,20 @@ const MultipleChoice = ({
             <div>
               <img
                 className={styles.img}
-                src={data.pictureUrl ? data.img : Simg}
+                src={data.img ? data.img : Simg}
                 alt=""
               />
             </div>
 
             <div className={styles.imgRight}>
               <p className={styles.name}>
-                <span className={styles.factoryName}>
-                  {data.enterpriseName}
-                </span>
-                <span className={styles.diqu_bai}>
+                <div className={styles.factoryName}>
+                  <span>{data.enterpriseName}</span>
+                </div>
+                <div className={styles.diqu_bai}>
                   <Icon type="jack-diqu_bai" className={styles.previous} />
                   {data.address ? data.address : '暂无'}
-                </span>
+                </div>
               </p>
               <p>人数：{data.staffNumber}人</p>
               <p>联系方式: {data.contactsMobile}</p>
@@ -189,13 +189,13 @@ const MultipleChoice = ({
           </Col>
           <Col span={9} className={styles.feedback}>
             <p className={styles.quotationInformation}>
-              <span className={styles.information}>•</span> 报价信息:
+              <span className={styles.information}>•</span> 报价信息：
               <span>
                 {data.receiveGoodsNum ? data.receiveGoodsNum : '暂无'}
               </span>
             </p>
             <p>
-              <span className={styles.information}>•</span> 付款方式:
+              <span className={styles.information}>•</span> 付款方式：
               <span>{data.payDetails ? data.payDetails : '暂无'}</span>
             </p>
             <p>

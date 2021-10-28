@@ -31,7 +31,10 @@ function index({ initialValues }) {
           <div className={styles.title}>
             收货地址:
             <span className={styles.content}>
-              {treeData.join('-')}-{address}
+              {console.log(treeData)}
+              {treeData.length == 0
+                ? `${treeData.join('-')}-${address}`
+                : '暂无'}
             </span>
           </div>
         </Col>

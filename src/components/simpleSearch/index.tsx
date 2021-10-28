@@ -8,6 +8,9 @@ const { Search } = Input
 
 const SimpleSearch = props => {
   const { config, onFilterChange, field = 'name' } = props
+  const currentImg =
+    config.imgSrc ||
+    'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/rc-upload-1635389590602-4logo_moren%402x.png'
 
   const { searchOrderStore } = useStores()
   const { updateOrderName, orderName } = searchOrderStore
@@ -28,9 +31,7 @@ const SimpleSearch = props => {
           {!isEmpty(config) && (
             <>
               <Divider className={styles.verticalLine} type="vertical" />
-              {config.imgSrc && (
-                <img className={styles.image} src={config.imgSrc} />
-              )}
+              <img className={styles.image} src={currentImg} />
               <span className={styles.title}>{config.title}</span>
             </>
           )}

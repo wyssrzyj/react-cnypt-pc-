@@ -77,8 +77,12 @@ const SearchOrder = () => {
       return {
         id: record.id,
         headerConfig: {
-          title: record.enterpriseName,
-          address: record.enterpriseAreaName
+          title: record.isEnterpriseInfoPublic
+            ? record.enterpriseName
+            : '某某有限公司',
+          address: record.isEnterpriseInfoPublic
+            ? record.enterpriseAreaName
+            : ''
         },
         contentConfig: {
           name: record.name,

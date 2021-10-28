@@ -40,7 +40,6 @@ const ListCard = props => {
   const { changeOrderStick, factoryDelOrder } = searchOrderStore
 
   const { data, getData } = props
-  console.log('🚀 ~ file: listCard.tsx ~ line 43 ~ data', data)
   const { stickType = 0 } = data
   const diffDay = dateDiff(data.inquiryEffectiveDate)
 

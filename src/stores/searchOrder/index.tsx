@@ -153,10 +153,10 @@ export default class SearchOrderStore {
   @action getFactoryPhotos = async params => {
     try {
       const res: ResponseProps = await axios.get(
-        `/api/factory/info/get-factory-images`,
+        `/api/factory/info/get-factory-images-info`,
         params
       )
-      return res
+      return res.data
     } catch (e) {
       console.log(e)
     }

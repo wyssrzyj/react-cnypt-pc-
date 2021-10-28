@@ -102,10 +102,18 @@ const SearchOrderDetail = props => {
             : '--',
           span: 12
         },
-        { label: '联系人', value: data.contactPerson || '--', span: 12 },
+        {
+          label: '联系人',
+          value:
+            +data.isContactPublic === 1 ? data.contactPerson : '***' || '--',
+          span: 12
+        },
         {
           label: '联系人手机号',
-          value: data.contactPersonMobile || '--',
+          value:
+            +data.isContactPublic === 1
+              ? data.contactPersonMobile
+              : '*******' || '--',
           span: 12
         }
       ]
@@ -183,7 +191,9 @@ const SearchOrderDetail = props => {
       {/* 搜索栏 */}
       <SimpleSearch
         config={{
-          title: dataSource.enterpriseName,
+          title: dataSource.isEnterpriseInfoPublic
+            ? dataSource.enterpriseName
+            : '某某有限公司',
           imgSrc: dataSource.enterpriseUrl
         }}
         onFilterChange={onFilterChange}

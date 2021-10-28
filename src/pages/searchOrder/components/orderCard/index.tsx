@@ -29,10 +29,12 @@ const OrderCard = props => {
       {!isNil(headerConfig) && (
         <header className={styles.cardHeader}>
           <span>{headerConfig.title}</span>
-          <span>
-            <Icon type="jack-weizhi" className={styles.headerIcon} />
-            {headerConfig.address}
-          </span>
+          {headerConfig.address && (
+            <span>
+              <Icon type="jack-weizhi" className={styles.headerIcon} />
+              {headerConfig.address}
+            </span>
+          )}
         </header>
       )}
 

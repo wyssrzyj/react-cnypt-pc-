@@ -158,6 +158,10 @@ const OtherCard = props => {
     setCurKey(activeIndex)
   }
 
+  const goDetail = id => {
+    window.open(`/order-search/${id}`)
+  }
+
   useEffect(() => {
     ;(async () => {
       await getProductCategory()
@@ -194,6 +198,7 @@ const OtherCard = props => {
                     style={{ width: '33%' }}
                     className={'swiper-slide'}
                     key={idx}
+                    onClick={() => goDetail(item.id)}
                   >
                     <OrderCard {...item} />
                   </div>

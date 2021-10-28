@@ -332,7 +332,6 @@ export const findTreeTarget = (values, data, key = 'id') => {
     }
     if (isArray(item.children) && item.children.length) {
       const res = findTreeTarget(values, item.children, key) //
-      console.log('🚀 ~~~~~~~~~~~~~~~~~~', res)
       if (!isEmpty(res)) {
         return res
       }
@@ -374,10 +373,14 @@ export const matchValue = (dataSource, target) => {
 }
 
 export const matchGoodValue = (dataSource, target) => {
-  const current = dataSource
-    .filter(item => target.find(o => o === item.id))
-    .map(value => value.name)
-    .join('、')
+  const current = target.reduce((prev, item, idx) => {
+    const target = findTreeTarget([item], dataSource) || {}
+    return (
+      prev +
+      (!isEmpty(target) ? target.name : '') +
+      (idx === target.length - 1 || !target.name ? '' : '、')
+    )
+  }, '')
   return current || '--'
 }
 

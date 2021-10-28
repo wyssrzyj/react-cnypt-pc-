@@ -102,10 +102,16 @@ const SearchOrderDetail = props => {
             : '--',
           span: 12
         },
-        { label: '联系人', value: data.contactPerson || '--', span: 12 },
+        {
+          label: '联系人',
+          value: data.isContactPublic ? data.contactPerson : '***' || '--',
+          span: 12
+        },
         {
           label: '联系人手机号',
-          value: data.contactPersonMobile || '--',
+          value: data.isContactPublic
+            ? data.contactPersonMobile
+            : '*******' || '--',
           span: 12
         }
       ]

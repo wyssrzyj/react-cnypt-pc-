@@ -14,16 +14,10 @@ const LoginLogs = React.lazy(() => import('./loginLogs'))
 const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
 const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
 const MonitorPage = React.lazy(() => import('../monitorPage'))
-const DemandList = React.lazy(
-  () => import('../controlPanel/issuerBill/demandList')
-)
+const DemandList = React.lazy(() => import('./issuerBill/demandList'))
 
-const DemandSheet = React.lazy(
-  () => import('../controlPanel/issuerBill/release')
-)
-const applicationList = React.lazy(
-  () => import('../controlPanel/issuerBill/applicationList')
-)
+const DemandSheet = React.lazy(() => import('./issuerBill/release'))
+const applicationList = React.lazy(() => import('./issuerBill/applicationList'))
 
 const VideoCenter = React.lazy(() => import('../videoCenter/factoryVideo'))
 const IssuerEnterpriseInfo = React.lazy(

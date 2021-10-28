@@ -11,7 +11,7 @@ const BtnIcon = <Icon type={'jack-jian1'} className={styles.btnIcon}></Icon>
 const Memorandum = () => {
   const [visible, setVisible] = useState(false)
 
-  const getListData = value => {
+  const getlistData = value => {
     let listData
     switch (value.date()) {
       case 8:
@@ -43,7 +43,7 @@ const Memorandum = () => {
   }
 
   const dateCellRender = value => {
-    const listData = getListData(value)
+    const listData = getlistData(value)
     // const listData = []
     if (listData.length) {
       const target = listData[0]

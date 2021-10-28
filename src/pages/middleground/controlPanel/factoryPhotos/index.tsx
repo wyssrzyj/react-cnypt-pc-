@@ -32,6 +32,8 @@ const FactoryPhotos = () => {
           factoryId: currentUserInfo.factoryId
         })
         delete data.factoryId
+        console.log('🚀 ~ file: index.tsx ~ line 34 ~ ; ~ data', data)
+
         setParams(data)
       }
       if (+currentUserInfo.enterpriseType === 1) {
@@ -63,10 +65,12 @@ const FactoryPhotos = () => {
       'clothInspectingMachineImage',
       'flatSeamingMachineImage'
     ]
-    if (arr.includes(key) && isArray(value) && value.length > 0) {
-      nErrors.equipment = false
-    } else {
-      nErrors.equipment = true
+    if (arr.includes(key)) {
+      if (isArray(value) && value.length > 0) {
+        nErrors.equipment = false
+      } else {
+        nErrors.equipment = true
+      }
     }
 
     setErrors(nErrors)
@@ -118,7 +122,7 @@ const FactoryPhotos = () => {
             <CusUpload
               tips={'只能上传jpg/png格式文件，最多上传3张'}
               maxCount={3}
-              fileList={params['publicityImagesList']}
+              fileList={params['publicityImagesList'] || []}
               valuesChange={value => valuesChange('publicityImagesList', value)}
             ></CusUpload>
           </div>
@@ -131,7 +135,7 @@ const FactoryPhotos = () => {
                 tips={'只能上传jpg/png格式文件，至少上传1张，最多10张'}
                 maxCount={10}
                 minCount={1}
-                fileList={params['productImagesList']}
+                fileList={params['productImagesList'] || []}
                 valuesChange={value => valuesChange('productImagesList', value)}
               ></CusUpload>
               {errors.productImagesList && (
@@ -148,7 +152,7 @@ const FactoryPhotos = () => {
             <CusUpload
               tips={'只能上传jpg/png格式文件，最多上传3张'}
               maxCount={3}
-              fileList={params['outsizeImageList']}
+              fileList={params['outsizeImageList'] || []}
               valuesChange={value => valuesChange('outsizeImageList', value)}
             ></CusUpload>
           </div>
@@ -158,7 +162,7 @@ const FactoryPhotos = () => {
             <CusUpload
               tips={'只能上传jpg/png格式文件，最多上传3张'}
               maxCount={3}
-              fileList={params['workshopImageList']}
+              fileList={params['workshopImageList'] || []}
               valuesChange={value => valuesChange('workshopImageList', value)}
             ></CusUpload>
           </div>
@@ -171,7 +175,7 @@ const FactoryPhotos = () => {
               <div className={styles.photos}>
                 <CusUpload
                   maxCount={1}
-                  fileList={params['sewingMachineImage']}
+                  fileList={params['sewingMachineImage'] || []}
                   valuesChange={value =>
                     valuesChange('sewingMachineImage', value)
                   }
@@ -179,7 +183,7 @@ const FactoryPhotos = () => {
                 ></CusUpload>
                 <CusUpload
                   maxCount={1}
-                  fileList={params['overlockMachineImage']}
+                  fileList={params['overlockMachineImage'] || []}
                   valuesChange={value =>
                     valuesChange('overlockMachineImage', value)
                   }
@@ -187,7 +191,7 @@ const FactoryPhotos = () => {
                 ></CusUpload>
                 <CusUpload
                   maxCount={1}
-                  fileList={params['flatSeamingMachineImage']}
+                  fileList={params['flatSeamingMachineImage'] || []}
                   valuesChange={value =>
                     valuesChange('flatSeamingMachineImage', value)
                   }
@@ -195,25 +199,25 @@ const FactoryPhotos = () => {
                 ></CusUpload>
                 <CusUpload
                   maxCount={1}
-                  fileList={params['cuttingBedImage']}
+                  fileList={params['cuttingBedImage'] || []}
                   valuesChange={value => valuesChange('cuttingBedImage', value)}
                   btnText={'裁床'}
                 ></CusUpload>
                 <CusUpload
                   maxCount={1}
-                  fileList={params['spreaderImage']}
+                  fileList={params['spreaderImage'] || []}
                   valuesChange={value => valuesChange('spreaderImage', value)}
                   btnText={'铺布机'}
                 ></CusUpload>
                 <CusUpload
                   maxCount={1}
-                  fileList={params['hangImage']}
+                  fileList={params['hangImage'] || []}
                   valuesChange={value => valuesChange('hangImage', value)}
                   btnText={'吊挂'}
                 ></CusUpload>
                 <CusUpload
                   maxCount={1}
-                  fileList={params['clothInspectingMachineImage']}
+                  fileList={params['clothInspectingMachineImage'] || []}
                   valuesChange={value =>
                     valuesChange('clothInspectingMachineImage', value)
                   }

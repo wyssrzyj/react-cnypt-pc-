@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col } from 'antd'
 import { isEmpty } from 'lodash'
-import { Title } from '@/components'
+import { Title, autoAddTooltip } from '@/components'
 import styles from './index.module.less'
 
 const InfoCard = props => {
@@ -34,7 +34,14 @@ const InfoCard = props => {
         {orderList.map((item, index) => (
           <Col key={index} span={item.span} className={styles.infoCol}>
             <span className={styles.label}>{item.label}</span>
-            <span className={styles.value}>{item.value}</span>
+            {autoAddTooltip(
+              ref => (
+                <span ref={ref} className={styles.tooltipBpx}>
+                  {item.value}
+                </span>
+              ),
+              { title: item.value }
+            )}
           </Col>
         ))}
       </Row>

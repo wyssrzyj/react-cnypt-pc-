@@ -51,6 +51,7 @@ function index({ stated }) {
           const submitRes = await submitRequisition({
             ...values,
             purchaserInquiryId: id,
+            supplierInquiryId: supplierInquiryId,
             status: 2
           })
           if (submitRes.code === 200) {
@@ -63,7 +64,7 @@ function index({ stated }) {
         const values = await getFieldsValue()
         const res = await rejectSubmission({
           ...values,
-          supplierId: supplierInquiryId,
+          supplierInquiryId: supplierInquiryId,
           status: -1
         })
         push('/control-panel/orderManagement/receiveOrder?key=all')

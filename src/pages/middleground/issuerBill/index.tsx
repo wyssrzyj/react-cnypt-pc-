@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styles from './index.module.less'
 import { Route, Switch } from 'react-router'
 
 import { Menu } from 'antd'
 import { Link } from 'react-router-dom'
 import { observer } from '@/utils/mobx'
-import { useLocation, useHistory } from 'react-router-dom'
+// import { useLocation, useHistory } from 'react-router-dom'
 
 // import { getCurrentUser, getUserInfo } from '@/utils/tool'
 
@@ -14,23 +14,25 @@ const DemandSheet = React.lazy(() => import('./release'))
 const applicationList = React.lazy(() => import('./applicationList'))
 
 function index() {
-  const location = useLocation()
-  const { state } = location
-  const { push } = useHistory()
-  const [stated, setStated] = useState<any>(state) //url 数据
+  // const location = useLocation()
+  // const { state } = location
+  // const { push } = useHistory()
+  // const [stated, setStated] = useState<any>(state) //url 数据
 
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
   const [currentMenu, setCurrentMenu] = useState<Array<string>>(['demandSheet'])
-  useEffect(() => {
-    setStated(state)
-    if (stated.key) {
-      setCurrentMenu(stated.key)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (state !== undefined) {
+  //     setStated(state)
+  //     if (stated.key) {
+  //       setCurrentMenu(stated.key)
+  //     }
+  //   }
+  // }, [])
   const handleMenu = ({ keyPath }) => {
-    console.log(keyPath)
+    // console.log(keyPath)
     // console.log('获取url中的数据~~~~~~~~~~~~~', location)
-    push({ pathname: location.pathname, state: { key: keyPath } })
+    // push({ pathname: location.pathname, state: { key: keyPath } })
     setCurrentMenu(keyPath)
   }
   const onOpenChange = keys => {

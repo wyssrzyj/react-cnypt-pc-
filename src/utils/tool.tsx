@@ -332,7 +332,6 @@ export const findTreeTarget = (values, data, key = 'id') => {
     }
     if (isArray(item.children) && item.children.length) {
       const res = findTreeTarget(values, item.children, key) //
-      console.log('🚀 ~~~~~~~~~~~~~~~~~~', res)
       if (!isEmpty(res)) {
         return res
       }

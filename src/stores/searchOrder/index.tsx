@@ -156,7 +156,7 @@ export default class SearchOrderStore {
         `/api/factory/info/get-factory-images`,
         params
       )
-      return res
+      return res.data
     } catch (e) {
       console.log(e)
     }

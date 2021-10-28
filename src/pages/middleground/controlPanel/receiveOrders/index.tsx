@@ -29,9 +29,18 @@ const tabs: Array<OptionType> = [
   { label: '已取消', url: '', key: 'complete' }
 ]
 
+export const tabsStatus = new Map()
+tabsStatus.set('all', '0')
+tabsStatus.set('request', '1')
+tabsStatus.set('doing', '2')
+tabsStatus.set('confirm', '3')
+tabsStatus.set('checked', '-2')
+tabsStatus.set('complete', '-1')
+
 const ReceiveOrder = () => {
   const history = useHistory()
   const location = useLocation()
+  const { pathname, search } = location
 
   const searchRef = useRef()
 
@@ -54,6 +63,38 @@ const ReceiveOrder = () => {
     setActiveKey(key)
   }, [])
 
+  useEffect(() => {
+    const res: any = urlGet() || {}
+    const { pageNum = 1, pageSize = defaultPageSize, key = 'all' } = res
+    const keys = Reflect.ownKeys(res)
+    const newParams = cloneDeep(params)
+    let flag = false
+    if (keys.includes('pageSize') || keys.includes('pageNum')) {
+      flag =
+        +pageNum === +newParams.pageNum && +pageSize === +newParams.pageSize
+    }
+
+    if (flag) return
+    const targetUrl = `${location.pathname}?key=${key}&pageNum=${pageNum}&pageSize=${pageSize}`
+
+    if (targetUrl !== `${pathname}${search}`) {
+      history.replace(targetUrl)
+    }
+
+    setActiveKey(key)
+    // tab页签变化 页码变化 更改查询条件
+    newParams.pageNum = +pageNum || 1
+    newParams.pageSize = +pageSize || defaultPageSize
+    const target = +tabsStatus.get(activeKey)
+    if (target !== 0) {
+      newParams.status = +tabsStatus.get(activeKey)
+    } else {
+      // 全部订单
+      delete newParams.status
+    }
+    setParams(newParams)
+  }, [search, activeKey])
+
   const getData = async () => {
     setLoading(true)
     const res = await supplierGetOrders(params)
@@ -69,6 +110,7 @@ const ReceiveOrder = () => {
   }
 
   const tabChange = key => {
+    console.log('🚀 ~ file: index.tsx ~ line 112 ~ ReceiveOrder ~ key', key)
     // tab切换时 修改activeKey
     setActiveKey(key)
     history.replace(`${location.pathname}?key=${key}`)

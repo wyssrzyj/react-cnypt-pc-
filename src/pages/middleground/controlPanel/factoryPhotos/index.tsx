@@ -32,6 +32,8 @@ const FactoryPhotos = () => {
           factoryId: currentUserInfo.factoryId
         })
         delete data.factoryId
+        console.log('🚀 ~ file: index.tsx ~ line 34 ~ ; ~ data', data)
+
         setParams(data)
       }
       if (+currentUserInfo.enterpriseType === 1) {
@@ -63,10 +65,12 @@ const FactoryPhotos = () => {
       'clothInspectingMachineImage',
       'flatSeamingMachineImage'
     ]
-    if (arr.includes(key) && isArray(value) && value.length > 0) {
-      nErrors.equipment = false
-    } else {
-      nErrors.equipment = true
+    if (arr.includes(key)) {
+      if (isArray(value) && value.length > 0) {
+        nErrors.equipment = false
+      } else {
+        nErrors.equipment = true
+      }
     }
 
     setErrors(nErrors)

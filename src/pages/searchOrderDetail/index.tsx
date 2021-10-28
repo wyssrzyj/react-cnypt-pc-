@@ -104,14 +104,16 @@ const SearchOrderDetail = props => {
         },
         {
           label: '联系人',
-          value: data.isContactPublic ? data.contactPerson : '***' || '--',
+          value:
+            +data.isContactPublic === 1 ? data.contactPerson : '***' || '--',
           span: 12
         },
         {
           label: '联系人手机号',
-          value: data.isContactPublic
-            ? data.contactPersonMobile
-            : '*******' || '--',
+          value:
+            +data.isContactPublic === 1
+              ? data.contactPersonMobile
+              : '*******' || '--',
           span: 12
         }
       ]

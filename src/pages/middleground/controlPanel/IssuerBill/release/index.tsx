@@ -33,7 +33,7 @@ const DemandSheet = () => {
   useEffect(() => {
     setStated(state)
 
-    if (stated.id) {
+    if (stated) {
       echoData(stated.id)
     }
   }, [])
@@ -102,15 +102,18 @@ const DemandSheet = () => {
     v.provinceId = v.location[1]
     v.cityId = v.location[0]
     v.districtId = v.location[2]
-    if (stated.modify) {
-      console.log('修改')
-      v.id = stated.id
+    if (stated) {
+      if (stated.modify) {
+        console.log('修改')
+        v.id = stated.id
+      }
     }
+
     console.log(v)
 
     const res = await ewDemandDoc(v)
     if (res.code === 200) {
-      push({ pathname: '/control-panel/panel/demand-list' })
+      push({ pathname: '/control-panel/demand-list' })
     }
     console.log(v)
   }

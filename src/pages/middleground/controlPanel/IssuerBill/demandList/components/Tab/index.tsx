@@ -54,7 +54,7 @@ const Tab = ({ routing }) => {
           className={styles.newly}
           icon={<PlusCircleTwoTone />}
         >
-          <Link to={'/control-panel/panel/demand-sheet'}> 新增需求单</Link>
+          <Link to={'/control-panel/demand-sheet'}> 新增需求单</Link>
         </Button>
       </div>
     </div>

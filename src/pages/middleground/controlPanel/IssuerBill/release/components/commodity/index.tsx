@@ -36,7 +36,7 @@ function Basics() {
   const { dictionary } = commonStore
   const {
     deliveryType = [],
-    materialType = [],
+    plusMaterialType = [],
     inquiryProcessType = [],
     productType = []
   } = toJS(dictionary)
@@ -50,7 +50,7 @@ function Basics() {
       type: 'select',
       field: 'plusMaterialType',
       span: 12,
-      options: materialType
+      options: plusMaterialType
     },
 
     {

@@ -86,6 +86,9 @@ const MultipleChoice = ({
     setIsModalVisible(true)
     setWindowType({ type: 'decline' })
   }
+  const onCancel = () => {
+    setIsModalVisible(false)
+  }
   return (
     <div className={styles.bos}>
       {/* 头部 */}
@@ -268,6 +271,8 @@ const MultipleChoice = ({
           visible={isModalVisible}
           centered={true}
           footer={null}
+          onCancel={onCancel}
+
           // maskClosable={false}
         >
           <div className={styles.delContent}>

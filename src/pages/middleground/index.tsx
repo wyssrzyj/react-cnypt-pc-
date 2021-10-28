@@ -16,6 +16,7 @@ const BindProduce = React.lazy(() => import('./bindProduce'))
 const ControlPanel = React.lazy(() => import('./controlPanel'))
 const VideoCenter = React.lazy(() => import('./videoCenter'))
 const OrderDetails = React.lazy(() => import('./orderDetails'))
+const IssuerBill = React.lazy(() => import('./issuerBill'))
 
 const LOGO =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/newLogo.png'
@@ -53,6 +54,7 @@ const EnterpriseHome = () => {
     type === 'put' && history.push('/control-panel/put-manage')
     type === 'receive' && history.push('/control-panel/receive-manage')
     type === 'home' && history.push('/control-panel/home')
+    type === 'demandList' && history.push('/control-panel/issuerBill')
   }
 
   return (
@@ -130,6 +132,24 @@ const EnterpriseHome = () => {
             >
               会员中心
             </div>
+            {+userInfo.enterpriseType === 1 &&
+            userInfo.enterpriseType !== null ? (
+              <div
+                className={classNames(
+                  styles.navItem,
+                  [
+                    '/control-panel/demand-sheet',
+                    '/control-panel/demand-list',
+                    '/control-panel/demand-applicationList'
+                  ].some(item => location.pathname.includes(item))
+                    ? styles.activeNavItem
+                    : ''
+                )}
+                onClick={() => toTarget('demandList')}
+              >
+                订单管理
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
@@ -159,11 +179,11 @@ const EnterpriseHome = () => {
             path="/control-panel/orderDetails"
             component={OrderDetails}
           />
-
           <Route
             path="/control-panel/bind-produce/:id"
             component={BindProduce}
           />
+          <Route path="/control-panel/issuerBill" component={IssuerBill} />
         </Switch>
       </div>
     </div>

@@ -68,7 +68,7 @@ const MultipleChoice = ({
   }
   const modify = e => {
     push({
-      pathname: '/control-panel/panel/demand-sheet',
+      pathname: '/control-panel/demand-sheet',
       state: { id: e, modify: 'modify' }
     })
   }
@@ -212,7 +212,8 @@ const MultipleChoice = ({
               <div>
                 <p className={styles.effect}>生效中</p>
                 <p className={styles.validity}>
-                  有效期：<span> {data.time}</span>
+                  <span className={styles.hui}>有效期：</span>
+                  <span> {data.time}</span>
                 </p>
                 <p>
                   剩余{data.surplus.day}天{data.surplus.hour}小时

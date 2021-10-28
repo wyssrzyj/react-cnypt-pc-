@@ -64,7 +64,7 @@ function Query({ query }) {
               >
                 重置
               </Button>
-              <Button className={styles.query} type="primary" htmlType="submit">
+              <Button className={styles.reset} type="primary" htmlType="submit">
                 查询
               </Button>
             </Form.Item>

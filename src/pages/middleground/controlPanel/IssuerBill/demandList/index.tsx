@@ -163,7 +163,7 @@ const DemandList = () => {
   }
   //再来一单
   const oneMoreOrder = async e => {
-    push({ pathname: '/control-panel/panel/demand-sheet', state: { id: e } })
+    push({ pathname: '/control-panel/demand-sheet', state: { id: e } })
   }
   // 查看订单信息
   const DemandOrderDetail = e => {

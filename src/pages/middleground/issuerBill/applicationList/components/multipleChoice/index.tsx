@@ -107,7 +107,9 @@ const MultipleChoice = ({
           <Col span={8}>
             <span>
               <span className={styles.sheetName}>发布时间:　</span>
-              <span>{timestampToTime(data.releaseTime)}</span>
+              <span className={styles.sheet}>
+                {timestampToTime(data.releaseTime)}
+              </span>
             </span>
           </Col>
           <Col span={4}>
@@ -152,26 +154,24 @@ const MultipleChoice = ({
             <div>
               <img
                 className={styles.img}
-                src={data.pictureUrl ? data.img : Simg}
+                src={data.pictureUrl ? data.pictureUrl : Simg}
                 alt=""
               />
             </div>
 
             <div className={styles.imgRight}>
-              <p className={styles.name}>
-                <span className={styles.factoryName}>
-                  {data.enterpriseName}
-                </span>
-                <span className={styles.diqu_bai}>
+              <p className={styles.namest}>
+                <div className={styles.factoryName}>{data.enterpriseName}</div>
+                <div className={styles.diqu_bai}>
                   <Icon type="jack-diqu_bai" className={styles.previous} />
                   {data.address ? data.address : '暂无'}
-                </span>
+                </div>
               </p>
               <p>人数：{data.staffNumber}人</p>
               <p>联系方式: {data.contactsMobile}</p>
               <p>电子邮箱: {data.contactsEmail}</p>
               <div className={styles.hidden}>
-                接单类型:
+                接单类型：
                 <Tooltip
                   placement="top"
                   title={data.prodTypeValueList.join('、')}
@@ -180,7 +180,7 @@ const MultipleChoice = ({
                 </Tooltip>
               </div>
               <div className={styles.hidden}>
-                擅长产品品类:
+                擅长产品品类：
                 <Tooltip
                   placement="top"
                   title={data.factoryCategoryList.join('、')}

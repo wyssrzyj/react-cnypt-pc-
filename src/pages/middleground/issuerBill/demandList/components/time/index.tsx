@@ -39,3 +39,12 @@ export function timestampToTime(v) {
   dateTime = yy + '-' + mm + '-' + dd + ' ' + hh + ':' + mf + ':' + ss
   return dateTime
 }
+
+export function ToTime(v) {
+  let dateTime
+  let yy = new Date(v).getFullYear()
+  let mm = new Date(v).getMonth() + 1
+  let dd = new Date(v).getDate()
+  dateTime = yy + '-' + mm + '-' + dd
+  return dateTime
+}

@@ -50,24 +50,30 @@ function Query({ query }) {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item
-              className={styles.btn}
-              wrapperCol={{ offset: 8, span: 16 }}
-            >
-              <Button
-                ghost
-                type="primary"
-                onClick={() => {
-                  setDateString([])
-                  form.resetFields()
-                }}
+            <div className={styles.btns}>
+              <Form.Item
+                className={styles.btn}
+                wrapperCol={{ offset: 81, span: 24 }}
               >
-                重置
-              </Button>
-              <Button className={styles.reset} type="primary" htmlType="submit">
-                查询
-              </Button>
-            </Form.Item>
+                <Button
+                  ghost
+                  type="primary"
+                  onClick={() => {
+                    setDateString([])
+                    form.resetFields()
+                  }}
+                >
+                  重置
+                </Button>
+                <Button
+                  className={styles.reset}
+                  type="primary"
+                  htmlType="submit"
+                >
+                  查询
+                </Button>
+              </Form.Item>
+            </div>
           </Col>
         </Row>
       </Form>

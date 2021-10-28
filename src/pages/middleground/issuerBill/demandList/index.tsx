@@ -7,7 +7,7 @@ import MultipleChoice from './components/multipleChoice'
 import { Pagination } from 'antd'
 import { cloneDeep } from 'lodash'
 import { useStores, toJS, observer } from '@/utils/mobx'
-import { timestampToTime, remainingTime } from './components/time'
+import { timestampToTime, remainingTime, ToTime } from './components/time'
 import { getTrees } from './method'
 import { useHistory } from 'react-router-dom'
 import { useLocation } from 'react-router'
@@ -79,7 +79,8 @@ const DemandList = () => {
       res.records.forEach(item => {
         item.checked = false
         item.processing = handle(item.processTypeList)
-        item.time = timestampToTime(item.inquiryEffectiveDate)
+        item.time = ToTime(item.inquiryEffectiveDate)
+
         item.releaseTime = timestampToTime(item.releaseTime)
         item.categoryIdList = getTrees(
           item.categoryIdList,

@@ -133,7 +133,7 @@ const SearchOrder = () => {
               label: '有效车位',
               value: matchValue(
                 factoryEffectiveLocation,
-                record.effectiveLocationValue
+                record.effectiveLocation
               )
             }
           ]

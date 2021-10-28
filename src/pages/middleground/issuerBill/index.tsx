@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styles from './index.module.less'
+import { Route, Switch } from 'react-router'
+
 import { Menu } from 'antd'
 import { Link } from 'react-router-dom'
-import { getCurrentUser, getUserInfo } from '@/utils/tool'
-import { Icon } from '@/components'
+// import { getCurrentUser, getUserInfo } from '@/utils/tool'
 
-const Title = ({ title, icon }) => {
-  return (
-    <div className={styles.menuTitle}>
-      <Icon type={icon} className={styles.menuIcon}></Icon>
-      {title}
-    </div>
-  )
-}
+const DemandList = React.lazy(() => import('./demandList'))
+const DemandSheet = React.lazy(() => import('./release'))
+const applicationList = React.lazy(() => import('./applicationList'))
+
 function index() {
-  const currentUser = getCurrentUser()
-  const userInfo = getUserInfo() || {}
+  // const currentUser = getCurrentUser()
+  // const userInfo = getUserInfo() || {}
 
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
@@ -39,14 +36,11 @@ function index() {
             mode="inline"
             onOpenChange={onOpenChange} //	SubMenu 展开/关闭的回调
           >
-            <Menu.ItemGroup
-              key="g6"
-              title={<Title title={'订单列表'} icon={'jack-video1'}></Title>}
-            >
+            <Menu.ItemGroup key="g6">
               <Menu.Item key="demandSheet">
                 <Link
                   className={styles.minute}
-                  to="/control-panel/panel/demand-sheet"
+                  to="/control-panel/issuerBill/demand-sheet"
                 >
                   发布订单
                 </Link>
@@ -54,7 +48,7 @@ function index() {
               <Menu.Item key="demandList">
                 <Link
                   className={styles.minute}
-                  to="/control-panel/panel/demand-list"
+                  to="/control-panel/issuerBill/demand-list"
                 >
                   订单列表
                 </Link>
@@ -62,7 +56,7 @@ function index() {
               <Menu.Item key="applicationList">
                 <Link
                   className={styles.minute}
-                  to="/control-panel/panel/demand-applicationList"
+                  to="/control-panel/issuerBill/demand-applicationList"
                 >
                   申请列表
                 </Link>
@@ -71,7 +65,24 @@ function index() {
           </Menu>
         </div>
         {/* 主体 */}
-        <div className={styles.controlPanelRight}></div>
+        <div className={styles.controlPanelRight}>
+          <Switch>
+            {/* 申请列表 */}
+            <Route
+              path="/control-panel/issuerBill/demand-applicationList"
+              component={applicationList}
+            />
+            <Route
+              path="/control-panel/issuerBill/demand-sheet"
+              component={DemandSheet}
+            />
+            {/* {订单列表} */}
+            <Route
+              path="/control-panel/issuerBill/demand-list"
+              component={DemandList}
+            />
+          </Switch>
+        </div>
       </div>
     </div>
   )

@@ -21,7 +21,7 @@ import { get } from 'lodash'
 import Viewer from 'react-viewer'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
-import { getCurrentUser, getUserInfo } from '@/utils/tool'
+import { getCurrentUser } from '@/utils/tool'
 import { useStores, observer } from '@/utils/mobx'
 import BusinessAddressCom from '../businessAddressCom'
 import Title from '../title'
@@ -77,7 +77,6 @@ const EnterpriseInfo = () => {
   const [form] = Form.useForm()
   const { validateFields, setFieldsValue, getFieldValue } = form
   const currentUser = getCurrentUser() || {}
-  const currentUserInfo = getUserInfo()
   const { mobilePhone, userId } = currentUser
   const { factoryPageStore, commonStore, loginStore } = useStores()
   const { userInfo } = loginStore
@@ -98,6 +97,7 @@ const EnterpriseInfo = () => {
   const [previewImage, setPreviewImage] = useState<string>('')
   const [contactsId, setContactsId] = useState<string>(undefined)
   const [oldData, setOldData] = useState<any>({})
+  const [enterpriseType, setEnterpriseType] = useState<any>()
 
   const uploadButton = (
     <div>
@@ -198,12 +198,18 @@ const EnterpriseInfo = () => {
         clothesGrade: newGrade,
         enterpriseInfoApproveId: oldData.enterpriseInfoApproveId,
         enterpriseLogoId:
-          imageUrl === preImageUrl ? undefined : enterpriseLogoId,
-        factoryProcessTypeList: factoryProcessTypeList.map(item => ({
+          imageUrl === preImageUrl ? undefined : enterpriseLogoId
+      }
+
+      if (+enterpriseId === 0) {
+        params.factoryProcessTypeList = factoryProcessTypeList.map(item => ({
           factoryId,
           ...item
         }))
       }
+      if (+enterpriseId === 1) {
+      }
+
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
         .then(async response => {
@@ -245,9 +251,17 @@ const EnterpriseInfo = () => {
             longitude,
             enterpriseLogoId,
             contactsId,
-            clothesGrade
+            clothesGrade,
+            enterpriseType
           } = data
-          data.establishedTime = moment(data.establishedTime)
+          const keys = Reflect.ownKeys(data)
+          if (keys.includes('roleCodes')) {
+            data['roleCodes'] = data['roleCodes'] || []
+          }
+
+          data.establishedTime = data.establishedTime
+            ? moment(data.establishedTime)
+            : null
           const grade = productClassMap.find(
             item => item.value === clothesGrade
           ) || { label: '' }
@@ -263,6 +277,8 @@ const EnterpriseInfo = () => {
           setPurchaserId(purchaserId)
           setEnterpriseId(enterpriseId)
           setEnterpriseLogoId(enterpriseLogoId)
+          setEnterpriseType(enterpriseType)
+          console.log(data, 'data')
           setFieldsValue({
             ...data,
             enterpriseLogoUrl,
@@ -291,10 +307,7 @@ const EnterpriseInfo = () => {
         const { success, data } = response
         if (success) {
           const { infoApprovalStatus, approvalDesc = '' } = data
-          console.log(
-            '🚀 ~ file: index.tsx ~ line 294 ~ getApprovalResult ~ infoApprovalStatus',
-            infoApprovalStatus
-          )
+
           setCurrentType(infoApprovalStatus)
           setMessageMap({
             0: (
@@ -317,6 +330,13 @@ const EnterpriseInfo = () => {
     }
   }
 
+  const onValuesChange = values => {
+    const keys = Reflect.ownKeys(values)
+    if (keys.includes('enterpriseType')) {
+      setEnterpriseType(values['enterpriseType'])
+    }
+  }
+
   useEffect(() => {
     if (enterpriseId) {
       getApprovalResult()
@@ -326,6 +346,15 @@ const EnterpriseInfo = () => {
   useEffect(() => {
     getEnterpriseInfo()
   }, [])
+
+  useEffect(() => {
+    console.log(form.getFieldsValue(), 'form.getFieldsValue()')
+    if (+enterpriseType === 1) {
+      form.setFieldsValue({
+        roleCodes: form.getFieldValue('roleCodes') || []
+      })
+    }
+  }, [enterpriseType])
 
   return (
     <div className={styles.enterpriseInfoContent}>
@@ -351,7 +380,7 @@ const EnterpriseInfo = () => {
             mobilePhone: mobilePhone
           }}
           style={{ position: 'relative' }}
-          // onValuesChange={onValuesChange}
+          onValuesChange={onValuesChange}
         >
           <Form.Item
             label={<span className={styles.formLabel}>企业Logo</span>}
@@ -442,7 +471,7 @@ const EnterpriseInfo = () => {
             <Input placeholder="请输入类别说明" />
           </Form.Item>
           {/* TODO: 加工厂 */}
-          {+currentUserInfo.enterpriseType === 0 && (
+          {+enterpriseType === 0 && (
             <>
               <Form.Item
                 label="厂房面积"
@@ -564,7 +593,7 @@ const EnterpriseInfo = () => {
           )}
 
           {/* TODO: 发单商 */}
-          {+currentUserInfo.enterpriseType === 1 && (
+          {+enterpriseType === 1 && (
             <>
               <Form.Item
                 label="企业角色"

@@ -11,7 +11,7 @@ import styles from './index.module.less'
 
 const SearchOrder = () => {
   const { searchOrderStore, commonStore, factoryStore } = useStores()
-  const { getOrderList, inquiryList, orderName } = searchOrderStore
+  const { inquiryList, orderName } = searchOrderStore
   const pageSize = 12
   const { dictionary } = commonStore
   const { productCategory } = factoryStore
@@ -160,7 +160,7 @@ const SearchOrder = () => {
 
   useEffect(() => {
     ;(async () => {
-      await getOrderList({ pageNum: 1, pageSize: 12 })
+      // await getOrderList({ pageNum: 1, pageSize: 12 })
       await getProductCategory()
     })()
   }, [])

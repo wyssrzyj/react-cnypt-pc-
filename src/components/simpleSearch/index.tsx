@@ -7,7 +7,7 @@ import styles from './index.module.less'
 const { Search } = Input
 
 const SimpleSearch = props => {
-  const { config, onFilterChange, field = 'name' } = props
+  const { config = {}, onFilterChange, field = 'name' } = props
   const currentImg =
     config.imgSrc ||
     'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/rc-upload-1635389590602-4logo_moren%402x.png'

@@ -183,7 +183,9 @@ const SearchOrderDetail = props => {
       {/* 搜索栏 */}
       <SimpleSearch
         config={{
-          title: dataSource.enterpriseName,
+          title: dataSource.isEnterpriseInfoPublic
+            ? dataSource.enterpriseName
+            : '某某有限公司',
           imgSrc: dataSource.enterpriseUrl
         }}
         onFilterChange={onFilterChange}

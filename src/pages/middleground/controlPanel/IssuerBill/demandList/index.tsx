@@ -30,17 +30,17 @@ const DemandList = () => {
   const { dictionary } = commonStore
   const { inquiryProcessType = [] } = toJS(dictionary)
 
-  const { ListData, DeleteDemandDoc, ToppingFunction, EndInterfaceInAdvance } =
+  const { listData, deleteDemandDoc, toppingFunction, endInterfaceInAdvance } =
     demandListStore
 
   const [reallylists, setReallyLists] = useState([]) //数据
   // const [allChecked, setAllChecked] = useState(false) //全选的状态
   const [numberLength, setNumberLength] = useState(1) //页码长度
   const [noOrders, setNoOrders] = useState(0) //没有订单
-  const [pageNumber, setPageNumber] = useState(1) //路由数据
+  const [pageNumber, setPageNumber] = useState(1) //分页
 
   const [params, setParams] = useState<any>({
-    pageNum: pageNumber,
+    pageNum: 1,
     pageSize: defaultPageSize,
     status: initialKey
   })
@@ -48,7 +48,6 @@ const DemandList = () => {
   useEffect(() => {
     listsAPI()
   }, [params])
-
   // const filterData = value => {
   //   //  过滤出需要的数据 并返回
   //   const res = inquiryProcessType.filter(item => item.value === value)
@@ -72,7 +71,7 @@ const DemandList = () => {
   }
 
   const listsAPI = async () => {
-    const res = await ListData(params) //待会设置页码之类的
+    const res = await listData(params) //待会设置页码之类的
     const treeData = productCategoryList //商品品类
     setNumberLength(res.total)
 
@@ -100,7 +99,12 @@ const DemandList = () => {
   }
   // 路由数据
   const routingData = value => {
-    setParams({ ...params, status: value })
+    setParams({
+      pageNum: 1,
+      pageSize: defaultPageSize,
+      status: value
+    })
+    setPageNumber(1)
   }
   //  排序
   const sortCallback = value => {
@@ -147,12 +151,17 @@ const DemandList = () => {
   // 分页
   const paging = pageNumber => {
     setPageNumber(pageNumber)
+    setParams({
+      pageNum: pageNumber,
+      pageSize: defaultPageSize,
+      status: initialKey
+    })
   }
   //置顶
   const topping = async value => {
     // console.log('置顶', value)
 
-    await ToppingFunction(value)
+    await toppingFunction(value)
     listsAPI()
   }
   //再来一单
@@ -166,14 +175,14 @@ const DemandList = () => {
   }
   //提前结束
   const earlyEnd = async e => {
-    const res = await EndInterfaceInAdvance({ id: e, status: -3 })
+    const res = await endInterfaceInAdvance({ id: e, status: -3 })
     if (res.code === 200) {
       listsAPI()
     }
   }
   // 结束订单
   const deleteRecord = async value => {
-    const res = await DeleteDemandDoc({ id: value })
+    const res = await deleteDemandDoc({ id: value })
     if (res.code === 200) {
       listsAPI()
     }
@@ -190,7 +199,7 @@ const DemandList = () => {
   //   if (ids.length > 0) {
   //     console.log(ids)
 
-  //     const res = await DeleteDemandDoc({ id: ids })
+  //     const res = await deleteDemandDoc({ id: ids })
   //     if (res.code === 200) {
   //       listsAPI()
   //     }
@@ -242,6 +251,7 @@ const DemandList = () => {
                   lineHeight: '32px',
                   textAlign: 'center'
                 }}
+                current={pageNumber}
                 defaultCurrent={defaultCurrent}
                 total={numberLength}
                 onChange={paging}

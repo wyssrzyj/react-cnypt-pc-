@@ -20,23 +20,24 @@ function DemandList() {
 
   const { demandListStore } = useStores()
   const {
-    ApplicationList,
-    TopOfApplicationList,
-    DeleteIssuer,
-    DeclineRequisition,
-    ConfirmCooperation,
-    CancelCooperation
+    applicationList,
+    topOfapplicationList,
+    deleteIssuer,
+    declineRequisition,
+    confirmCooperation,
+    cancelCooperation
   } = demandListStore
   const location = useLocation()
   const { search } = location
 
   const [lists, setLists] = useState([]) //数据
   const [dataLength, setDataLength] = useState(0) //数据总数量
+  const [pageNumber, setPageNumber] = useState(1) //路由数
 
   const searchURL = new URLSearchParams(search)
   const initialKey = searchURL.get('key')
   const [params, setParams] = useState({
-    pageNum: 1,
+    pageNum: pageNumber,
     pageSize: defaultPageSize,
     status: initialKey
   })
@@ -45,10 +46,8 @@ function DemandList() {
   }, [params])
 
   const InterfaceData = async () => {
-    const res = await ApplicationList(params)
+    const res = await applicationList(params)
     if (res.code === 200) {
-      console.log(res.data.records)
-
       setDataLength(res.data.total)
       setLists(res.data.records)
     }
@@ -65,18 +64,26 @@ function DemandList() {
     setParams({ ...params, ...value })
   }
   //分页
-  const pageChange = (page, pageSize) => {
-    console.log('page: ', page)
-    console.log('pageSize: ', pageSize)
+  const pageChange = page => {
+    setPageNumber(page)
+    setParams({
+      pageNum: page,
+      pageSize: defaultPageSize,
+      status: initialKey
+    })
   }
   // 路由数据
   const routingData = value => {
-    const res = { status: value }
-    setParams({ ...params, ...res })
+    setParams({
+      pageNum: 1,
+      pageSize: defaultPageSize,
+      status: value
+    })
+    setPageNumber(1)
   }
   //置
   const toppingMethod = async value => {
-    const res = await TopOfApplicationList(value)
+    const res = await topOfapplicationList(value)
     console.log(res)
     if (res.code === 200) {
       InterfaceData()
@@ -85,7 +92,7 @@ function DemandList() {
   // 谢绝
   const earlyEnd = async e => {
     console.log(e)
-    const res = await DeclineRequisition({ id: e, status: -2 })
+    const res = await declineRequisition({ id: e, status: -2 })
     console.log(res)
     if (res.code === 200) {
       InterfaceData()
@@ -93,14 +100,14 @@ function DemandList() {
   }
   //确认合作
   const InitiateOrder = async e => {
-    const res = await ConfirmCooperation({ id: e, status: 3 })
+    const res = await confirmCooperation({ id: e, status: 3 })
     if (res.code === 200) {
       InterfaceData()
     }
   }
   // 取消合作
   const reOrder = async e => {
-    const res = await CancelCooperation({ id: e, status: 2 })
+    const res = await cancelCooperation({ id: e, status: 2 })
     if (res.code === 200) {
       InterfaceData()
     }
@@ -109,7 +116,7 @@ function DemandList() {
   const deleteMethod = async id => {
     console.log('删除', id)
 
-    const res = await DeleteIssuer({ supplierInquiryId: id })
+    const res = await deleteIssuer({ supplierInquiryId: id })
     if (res.code === 200) {
       InterfaceData()
     }
@@ -154,6 +161,7 @@ function DemandList() {
                 }}
                 defaultCurrent={defaultCurrent}
                 total={dataLength}
+                current={pageNumber}
                 onChange={pageChange}
               />
             </div>

@@ -45,7 +45,7 @@ export default class DemandList {
     }
   }
   // 再来一单
-  @action AnotherSingleInterface = async params => {
+  @action anotherSingleInterface = async params => {
     try {
       const res: ResponseProps = await axios.get(
         `/api/oms/inquiry-purchase/get`,
@@ -64,14 +64,14 @@ export default class DemandList {
     }
   }
   // 再来一单 id
-  @action OneMoreOrder = async params => {
+  @action oneMoreOrder = async params => {
     runInAction(() => {
       this.echo = params
     })
   }
 
   // 订单列表数据展示
-  @action ListData = async params => {
+  @action listData = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/inquiry-list`,
@@ -87,7 +87,7 @@ export default class DemandList {
   }
 
   // 置顶
-  @action ToppingFunction = async params => {
+  @action toppingFunction = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/stick`,
@@ -108,8 +108,8 @@ export default class DemandList {
       return e
     }
   }
-  // 需求单置顶
-  @action TopOfApplicationList = async params => {
+  // 需求单置顶1
+  @action topOfapplicationList = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/purchaser-inquiry-stick`,
@@ -129,7 +129,7 @@ export default class DemandList {
   }
 
   // 删除需求单
-  @action DeleteDemandDoc = async params => {
+  @action deleteDemandDoc = async params => {
     try {
       const res: ResponseProps = await axios.delete(
         `/api/oms/inquiry-purchase/delete`,
@@ -144,7 +144,7 @@ export default class DemandList {
     }
   }
   // 删除发单商需求单记录
-  @action DeleteIssuer = async params => {
+  @action deleteIssuer = async params => {
     try {
       const res: ResponseProps = await axios.get(
         `/api/oms/inquiry-purchase/delete-purchaser-record`,
@@ -159,7 +159,7 @@ export default class DemandList {
     }
   }
   // 谢绝需求单申请
-  @action DeclineRequisition = async params => {
+  @action declineRequisition = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/decline-inquiry-application`,
@@ -174,7 +174,7 @@ export default class DemandList {
     }
   }
   // 确认合作
-  @action ConfirmCooperation = async params => {
+  @action confirmCooperation = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/confirm-cooperation`,
@@ -189,7 +189,7 @@ export default class DemandList {
     }
   }
   // 取消合作
-  @action CancelCooperation = async params => {
+  @action cancelCooperation = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/cancel-cooperation`,
@@ -205,7 +205,7 @@ export default class DemandList {
   }
 
   // 提前结束
-  @action EndInterfaceInAdvance = async params => {
+  @action endInterfaceInAdvance = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/advance-end`,
@@ -221,7 +221,7 @@ export default class DemandList {
   }
   // 需求单申请列表查询
   // 提前结束
-  @action RequisitionApplication = async params => {
+  @action requisitionApplication = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/inquiry-application-list`,
@@ -236,7 +236,7 @@ export default class DemandList {
     }
   }
   // 需求单申请列表查询
-  @action ApplicationList = async params => {
+  @action applicationList = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/inquiry-application-list`,
@@ -252,7 +252,7 @@ export default class DemandList {
   }
 
   // 判断是否超过发单商最大订单
-  @action OrderQuantity = async params => {
+  @action orderQuantity = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-quote/judge-goods-num`,
@@ -267,7 +267,7 @@ export default class DemandList {
     }
   }
   // 供应商主动申请需求单  formti提交
-  @action SubmitRequisition = async params => {
+  @action submitRequisition = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-quote/active-application-inquiry`,
@@ -286,7 +286,7 @@ export default class DemandList {
   }
 
   // 供应商主动申请需求单  form提交
-  @action RejectSubmission = async params => {
+  @action rejectSubmission = async params => {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-quote/refuse-take-inquiry`,

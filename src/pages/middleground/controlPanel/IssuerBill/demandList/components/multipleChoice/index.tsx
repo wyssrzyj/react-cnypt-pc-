@@ -171,7 +171,7 @@ const MultipleChoice = ({
                 <span className={styles.fontColor}>{data.issuedBill}</span>
                 家已发单，已发订单量
                 <span className={styles.fontColor}>
-                  {data.issuedOrderQuantity}
+                  {data.issuedorderQuantity}
                 </span>
                 件
               </p> */}

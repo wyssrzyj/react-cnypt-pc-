@@ -16,6 +16,7 @@ const MultipleChoice = ({
   demandSheetDetails
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [windowType, setWindowType] = useState<any>({}) //弹窗类型
 
   const sortColor = new Map()
   sortColor.set(2, styles.red)
@@ -44,24 +45,47 @@ const MultipleChoice = ({
     toppingMethod({ id: e, purchaserstickType: stickType })
   }
 
-  // // 删除记录
-  // const deleteRecord = e => {
-  //   console.log(e)
-  //   console.log('删除记录')
-  //   deleteMethod(e)
-  // }
+  // 弹窗确认
   const handleOk = id => {
-    deleteMethod(id)
+    if (windowType.type === 'mov') {
+      deleteMethod(id)
+    }
+    if (windowType.type === 'CancelConfirmation') {
+      reOrder(data.id)
+    }
+    if (windowType.type === 'confirmCooperation') {
+      InitiateOrder(data.id)
+    }
+    if (windowType.type === 'decline') {
+      earlyEnd(data.id)
+    }
+
     setIsModalVisible(false)
   }
 
   const handleCancel = () => {
     setIsModalVisible(false)
   }
+  // 删除
   const showModal = () => {
     setIsModalVisible(true)
+    setWindowType({ type: 'mov' })
   }
-
+  // 取消确认
+  const CancelConfirmation = () => {
+    setIsModalVisible(true)
+    setWindowType({ type: 'CancelConfirmation' })
+  }
+  // 确认合作
+  const confirmCooperation = () => {
+    setIsModalVisible(true)
+    setWindowType({ type: 'confirmCooperation' })
+  }
+  // 谢绝
+  const decline = () => {
+    setIsModalVisible(true)
+    setWindowType({ type: 'decline' })
+  }
   return (
     <div className={styles.bos}>
       {/* 头部 */}
@@ -203,14 +227,14 @@ const MultipleChoice = ({
             {data.status === 2 ? (
               <>
                 <Button
-                  onClick={() => earlyEnd(data.id)}
+                  onClick={decline}
                   className={styles.btn}
                   type={'primary'}
                 >
                   谢绝
                 </Button>
                 <Button
-                  onClick={() => InitiateOrder(data.id)}
+                  onClick={confirmCooperation}
                   className={styles.btn2}
                   type={'primary'}
                   ghost
@@ -222,7 +246,7 @@ const MultipleChoice = ({
             {data.status === 3 ? (
               <Button
                 type={'primary'}
-                onClick={() => reOrder(data.id)}
+                onClick={CancelConfirmation}
                 className={styles.btn}
               >
                 取消确认
@@ -247,9 +271,35 @@ const MultipleChoice = ({
           // maskClosable={false}
         >
           <div className={styles.delContent}>
-            <Icon type={'jack-sptg1'} className={styles.delIcon}></Icon>
-            <div className={styles.delTitle}>删除订单</div>
-            <div className={styles.delText}>确定删除订单？</div>
+            {windowType.type === 'mov' ? (
+              <div className={styles.delContent}>
+                <Icon type={'jack-sptg1'} className={styles.delIcon}></Icon>
+                <div className={styles.delTitle}>删除订单</div>
+                <div className={styles.delText}>确定删除订单？</div>
+              </div>
+            ) : null}
+            {windowType.type === 'CancelConfirmation' ? (
+              <div className={styles.delContent}>
+                <Icon type={'jack-ts'} className={styles.delIcon}></Icon>
+                <div className={styles.delTitle}>取消确认</div>
+                <div className={styles.delText}>是否取消确认？</div>
+              </div>
+            ) : null}
+            {windowType.type === 'confirmCooperation' ? (
+              <div className={styles.delContent}>
+                <Icon type={'jack-wc'} className={styles.delIcon}></Icon>
+                <div className={styles.delTitle}>确定合作？</div>
+                <div className={styles.delText}>是否确定合作？</div>
+              </div>
+            ) : null}
+            {windowType.type === 'decline' ? (
+              <div className={styles.delContent}>
+                <Icon type={'jack-ts'} className={styles.delIcon}></Icon>
+                <div className={styles.delTitle}>是否谢绝？</div>
+                <div className={styles.delText}>是否确定谢绝？</div>
+              </div>
+            ) : null}
+
             <div className={styles.modal}>
               <Button
                 className={styles.cancelBtn}

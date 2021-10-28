@@ -16,7 +16,7 @@ import { useLocation } from 'react-router-dom'
 const DemandSheet = () => {
   const location = useLocation()
   const { demandListStore } = useStores()
-  const { ewDemandDoc, AnotherSingleInterface } = demandListStore
+  const { ewDemandDoc, anotherSingleInterface } = demandListStore
 
   const [validity, setValidity] = useState<any>()
   const [confirm, setConfirm] = useState<any>(true)
@@ -37,7 +37,7 @@ const DemandSheet = () => {
     }
   }, [])
   const echoData = async v => {
-    const { data } = await AnotherSingleInterface({ id: v })
+    const { data } = await anotherSingleInterface({ id: v })
 
     if (data) {
       data.stylePicture = data.stylePicture.map(url => ({

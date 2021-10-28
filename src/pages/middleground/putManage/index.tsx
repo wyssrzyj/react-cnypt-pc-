@@ -237,6 +237,9 @@ const PutManage = () => {
   }
 
   const paginationChange = (page, pageSize) => {
+    console.log(page)
+    console.log(pageSize)
+
     history.replace(
       `${pathname}?key=${activeKey}&pageNum=${page}&pageSize=${pageSize}`
     )

@@ -20,7 +20,7 @@ const OrderDetails = () => {
   const { state } = location
 
   const { demandListStore } = useStores()
-  const { AnotherSingleInterface } = demandListStore
+  const { anotherSingleInterface } = demandListStore
   const [initialValues, setInitialValues] = useState<any>({})
   const [stated, setStated] = useState<any>(state)
   useEffect(() => {
@@ -35,7 +35,7 @@ const OrderDetails = () => {
   }
 
   const echoData = async v => {
-    const { data } = await AnotherSingleInterface({ id: v })
+    const { data } = await anotherSingleInterface({ id: v })
     console.log(data)
 
     setInitialValues(data)

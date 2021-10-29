@@ -63,7 +63,7 @@ const memberCenter = [
       }
     ]
   }
-  // 监控列表
+  // 监控列表1
   // {
   //   title: '监控列表',
   //   children: [

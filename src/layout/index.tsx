@@ -12,8 +12,9 @@ interface LayoutProps extends RouteComponentProps {
 
 const Layout = (props: LayoutProps) => {
   const currentUser = getCurrentUser()
-  const { commonStore, loginStore } = useStores()
+  const { commonStore, loginStore, factoryStore } = useStores()
   const { allDictionary, getAllArea } = commonStore
+  const { productCategory } = factoryStore
   const { userInfo } = loginStore
   const { location } = props
   const { pathname } = location
@@ -43,6 +44,7 @@ const Layout = (props: LayoutProps) => {
       currentUser.userId && !infoFlag && (await userInfo())
       await allDictionary([])
       await getAllArea()
+      await productCategory()
     })()
   }, [])
 

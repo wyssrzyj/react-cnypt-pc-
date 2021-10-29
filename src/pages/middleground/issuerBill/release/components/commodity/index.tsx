@@ -50,7 +50,8 @@ function Basics() {
       type: 'select',
       field: 'plusMaterialType',
       span: 12,
-      options: plusMaterialType
+      options: plusMaterialType,
+      cesar: 0
     },
 
     {
@@ -58,7 +59,8 @@ function Basics() {
       // type: 'number',
       message: '请输入目标单价',
       field: 'goodsPrice',
-      span: 12
+      span: 12,
+      cesar: 1
     },
     {
       label: '加工类型',
@@ -69,7 +71,8 @@ function Basics() {
       mode: 'multiple',
       field: 'processTypeList',
       span: 12,
-      options: inquiryProcessType
+      options: inquiryProcessType,
+      cesar: 0
     },
     {
       label: '生产方式',
@@ -80,7 +83,8 @@ function Basics() {
       mode: 'multiple',
       field: 'productTypeList',
       span: 12,
-      options: productType
+      options: productType,
+      cesar: 0
     },
 
     {
@@ -91,12 +95,26 @@ function Basics() {
       span: 12
     }
   ]
+  let map = new Map()
+
+  const fangfa = item => {
+    map.set(1, [
+      {
+        pattern: /^[0-9]*$/,
+        message: '请输入正确的数量'
+      }
+      // { max: 99, message: '不得超过99个字符' }
+    ])
+    map.set(0, [{ required: item.required, message: item.message }])
+  }
+
   return (
     <div>
       <Category />
 
       <Row>
         {orderConfigs.map(item => {
+          fangfa(item)
           //orderConfigs form的数据
           const data: any = {} //定义一个空对象
           keys.forEach(i => {
@@ -111,15 +129,7 @@ function Basics() {
               <FormItem
                 name={item.field}
                 label={item.label}
-                rules={[
-                  {
-                    pattern: /^[0-9]*$/,
-                    message: '请输入正确的数量'
-                  },
-
-                  { required: item.required, message: item.message },
-                  { max: 99, message: '不得超过99个字符' }
-                ]}
+                rules={map.get(item.cesar)}
                 {...layout}
               >
                 <FormNode {...data}></FormNode>

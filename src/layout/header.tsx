@@ -156,8 +156,9 @@ const Header = () => {
   //会员中心
   // 加工厂没有发单信息
   // 发单商没有监控列表
-
+  // 企业类型 0 加工厂 1 发单商
   const memberCenterFiltering = memberCenter.filter(item => {
+    //  发单商不显示照片
     if (enterpriseType === '1') {
       if (item.title == '账号管理') {
         item.children = [
@@ -171,7 +172,6 @@ const Header = () => {
           }
         ]
       }
-      return item
     } else {
       if (item.title == '账号管理') {
         item.children = [
@@ -193,6 +193,13 @@ const Header = () => {
       // if (item.title !== '监控列表' && item.title !== '验厂管理') {
       //   return item
       // }
+    }
+    // 发单商不显示  验厂管理
+    if (enterpriseType === '1') {
+      if (item) {
+        console.log(item)
+        return item.title !== '验厂管理'
+      }
     }
   })
 

@@ -31,7 +31,7 @@ function index() {
   // }, [])
   const handleMenu = ({ keyPath }) => {
     // console.log(keyPath)
-    // console.log('获取url中的数据~~~~~~~~~~~~~', location)
+    // console.log('获取url中的数据~~~~~~~~~~~~~~', location)
     // push({ pathname: location.pathname, state: { key: keyPath } })
     setCurrentMenu(keyPath)
   }

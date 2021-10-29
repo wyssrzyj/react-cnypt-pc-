@@ -124,7 +124,9 @@ const OverflowCard = props => {
     setModalFlag(f => !f)
     if (!modalFlag) {
       // 需求单
-      const res = await getOrderList({})
+      const res = await getOrderList({
+        enterpriseId: currentUserInfo.enterpriseId
+      })
       setOrders(res.records || [])
     }
   }

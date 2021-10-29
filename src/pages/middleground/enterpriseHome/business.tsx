@@ -59,7 +59,7 @@ const BusinessHome = () => {
       label: '新增订单',
       type: 'add',
       callback: () => {
-        history.push('/control-panel/order/add')
+        history.push('/control-panel/issuerBill/demand-sheet')
       }
     }
   ]

@@ -62,24 +62,25 @@ const memberCenter = [
         url: '/control-panel/panel/photograph'
       }
     ]
-  },
-  {
-    title: '监控列表',
-    children: [
-      {
-        title: '部门管理',
-        url: '/control-panel/panel/department'
-      },
-      {
-        title: '监控列表',
-        url: '/control-panel/panel/monitorPage'
-      },
-      {
-        title: '视频中心',
-        url: '/control-panel/panel/video-center'
-      }
-    ]
   }
+  // 监控列表
+  // {
+  //   title: '监控列表',
+  //   children: [
+  //     {
+  //       title: '部门管理',
+  //       url: '/control-panel/panel/department'
+  //     },
+  //     {
+  //       title: '监控列表',
+  //       url: '/control-panel/panel/monitorPage'
+  //     },
+  //     {
+  //       title: '视频中心',
+  //       url: '/control-panel/panel/video-center'
+  //     }
+  //   ]
+  // }
 ] //会员中心
 
 const Header = () => {
@@ -188,9 +189,10 @@ const Header = () => {
           }
         ]
       }
-      if (item.title !== '监控列表' && item.title !== '验厂管理') {
-        return item
-      }
+      return item
+      // if (item.title !== '监控列表' && item.title !== '验厂管理') {
+      //   return item
+      // }
     }
   })
 

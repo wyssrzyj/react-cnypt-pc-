@@ -3,6 +3,8 @@ import { Row, Col, Button, Tooltip, Modal } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components' //路径
 import { timestampToTime } from '../../time'
+import { useStores, toJS } from '@/utils/mobx'
+import { getTrees } from '../../method/index'
 
 let Simg = 'http://dev.uchat.com.cn:8002/images/b140ef.png'
 
@@ -15,11 +17,12 @@ const MultipleChoice = ({
   reOrder,
   demandSheetDetails
 }) => {
-  console.log(data)
+  const { commonStore } = useStores()
+  const { dictionary } = commonStore
+  const { prodType = [] } = toJS(dictionary)
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
-
   const sortColor = new Map()
   sortColor.set(2, styles.red)
   sortColor.set(3, styles.green)
@@ -175,22 +178,32 @@ const MultipleChoice = ({
               <p>联系方式: {data.contactsMobile}</p>
               <p>电子邮箱: {data.contactsEmail}</p>
               <div className={styles.hidden}>
-                接单类型：
+                加工类型：
                 <Tooltip
                   placement="top"
                   title={
                     data.prodTypeValueList
-                      ? data.prodTypeValueList.join('、')
+                      ? getTrees(
+                          data.prodTypeValueList,
+                          prodType,
+                          'value',
+                          'label'
+                        ).join('、')
                       : '暂无'
                   }
                 >
                   {data.prodTypeValueList
-                    ? data.prodTypeValueList.join('、')
+                    ? getTrees(
+                        data.prodTypeValueList,
+                        prodType,
+                        'value',
+                        'label'
+                      ).join('、')
                     : '暂无'}
                 </Tooltip>
               </div>
               <div className={styles.hidden}>
-                擅长产品品类：
+                主营类别：
                 <Tooltip
                   placement="top"
                   title={

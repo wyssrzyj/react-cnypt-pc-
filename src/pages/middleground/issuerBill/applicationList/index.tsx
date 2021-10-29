@@ -29,7 +29,6 @@ function DemandList() {
   } = demandListStore
   const location = useLocation()
   const { search } = location
-
   const [lists, setLists] = useState([]) //数据
   const [dataLength, setDataLength] = useState(0) //数据总数量
   const [pageNumber, setPageNumber] = useState(1) //路由数
@@ -54,6 +53,7 @@ function DemandList() {
       }
     }
   }
+
   // 排序
   const sortCallback = value => {
     console.log(value)

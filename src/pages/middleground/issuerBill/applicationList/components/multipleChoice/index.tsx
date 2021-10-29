@@ -15,6 +15,8 @@ const MultipleChoice = ({
   reOrder,
   demandSheetDetails
 }) => {
+  console.log(data)
+
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
 
@@ -55,6 +57,8 @@ const MultipleChoice = ({
     }
     if (windowType.type === 'confirmCooperation') {
       InitiateOrder(data.id)
+      {
+      }
     }
     if (windowType.type === 'decline') {
       earlyEnd(data.id)
@@ -174,18 +178,30 @@ const MultipleChoice = ({
                 接单类型：
                 <Tooltip
                   placement="top"
-                  title={data.prodTypeValueList.join('、')}
+                  title={
+                    data.prodTypeValueList
+                      ? data.prodTypeValueList.join('、')
+                      : '暂无'
+                  }
                 >
-                  {data.prodTypeValueList.join('、')}
+                  {data.prodTypeValueList
+                    ? data.prodTypeValueList.join('、')
+                    : '暂无'}
                 </Tooltip>
               </div>
               <div className={styles.hidden}>
                 擅长产品品类：
                 <Tooltip
                   placement="top"
-                  title={data.factoryCategoryList.join('、')}
+                  title={
+                    data.factoryCategoryList
+                      ? data.factoryCategoryList.join('、')
+                      : '暂无'
+                  }
                 >
-                  {data.factoryCategoryList.join('、')}
+                  {data.factoryCategoryList
+                    ? data.factoryCategoryList.join('、')
+                    : '暂无'}
                 </Tooltip>
               </div>
             </div>

@@ -49,7 +49,9 @@ function DemandList() {
     const res = await applicationList(params)
     if (res.code === 200) {
       setDataLength(res.data.total)
-      setLists(res.data.records)
+      if (res.data.records) {
+        setLists(res.data.records)
+      }
     }
   }
   // 排序

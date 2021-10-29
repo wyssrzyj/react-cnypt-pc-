@@ -2,19 +2,21 @@ import React from 'react'
 import { Form, Col, Row } from 'antd'
 import { useStores } from '@/utils/mobx'
 import { toJS } from 'mobx'
-
 import FormNode from '@/components/FormNode'
 import Regional from './regional'
+import styles from './index.module.less'
+
 const FormItem = Form.Item
 const layout = {
   labelCol: {
     span: 5
   },
   wrapperCol: {
-    span: 12
+    span: 16
   }
 }
 const keys = [
+  'size',
   'type',
   'options',
   'keys',
@@ -79,7 +81,7 @@ function Basics() {
     map.set(0, [{ required: item.required, message: item.message }])
   }
   return (
-    <div>
+    <div className={styles.basic}>
       <Row>
         {orderConfigs.map(item => {
           //orderConfigs form的数据
@@ -92,7 +94,7 @@ function Basics() {
           })
           fangfa(item)
           return (
-            <Col key={item.field} span={item.span}>
+            <Col key={item.field} span={item.span} className={styles.field}>
               <FormItem
                 key={item.field}
                 name={item.field}

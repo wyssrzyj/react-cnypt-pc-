@@ -9,7 +9,7 @@ const layout = {
     span: 5
   },
   wrapperCol: {
-    span: 20
+    span: 16
   }
 }
 
@@ -39,24 +39,32 @@ const date = ({ validity }) => {
     <Row>
       <Col span={12}>
         <FormItem
-          {...layout}
           className={styles.processingType}
           name="processingType"
           label="订单有效期"
           rules={[{ required: true, message: '请选择日期' }]}
+          {...layout}
         >
-          <DatePicker onChange={onChange} disabledDate={disabledDate} />
+          <DatePicker
+            style={{ width: '100%' }}
+            onChange={onChange}
+            disabledDate={disabledDate}
+          />
         </FormItem>
       </Col>
       <Col span={12}>
         <FormItem
-          {...layout}
           name="unitPrice"
           className={styles.processingType}
           label="交货期"
           rules={[{ required: true, message: '请选择日期' }]}
+          {...layout}
         >
-          <DatePicker onChange={onChanges} disabledDate={disabledDate} />
+          <DatePicker
+            style={{ width: '100%' }}
+            onChange={onChanges}
+            disabledDate={disabledDate}
+          />
         </FormItem>
       </Col>
     </Row>

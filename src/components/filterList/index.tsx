@@ -84,7 +84,6 @@ const FilterList = props => {
   )
     ? prodType
     : inquiryProcessType
-  const newTitle = '加工类型'
   const newTime =
     location.pathname === '/factory-search' ? '更新时间' : '发布时间'
 
@@ -155,11 +154,7 @@ const FilterList = props => {
 
   const selectAllProcessing = () => {
     setActiveProcessing({})
-    onFilterChange({
-      [location.pathname === '/factory-search'
-        ? 'prodType'
-        : 'processTypeValues']: ''
-    })
+    onFilterChange({ prodType: '' })
   }
 
   // const onTabChange = activeKey => {
@@ -175,11 +170,7 @@ const FilterList = props => {
   }
   const onProcessingChange = params => {
     setActiveProcessing({ ...params })
-    onFilterChange({
-      [location.pathname === '/factory-search'
-        ? 'prodType'
-        : 'processTypeValues']: params.id
-    })
+    onFilterChange({ prodType: params.id })
   }
   const onFactorySizeChange = (value, field) => {
     setMoreParams({
@@ -414,7 +405,7 @@ const FilterList = props => {
         </div>
       </div>
       <div className={styles.classification}>
-        <div className={styles.classificationLabel}>{newTitle}</div>
+        <div className={styles.classificationLabel}>加工类型</div>
         <div className={styles.classificationItem}>
           <span
             className={classNames(

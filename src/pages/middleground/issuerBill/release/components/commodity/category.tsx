@@ -54,7 +54,7 @@ const Category = () => {
     onChange: onChange,
     treeCheckable: true,
     showCheckedStrategy: SHOW_PARENT,
-    placeholder: '请选择产品品类',
+    placeholder: '请选择商品品类',
     style: {
       width: '100%'
     }
@@ -85,8 +85,8 @@ const Category = () => {
           <FormItem
             className={styles.categoryId}
             name="categoryId"
-            label="产品品类"
-            rules={[{ required: true, message: '请选择产品品类 ' }]}
+            label="商品品类"
+            rules={[{ required: true, message: '请选择商品品类 ' }]}
             {...layout}
           >
             <TreeSelect maxTagCount={5} allowClear={true} {...tProps} />

@@ -5,18 +5,25 @@ import { routingMethod } from './routeConfig'
 
 import { Menu } from 'antd'
 import { Link } from 'react-router-dom'
-import { observer } from '@/utils/mobx'
 import { useLocation } from 'react-router-dom'
 const DemandList = React.lazy(() => import('./demandList'))
 const DemandSheet = React.lazy(() => import('./release'))
 const applicationList = React.lazy(() => import('./applicationList'))
+import { useStores, toJS, observer } from '@/utils/mobx'
 
 function index() {
+  const { factoryStore } = useStores()
+  const { productCategoryList, productCategory } = factoryStore
+  const treeData = productCategoryList //商品品类
+
   const location = useLocation()
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
+  // 商品品类  调取接口
   useEffect(() => {
     setCurrentMenu(routingMethod.get(location.pathname))
+    console.log('修改刷新数据消失问题', toJS(treeData))
+    CommodityCategory()
   }, [])
 
   const handleMenu = ({ keyPath }) => {
@@ -24,6 +31,9 @@ function index() {
   }
   const onOpenChange = keys => {
     setOpenKeys(keys)
+  }
+  const CommodityCategory = async () => {
+    await productCategory() //点击订单详情 调取商品品类的接口数据
   }
   return (
     <div className={styles.controlPanel}>

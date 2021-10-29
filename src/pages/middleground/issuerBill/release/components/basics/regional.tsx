@@ -90,7 +90,7 @@ const regional = () => {
         <Col span={24} className={styles.textArea}>
           <FormItem {...lay} name="otherRequirement" label="其他要求">
             <TextArea
-              style={{ width: '82%', resize: 'none' }}
+              style={{ width: '74%', resize: 'none' }}
               rows={4}
               allowClear={true}
               showCount

@@ -3,7 +3,7 @@ import { Row, Col, Button, Tooltip, Modal } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components' //路径
 import { useHistory } from 'react-router-dom'
-import { toJS, useStores } from '@/utils/mobx'
+import { toJS, useStores, observer } from '@/utils/mobx'
 
 const MultipleChoice = ({
   data,
@@ -356,4 +356,4 @@ const MultipleChoice = ({
   )
 }
 
-export default MultipleChoice
+export default observer(MultipleChoice)

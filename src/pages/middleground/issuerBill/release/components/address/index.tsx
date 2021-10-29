@@ -61,7 +61,7 @@ const index = () => {
               { required: true, message: `请输入订单联系人` }
             ]}
           >
-            <Input placeholder={`请输入请输入设备名称`} />
+            <Input placeholder={`订单联系人`} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -79,7 +79,7 @@ const index = () => {
               { required: true, message: `请输入联系人电话` }
             ]}
           >
-            <Input placeholder={`请输入请输入设备名称`} />
+            <Input placeholder={`联系人电话`} />
           </Form.Item>
         </Col>
       </Row>

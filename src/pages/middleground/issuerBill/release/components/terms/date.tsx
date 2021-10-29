@@ -36,7 +36,7 @@ const date = ({ validity }) => {
   }
 
   return (
-    <Row>
+    <Row className={styles.top}>
       <Col span={12}>
         <FormItem
           className={styles.processingType}

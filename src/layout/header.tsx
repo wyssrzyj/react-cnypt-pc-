@@ -97,8 +97,28 @@ const Header = () => {
       type: '加工厂',
       children: [
         {
-          title: '订单列表',
-          url: '/control-panel/orderManagement/receiveOrder?key=all'
+          title: '全部',
+          url: '/control-panel/orderManagement/receiveOrder?key=all&pageNum=1&pageSize=10'
+        },
+        {
+          title: '新需求',
+          url: '/control-panel/orderManagement/receiveOrder?key=request&pageNum=1&pageSize=10'
+        },
+        {
+          title: '待反馈',
+          url: '/control-panel/orderManagement/receiveOrder?key=doing&pageNum=1&pageSize=10'
+        },
+        {
+          title: '已确认',
+          url: '/control-panel/orderManagement/receiveOrder?key=confirm&pageNum=1&pageSize=10'
+        },
+        {
+          title: '被谢绝',
+          url: '/control-panel/orderManagement/receiveOrder?key=checked&pageNum=1&pageSize=10'
+        },
+        {
+          title: '已取消',
+          url: '/control-panel/orderManagement/receiveOrder?key=complete&pageNum=1&pageSize=10'
         }
       ]
     },

@@ -45,7 +45,7 @@ const MultipleChoice = ({
     toppingMethod({ id: value, stickType: ccc })
   }
 
-  // 失败原因
+  // 失败原因.
   const failureReason = e => {
     console.log(e)
     console.log('失败原因')

@@ -22,9 +22,13 @@ const memberCenter = [
         url: '/control-panel/panel/enterprise'
       },
       {
-        title: '发单信息',
-        url: '/control-panel/panel/issue-bill'
+        title: '企业照片',
+        url: '/control-panel/panel/enterprise-photos'
       }
+      // {
+      //   title: '发单信息',
+      //   url: '/control-panel/panel/issue-bill'
+      // }
     ]
   },
   {
@@ -93,8 +97,28 @@ const Header = () => {
       type: '加工厂',
       children: [
         {
-          title: '订单列表',
-          url: '/control-panel/orderManagement/receiveOrder?key=all'
+          title: '全部',
+          url: '/control-panel/orderManagement/receiveOrder?key=all&pageNum=1&pageSize=10'
+        },
+        {
+          title: '新需求',
+          url: '/control-panel/orderManagement/receiveOrder?key=request&pageNum=1&pageSize=10'
+        },
+        {
+          title: '待反馈',
+          url: '/control-panel/orderManagement/receiveOrder?key=doing&pageNum=1&pageSize=10'
+        },
+        {
+          title: '已确认',
+          url: '/control-panel/orderManagement/receiveOrder?key=confirm&pageNum=1&pageSize=10'
+        },
+        {
+          title: '被谢绝',
+          url: '/control-panel/orderManagement/receiveOrder?key=checked&pageNum=1&pageSize=10'
+        },
+        {
+          title: '已取消',
+          url: '/control-panel/orderManagement/receiveOrder?key=complete&pageNum=1&pageSize=10'
         }
       ]
     },
@@ -133,12 +157,37 @@ const Header = () => {
   // 发单商没有监控列表
 
   const memberCenterFiltering = memberCenter.filter(item => {
-    if (enterpriseType === '0') {
+    if (enterpriseType === '1') {
       if (item.title == '账号管理') {
-        item.children.splice(2, 1)
+        item.children = [
+          {
+            title: '账号安全',
+            url: '/control-panel/panel/account'
+          },
+          {
+            title: '企业信息',
+            url: '/control-panel/panel/enterprise'
+          }
+        ]
       }
       return item
     } else {
+      if (item.title == '账号管理') {
+        item.children = [
+          {
+            title: '账号安全',
+            url: '/control-panel/panel/account'
+          },
+          {
+            title: '企业信息',
+            url: '/control-panel/panel/enterprise'
+          },
+          {
+            title: '企业照片',
+            url: '/control-panel/panel/enterprise-photos'
+          }
+        ]
+      }
       if (item.title !== '监控列表' && item.title !== '验厂管理') {
         return item
       }
@@ -257,88 +306,65 @@ const Header = () => {
   )
   return (
     <header>
-      {currentUser.userId ? (
-        <div className={styles.header}>
-          <div className={styles.headerLeft}>
-            <Link to="/" className={styles.home}>
-              <Icon type={'jack-shouye2'} className={styles.homeIcon}></Icon>
-              <span className={styles.homeName}>优产云平台首页</span>
-            </Link>
+      <div className={styles.header}>
+        <div className={styles.headerLeft}>
+          <Link to="/" className={styles.home}>
+            <Icon type={'jack-shouye2'} className={styles.homeIcon}></Icon>
+            <span className={styles.homeName}>优产云平台首页</span>
+          </Link>
 
-            {currentUser.userId ? (
-              <Dropdown overlay={menu}>
-                <span className={styles.user}>
-                  <Icon
-                    type={'jack-yonghu2'}
-                    className={styles.userIcon}
-                  ></Icon>
-                  您好，{currentUser.nickName || currentUser.username}
-                </span>
-              </Dropdown>
-            ) : (
-              <>
-                <span style={{ cursor: 'pointer' }} onClick={toRegister}>
-                  <Icon
-                    type={'jack-yonghu2'}
-                    className={styles.userIcon}
-                  ></Icon>
-                  注册
-                </span>
-                <span>&nbsp;/ &nbsp;</span>
-                <a onClick={toLogin}>登录</a>
-              </>
-            )}
-          </div>
-
-          {/* -----------------------------我的工作台----------------------------- */}
-          <div className={styles.headerRight}>
-            {currentUser.userId ? (
-              <Dropdown
-                className={styles.headerLeftest}
-                overlay={workbenchDataFilteringMethod}
-              >
-                <div className={styles.chunks} onClick={toAccountRight}>
-                  <span className={styles.consoleBox}>
-                    <Icon
-                      type={'jack-bussiness-man'}
-                      className={styles.workbench}
-                    ></Icon>
-                    <span className={styles.headerChunk}>我的工作台</span>
-                  </span>
-                </div>
-              </Dropdown>
-            ) : null}
-          </div>
-          {/* -----------------------------会员中心----------------------------- */}
-          <div className={styles}>
-            {currentUser.userId ? (
-              <Dropdown overlay={memberCenterFilteringMethod}>
-                <div className={styles.chunks} onClick={toAccountSafe}>
-                  <span className={styles.consoleBox}>
-                    <AuditOutlined className={styles.member} />
-                    <span className={styles.headerChunk}>会员中心</span>
-                  </span>
-                </div>
-              </Dropdown>
-            ) : null}
-          </div>
+          {currentUser.userId ? (
+            <Dropdown overlay={menu}>
+              <span className={styles.user}>
+                <Icon type={'jack-yonghu2'} className={styles.userIcon}></Icon>
+                您好，{currentUser.nickName || currentUser.username}
+              </span>
+            </Dropdown>
+          ) : (
+            <>
+              <span style={{ cursor: 'pointer' }} onClick={toRegister}>
+                <Icon type={'jack-yonghu2'} className={styles.userIcon}></Icon>
+                注册
+              </span>
+              <span>&nbsp;/ &nbsp;</span>
+              <a onClick={toLogin}>登录</a>
+            </>
+          )}
         </div>
-      ) : (
-        <div className={styles.father}>
-          <div className={styles.topCenter}>
-            <img
-              className={styles.topCenterImg}
-              src="http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/5a113adbb7a24ecc8ebedef760019f84.png"
-              alt=""
-            />
-            {!location.pathname.includes('/user/login') && (
-              <div onClick={toLogin} className={styles.landing}>
-                登录
+
+        {/* -----------------------------我的工作台----------------------------- */}
+        <div className={styles.headerRight}>
+          {currentUser.userId ? (
+            <Dropdown
+              className={styles.headerLeftest}
+              overlay={workbenchDataFilteringMethod}
+            >
+              <div className={styles.chunks} onClick={toAccountRight}>
+                <span className={styles.consoleBox}>
+                  <Icon
+                    type={'jack-bussiness-man'}
+                    className={styles.workbench}
+                  ></Icon>
+                  <span className={styles.headerChunk}>我的工作台</span>
+                </span>
               </div>
-            )}
-          </div>
+            </Dropdown>
+          ) : null}
         </div>
-      )}
+        {/* -----------------------------会员中心----------------------------- */}
+        <div className={styles}>
+          {currentUser.userId ? (
+            <Dropdown overlay={memberCenterFilteringMethod}>
+              <div className={styles.chunks} onClick={toAccountSafe}>
+                <span className={styles.consoleBox}>
+                  <AuditOutlined className={styles.member} />
+                  <span className={styles.headerChunk}>会员中心</span>
+                </span>
+              </div>
+            </Dropdown>
+          ) : null}
+        </div>
+      </div>
     </header>
   )
 }

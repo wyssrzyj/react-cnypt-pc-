@@ -134,9 +134,19 @@ const DemandSheet = () => {
     console.log(v)
   }
 
+  const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 16 }
+  }
+
   return (
     <div className={styles.demand}>
-      <Form form={form} onFinish={onFinish} initialValues={initialValues}>
+      <Form
+        form={form}
+        onFinish={onFinish}
+        initialValues={initialValues}
+        {...layout}
+      >
         <section>
           <Title title={'基础信息'}></Title>
           <Basics />
@@ -157,7 +167,7 @@ const DemandSheet = () => {
             保存草稿
           </Button>
           <Button
-            className={styles.button}
+            className={styles.button2}
             type={'primary'}
             onClick={release}
             htmlType={'submit'}

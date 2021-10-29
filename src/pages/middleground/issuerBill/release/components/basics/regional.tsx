@@ -12,7 +12,7 @@ const layout = {
     span: 4
   },
   wrapperCol: {
-    span: 12
+    span: 16
   }
 }
 const lay = {
@@ -67,7 +67,7 @@ const regional = () => {
     onChange: onChange,
     treeCheckable: true,
     showCheckedStrategy: SHOW_PARENT,
-    placeholder: '请选择产品品类',
+    placeholder: '请选择地区',
     style: {
       width: '100%'
     }
@@ -77,10 +77,10 @@ const regional = () => {
       <Row>
         <Col span={12} className={styles.requirements}>
           <FormItem
-            {...layout}
             name="regionalIdList"
-            label="地区要求"
-            rules={[{ required: true, message: '请输入地区要求' }]}
+            label="地区"
+            rules={[{ required: true, message: '请选择地区' }]}
+            {...layout}
           >
             <TreeSelect maxTagCount={5} allowClear={true} {...tProps} />
           </FormItem>

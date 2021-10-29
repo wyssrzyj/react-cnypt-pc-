@@ -13,7 +13,7 @@ const layout = {
     span: 5
   },
   wrapperCol: {
-    span: 12
+    span: 16
   }
 }
 const keys = [
@@ -91,7 +91,7 @@ function Basics() {
       label: '款图',
       type: 'img',
       field: 'stylePicture',
-      multiple: true,
+      // multiple: true,
       span: 12
     }
   ]
@@ -110,39 +110,41 @@ function Basics() {
   return (
     <div>
       <Category />
+      <div className={styles.orderCon}>
+        <Row>
+          {orderConfigs.map(item => {
+            fangfa(item)
+            //orderConfigs form的数据
+            const data: any = {} //定义一个空对象
+            keys.forEach(i => {
+              if (![null, undefined].includes(item[i])) {
+                //当不等于null和undefined
+                data[i] = item[i]
+              }
+            })
 
-      <Row>
-        {orderConfigs.map(item => {
-          fangfa(item)
-          //orderConfigs form的数据
-          const data: any = {} //定义一个空对象
-          keys.forEach(i => {
-            if (![null, undefined].includes(item[i])) {
-              //当不等于null和undefined
-              data[i] = item[i]
-            }
-          })
+            return (
+              <Col key={item.field} span={item.span} className={styles.modify}>
+                <FormItem
+                  name={item.field}
+                  label={item.label}
+                  rules={map.get(item.cesar)}
+                  {...layout}
+                >
+                  <FormNode {...data}></FormNode>
+                </FormItem>
+              </Col>
+            )
+          })}
+        </Row>
+      </div>
 
-          return (
-            <Col key={item.field} span={item.span} className={styles.modify}>
-              <FormItem
-                name={item.field}
-                label={item.label}
-                rules={map.get(item.cesar)}
-                {...layout}
-              >
-                <FormNode {...data}></FormNode>
-              </FormItem>
-            </Col>
-          )
-        })}
-      </Row>
       <Row className={styles.goodsRemark}>
         <span className={styles.payment}>
           上传款图，只能上传jpg/png格式文件，文件不能超过20M，最多上传10个文件
         </span>
-        <Col span={20} className={styles.textArea}>
-          <FormItem name="goodsRemark" label="备注说明">
+        <Col span={24} className={styles.textArea}>
+          <FormItem name="goodsRemark" label="备注说明" labelCol={{ span: 2 }}>
             <TextArea
               style={{ width: '100%', resize: 'none' }}
               rows={4}

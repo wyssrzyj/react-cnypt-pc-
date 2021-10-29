@@ -210,7 +210,7 @@ const MultipleChoice = ({
             <p className={styles.quotationInformation}>
               <span className={styles.information}>•</span> 报价信息:
               <span>
-                {data.receiveGoodsNum ? data.receiveGoodsNum : '暂无'}
+                {data.availableOrders ? data.availableOrders : '暂无'}
               </span>
             </p>
             <p>
@@ -219,7 +219,7 @@ const MultipleChoice = ({
             </p>
             <p>
               <span className={styles.information}>•</span>可接订单数：
-              {data.availableOrders ? data.availableOrders : '暂无'}
+              {data.receiveGoodsNum ? data.receiveGoodsNum : '暂无'}
             </p>
             <p>
               <span className={styles.information}>•</span>备注：

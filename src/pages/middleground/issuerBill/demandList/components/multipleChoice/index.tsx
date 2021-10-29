@@ -3,6 +3,7 @@ import { Row, Col, Button, Tooltip, Modal } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components' //路径
 import { useHistory } from 'react-router-dom'
+import { toJS, useStores } from '@/utils/mobx'
 
 const MultipleChoice = ({
   data,
@@ -13,8 +14,14 @@ const MultipleChoice = ({
   DemandOrderDetail
 }) => {
   const { push } = useHistory()
+  const { commonStore } = useStores()
+
+  const { dictionary } = commonStore
+
+  const { goodsNum = [] } = toJS(dictionary)
 
   const { id, stickType } = data
+
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
 
@@ -28,13 +35,17 @@ const MultipleChoice = ({
   examine.set(1, 'jack-shenhe')
   let Simg = 'http://dev.uchat.com.cn:8002/images/b140ef.png'
 
+  // 订单量
+  const dingdong = v => {
+    return goodsNum.filter(item => item.value === v)[0].label
+  }
   // 置顶事件
   const changeSort = async value => {
     let ccc = stickType == 0 ? 1 : 0
     toppingMethod({ id: value, stickType: ccc })
   }
 
-  // 失败原因
+  // 失败原因.
   const failureReason = e => {
     console.log(e)
     console.log('失败原因')
@@ -154,9 +165,7 @@ const MultipleChoice = ({
                     {data.categoryIdList.join('、')}
                   </div>
                 </Tooltip>
-                <p className={styles.ddl}>
-                  订单量：{data.totalOrderAmount ? data.totalOrderAmount : 0} 件
-                </p>
+                <p className={styles.ddl}>订单量：{dingdong(data.goodsNum)}</p>
               </div>
             </div>
           </Col>
@@ -208,7 +217,6 @@ const MultipleChoice = ({
           <Col className={styles.state} span={6}>
             {/* -1 草稿箱 1 提交需求单 -2审核失败 -3已结束 */}
             {/* 生效中 */}
-            {console.log(data.status)}
             {+data.status === 1 ? (
               <div>
                 <p className={styles.effect}>生效中</p>
@@ -222,7 +230,6 @@ const MultipleChoice = ({
               </div>
             ) : null}
             {/* 已结束 */}
-            {console.log(data.status)}
             {data.status === -3 ? (
               <div>
                 <p className={styles.already}>已结束</p>

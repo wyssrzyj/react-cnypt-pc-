@@ -116,7 +116,7 @@ const OtherCard = props => {
     inquiryList({
       pageSize: 100,
       pageNum: 1,
-      tenantId
+      enterpriseId: tenantId
     }).then(response => {
       const { success, data } = response
       if (success) {

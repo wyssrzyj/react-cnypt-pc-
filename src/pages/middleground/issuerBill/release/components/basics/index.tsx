@@ -85,7 +85,10 @@ function Basics() {
                 key={item.field}
                 name={item.field}
                 label={item.label}
-                rules={[{ required: item.required, message: item.message }]}
+                rules={[
+                  { required: item.required, message: item.message },
+                  { max: 99, message: '不得超过99个字符' }
+                ]}
                 {...layout}
               >
                 <FormNode {...data}></FormNode>

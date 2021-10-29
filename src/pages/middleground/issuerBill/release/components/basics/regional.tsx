@@ -58,7 +58,7 @@ const regional = () => {
     return v
   }
   const onChange = value => {
-    //获取所有的父节点
+    //获取所有的父节点.
     serValue(value)
   }
   const tProps = {

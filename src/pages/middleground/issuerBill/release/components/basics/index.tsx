@@ -41,7 +41,8 @@ function Basics() {
       message: '输入所要发布订单标题',
       placeholder: '输入所要发布订单标题',
       field: 'name',
-      span: 12
+      span: 12,
+      cesar: 1
     },
     {
       label: '有效车位',
@@ -51,10 +52,12 @@ function Basics() {
       type: 'select',
       field: 'effectiveLocation',
       span: 12,
+      cesar: 0,
       options: factoryEffectiveLocation
     },
     {
       label: '企业信息',
+      cesar: 0,
       field: 'isEnterpriseInfoPublic',
       required: true,
       message: '请选择是否公开',
@@ -66,6 +69,20 @@ function Basics() {
       ]
     }
   ]
+  let map = new Map()
+  const fangfa = item => {
+    map.set(1, [
+      { required: item.required, message: item.message },
+      { max: 99, message: '不得超过99个字符' }
+    ])
+
+    map.set(0, [{ required: item.required, message: item.message }])
+  }
+
+  // ;[
+  //   { required: item.required, message: item.message },
+  //   { max: 99, message: '不得超过99个字符' }
+  // ]
   return (
     <div>
       <Row>
@@ -78,17 +95,14 @@ function Basics() {
               data[i] = item[i]
             }
           })
-
+          fangfa(item)
           return (
             <Col key={item.field} span={item.span}>
               <FormItem
                 key={item.field}
                 name={item.field}
                 label={item.label}
-                rules={[
-                  { required: item.required, message: item.message },
-                  { max: 99, message: '不得超过99个字符' }
-                ]}
+                rules={map.get(item.cesar)}
                 {...layout}
               >
                 <FormNode {...data}></FormNode>

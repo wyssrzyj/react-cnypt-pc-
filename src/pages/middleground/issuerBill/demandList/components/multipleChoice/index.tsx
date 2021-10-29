@@ -208,6 +208,7 @@ const MultipleChoice = ({
           <Col className={styles.state} span={6}>
             {/* -1 草稿箱 1 提交需求单 -2审核失败 -3已结束 */}
             {/* 生效中 */}
+            {console.log(data.status)}
             {+data.status === 1 ? (
               <div>
                 <p className={styles.effect}>生效中</p>

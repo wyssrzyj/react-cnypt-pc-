@@ -9,9 +9,9 @@ import Terms from './components/terms'
 import Address from './components/address'
 import { useStores, observer } from '@/utils/mobx'
 import { useHistory } from 'react-router-dom'
-import { timestampToTime } from './components/time' //
+// import { timestampToTime } from './components/time' //
 import { useLocation } from 'react-router-dom'
-import moment from 'moment' //引入moment
+// import moment from 'moment' //引入moment
 
 const DemandSheet = () => {
   const location = useLocation()
@@ -68,8 +68,8 @@ const DemandSheet = () => {
       if (data.location[0] === 0) {
         data.location = null
       }
-      data.processingType = moment(timestampToTime(data.inquiryEffectiveDate)) //时间的回显
-      data.unitPrice = moment(timestampToTime(data.deliveryDate))
+      // data.processingType = moment(timestampToTime(data.inquiryEffectiveDate)) //时间的回显
+      // data.unitPrice = moment(timestampToTime(data.deliveryDate))
     }
     console.log(data)
 

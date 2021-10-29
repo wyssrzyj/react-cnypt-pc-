@@ -148,8 +148,8 @@ const EnterpriseHome = () => {
               <div
                 className={classNames(
                   styles.navItem,
-                  ['/control-panel/orderManagement/receiveOrder?key=all'].some(
-                    item => location.pathname.includes(item)
+                  ['/control-panel/orderManagement/receiveOrder'].some(item =>
+                    location.pathname.includes(item)
                   )
                     ? styles.activeNavItem
                     : ''

@@ -113,7 +113,9 @@ const Category = () => {
               }
             >
               {goodsNum.map(item => (
-                <Option value={item.id}>{item.label}</Option>
+                <Option key={item.id} value={item.id}>
+                  {item.label}
+                </Option>
               ))}
             </Select>
           </FormItem>

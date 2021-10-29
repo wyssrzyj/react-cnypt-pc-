@@ -164,13 +164,13 @@ const MultipleChoice = ({
             </div>
 
             <div className={styles.imgRight}>
-              <p className={styles.namest}>
+              <div className={styles.namest}>
                 <div className={styles.factoryName}>{data.enterpriseName}</div>
                 <div className={styles.diqu_bai}>
                   <Icon type="jack-diqu_bai" className={styles.previous} />
                   {data.address ? data.address : '暂无'}
                 </div>
-              </p>
+              </div>
               <p>人数：{data.staffNumber}人</p>
               <p>联系方式: {data.contactsMobile}</p>
               <p>电子邮箱: {data.contactsEmail}</p>

@@ -137,13 +137,6 @@ const MultipleChoice = ({
       {/* 主题 */}
       <div className={styles.theme}>
         <Row>
-          <Col span={1}>
-            {/* <Checkbox
-              className={styles.checked}
-              // onChange={callback}
-              checked={checked}
-            /> */}
-          </Col>
           <Col span={8}>
             <div className={styles.subject}>
               <img

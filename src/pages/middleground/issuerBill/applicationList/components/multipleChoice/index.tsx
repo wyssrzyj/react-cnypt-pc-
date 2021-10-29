@@ -57,6 +57,8 @@ const MultipleChoice = ({
     }
     if (windowType.type === 'confirmCooperation') {
       InitiateOrder(data.id)
+      {
+      }
     }
     if (windowType.type === 'decline') {
       earlyEnd(data.id)

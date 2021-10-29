@@ -78,11 +78,6 @@ function Basics() {
 
     map.set(0, [{ required: item.required, message: item.message }])
   }
-
-  // ;[
-  //   { required: item.required, message: item.message },
-  //   { max: 99, message: '不得超过99个字符' }
-  // ]
   return (
     <div>
       <Row>

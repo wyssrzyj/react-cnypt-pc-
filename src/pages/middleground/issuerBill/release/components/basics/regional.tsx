@@ -3,6 +3,7 @@ import { Form, Row, Col, Input, TreeSelect } from 'antd'
 // import { toJS } from 'mobx'
 import { observer, toJS, useStores } from '@/utils/mobx'
 import styles from './index.module.less'
+import { isEmpty } from 'lodash'
 const { TextArea } = Input
 // const { SHOW_PARENT } = TreeSelect
 const FormItem = Form.Item
@@ -32,17 +33,32 @@ const regional = () => {
   const [treeData, setTreeData] = useState([])
 
   useEffect(() => {
-    setTreeData([
-      {
-        label: '全国',
-        value: '0',
-        key: '0',
-        children: toJS(allArea)
-      }
-    ])
+    if (!isEmpty(toJS(allArea))) {
+      setTreeData([
+        {
+          label: '全国',
+          value: '0',
+          key: '0',
+          children: list(toJS(allArea))
+        }
+      ])
+    }
   }, [allArea])
+
+  const list = v => {
+    if (!isEmpty(v)) {
+      v.map(item => {
+        if (!isEmpty(item.children)) {
+          item.children.forEach(s => {
+            s.children = []
+          })
+        }
+      })
+    }
+    return v
+  }
   const onChange = value => {
-    //获取所有的父节点
+    //获取所有的父节点.
     serValue(value)
   }
   const tProps = {

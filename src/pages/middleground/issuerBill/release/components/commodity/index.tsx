@@ -103,7 +103,6 @@ function Basics() {
         pattern: /^[0-9]*$/,
         message: '请输入正确的数量'
       }
-      // { max: 99, message: '不得超过99个字符.' }
     ])
     map.set(0, [{ required: item.required, message: item.message }])
   }

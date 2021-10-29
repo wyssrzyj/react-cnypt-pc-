@@ -221,7 +221,7 @@ const MultipleChoice = ({
               </div>
             ) : null}
             {/* 已结束 */}
-            {console.log(data.status)}
+
             {data.status === -3 ? (
               <div>
                 <p className={styles.already}>已结束</p>

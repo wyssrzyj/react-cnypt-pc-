@@ -19,7 +19,7 @@ export default class SearchOrderStore {
   @action getOrderList = async params => {
     try {
       const res: ResponseProps = await axios.post(
-        `/api/oms/inquiry-purchase/inquiry-list`,
+        `/api/oms/inquiry-purchase/list-inquiry-search`,
         params
       )
 

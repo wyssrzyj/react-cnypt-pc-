@@ -14,10 +14,10 @@ const LoginLogs = React.lazy(() => import('./loginLogs'))
 const PlantSitePhoto = React.lazy(() => import('./components/plantSitePhoto'))
 const EnterpriseInfo = React.lazy(() => import('./components/enterpriseInfo'))
 const MonitorPage = React.lazy(() => import('../monitorPage'))
-const DemandList = React.lazy(() => import('./demandList'))
+// const DemandList = React.lazy(() => import('./demandList'))
 
-const DemandSheet = React.lazy(() => import('./release'))
-const applicationList = React.lazy(() => import('./applicationList'))
+// const DemandSheet = React.lazy(() => import('./release'))
+// const applicationList = React.lazy(() => import('./applicationList'))
 
 const VideoCenter = React.lazy(() => import('../videoCenter/factoryVideo'))
 const IssuerEnterpriseInfo = React.lazy(
@@ -37,7 +37,6 @@ const FactoryPhotograph = React.lazy(
   () => import('./components/factoryPhotograph')
 )
 const Department = React.lazy(() => import('../department'))
-const ReceiveOrders = React.lazy(() => import('./receiveOrders'))
 const OrderManage = React.lazy(() => import('./receiveOrders/orderManage'))
 const FactoryPhotos = React.lazy(() => import('./factoryPhotos'))
 
@@ -228,54 +227,6 @@ const ControlPanel = () => {
                 </Menu.Item>
               </Menu.ItemGroup>
             ) : null}
-            {userInfo.enterpriseType !== null &&
-            +userInfo.enterpriseType === 0 ? (
-              <Menu.ItemGroup
-                key="g5"
-                title={<Title title={'接单管理'} icon={'jack-video1'}></Title>}
-              >
-                <Menu.Item key="receiveOrder">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/receiveOrder?key=all"
-                  >
-                    订单管理
-                  </Link>
-                </Menu.Item>
-              </Menu.ItemGroup>
-            ) : null}
-            {userInfo.enterpriseType !== null &&
-            +userInfo.enterpriseType === 1 ? (
-              <Menu.ItemGroup
-                key="g6"
-                title={<Title title={'发布订单'} icon={'jack-video1'}></Title>}
-              >
-                <Menu.Item key="demandSheet">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/demand-sheet"
-                  >
-                    发布订单
-                  </Link>
-                </Menu.Item>
-                <Menu.Item key="demandList">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/demand-list"
-                  >
-                    订单列表
-                  </Link>
-                </Menu.Item>
-                <Menu.Item key="applicationList">
-                  <Link
-                    className={styles.minute}
-                    to="/control-panel/panel/demand-applicationList"
-                  >
-                    申请列表
-                  </Link>
-                </Menu.Item>
-              </Menu.ItemGroup>
-            ) : null}
           </Menu>
         </div>
 
@@ -286,11 +237,7 @@ const ControlPanel = () => {
               path="/control-panel/panel/enterprise-photos"
               component={FactoryPhotos}
             />
-            {/* 发单信息 */}
-            <Route
-              path="/control-panel/panel/receiveOrder"
-              component={ReceiveOrders}
-            />
+
             <Route
               path="/control-panel/panel/ordersManage"
               component={OrderManage}
@@ -354,21 +301,6 @@ const ControlPanel = () => {
             <Route
               path="/control-panel/panel/video-center"
               component={VideoCenter}
-            />
-            {/* 发布订单 */}
-            <Route
-              path="/control-panel/panel/demand-sheet"
-              component={DemandSheet}
-            />
-            {/* {订单列表} */}
-            <Route
-              path="/control-panel/panel/demand-list"
-              component={DemandList}
-            />
-            {/* 申请列表 */}
-            <Route
-              path="/control-panel/panel/demand-applicationList"
-              component={applicationList}
             />
 
             <Redirect to="/platform" />

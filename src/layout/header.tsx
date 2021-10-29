@@ -9,70 +9,6 @@ import { useStores } from '@/utils/mobx'
 import { Icon } from '@/components'
 import styles from './header.module.less'
 
-const workbenchData = [
-  {
-    title: '接单管理',
-    children: [
-      {
-        title: '待确认',
-        url: '/control-panel/receive-manage?key=confirm&pageNum=1&pageSize=10'
-      },
-      {
-        title: '进行中',
-        url: '/control-panel/receive-manage?key=doing&pageNum=1&pageSize=10'
-      },
-      {
-        title: '待验收',
-        url: '/control-panel/receive-manage?key=checked&pageNum=1&pageSize=10'
-      },
-      {
-        title: '已完成',
-        url: '/control-panel/receive-manage?key=complete&pageNum=1&pageSize=10'
-      },
-      {
-        title: '退回',
-        url: '/control-panel/receive-manage?key=return&pageNum=1&pageSize=10'
-      },
-      {
-        title: '取消',
-        url: '/control-panel/receive-manage?key=cancel&pageNum=1&pageSize=10'
-      }
-    ]
-  },
-  {
-    title: '发单管理',
-    children: [
-      {
-        title: '待确认',
-        url: '/control-panel/receive-manage?key=confirm&pageNum=1&pageSize=10'
-      },
-      {
-        title: '进行中',
-        url: '/control-panel/receive-manage?key=doing&pageNum=1&pageSize=10'
-      },
-      {
-        title: '待验收',
-        url: '/control-panel/receive-manage?key=checked&pageNum=1&pageSize=10'
-      },
-      {
-        title: '已完成',
-        url: '/control-panel/receive-manage?key=complete&pageNum=1&pageSize=10'
-      },
-      {
-        title: '退回',
-        url: '/control-panel/receive-manage?key=return&pageNum=1&pageSize=10'
-      },
-      {
-        title: '取消',
-        url: '/control-panel/receive-manage?key=cancel&pageNum=1&pageSize=10'
-      },
-      {
-        title: '草稿',
-        url: '/control-panel/panel/enterprise'
-      }
-    ]
-  }
-] //我的工作台
 const memberCenter = [
   {
     title: '账号管理',
@@ -150,12 +86,45 @@ const Header = () => {
   const { logout } = loginStore
   const { enterpriseType } = userInfo
 
+  const workbenchData = [
+    //加工厂
+    {
+      title: '订单管理',
+      type: '加工厂',
+      children: [
+        {
+          title: '订单列表',
+          url: '/control-panel/orderManagement/receiveOrder?key=all'
+        }
+      ]
+    },
+    {
+      //发单商
+      title: '订单管理',
+      type: '发单商',
+      children: [
+        {
+          title: '发布订单',
+          url: '/control-panel/issuerBill/demand-sheet'
+        },
+        {
+          title: '订单列表',
+          url: '/control-panel/issuerBill/demand-list'
+        },
+        {
+          title: '申请列表',
+          url: '/control-panel/issuerBill/demand-applicationList'
+        }
+      ]
+    }
+  ] //我的工作台
+
   // 企业类型 0 加工厂 1 发单商
   //我的工作台
   const workbenchDataFiltering = workbenchData.filter(item => {
     return (
-      (enterpriseType == '0' && item.title === '接单管理') ||
-      (enterpriseType == '1' && item.title === '发单管理')
+      (enterpriseType == '0' && item.type === '加工厂') ||
+      (enterpriseType == '1' && item.type === '发单商')
     )
   })
 

@@ -26,7 +26,6 @@ function index({ stated }) {
       span: 12
     }
   }
-  console.log(id)
 
   const [initialValues, setInitialValues] = useState<any>({})
 
@@ -57,7 +56,7 @@ function index({ stated }) {
           })
           if (submitRes.code === 200) {
             push({
-              pathname: '/control-panel/panel/receiveOrder'
+              pathname: '/control-panel/orderManagement/receiveOrder'
             })
           }
         }
@@ -68,7 +67,7 @@ function index({ stated }) {
           supplierInquiryId: supplierInquiryId,
           status: -1
         })
-        push('/control-panel/panel/receiveOrder?key=all')
+        push('/control-panel/orderManagement/receiveOrder?key=all')
         console.log(res)
         console.log('拒绝')
       }

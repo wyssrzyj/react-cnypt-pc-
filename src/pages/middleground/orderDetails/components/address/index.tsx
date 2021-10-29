@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'antd'
 import styles from './index.module.less'
-import { toJS, useStores } from '@/utils/mobx'
+import { observer, toJS, useStores } from '@/utils/mobx'
 import { getTrees } from '../../method'
 
-function index({ initialValues }) {
-  const { contactPerson, contactPersonMobile, address } = initialValues
+function index({ initialValues, enterpriseType }) {
+  console.log(enterpriseType)
+  {
+    /* 0 加工厂 1 发单商   只有加工厂才能看到form */
+  }
+
+  const { contactPerson, contactPersonMobile, address, isContactPublic } =
+    initialValues
 
   const { commonStore } = useStores()
   const { allArea } = commonStore
   const [treeData, setTreeData] = useState([])
+  const [testate, setTestate] = useState<any>(isContactPublic)
 
   useEffect(() => {
     // 地区要求的获取
@@ -20,9 +27,14 @@ function index({ initialValues }) {
         'value',
         'label'
       )
+
       setTreeData(res)
     }
+    if (isContactPublic) {
+      setTestate(isContactPublic)
+    }
   }, [initialValues, allArea])
+  console.log(testate)
 
   return (
     <div>
@@ -31,27 +43,75 @@ function index({ initialValues }) {
           <div className={styles.title}>
             收货地址:
             <span className={styles.content}>
-              {treeData.join('-')}-{address}
+              {treeData[0] !== undefined
+                ? ` ${treeData.join('-')}-${address}`
+                : '暂无'}
             </span>
           </div>
         </Col>
       </Row>
-      <Row>
-        <Col span={12}>
-          <div className={styles.title}>
-            订单联系人:
-            <span className={styles.contents}>{contactPerson}</span>
-          </div>
-        </Col>
-        <Col span={12}>
-          <div className={styles.title}>
-            联系人电话:
-            <span className={styles.content}>{contactPersonMobile}</span>
-          </div>
-        </Col>
-      </Row>
+      {console.log('状态', isContactPublic)}
+      {enterpriseType === 1 ? (
+        <Row>
+          <Col span={12}>
+            <div className={styles.title}>
+              发单订单联系人:
+              <span className={styles.contents}>{contactPerson}</span>
+            </div>
+          </Col>
+          <Col span={12}>
+            <div className={styles.title}>
+              联系人电话:
+              <span className={styles.content}>{contactPersonMobile}</span>
+            </div>
+          </Col>
+        </Row>
+      ) : (
+        <div>
+          <Row>
+            {+isContactPublic === 1 ? (
+              <>
+                <Col span={12}>
+                  <div className={styles.title}>
+                    订单联系人:
+                    <span className={styles.contents}>{contactPerson}</span>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div className={styles.title}>
+                    联系人电话:
+                    <span className={styles.content}>
+                      {contactPersonMobile}
+                    </span>
+                  </div>
+                </Col>
+              </>
+            ) : null}
+            {+isContactPublic === 2 ? (
+              <>
+                <Col span={12}>
+                  <div className={styles.title}>
+                    订单联系人:
+                    <span className={styles.contents}>
+                      {'提交订单后可查看'}
+                    </span>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div className={styles.title}>
+                    联系人电话:
+                    <span className={styles.content}>
+                      <span>{'提交订单后可查看'}</span>
+                    </span>
+                  </div>
+                </Col>
+              </>
+            ) : null}
+          </Row>
+        </div>
+      )}
     </div>
   )
 }
 
-export default index
+export default observer(index)

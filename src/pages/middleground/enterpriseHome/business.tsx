@@ -59,7 +59,7 @@ const BusinessHome = () => {
       label: '新增订单',
       type: 'add',
       callback: () => {
-        history.push('/control-panel/order/add')
+        history.push('/control-panel/issuerBill/demand-sheet')
       }
     }
   ]
@@ -69,6 +69,7 @@ const BusinessHome = () => {
       <Header rightConfigs={rightConfigs}></Header>
       <BasciInfo configs={basicConfigs} title={'基本信息'}></BasciInfo>
       <div className={styles.main}>
+        {}
         <Todo></Todo>
         <Memorandum></Memorandum>
       </div>

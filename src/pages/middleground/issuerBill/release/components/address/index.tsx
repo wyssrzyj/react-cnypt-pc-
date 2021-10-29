@@ -21,7 +21,6 @@ const index = () => {
   const { allArea } = commonStore
   useEffect(() => {
     setTreeData(toJS(allArea))
-    console.log(toJS(allArea))
   }, [allArea])
 
   return (
@@ -39,7 +38,12 @@ const index = () => {
         </Col>
         <Col span={12}>
           <div className={styles.addressRight}>
-            <Form.Item {...layout} label="详细地址" name="address">
+            <Form.Item
+              {...layout}
+              rules={[{ max: 99, message: '不得超过99个字符' }]}
+              label="详细地址"
+              name="address"
+            >
               <Input placeholder="请输入详细的地址，如道路、门牌号、小区、单元等" />
             </Form.Item>
           </div>

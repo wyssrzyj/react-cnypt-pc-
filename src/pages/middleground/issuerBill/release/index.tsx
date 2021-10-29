@@ -9,10 +9,16 @@ import Terms from './components/terms'
 import Address from './components/address'
 import { useStores, observer } from '@/utils/mobx'
 import { useHistory } from 'react-router-dom'
+// import { timestampToTime } from './components/time' //
 import { useLocation } from 'react-router-dom'
+// import moment from 'moment' //引入moment
 
 const DemandSheet = () => {
   const location = useLocation()
+  const { push } = useHistory()
+  const [form] = Form.useForm()
+  const { state } = location
+
   const { demandListStore } = useStores()
   const { ewDemandDoc, anotherSingleInterface } = demandListStore
 
@@ -22,18 +28,25 @@ const DemandSheet = () => {
     isEnterpriseInfoPublic: 1,
     isContactPublic: 1
   })
+  const [stated, setStated] = useState<any>(state) //url 数据
+  const { factoryStore } = useStores()
 
-  const { push } = useHistory()
-  const [form] = Form.useForm()
-  const { search } = location
+  const { productCategory } = factoryStore
+  useEffect(() => {
+    api()
+  }, [])
+  let api = async () => {
+    await productCategory()
+  }
 
   useEffect(() => {
-    const searchURL = new URLSearchParams(search)
-    const id = searchURL.get('id')
-    if (id) {
-      echoData(id)
+    setStated(state)
+
+    if (stated) {
+      echoData(stated.id)
     }
   }, [])
+
   const echoData = async v => {
     const { data } = await anotherSingleInterface({ id: v })
 
@@ -52,9 +65,13 @@ const DemandSheet = () => {
       } else {
         data.regionalIdList = ['0'] //全国
       }
-      // data.processingType = moment(timestampToTime(data.inquiryEffectiveDate))//时间的回显
+      if (data.location[0] === 0) {
+        data.location = null
+      }
+      // data.processingType = moment(timestampToTime(data.inquiryEffectiveDate)) //时间的回显
       // data.unitPrice = moment(timestampToTime(data.deliveryDate))
     }
+    console.log(data)
 
     setInitialValues(data)
   }
@@ -95,16 +112,27 @@ const DemandSheet = () => {
     } else {
       v.status = -1
     }
-    v.provinceId = v.location[1]
-    v.cityId = v.location[0]
-    v.districtId = v.location[2]
+    if (v.location) {
+      v.provinceId = v.location[1]
+      v.cityId = v.location[0]
+      v.districtId = v.location[2]
+    }
+
+    if (stated) {
+      if (stated.modify) {
+        console.log('修改')
+        v.id = stated.id
+      }
+    }
+
+    console.log(v)
+
     const res = await ewDemandDoc(v)
     if (res.code === 200) {
-      push({ pathname: '/control-panel/panel/demand-list' })
+      push({ pathname: '/control-panel/issuerBill/demand-list' })
     }
     console.log(v)
   }
-  console.log(initialValues)
 
   return (
     <div className={styles.demand}>

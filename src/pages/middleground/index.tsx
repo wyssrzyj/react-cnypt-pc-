@@ -16,6 +16,8 @@ const BindProduce = React.lazy(() => import('./bindProduce'))
 const ControlPanel = React.lazy(() => import('./controlPanel'))
 const VideoCenter = React.lazy(() => import('./videoCenter'))
 const OrderDetails = React.lazy(() => import('./orderDetails'))
+const IssuerBill = React.lazy(() => import('./issuerBill'))
+const orderManagement = React.lazy(() => import('./orderManagement'))
 
 const LOGO =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/newLogo.png'
@@ -49,10 +51,14 @@ const EnterpriseHome = () => {
   }, [])
 
   const toTarget = type => {
+    type === 'machiningOrder' &&
+      history.push('/control-panel/orderManagement/receiveOrder?key=all')
     type === 'control' && history.push('/control-panel/panel/account')
     type === 'put' && history.push('/control-panel/put-manage')
     type === 'receive' && history.push('/control-panel/receive-manage')
     type === 'home' && history.push('/control-panel/home')
+    type === 'demandList' &&
+      history.push('/control-panel/issuerBill/demand-sheet')
   }
 
   return (
@@ -72,7 +78,7 @@ const EnterpriseHome = () => {
             >
               首页
             </div>
-            {+userInfo.enterpriseType === 0 &&
+            {/* {+userInfo.enterpriseType === 0 &&
             userInfo.enterpriseType !== null ? (
               <div
                 className={classNames(
@@ -93,9 +99,8 @@ const EnterpriseHome = () => {
               >
                 接单管理
               </div>
-            ) : null}
-
-            {+userInfo.enterpriseType === 1 &&
+            ) : null} */}
+            {/* {+userInfo.enterpriseType === 1 &&
             userInfo.enterpriseType !== null ? (
               <div
                 className={classNames(
@@ -116,6 +121,42 @@ const EnterpriseHome = () => {
                 onClick={() => toTarget('put')}
               >
                 发单管理
+              </div>
+            ) : null} */}
+            {+userInfo.enterpriseType === 1 &&
+            userInfo.enterpriseType !== null ? (
+              // 发单商的
+              <div
+                className={classNames(
+                  styles.navItem,
+                  [
+                    '/control-panel/issuerBill/demand-sheet',
+                    '/control-panel/issuerBill/demand-list',
+                    '/control-panel/issuerBill/demand-applicationList'
+                  ].some(item => location.pathname.includes(item))
+                    ? styles.activeNavItem
+                    : ''
+                )}
+                onClick={() => toTarget('demandList')}
+              >
+                订单管理
+              </div>
+            ) : null}
+            {+userInfo.enterpriseType === 0 &&
+            userInfo.enterpriseType !== null ? (
+              // 加工厂的
+              <div
+                className={classNames(
+                  styles.navItem,
+                  ['/control-panel/orderManagement/receiveOrder?key=all'].some(
+                    item => location.pathname.includes(item)
+                  )
+                    ? styles.activeNavItem
+                    : ''
+                )}
+                onClick={() => toTarget('machiningOrder')}
+              >
+                订单管理
               </div>
             ) : null}
 
@@ -159,10 +200,14 @@ const EnterpriseHome = () => {
             path="/control-panel/orderDetails"
             component={OrderDetails}
           />
-
           <Route
             path="/control-panel/bind-produce/:id"
             component={BindProduce}
+          />
+          <Route path="/control-panel/issuerBill" component={IssuerBill} />
+          <Route
+            path="/control-panel/orderManagement"
+            component={orderManagement}
           />
         </Switch>
       </div>

@@ -15,6 +15,8 @@ import Swiper from 'swiper'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
+import { getCurrentUser, getUserInfo } from '@/utils/tool'
+import { useHistory } from 'react-router'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
@@ -65,6 +67,10 @@ const OverflowCard = props => {
     enterpriseId
   } = props
 
+  const currentUserInfo = getUserInfo()
+  const currentUser = getCurrentUser()
+  const history = useHistory()
+
   // const history = useHistory()
 
   const { commonStore, searchOrderStore } = useStores()
@@ -111,6 +117,10 @@ const OverflowCard = props => {
 
   const modalShow = async event => {
     event.stopPropagation()
+    if (!currentUser.userId) {
+      history.push('/user/login')
+      return
+    }
     setModalFlag(f => !f)
     if (!modalFlag) {
       // 需求单
@@ -188,9 +198,11 @@ const OverflowCard = props => {
               </li>
             </ul>
 
-            <Button type={'primary'} onClick={modalShow}>
-              立即询价
-            </Button>
+            {+currentUserInfo.enterpriseType !== 0 && (
+              <Button type={'primary'} onClick={modalShow}>
+                立即询价
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -207,10 +219,6 @@ const OverflowCard = props => {
         <div className={styles.totalListBox}>
           <div className={styles.totalList}>
             {orders.map((data: any, idx) => {
-              console.log(
-                '🚀 ~ file: index.tsx ~ line 201 ~ {orders.map ~ data',
-                data
-              )
               return (
                 <RequestCard
                   enterpriseId={enterpriseId}

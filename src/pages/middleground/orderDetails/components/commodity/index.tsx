@@ -7,7 +7,7 @@ import { getTrees } from '../../method'
 function index({ initialValues }) {
   const {
     categoryId,
-    plusMaterialType,
+    // plusMaterialType,
     goodsPrice,
     processTypeList,
     goodsRemark,
@@ -19,13 +19,13 @@ function index({ initialValues }) {
   const { dictionary } = commonStore
   const {
     goodsNum = [],
-    materialType = [],
+    plusMaterialType = [],
     inquiryProcessType = []
   } = toJS(dictionary) //字典
 
   const [productCategory, setProductCategory] = useState([]) //商品品类
   const [issue, setIssue] = useState([]) //发单量
-  const [fabric, setFabric] = useState() //面料
+  const [fabric, setFabric] = useState<any>() //面料
   const [orderReceiving, setOrderReceiving] = useState([]) //接单类型
 
   useEffect(() => {
@@ -43,9 +43,12 @@ function index({ initialValues }) {
     }
     //面料
     if (plusMaterialType) {
-      setFabric(
-        materialType.filter(item => item.value === plusMaterialType)[0].label
-      )
+      let res = plusMaterialType.filter(
+        item => item.value === initialValues.plusMaterialType
+      )[0]
+      if (res) {
+        setFabric(res.label)
+      }
     }
     //接单类型
     if (processTypeList) {
@@ -73,12 +76,15 @@ function index({ initialValues }) {
         <Col span={12}>
           <div className={styles.title}>
             面料类型:
-            <span className={styles.content}>{fabric}</span>
+            <span className={styles.content}>{fabric ? fabric : '暂无'}</span>
           </div>
         </Col>
         <Col span={12}>
           <div className={styles.title}>
-            目标单价: <span className={styles.content}>{goodsPrice}</span>
+            目标单价:
+            <span className={styles.content}>
+              {goodsPrice ? goodsPrice : '暂无'}
+            </span>
           </div>
         </Col>
       </Row>
@@ -91,7 +97,10 @@ function index({ initialValues }) {
         </Col>
         <Col span={12}>
           <div className={styles.title}>
-            备注说明: <span className={styles.content}>{goodsRemark}</span>
+            备注说明:
+            <span className={styles.content}>
+              {goodsRemark ? goodsRemark : '暂无'}
+            </span>
           </div>
         </Col>
       </Row>

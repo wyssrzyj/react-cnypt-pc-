@@ -28,7 +28,8 @@ const keys = [
   'onSearch',
   'filterOption',
   'allowClear',
-  'width'
+  'width',
+  'multiple'
 ]
 
 function Basics() {
@@ -36,7 +37,7 @@ function Basics() {
   const { dictionary } = commonStore
   const {
     deliveryType = [],
-    materialType = [],
+    plusMaterialType = [],
     inquiryProcessType = [],
     productType = []
   } = toJS(dictionary)
@@ -50,7 +51,7 @@ function Basics() {
       type: 'select',
       field: 'plusMaterialType',
       span: 12,
-      options: materialType
+      options: plusMaterialType
     },
 
     {
@@ -88,6 +89,7 @@ function Basics() {
       label: '款图',
       type: 'img',
       field: 'stylePicture',
+      multiple: true,
       span: 12
     }
   ]

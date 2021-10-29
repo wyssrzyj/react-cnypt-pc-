@@ -36,7 +36,6 @@ function Basics() {
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const {
-    deliveryType = [],
     plusMaterialType = [],
     inquiryProcessType = [],
     productType = []
@@ -56,11 +55,10 @@ function Basics() {
 
     {
       label: '目标单价',
-      type: 'number',
+      // type: 'number',
       message: '请输入目标单价',
       field: 'goodsPrice',
-      span: 12,
-      options: deliveryType
+      span: 12
     },
     {
       label: '加工类型',
@@ -113,7 +111,15 @@ function Basics() {
               <FormItem
                 name={item.field}
                 label={item.label}
-                rules={[{ required: item.required, message: item.message }]}
+                rules={[
+                  {
+                    pattern: /^[0-9]*$/,
+                    message: '请输入正确的数量'
+                  },
+
+                  { required: item.required, message: item.message },
+                  { max: 99, message: '不得超过99个字符' }
+                ]}
                 {...layout}
               >
                 <FormNode {...data}></FormNode>

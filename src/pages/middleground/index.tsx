@@ -144,7 +144,7 @@ const EnterpriseHome = () => {
             ) : null}
             {+userInfo.enterpriseType === 0 &&
             userInfo.enterpriseType !== null ? (
-              // 加工厂的
+              // 加工厂的.
               <div
                 className={classNames(
                   styles.navItem,

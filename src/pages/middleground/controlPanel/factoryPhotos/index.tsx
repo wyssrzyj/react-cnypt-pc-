@@ -31,9 +31,9 @@ const FactoryPhotos = () => {
         const data = await getFactoryPhotos({
           factoryId: currentUserInfo.factoryId
         })
+        // if (data.factoryId) {
         delete data.factoryId
-        console.log('🚀 ~ file: index.tsx ~ line 34 ~ ; ~ data', data)
-
+        // }
         setParams(data)
       }
       if (+currentUserInfo.enterpriseType === 1) {
@@ -41,7 +41,9 @@ const FactoryPhotos = () => {
         const data = await getPurchaserPhotos({
           purchaserId: currentUserInfo.purchaserId
         })
+        // if (data.purchaserId) {
         delete data.purchaserId
+        // }
         setParams(data)
       }
     })()
@@ -96,8 +98,6 @@ const FactoryPhotos = () => {
     nErrors.equipment = flag ? false : true
 
     setErrors(nErrors)
-
-    console.log(params)
 
     if (+currentUserInfo.enterpriseType === 0 && !nErrors.equipment) {
       // 加工厂 factoryId

@@ -7,7 +7,7 @@ import { observer, useStores } from '@/utils/mobx'
 import { Overview, EnterpriseInformation, ContactCom } from './components'
 import { DetailHeader, TabHeader } from '@/components'
 import styles from './index.module.less'
-import ProductDynamic from './productDynamic'
+// import ProductDynamic from './productDynamic'
 
 const initTabOptions = [
   // {
@@ -42,6 +42,8 @@ const FactoryDetail = props => {
   const [factoryInfo, setFactoryInfo] = useState<any>({})
   const [activeTab, setActiveTab] = useState('info')
   const [tabOptions, setTabOptions] = useState(initTabOptions)
+  console.log(setTabOptions)
+  console.log(factoryStore)
 
   // const { getFactoryData, getFactoryMachineData, getFactoryBoard } =
   //、   factoryStore

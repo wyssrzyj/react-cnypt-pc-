@@ -194,7 +194,7 @@ const Header = () => {
       //   return item
       // }
     }
-    // 发单商不显示  验厂管理
+    // 发单商不显示  验厂管理 .
     if (enterpriseType === '1') {
       if (item) {
         console.log(item)

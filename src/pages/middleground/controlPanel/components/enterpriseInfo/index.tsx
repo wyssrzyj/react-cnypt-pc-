@@ -258,6 +258,9 @@ const EnterpriseInfo = () => {
           if (keys.includes('roleCodes')) {
             data['roleCodes'] = data['roleCodes'] || []
           }
+          if (keys.includes('materialTypeValues')) {
+            data['materialTypeValues'] = data['materialTypeValues'] || []
+          }
 
           data.establishedTime = data.establishedTime
             ? moment(data.establishedTime)
@@ -278,7 +281,6 @@ const EnterpriseInfo = () => {
           setEnterpriseId(enterpriseId)
           setEnterpriseLogoId(enterpriseLogoId)
           setEnterpriseType(enterpriseType)
-          console.log(data, 'data')
           setFieldsValue({
             ...data,
             enterpriseLogoUrl,
@@ -348,7 +350,6 @@ const EnterpriseInfo = () => {
   }, [])
 
   useEffect(() => {
-    console.log(form.getFieldsValue(), 'form.getFieldsValue()')
     if (+enterpriseType === 1) {
       form.setFieldsValue({
         roleCodes: form.getFieldValue('roleCodes') || []

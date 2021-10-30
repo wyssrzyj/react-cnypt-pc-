@@ -1,42 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './index.module.less'
 import { Route, Switch } from 'react-router'
+import { routingMethod } from './routeConfig'
 
 import { Menu } from 'antd'
 import { Link } from 'react-router-dom'
-import { observer } from '@/utils/mobx'
-// import { useLocation, useHistory } from 'react-router-dom'
-
-// import { getCurrentUser, getUserInfo } from '@/utils/tool'
-
+import { useLocation } from 'react-router-dom'
 const DemandList = React.lazy(() => import('./demandList'))
 const DemandSheet = React.lazy(() => import('./release'))
 const applicationList = React.lazy(() => import('./applicationList'))
+import { useStores, observer } from '@/utils/mobx'
 
 function index() {
-  // const location = useLocation()
-  // const { state } = location
-  // const { push } = useHistory()
-  // const [stated, setStated] = useState<any>(state) //url 数据
+  const { factoryStore } = useStores()
+  const { productCategory } = factoryStore
 
+  const location = useLocation()
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
-  const [currentMenu, setCurrentMenu] = useState<Array<string>>(['demandSheet'])
-  // useEffect(() => {
-  //   if (state !== undefined) {
-  //     setStated(state)
-  //     if (stated.key) {
-  //       setCurrentMenu(stated.key)
-  //     }
-  //   }
-  // }, [])
+  const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
+  // 商品品类  调取接口
+  useEffect(() => {
+    setCurrentMenu(routingMethod.get(location.pathname))
+    CommodityCategory()
+  }, [location.pathname])
+
   const handleMenu = ({ keyPath }) => {
-    // console.log(keyPath)
-    // console.log('获取url中的数据~~~~~~~~~~~~~~', location)
-    // push({ pathname: location.pathname, state: { key: keyPath } })
     setCurrentMenu(keyPath)
   }
   const onOpenChange = keys => {
     setOpenKeys(keys)
+  }
+  const CommodityCategory = async () => {
+    await productCategory() //点击订单详情 调取商品品类的接口数据
   }
   return (
     <div className={styles.controlPanel}>
@@ -52,7 +47,7 @@ function index() {
             onOpenChange={onOpenChange} //	SubMenu 展开/关闭的回调
           >
             <Menu.ItemGroup key="g6">
-              <Menu.Item key="demandSheet">
+              <Menu.Item key="1">
                 <Link
                   className={styles.minute}
                   to="/control-panel/issuerBill/demand-sheet"
@@ -60,7 +55,7 @@ function index() {
                   发布订单
                 </Link>
               </Menu.Item>
-              <Menu.Item key="demandList">
+              <Menu.Item key="2">
                 <Link
                   className={styles.minute}
                   to="/control-panel/issuerBill/demand-list"
@@ -68,7 +63,7 @@ function index() {
                   订单列表
                 </Link>
               </Menu.Item>
-              <Menu.Item key="applicationList">
+              <Menu.Item key="3">
                 <Link
                   className={styles.minute}
                   to="/control-panel/issuerBill/demand-applicationList"

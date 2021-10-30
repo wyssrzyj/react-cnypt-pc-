@@ -144,12 +144,12 @@ const EnterpriseHome = () => {
             ) : null}
             {+userInfo.enterpriseType === 0 &&
             userInfo.enterpriseType !== null ? (
-              // 加工厂的
+              // 加工厂的.
               <div
                 className={classNames(
                   styles.navItem,
-                  ['/control-panel/orderManagement/receiveOrder?key=all'].some(
-                    item => location.pathname.includes(item)
+                  ['/control-panel/orderManagement/receiveOrder'].some(item =>
+                    location.pathname.includes(item)
                   )
                     ? styles.activeNavItem
                     : ''

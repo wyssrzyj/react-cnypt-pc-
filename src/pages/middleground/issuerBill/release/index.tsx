@@ -71,7 +71,6 @@ const DemandSheet = () => {
       // data.processingType = moment(timestampToTime(data.inquiryEffectiveDate)) //时间的回显
       // data.unitPrice = moment(timestampToTime(data.deliveryDate))
     }
-    console.log(data)
 
     setInitialValues(data)
   }
@@ -125,24 +124,33 @@ const DemandSheet = () => {
       }
     }
 
-    console.log(v)
+    console.log(v.goodsNum)
 
     const res = await ewDemandDoc(v)
     if (res.code === 200) {
       push({ pathname: '/control-panel/issuerBill/demand-list' })
     }
-    console.log(v)
+  }
+
+  const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 16 }
   }
 
   return (
     <div className={styles.demand}>
-      <Form form={form} onFinish={onFinish} initialValues={initialValues}>
+      <Form
+        form={form}
+        onFinish={onFinish}
+        initialValues={initialValues}
+        {...layout}
+      >
         <section>
           <Title title={'基础信息'}></Title>
           <Basics />
         </section>
         <section className={styles.commodity}>
-          <Title title={'产品信息'}></Title>
+          <Title title={'商品信息'}></Title>
 
           <Commodity />
         </section>
@@ -157,7 +165,7 @@ const DemandSheet = () => {
             保存草稿
           </Button>
           <Button
-            className={styles.button}
+            className={styles.button2}
             type={'primary'}
             onClick={release}
             htmlType={'submit'}

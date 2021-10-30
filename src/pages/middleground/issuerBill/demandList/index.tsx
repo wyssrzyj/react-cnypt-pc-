@@ -29,6 +29,7 @@ const DemandList = () => {
   const { productCategoryList } = factoryStore
   const { dictionary } = commonStore
   const { inquiryProcessType = [] } = toJS(dictionary)
+  const treeData = productCategoryList //商品品类
 
   const { listData, deleteDemandDoc, toppingFunction, endInterfaceInAdvance } =
     demandListStore
@@ -72,7 +73,6 @@ const DemandList = () => {
 
   const listsAPI = async () => {
     const res = await listData(params) //待会设置页码之类的
-    const treeData = productCategoryList //商品品类
     setNumberLength(res.total)
 
     if (Array.isArray(res.records)) {
@@ -92,7 +92,6 @@ const DemandList = () => {
       })
       setNoOrders(res.records.length)
       setReallyLists(res.records)
-      console.log(res.records)
     }
   }
   // 路由数据

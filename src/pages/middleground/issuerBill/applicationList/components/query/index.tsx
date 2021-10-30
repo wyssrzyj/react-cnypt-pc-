@@ -33,8 +33,8 @@ function Query({ query }) {
       >
         <Row>
           <Col span={12} className={styles.username}>
-            <Form.Item label="订单标题" name="name">
-              <Input placeholder="请输入订单标题" />
+            <Form.Item label="订单名称" name="name">
+              <Input placeholder="请输入订单名称" />
             </Form.Item>
           </Col>
           <Col span={12} className={styles.username}>

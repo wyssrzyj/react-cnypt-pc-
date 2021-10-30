@@ -3,7 +3,7 @@ import { Row, Col, Button, Tooltip, Modal } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components' //路径
 import { useHistory } from 'react-router-dom'
-import { toJS, useStores } from '@/utils/mobx'
+import { toJS, useStores, observer } from '@/utils/mobx'
 
 const MultipleChoice = ({
   data,
@@ -137,13 +137,6 @@ const MultipleChoice = ({
       {/* 主题 */}
       <div className={styles.theme}>
         <Row>
-          <Col span={1}>
-            {/* <Checkbox
-              className={styles.checked}
-              // onChange={callback}
-              checked={checked}
-            /> */}
-          </Col>
           <Col span={8}>
             <div className={styles.subject}>
               <img
@@ -356,4 +349,4 @@ const MultipleChoice = ({
   )
 }
 
-export default MultipleChoice
+export default observer(MultipleChoice)

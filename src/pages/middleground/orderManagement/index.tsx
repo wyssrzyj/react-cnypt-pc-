@@ -28,7 +28,7 @@ function index() {
         {/* 主体 */}
         <div className={styles.controlPanelRight}>
           <Switch>
-            {/* 发单信息 */} /control-panel/orderManagement
+            {/* 发单信息. */} /control-panel/orderManagement
             <Route
               path="/control-panel/orderManagement/receiveOrder"
               component={ReceiveOrders}

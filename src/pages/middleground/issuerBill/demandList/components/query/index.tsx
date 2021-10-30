@@ -4,6 +4,14 @@ import styles from './index.module.less'
 import { Form, Input, Button, Col, Space, DatePicker } from 'antd'
 const { RangePicker } = DatePicker
 
+const layout = {
+  labelCol: {
+    span: 8
+  },
+  wrapperCol: {
+    span: 24
+  }
+}
 function Query({ query }) {
   const [form] = Form.useForm()
 
@@ -39,12 +47,12 @@ function Query({ query }) {
         autoComplete="off"
       >
         <Col className={styles.username}>
-          <Form.Item label="需求单名称" name="DemandSheet">
-            <Input placeholder="请输入需求单名称" />
+          <Form.Item label="订单名称" name="DemandSheet">
+            <Input placeholder="请输入订单名称" />
           </Form.Item>
         </Col>
         <Col className={styles.username}>
-          <Form.Item label="发单时间" name="issuingTime">
+          <Form.Item {...layout} label="发单时间" name="issuingTime">
             <Space direction="vertical" size={12}>
               <RangePicker onChange={handleSelectTime} />
             </Space>
@@ -54,7 +62,9 @@ function Query({ query }) {
           <Button className={styles.query} type="primary" htmlType="submit">
             查询
           </Button>
-          <Button onClick={reset}>重置</Button>
+          <Button disabled type="primary" onClick={reset}>
+            重置
+          </Button>
         </Form.Item>
       </Form>
     </div>

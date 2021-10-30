@@ -3,6 +3,8 @@ import { Row, Col, Button, Tooltip, Modal } from 'antd'
 import styles from './index.module.less'
 import { Icon } from '@/components' //路径
 import { timestampToTime } from '../../time'
+import { useStores, toJS } from '@/utils/mobx'
+import { getTrees } from '../../method/index'
 
 let Simg = 'http://dev.uchat.com.cn:8002/images/b140ef.png'
 
@@ -17,9 +19,12 @@ const MultipleChoice = ({
 }) => {
   console.log(data)
 
+  const { commonStore } = useStores()
+  const { dictionary } = commonStore
+  const { prodType = [] } = toJS(dictionary)
+
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
-
   const sortColor = new Map()
   sortColor.set(2, styles.red)
   sortColor.set(3, styles.green)
@@ -52,6 +57,7 @@ const MultipleChoice = ({
     if (windowType.type === 'mov') {
       deleteMethod(id)
     }
+
     if (windowType.type === 'CancelConfirmation') {
       reOrder(data.id)
     }
@@ -60,7 +66,12 @@ const MultipleChoice = ({
       {
       }
     }
+    // 谢绝
     if (windowType.type === 'decline') {
+      earlyEnd(data.id)
+    }
+    // 取消申请
+    if (windowType.type === 'withdraw') {
       earlyEnd(data.id)
     }
 
@@ -89,6 +100,11 @@ const MultipleChoice = ({
   const decline = () => {
     setIsModalVisible(true)
     setWindowType({ type: 'decline' })
+  }
+  // 取消申请
+  const withdraw = () => {
+    setIsModalVisible(true)
+    setWindowType({ type: 'withdraw' })
   }
   const onCancel = () => {
     setIsModalVisible(false)
@@ -164,33 +180,43 @@ const MultipleChoice = ({
             </div>
 
             <div className={styles.imgRight}>
-              <p className={styles.namest}>
+              <div className={styles.namest}>
                 <div className={styles.factoryName}>{data.enterpriseName}</div>
                 <div className={styles.diqu_bai}>
                   <Icon type="jack-diqu_bai" className={styles.previous} />
                   {data.address ? data.address : '暂无'}
                 </div>
-              </p>
+              </div>
               <p>人数：{data.staffNumber}人</p>
               <p>联系方式: {data.contactsMobile}</p>
               <p>电子邮箱: {data.contactsEmail}</p>
               <div className={styles.hidden}>
-                接单类型：
+                加工类型：
                 <Tooltip
                   placement="top"
                   title={
                     data.prodTypeValueList
-                      ? data.prodTypeValueList.join('、')
+                      ? getTrees(
+                          data.prodTypeValueList,
+                          prodType,
+                          'value',
+                          'label'
+                        ).join('、')
                       : '暂无'
                   }
                 >
                   {data.prodTypeValueList
-                    ? data.prodTypeValueList.join('、')
+                    ? getTrees(
+                        data.prodTypeValueList,
+                        prodType,
+                        'value',
+                        'label'
+                      ).join('、')
                     : '暂无'}
                 </Tooltip>
               </div>
               <div className={styles.hidden}>
-                擅长产品品类：
+                主营类别：
                 <Tooltip
                   placement="top"
                   title={
@@ -209,9 +235,7 @@ const MultipleChoice = ({
           <Col span={9} className={styles.feedback}>
             <p className={styles.quotationInformation}>
               <span className={styles.information}>•</span> 报价信息:
-              <span>
-                {data.availableOrders ? data.availableOrders : '暂无'}
-              </span>
+              <span>{data.quoteInfo ? data.quoteInfo : '暂无'}</span>
             </p>
             <p>
               <span className={styles.information}>•</span> 付款方式:
@@ -272,13 +296,24 @@ const MultipleChoice = ({
               </Button>
             ) : null}
 
-            {[1, -1, -2].includes(+data.status) ? (
+            {[-1, -2].includes(+data.status) ? (
               <Button
                 type={'primary'}
+                ghost
                 onClick={showModal}
                 className={styles.btn}
               >
                 删除记录
+              </Button>
+            ) : null}
+            {[1].includes(+data.status) ? (
+              <Button
+                type={'primary'}
+                ghost
+                onClick={withdraw}
+                className={styles.btn}
+              >
+                取消申请
               </Button>
             ) : null}
           </Col>
@@ -318,6 +353,15 @@ const MultipleChoice = ({
                 <Icon type={'jack-ts'} className={styles.delIcon}></Icon>
                 <div className={styles.delTitle}>是否谢绝？</div>
                 <div className={styles.delText}>是否确定谢绝？</div>
+              </div>
+            ) : null}
+            {windowType.type === 'withdraw' ? (
+              <div className={styles.delContent}>
+                <Icon type={'jack-ts'} className={styles.delIcon}></Icon>
+                <div className={styles.delTitle}>是否取消申请？</div>
+                <div className={styles.delText}>
+                  取消后将收不到该工厂反馈的消息
+                </div>
               </div>
             ) : null}
 

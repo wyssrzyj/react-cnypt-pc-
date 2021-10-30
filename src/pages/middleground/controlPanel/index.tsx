@@ -194,7 +194,8 @@ const ControlPanel = () => {
                 </Menu.Item>
               </Menu.ItemGroup>
             ) : null}
-            {userInfo.enterpriseType !== null &&
+            {/* 监控列表 */}
+            {/* {userInfo.enterpriseType !== null &&
             +userInfo.enterpriseType === 0 ? (
               <Menu.ItemGroup
                 key="g4"
@@ -226,7 +227,7 @@ const ControlPanel = () => {
                   </Link>
                 </Menu.Item>
               </Menu.ItemGroup>
-            ) : null}
+            ) : null} */}
           </Menu>
         </div>
 

@@ -31,10 +31,10 @@ function Query({ query }) {
         onFinish={onFinish}
         autoComplete="off"
       >
-        <Row>
+        <Row className={styles.issuingTime}>
           <Col span={12} className={styles.username}>
-            <Form.Item label="订单标题" name="name">
-              <Input placeholder="请输入订单标题" />
+            <Form.Item label="订单名称" name="name">
+              <Input placeholder="请输入订单名称" />
             </Form.Item>
           </Col>
           <Col span={12} className={styles.username}>
@@ -44,6 +44,8 @@ function Query({ query }) {
               </Space>
             </Form.Item>
           </Col>
+        </Row>
+        <Row>
           <Col span={12} className={styles.username}>
             <Form.Item label="加工厂名称" name="supplierName">
               <Input placeholder="请输入加工厂名称" />

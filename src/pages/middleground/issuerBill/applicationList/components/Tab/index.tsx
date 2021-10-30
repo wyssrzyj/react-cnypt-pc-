@@ -7,9 +7,9 @@ const { TabPane } = Tabs
 
 const tabs = [
   { label: `全部`, url: '', key: '' },
-  { label: `待反馈`, url: '', key: '2' },
+  { label: `待处理`, url: '', key: '2' },
   { label: `等待答复`, url: '', key: '1' },
-  { label: `已发单`, url: '', key: '3' },
+  { label: `已确认`, url: '', key: '3' },
   { label: `已谢绝`, url: '', key: '-2' },
   { label: `被拒绝`, url: '', key: '-1' }
 ]

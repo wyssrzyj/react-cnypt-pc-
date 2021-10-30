@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom'
 
 function index({ stated }) {
   const { push } = useHistory()
-  const { id, source, supplierInquiryId } = stated
+  const { id, supplierInquiryId } = stated
   const { demandListStore } = useStores()
   const {
     orderQuantity,
@@ -84,7 +84,7 @@ function index({ stated }) {
         initialValues={initialValues}
         autoComplete="off"
       >
-        <Row>
+        <Row className={styles.quoteInfo}>
           <Col span={12}>
             <Form.Item {...layout} label="报价信息" name="quoteInfo">
               <Input placeholder={'请输入报价信息'} />
@@ -96,7 +96,7 @@ function index({ stated }) {
             </Form.Item>
           </Col>
         </Row>
-        <Row>
+        <Row className={styles.receiveGoodsNum}>
           <Col span={12}>
             <Form.Item
               {...layout}
@@ -118,11 +118,11 @@ function index({ stated }) {
         </Row>
 
         <div className={styles.noBtn}>
-          {source == 2 ? null : (
+          {/* {source == 2 ? null : (
             <Button ghost type="primary" onClick={() => onFinish(false)}>
               拒绝接单
             </Button>
-          )}
+          )} */}
           <Form.Item>
             <Button
               className={styles.placeOrder}

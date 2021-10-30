@@ -13,7 +13,6 @@ function Formmodular() {
         className={styles.form}
         onFinish={v => {
           if (sum) {
-            console.log(v)
             console.log('查询')
           } else {
             return v === null

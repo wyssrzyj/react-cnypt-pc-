@@ -123,9 +123,11 @@ const SearchOrder = () => {
             },
             {
               label: '地区要求',
-              value: matchArrayValue(
+              value: matchGoodValue(
                 newAllArea,
                 record.inquiryDistrictIds,
+                'value',
+                'label',
                 '不限'
               )
             },
@@ -171,7 +173,7 @@ const SearchOrder = () => {
 
   return (
     <div className={styles.searchOrder}>
-      <SimpleSearch onFilterChange={onFilterChange} />
+      <SimpleSearch onFilterChange={onFilterChange} field="order" />
       <div className={styles.orderContent}>
         {/* 搜索 */}
         <FilterList onFilterChange={onFilterChange} />

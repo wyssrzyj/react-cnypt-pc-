@@ -62,24 +62,25 @@ const memberCenter = [
         url: '/control-panel/panel/photograph'
       }
     ]
-  },
-  {
-    title: '监控列表',
-    children: [
-      {
-        title: '部门管理',
-        url: '/control-panel/panel/department'
-      },
-      {
-        title: '监控列表',
-        url: '/control-panel/panel/monitorPage'
-      },
-      {
-        title: '视频中心',
-        url: '/control-panel/panel/video-center'
-      }
-    ]
   }
+  // 监控列表1
+  // {
+  //   title: '监控列表',
+  //   children: [
+  //     {
+  //       title: '部门管理',
+  //       url: '/control-panel/panel/department'
+  //     },
+  //     {
+  //       title: '监控列表',
+  //       url: '/control-panel/panel/monitorPage'
+  //     },
+  //     {
+  //       title: '视频中心',
+  //       url: '/control-panel/panel/video-center'
+  //     }
+  //   ]
+  // }
 ] //会员中心
 
 const Header = () => {
@@ -155,8 +156,9 @@ const Header = () => {
   //会员中心
   // 加工厂没有发单信息
   // 发单商没有监控列表
-
+  // 企业类型 0 加工厂 1 发单商
   const memberCenterFiltering = memberCenter.filter(item => {
+    //  发单商不显示照片
     if (enterpriseType === '1') {
       if (item.title == '账号管理') {
         item.children = [
@@ -170,7 +172,6 @@ const Header = () => {
           }
         ]
       }
-      return item
     } else {
       if (item.title == '账号管理') {
         item.children = [
@@ -188,8 +189,15 @@ const Header = () => {
           }
         ]
       }
-      if (item.title !== '监控列表' && item.title !== '验厂管理') {
-        return item
+      return item
+      // if (item.title !== '监控列表' && item.title !== '验厂管理') {
+      //   return item
+      // }
+    }
+    // 发单商不显示  验厂管理
+    if (enterpriseType === '1') {
+      if (item) {
+        return item.title !== '验厂管理'
       }
     }
   })
@@ -264,7 +272,7 @@ const Header = () => {
       })}
     </div>
   )
-  /* -----------------------------会员中心----------------------------- */
+  /* -----------------------------会员中心---------------------------- */
   const memberCenterFilteringMethod = (
     <div className={styles.console}>
       {memberCenterFiltering.map((item, index) => {

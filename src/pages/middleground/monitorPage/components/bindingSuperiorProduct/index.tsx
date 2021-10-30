@@ -31,7 +31,6 @@ const BindingSuperiorProduct = props => {
   }
 
   const move = item => {
-    console.log(item)
     console.log(checkedKeys)
     {
       if (item.parentId != 0) {

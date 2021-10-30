@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { Input, Divider } from 'antd'
-import { isEmpty } from 'lodash'
+import { isEmpty, get } from 'lodash'
 import { useStores } from '@/utils/mobx'
 import styles from './index.module.less'
 
 const { Search } = Input
+
+const titleMap = { order: '订单', factoryName: '工厂' }
 
 const SimpleSearch = props => {
   const { config = {}, onFilterChange, field = 'name' } = props
@@ -38,7 +40,7 @@ const SimpleSearch = props => {
         </div>
         <Search
           style={{ width: 500 }}
-          placeholder="请输入订单信息"
+          placeholder={`请输入${get(titleMap, field, '工厂')}信息`}
           allowClear
           enterButton="搜索"
           size="large"

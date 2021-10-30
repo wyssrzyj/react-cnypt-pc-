@@ -203,6 +203,7 @@ const SearchOrderDetail = props => {
           imgSrc: dataSource.enterpriseUrl
         }}
         onFilterChange={onFilterChange}
+        field="order"
       />
       {/* 广告位 */}
       <Advertising />

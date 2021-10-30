@@ -173,7 +173,7 @@ const SearchOrder = () => {
 
   return (
     <div className={styles.searchOrder}>
-      <SimpleSearch onFilterChange={onFilterChange} />
+      <SimpleSearch onFilterChange={onFilterChange} field="order" />
       <div className={styles.orderContent}>
         {/* 搜索 */}
         <FilterList onFilterChange={onFilterChange} />

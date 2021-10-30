@@ -28,9 +28,10 @@ const FactoryPhotos = () => {
     ;(async () => {
       if (+currentUserInfo.enterpriseType === 0) {
         // 加工厂
-        const data = await getFactoryPhotos({
-          factoryId: currentUserInfo.factoryId
-        })
+        const data =
+          (await getFactoryPhotos({
+            factoryId: currentUserInfo.factoryId
+          })) || {}
         if (data.factoryId) {
           delete data.factoryId
         }

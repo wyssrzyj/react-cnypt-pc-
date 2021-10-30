@@ -9,7 +9,7 @@ import Terms from './components/terms'
 import Address from './components/address'
 import { useStores, observer } from '@/utils/mobx'
 import { useHistory } from 'react-router-dom'
-// import { timestampToTime } from './components/time' //
+// import { timestampToTime } from './components/time' ///
 import { useLocation } from 'react-router-dom'
 // import moment from 'moment' //引入moment
 

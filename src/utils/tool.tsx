@@ -372,16 +372,22 @@ export const matchValue = (dataSource, target) => {
   return current.label || '--'
 }
 
-export const matchGoodValue = (dataSource, target) => {
+export const matchGoodValue = (
+  dataSource,
+  target,
+  findKey?,
+  targetKey = 'name',
+  field?
+) => {
   const current = target.reduce((prev, item, idx) => {
-    const target = findTreeTarget([item], dataSource) || {}
+    const target = findTreeTarget([item], dataSource, findKey) || {}
     return (
       prev +
-      (!isEmpty(target) ? target.name : '') +
-      (idx === target.length - 1 || !target.name ? '' : '、')
+      (!isEmpty(target) ? target[targetKey] : '') +
+      (idx === target.length - 1 || !target[targetKey] ? '' : '、')
     )
   }, '')
-  return current || '--'
+  return current || field || '--'
 }
 
 export const matchArrayValue = (dataSource, target, field) => {

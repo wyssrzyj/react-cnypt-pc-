@@ -144,7 +144,13 @@ const SearchOrderDetail = props => {
       orderList: [
         {
           label: '地区要求',
-          value: matchArrayValue(newAllArea, data.regionalIdList, '不限'),
+          value: matchGoodValue(
+            newAllArea,
+            data.regionalIdList,
+            'value',
+            'label',
+            '不限'
+          ),
           span: 12
         },
         {

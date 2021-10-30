@@ -123,9 +123,11 @@ const SearchOrder = () => {
             },
             {
               label: '地区要求',
-              value: matchArrayValue(
+              value: matchGoodValue(
                 newAllArea,
                 record.inquiryDistrictIds,
+                'value',
+                'label',
                 '不限'
               )
             },

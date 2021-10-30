@@ -44,7 +44,7 @@ const FactoryDetail = props => {
   const [tabOptions, setTabOptions] = useState(initTabOptions)
 
   // const { getFactoryData, getFactoryMachineData, getFactoryBoard } =
-  //   factoryStore
+  //、   factoryStore
 
   useEffect(() => {
     ;(async () => {

@@ -62,7 +62,7 @@ function Query({ query }) {
           <Button className={styles.query} type="primary" htmlType="submit">
             查询
           </Button>
-          <Button disabled type="primary" onClick={reset}>
+          <Button ghost type="primary" onClick={reset}>
             重置
           </Button>
         </Form.Item>

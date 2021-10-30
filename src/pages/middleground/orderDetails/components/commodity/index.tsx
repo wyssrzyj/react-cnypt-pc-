@@ -3,6 +3,7 @@ import { Col, Row, Tooltip } from 'antd'
 import styles from './index.module.less'
 import { toJS, useStores } from '@/utils/mobx'
 import { getTrees } from '../../method'
+import { matchGoodValue } from '@/utils/tool'
 
 function index({ initialValues }) {
   const {
@@ -31,9 +32,16 @@ function index({ initialValues }) {
   useEffect(() => {
     //商品品类
     if (categoryId) {
-      setProductCategory(
-        getTrees(categoryId, toJS(productCategoryList), 'id', 'name')
-      )
+      // console.log(categoryId)
+      // console.log(toJS(productCategoryList))
+
+      // console.log(getTrees(categoryId, toJS(productCategoryList), 'id', 'name'))
+
+      // console.log()
+
+      //   console.log(matchGoodValue(productCategoryList, data.categoryId))
+
+      setProductCategory(matchGoodValue(toJS(productCategoryList), categoryId))
     }
     //发单量
     if (initialValues.goodsNum) {
@@ -61,12 +69,10 @@ function index({ initialValues }) {
     <div>
       <Row>
         <Col span={12}>
-          <Tooltip placement="top" title={productCategory.join('、')}>
+          <Tooltip placement="top" title={productCategory}>
             <div className={styles.title}>
               商品品类:
-              <span className={styles.content}>
-                {productCategory.join('、')}
-              </span>
+              <span className={styles.content}>{productCategory}</span>
             </div>
           </Tooltip>
         </Col>
@@ -116,7 +122,7 @@ function index({ initialValues }) {
       </Row>
       <div className={styles.titles}>
         款图:
-        <span className={styles.content}>
+        <div className={styles.content}>
           {stylePicture !== undefined && stylePicture.length > 0 ? (
             stylePicture.map((v, i) => (
               <img key={i} className={styles.img} src={v} alt="" />
@@ -124,7 +130,7 @@ function index({ initialValues }) {
           ) : (
             <span className={styles.wu}>暂无</span>
           )}
-        </span>
+        </div>
       </div>
     </div>
   )

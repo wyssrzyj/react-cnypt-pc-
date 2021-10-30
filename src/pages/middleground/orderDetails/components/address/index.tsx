@@ -5,7 +5,6 @@ import { observer, toJS, useStores } from '@/utils/mobx'
 import { getTrees } from '../../method'
 
 function index({ initialValues, enterpriseType }) {
-  console.log(enterpriseType)
   {
     /* 0 加工厂 1 发单商   只有加工厂才能看到form */
   }
@@ -16,7 +15,6 @@ function index({ initialValues, enterpriseType }) {
   const { commonStore } = useStores()
   const { allArea } = commonStore
   const [treeData, setTreeData] = useState([])
-  const [testate, setTestate] = useState<any>(isContactPublic)
 
   useEffect(() => {
     // 地区要求的获取
@@ -30,11 +28,7 @@ function index({ initialValues, enterpriseType }) {
 
       setTreeData(res)
     }
-    if (isContactPublic) {
-      setTestate(isContactPublic)
-    }
   }, [initialValues, allArea])
-  console.log(testate)
 
   return (
     <div>
@@ -50,7 +44,7 @@ function index({ initialValues, enterpriseType }) {
           </div>
         </Col>
       </Row>
-      {console.log('状态', isContactPublic)}
+
       {enterpriseType === 1 ? (
         <Row>
           <Col span={12}>

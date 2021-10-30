@@ -291,7 +291,12 @@ const MultipleChoice = ({
                   </div>
                 ) : (
                   <div className={styles.btn}>
-                    <Button className={styles.mov} onClick={showModal}>
+                    <Button
+                      ghost
+                      type="primary"
+                      className={styles.mov}
+                      onClick={showModal}
+                    >
                       删除记录
                     </Button>
                     {/* </Popconfirm> */}

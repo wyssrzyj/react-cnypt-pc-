@@ -189,7 +189,7 @@ const ListCard = props => {
       refuse(data.supplierInquiryId)
     }
     if (windowType.type === 'mov') {
-      del
+      del()
     }
 
     setIsModalVisible(false)
@@ -227,12 +227,12 @@ const ListCard = props => {
           <div className={styles.order}>
             <span className={styles.orderLabel}>发单商:</span>
             <Popover
-              content={data.enterpriseName ? data.enterpriseName : '***'}
+              content={data.enterpriseName ? data.enterpriseName : '---  --- '}
             >
               {data.enterpriseName !== null ? (
                 <span className={styles.orderNum}>{data.enterpriseName}</span>
               ) : (
-                <span className={styles.orderNum}>***</span>
+                <span className={styles.orderNum}>--- ---</span>
               )}
             </Popover>
           </div>

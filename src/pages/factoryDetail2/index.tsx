@@ -10,10 +10,10 @@ import styles from './index.module.less'
 import ProductDynamic from './productDynamic'
 
 const initTabOptions = [
-  {
-    value: 'dynamic',
-    label: '生产动态'
-  },
+  // {
+  //   value: 'dynamic',
+  //   label: '生产动态'
+  // },
   {
     value: 'info',
     label: '企业信息'
@@ -25,7 +25,7 @@ const initTabOptions = [
 ]
 
 const titleMap = new Map()
-titleMap.set('dynamic', '产能云平台-工厂详情-生产动态')
+// titleMap.set('dynamic', '产能云平台-工厂详情-生产动态')
 titleMap.set('info', '产能云平台-工厂详情-企业信息')
 titleMap.set('contact', '产能云平台-工厂详情-联系方式')
 
@@ -40,36 +40,35 @@ const FactoryDetail = props => {
   const { commonStore, factoryStore } = useStores()
   const { updateName } = commonStore
   const [factoryInfo, setFactoryInfo] = useState<any>({})
-  const [activeTab, setActiveTab] = useState('dynamic')
+  const [activeTab, setActiveTab] = useState('info')
   const [tabOptions, setTabOptions] = useState(initTabOptions)
 
-  const { getFactoryData, getFactoryMachineData, getFactoryBoard } =
-    factoryStore
+  // const { getFactoryData, getFactoryMachineData, getFactoryBoard } =
+  //   factoryStore
 
   useEffect(() => {
     ;(async () => {
-      const res1 = await getFactoryData(factoryId)
-      const res2 = await getFactoryMachineData(factoryId)
-      const res3 = await getFactoryBoard(factoryId)
-
-      const flag = res1 === null && res2 === null && res3 === null
-      if (flag) {
-        setTabOptions([
-          {
-            value: 'info',
-            label: '企业信息'
-          },
-          {
-            value: 'contact',
-            label: '联系方式'
-          }
-        ])
-        setActiveTab('info')
-      }
-      if (!flag) {
-        setTabOptions([...initTabOptions])
-        setActiveTab('dynamic')
-      }
+      // const res1 = await getFactoryData(factoryId)
+      // const res2 = await getFactoryMachineData(factoryId)
+      // const res3 = await getFactoryBoard(factoryId)
+      // const flag = res1 === null && res2 === null && res3 === null
+      // if (flag) {
+      //   setTabOptions([
+      //     {
+      //       value: 'info',
+      //       label: '企业信息'
+      //     },
+      //     {
+      //       value: 'contact',
+      //       label: '联系方式'
+      //     }
+      //   ])
+      //   setActiveTab('info')
+      // }
+      // if (!flag) {
+      //   setTabOptions([...initTabOptions])
+      //   setActiveTab('dynamic')
+      // }
     })()
   }, [factoryId])
 
@@ -120,7 +119,7 @@ const FactoryDetail = props => {
           onTabChange={key => setActiveTab(key)}
         />
         {/* 生产动态 */}
-        {activeTab === 'dynamic' && <ProductDynamic />}
+        {/* {activeTab === 'dynamic' && <ProductDynamic />} */}
         {/* 企业信息 */}
         {activeTab === 'info' && (
           <EnterpriseInformation factoryId={factoryId} current={factoryInfo} />

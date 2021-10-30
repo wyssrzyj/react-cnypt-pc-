@@ -169,6 +169,10 @@ const Header = () => {
           {
             title: '企业信息',
             url: '/control-panel/panel/enterprise'
+          },
+          {
+            title: '企业照片',
+            url: '/control-panel/panel/enterprise-photos'
           }
         ]
       }

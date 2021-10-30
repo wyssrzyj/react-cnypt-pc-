@@ -13,7 +13,15 @@ const InfoCard = props => {
         {infoList.map((item, index) => (
           <Col key={index} span={item.span} className={styles.infoCol}>
             <span className={styles.label}>{item.label}</span>
-            <span className={styles.value}>{item.value}</span>
+            {autoAddTooltip(
+              ref => (
+                <span ref={ref} className={styles.tooltipBpx}>
+                  {item.value}
+                </span>
+              ),
+              { title: item.value }
+            )}
+            {/* <span className={styles.value}>{item.value}</span> */}
           </Col>
         ))}
         <Col className={styles.imgBox} span={24}>

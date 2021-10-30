@@ -27,10 +27,9 @@ const OtherCard = props => {
   const leftRef = useRef<HTMLDivElement>()
   const rightRef = useRef<HTMLDivElement>()
 
-  const { searchOrderStore, commonStore, factoryStore } = useStores()
+  const { searchOrderStore, commonStore } = useStores()
   const { dictionary } = commonStore
   const { inquiryList } = searchOrderStore
-  const { productCategory } = factoryStore
   const {
     goodsNum = [],
     inquiryProcessType = [],
@@ -38,16 +37,13 @@ const OtherCard = props => {
   } = toJS(dictionary)
 
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
+  const productCategoryList = JSON.parse(
+    localStorage.getItem('productCategoryList')
+  )
 
-  const [curKey, setCurKey] = useState(0)
+  const [curKey, setCurKey] = useState(1)
   const [list, setList] = useState<any>([])
-  const [productCategoryList, setProductCategoryList] = useState<any>([])
   const [cardList, setCardList] = useState<any>([])
-
-  const getProductCategory = async () => {
-    const data = (await productCategory()) || {}
-    setProductCategoryList([...data])
-  }
 
   const transformData = () => {
     const newCardList = list.map(record => {
@@ -150,7 +146,7 @@ const OtherCard = props => {
   }
 
   const toRight = () => {
-    leftRef.current.click()
+    curKey !== cardList.length - 1 && leftRef.current.click()
   }
 
   const keyChange = event => {
@@ -161,12 +157,6 @@ const OtherCard = props => {
   const goDetail = id => {
     window.open(`/order-search/${id}`)
   }
-
-  useEffect(() => {
-    ;(async () => {
-      await getProductCategory()
-    })()
-  }, [])
 
   useEffect(() => {
     if (!isEmpty(list)) {
@@ -192,7 +182,7 @@ const OtherCard = props => {
           {cardList.length > 0 && (
             <div className="swiper-wrapper">
               {cardList.map((item, idx) => {
-                if (!item) return null
+                if (!item) return false
                 return (
                   <div
                     style={{ width: '33%' }}
@@ -226,7 +216,7 @@ const OtherCard = props => {
             onClick={toRight}
             className={classNames(
               styles.operationIcon,
-              curKey === list.length - 2 && styles.disableIcon
+              curKey === cardList.length - 1 && styles.disableIcon
             )}
           />
         </div>

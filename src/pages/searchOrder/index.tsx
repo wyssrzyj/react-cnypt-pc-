@@ -10,11 +10,10 @@ import { OrderSearchHeader, OrderCard } from './components'
 import styles from './index.module.less'
 
 const SearchOrder = () => {
-  const { searchOrderStore, commonStore, factoryStore } = useStores()
+  const { searchOrderStore, commonStore } = useStores()
   const { inquiryList, orderName } = searchOrderStore
   const pageSize = 12
   const { dictionary } = commonStore
-  const { productCategory } = factoryStore
 
   const {
     goodsNum = [],
@@ -22,19 +21,16 @@ const SearchOrder = () => {
     factoryEffectiveLocation = []
   } = toJS(dictionary)
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
+  const productCategoryList = JSON.parse(
+    localStorage.getItem('productCategoryList')
+  )
 
   const [factoryParams, setFactoryParams] = useState<any>({})
   const [sortParams, setSortParams] = useState<any>({})
   const [pageNum, setPageNum] = useState<number>(1)
   const [cardList, setCardList] = useState<any>([])
   const [dataList, setDataList] = useState<any>([])
-  const [productCategoryList, setProductCategoryList] = useState<any>([])
   const [total, setTotal] = useState(0)
-
-  const getProductCategory = async () => {
-    const data = (await productCategory()) || {}
-    setProductCategoryList([...data])
-  }
 
   const onFilterChange = params => {
     const newFactoryParams = { ...factoryParams, ...params }
@@ -159,13 +155,6 @@ const SearchOrder = () => {
       setCardList([])
     }
   }, [dataList])
-
-  useEffect(() => {
-    ;(async () => {
-      // await getOrderList({ pageNum: 1, pageSize: 12 })
-      await getProductCategory()
-    })()
-  }, [])
 
   useEffect(() => {
     getDemandList()

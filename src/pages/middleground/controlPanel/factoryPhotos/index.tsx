@@ -31,9 +31,9 @@ const FactoryPhotos = () => {
         const data = await getFactoryPhotos({
           factoryId: currentUserInfo.factoryId
         })
-        // if (data.factoryId) {
-        delete data.factoryId
-        // }
+        if (data.factoryId) {
+          delete data.factoryId
+        }
         setParams(data)
       }
       if (+currentUserInfo.enterpriseType === 1) {
@@ -41,9 +41,9 @@ const FactoryPhotos = () => {
         const data = await getPurchaserPhotos({
           purchaserId: currentUserInfo.purchaserId
         })
-        // if (data.purchaserId) {
-        delete data.purchaserId
-        // }
+        if (data.purchaserId) {
+          delete data.purchaserId
+        }
         setParams(data)
       }
     })()

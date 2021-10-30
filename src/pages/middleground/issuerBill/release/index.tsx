@@ -71,7 +71,6 @@ const DemandSheet = () => {
       // data.processingType = moment(timestampToTime(data.inquiryEffectiveDate)) //时间的回显
       // data.unitPrice = moment(timestampToTime(data.deliveryDate))
     }
-    console.log(data)
 
     setInitialValues(data)
   }
@@ -125,13 +124,12 @@ const DemandSheet = () => {
       }
     }
 
-    console.log(v)
+    console.log(v.goodsNum)
 
     const res = await ewDemandDoc(v)
     if (res.code === 200) {
       push({ pathname: '/control-panel/issuerBill/demand-list' })
     }
-    console.log(v)
   }
 
   const layout = {

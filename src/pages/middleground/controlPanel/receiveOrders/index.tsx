@@ -56,12 +56,11 @@ const ReceiveOrder = () => {
     pageSize: defaultPageSize
   })
   const [total, setTotal] = useState<number>(50)
-
+  const res: any = urlGet() || {}
+  const { key = 'all' } = res
   useEffect(() => {
-    const res: any = urlGet() || {}
-    const { key = 'all' } = res
     setActiveKey(key)
-  }, [])
+  }, [key])
 
   useEffect(() => {
     const res: any = urlGet() || {}

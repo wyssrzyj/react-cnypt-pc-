@@ -110,13 +110,10 @@ const DemandSheet = () => {
       }
     }
 
-    console.log(v)
-
     const res = await ewDemandDoc(v)
     if (res.code === 200) {
       push({ pathname: '/control-panel/issuerBill/demand-list' })
     }
-    console.log(v)
   }
 
   return (

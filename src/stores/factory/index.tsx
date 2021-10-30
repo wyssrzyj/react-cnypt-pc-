@@ -81,6 +81,7 @@ export default class FactoryStore {
       if (res) {
         runInAction(() => {
           this.productCategoryList = res.data
+          localStorage.setItem('productCategoryList', JSON.stringify(res.data))
         })
         return res.data || []
       } else {

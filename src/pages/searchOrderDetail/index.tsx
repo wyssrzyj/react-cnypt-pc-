@@ -22,10 +22,9 @@ const SearchOrderDetail = props => {
   const { id } = params
 
   const history = useHistory()
-  const { searchOrderStore, commonStore, factoryStore } = useStores()
+  const { searchOrderStore, commonStore } = useStores()
   const { inquiryPurchase } = searchOrderStore
   const { dictionary } = commonStore
-  const { productCategory } = factoryStore
   const {
     goodsNum = [],
     inquiryProcessType = [],
@@ -36,15 +35,18 @@ const SearchOrderDetail = props => {
   const [dataSource, setDataSource] = useState<any>({})
   const [overviewData, setOverviewData] = useState<any>({})
   const [infoData, setInfoData] = useState<any>({})
-  const [productCategoryList, setProductCategoryList] = useState<any>([])
+  // const [productCategoryList, setProductCategoryList] = useState<any>([])
   const [tenantId, setTenantId] = useState<string>(undefined)
 
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
+  const productCategoryList = JSON.parse(
+    localStorage.getItem('productCategoryList')
+  )
 
-  const getProductCategory = async () => {
-    const data = (await productCategory()) || {}
-    setProductCategoryList([...data])
-  }
+  // const getProductCategory = async () => {
+  //   const data = (await productCategory()) || {}
+  //   setProductCategoryList([...data])
+  // }
 
   const getOrderDetails = () => {
     inquiryPurchase(id).then(response => {
@@ -175,12 +177,6 @@ const SearchOrderDetail = props => {
   const onFilterChange = () => {
     history.push('/order-search')
   }
-
-  useEffect(() => {
-    ;(async () => {
-      await getProductCategory()
-    })()
-  }, [])
 
   useEffect(() => {
     if (!isEmpty(dataSource)) {

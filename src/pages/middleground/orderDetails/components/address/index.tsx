@@ -7,7 +7,6 @@ import { getTrees } from '../../method'
 function index({ initialValues, enterpriseType }) {
   {
     /* 0 加工厂 1 发单商   只有加工厂才能看到form */
-    console.log(enterpriseType)
   }
 
   const { contactPerson, contactPersonMobile, address, isContactPublic } =

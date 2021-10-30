@@ -1,4 +1,3 @@
-import { findTreeTarget } from '@/utils/tool'
 import { isArray, isEmpty } from 'lodash'
 
 // 1
@@ -35,9 +34,4 @@ export const findTarget = (val, data, key, name) => {
       }
     }
   }
-}
-
-export const getTreeLabel = (target, tree) => {
-  console.log('🚀 ~ file: index.tsx ~ line 41 ~ getTreeLabel ~ tree', tree)
-  console.log(findTreeTarget(target, tree), '==============')
 }

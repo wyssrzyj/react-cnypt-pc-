@@ -23,9 +23,7 @@ function Basic({ initialValues, enterpriseType }) {
 
   useEffect(() => {
     // 地区要求的获取
-    // const newAllArea = JSON.parse(localStorage.getItem('allArea'))
     const newAllArea = cloneDeep(allArea)
-    console.log(initialValues.regionalIdList)
     if (initialValues.regionalIdList) {
       const res = matchGoodValue(
         newAllArea,

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Tooltip } from 'antd'
 import styles from './index.module.less'
-import { toJS, useStores } from '@/utils/mobx'
+import { observer, toJS, useStores } from '@/utils/mobx'
 import { getTrees } from '../../method'
+
 import { matchGoodValue } from '@/utils/tool'
 
 function index({ initialValues }) {
@@ -16,7 +17,7 @@ function index({ initialValues }) {
   } = initialValues
 
   const { factoryStore, commonStore } = useStores()
-  const { productCategoryList } = factoryStore
+  const { productCategoryList, productCategory } = factoryStore
   const { dictionary } = commonStore
   const {
     goodsNum = [],
@@ -24,24 +25,20 @@ function index({ initialValues }) {
     inquiryProcessType = []
   } = toJS(dictionary) //字典
 
-  const [productCategory, setProductCategory] = useState([]) //商品品类
+  const [productCategoric, setProductCategoric] = useState([]) //商品品类
   const [issue, setIssue] = useState([]) //发单量
   const [fabric, setFabric] = useState<any>() //面料
   const [orderReceiving, setOrderReceiving] = useState([]) //接单类型
+  // 商品品类 接口
+  const api = async () => {
+    await productCategory()
+  }
 
   useEffect(() => {
+    api()
     //商品品类
     if (categoryId) {
-      // console.log(categoryId)
-      // console.log(toJS(productCategoryList))
-
-      // console.log(getTrees(categoryId, toJS(productCategoryList), 'id', 'name'))
-
-      // console.log()
-
-      //   console.log(matchGoodValue(productCategoryList, data.categoryId))
-
-      setProductCategory(matchGoodValue(toJS(productCategoryList), categoryId))
+      setProductCategoric(matchGoodValue(toJS(productCategoryList), categoryId))
     }
     //发单量
     if (initialValues.goodsNum) {
@@ -65,14 +62,15 @@ function index({ initialValues }) {
       )
     }
   }, [initialValues])
+
   return (
     <div>
       <Row>
         <Col span={12}>
-          <Tooltip placement="top" title={productCategory}>
+          <Tooltip placement="top" title={productCategoric}>
             <div className={styles.title}>
               商品品类:
-              <span className={styles.content}>{productCategory}</span>
+              <span className={styles.content}>{productCategoric}</span>
             </div>
           </Tooltip>
         </Col>
@@ -136,4 +134,4 @@ function index({ initialValues }) {
   )
 }
 
-export default index
+export default observer(index)

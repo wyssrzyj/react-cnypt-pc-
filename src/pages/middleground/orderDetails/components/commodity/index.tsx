@@ -35,7 +35,7 @@ function index({ initialValues }) {
       // console.log(categoryId)
       // console.log(toJS(productCategoryList))
 
-      // console.log(getTrees(categoryId, toJS(productCategoryList), 'id', 'name').)
+      // console.log(getTrees(categoryId, toJS(productCategoryList), 'id', 'name'))
 
       // console.log()
 

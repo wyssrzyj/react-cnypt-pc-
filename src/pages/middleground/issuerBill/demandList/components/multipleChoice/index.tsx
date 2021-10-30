@@ -271,14 +271,6 @@ const MultipleChoice = ({
                 {data.status === -1 ? (
                   <div className={styles.btn}>
                     <Button
-                      ghost
-                      type="primary"
-                      className={styles.mov}
-                      onClick={showModal}
-                    >
-                      删除记录
-                    </Button>
-                    <Button
                       type="primary"
                       className={styles.mov}
                       onClick={() => {
@@ -286,6 +278,14 @@ const MultipleChoice = ({
                       }}
                     >
                       修改草稿
+                    </Button>
+                    <Button
+                      ghost
+                      type="primary"
+                      className={styles.mov}
+                      onClick={showModal}
+                    >
+                      删除记录
                     </Button>
                     {/* </Popconfirm> */}
                   </div>

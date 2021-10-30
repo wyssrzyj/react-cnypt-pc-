@@ -46,6 +46,8 @@ function DemandList() {
 
   const InterfaceData = async () => {
     const res = await applicationList(params)
+    console.log('数据', res.data.records)
+
     if (res.code === 200) {
       setDataLength(res.data.total)
       if (res.data.records) {
@@ -95,7 +97,7 @@ function DemandList() {
   const earlyEnd = async e => {
     console.log(e)
     const res = await declineRequisition({ id: e, status: -2 })
-    console.log(res)
+    console.log('谢绝操作', res)
     if (res.code === 200) {
       InterfaceData()
     }
@@ -116,8 +118,6 @@ function DemandList() {
   }
   // 删除
   const deleteMethod = async id => {
-    console.log('删除', id)
-
     const res = await deleteIssuer({ supplierInquiryId: id })
     if (res.code === 200) {
       InterfaceData()

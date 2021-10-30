@@ -79,7 +79,7 @@ const SearchBar = forwardRef(({ callback }: Props, ref) => {
         ></Input>
       </Col>
       <Col span={10} className={styles.searchBarItem}>
-        <span className={styles.label}>发布时间</span>
+        <span className={styles.labels}>发布时间</span>
         <div className={styles.inputBox}>
           <DatePicker
             onChange={value =>
@@ -107,7 +107,7 @@ const SearchBar = forwardRef(({ callback }: Props, ref) => {
         </div>
       </Col>
       <Col span={4} className={styles.btnBox}>
-        <Button type={'primary'} ghost className={styles.btn} onClick={reset}>
+        <Button type={'primary'} ghost className={styles.btns} onClick={reset}>
           重置
         </Button>
         <Button type={'primary'} className={styles.btn} onClick={onSubmit}>

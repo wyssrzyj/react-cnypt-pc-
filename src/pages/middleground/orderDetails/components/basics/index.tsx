@@ -51,7 +51,10 @@ function index({ initialValues, enterpriseType }) {
         <Col span={12}>
           {/* 0 加工厂 1 发单商  发单商可以看到所有的信息，加工厂需要根据是否公开才能看 */}
           <div className={styles.title}>
-            订单标题： <span className={styles.contents}>{name}</span>
+            订单标题：
+            <Tooltip placement="top" title={name}>
+              <span className={styles.contents}>{name}</span>
+            </Tooltip>
           </div>
         </Col>
         <Col span={12}>
@@ -97,12 +100,14 @@ function index({ initialValues, enterpriseType }) {
       </Row>
       <Row>
         <Col span={12}>
-          <div className={styles.title}>
-            其他要求:
-            <span className={styles.content}>
-              {otherRequirement ? otherRequirement : '暂无'}
-            </span>
-          </div>
+          <Tooltip placement="top" title={otherRequirement}>
+            <div className={styles.title}>
+              其他要求:
+              <span className={styles.content}>
+                {otherRequirement ? otherRequirement : '暂无'}
+              </span>
+            </div>
+          </Tooltip>
         </Col>
       </Row>
     </div>

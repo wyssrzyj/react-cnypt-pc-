@@ -17,6 +17,8 @@ const MultipleChoice = ({
   reOrder,
   demandSheetDetails
 }) => {
+  console.log(data)
+
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const { prodType = [] } = toJS(dictionary)
@@ -55,6 +57,7 @@ const MultipleChoice = ({
     if (windowType.type === 'mov') {
       deleteMethod(id)
     }
+
     if (windowType.type === 'CancelConfirmation') {
       reOrder(data.id)
     }
@@ -63,7 +66,12 @@ const MultipleChoice = ({
       {
       }
     }
+    // 谢绝
     if (windowType.type === 'decline') {
+      earlyEnd(data.id)
+    }
+    // 取消申请
+    if (windowType.type === 'withdraw') {
       earlyEnd(data.id)
     }
 
@@ -92,6 +100,11 @@ const MultipleChoice = ({
   const decline = () => {
     setIsModalVisible(true)
     setWindowType({ type: 'decline' })
+  }
+  // 取消申请
+  const withdraw = () => {
+    setIsModalVisible(true)
+    setWindowType({ type: 'withdraw' })
   }
   const onCancel = () => {
     setIsModalVisible(false)
@@ -222,9 +235,7 @@ const MultipleChoice = ({
           <Col span={9} className={styles.feedback}>
             <p className={styles.quotationInformation}>
               <span className={styles.information}>•</span> 报价信息:
-              <span>
-                {data.availableOrders ? data.availableOrders : '暂无'}
-              </span>
+              <span>{data.quoteInfo ? data.quoteInfo : '暂无'}</span>
             </p>
             <p>
               <span className={styles.information}>•</span> 付款方式:
@@ -285,13 +296,24 @@ const MultipleChoice = ({
               </Button>
             ) : null}
 
-            {[1, -1, -2].includes(+data.status) ? (
+            {[-1, -2].includes(+data.status) ? (
               <Button
                 type={'primary'}
+                ghost
                 onClick={showModal}
                 className={styles.btn}
               >
                 删除记录
+              </Button>
+            ) : null}
+            {[1].includes(+data.status) ? (
+              <Button
+                type={'primary'}
+                ghost
+                onClick={withdraw}
+                className={styles.btn}
+              >
+                取消申请
               </Button>
             ) : null}
           </Col>
@@ -331,6 +353,15 @@ const MultipleChoice = ({
                 <Icon type={'jack-ts'} className={styles.delIcon}></Icon>
                 <div className={styles.delTitle}>是否谢绝？</div>
                 <div className={styles.delText}>是否确定谢绝？</div>
+              </div>
+            ) : null}
+            {windowType.type === 'withdraw' ? (
+              <div className={styles.delContent}>
+                <Icon type={'jack-ts'} className={styles.delIcon}></Icon>
+                <div className={styles.delTitle}>是否取消申请？</div>
+                <div className={styles.delText}>
+                  取消后将收不到该工厂反馈的消息
+                </div>
               </div>
             ) : null}
 

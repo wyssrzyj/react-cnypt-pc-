@@ -158,52 +158,35 @@ const Header = () => {
   // 发单商没有监控列表
   // 企业类型 0 加工厂 1 发单商
   const memberCenterFiltering = memberCenter.filter(item => {
-    //  发单商不显示照片
-    if (enterpriseType === '1') {
-      if (item.title == '账号管理') {
-        item.children = [
-          {
-            title: '账号安全',
-            url: '/control-panel/panel/account'
-          },
-          {
-            title: '企业信息',
-            url: '/control-panel/panel/enterprise'
-          },
-          {
-            title: '企业照片',
-            url: '/control-panel/panel/enterprise-photos'
-          }
-        ]
+    if (item.title == '账号管理') {
+      item.children = [
+        {
+          title: '账号安全',
+          url: '/control-panel/panel/account'
+        },
+        {
+          title: '企业信息',
+          url: '/control-panel/panel/enterprise'
+        }
+      ]
+
+      if (userInfo.factoryId || userInfo.purchaserId) {
+        item.children.push({
+          title: '企业照片',
+          url: '/control-panel/panel/enterprise-photos'
+        })
       }
-    } else {
-      if (item.title == '账号管理') {
-        item.children = [
-          {
-            title: '账号安全',
-            url: '/control-panel/panel/account'
-          },
-          {
-            title: '企业信息',
-            url: '/control-panel/panel/enterprise'
-          },
-          {
-            title: '企业照片',
-            url: '/control-panel/panel/enterprise-photos'
-          }
-        ]
-      }
-      return item
-      // if (item.title !== '监控列表' && item.title !== '验厂管理') {
-      //   return item
-      // }
     }
-    // 发单商不显示  验厂管理
+
     if (enterpriseType === '1') {
       if (item) {
         return item.title !== '验厂管理'
       }
     }
+
+    return item
+
+    // 发单商不显示  验厂管理
   })
 
   const history = useHistory()

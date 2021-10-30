@@ -40,7 +40,7 @@ const date = ({ validity }) => {
       <Col span={12}>
         <FormItem
           className={styles.processingType}
-          name="processingType"
+          name="inquiryEffectiveDate"
           label="订单有效期"
           rules={[{ required: true, message: '请选择日期' }]}
           {...layout}
@@ -54,7 +54,7 @@ const date = ({ validity }) => {
       </Col>
       <Col span={12}>
         <FormItem
-          name="unitPrice"
+          name="deliveryDate"
           className={styles.processingType}
           label="交货期"
           rules={[{ required: true, message: '请选择日期' }]}

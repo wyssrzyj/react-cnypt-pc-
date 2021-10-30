@@ -8,10 +8,8 @@ import Commodity from './components/commodity'
 import Terms from './components/terms'
 import Address from './components/address'
 import { useStores, observer } from '@/utils/mobx'
-import { useHistory } from 'react-router-dom'
-// import { timestampToTime } from './components/time' //
-import { useLocation } from 'react-router-dom'
-// import moment from 'moment' //引入moment
+import { useHistory, useLocation } from 'react-router-dom'
+import moment from 'moment'
 
 const DemandSheet = () => {
   const location = useLocation()
@@ -37,6 +35,7 @@ const DemandSheet = () => {
   }, [])
   let api = async () => {
     await productCategory()
+    console.log(validity)
   }
 
   useEffect(() => {
@@ -68,8 +67,8 @@ const DemandSheet = () => {
       if (data.location[0] === 0) {
         data.location = null
       }
-      // data.processingType = moment(timestampToTime(data.inquiryEffectiveDate)) //时间的回显
-      // data.unitPrice = moment(timestampToTime(data.deliveryDate))
+      data.inquiryEffectiveDate = moment(data.inquiryEffectiveDate) //时间的回显
+      data.deliveryDate = moment(data.deliveryDate)
     }
 
     setInitialValues(data)
@@ -95,8 +94,8 @@ const DemandSheet = () => {
 
   const onFinish = async v => {
     //日期
-    v.inquiryEffectiveDate = new Date(validity.processingType).getTime() //需求有效期
-    v.deliveryDate = new Date(validity.unitPrice).getTime() //交货期
+    v.inquiryEffectiveDate = moment(v.inquiryEffectiveDate).valueOf() //需求有效期
+    v.deliveryDate = moment(v.deliveryDate).valueOf() //交货期
     if (isArray(v.annex)) {
       v.annex = v.annex.map(item => item.url)
     }

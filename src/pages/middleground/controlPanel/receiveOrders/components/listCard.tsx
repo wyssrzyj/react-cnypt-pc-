@@ -185,6 +185,8 @@ const ListCard = props => {
 
   // 弹窗确认
   const handleOk = () => {
+    console.log(2222222222222222)
+
     if (windowType.type === 'withdraw') {
       refuse(data.supplierInquiryId)
     }
@@ -322,7 +324,6 @@ const ListCard = props => {
           centered={true}
           footer={null}
           onCancel={onCancel}
-
           // maskClosable={false}
         >
           <div className={styles.delContent}>
@@ -354,9 +355,7 @@ const ListCard = props => {
               <Button
                 type="primary"
                 className={styles.submitBtn}
-                onClick={() => {
-                  handleOk()
-                }}
+                onClick={handleOk}
                 size="large"
               >
                 确认

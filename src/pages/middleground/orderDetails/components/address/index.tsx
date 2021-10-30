@@ -7,6 +7,7 @@ import { getTrees } from '../../method'
 function index({ initialValues, enterpriseType }) {
   {
     /* 0 加工厂 1 发单商   只有加工厂才能看到form */
+    console.log(enterpriseType)
   }
 
   const { contactPerson, contactPersonMobile, address, isContactPublic } =
@@ -45,7 +46,7 @@ function index({ initialValues, enterpriseType }) {
         </Col>
       </Row>
 
-      {enterpriseType === 1 ? (
+      {+enterpriseType === 1 ? (
         <Row>
           <Col span={12}>
             <div className={styles.title}>

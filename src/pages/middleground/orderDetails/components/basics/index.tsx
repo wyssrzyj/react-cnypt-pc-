@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Tooltip } from 'antd'
-import { toJS, useStores } from '@/utils/mobx'
-import { getTrees } from '../../method'
-
+import { observer, toJS, useStores } from '@/utils/mobx'
+import { cloneDeep } from 'lodash'
 import styles from './index.module.less'
+import { matchGoodValue } from '@/utils/tool'
 
-function index({ initialValues, enterpriseType }) {
+function Basic({ initialValues, enterpriseType }) {
   const {
     isEnterpriseInfoPublic,
     name,
@@ -18,21 +18,25 @@ function index({ initialValues, enterpriseType }) {
   const { allArea, dictionary } = commonStore
   const { factoryEffectiveLocation = [] } = toJS(dictionary) //有效车位
 
-  const [treeData, setTreeData] = useState([])
+  const [treeData, setTreeData] = useState('')
   const [parkingLot, setParkingLot] = useState<any>()
 
   useEffect(() => {
     // 地区要求的获取
+    // const newAllArea = JSON.parse(localStorage.getItem('allArea'))
+    const newAllArea = cloneDeep(allArea)
+    console.log(initialValues.regionalIdList)
     if (initialValues.regionalIdList) {
-      initialValues.regionalIdList = getTrees(
+      const res = matchGoodValue(
+        newAllArea,
         initialValues.regionalIdList,
-        toJS(allArea),
         'value',
-        'label'
+        'label',
+        '不限'
       )
-      setTreeData(initialValues.regionalIdList)
+      setTreeData(res)
     } else {
-      setTreeData((initialValues.regionalIdList = ['全国']))
+      setTreeData('全国')
     }
     // 车位的获取
     if (factoryEffectiveLocation) {
@@ -43,7 +47,7 @@ function index({ initialValues, enterpriseType }) {
         setParkingLot(res[0].label)
       }
     }
-  }, [initialValues, allArea])
+  }, [initialValues.regionalIdList, allArea])
 
   return (
     <div>
@@ -65,16 +69,7 @@ function index({ initialValues, enterpriseType }) {
         </Col>
       </Row>
       <Row>
-        {+enterpriseType === 1 ? (
-          <Col span={12}>
-            <div className={styles.title}>
-              企业名称:
-              <span className={styles.content}>
-                {enterpriseName ? enterpriseName : '暂无'}
-              </span>
-            </div>
-          </Col>
-        ) : (
+        {+enterpriseType === 0 ? (
           <Col span={12}>
             <div className={styles.title}>
               企业名称:
@@ -85,14 +80,25 @@ function index({ initialValues, enterpriseType }) {
               )}
             </div>
           </Col>
+        ) : null}
+
+        {+enterpriseType === 1 && (
+          <Col span={12}>
+            <div className={styles.title}>
+              企业信息:
+              <span className={styles.content}>
+                {isEnterpriseInfoPublic ? '公开' : '不公开'}
+              </span>
+            </div>
+          </Col>
         )}
 
         <Col span={12}>
-          <Tooltip placement="top" title={treeData.join('、')}>
+          <Tooltip placement="top" title={treeData}>
             <div className={styles.hidden}>
               地区要求:
               <span className={styles.content}>
-                {treeData ? treeData.join('、') : '暂无'}
+                {treeData ? treeData : '暂无'}
               </span>
             </div>
           </Tooltip>
@@ -114,4 +120,4 @@ function index({ initialValues, enterpriseType }) {
   )
 }
 
-export default index
+export default observer(Basic)

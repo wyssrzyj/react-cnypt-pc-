@@ -44,8 +44,9 @@ const ReceiveOrder = () => {
 
   const searchRef = useRef()
 
-  const { searchOrderStore } = useStores()
+  const { searchOrderStore, demandListStore } = useStores()
   const { supplierGetOrders } = searchOrderStore
+  const { rejectSubmission } = demandListStore
 
   const defaultPageSize = 10
   const [activeKey, setActiveKey] = useState<string>('all')
@@ -98,6 +99,7 @@ const ReceiveOrder = () => {
     setLoading(true)
     const res = await supplierGetOrders(params)
     setTotal(res.total || 0)
+
     setDataSource(res.records || [])
     setLoading(false)
   }
@@ -130,6 +132,16 @@ const ReceiveOrder = () => {
       await getData()
     })()
   }, [params])
+  // 拒绝
+  const refuse = async id => {
+    let res = await rejectSubmission({
+      supplierInquiryId: id,
+      status: -1
+    })
+    if (res.code === 200) {
+      getData()
+    }
+  }
 
   return (
     <div className={styles.receiveOrders}>
@@ -150,6 +162,7 @@ const ReceiveOrder = () => {
               getData={getData}
               data={item}
               curKey={activeKey}
+              refuse={refuse}
               key={idx}
             ></ListCard>
           )

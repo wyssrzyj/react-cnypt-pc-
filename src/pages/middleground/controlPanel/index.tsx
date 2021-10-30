@@ -52,6 +52,10 @@ const Title = ({ title, icon }) => {
 const ControlPanel = () => {
   const currentUser = getCurrentUser()
   const userInfo = getUserInfo() || {}
+  console.log(
+    '🚀 ~ file: index.tsx ~ line 55 ~ ControlPanel ~ userInfo',
+    userInfo
+  )
 
   const { factoryStore } = useStores()
   const { productCategory } = factoryStore
@@ -115,14 +119,17 @@ const ControlPanel = () => {
                   企业信息
                 </Link>
               </Menu.Item>
-              <Menu.Item key="enterprise-photos" className={styles.items}>
-                <Link
-                  className={styles.minutest}
-                  to="/control-panel/panel/enterprise-photos"
-                >
-                  企业照片
-                </Link>
-              </Menu.Item>
+              {userInfo.purchaserId || userInfo.factoryId ? (
+                <Menu.Item key="enterprise-photos" className={styles.items}>
+                  <Link
+                    className={styles.minutest}
+                    to="/control-panel/panel/enterprise-photos"
+                  >
+                    企业照片
+                  </Link>
+                </Menu.Item>
+              ) : null}
+
               {+currentUser.enterpriseType === 1 ? (
                 <Menu.Item key="issue-bill" className={styles.items}>
                   <Link

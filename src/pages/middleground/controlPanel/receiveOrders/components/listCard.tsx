@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@/components'
-import { Popover, Button } from 'antd'
+import { Popover, Button, Modal } from 'antd'
 import styles from './listCard.module.less'
 import { observer, useStores } from '@/utils/mobx'
 import classNames from 'classnames'
@@ -35,12 +35,17 @@ const ListCard = props => {
   const history = useHistory()
   const { commonStore, factoryStore, searchOrderStore } = useStores()
   const { dictionary } = commonStore
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [windowType, setWindowType] = useState<any>({}) //弹窗类型
+
   const { inquiryProcessType, goodsNum } = dictionary
   const { productCategoryList } = factoryStore
   const { changeOrderStick, factoryDelOrder } = searchOrderStore
 
-  const { data, getData } = props
+  const { data, getData, refuse } = props
   const { stickType = 0 } = data
+  console.log('数据', data.enterpriseName) //判断条件
+
   const diffDay = dateDiff(data.inquiryEffectiveDate)
 
   const configs = [
@@ -117,29 +122,83 @@ const ListCard = props => {
   const getEdit = () => {
     if (data.status === 1) {
       return (
-        <Button type={'primary'} onClick={reply}>
-          立即回复
-        </Button>
+        <>
+          <Button
+            disabled={data.enterpriseName === null ? true : false}
+            type={'primary'}
+            onClick={reply}
+          >
+            立即回复
+          </Button>
+          <Button
+            className={styles.refuse}
+            type={'primary'}
+            ghost
+            onClick={() => {
+              setIsModalVisible(true)
+              setWindowType({ type: 'withdraw' })
+            }}
+          >
+            拒绝接单
+          </Button>
+        </>
       )
     }
     if (data.status === 2) {
       return (
         <>
-          <Button type={'primary'} onClick={reply}>
+          <Button
+            disabled={data.enterpriseName === null ? true : false}
+            type={'primary'}
+            onClick={reply}
+          >
             修改回复
           </Button>
-          <Button type={'text'} onClick={del} className={styles.delBtn}>
-            删除记录
+          <Button
+            className={styles.refuse}
+            ghost
+            type={'primary'}
+            onClick={() => {
+              setIsModalVisible(true)
+              setWindowType({ type: 'withdraw' })
+            }}
+          >
+            拒绝接单
           </Button>
         </>
       )
     }
 
     return (
-      <Button type={'primary'} onClick={del}>
+      <Button
+        ghost
+        type={'primary'}
+        onClick={() => {
+          setIsModalVisible(true)
+          setWindowType({ type: 'mov' })
+        }}
+      >
         删除记录
       </Button>
     )
+  }
+
+  // 弹窗确认
+  const handleOk = () => {
+    if (windowType.type === 'withdraw') {
+      refuse(data.supplierInquiryId)
+    }
+    if (windowType.type === 'mov') {
+      del
+    }
+
+    setIsModalVisible(false)
+  }
+  const onCancel = () => {
+    setIsModalVisible(false)
+  }
+  const handleCancel = () => {
+    setIsModalVisible(false)
   }
 
   const reply = () => {
@@ -156,7 +215,6 @@ const ListCard = props => {
     await factoryDelOrder({
       supplierInquiryId: data.supplierInquiryId
     })
-
     getData && getData()
   }
 
@@ -168,8 +226,14 @@ const ListCard = props => {
         <div className={styles.left}>
           <div className={styles.order}>
             <span className={styles.orderLabel}>发单商:</span>
-            <Popover content={data.enterpriseName}>
-              <span className={styles.orderNum}>{data.enterpriseName}</span>
+            <Popover
+              content={data.enterpriseName ? data.enterpriseName : '***'}
+            >
+              {data.enterpriseName !== null ? (
+                <span className={styles.orderNum}>{data.enterpriseName}</span>
+              ) : (
+                <span className={styles.orderNum}>***</span>
+              )}
             </Popover>
           </div>
           <Popover content={'发布时间'}>
@@ -195,6 +259,11 @@ const ListCard = props => {
               {STATUS_TEXT.get(data.status)}
             </span>
           </div>
+          {data.enterpriseName === null ? (
+            <div className={styles.order}>
+              <span className={styles.invalid}>(此订单已失效)</span>
+            </div>
+          ) : null}
         </div>
 
         <Popover content={STICK_TIPS.get(stickType)}>
@@ -223,9 +292,13 @@ const ListCard = props => {
             {configs.map(item => (
               <div key={item.field} className={styles.infoItem}>
                 <span className={styles.infoLabel}>{item.label}</span>
-                <span className={styles.infoValue}>
-                  {getTarget(item.field, data[item.field])}
-                </span>
+                {data.enterpriseName !== null ? (
+                  <span className={styles.infoValue}>
+                    {getTarget(item.field, data[item.field])}
+                  </span>
+                ) : (
+                  <span className={styles.infoValue}>---</span>
+                )}
               </div>
             ))}
           </div>
@@ -242,6 +315,55 @@ const ListCard = props => {
         </div>
         <div className={styles.from}>{SOURCE_TEXT.get(data.source)}</div>
         <div className={styles.btnBox}>{getEdit()}</div>
+      </div>
+      <div>
+        <Modal
+          visible={isModalVisible}
+          centered={true}
+          footer={null}
+          onCancel={onCancel}
+
+          // maskClosable={false}
+        >
+          <div className={styles.delContent}>
+            {windowType.type === 'mov' ? (
+              <div className={styles.delContent}>
+                <Icon type={'jack-sptg1'} className={styles.delIcon}></Icon>
+                <div className={styles.delTitle}>删除订单</div>
+                <div className={styles.delText}>确定删除订单？</div>
+              </div>
+            ) : null}
+            {windowType.type === 'withdraw' ? (
+              <div className={styles.delContent}>
+                <Icon type={'jack-ts'} className={styles.delIcon}></Icon>
+                <div className={styles.delTitle}>是否拒绝接单？</div>
+                <div className={styles.delText}>确定拒绝接单？</div>
+              </div>
+            ) : null}
+
+            <div className={styles.modal}>
+              <Button
+                className={styles.cancelBtn}
+                size="large"
+                type="primary"
+                ghost
+                onClick={handleCancel}
+              >
+                取消
+              </Button>
+              <Button
+                type="primary"
+                className={styles.submitBtn}
+                onClick={() => {
+                  handleOk()
+                }}
+                size="large"
+              >
+                确认
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </div>
     </div>
   )

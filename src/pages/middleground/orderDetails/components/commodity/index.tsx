@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'antd'
+import { Col, Row, Tooltip } from 'antd'
 import styles from './index.module.less'
 import { toJS, useStores } from '@/utils/mobx'
 import { getTrees } from '../../method'
@@ -61,10 +61,14 @@ function index({ initialValues }) {
     <div>
       <Row>
         <Col span={12}>
-          <div className={styles.title}>
-            商品品类:
-            <span className={styles.content}>{productCategory.join('、')}</span>
-          </div>
+          <Tooltip placement="top" title={productCategory.join('、')}>
+            <div className={styles.title}>
+              商品品类:
+              <span className={styles.content}>
+                {productCategory.join('、')}
+              </span>
+            </div>
+          </Tooltip>
         </Col>
         <Col span={12}>
           <div className={styles.title}>
@@ -90,21 +94,27 @@ function index({ initialValues }) {
       </Row>
       <Row>
         <Col span={12}>
-          <div className={styles.title}>
-            接单类型:
-            <span className={styles.content}>{orderReceiving.join('、')}</span>
-          </div>
+          <Tooltip placement="top" title={orderReceiving.join('、')}>
+            <div className={styles.title}>
+              接单类型:
+              <span className={styles.content}>
+                {orderReceiving.join('、')}
+              </span>
+            </div>
+          </Tooltip>
         </Col>
         <Col span={12}>
-          <div className={styles.title}>
-            备注说明:
-            <span className={styles.content}>
-              {goodsRemark ? goodsRemark : '暂无'}
-            </span>
-          </div>
+          <Tooltip placement="top" title={goodsRemark}>
+            <div className={styles.title}>
+              备注说明:
+              <span className={styles.content}>
+                {goodsRemark ? goodsRemark : '暂无'}
+              </span>
+            </div>
+          </Tooltip>
         </Col>
       </Row>
-      <div className={styles.title}>
+      <div className={styles.titles}>
         款图:
         <span className={styles.content}>
           {stylePicture !== undefined && stylePicture.length > 0 ? (

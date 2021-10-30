@@ -100,8 +100,8 @@ function Basics() {
   const fangfa = item => {
     map.set(1, [
       {
-        pattern: /^[0-9]*$/,
-        message: '请输入正确的数量'
+        pattern: /^([1-9]{1})(\d{1}(\.\d{1,2})?)$/,
+        message: '请输入正确的数量(小数点最多输入两位)'
       }
     ])
     map.set(0, [{ required: item.required, message: item.message }])

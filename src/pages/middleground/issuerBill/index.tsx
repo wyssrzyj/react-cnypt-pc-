@@ -9,12 +9,11 @@ import { useLocation } from 'react-router-dom'
 const DemandList = React.lazy(() => import('./demandList'))
 const DemandSheet = React.lazy(() => import('./release'))
 const applicationList = React.lazy(() => import('./applicationList'))
-import { useStores, toJS, observer } from '@/utils/mobx'
+import { useStores, observer } from '@/utils/mobx'
 
 function index() {
   const { factoryStore } = useStores()
-  const { productCategoryList, productCategory } = factoryStore
-  const treeData = productCategoryList //商品品类
+  const { productCategory } = factoryStore
 
   const location = useLocation()
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
@@ -22,9 +21,8 @@ function index() {
   // 商品品类  调取接口
   useEffect(() => {
     setCurrentMenu(routingMethod.get(location.pathname))
-    console.log('修改刷新数据消失问题', toJS(treeData))
     CommodityCategory()
-  }, [])
+  }, [location.pathname])
 
   const handleMenu = ({ keyPath }) => {
     setCurrentMenu(keyPath)

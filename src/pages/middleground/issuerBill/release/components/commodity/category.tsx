@@ -76,8 +76,6 @@ const Category = () => {
     console.log('search:', val)
   }
 
-  console.log(goodsNum)
-
   return (
     <div className={styles.top}>
       <Row>
@@ -113,7 +111,7 @@ const Category = () => {
               }
             >
               {goodsNum.map(item => (
-                <Option key={item.id} value={item.id}>
+                <Option key={item.value} value={item.value}>
                   {item.label}
                 </Option>
               ))}

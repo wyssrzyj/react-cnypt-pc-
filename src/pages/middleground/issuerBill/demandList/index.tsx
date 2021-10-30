@@ -92,7 +92,6 @@ const DemandList = () => {
       })
       setNoOrders(res.records.length)
       setReallyLists(res.records)
-      console.log(res.records)
     }
   }
   // 路由数据

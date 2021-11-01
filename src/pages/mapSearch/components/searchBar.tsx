@@ -284,7 +284,7 @@ const SearchBar = props => {
 
         <Select
           allowClear
-          placeholder={'接单类型'}
+          placeholder={'加工类型'}
           className={styles.prodTypeSelect}
           onChange={value => valueChange(value, 'prodType')}
         >

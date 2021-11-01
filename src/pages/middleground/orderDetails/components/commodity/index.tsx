@@ -3,7 +3,6 @@ import { Col, Row, Tooltip } from 'antd'
 import styles from './index.module.less'
 import { observer, toJS, useStores } from '@/utils/mobx'
 import { getTrees } from '../../method'
-
 import { matchGoodValue } from '@/utils/tool'
 
 function index({ initialValues }) {
@@ -28,12 +27,11 @@ function index({ initialValues }) {
   const [productCategoric, setProductCategoric] = useState([]) //商品品类
   const [issue, setIssue] = useState([]) //发单量
   const [fabric, setFabric] = useState<any>() //面料
-  const [orderReceiving, setOrderReceiving] = useState([]) //接单类型
+  const [orderReceiving, setOrderReceiving] = useState([]) //加工类型
   // 商品品类 接口
   const api = async () => {
     await productCategory()
   }
-
   useEffect(() => {
     api()
     //商品品类
@@ -55,7 +53,7 @@ function index({ initialValues }) {
         setFabric(res.label)
       }
     }
-    //接单类型
+    //加工类型
     if (processTypeList) {
       setOrderReceiving(
         getTrees(processTypeList, inquiryProcessType, 'value', 'label')
@@ -100,7 +98,7 @@ function index({ initialValues }) {
         <Col span={12}>
           <Tooltip placement="top" title={orderReceiving.join('、')}>
             <div className={styles.title}>
-              接单类型:
+              加工类型:
               <span className={styles.content}>
                 {orderReceiving.join('、')}
               </span>

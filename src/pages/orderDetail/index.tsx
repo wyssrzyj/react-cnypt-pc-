@@ -6,7 +6,7 @@ import {
   PhoneOutlined,
   MailOutlined,
   EnvironmentOutlined,
-  CommentOutlined,
+  CommentOutlined
 } from '@ant-design/icons'
 import { DetailHeader, JackCard, Icon } from '@/components'
 import { FactorySample, OrderOverview, OrderTab } from './components'
@@ -25,28 +25,28 @@ const clothingList = [
   {
     label: '主营类别',
     value: '毛衫服装(细针),毛衫服装(粗针)',
-    key: 'man',
+    key: 'man'
   },
   {
     label: '加工行业',
     value: '生产企业或加工个体户',
-    key: 'woman',
+    key: 'woman'
   },
   {
     label: '生产人数',
     value: '100-499人',
-    key: 'kids',
+    key: 'kids'
   },
   {
-    label: '接单类型',
+    label: '加工类型',
     value: '经销单',
-    key: 'dress',
+    key: 'dress'
   },
   {
     label: '工厂地区',
     value: '广东省 东莞市',
-    key: 'OEM',
-  },
+    key: 'OEM'
+  }
 ]
 const clothingFooter = (
   <>
@@ -66,32 +66,32 @@ const ourList = [
     label: '名称',
     value: '企业设置不公开',
     key: 'man',
-    icon: <UserOutlined className={styles.ourIcon} />,
+    icon: <UserOutlined className={styles.ourIcon} />
   },
   {
     label: '手机',
     value: '企业设置不公开',
     key: 'woman',
-    icon: <MobileOutlined className={styles.ourIcon} />,
+    icon: <MobileOutlined className={styles.ourIcon} />
   },
   {
     label: '电话',
     value: '企业设置不公开',
     key: 'kids',
-    icon: <PhoneOutlined className={styles.ourIcon} />,
+    icon: <PhoneOutlined className={styles.ourIcon} />
   },
   {
     label: '邮箱',
     value: '企业设置不公开',
     key: 'dress',
-    icon: <MailOutlined className={styles.ourIcon} />,
+    icon: <MailOutlined className={styles.ourIcon} />
   },
   {
     label: '地址',
     value: '企业设置不公开',
     key: 'OEM',
-    icon: <EnvironmentOutlined className={styles.ourIcon} />,
-  },
+    icon: <EnvironmentOutlined className={styles.ourIcon} />
+  }
 ]
 const ourFooter = <Button icon={<CommentOutlined />}>现在聊天</Button>
 

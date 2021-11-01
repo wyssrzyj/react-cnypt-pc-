@@ -126,7 +126,7 @@ const OrderInfo = props => {
         <li>
           <div className={styles.left}>
             <Icon type="jack-jdlx" className={styles.icon} />
-            <span className={styles.subTitle}>接单类型</span>
+            <span className={styles.subTitle}>加工类型</span>
           </div>
           <div className={styles.right}>
             {isEmpty(orderType)

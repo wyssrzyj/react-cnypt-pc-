@@ -165,7 +165,7 @@ const OverflowCard = props => {
                   <Icon type="jack-scrs" className={styles.ulIcon} />
                   有效车位：
                 </span>
-                <span>{effectiveLocation ? effectiveLocation : '0'}台</span>
+                <span>{effectiveLocation ? effectiveLocation : '0'}人</span>
               </li>
               <li>
                 <span className={styles.ulName}>

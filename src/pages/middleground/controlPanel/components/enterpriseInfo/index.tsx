@@ -571,9 +571,9 @@ const EnterpriseInfo = () => {
                 </Select>
               </Form.Item>
               <Form.Item
-                label="接单类型"
+                label="加工类型"
                 name="factoryProcessTypeList"
-                rules={[{ required: true, message: '请选择接单类型！' }]}
+                rules={[{ required: true, message: '请选择加工类型！' }]}
               >
                 <ProcessingTypeCom />
               </Form.Item>

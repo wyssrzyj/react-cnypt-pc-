@@ -146,6 +146,7 @@ const Header = () => {
 
   // 企业类型 0 加工厂 1 发单商
   //我的工作台
+
   const workbenchDataFiltering = workbenchData.filter(item => {
     return (
       (enterpriseType == '0' && item.type === '加工厂') ||
@@ -177,8 +178,14 @@ const Header = () => {
         })
       }
     }
+    console.log('enterpriseTypeenterpriseType', enterpriseType)
 
     if (enterpriseType === '1') {
+      if (item) {
+        return item.title !== '验厂管理'
+      }
+    }
+    if (enterpriseType === null) {
       if (item) {
         return item.title !== '验厂管理'
       }

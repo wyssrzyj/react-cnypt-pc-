@@ -171,7 +171,7 @@ const MultipleChoice = ({
               <p>联系方式: {data.contactsMobile}</p>
               <p>电子邮箱: {data.contactsEmail}</p>
               <div className={styles.hidden}>
-                接单类型:
+                加工类型:
                 <Tooltip
                   placement="top"
                   title={data.prodTypeValueList.join('、')}

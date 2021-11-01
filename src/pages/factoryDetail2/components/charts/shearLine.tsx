@@ -12,7 +12,7 @@ const ShearLine = () => {
   const [chart, setChart] = useState(null)
 
   useEffect(() => {
-    const arr = factoryMachineData.statisticHour
+    const arr = factoryMachineData.statisticHour || []
     const target = arr.map(item => {
       return {
         devCutcount: item.devCutcount,

@@ -263,7 +263,6 @@ const FilterList = props => {
   useEffect(() => {
     if (!isEmpty(productCategoryList)) {
       const newData = toJS(productCategoryList)
-      console.log(newData)
 
       const { location } = history
       const state: any = location.state || {}

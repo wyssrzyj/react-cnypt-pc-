@@ -134,6 +134,11 @@ const EnterpriseInfo = () => {
 
   const confirmSubmit = () => {
     validateFields().then(values => {
+      console.log(
+        '🚀 ~ file: index.tsx ~ line 137 ~ validateFields ~ values',
+        values
+      )
+
       const {
         area = [],
         businessAddress = {},
@@ -201,13 +206,13 @@ const EnterpriseInfo = () => {
           imageUrl === preImageUrl ? undefined : enterpriseLogoId
       }
 
-      if (+enterpriseId === 0) {
+      if (+enterpriseType === 0) {
         params.factoryProcessTypeList = factoryProcessTypeList.map(item => ({
           factoryId,
           ...item
         }))
       }
-      if (+enterpriseId === 1) {
+      if (+enterpriseType === 1) {
       }
 
       axios

@@ -15,7 +15,7 @@ const PassPercent = () => {
   const [chart, setChart] = useState(null)
 
   useEffect(() => {
-    const arr = factoryData.order
+    const arr = factoryData.order || []
     const target = []
     arr.forEach(item => {
       target.push({

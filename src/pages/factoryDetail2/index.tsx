@@ -41,15 +41,15 @@ const FactoryDetail = props => {
   const { updateName } = commonStore
   const [factoryInfo, setFactoryInfo] = useState<any>({})
   const [activeTab, setActiveTab] = useState('info')
-  const [tabOptions, setTabOptions] = useState(initTabOptions)
-  console.log(setTabOptions)
-  console.log(factoryStore)
+  const [tabOptions, _setTabOptions] = useState(initTabOptions)
+  const [init, setInit] = useState(false)
 
-  // const { getFactoryData, getFactoryMachineData, getFactoryBoard } =
-  //、   factoryStore
+  const { getFactoryData, getFactoryBoard } = factoryStore
 
   useEffect(() => {
     ;(async () => {
+      await getFactoryData(factoryId)
+      await getFactoryBoard(factoryId)
       // const res1 = await getFactoryData(factoryId)
       // const res2 = await getFactoryMachineData(factoryId)
       // const res3 = await getFactoryBoard(factoryId)
@@ -71,6 +71,7 @@ const FactoryDetail = props => {
       //   setTabOptions([...initTabOptions])
       //   setActiveTab('dynamic')
       // }
+      setInit(true)
     })()
   }, [factoryId])
 
@@ -121,13 +122,15 @@ const FactoryDetail = props => {
           onTabChange={key => setActiveTab(key)}
         />
         {/* 生产动态 */}
-        {/* {activeTab === 'dynamic' && <ProductDynamic />} */}
+        {/* {activeTab === 'dynamic' && init && <ProductDynamic />} */}
         {/* 企业信息 */}
-        {activeTab === 'info' && (
+        {activeTab === 'info' && init && (
           <EnterpriseInformation factoryId={factoryId} current={factoryInfo} />
         )}
         {/* 联系方式 */}
-        {activeTab === 'contact' && <ContactCom factoryId={factoryId} />}
+        {activeTab === 'contact' && init && (
+          <ContactCom factoryId={factoryId} />
+        )}
       </div>
       {/* 导航栏 */}
     </div>

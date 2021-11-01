@@ -35,7 +35,7 @@ const MoveChart = () => {
   const [data, setData] = useState(initData)
 
   useEffect(() => {
-    const arr = factoryMachineData.statisticWeek
+    const arr = factoryMachineData.statisticWeek || []
     const target = arr.map(item => {
       const runtime = item.devEletime
         ? ((item.devRunningtime / item.devEletime) * 100).toFixed(2)

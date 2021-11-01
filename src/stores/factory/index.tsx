@@ -123,7 +123,7 @@ export default class FactoryStore {
         runInAction(() => {
           this.factoryData = res.data || {}
         })
-        return res.data || []
+        return res.data
       } else {
         message.error('获取数据失败~')
       }
@@ -148,9 +148,9 @@ export default class FactoryStore {
 
       if (res.code === 200) {
         runInAction(() => {
-          this.factoryMachineData = res.data
+          this.factoryMachineData = res.data || {}
         })
-        return res.data || []
+        return res.data
       } else {
         message.error('获取数据失败~')
       }
@@ -173,9 +173,9 @@ export default class FactoryStore {
 
       if (res.code === 200) {
         runInAction(() => {
-          this.factoryProductList = res.data
+          this.factoryProductList = res.data || []
         })
-        return res.data || []
+        return res.data
       } else {
         message.error('获取数据失败~')
       }

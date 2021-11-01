@@ -15,7 +15,7 @@ const PinNumber = () => {
   const [chart, setChart] = useState(null)
 
   useEffect(() => {
-    const target = factoryMachineData.statisticWeek
+    const target = factoryMachineData.statisticWeek || []
     target.forEach(item => {
       item.statisticDate = moment(item.statisticDate).format('MM-DD')
     })

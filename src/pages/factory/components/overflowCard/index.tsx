@@ -83,7 +83,7 @@ const OverflowCard = props => {
 
   const goToDetail = () => {
     updateName('')
-    // history.push(`/factory-detail/${factoryId}`)
+    /// history.push(`/factory-detail/${factoryId}`)
     window.open(`/factory-detail/${factoryId}`)
   }
 

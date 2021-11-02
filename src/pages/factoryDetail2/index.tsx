@@ -76,6 +76,8 @@ const FactoryDetail = props => {
   }, [factoryId])
 
   useEffect(() => {
+    console.log(document.title)
+
     document.title = titleMap.get(activeTab)
 
     return () => {

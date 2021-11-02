@@ -28,7 +28,7 @@ const DemandList = () => {
   const { demandListStore, factoryStore, commonStore } = useStores()
   const { productCategoryList } = factoryStore
   const { dictionary } = commonStore
-  const { inquiryProcessType = [] } = toJS(dictionary)
+  const { processType = [] } = toJS(dictionary)
   const treeData = productCategoryList //商品品类
 
   const { listData, deleteDemandDoc, toppingFunction, endInterfaceInAdvance } =
@@ -51,7 +51,7 @@ const DemandList = () => {
   }, [params])
   // const filterData = value => {
   //   //  过滤出需要的数据 并返回
-  //   const res = inquiryProcessType.filter(item => item.value === value)
+  //   const res = processType.filter(item => item.value === value)
   //   return res
   // }
   // const handle = v => {
@@ -68,7 +68,7 @@ const DemandList = () => {
   //   return sum
   // }
   const handle = v => {
-    return getTrees(v, inquiryProcessType, 'value', 'label')
+    return getTrees(v, processType, 'value', 'label')
   }
 
   const listsAPI = async () => {

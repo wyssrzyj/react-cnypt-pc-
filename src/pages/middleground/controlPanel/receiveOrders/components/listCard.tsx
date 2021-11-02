@@ -38,7 +38,7 @@ const ListCard = props => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
 
-  const { inquiryProcessType, goodsNum } = dictionary
+  const { processType, goodsNum } = dictionary
   const { productCategoryList } = factoryStore
   const { changeOrderStick, factoryDelOrder } = searchOrderStore
 
@@ -99,7 +99,7 @@ const ListCard = props => {
   const getTarget = (field, value) => {
     if (field === 'processTypeValues') {
       return value.reduce((prev, item, idx) => {
-        const target = inquiryProcessType.find(i => i.value === item)?.label
+        const target = processType.find(i => i.value === item)?.label
         return prev + target + (idx === value.length - 1 ? '' : '、')
       }, '')
     }

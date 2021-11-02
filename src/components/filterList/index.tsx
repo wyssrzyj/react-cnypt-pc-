@@ -53,7 +53,7 @@ const FilterList = props => {
   const {
     prodType = [],
     factoryEffectiveLocation = [],
-    inquiryProcessType = [],
+    processType = [],
     plusMaterialType = [],
     goodsNum = []
   } = toJS(dictionary)
@@ -83,7 +83,7 @@ const FilterList = props => {
     location.pathname
   )
     ? prodType
-    : inquiryProcessType
+    : processType
   const newTime =
     location.pathname === '/factory-search' ? '更新时间' : '发布时间'
 

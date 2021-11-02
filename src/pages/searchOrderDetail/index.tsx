@@ -27,7 +27,7 @@ const SearchOrderDetail = props => {
   const { dictionary } = commonStore
   const {
     goodsNum = [],
-    inquiryProcessType = [],
+    processType = [],
     factoryEffectiveLocation = [],
     productType = []
   } = toJS(dictionary)
@@ -78,11 +78,7 @@ const SearchOrderDetail = props => {
         { label: '需求单编号', value: data.code, span: 24 },
         {
           label: '加工类型',
-          value: matchArrayValue(
-            inquiryProcessType,
-            data.processTypeList,
-            '--'
-          ),
+          value: matchArrayValue(processType, data.processTypeList, '--'),
           span: 12
         },
         {

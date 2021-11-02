@@ -49,7 +49,7 @@ function Basics() {
       message: '请选择面料类型',
       placeholder: '请选择面料类型',
       type: 'select',
-      field: 'plusMaterialType',
+      field: 'materialTypeList',
       span: 12,
       options: plusMaterialType
     },

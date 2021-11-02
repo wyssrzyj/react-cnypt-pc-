@@ -139,41 +139,43 @@ const Home = () => {
     <div className={styles.home}>
       <div className={styles.container} ref={containerRef}>
         <img src={BANNER} ref={bannerRef} className={styles.banner} alt="" />
-        <SearchBar></SearchBar>
-        <div className={styles.searchBox}>
-          <div className={styles.inputBox}>
-            <div className={styles.mask}></div>
-            <Input
-              onChange={valueChange}
-              onPressEnter={searchFunction}
-              className={styles.input}
-              placeholder={'请输入加工厂信息'}
-              prefix={SIcon}
-            />
+        <div className={styles.content}>
+          <SearchBar></SearchBar>
+          <div className={styles.searchBox}>
+            <div className={styles.inputBox}>
+              <div className={styles.mask}></div>
+              <Input
+                onChange={valueChange}
+                onPressEnter={searchFunction}
+                className={styles.input}
+                placeholder={'请输入加工厂信息'}
+                prefix={SIcon}
+              />
+            </div>
+            <Button
+              className={styles.btn}
+              type={'primary'}
+              onClick={searchFunction}
+            >
+              搜索
+            </Button>
           </div>
-          <Button
-            className={styles.btn}
-            type={'primary'}
-            onClick={searchFunction}
-          >
-            搜索
-          </Button>
-        </div>
 
-        <div className={styles.cards}>
-          {cardConfigs.map((item, idx) => {
-            return (
-              <div className={styles.card} key={idx}>
-                <div className={styles.cardTitle}>{item.label}</div>
-                <div>
-                  <DealCount
-                    length={item.length}
-                    count={data[item.field] || 0}
-                  ></DealCount>
+          <div className={styles.cards}>
+            {cardConfigs.map((item, idx) => {
+              return (
+                <div className={styles.card} key={idx}>
+                  <div className={styles.cardTitle}>{item.label}</div>
+                  <div>
+                    <DealCount
+                      length={item.length}
+                      count={data[item.field] || 0}
+                    ></DealCount>
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       </div>
       <div className={styles.swiperContainer}>

@@ -318,8 +318,23 @@ const Header = () => {
           {currentUser.userId ? (
             <Dropdown overlay={menu}>
               <span className={styles.user}>
-                <Icon type={'jack-yonghu2'} className={styles.userIcon}></Icon>
-                您好，{currentUser.nickName || currentUser.username}
+                <span>
+                  <Icon
+                    type={'jack-yonghu2'}
+                    className={styles.userIcon}
+                  ></Icon>
+                </span>
+                <span>
+                  您好，
+                  {currentUser.nickName || currentUser.username}
+                  {console.log(+enterpriseType)}
+                  {+enterpriseType === 1 ? (
+                    <span className={styles.role}>(发单商)</span>
+                  ) : null}
+                  {+enterpriseType === 0 ? (
+                    <span className={styles.role}>(加工厂)</span>
+                  ) : null}
+                </span>
               </span>
             </Dropdown>
           ) : (
@@ -333,7 +348,6 @@ const Header = () => {
             </>
           )}
         </div>
-
         {/* -----------------------------我的工作台----------------------------- */}
         <div className={styles.headerRight}>
           {currentUser.userId ? (

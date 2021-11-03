@@ -28,6 +28,7 @@ const DemandSheet = () => {
   })
   const [stated, setStated] = useState<any>(state) //url 数据
   const { factoryStore } = useStores()
+  const [invalid, setInvalid] = useState<any>('') //时间回显判断失效时间错
 
   const { productCategory } = factoryStore
   useEffect(() => {
@@ -67,8 +68,10 @@ const DemandSheet = () => {
       if (data.location[0] === 0) {
         data.location = null
       }
-      data.inquiryEffectiveDate = moment(data.inquiryEffectiveDate) //时间的回显
+      console.log(moment(data.inquiryEffectiveDate))
+      data.inquiryEffectiveDate = moment(data.inquiryEffectiveDate) //订单有效期时间的回显
       data.deliveryDate = moment(data.deliveryDate)
+      setInvalid(moment(data.inquiryEffectiveDate).valueOf()) //订单有效期时间的时间戳
     }
 
     setInitialValues(data)
@@ -134,6 +137,12 @@ const DemandSheet = () => {
     labelCol: { span: 6 },
     wrapperCol: { span: 16 }
   }
+  const onKeyDownchange = e => {
+    if (e.keyCode == 13) {
+      //事件操作
+      console.log('按下了回车')
+    }
+  }
 
   return (
     <div className={styles.demand}>
@@ -154,7 +163,7 @@ const DemandSheet = () => {
         </section>
         <section>
           <Title title={'其他'}></Title>
-          <Terms data={data} />
+          <Terms data={data} time={invalid} />
           <Address />
         </section>
 
@@ -163,6 +172,7 @@ const DemandSheet = () => {
             保存草稿
           </Button>
           <Button
+            onKeyDown={e => onKeyDownchange(e)}
             className={styles.button2}
             type={'primary'}
             onClick={release}

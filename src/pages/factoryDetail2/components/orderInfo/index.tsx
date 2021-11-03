@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Badge } from 'antd'
 import { filter, find, isEmpty } from 'lodash'
+import { toJS, useStores } from '@/utils/mobx'
+
 import classNames from 'classnames'
 import axios from '@/utils/axios'
 import {
-  getTypeOptions,
-  getProductMode,
+  // getProductMode,
   checkValue,
   getProductClassMap
 } from '@/utils/tool'
@@ -14,22 +15,26 @@ import HeaderLine from '../headerLine'
 import styles from './index.module.less'
 
 const OrderInfo = props => {
+  const { commonStore } = useStores()
+  const { dictionary } = commonStore
+  const { productType = [], processType = [] } = toJS(dictionary)
   const { factoryId } = props
   const productClassOptions = getProductClassMap()
-  const productionModeOptions = getProductMode()
+  // const productionModeOptions = getProductMode()
   const [currentFactory, setCurrentFactory] = useState<any>({})
   const [mainList, setMainList] = useState<any>([])
   const [orderType, setOrderType] = useState<any>([])
   const [grade, setGrade] = useState<string>('--')
 
   const getOrderReceiving = () => {
-    const typeOptions = getTypeOptions()
     axios
       .get('/api/factory/info/get-detail-receive-order-desc', {
         factoryId
       })
       .then(response => {
         const { success, data } = response
+        console.log(data)
+
         if (success) {
           const { factoryCategoryList, factoryProcessTypeList, clothesGrade } =
             data
@@ -39,11 +44,13 @@ const OrderInfo = props => {
             setMainList([...newLabel])
           }
           if (factoryProcessTypeList) {
-            const newOrderType = filter(typeOptions, function (o) {
+            const newOrderType = filter(processType, function (o) {
               return find(factoryProcessTypeList, function (item) {
                 return item.processType === o.value
               })
             })
+            console.log(newOrderType)
+
             setOrderType([...newOrderType])
           }
           // 产品档次
@@ -114,11 +121,11 @@ const OrderInfo = props => {
             <span className={styles.subTitle}>生产方式</span>
           </div>
           <div className={styles.right}>
-            {productionModeOptions.find(
-              item => item.value == currentFactory.productionMode
+            {productType.find(
+              item => item.value == currentFactory.productTypeValues
             )
-              ? productionModeOptions.find(
-                  item => item.value == currentFactory.productionMode
+              ? productType.find(
+                  item => item.value == currentFactory.productTypeValues
                 ).label
               : '--'}
           </div>

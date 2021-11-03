@@ -21,7 +21,7 @@ const MultipleChoice = ({
 
   const { commonStore } = useStores()
   const { dictionary } = commonStore
-  const { prodType = [] } = toJS(dictionary)
+  const { processType = [] } = toJS(dictionary)
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
@@ -192,23 +192,24 @@ const MultipleChoice = ({
               <p>电子邮箱: {data.contactsEmail}</p>
               <div className={styles.hidden}>
                 加工类型：
+                {console.log(processType)}
                 <Tooltip
                   placement="top"
                   title={
-                    data.prodTypeValueList
+                    data.processTypeValues
                       ? getTrees(
-                          data.prodTypeValueList,
-                          prodType,
+                          data.processTypeValues,
+                          processType,
                           'value',
                           'label'
                         ).join('、')
                       : '暂无'
                   }
                 >
-                  {data.prodTypeValueList
+                  {data.processTypeValues
                     ? getTrees(
-                        data.prodTypeValueList,
-                        prodType,
+                        data.processTypeValues,
+                        processType,
                         'value',
                         'label'
                       ).join('、')

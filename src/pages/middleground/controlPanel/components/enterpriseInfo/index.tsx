@@ -12,8 +12,10 @@ import {
   Row,
   Col,
   DatePicker,
-  Select
+  Select,
+  TreeSelect
 } from 'antd'
+
 import { PlusOutlined } from '@ant-design/icons'
 import { isEmpty, isArray } from 'lodash'
 import { toJS } from 'mobx'
@@ -34,6 +36,7 @@ import moment from 'moment'
 
 const { TextArea } = Input
 const { Option } = Select
+const { SHOW_PARENT } = TreeSelect
 
 const layout = {
   labelCol: { span: 3 },
@@ -61,11 +64,11 @@ const productClassMap = [
   { value: 7, label: '高中低' }
 ]
 
-const productClassOptions = [
-  { label: '高', value: '高' },
-  { label: '中', value: '中' },
-  { label: '低', value: '低' }
-]
+// const productClassOptions = [
+//   { label: '高', value: '高' },
+//   { label: '中', value: '中' },
+//   { label: '低', value: '低' }
+// ]
 
 // const productionModeOptions = [
 //   { label: '流水', value: 0 },
@@ -82,8 +85,14 @@ const EnterpriseInfo = () => {
   const { userInfo } = loginStore
   const { uploadFiles } = factoryPageStore
   const { allArea, dictionary } = commonStore
-  const { plusMaterialType, purchaserRole, productType = [] } = dictionary
-  console.log('生产方式', toJS(productType))
+  const {
+    plusMaterialType,
+    purchaserRole,
+    productType = [],
+    productGradeHigh = [],
+    productGradeMiddle = [],
+    productGradeLow = []
+  } = dictionary
 
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imageUrlList, setImageUrlList] = useState<any[]>([])
@@ -99,6 +108,8 @@ const EnterpriseInfo = () => {
   const [contactsId, setContactsId] = useState<string>(undefined)
   const [oldData, setOldData] = useState<any>({})
   const [enterpriseType, setEnterpriseType] = useState<any>()
+  const [value, serValue] = useState([])
+  const [treeData, setTreeData] = useState([])
 
   const uploadButton = (
     <div>
@@ -177,6 +188,8 @@ const EnterpriseInfo = () => {
       const grade = productClassMap.find(
         item => item.label === clothesGrade.join('')
       ) || { value: '' }
+      console.log('不知道是啥', grade)
+
       const newGrade = grade.value
       delete values.clothesGrade
       values.establishedTime = moment(values.establishedTime).valueOf()
@@ -210,7 +223,7 @@ const EnterpriseInfo = () => {
       }
       if (+enterpriseType === 1) {
       }
-      console.log('paramsparams', params)
+      console.log('提交数据', params)
 
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
@@ -258,6 +271,7 @@ const EnterpriseInfo = () => {
             clothesGrade,
             enterpriseType
           } = data
+
           const keys = Reflect.ownKeys(data)
           if (keys.includes('roleCodes')) {
             data['roleCodes'] = data['roleCodes'] || []
@@ -360,6 +374,44 @@ const EnterpriseInfo = () => {
       })
     }
   }, [enterpriseType])
+  useEffect(() => {
+    let arr = [
+      {
+        label: '高端',
+        value: 0,
+        children: cloneDeep(productGradeHigh)
+      },
+      {
+        label: '中端',
+        value: 1,
+        children: cloneDeep(productGradeMiddle)
+      },
+      {
+        label: '低端',
+        value: 2,
+        children: cloneDeep(productGradeLow)
+      }
+    ]
+    console.log(toJS(arr))
+
+    setTreeData(arr)
+  }, [])
+
+  const onChange = value => {
+    //获取所有的父节点
+    serValue(value)
+  }
+  const tProps = {
+    treeData,
+    value: value,
+    onChange: onChange,
+    treeCheckable: true,
+    showCheckedStrategy: SHOW_PARENT,
+    placeholder: '请选择产品档次',
+    style: {
+      width: '100%'
+    }
+  }
 
   return (
     <div className={styles.enterpriseInfoContent}>
@@ -535,16 +587,18 @@ const EnterpriseInfo = () => {
               </Form.Item>
               <Form.Item
                 label="产品档次"
-                name="clothesGrade"
+                name="productGradeValues"
                 rules={[{ required: true, message: '请选择产品档次' }]}
               >
-                <Select mode="multiple" placeholder="请选择产品档次">
-                  {productClassOptions.map(option => (
+                <TreeSelect maxTagCount={5} allowClear={true} {...tProps} />
+
+                {/* <Select allowClear mode="multiple" placeholder="请选择产品档次">
+                  {productGradeHigh.map(option => (
                     <Option key={option.value + 'product'} value={option.value}>
                       {option.label}
                     </Option>
                   ))}
-                </Select>
+                </Select> */}
               </Form.Item>
 
               <Form.Item

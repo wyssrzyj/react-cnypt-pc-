@@ -41,7 +41,6 @@ function Basics() {
     productType = [],
     processType = []
   } = toJS(dictionary)
-  console.log(processType)
 
   const orderConfigs = [
     {

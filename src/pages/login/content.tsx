@@ -87,6 +87,12 @@ const LoginContent = () => {
   const toReset = () => {
     history.push('/user/reset')
   }
+  const onKeyDownchange = e => {
+    if (e.keyCode == 13) {
+      //事件操作
+      submit()
+    }
+  }
 
   return (
     <div className={styles.center}>
@@ -146,6 +152,7 @@ const LoginContent = () => {
                     placeholder={pwdPlaceholder}
                     // type="password"
                     size={'middle'}
+                    onKeyDown={e => onKeyDownchange(e)}
                   />
                 </Form.Item>
               </section>

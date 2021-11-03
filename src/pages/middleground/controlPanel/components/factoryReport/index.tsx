@@ -5,11 +5,7 @@ import { toJS } from 'mobx'
 import { filter, find, isEmpty } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import axios from '@/utils/axios'
-import {
-  getTypeOptions,
-  getProductClassMap,
-  getProductMode
-} from '@/utils/tool'
+import { getProductClassMap } from '@/utils/tool'
 import { Icon, autoAddTooltip } from '@/components'
 import { getUserInfo } from '@/utils/tool'
 import Title from '../title'
@@ -21,11 +17,14 @@ const FactoryReport = () => {
   const { commonStore, factoryStore } = useStores()
   const { dictionary } = commonStore
   const { productCategoryList } = factoryStore
-  const { factoryYearOutputValue = [], factoryYearOutputProd = [] } =
-    toJS(dictionary)
+  const {
+    factoryYearOutputValue = [],
+    factoryYearOutputProd = [],
+    productType = [],
+    processType = []
+  } = toJS(dictionary)
   const productClassOptions = getProductClassMap()
-  const productionModeOptions = getProductMode()
-  const typeOptions = getTypeOptions()
+  // const typeOptions = getTypeOptions()
   const [currentFactory, setCurrentFactory] = useState<any>({})
   const [mainList, setMainList] = useState<any>([])
   const [orderType, setOrderType] = useState<any>([])
@@ -48,6 +47,8 @@ const FactoryReport = () => {
         if (success) {
           const { mainCategoriesList, factoryProcessTypeList, clothesGrade } =
             data
+          console.log(data)
+
           setCurrentFactory({ ...data })
           const newLabel = filter(childList, function (o) {
             return find(mainCategoriesList, function (item) {
@@ -55,12 +56,12 @@ const FactoryReport = () => {
             })
           }).map(item => item.name)
           setMainList([...newLabel])
-
-          const newOrderType = filter(typeOptions, function (o) {
+          const newOrderType = filter(processType, function (o) {
             return find(factoryProcessTypeList, function (item) {
               return item.processType === o.value
             })
           })
+
           setOrderType([...newOrderType])
           // 产品档次
           if (clothesGrade) {
@@ -254,11 +255,11 @@ const FactoryReport = () => {
               <span className={styles.subTitle}>生产方式</span>
             </div>
             <div className={styles.right}>
-              {productionModeOptions.find(
-                item => item.value == currentFactory.productionMode
+              {productType.find(
+                item => item.value == currentFactory.productTypeValues
               )
-                ? productionModeOptions.find(
-                    item => item.value == currentFactory.productionMode
+                ? productType.find(
+                    item => item.value == currentFactory.productTypeValues
                   ).label
                 : '--'}
             </div>

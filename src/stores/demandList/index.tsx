@@ -44,6 +44,22 @@ export default class DemandList {
       return e
     }
   }
+
+  // 产品档次
+  @action gradingOfProducts = async () => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/product-grade/list-tree`
+      )
+      if (res.code === 200) {
+        return res
+      } else {
+        message.error(res.msg)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
   // 再来一单
   @action anotherSingleInterface = async params => {
     try {

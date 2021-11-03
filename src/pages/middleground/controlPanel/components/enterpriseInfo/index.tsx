@@ -64,35 +64,19 @@ const productClassMap = [
   { value: 7, label: '高中低' }
 ]
 
-// const productClassOptions = [
-//   { label: '高', value: '高' },
-//   { label: '中', value: '中' },
-//   { label: '低', value: '低' }
-// ]
-
-// const productionModeOptions = [
-//   { label: '流水', value: 0 },
-//   { label: '整件', value: 1 },
-//   { label: '流水和整件', value: 2 }
-// ]
-
 const EnterpriseInfo = () => {
   const [form] = Form.useForm()
   const { validateFields, setFieldsValue, getFieldValue } = form
   const currentUser = getCurrentUser() || {}
   const { mobilePhone, userId } = currentUser
-  const { factoryPageStore, commonStore, loginStore } = useStores()
+  const { factoryPageStore, commonStore, loginStore, demandListStore } =
+    useStores()
   const { userInfo } = loginStore
+  const { gradingOfProducts } = demandListStore
+
   const { uploadFiles } = factoryPageStore
   const { allArea, dictionary } = commonStore
-  const {
-    plusMaterialType,
-    purchaserRole,
-    productType = [],
-    productGradeHigh = [],
-    productGradeMiddle = [],
-    productGradeLow = []
-  } = dictionary
+  const { plusMaterialType, purchaserRole, productType = [] } = dictionary
 
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imageUrlList, setImageUrlList] = useState<any[]>([])
@@ -223,8 +207,56 @@ const EnterpriseInfo = () => {
       }
       if (+enterpriseType === 1) {
       }
-      console.log('提交数据', params)
 
+      console.log(treeData)
+
+      // --------------------------------------------------------------------
+      const list = (item, data) => {
+        //item 原始数据
+        // data 字典数据
+        let sum = []
+        let res = data.filter(v => v.value === item)[0]
+        if (res !== undefined) {
+          res.children.forEach(item => {
+            sum.push(item.value)
+          })
+        }
+        return sum
+      }
+      const getSubData = (v, data) => {
+        // v  原始数据
+        // data 字典数据
+        let sum = []
+        v.forEach(item => {
+          sum.push(list(item, data))
+        })
+        return sum.flat(Infinity)
+      }
+      // --------------------------------------------------------------------\
+      console.log(treeData) //接口数据
+
+      let data = params.productGradeValues //原数组
+      let dataChilder = getSubData(data, treeData) //子项数据
+      // console.log(dataChilder)
+      // console.log('提交数据', params)
+      // console.log('提交数据productGradeValues', data) // true
+      // 判断数据
+      let judgment = [
+        'productGradeHigh',
+        'productGradeMiddle',
+        'productGradeLow'
+      ]
+      judgment.forEach(v => {
+        // v 判断数据
+        // data 原数组
+        let susa = data.indexOf(v)
+        if (susa !== -1) {
+          data.splice(susa, 1) //替换掉
+        }
+      })
+      let goodData = data.concat(dataChilder) //合并数组
+      params.productGradeValues = goodData
+      console.log(params)
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
         .then(async response => {
@@ -235,7 +267,6 @@ const EnterpriseInfo = () => {
             message.success(msg)
             userInfo() //更新企业名称、企业id
             localStorage.setItem('enterpriseInfo', JSON.stringify(data))
-
             !enterpriseId && (await dealRefresh())
 
             setTimeout(() => {
@@ -375,27 +406,12 @@ const EnterpriseInfo = () => {
     }
   }, [enterpriseType])
   useEffect(() => {
-    let arr = [
-      {
-        label: '高端',
-        value: 0,
-        children: cloneDeep(productGradeHigh)
-      },
-      {
-        label: '中端',
-        value: 1,
-        children: cloneDeep(productGradeMiddle)
-      },
-      {
-        label: '低端',
-        value: 2,
-        children: cloneDeep(productGradeLow)
-      }
-    ]
-    console.log(toJS(arr))
-
-    setTreeData(arr)
+    grade()
   }, [])
+  const grade = async () => {
+    let res = await gradingOfProducts() //订单档次
+    setTreeData(res.data)
+  }
 
   const onChange = value => {
     //获取所有的父节点

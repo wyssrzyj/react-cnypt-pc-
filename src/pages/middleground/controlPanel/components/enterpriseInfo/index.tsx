@@ -67,11 +67,11 @@ const productClassOptions = [
   { label: '低', value: '低' }
 ]
 
-const productionModeOptions = [
-  { label: '流水', value: 0 },
-  { label: '整件', value: 1 },
-  { label: '流水和整件', value: 2 }
-]
+// const productionModeOptions = [
+//   { label: '流水', value: 0 },
+//   { label: '整件', value: 1 },
+//   { label: '流水和整件', value: 2 }
+// ]
 
 const EnterpriseInfo = () => {
   const [form] = Form.useForm()
@@ -82,7 +82,8 @@ const EnterpriseInfo = () => {
   const { userInfo } = loginStore
   const { uploadFiles } = factoryPageStore
   const { allArea, dictionary } = commonStore
-  const { plusMaterialType, purchaserRole } = dictionary
+  const { plusMaterialType, purchaserRole, productType = [] } = dictionary
+  console.log('生产方式', toJS(productType))
 
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imageUrlList, setImageUrlList] = useState<any[]>([])
@@ -134,11 +135,6 @@ const EnterpriseInfo = () => {
 
   const confirmSubmit = () => {
     validateFields().then(values => {
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 137 ~ validateFields ~ values',
-        values
-      )
-
       const {
         area = [],
         businessAddress = {},
@@ -214,10 +210,12 @@ const EnterpriseInfo = () => {
       }
       if (+enterpriseType === 1) {
       }
+      console.log('paramsparams', params)
 
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
         .then(async response => {
+          console.log('企业信息录入', response)
           const { success, msg, data = {} } = response
           if (success) {
             // message.success('请完善企业证件认证，平台将在1~3个工作日与您取得联系，请注意接听来电。')
@@ -241,6 +239,7 @@ const EnterpriseInfo = () => {
     axios
       .get('/api/factory/enterprise/get-enterprise-info', {})
       .then(response => {
+        console.log('企业信息回显接口', response)
         const { success, data = {} } = response
         if (success && !isEmpty(data)) {
           const {
@@ -550,11 +549,16 @@ const EnterpriseInfo = () => {
 
               <Form.Item
                 label="生产方式"
-                name="productionMode"
+                name="productTypeValues"
                 rules={[{ required: true, message: '请选择生产方式！' }]}
               >
-                <Select placeholder="请选择生产方式">
-                  {productionModeOptions.map(option => (
+                <Select
+                  mode="multiple"
+                  allowClear
+                  style={{ width: '100%' }}
+                  placeholder="请选择生产方式"
+                >
+                  {toJS(productType).map(option => (
                     <Option key={option.value + 'mode'} value={option.value}>
                       {option.label}
                     </Option>

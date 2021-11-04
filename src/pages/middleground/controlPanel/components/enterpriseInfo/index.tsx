@@ -227,10 +227,12 @@ const EnterpriseInfo = () => {
         // v  原始数据
         // data 字典数据
         let sum = []
-        v.forEach(item => {
-          sum.push(list(item, data))
-        })
-        return sum.flat(Infinity)
+        if (isArray(v)) {
+          v.forEach(item => {
+            sum.push(list(item, data))
+          })
+          return sum.flat(Infinity)
+        }
       }
       // --------------------------------------------------------------------\
       console.log(treeData) //接口数据
@@ -250,14 +252,20 @@ const EnterpriseInfo = () => {
       judgment.forEach(v => {
         // v 判断数据
         // data 原数组
-        let susa = data.indexOf(v)
-        if (susa !== -1) {
-          data.splice(susa, 1) //替换掉
+        if (data) {
+          let susa = data.indexOf(v)
+          if (susa !== -1) {
+            data.splice(susa, 1) //替换掉
+          }
         }
       })
-      let goodData = data.concat(dataChilder) //合并数组
-      params.productGradeValues = goodData
+      if (data) {
+        let goodData = data.concat(dataChilder) //合并数组
+        params.productGradeValues = goodData
+      }
       console.log(params)
+
+      // -------------------------------------------
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
         .then(async response => {

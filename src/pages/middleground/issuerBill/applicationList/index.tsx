@@ -8,7 +8,6 @@ import { Pagination } from 'antd'
 import { useStores, observer } from '@/utils/mobx'
 import { useLocation } from 'react-router'
 import { useHistory } from 'react-router-dom'
-
 export const ORDER_EMPTY =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/order_empty.png'
 
@@ -28,30 +27,49 @@ function DemandList() {
     cancelCooperation
   } = demandListStore
   const location = useLocation()
-  const { search } = location
+  const { search, state } = location
   const [lists, setLists] = useState([]) //数据
   const [dataLength, setDataLength] = useState(0) //数据总数量
   const [pageNumber, setPageNumber] = useState(1) //路由数
+  const [query, setQuery] = useState({}) //查询
 
   const searchURL = new URLSearchParams(search)
   const initialKey = searchURL.get('key')
-  const [params, setParams] = useState({
+  const [params, setParams] = useState<any>({
     pageNum: pageNumber,
     pageSize: defaultPageSize,
     status: initialKey
   })
   useEffect(() => {
     InterfaceData()
+    console.log(params)
   }, [params])
 
   const InterfaceData = async () => {
-    const res = await applicationList(params)
-    console.log('数据', res.data.records)
-
-    if (res.code === 200) {
-      setDataLength(res.data.total)
-      if (res.data.records) {
-        setLists(res.data.records)
+    if (state !== undefined) {
+      console.log('有数据')
+      let sum = {
+        pageNum: pageNumber,
+        pageSize: defaultPageSize,
+        status: initialKey,
+        name: state['name']
+      }
+      setQuery(sum)
+      const res = await applicationList(sum)
+      if (res.code === 200) {
+        setDataLength(res.data.total)
+        if (res.data.records) {
+          setLists(res.data.records)
+        }
+      }
+    } else {
+      console.log('没有数据')
+      const res = await applicationList(params)
+      if (res.code === 200) {
+        setDataLength(res.data.total)
+        if (res.data.records) {
+          setLists(res.data.records)
+        }
       }
     }
   }
@@ -62,9 +80,10 @@ function DemandList() {
   }
   // 查询
   const queryMethod = value => {
-    console.log(value)
     value.releaseTimeStart = new Date(value.issuingTime[0]).getTime()
     value.releaseTimeEnd = new Date(value.issuingTime[1]).getTime()
+    // 查询数据
+    setQuery(value)
     setParams({ ...params, ...value })
   }
   //分页
@@ -78,11 +97,12 @@ function DemandList() {
   }
   // 路由数据
   const routingData = value => {
-    setParams({
+    let user = {
       pageNum: 1,
       pageSize: defaultPageSize,
       status: value
-    })
+    }
+    setParams({ ...query, ...user })
     setPageNumber(1)
   }
   //置
@@ -133,7 +153,7 @@ function DemandList() {
     <div className={styles.demand}>
       <section>
         <Tab routing={routingData} />
-        <Query query={queryMethod} />
+        <Query state={state} query={queryMethod} />
         <Sort callback={sortCallback} />
         {dataLength > 0 ? (
           <>

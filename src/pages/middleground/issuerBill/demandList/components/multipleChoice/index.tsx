@@ -83,6 +83,15 @@ const MultipleChoice = ({
       state: { id: e, modify: 'modify' }
     })
   }
+  const jump = () => {
+    console.log('跳转')
+    console.log(data.name)
+
+    push({
+      pathname: '/control-panel/issuerBill/demand-applicationList',
+      state: { name: data.name }
+    })
+  }
   return (
     <div className={styles.bos}>
       {/* 头部 */}
@@ -164,7 +173,10 @@ const MultipleChoice = ({
           </Col>
           <Col span={7}>
             <div className={styles.feedback}>
-              <p>
+              <p
+                className={styles.shout}
+                onClick={data.enterpriseNum > 0 ? jump : null}
+              >
                 共
                 <span className={styles.fontColor}>
                   {data.enterpriseNum ? data.enterpriseNum : 0}

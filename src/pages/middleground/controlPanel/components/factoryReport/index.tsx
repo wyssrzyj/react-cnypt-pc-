@@ -52,7 +52,6 @@ const FactoryReport = () => {
             factoryProcessTypeList,
             productGradeValues
           } = data
-          console.log(data)
 
           setCurrentFactory({ ...data })
           const newLabel = filter(childList, function (o) {

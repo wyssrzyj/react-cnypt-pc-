@@ -178,7 +178,6 @@ const Header = () => {
         })
       }
     }
-    console.log('enterpriseTypeenterpriseType', enterpriseType)
 
     if (enterpriseType === '1') {
       if (item) {
@@ -327,7 +326,6 @@ const Header = () => {
                 <span>
                   您好，
                   {currentUser.nickName || currentUser.username}
-                  {console.log(+enterpriseType)}
                   {+enterpriseType === 1 ? (
                     <span className={styles.role}>(发单商)</span>
                   ) : null}

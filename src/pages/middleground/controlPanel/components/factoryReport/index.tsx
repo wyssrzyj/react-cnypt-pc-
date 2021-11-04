@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { Badge, message } from 'antd'
+import { Badge, message, Tooltip } from 'antd'
 import moment from 'moment'
 import { toJS } from 'mobx'
 import { filter, find, isEmpty } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import axios from '@/utils/axios'
-import { getProductClassMap } from '@/utils/tool'
 import { Icon, autoAddTooltip } from '@/components'
 import { getUserInfo } from '@/utils/tool'
 import Title from '../title'
 import styles from './index.module.less'
+import { getTrees } from './method'
 
 const FactoryReport = () => {
   const currentUser = getUserInfo() || {}
   const { factoryId } = currentUser
-  const { commonStore, factoryStore } = useStores()
+  const { commonStore, factoryStore, demandListStore } = useStores()
+  const { gradingOfProducts } = demandListStore
+
   const { dictionary } = commonStore
   const { productCategoryList } = factoryStore
   const {
@@ -23,7 +25,6 @@ const FactoryReport = () => {
     productType = [],
     processType = []
   } = toJS(dictionary)
-  const productClassOptions = getProductClassMap()
   // const typeOptions = getTypeOptions()
   const [currentFactory, setCurrentFactory] = useState<any>({})
   const [mainList, setMainList] = useState<any>([])
@@ -33,6 +34,7 @@ const FactoryReport = () => {
   const [memberText, setMemberText] = useState('')
   // const [modalVisible, setModalVisible] = useState<boolean>(true)
   const [grade, setGrade] = useState<string>('--')
+  const [treeData, setTreeData] = useState<any>([])
 
   const getFactoryInfo = () => {
     const newList = toJS(productCategoryList)
@@ -45,8 +47,11 @@ const FactoryReport = () => {
       .then(response => {
         const { success, data } = response
         if (success) {
-          const { mainCategoriesList, factoryProcessTypeList, clothesGrade } =
-            data
+          const {
+            mainCategoriesList,
+            factoryProcessTypeList,
+            productGradeValues
+          } = data
           console.log(data)
 
           setCurrentFactory({ ...data })
@@ -64,14 +69,15 @@ const FactoryReport = () => {
 
           setOrderType([...newOrderType])
           // 产品档次
-          if (clothesGrade) {
-            const newGrade = productClassOptions.find(
-              item => item.value == clothesGrade
+          if (treeData.length > 0) {
+            console.log(productGradeValues)
+            console.log(treeData)
+
+            setGrade(
+              getTrees(productGradeValues, treeData, 'value', 'label').join(
+                '、'
+              )
             )
-            if (newGrade) {
-              const gradeText = newGrade.label.split('').join('、')
-              setGrade(gradeText)
-            }
           }
         }
       })
@@ -104,13 +110,22 @@ const FactoryReport = () => {
         message[success ? 'success' : 'error'](msg)
       })
   }
+  useEffect(() => {
+    gradeS()
+  }, [])
+  const gradeS = async () => {
+    let res = await gradingOfProducts() //订单档次
+    if (res.code === 200) {
+      setTreeData(res.data)
+    }
+  }
 
   useEffect(() => {
     if (productCategoryList) {
       getFactoryInfo()
       getInspectionMember()
     }
-  }, [productCategoryList])
+  }, [productCategoryList, treeData])
   return (
     <div className={styles.factoryReport}>
       <header className={styles.header}>
@@ -244,7 +259,11 @@ const FactoryReport = () => {
                     text="产品档次"
                     className={styles.classesSubtitle}
                   />
-                  <span>{grade}</span>
+                  <Tooltip placement="top" title={grade}>
+                    <div className={styles.hidden}>
+                      <span>{grade}</span>
+                    </div>
+                  </Tooltip>
                 </li>
               </ul>
             </div>

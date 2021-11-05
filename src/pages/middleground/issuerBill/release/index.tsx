@@ -21,6 +21,8 @@ const DemandSheet = () => {
   const { ewDemandDoc, anotherSingleInterface } = demandListStore
 
   const [validity, setValidity] = useState<any>()
+  console.log(validity)
+
   const [confirm, setConfirm] = useState<any>(true)
   const [initialValues, setInitialValues] = useState<any>({
     isEnterpriseInfoPublic: 1,
@@ -36,7 +38,6 @@ const DemandSheet = () => {
   }, [])
   let api = async () => {
     await productCategory()
-    console.log(validity)
   }
 
   useEffect(() => {

@@ -11,10 +11,16 @@ export default class DemandList {
   @observable testData = []
   @observable echo = ''
   @observable zhiding = [{ name: '置顶' }]
+  @observable data = []
 
   @action changeTestData = () => {
     runInAction(() => {
       this.testData = [...this.testData, { id: this.testData.length + 1 }]
+    })
+  }
+  @action popUpData = params => {
+    runInAction(() => {
+      this.data = params
     })
   }
 

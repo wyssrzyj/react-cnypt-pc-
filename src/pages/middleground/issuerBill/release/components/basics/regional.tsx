@@ -4,6 +4,7 @@ import { Form, Row, Col, Input, TreeSelect } from 'antd'
 import { observer, toJS, useStores } from '@/utils/mobx'
 import styles from './index.module.less'
 import { isEmpty } from 'lodash'
+import Region from './region'
 const { TextArea } = Input
 // const { SHOW_PARENT } = TreeSelect
 const FormItem = Form.Item
@@ -82,7 +83,12 @@ const regional = () => {
             rules={[{ required: true, message: '请选择地区' }]}
             {...layout}
           >
-            <TreeSelect maxTagCount={5} allowClear={true} {...tProps} />
+            <TreeSelect
+              defaultOpen={false}
+              maxTagCount={5}
+              allowClear={true}
+              {...tProps}
+            />
           </FormItem>
         </Col>
       </Row>
@@ -99,6 +105,7 @@ const regional = () => {
           </FormItem>
         </Col>
       </Row>
+      <Region />
     </div>
   )
 }

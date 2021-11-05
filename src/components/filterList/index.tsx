@@ -62,7 +62,7 @@ const FilterList = props => {
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [activeArea, setActiveArea] = useState<any>([])
   const [activeProcessing, setActiveProcessing] = useState<any>({}) //加工类型
-  const [activeTabs, setActiveTabs] = useState<any>([])
+  const [activeTabs, setActiveTabs] = useState<any>([]) //主要数据
   const [mainCategory, setMainCategory] = useState<any>([
     { id: '', name: '全部' }
   ])
@@ -143,6 +143,8 @@ const FilterList = props => {
   }
 
   const handleModalOk = cities => {
+    console.log(cities) //选中的数据
+    console.log('999999999999999999999999')
     setActiveArea([...cities])
     onFilterChange({ cityIds: cities.map(item => item.id) })
     setModalVisible(false)
@@ -538,10 +540,10 @@ const FilterList = props => {
 
       {modalVisible && (
         <AreaModal
-          visible={modalVisible}
-          selectedCity={activeArea}
-          handleCancel={() => setModalVisible(false)}
-          handleOk={handleModalOk}
+          visible={modalVisible} //弹窗
+          // selectedCity={activeArea}
+          handleCancel={() => setModalVisible(false)} //点击遮罩层或右上角叉或取消按钮的回调
+          handleOk={handleModalOk} //确认的回调
         />
       )}
     </div>

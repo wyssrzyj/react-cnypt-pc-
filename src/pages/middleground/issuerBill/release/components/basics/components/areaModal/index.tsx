@@ -39,7 +39,9 @@ const AreaModal = props => {
   )
   useEffect(() => {
     console.log('回显的数据', perfect)
-    setActiveCity(perfect)
+    if (perfect) {
+      setActiveCity(perfect)
+    }
   }, [perfect])
   //  点击左侧显示颜色
   useEffect(() => {

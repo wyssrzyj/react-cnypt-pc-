@@ -11,7 +11,7 @@ export default class DemandList {
   @observable testData = []
   @observable echo = ''
   @observable zhiding = [{ name: '置顶' }]
-  @observable data = []
+  @observable regionalData = [] //地区弹窗返回的数据
 
   @action changeTestData = () => {
     runInAction(() => {
@@ -20,7 +20,7 @@ export default class DemandList {
   }
   @action popUpData = params => {
     runInAction(() => {
-      this.data = params
+      this.regionalData = params
     })
   }
 

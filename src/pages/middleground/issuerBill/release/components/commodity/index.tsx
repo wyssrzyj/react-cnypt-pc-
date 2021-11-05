@@ -39,6 +39,7 @@ function Basics() {
     productType = [],
     processType = []
   } = toJS(dictionary)
+  console.log(plusMaterialType)
 
   const orderConfigs = [
     {

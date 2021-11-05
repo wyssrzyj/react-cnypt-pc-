@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Select } from 'antd'
 import { toJS } from 'mobx'
 import AreaModal from './components/areaModal'
@@ -8,12 +8,7 @@ const { Option } = Select
 function region() {
   const { commonStore, demandListStore } = useStores()
   const { allArea } = commonStore
-  const { popUpData, data } = demandListStore
-  useEffect(() => {
-    console.log('更改了')
-    console.log('全局数据', toJS(data))
-  }, [data])
-
+  const { popUpData } = demandListStore
   // -------------------
   //全部地区
   const list = item => {
@@ -44,7 +39,6 @@ function region() {
 
   const handleModalOk = cities => {
     popUpData(cities)
-
     setModalVisible(false)
   }
   return (
@@ -55,8 +49,7 @@ function region() {
           allowClear
           open={false}
           style={{ width: '100%' }}
-          placeholder="Please select"
-          // onChange={handleChange}
+          placeholder="请选择地区"
         >
           {children}
         </Select>

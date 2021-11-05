@@ -179,16 +179,18 @@ const AreaModal = props => {
       <div className={styles.hasChosen}>
         <div>
           <span>已选择：</span>
-          {activeCity.map(city => (
-            <Tag
-              key={city.id}
-              className={styles.selectedTag}
-              closable
-              onClose={() => closeTag(city.id)}
-            >
-              {city.name}
-            </Tag>
-          ))}
+          <div className={styles.bof}>
+            {activeCity.map(city => (
+              <Tag
+                key={city.id}
+                className={styles.selectedTag}
+                closable
+                onClose={() => closeTag(city.id)}
+              >
+                {city.name}
+              </Tag>
+            ))}
+          </div>
         </div>
         <Button icon={<DeleteOutlined />} onClick={emptyCity}>
           清空

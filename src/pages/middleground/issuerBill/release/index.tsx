@@ -18,7 +18,8 @@ const DemandSheet = () => {
   const { state } = location
 
   const { demandListStore } = useStores()
-  const { ewDemandDoc, anotherSingleInterface, regionalData } = demandListStore
+  const { ewDemandDoc, anotherSingleInterface, regionalData, popUpEcho } =
+    demandListStore
 
   const [validity, setValidity] = useState<any>()
   console.log(validity)
@@ -90,6 +91,7 @@ const DemandSheet = () => {
     }
 
     console.log(data)
+    popUpEcho(data.regionalIdList) //地区弹窗回显
 
     setInitialValues(data)
   }

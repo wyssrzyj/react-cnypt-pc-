@@ -12,6 +12,7 @@ export default class DemandList {
   @observable echo = ''
   @observable zhiding = [{ name: '置顶' }]
   @observable regionalData = [] //地区弹窗返回的数据
+  @observable popData = [] //弹窗回显
 
   @action changeTestData = () => {
     runInAction(() => {
@@ -22,6 +23,12 @@ export default class DemandList {
     runInAction(() => {
       this.regionalData = params
     })
+  }
+  @action popUpEcho = params => {
+    runInAction(() => {
+      this.popData = params
+    })
+    console.log('弹窗回显', params)
   }
 
   // 更新或新增订单

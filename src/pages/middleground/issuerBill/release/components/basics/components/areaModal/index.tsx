@@ -26,7 +26,8 @@ const AreaModal = props => {
   ]
   const newAllArea = wholeCountry.concat(toJS(allArea)) //字典数据
 
-  const { visible, handleOk, handleCancel, selectedCity = [] } = props
+  const { visible, handleOk, handleCancel, selectedCity = [], perfect } = props
+
   const [cityTree, setCityTree] = useState<any>([...newAllArea[0].children])
   const [activeCity, setActiveCity] = useState<any>([...selectedCity])
   const [newData, setNewData] = useState<any>() //最新的数据
@@ -36,6 +37,10 @@ const AreaModal = props => {
   const [activeProvince, setActiveProvince] = useState<string>(
     newAllArea[0].value
   )
+  useEffect(() => {
+    console.log('回显的数据', perfect)
+    setActiveCity(perfect)
+  }, [perfect])
   //  点击左侧显示颜色
   useEffect(() => {
     let res = activeCity.findIndex(item => item.id === leftMethod['value'])
@@ -47,26 +52,6 @@ const AreaModal = props => {
       setColor(false)
     }
     setNewData(activeCity)
-
-    // console.log(activeCity)
-    // console.log('父节点的id', leftMethod)
-    // let num = activeCity.filter(item => item.pid === leftMethod.value)
-    // if (leftMethod.children !== undefined) {
-    //   if (num.length === leftMethod.children.length) {
-    //     console.log('子项全有了')
-    //     console.log(num)
-    //     console.log(activeCity)
-    //     let index = activeCity.filter(item => item.pid !== leftMethod['value'])
-    //     let parent = [
-    //       {
-    //         label: leftMethod['label'],
-    //         value: leftMethod['value'],
-    //         pid: leftMethod['value']
-    //       }
-    //     ]
-    //     setNewData(index.concat(parent))
-    //   }
-    // }
   }, [activeCity, leftMethod])
 
   //

@@ -4,8 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 4%;
-  // padding-top: 50px;
+  padding-top: 6%;
 }
 
 .inputBox {
@@ -76,20 +75,17 @@
     }
   }
 }
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   min-height: 460px;
-
   height: calc(100vh - 370px);
-  // height: calc(100vh - 38px);
+  min-height: 610px;
   background-repeat: no-repeat;
 }
-
-
-
 
 .banner {
   display: block;
@@ -115,7 +111,7 @@
 }
 
 .searchBar {
-  // padding-top: 6%; 
+  // padding-top: 6%;
   // padding-top: 7%;
   text-align: center;
 }
@@ -226,11 +222,13 @@
   align-items: center;
   justify-content: center;
 }
+
 .content{
-  // background: red;
-  // width: 80%;
-  // height: 80%;
-  // margin:  auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin:  auto;
 }
 
 .card {

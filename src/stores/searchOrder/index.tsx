@@ -105,10 +105,7 @@ export default class SearchOrderStore {
 
   @action inquiryList = async params => {
     try {
-      const res: ResponseProps = await axios.post(
-        `/api/oms/inquiry-purchase/list-inquiry-search`,
-        params
-      )
+      const res: ResponseProps = await axios.post(``, params)
       return res
     } catch (e) {
       console.log(e)

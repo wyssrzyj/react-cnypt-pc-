@@ -173,45 +173,25 @@ const MultipleChoice = ({
           </Col>
           <Col span={7}>
             <div className={styles.feedback}>
-              {data.enterpriseNum > 0 ? (
-                <Tooltip placement="top" title={'点击跳转至申请列表'}>
-                  <p
-                    className={styles.shout}
-                    onClick={data.enterpriseNum > 0 ? jump : null}
-                  >
-                    共
-                    <span className={styles.fontColor}>
-                      {data.enterpriseNum ? data.enterpriseNum : 0}
-                    </span>
-                    家，
-                    <span className={styles.fontColor}>
-                      {data.enterpriseRefuseTotalNum
-                        ? data.enterpriseRefuseTotalNum
-                        : 0}
-                    </span>
-                    家已谢绝
-                    {/* <span className={styles.fontColor}>1</span> 家已反馈 */}
-                  </p>
-                </Tooltip>
-              ) : (
-                <p
-                  className={styles.shout}
-                  onClick={data.enterpriseNum > 0 ? jump : null}
-                >
-                  共
-                  <span className={styles.fontColor}>
-                    {data.enterpriseNum ? data.enterpriseNum : 0}
-                  </span>
-                  家，
-                  <span className={styles.fontColor}>
-                    {data.enterpriseRefuseTotalNum
-                      ? data.enterpriseRefuseTotalNum
-                      : 0}
-                  </span>
-                  家已谢绝
-                  {/* <span className={styles.fontColor}>1</span> 家已反馈 */}
-                </p>
-              )}
+              <div
+                className={
+                  (styles.shout, data.enterpriseNum > 0 ? styles.shouts : null)
+                }
+                onClick={data.enterpriseNum > 0 ? jump : null}
+              >
+                共
+                <span className={styles.fontColor}>
+                  {data.enterpriseNum ? data.enterpriseNum : 0}
+                </span>
+                家，
+                <span className={styles.fontColor}>
+                  {data.enterpriseRefuseTotalNum
+                    ? data.enterpriseRefuseTotalNum
+                    : 0}
+                </span>
+                家已谢绝
+                {/* <span className={styles.fontColor}>1</span> 家已反馈 */}
+              </div>
               {/* <p>
                 <span className={styles.fontColor}>{data.issuedBill}</span>
                 家已发单，已发订单量

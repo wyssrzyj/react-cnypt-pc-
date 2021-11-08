@@ -48,10 +48,6 @@ function DemandList() {
   }, [])
   const Interface = async () => {
     if (state !== undefined) {
-      console.log('有数据')
-      console.log(params)
-      console.log('点击了查询 测试~~~~')
-
       let sum = {
         pageNum: pageNumber,
         pageSize: defaultPageSize,

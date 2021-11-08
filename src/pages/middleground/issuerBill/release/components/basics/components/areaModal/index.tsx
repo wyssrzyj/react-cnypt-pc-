@@ -174,6 +174,7 @@ const AreaModal = props => {
       onOk={confirmFn}
       onCancel={handleCancel}
       width={660}
+      centered={true}
     >
       <div className={styles.hasChosen}>
         <div>

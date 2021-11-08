@@ -21,7 +21,7 @@ const MainCategoriesCom = props => {
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [checkedObject, setCheckedObject] = useState<any>({})
   const [checkedLabel, setCheckedLabel] = useState<any>([])
-  // const [childList, setChildList] = useState<any>([])
+  /// const [childList, setChildList] = useState<any>([])
   const handleOk = () => {
     setModalVisible(false)
     isFunction(onChange) && onChange(checkedCategories)

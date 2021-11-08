@@ -305,6 +305,8 @@ const Header = () => {
       })}
     </div>
   )
+  console.log(currentUser.userId)
+
   return (
     <header>
       <div className={styles.header}>

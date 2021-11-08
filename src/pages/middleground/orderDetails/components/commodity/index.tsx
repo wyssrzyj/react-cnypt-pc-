@@ -46,7 +46,6 @@ function index({ initialValues }) {
     }
     //面料
     if (plusMaterialType) {
-      console.log(plusMaterialType)
       console.log(initialValues.materialTypeList)
       if (initialValues.materialTypeList) {
         setFabric(

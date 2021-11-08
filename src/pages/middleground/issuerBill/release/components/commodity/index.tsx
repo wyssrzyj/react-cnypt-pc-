@@ -3,6 +3,7 @@ import { Form, Col, Row, Input } from 'antd'
 import { toJS, useStores } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 import Category from './category'
+// import ImgUpload from '../imgUploadss'
 import styles from './index.module.less'
 
 const { TextArea } = Input
@@ -32,6 +33,7 @@ const keys = [
 ]
 
 function Basics() {
+  // const [imageUrl, setImageUrl] = useState('')
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const {
@@ -39,7 +41,6 @@ function Basics() {
     productType = [],
     processType = []
   } = toJS(dictionary)
-  console.log(plusMaterialType)
 
   const orderConfigs = [
     {
@@ -155,6 +156,13 @@ function Basics() {
           </FormItem>
         </Col>
       </Row>
+      {/* <Row className={styles.goodsRemark}>
+        <Col span={24} className={styles.textArea}>
+          <FormItem name="img" label="上传" labelCol={{ span: 2 }}>
+            <ImgUpload />
+          </FormItem>
+        </Col>
+      </Row> */}
     </div>
   )
 }

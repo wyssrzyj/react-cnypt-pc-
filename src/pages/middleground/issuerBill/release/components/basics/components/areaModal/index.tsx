@@ -38,7 +38,6 @@ const AreaModal = props => {
     newAllArea[0].value
   )
   useEffect(() => {
-    console.log('回显的数据', perfect)
     if (perfect) {
       setActiveCity(perfect)
     }

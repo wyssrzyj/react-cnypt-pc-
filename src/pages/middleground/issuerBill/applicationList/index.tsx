@@ -52,7 +52,8 @@ function DemandList() {
         pageNum: pageNumber,
         pageSize: defaultPageSize,
         status: initialKey,
-        name: state['name']
+        name: state['name'],
+        id: state['id']
       }
       setQuery(sum)
       const res = await applicationList(sum)

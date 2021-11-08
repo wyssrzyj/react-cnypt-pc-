@@ -59,8 +59,6 @@ const regional = () => {
   // 把全国添加到最前面
 
   const newAllArea = wholeCountry.concat(testMethod(toJS(allArea))) //字典数据
-  console.log(newAllArea)
-
   let num = e => {
     let sum = []
     e.map(item => {

@@ -35,8 +35,6 @@ const DemandSheet = () => {
   const { productCategory } = factoryStore
   // 弹窗地区数据回显
   useEffect(() => {
-    console.log('更改了')
-    console.log('全局数据', toJS(regionalData))
     let arr = toJS(regionalData) //把id和name修改value和label
     if (arr.length > 0) {
       console.log(arr)

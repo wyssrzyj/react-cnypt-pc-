@@ -89,7 +89,7 @@ const MultipleChoice = ({
 
     push({
       pathname: '/control-panel/issuerBill/demand-applicationList',
-      state: { name: data.name }
+      state: { name: data.name, id: id }
     })
   }
   return (

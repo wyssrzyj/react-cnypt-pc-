@@ -16,7 +16,6 @@ const layout = {
 
 const date = ({ validity, time }) => {
   console.log(validity)
-
   const [day, setDay] = useState('')
   useEffect(() => {
     if (time) {

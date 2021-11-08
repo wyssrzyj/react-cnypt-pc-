@@ -101,7 +101,6 @@ const AreaModal = props => {
     if (arr1 !== -1) {
       activeCity.splice(arr1, 1)
     }
-
     // 添加
     const index = activeCity.findIndex(city => city.id === params.id) //
     if (index < 0) {
@@ -118,11 +117,6 @@ const AreaModal = props => {
     } else {
       setColor(false)
     }
-
-    /// console.log(city[0])
-    // const arrlist = activeCity.findIndex(city => city.id === city[0].value) //
-    // console.log(arrlist)
-
     // 全国
     if (params.id === '0') {
       setActiveCity(activeCity.filter(item => item.id === params.id)) //只留全国
@@ -157,10 +151,8 @@ const AreaModal = props => {
     activeCity.splice(index, 1)
     setActiveCity([...activeCity])
   }
-
   const emptyCity = () => {
     setActiveCity([])
-    // isFunction(handleOk) && handleOk([])
   }
   const confirmFn = () => {
     isFunction(handleOk) && handleOk(activeCity)

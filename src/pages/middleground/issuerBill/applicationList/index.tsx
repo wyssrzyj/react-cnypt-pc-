@@ -42,13 +42,15 @@ function DemandList() {
   })
   useEffect(() => {
     InterfaceData()
-    console.log(params)
   }, [params])
-
-  const InterfaceData = async () => {
+  useEffect(() => {
+    Interface()
+  }, [])
+  const Interface = async () => {
     if (state !== undefined) {
       console.log('有数据')
-      console.log(state)
+      console.log(params)
+      console.log('点击了查询 测试~~~~')
 
       let sum = {
         pageNum: pageNumber,
@@ -77,6 +79,16 @@ function DemandList() {
     }
   }
 
+  const InterfaceData = async () => {
+    const res = await applicationList(params)
+    if (res.code === 200) {
+      setDataLength(res.data.total)
+      if (res.data.records) {
+        setLists(res.data.records)
+      }
+    }
+  }
+
   // 排序
   const sortCallback = value => {
     console.log(value)
@@ -87,7 +99,13 @@ function DemandList() {
     value.releaseTimeEnd = new Date(value.issuingTime[1]).getTime()
     // 查询数据
     setQuery(value)
-    setParams({ ...params, ...value })
+
+    setParams({
+      ...value,
+      pageNum: pageNumber,
+      pageSize: defaultPageSize,
+      status: initialKey
+    })
   }
   //分页
   const pageChange = page => {

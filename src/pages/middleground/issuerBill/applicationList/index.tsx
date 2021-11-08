@@ -48,12 +48,14 @@ function DemandList() {
   const InterfaceData = async () => {
     if (state !== undefined) {
       console.log('有数据')
+      console.log(state)
+
       let sum = {
         pageNum: pageNumber,
         pageSize: defaultPageSize,
         status: initialKey,
         name: state['name'],
-        id: state['id']
+        purchaserInquiryId: state['id']
       }
       setQuery(sum)
       const res = await applicationList(sum)

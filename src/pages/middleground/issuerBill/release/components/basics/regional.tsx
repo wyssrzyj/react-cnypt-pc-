@@ -107,6 +107,7 @@ const regional = () => {
             {...layout}
           >
             <Select
+              maxTagCount={5}
               mode="multiple"
               allowClear
               open={false}

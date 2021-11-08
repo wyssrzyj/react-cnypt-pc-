@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Button, Tag } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
-import { isFunction } from 'lodash'
+import { isArray, isFunction } from 'lodash'
 import { toJS } from 'mobx'
 import { useStores, observer } from '@/utils/mobx'
 import classNames from 'classnames'
 import styles from './index.module.less'
-import { isArray } from '_@antv_util@2.0.17@@antv/util'
 
 const AreaModal = props => {
   const { commonStore } = useStores()

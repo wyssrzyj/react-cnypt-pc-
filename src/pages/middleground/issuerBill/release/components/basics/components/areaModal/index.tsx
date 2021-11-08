@@ -120,7 +120,7 @@ const AreaModal = props => {
       setColor(false)
     }
 
-    // console.log(city[0])
+    /// console.log(city[0])
     // const arrlist = activeCity.findIndex(city => city.id === city[0].value) //
     // console.log(arrlist)
 

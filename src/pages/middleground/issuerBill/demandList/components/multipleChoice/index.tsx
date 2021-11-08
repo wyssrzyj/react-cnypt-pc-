@@ -179,17 +179,24 @@ const MultipleChoice = ({
                 }
                 onClick={data.enterpriseNum > 0 ? jump : null}
               >
-                共
-                <span className={styles.fontColor}>
-                  {data.enterpriseNum ? data.enterpriseNum : 0}
+                <span
+                  className={
+                    (styles.shout, data.enterpriseNum > 0 ? styles.shou : null)
+                  }
+                >
+                  共
+                  <span className={styles.fontColor}>
+                    {data.enterpriseNum ? data.enterpriseNum : 0}
+                  </span>
+                  家，
+                  <span className={styles.fontColor}>
+                    {data.enterpriseRefuseTotalNum
+                      ? data.enterpriseRefuseTotalNum
+                      : 0}
+                  </span>
+                  家已谢绝
                 </span>
-                家，
-                <span className={styles.fontColor}>
-                  {data.enterpriseRefuseTotalNum
-                    ? data.enterpriseRefuseTotalNum
-                    : 0}
-                </span>
-                家已谢绝
+
                 {/* <span className={styles.fontColor}>1</span> 家已反馈 */}
               </div>
               {/* <p>

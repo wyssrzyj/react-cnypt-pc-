@@ -23,9 +23,6 @@ const MainCategoriesCom = props => {
   const [checkedLabel, setCheckedLabel] = useState<any>([])
   // const [childList, setChildList] = useState<any>([])
   const handleOk = () => {
-    console.log('点击了ok')
-    console.log(checkedCategories)
-
     setModalVisible(false)
     isFunction(onChange) && onChange(checkedCategories)
   }
@@ -36,8 +33,6 @@ const MainCategoriesCom = props => {
     checkedObject[label] = [...checkedValue]
     setCheckedObject({ ...checkedObject })
     const newArray = Object.values(checkedObject) as Array<Array<string>>
-    console.log(newArray)
-
     const flat = newArray.reduce((prev, next) => {
       return [...prev, ...next]
     }, [])
@@ -47,8 +42,6 @@ const MainCategoriesCom = props => {
       })
     }).map(item => item.name)
     setCheckedLabel([...newLabel])
-    console.log('过滤好的数据', [...newLabel])
-
     // if (flat.length > 5) {
     //   message.warning('最多可选5个')
     // } else {
@@ -88,7 +81,6 @@ const MainCategoriesCom = props => {
           state === 'check' ? styles.disable : styles.active
         )}
       >
-        {console.log(checkedLabel)}
         <div>
           {checkedLabel.map((type, index) => (
             <span key={index} className={styles.checkedBox}>

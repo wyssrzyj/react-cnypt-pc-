@@ -39,8 +39,6 @@ const Category = () => {
   useEffect(() => {
     ;(async () => {
       const res = cloneDeep(productCategoryList)
-      console.log(res)
-
       setTreeData(dealTypeData(res))
     })()
   }, [productCategoryList])

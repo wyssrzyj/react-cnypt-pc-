@@ -7,7 +7,7 @@ import Basics from './components/basics'
 import Commodity from './components/commodity'
 import Terms from './components/terms'
 import Address from './components/address'
-import { useStores, observer } from '@/utils/mobx'
+import { useStores, observer, toJS } from '@/utils/mobx'
 import { useHistory, useLocation } from 'react-router-dom'
 import moment from 'moment'
 
@@ -18,9 +18,11 @@ const DemandSheet = () => {
   const { state } = location
 
   const { demandListStore } = useStores()
-  const { ewDemandDoc, anotherSingleInterface } = demandListStore
+  const { ewDemandDoc, anotherSingleInterface, regionalData, popUpEcho } =
+    demandListStore
 
   const [validity, setValidity] = useState<any>()
+  console.log(validity)
   const [confirm, setConfirm] = useState<any>(true)
   const [initialValues, setInitialValues] = useState<any>({
     isEnterpriseInfoPublic: 1,
@@ -29,19 +31,31 @@ const DemandSheet = () => {
   const [stated, setStated] = useState<any>(state) //url 数据
   const { factoryStore } = useStores()
   const [invalid, setInvalid] = useState<any>('') //时间回显判断失效时间错
-
+  // const [tetragonal, setTetragonal] = useState([])
   const { productCategory } = factoryStore
+  // 弹窗地区数据回显
+  useEffect(() => {
+    let arr = toJS(regionalData) //把id和name修改value和label
+    if (arr.length > 0) {
+      console.log(arr)
+      let sum = []
+      arr.forEach(item => {
+        sum.push(item.id)
+      })
+      form.setFieldsValue({ regionalIdList: sum })
+    }
+  }, [regionalData])
+
   useEffect(() => {
     api()
+    //
   }, [])
   let api = async () => {
     await productCategory()
-    console.log(validity)
   }
 
   useEffect(() => {
     setStated(state)
-
     if (stated) {
       echoData(stated.id)
     }
@@ -73,6 +87,9 @@ const DemandSheet = () => {
       data.deliveryDate = moment(data.deliveryDate)
       setInvalid(moment(data.inquiryEffectiveDate).valueOf()) //订单有效期时间的时间戳
     }
+
+    console.log(data)
+    popUpEcho(data.regionalIdList) //地区弹窗回显
 
     setInitialValues(data)
   }

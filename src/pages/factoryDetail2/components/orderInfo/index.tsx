@@ -27,6 +27,7 @@ const OrderInfo = props => {
   const [orderType, setOrderType] = useState<any>([])
   const [grade, setGrade] = useState<string>('--')
   const [treeData, setTreeData] = useState<any>([])
+  const [production, setProduction] = useState<any>([])
 
   useEffect(() => {
     getOrderReceiving()
@@ -48,7 +49,6 @@ const OrderInfo = props => {
       })
       .then(response => {
         const { success, data } = response
-        console.log('接口数据', data)
 
         if (success) {
           const {
@@ -67,7 +67,7 @@ const OrderInfo = props => {
                 return item.processType === o.value
               })
             })
-            console.log(newOrderType)
+            console.log('加工类型newOrderType', newOrderType)
 
             setOrderType([...newOrderType])
           }
@@ -77,6 +77,17 @@ const OrderInfo = props => {
               getTrees(productGradeValues, treeData, 'value', 'label').join(
                 '、'
               )
+            )
+          }
+          // 生产方式
+          if (data.productTypeValues) {
+            setProduction(
+              getTrees(
+                data.productTypeValues,
+                productType,
+                'value',
+                'label'
+              ).join('、')
             )
           }
         }
@@ -136,15 +147,7 @@ const OrderInfo = props => {
             <Icon type="jack-scfs" className={styles.icon} />
             <span className={styles.subTitle}>生产方式</span>
           </div>
-          <div className={styles.right}>
-            {productType.find(
-              item => item.value == currentFactory.productTypeValues
-            )
-              ? productType.find(
-                  item => item.value == currentFactory.productTypeValues
-                ).label
-              : '--'}
-          </div>
+          <div className={styles.right}>{production ? production : '--'}</div>
         </li>
         <li>
           <div className={styles.left}>

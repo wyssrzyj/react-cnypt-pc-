@@ -39,6 +39,7 @@ const DemandList = () => {
   const [numberLength, setNumberLength] = useState(1) //页码长度
   const [noOrders, setNoOrders] = useState(0) //没有订单
   const [pageNumber, setPageNumber] = useState(1) //分页
+  const [query, setQuery] = useState({}) //查询
 
   const [params, setParams] = useState<any>({
     pageNum: 1,
@@ -96,11 +97,13 @@ const DemandList = () => {
   }
   // 路由数据
   const routingData = value => {
-    setParams({
+    console.log(query)
+    let sum = {
       pageNum: 1,
       pageSize: defaultPageSize,
       status: value
-    })
+    }
+    setParams({ ...sum, ...query })
     setPageNumber(1)
   }
   //  排序
@@ -126,6 +129,7 @@ const DemandList = () => {
         newParams[item] = res[item]
       })
       setParams(newParams)
+      setQuery(res)
     } else {
       setParams({ pageNum: 1, pageSize: defaultPageSize })
     }

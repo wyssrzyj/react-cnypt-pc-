@@ -17,8 +17,6 @@ const MultipleChoice = ({
   reOrder,
   demandSheetDetails
 }) => {
-  console.log(data)
-
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const { processType = [] } = toJS(dictionary)
@@ -192,7 +190,6 @@ const MultipleChoice = ({
               <p>电子邮箱: {data.contactsEmail}</p>
               <div className={styles.hidden}>
                 加工类型：
-                {console.log(processType)}
                 <Tooltip
                   placement="top"
                   title={

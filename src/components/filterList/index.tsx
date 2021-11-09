@@ -51,7 +51,6 @@ const FilterList = props => {
   const { factoryStore, commonStore } = useStores()
   const { dictionary, allArea } = commonStore
   const {
-    prodType = [],
     factoryEffectiveLocation = [],
     processType = [],
     plusMaterialType = [],
@@ -79,11 +78,13 @@ const FilterList = props => {
   const [setUpTime, setSetUpTime] = useState<string>(null)
   const [updateTime, setUpdateTime] = useState<string>(null)
 
-  const newTypeList = ['/factory-search', '/producer-search'].includes(
-    location.pathname
-  )
-    ? prodType
-    : processType
+  // const newTypeList = ['/factory-search', '/producer-search'].includes(
+  //   location.pathname
+  // )
+  //   ? prodType
+  //   : processType
+  const newTypeList = processType
+
   const newTime =
     location.pathname === '/factory-search' ? '更新时间' : '发布时间'
 

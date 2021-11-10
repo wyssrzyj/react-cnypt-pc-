@@ -15,7 +15,7 @@ const layout = {
   }
 }
 
-function Basics({ data }) {
+function Basics({ data, time }) {
   const unitPrice = value => {
     data(value)
   }
@@ -59,7 +59,7 @@ function Basics({ data }) {
           )
         })} */}
       </Row>
-      <Date validity={unitPrice} />
+      <Date time={time} validity={unitPrice} />
     </div>
   )
 }

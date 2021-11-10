@@ -49,7 +49,7 @@ function index({ initialValues, enterpriseType }) {
         <Row>
           <Col span={12}>
             <div className={styles.title}>
-              发单订单联系人:
+              订单联系人:
               <span className={styles.contents}>{contactPerson}</span>
             </div>
           </Col>

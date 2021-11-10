@@ -21,7 +21,7 @@ function index({ initialValues }) {
   const {
     goodsNum = [],
     plusMaterialType = [],
-    inquiryProcessType = []
+    processType = []
   } = toJS(dictionary) //字典
 
   const [productCategoric, setProductCategoric] = useState([]) //商品品类
@@ -46,17 +46,22 @@ function index({ initialValues }) {
     }
     //面料
     if (plusMaterialType) {
-      let res = plusMaterialType.filter(
-        item => item.value === initialValues.plusMaterialType
-      )[0]
-      if (res) {
-        setFabric(res.label)
+      console.log(initialValues.materialTypeList)
+      if (initialValues.materialTypeList) {
+        setFabric(
+          getTrees(
+            initialValues.materialTypeList,
+            plusMaterialType,
+            'value',
+            'label'
+          )
+        )
       }
     }
     //加工类型
     if (processTypeList) {
       setOrderReceiving(
-        getTrees(processTypeList, inquiryProcessType, 'value', 'label')
+        getTrees(processTypeList, processType, 'value', 'label')
       )
     }
   }, [initialValues])
@@ -80,10 +85,14 @@ function index({ initialValues }) {
       </Row>
       <Row>
         <Col span={12}>
-          <div className={styles.title}>
-            面料类型:
-            <span className={styles.content}>{fabric ? fabric : '暂无'}</span>
-          </div>
+          <Tooltip placement="top" title={fabric ? fabric.join('、') : '暂无'}>
+            <div className={styles.title}>
+              面料类型:
+              <span className={styles.content}>
+                {fabric ? fabric.join('、') : '暂无'}
+              </span>
+            </div>
+          </Tooltip>
         </Col>
         <Col span={12}>
           <div className={styles.title}>
@@ -117,7 +126,8 @@ function index({ initialValues }) {
         </Col>
       </Row>
       <div className={styles.titles}>
-        款图:
+        <span className={styles.payment}> 款图:</span>
+
         <div className={styles.content}>
           {stylePicture !== undefined && stylePicture.length > 0 ? (
             stylePicture.map((v, i) => (

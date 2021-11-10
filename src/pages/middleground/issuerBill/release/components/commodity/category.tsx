@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { TreeSelect, Form, Col, Row, Select } from 'antd'
+import React, { useEffect } from 'react'
+import { Form, Col, Row, Select } from 'antd'
 import { observer, toJS, useStores } from '@/utils/mobx'
 // import FormNode from '@/components/FormNode'
 const { Option } = Select
 // import Inputs from './inputs'
 import styles from './index.module.less'
-import { cloneDeep } from 'lodash'
+// import { cloneDeep } from 'lodash'
+import MainCategoriesCom from './mainCategoriesCom'
 
 const FormItem = Form.Item
-const { SHOW_PARENT } = TreeSelect
 const Category = () => {
   const { factoryStore, commonStore } = useStores()
   const { productCategoryList } = factoryStore
-  const [treeData, setTreeData] = useState([])
-  const [value, serValue] = useState([])
+  // const [treeData, setTreeData] = useState([])
+  // const [value, serValue] = useState([])
   const { dictionary } = commonStore
   const { goodsNum = [] } = toJS(dictionary)
 
@@ -38,27 +38,15 @@ const Category = () => {
   }
   useEffect(() => {
     ;(async () => {
-      const res = cloneDeep(productCategoryList)
-      setTreeData(dealTypeData(res))
+      // const res = cloneDeep(productCategoryList)
+      // setTreeData(dealTypeData(res))
     })()
   }, [productCategoryList])
 
-  const onChange = value => {
-    //获取所有的父节点
-    serValue(value)
-  }
-
-  const tProps = {
-    treeData,
-    value: value,
-    onChange: onChange,
-    treeCheckable: true,
-    showCheckedStrategy: SHOW_PARENT,
-    placeholder: '请选择商品品类',
-    style: {
-      width: '100%'
-    }
-  }
+  // const onChange = value => {
+  //   //获取所有的父节点
+  //   serValue(value)
+  // }
 
   function onChanges(value) {
     console.log(`selected ${value}`)
@@ -87,7 +75,9 @@ const Category = () => {
             rules={[{ required: true, message: '请选择商品品类 ' }]}
             {...layout}
           >
-            <TreeSelect maxTagCount={5} allowClear={true} {...tProps} />
+            <MainCategoriesCom />
+
+            {/* <TreeSelect maxTagCount={5} allowClear={true} {...tProps} /> */}
           </FormItem>
         </Col>
         <Col span={12} className={styles.cate}>

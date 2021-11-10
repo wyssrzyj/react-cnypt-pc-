@@ -3,10 +3,10 @@ import { Form, Col, Row, Input } from 'antd'
 import { toJS, useStores } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 import Category from './category'
+// import ImgUpload from '../imgUploadss'
 import styles from './index.module.less'
 
 const { TextArea } = Input
-
 const FormItem = Form.Item
 const layout = {
   labelCol: {
@@ -33,12 +33,13 @@ const keys = [
 ]
 
 function Basics() {
+  // const [imageUrl, setImageUrl] = useState('')
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const {
     plusMaterialType = [],
-    inquiryProcessType = [],
-    productType = []
+    productType = [],
+    processType = []
   } = toJS(dictionary)
 
   const orderConfigs = [
@@ -47,8 +48,8 @@ function Basics() {
       required: true,
       message: '请选择面料类型',
       placeholder: '请选择面料类型',
-      type: 'select',
-      field: 'plusMaterialType',
+      type: 'multipleSelect',
+      field: 'materialTypeList',
       span: 12,
       options: plusMaterialType,
       cesar: 0
@@ -71,7 +72,7 @@ function Basics() {
       mode: 'multiple',
       field: 'processTypeList',
       span: 12,
-      options: inquiryProcessType,
+      options: processType,
       cesar: 0
     },
     {
@@ -100,7 +101,7 @@ function Basics() {
   const fangfa = item => {
     map.set(1, [
       {
-        pattern: /^([1-9]{1})(\d{1}(\.\d{1,2})?)$/,
+        pattern: /^([0-9]+[\d]*(.[0-9]{1,2})?)$/,
         message: '请输入正确的数量(小数点最多输入两位)'
       }
     ])
@@ -155,6 +156,13 @@ function Basics() {
           </FormItem>
         </Col>
       </Row>
+      {/* <Row className={styles.goodsRemark}>
+        <Col span={24} className={styles.textArea}>
+          <FormItem name="img" label="上传" labelCol={{ span: 2 }}>
+            <ImgUpload />
+          </FormItem>
+        </Col>
+      </Row> */}
     </div>
   )
 }

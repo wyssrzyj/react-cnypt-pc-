@@ -2,16 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Radio, Dropdown, Space, Checkbox, Button } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import { find, isFunction, isEmpty } from 'lodash'
+import { toJS, useStores } from '@/utils/mobx'
+
 import classNames from 'classnames'
 import styles from './index.module.less'
-
-const typeOptions = [
-  { label: '清加工单', value: 'QJG' },
-  { label: 'OEM', value: 'OEM' },
-  { label: 'ODM', value: 'ODM' },
-  { label: '经销单', value: 'JXD' },
-  { label: '自营进出口单', value: 'ZCK' }
-]
 
 const ProcessingTypeCom = props => {
   const { onChange, value, state } = props
@@ -20,6 +14,17 @@ const ProcessingTypeCom = props => {
   const [menuVisible, setMenuVisible] = useState<boolean>(false)
   const [checkedTypes, setCheckedTypes] = useState<any>([])
   const [tipVisible, setTipVisible] = useState<boolean>(false)
+  const { commonStore } = useStores()
+  const { dictionary } = commonStore
+  const { processType = [] } = toJS(dictionary)
+  // const typeOptions = [
+  //   { label: '清加工单', value: 'QJG' },
+  //   { label: 'OEM', value: 'OEM' },
+  //   { label: 'ODM', value: 'ODM' },
+  //   { label: '经销单', value: 'JXD' },
+  //   { label: '自营进出口单', value: 'ZCK' }
+  // ]
+  const typeOptions = processType
 
   const mainChange = e => {
     setMainValue(e.target.value)

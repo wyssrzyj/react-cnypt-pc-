@@ -384,16 +384,16 @@ const FormNode = (props: FormNodeProps) => {
           />
           <Upload
             ref={uploadRef}
-            fileList={nodeValue}
-            listType="picture-card"
-            accept={accept}
-            name="file"
-            maxCount={maxImgs}
-            beforeUpload={beforeUpload}
-            customRequest={customRequest}
-            onRemove={fileRemove}
-            disabled={disabled}
-            onPreview={onPreview}
+            fileList={nodeValue} //已经上传的文件列表
+            listType="picture-card" //上传列表的内建样式
+            accept={accept} //接受上传的文件类型
+            name="file" //发到后台的文件参数名
+            maxCount={maxImgs} //限制上传数量
+            beforeUpload={beforeUpload} //上传文件之前的钩子
+            customRequest={customRequest} //自定义自己的上传实现
+            onRemove={fileRemove} //点击移除文件时的回调
+            disabled={disabled} //	是否禁用
+            onPreview={onPreview} //点击文件链接或预览图标时的回调
             {...other}
           >
             {!disabled && (isEmpty(nodeValue) || nodeValue.length) < maxImgs

@@ -11,11 +11,24 @@ export default class DemandList {
   @observable testData = []
   @observable echo = ''
   @observable zhiding = [{ name: '置顶' }]
+  @observable regionalData = [] //地区弹窗返回的数据
+  @observable popData = [] //弹窗回显
 
   @action changeTestData = () => {
     runInAction(() => {
       this.testData = [...this.testData, { id: this.testData.length + 1 }]
     })
+  }
+  @action popUpData = params => {
+    runInAction(() => {
+      this.regionalData = params
+    })
+  }
+  @action popUpEcho = params => {
+    runInAction(() => {
+      this.popData = params
+    })
+    console.log('弹窗回显', params)
   }
 
   // 更新或新增订单
@@ -42,6 +55,22 @@ export default class DemandList {
       return res
     } catch (e) {
       return e
+    }
+  }
+
+  // 产品档次
+  @action gradingOfProducts = async () => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/product-grade/list-tree`
+      )
+      if (res.code === 200) {
+        return res
+      } else {
+        message.error(res.msg)
+      }
+    } catch (e) {
+      console.log(e)
     }
   }
   // 再来一单

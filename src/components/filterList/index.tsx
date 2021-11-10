@@ -51,9 +51,8 @@ const FilterList = props => {
   const { factoryStore, commonStore } = useStores()
   const { dictionary, allArea } = commonStore
   const {
-    prodType = [],
     factoryEffectiveLocation = [],
-    inquiryProcessType = [],
+    processType = [],
     plusMaterialType = [],
     goodsNum = []
   } = toJS(dictionary)
@@ -62,7 +61,7 @@ const FilterList = props => {
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [activeArea, setActiveArea] = useState<any>([])
   const [activeProcessing, setActiveProcessing] = useState<any>({}) //加工类型
-  const [activeTabs, setActiveTabs] = useState<any>([])
+  const [activeTabs, setActiveTabs] = useState<any>([]) //主要数据
   const [mainCategory, setMainCategory] = useState<any>([
     { id: '', name: '全部' }
   ])
@@ -79,11 +78,13 @@ const FilterList = props => {
   const [setUpTime, setSetUpTime] = useState<string>(null)
   const [updateTime, setUpdateTime] = useState<string>(null)
 
-  const newTypeList = ['/factory-search', '/producer-search'].includes(
-    location.pathname
-  )
-    ? prodType
-    : inquiryProcessType
+  // const newTypeList = ['/factory-search', '/producer-search'].includes(
+  //   location.pathname
+  // )
+  //   ? prodType
+  //   : processType
+  const newTypeList = processType
+
   const newTime =
     location.pathname === '/factory-search' ? '更新时间' : '发布时间'
 
@@ -143,6 +144,8 @@ const FilterList = props => {
   }
 
   const handleModalOk = cities => {
+    console.log(cities) //选中的数据
+    console.log('999999999999999999999999')
     setActiveArea([...cities])
     onFilterChange({ cityIds: cities.map(item => item.id) })
     setModalVisible(false)
@@ -538,10 +541,10 @@ const FilterList = props => {
 
       {modalVisible && (
         <AreaModal
-          visible={modalVisible}
-          selectedCity={activeArea}
-          handleCancel={() => setModalVisible(false)}
-          handleOk={handleModalOk}
+          visible={modalVisible} //弹窗
+          // selectedCity={activeArea}
+          handleCancel={() => setModalVisible(false)} //点击遮罩层或右上角叉或取消按钮的回调
+          handleOk={handleModalOk} //确认的回调
         />
       )}
     </div>

@@ -83,6 +83,15 @@ const MultipleChoice = ({
       state: { id: e, modify: 'modify' }
     })
   }
+  const jump = () => {
+    console.log('跳转')
+    console.log(data.name)
+
+    push({
+      pathname: '/control-panel/issuerBill/demand-applicationList',
+      state: { name: data.name, id: id }
+    })
+  }
   return (
     <div className={styles.bos}>
       {/* 头部 */}
@@ -164,20 +173,32 @@ const MultipleChoice = ({
           </Col>
           <Col span={7}>
             <div className={styles.feedback}>
-              <p>
-                共
-                <span className={styles.fontColor}>
-                  {data.enterpriseNum ? data.enterpriseNum : 0}
+              <div
+                className={
+                  (styles.shout, data.enterpriseNum > 0 ? styles.shouts : null)
+                }
+                onClick={data.enterpriseNum > 0 ? jump : null}
+              >
+                <span
+                  className={
+                    (styles.shout, data.enterpriseNum > 0 ? styles.shou : null)
+                  }
+                >
+                  共
+                  <span className={styles.fontColor}>
+                    {data.enterpriseNum ? data.enterpriseNum : 0}
+                  </span>
+                  家，
+                  <span className={styles.fontColor}>
+                    {data.enterpriseRefuseTotalNum
+                      ? data.enterpriseRefuseTotalNum
+                      : 0}
+                  </span>
+                  家已谢绝
                 </span>
-                家，
-                <span className={styles.fontColor}>
-                  {data.enterpriseRefuseTotalNum
-                    ? data.enterpriseRefuseTotalNum
-                    : 0}
-                </span>
-                家已谢绝
+
                 {/* <span className={styles.fontColor}>1</span> 家已反馈 */}
-              </p>
+              </div>
               {/* <p>
                 <span className={styles.fontColor}>{data.issuedBill}</span>
                 家已发单，已发订单量

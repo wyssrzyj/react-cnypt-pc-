@@ -52,11 +52,6 @@ const Title = ({ title, icon }) => {
 const ControlPanel = () => {
   const currentUser = getCurrentUser()
   const userInfo = getUserInfo() || {}
-  console.log(
-    '🚀 ~ file: index.tsx ~ line 55 ~ ControlPanel ~ userInfo',
-    userInfo
-  )
-
   const { factoryStore } = useStores()
   const { productCategory } = factoryStore
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])

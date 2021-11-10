@@ -17,7 +17,7 @@ const SearchOrder = () => {
 
   const {
     goodsNum = [],
-    inquiryProcessType = [],
+    processType = [],
     factoryEffectiveLocation = []
   } = toJS(dictionary)
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
@@ -98,7 +98,7 @@ const SearchOrder = () => {
             {
               label: '加工类型',
               value: matchArrayValue(
-                inquiryProcessType,
+                processType,
                 record.processTypeValues,
                 '--'
               )

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Icon } from '@/components'
-import { Popover, Button, Modal } from 'antd'
+import { Popover, Button, Modal, Tooltip } from 'antd'
 import styles from './listCard.module.less'
 import { observer, toJS, useStores } from '@/utils/mobx'
 import classNames from 'classnames'
@@ -56,7 +56,7 @@ const ListCard = props => {
     },
     {
       label: '商品品类:',
-      field: 'factoryCategoryCodes ',
+      field: 'categoryCodes ',
       value: '针织服装（薄料）'
     },
     {
@@ -106,12 +106,12 @@ const ListCard = props => {
     if (field === 'goodsNum') {
       return goodsNum.find(item => item.value === value)?.label
     }
-    if (field === 'factoryCategoryCodes ') {
+    if (field === 'categoryCodes ') {
       console.log(field)
-      console.log(data.factoryCategoryCodes)
+      console.log(data.categoryCodes)
       console.log(newList)
 
-      const arr = getTrees(data.factoryCategoryCodes, newList, 'code', 'name')
+      const arr = getTrees(data.categoryCodes, newList, 'code', 'name')
       if (arr) {
         return arr.join('、')
       } else {
@@ -296,9 +296,14 @@ const ListCard = props => {
               <div key={item.field} className={styles.infoItem}>
                 <span className={styles.infoLabel}>{item.label}</span>
                 {data.enterpriseName !== null ? (
-                  <span className={styles.infoValue}>
-                    {getTarget(item.field, data[item.field])}
-                  </span>
+                  <Tooltip
+                    placement="top"
+                    title={getTarget(item.field, data[item.field])}
+                  >
+                    <span className={styles.infoValue}>
+                      {getTarget(item.field, data[item.field])}
+                    </span>
+                  </Tooltip>
                 ) : (
                   <span className={styles.infoValue}>---</span>
                 )}

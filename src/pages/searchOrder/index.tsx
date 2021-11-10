@@ -105,7 +105,7 @@ const SearchOrder = () => {
             {
               label: '商品品类',
               value: getTrees(
-                record.factoryCategoryCodes,
+                record.categoryCodes,
                 productCategoryList,
                 'code',
                 'name'

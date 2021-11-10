@@ -41,12 +41,18 @@ function DemandList() {
     status: initialKey
   })
   useEffect(() => {
-    InterfaceData()
+    if (state !== undefined) {
+      console.log('有', state)
+      Interface()
+    } else {
+      console.log('没有', state)
+      InterfaceData()
+    }
   }, [params])
-  useEffect(() => {
-    Interface()
-  }, [])
+  console.log('测试路由数据是否一直有', state)
+
   const Interface = async () => {
+    console.log('有值初始化我调用了')
     if (state !== undefined) {
       let sum = {
         pageNum: pageNumber,
@@ -57,6 +63,8 @@ function DemandList() {
       }
       setQuery(sum)
       const res = await applicationList(sum)
+      console.log('路由有数据', res)
+
       if (res.code === 200) {
         setDataLength(res.data.total)
         if (res.data.records) {
@@ -65,6 +73,8 @@ function DemandList() {
       }
     } else {
       const res = await applicationList(params)
+      console.log('没有数据', res)
+
       if (res.code === 200) {
         setDataLength(res.data.total)
         if (res.data.records) {
@@ -75,6 +85,8 @@ function DemandList() {
   }
 
   const InterfaceData = async () => {
+    console.log('没值我调用了')
+
     const res = await applicationList(params)
     if (res.code === 200) {
       setDataLength(res.data.total)

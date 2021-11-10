@@ -28,7 +28,6 @@ const date = ({ validity, time }) => {
     console.log(date)
 
     setDay(remainingTime(date._d.getTime()).day)
-    console.log('相差')
     // setProcessingType(dateString)
   }
   function onChanges(date) {

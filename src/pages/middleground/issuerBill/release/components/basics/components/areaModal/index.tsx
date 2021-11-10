@@ -122,14 +122,14 @@ const AreaModal = props => {
       setActiveCity(activeCity.filter(item => item.id === params.id)) //只留全国
     }
 
-    console.log(newData)
-    console.log('父节点的id', leftMethod)
+    // console.log(newData)
+    // console.log('父节点的id', leftMethod)
     let num = newData.filter(item => item.pid === leftMethod.value)
     if (leftMethod.children !== undefined) {
       if (num.length === leftMethod.children.length) {
-        console.log('子项全有了')
-        console.log(num)
-        console.log(newData)
+        // console.log('子项全有了')
+        // console.log(num)
+        // console.log(newData)
         if (newData) {
           let index = newData.filter(item => item.pid !== leftMethod['value'])
           let parent = [
@@ -139,7 +139,7 @@ const AreaModal = props => {
               pid: leftMethod['value']
             }
           ]
-          console.log(index.concat(parent))
+          // console.log(index.concat(parent))
           setActiveCity(index.concat(parent))
         }
       }

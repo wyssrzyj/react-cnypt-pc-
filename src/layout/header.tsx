@@ -305,7 +305,6 @@ const Header = () => {
       })}
     </div>
   )
-  console.log(currentUser.userId)
 
   return (
     <header>

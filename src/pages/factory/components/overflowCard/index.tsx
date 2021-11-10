@@ -127,6 +127,7 @@ const OverflowCard = props => {
       const res = await getOrderList({
         enterpriseId: currentUserInfo.enterpriseId
       })
+
       setOrders(res.records || [])
     }
   }
@@ -220,6 +221,7 @@ const OverflowCard = props => {
         <Title title={'选择需求单'}></Title>
         <div className={styles.totalListBox}>
           <div className={styles.totalList}>
+            {console.log(orders)}
             {orders.map((data: any, idx) => {
               return (
                 <RequestCard

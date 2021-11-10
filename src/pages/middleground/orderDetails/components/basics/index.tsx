@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Tooltip } from 'antd'
 import { observer, toJS, useStores } from '@/utils/mobx'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
 import styles from './index.module.less'
 import { matchGoodValue } from '@/utils/tool'
 
 function Basic({ initialValues, enterpriseType }) {
-  const {
-    isEnterpriseInfoPublic,
-    name,
-    effectiveLocation,
-    otherRequirement,
-    enterpriseName
-  } = initialValues
+  const { isEnterpriseInfoPublic, name, otherRequirement, enterpriseName } =
+    initialValues
 
   const { commonStore } = useStores()
   const { allArea, dictionary } = commonStore
-  const { factoryEffectiveLocation = [] } = toJS(dictionary) //有效车位
+  const { effectiveLocation = [] } = toJS(dictionary) //有效车位
 
   const [treeData, setTreeData] = useState('')
   const [parkingLot, setParkingLot] = useState<any>()
@@ -37,10 +32,11 @@ function Basic({ initialValues, enterpriseType }) {
       setTreeData('全国')
     }
     // 车位的获取
-    if (factoryEffectiveLocation) {
-      const res = factoryEffectiveLocation.filter(
-        item => item.value === effectiveLocation
+    if (!isEmpty(initialValues.effectiveLocation)) {
+      const res = effectiveLocation.filter(
+        item => item.value === initialValues.effectiveLocation
       )
+
       if (res[0] !== undefined) {
         setParkingLot(res[0].label)
       }

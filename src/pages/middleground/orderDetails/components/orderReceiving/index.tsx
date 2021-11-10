@@ -69,7 +69,6 @@ function index({ stated }) {
         })
         push('/control-panel/orderManagement/receiveOrder?key=all')
         console.log(res)
-
         console.log('拒绝')
       }
     } catch (err) {}

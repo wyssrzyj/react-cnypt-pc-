@@ -30,7 +30,6 @@ const DemandList = () => {
   const { dictionary } = commonStore
   const { processType = [] } = toJS(dictionary)
   const treeData = productCategoryList //商品品类
-
   const { listData, deleteDemandDoc, toppingFunction, endInterfaceInAdvance } =
     demandListStore
 
@@ -74,6 +73,7 @@ const DemandList = () => {
 
   const listsAPI = async () => {
     const res = await listData(params) //待会设置页码之类的
+
     setNumberLength(res.total)
 
     if (Array.isArray(res.records)) {
@@ -84,20 +84,20 @@ const DemandList = () => {
 
         item.releaseTime = timestampToTime(item.releaseTime)
         item.categoryIdList = getTrees(
-          item.categoryIdList,
+          item.categoryCodes,
           toJS(treeData),
-          'id',
+          'code',
           'name'
         )
         item.surplus = remainingTime(item.inquiryEffectiveDate)
       })
       setNoOrders(res.records.length)
+
       setReallyLists(res.records)
     }
   }
   // 路由数据
   const routingData = value => {
-    console.log(query)
     let sum = {
       pageNum: 1,
       pageSize: defaultPageSize,
@@ -174,7 +174,6 @@ const DemandList = () => {
   }
   // 查看订单信息
   const DemandOrderDetail = e => {
-    console.log('查看订单信息')
     push({ pathname: '/control-panel/orderDetails', state: { id: e } })
   }
   //提前结束

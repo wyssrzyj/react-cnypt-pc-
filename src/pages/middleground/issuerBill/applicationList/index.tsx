@@ -64,7 +64,6 @@ function DemandList() {
         }
       }
     } else {
-      console.log('没有数据')
       const res = await applicationList(params)
       if (res.code === 200) {
         setDataLength(res.data.total)
@@ -125,7 +124,6 @@ function DemandList() {
   //置
   const toppingMethod = async value => {
     const res = await topOfapplicationList(value)
-    console.log(res)
     if (res.code === 200) {
       InterfaceData()
     }

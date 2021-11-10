@@ -70,7 +70,7 @@ const Category = () => {
         <Col span={12}>
           <FormItem
             className={styles.categoryId}
-            name="categoryId"
+            name="categoryCodes"
             label="商品品类"
             rules={[{ required: true, message: '请选择商品品类 ' }]}
             {...layout}

@@ -51,7 +51,7 @@ const FilterList = props => {
   const { factoryStore, commonStore } = useStores()
   const { dictionary, allArea } = commonStore
   const {
-    factoryEffectiveLocation = [],
+    effectiveLocation = [],
     processType = [],
     plusMaterialType = [],
     goodsNum = []
@@ -165,6 +165,8 @@ const FilterList = props => {
   //   onFilterChange({ factoryType: activeKey === 'all' ? '' : activeKey })
   // }
   const onProductChange = params => {
+    console.log('商品品类', params)
+
     setActiveDeputyCategory({ ...params })
     onFilterChange({
       mainCategoryChildId: params.id,
@@ -358,7 +360,7 @@ const FilterList = props => {
                   item.id === activeDeputyCategory.id ? styles.active : null
                 )}
                 onClick={() =>
-                  onProductChange({ id: item.id, name: item.name })
+                  onProductChange({ id: item.code, name: item.name })
                 }
               >
                 {item.name}
@@ -462,7 +464,7 @@ const FilterList = props => {
             value={moreParams.effectiveLocation}
             onChange={value => onFactorySizeChange(value, 'effectiveLocation')}
           >
-            {factoryEffectiveLocation.map(item => (
+            {effectiveLocation.map(item => (
               <Option key={item.id} value={item.value}>
                 {item.label}
               </Option>

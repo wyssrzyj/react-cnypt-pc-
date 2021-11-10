@@ -84,9 +84,6 @@ const MultipleChoice = ({
     })
   }
   const jump = () => {
-    console.log('跳转')
-    console.log(data.name)
-
     push({
       pathname: '/control-panel/issuerBill/demand-applicationList',
       state: { name: data.name, id: id }

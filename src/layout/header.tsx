@@ -90,6 +90,7 @@ const Header = () => {
 
   const { logout } = loginStore
   const { enterpriseType } = userInfo
+  console.log('测试是否修改', userInfo)
 
   const workbenchData = [
     //加工厂

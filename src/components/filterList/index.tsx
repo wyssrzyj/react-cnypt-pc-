@@ -81,7 +81,7 @@ const FilterList = props => {
   // const newTypeList = ['/factory-search', '/producer-search'].includes(
   //   location.pathname
   // )
-  //   ? prodType
+  //   ? processType
   //   : processType
   const newTypeList = processType
 
@@ -100,7 +100,7 @@ const FilterList = props => {
     // 向上清空父组件的状态
     onFilterChange({
       cityIds: [],
-      prodType: '',
+      processType: '',
       mainCategoryParentId: '',
       mainCategoryChildId: ''
     })
@@ -157,7 +157,7 @@ const FilterList = props => {
 
   const selectAllProcessing = () => {
     setActiveProcessing({})
-    onFilterChange({ prodType: '' })
+    onFilterChange({ processType: '' })
   }
 
   // const onTabChange = activeKey => {
@@ -165,9 +165,9 @@ const FilterList = props => {
   //   onFilterChange({ factoryType: activeKey === 'all' ? '' : activeKey })
   // }
   const onProductChange = params => {
-    console.log('商品品类', params)
-
+    console.log('商品品类999999999999999', params.id)
     setActiveDeputyCategory({ ...params })
+
     onFilterChange({
       mainCategoryChildId: params.id,
       mainCategoryParentId: activeMainCategory
@@ -175,7 +175,7 @@ const FilterList = props => {
   }
   const onProcessingChange = params => {
     setActiveProcessing({ ...params })
-    onFilterChange({ prodType: params.id })
+    onFilterChange({ processType: params.id })
   }
   const onFactorySizeChange = (value, field) => {
     setMoreParams({
@@ -252,7 +252,7 @@ const FilterList = props => {
     // 加工类型
     if (activeProcessing.id === id) {
       setActiveProcessing({})
-      onFilterChange({ prodType: '' })
+      onFilterChange({ processType: '' })
     }
   }
 
@@ -338,6 +338,7 @@ const FilterList = props => {
           className={classNames(styles.classificationItem, styles.classesBox)}
         >
           <div>
+            {console.log('产品类别', mainCategory)}
             {mainCategory.map(item => (
               <span
                 key={item.id}
@@ -360,9 +361,10 @@ const FilterList = props => {
                   item.id === activeDeputyCategory.id ? styles.active : null
                 )}
                 onClick={() =>
-                  onProductChange({ id: item.code, name: item.name })
+                  onProductChange({ id: item.id, name: item.name })
                 }
               >
+                {console.log(item)}
                 {item.name}
               </span>
             ))}

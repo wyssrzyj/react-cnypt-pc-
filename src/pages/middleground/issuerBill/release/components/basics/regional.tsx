@@ -102,7 +102,7 @@ const regional = () => {
         >
           <FormItem
             name="regionalIdList"
-            label="地区"
+            label="地区要求"
             rules={[{ required: true, message: '请选择地区' }]}
             {...layout}
           >

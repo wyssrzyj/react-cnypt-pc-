@@ -185,6 +185,8 @@ const DemandList = () => {
   }
   // 结束订单
   const deleteRecord = async value => {
+    console.log('删除需求单', { id: value })
+
     const res = await deleteDemandDoc({ id: value })
     if (res.code === 200) {
       listsAPI()

@@ -5,7 +5,7 @@ import styles from './index.module.less'
 import Sort from './components/sort'
 import MultipleChoice from './components/multipleChoice'
 import { Pagination } from 'antd'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isArray } from 'lodash'
 import { useStores, toJS, observer } from '@/utils/mobx'
 import { timestampToTime, remainingTime, ToTime } from './components/time'
 import { getTrees } from './method'
@@ -30,7 +30,6 @@ const DemandList = () => {
   const { dictionary } = commonStore
   const { processType = [] } = toJS(dictionary)
   const treeData = productCategoryList //商品品类
-
   const { listData, deleteDemandDoc, toppingFunction, endInterfaceInAdvance } =
     demandListStore
 
@@ -39,6 +38,7 @@ const DemandList = () => {
   const [numberLength, setNumberLength] = useState(1) //页码长度
   const [noOrders, setNoOrders] = useState(0) //没有订单
   const [pageNumber, setPageNumber] = useState(1) //分页
+  const [query, setQuery] = useState({}) //查询
 
   const [params, setParams] = useState<any>({
     pageNum: 1,
@@ -73,34 +73,36 @@ const DemandList = () => {
 
   const listsAPI = async () => {
     const res = await listData(params) //待会设置页码之类的
+
     setNumberLength(res.total)
 
     if (Array.isArray(res.records)) {
       res.records.forEach(item => {
         item.checked = false
-        item.processing = handle(item.processTypeList)
+        item.processing = isArray(item.processTypeList)
+          ? handle(item.processTypeList)
+          : []
         item.time = ToTime(item.inquiryEffectiveDate)
 
         item.releaseTime = timestampToTime(item.releaseTime)
-        item.categoryIdList = getTrees(
-          item.categoryIdList,
-          toJS(treeData),
-          'id',
-          'name'
-        )
+        item.categoryIdList = isArray(item.categoryIdList)
+          ? getTrees(item.categoryIdList, toJS(treeData), 'id', 'name')
+          : []
         item.surplus = remainingTime(item.inquiryEffectiveDate)
       })
       setNoOrders(res.records.length)
+
       setReallyLists(res.records)
     }
   }
-  // 路由数据
+  // 路由数据.
   const routingData = value => {
-    setParams({
+    let sum = {
       pageNum: 1,
       pageSize: defaultPageSize,
       status: value
-    })
+    }
+    setParams({ ...sum, ...query })
     setPageNumber(1)
   }
   //  排序
@@ -126,6 +128,7 @@ const DemandList = () => {
         newParams[item] = res[item]
       })
       setParams(newParams)
+      setQuery(res)
     } else {
       setParams({ pageNum: 1, pageSize: defaultPageSize })
     }
@@ -170,7 +173,6 @@ const DemandList = () => {
   }
   // 查看订单信息
   const DemandOrderDetail = e => {
-    console.log('查看订单信息')
     push({ pathname: '/control-panel/orderDetails', state: { id: e } })
   }
   //提前结束
@@ -182,6 +184,8 @@ const DemandList = () => {
   }
   // 结束订单
   const deleteRecord = async value => {
+    console.log('删除需求单', { id: value })
+
     const res = await deleteDemandDoc({ id: value })
     if (res.code === 200) {
       listsAPI()

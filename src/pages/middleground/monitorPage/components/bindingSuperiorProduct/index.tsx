@@ -17,7 +17,7 @@ const BindingSuperiorProduct = props => {
     checkedKeys,
     setCheckedKeys
   } = props
-  console.log(props)
+
   const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
   const onSelect = (selectedKeysValue: React.Key[], info: any) => {
     console.log('onSelect', info)

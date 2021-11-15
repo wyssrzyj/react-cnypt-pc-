@@ -39,7 +39,6 @@ export default class RegisterStore {
         params
       )
       if (res) {
-        console.log(res)
       }
       return res
     } catch (e) {

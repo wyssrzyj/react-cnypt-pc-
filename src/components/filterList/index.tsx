@@ -51,8 +51,7 @@ const FilterList = props => {
   const { factoryStore, commonStore } = useStores()
   const { dictionary, allArea } = commonStore
   const {
-    prodType = [],
-    factoryEffectiveLocation = [],
+    effectiveLocation = [],
     processType = [],
     plusMaterialType = [],
     goodsNum = []
@@ -62,7 +61,7 @@ const FilterList = props => {
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [activeArea, setActiveArea] = useState<any>([])
   const [activeProcessing, setActiveProcessing] = useState<any>({}) //加工类型
-  const [activeTabs, setActiveTabs] = useState<any>([])
+  const [activeTabs, setActiveTabs] = useState<any>([]) //主要数据
   const [mainCategory, setMainCategory] = useState<any>([
     { id: '', name: '全部' }
   ])
@@ -79,11 +78,13 @@ const FilterList = props => {
   const [setUpTime, setSetUpTime] = useState<string>(null)
   const [updateTime, setUpdateTime] = useState<string>(null)
 
-  const newTypeList = ['/factory-search', '/producer-search'].includes(
-    location.pathname
-  )
-    ? prodType
-    : processType
+  // const newTypeList = ['/factory-search', '/producer-search'].includes(
+  //   location.pathname
+  // )
+  //   ? processType
+  //   : processType
+  const newTypeList = processType
+
   const newTime =
     location.pathname === '/factory-search' ? '更新时间' : '发布时间'
 
@@ -99,7 +100,7 @@ const FilterList = props => {
     // 向上清空父组件的状态
     onFilterChange({
       cityIds: [],
-      prodType: '',
+      processType: '',
       mainCategoryParentId: '',
       mainCategoryChildId: ''
     })
@@ -143,6 +144,8 @@ const FilterList = props => {
   }
 
   const handleModalOk = cities => {
+    console.log(cities) //选中的数据
+    console.log('999999999999999999999999')
     setActiveArea([...cities])
     onFilterChange({ cityIds: cities.map(item => item.id) })
     setModalVisible(false)
@@ -154,7 +157,7 @@ const FilterList = props => {
 
   const selectAllProcessing = () => {
     setActiveProcessing({})
-    onFilterChange({ prodType: '' })
+    onFilterChange({ processType: '' })
   }
 
   // const onTabChange = activeKey => {
@@ -162,7 +165,9 @@ const FilterList = props => {
   //   onFilterChange({ factoryType: activeKey === 'all' ? '' : activeKey })
   // }
   const onProductChange = params => {
+    console.log('商品品类999999999999999', params.id)
     setActiveDeputyCategory({ ...params })
+
     onFilterChange({
       mainCategoryChildId: params.id,
       mainCategoryParentId: activeMainCategory
@@ -170,7 +175,7 @@ const FilterList = props => {
   }
   const onProcessingChange = params => {
     setActiveProcessing({ ...params })
-    onFilterChange({ prodType: params.id })
+    onFilterChange({ processType: params.id })
   }
   const onFactorySizeChange = (value, field) => {
     setMoreParams({
@@ -247,7 +252,7 @@ const FilterList = props => {
     // 加工类型
     if (activeProcessing.id === id) {
       setActiveProcessing({})
-      onFilterChange({ prodType: '' })
+      onFilterChange({ processType: '' })
     }
   }
 
@@ -333,6 +338,7 @@ const FilterList = props => {
           className={classNames(styles.classificationItem, styles.classesBox)}
         >
           <div>
+            {console.log('产品类别', mainCategory)}
             {mainCategory.map(item => (
               <span
                 key={item.id}
@@ -358,6 +364,7 @@ const FilterList = props => {
                   onProductChange({ id: item.id, name: item.name })
                 }
               >
+                {console.log(item)}
                 {item.name}
               </span>
             ))}
@@ -459,7 +466,7 @@ const FilterList = props => {
             value={moreParams.effectiveLocation}
             onChange={value => onFactorySizeChange(value, 'effectiveLocation')}
           >
-            {factoryEffectiveLocation.map(item => (
+            {effectiveLocation.map(item => (
               <Option key={item.id} value={item.value}>
                 {item.label}
               </Option>
@@ -538,10 +545,10 @@ const FilterList = props => {
 
       {modalVisible && (
         <AreaModal
-          visible={modalVisible}
-          selectedCity={activeArea}
-          handleCancel={() => setModalVisible(false)}
-          handleOk={handleModalOk}
+          visible={modalVisible} //弹窗
+          // selectedCity={activeArea}
+          handleCancel={() => setModalVisible(false)} //点击遮罩层或右上角叉或取消按钮的回调
+          handleOk={handleModalOk} //确认的回调
         />
       )}
     </div>

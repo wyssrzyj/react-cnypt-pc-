@@ -15,7 +15,7 @@ import {
   Select
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { isEmpty, isArray } from 'lodash'
+import { isEmpty, isArray, isNil } from 'lodash'
 import { toJS } from 'mobx'
 import { get } from 'lodash'
 import Viewer from 'react-viewer'
@@ -205,6 +205,7 @@ const EnterpriseInfo = () => {
         enterpriseLogoId:
           imageUrl === preImageUrl ? undefined : enterpriseLogoId
       }
+      console.log(params, 'params')
 
       if (+enterpriseType === 0) {
         params.factoryProcessTypeList = factoryProcessTypeList.map(item => ({
@@ -222,10 +223,7 @@ const EnterpriseInfo = () => {
           if (success) {
             message.success(msg)
             const res = await userInfo() //更新企业名称、企业id
-            console.log(
-              '🚀 ~ file: index.tsx ~ line 277 ~ validateFields ~ user',
-              res.data
-            )
+
             localStorage.setItem('enterpriseInfo', JSON.stringify(data))
             !res.data.enterpriseId && (await dealRefresh())
 
@@ -482,7 +480,7 @@ const EnterpriseInfo = () => {
             <Input placeholder="请输入类别说明" />
           </Form.Item>
           {/* TODO: 加工厂 */}
-          {+enterpriseType === 0 && (
+          {!isNil(enterpriseType) && +enterpriseType === 0 && (
             <>
               <Form.Item
                 label="厂房面积"
@@ -604,7 +602,7 @@ const EnterpriseInfo = () => {
           )}
 
           {/* TODO: 发单商 */}
-          {+enterpriseType === 1 && (
+          {!isNil(enterpriseType) && +enterpriseType === 1 && (
             <>
               <Form.Item
                 label="企业角色"

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Col, Row, Input } from 'antd'
-import { toJS, useStores } from '@/utils/mobx'
+import { toJS, useStores, observer } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 import Category from './category'
 import styles from './index.module.less'
@@ -142,4 +142,4 @@ function Basics() {
   )
 }
 
-export default Basics
+export default observer(Basics)

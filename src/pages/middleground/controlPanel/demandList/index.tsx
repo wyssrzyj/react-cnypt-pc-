@@ -5,7 +5,7 @@ import styles from './index.module.less'
 import Sort from './components/sort'
 import MultipleChoice from './components/multipleChoice'
 import { Pagination } from 'antd'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isArray } from 'lodash'
 import { useStores, toJS, observer } from '@/utils/mobx'
 import { timestampToTime, remainingTime } from './components/time'
 import { getTrees } from './method'
@@ -61,15 +61,14 @@ const DemandList = () => {
     if (Array.isArray(res.records)) {
       res.records.forEach(item => {
         item.checked = false
-        item.processing = handle(item.processTypeList)
+        item.processing = isArray(item.processTypeList)
+          ? handle(item.processTypeList)
+          : []
         item.time = timestampToTime(item.inquiryEffectiveDate)
         item.releaseTime = timestampToTime(item.releaseTime)
-        item.categoryIdList = getTrees(
-          item.categoryIdList,
-          toJS(treeData),
-          'id',
-          'name'
-        )
+        item.categoryIdList = isArray(item.categoryIdList)
+          ? getTrees(item.categoryIdList, toJS(treeData), 'id', 'name')
+          : []
         item.surplus = remainingTime(item.inquiryEffectiveDate)
       })
       setNoOrders(res.records.length)
@@ -155,7 +154,8 @@ const DemandList = () => {
       listsAPI()
     }
   }
-
+  console.log(reallylists, 'reallylists')
+  console.log(noOrders, 'noOrders')
   return (
     <div className={styles.demand}>
       <section>

@@ -149,5 +149,5 @@ export default {
   delete: function (url, params?, success?, failure?) {
     return apiAxios('DELETE', url, params, success, failure)
   },
-  cancels // 切换路由之前 遍历cancels 执行方法 取消之前的请求.
+  cancels // 切换路由之前 遍历cancels 执行方法 取消之前的请求...
 }

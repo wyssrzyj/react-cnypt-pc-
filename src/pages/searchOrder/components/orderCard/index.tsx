@@ -9,6 +9,7 @@ const NODATA =
 
 const OrderCard = props => {
   const { headerConfig, contentConfig = {}, footerConfig } = props
+
   const [demand, setDemand] = useState<string>('up')
   const [above, setAbove] = useState<number>(177)
 

@@ -10,6 +10,7 @@ const InfoCard = props => {
     <div className={styles.infoCard}>
       <Title title={'商品信息'} />
       <Row gutter={16}>
+        {console.log(infoList)}
         {infoList.map((item, index) => (
           <Col key={index} span={item.span} className={styles.infoCol}>
             <span className={styles.label}>{item.label}</span>

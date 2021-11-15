@@ -7,6 +7,7 @@ import { useStores, observer } from '@/utils/mobx'
 import { matchValue, matchGoodValue, matchArrayValue } from '@/utils/tool'
 import { SimpleSearch, FilterList } from '@/components'
 import { OrderSearchHeader, OrderCard } from './components'
+import { getTrees } from './method'
 import styles from './index.module.less'
 
 const SearchOrder = () => {
@@ -18,12 +19,13 @@ const SearchOrder = () => {
   const {
     goodsNum = [],
     processType = [],
-    factoryEffectiveLocation = []
+    effectiveLocation = []
   } = toJS(dictionary)
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
   const productCategoryList = JSON.parse(
     localStorage.getItem('productCategoryList')
   )
+  console.log(productCategoryList)
 
   const [factoryParams, setFactoryParams] = useState<any>({})
   const [sortParams, setSortParams] = useState<any>({})
@@ -34,6 +36,8 @@ const SearchOrder = () => {
 
   const onFilterChange = params => {
     const newFactoryParams = { ...factoryParams, ...params }
+    console.log(newFactoryParams)
+
     setFactoryParams({ ...newFactoryParams })
     setPageNum(1)
   }
@@ -44,6 +48,8 @@ const SearchOrder = () => {
   }
 
   const getDemandList = () => {
+    console.log(8848)
+
     inquiryList({
       pageSize,
       pageNum,
@@ -51,10 +57,14 @@ const SearchOrder = () => {
       ...factoryParams,
       ...sortParams
     }).then(response => {
+      console.log(response)
       const { success, data } = response
+
       if (success) {
         const { total, records } = data
         setTotal(total)
+        console.log([...records])
+
         setDataList([...records])
       }
     })
@@ -69,7 +79,11 @@ const SearchOrder = () => {
   }
 
   const transformData = () => {
+    console.log(dataList)
+
     const newCardList = dataList.map(record => {
+      console.log(record)
+
       return {
         id: record.id,
         headerConfig: {
@@ -90,10 +104,12 @@ const SearchOrder = () => {
             },
             {
               label: '商品品类',
-              value: matchGoodValue(
+              value: getTrees(
+                record.categoryCodes,
                 productCategoryList,
-                record.factoryCategoryIds
-              )
+                'code',
+                'name'
+              ).join('、')
             },
             {
               label: '加工类型',
@@ -129,10 +145,7 @@ const SearchOrder = () => {
             },
             {
               label: '有效车位',
-              value: matchValue(
-                factoryEffectiveLocation,
-                record.effectiveLocation
-              )
+              value: matchValue(effectiveLocation, record.effectiveLocation)
             }
           ]
         },
@@ -169,6 +182,7 @@ const SearchOrder = () => {
         {/* 列表头 */}
         <OrderSearchHeader onChange={onSortChange} />
         {/* 卡片列表 */}
+        {console.log(cardList)}
         <Row gutter={16}>
           {isEmpty(cardList) ? (
             <Empty className={styles.orderEmpty} />

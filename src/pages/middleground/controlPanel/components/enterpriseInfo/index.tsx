@@ -12,8 +12,10 @@ import {
   Row,
   Col,
   DatePicker,
-  Select
+  Select,
+  TreeSelect
 } from 'antd'
+
 import { PlusOutlined } from '@ant-design/icons'
 import { isEmpty, isArray } from 'lodash'
 import { toJS } from 'mobx'
@@ -34,6 +36,7 @@ import moment from 'moment'
 
 const { TextArea } = Input
 const { Option } = Select
+const { SHOW_PARENT } = TreeSelect
 
 const layout = {
   labelCol: { span: 3 },
@@ -61,28 +64,19 @@ const productClassMap = [
   { value: 7, label: '高中低' }
 ]
 
-const productClassOptions = [
-  { label: '高', value: '高' },
-  { label: '中', value: '中' },
-  { label: '低', value: '低' }
-]
-
-const productionModeOptions = [
-  { label: '流水', value: 0 },
-  { label: '整件', value: 1 },
-  { label: '流水和整件', value: 2 }
-]
-
 const EnterpriseInfo = () => {
   const [form] = Form.useForm()
   const { validateFields, setFieldsValue, getFieldValue } = form
   const currentUser = getCurrentUser() || {}
   const { mobilePhone, userId } = currentUser
-  const { factoryPageStore, commonStore, loginStore } = useStores()
+  const { factoryPageStore, commonStore, loginStore, demandListStore } =
+    useStores()
   const { userInfo } = loginStore
+  const { gradingOfProducts } = demandListStore
+
   const { uploadFiles } = factoryPageStore
   const { allArea, dictionary } = commonStore
-  const { plusMaterialType, purchaserRole } = dictionary
+  const { plusMaterialType, purchaserRole, productType = [] } = dictionary
 
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imageUrlList, setImageUrlList] = useState<any[]>([])
@@ -98,6 +92,8 @@ const EnterpriseInfo = () => {
   const [contactsId, setContactsId] = useState<string>(undefined)
   const [oldData, setOldData] = useState<any>({})
   const [enterpriseType, setEnterpriseType] = useState<any>()
+  const [value, serValue] = useState([])
+  const [treeData, setTreeData] = useState([])
 
   const uploadButton = (
     <div>
@@ -134,11 +130,6 @@ const EnterpriseInfo = () => {
 
   const confirmSubmit = () => {
     validateFields().then(values => {
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 137 ~ validateFields ~ values',
-        values
-      )
-
       const {
         area = [],
         businessAddress = {},
@@ -181,6 +172,8 @@ const EnterpriseInfo = () => {
       const grade = productClassMap.find(
         item => item.label === clothesGrade.join('')
       ) || { value: '' }
+      console.log('不知道是啥', grade)
+
       const newGrade = grade.value
       delete values.clothesGrade
       values.establishedTime = moment(values.establishedTime).valueOf()
@@ -215,16 +208,74 @@ const EnterpriseInfo = () => {
       if (+enterpriseType === 1) {
       }
 
+      console.log(treeData)
+
+      // --------------------------------------------------------------------
+      const list = (item, data) => {
+        //item 原始数据
+        // data 字典数据
+        let sum = []
+        let res = data.filter(v => v.value === item)[0]
+        if (res !== undefined) {
+          res.children.forEach(item => {
+            sum.push(item.value)
+          })
+        }
+        return sum
+      }
+      const getSubData = (v, data) => {
+        // v  原始数据
+        // data 字典数据
+        let sum = []
+        if (isArray(v)) {
+          v.forEach(item => {
+            sum.push(list(item, data))
+          })
+          return sum.flat(Infinity)
+        }
+      }
+      // --------------------------------------------------------------------\
+      console.log(treeData) //接口数据
+
+      let data = params.productGradeValues //原数组
+      let dataChilder = getSubData(data, treeData) //子项数据
+      // console.log(dataChilder)
+      // console.log('提交数据', params)
+      // console.log('提交数据productGradeValues', data) // true
+      // 判断数据
+      let judgment = [
+        'productGradeHigh',
+        'productGradeMiddle',
+        'productGradeLow'
+      ]
+      //方法待会需要修改掉
+      judgment.forEach(v => {
+        // v 判断数据
+        // data 原数组
+        if (data) {
+          let susa = data.indexOf(v)
+          if (susa !== -1) {
+            data.splice(susa, 1) //替换掉
+          }
+        }
+      })
+      if (data) {
+        let goodData = data.concat(dataChilder) //合并数组
+        params.productGradeValues = goodData
+      }
+      console.log(params)
+
+      // -------------------------------------------
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
         .then(async response => {
+          console.log('企业信息录入', response)
           const { success, msg, data = {} } = response
           if (success) {
             // message.success('请完善企业证件认证，平台将在1~3个工作日与您取得联系，请注意接听来电。')
             message.success(msg)
             userInfo() //更新企业名称、企业id
             localStorage.setItem('enterpriseInfo', JSON.stringify(data))
-
             !enterpriseId && (await dealRefresh())
 
             setTimeout(() => {
@@ -241,6 +292,7 @@ const EnterpriseInfo = () => {
     axios
       .get('/api/factory/enterprise/get-enterprise-info', {})
       .then(response => {
+        console.log('企业信息回显接口', response)
         const { success, data = {} } = response
         if (success && !isEmpty(data)) {
           const {
@@ -259,6 +311,7 @@ const EnterpriseInfo = () => {
             clothesGrade,
             enterpriseType
           } = data
+
           const keys = Reflect.ownKeys(data)
           if (keys.includes('roleCodes')) {
             data['roleCodes'] = data['roleCodes'] || []
@@ -361,6 +414,29 @@ const EnterpriseInfo = () => {
       })
     }
   }, [enterpriseType])
+  useEffect(() => {
+    grade()
+  }, [])
+  const grade = async () => {
+    let res = await gradingOfProducts() //订单档次
+    setTreeData(res.data)
+  }
+
+  const onChange = value => {
+    //获取所有的父节点
+    serValue(value)
+  }
+  const tProps = {
+    treeData,
+    value: value,
+    onChange: onChange,
+    treeCheckable: true,
+    showCheckedStrategy: SHOW_PARENT,
+    placeholder: '请选择产品档次',
+    style: {
+      width: '100%'
+    }
+  }
 
   return (
     <div className={styles.enterpriseInfoContent}>
@@ -536,25 +612,32 @@ const EnterpriseInfo = () => {
               </Form.Item>
               <Form.Item
                 label="产品档次"
-                name="clothesGrade"
+                name="productGradeValues"
                 rules={[{ required: true, message: '请选择产品档次' }]}
               >
-                <Select mode="multiple" placeholder="请选择产品档次">
-                  {productClassOptions.map(option => (
+                <TreeSelect maxTagCount={5} allowClear={true} {...tProps} />
+
+                {/* <Select allowClear mode="multiple" placeholder="请选择产品档次">
+                  {productGradeHigh.map(option => (
                     <Option key={option.value + 'product'} value={option.value}>
                       {option.label}
                     </Option>
                   ))}
-                </Select>
+                </Select> */}
               </Form.Item>
 
               <Form.Item
                 label="生产方式"
-                name="productionMode"
+                name="productTypeValues"
                 rules={[{ required: true, message: '请选择生产方式！' }]}
               >
-                <Select placeholder="请选择生产方式">
-                  {productionModeOptions.map(option => (
+                <Select
+                  mode="multiple"
+                  allowClear
+                  style={{ width: '100%' }}
+                  placeholder="请选择生产方式"
+                >
+                  {toJS(productType).map(option => (
                     <Option key={option.value + 'mode'} value={option.value}>
                       {option.label}
                     </Option>

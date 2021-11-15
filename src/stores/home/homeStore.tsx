@@ -51,7 +51,6 @@ export default class HomeStore {
 
       // localStorage.setItem("token", res.token)
       if (res) {
-        console.log(res)
         // localStorage.setItem("currentUser", JSON.stringify(res))
       }
       return res
@@ -65,7 +64,6 @@ export default class HomeStore {
       const res: ResponseProps = await axios.get('/api/say/Hello', params)
       // localStorage.setItem("token", res.token)
       if (res) {
-        console.log(res)
         // localStorage.setItem("currentUser", JSON.stringify(res))
       }
       return res
@@ -84,7 +82,6 @@ export default class HomeStore {
       )
       // localStorage.setItem("token", res.token)
       if (res) {
-        console.log(res)
         // localStorage.setItem("currentUser", JSON.stringify(res))
       }
       return res

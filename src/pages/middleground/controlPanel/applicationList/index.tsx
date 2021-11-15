@@ -84,7 +84,6 @@ function DemandList() {
   //置
   const toppingMethod = async value => {
     const res = await topOfapplicationList(value)
-    console.log(res)
     if (res.code === 200) {
       InterfaceData()
     }
@@ -93,7 +92,6 @@ function DemandList() {
   const earlyEnd = async e => {
     console.log(e)
     const res = await declineRequisition({ id: e, status: -2 })
-    console.log(res)
     if (res.code === 200) {
       InterfaceData()
     }

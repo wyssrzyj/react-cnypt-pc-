@@ -28,9 +28,8 @@ const DemandList = () => {
   const { demandListStore, factoryStore, commonStore } = useStores()
   const { productCategoryList } = factoryStore
   const { dictionary } = commonStore
-  const { inquiryProcessType = [] } = toJS(dictionary)
+  const { processType = [] } = toJS(dictionary)
   const treeData = productCategoryList //商品品类
-
   const { listData, deleteDemandDoc, toppingFunction, endInterfaceInAdvance } =
     demandListStore
 
@@ -39,6 +38,7 @@ const DemandList = () => {
   const [numberLength, setNumberLength] = useState(1) //页码长度
   const [noOrders, setNoOrders] = useState(0) //没有订单
   const [pageNumber, setPageNumber] = useState(1) //分页
+  const [query, setQuery] = useState({}) //查询
 
   const [params, setParams] = useState<any>({
     pageNum: 1,
@@ -51,7 +51,7 @@ const DemandList = () => {
   }, [params])
   // const filterData = value => {
   //   //  过滤出需要的数据 并返回
-  //   const res = inquiryProcessType.filter(item => item.value === value)
+  //   const res = processType.filter(item => item.value === value)
   //   return res
   // }
   // const handle = v => {
@@ -68,11 +68,12 @@ const DemandList = () => {
   //   return sum
   // }
   const handle = v => {
-    return getTrees(v, inquiryProcessType, 'value', 'label')
+    return getTrees(v, processType, 'value', 'label')
   }
 
   const listsAPI = async () => {
     const res = await listData(params) //待会设置页码之类的
+
     setNumberLength(res.total)
 
     if (Array.isArray(res.records)) {
@@ -83,24 +84,26 @@ const DemandList = () => {
 
         item.releaseTime = timestampToTime(item.releaseTime)
         item.categoryIdList = getTrees(
-          item.categoryIdList,
+          item.categoryCodes,
           toJS(treeData),
-          'id',
+          'code',
           'name'
         )
         item.surplus = remainingTime(item.inquiryEffectiveDate)
       })
       setNoOrders(res.records.length)
+
       setReallyLists(res.records)
     }
   }
   // 路由数据
   const routingData = value => {
-    setParams({
+    let sum = {
       pageNum: 1,
       pageSize: defaultPageSize,
       status: value
-    })
+    }
+    setParams({ ...sum, ...query })
     setPageNumber(1)
   }
   //  排序
@@ -126,6 +129,7 @@ const DemandList = () => {
         newParams[item] = res[item]
       })
       setParams(newParams)
+      setQuery(res)
     } else {
       setParams({ pageNum: 1, pageSize: defaultPageSize })
     }
@@ -170,7 +174,6 @@ const DemandList = () => {
   }
   // 查看订单信息
   const DemandOrderDetail = e => {
-    console.log('查看订单信息')
     push({ pathname: '/control-panel/orderDetails', state: { id: e } })
   }
   //提前结束
@@ -182,6 +185,8 @@ const DemandList = () => {
   }
   // 结束订单
   const deleteRecord = async value => {
+    console.log('删除需求单', { id: value })
+
     const res = await deleteDemandDoc({ id: value })
     if (res.code === 200) {
       listsAPI()

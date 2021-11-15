@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash'
 import moment from 'moment'
 import { useHistory } from 'react-router'
 import { useStores } from '@/utils/mobx'
+
 import {
   matchValue,
   matchGoodValue,
@@ -14,7 +15,7 @@ import {
 import { SimpleSearch } from '@/components'
 import { Advertising, OverviewCard, InfoCard, OtherCard } from './components'
 import styles from './index.module.less'
-
+import { getTrees } from './components/method/index'
 const SearchOrderDetail = props => {
   const {
     match: { params = {} }
@@ -27,8 +28,8 @@ const SearchOrderDetail = props => {
   const { dictionary } = commonStore
   const {
     goodsNum = [],
-    inquiryProcessType = [],
-    factoryEffectiveLocation = [],
+    processType = [],
+    effectiveLocation = [],
     productType = []
   } = toJS(dictionary)
 
@@ -57,6 +58,13 @@ const SearchOrderDetail = props => {
     })
   }
   const transformData = data => {
+    const lei = getTrees(
+      data.categoryCodes,
+      productCategoryList,
+      'code',
+      'name'
+    ).join('、')
+
     const { location } = data
     let newLocation
     if (location.length === 3) {
@@ -78,11 +86,7 @@ const SearchOrderDetail = props => {
         { label: '需求单编号', value: data.code, span: 24 },
         {
           label: '加工类型',
-          value: matchArrayValue(
-            inquiryProcessType,
-            data.processTypeList,
-            '--'
-          ),
+          value: matchArrayValue(processType, data.processTypeList, '--'),
           span: 12
         },
         {
@@ -124,7 +128,8 @@ const SearchOrderDetail = props => {
       infoList: [
         {
           label: '商品品类',
-          value: matchGoodValue(productCategoryList, data.categoryId),
+          // value: matchGoodValue(productCategoryList, data.categoryId),
+          value: lei,
           span: 12
         },
         {
@@ -157,7 +162,7 @@ const SearchOrderDetail = props => {
         },
         {
           label: '有效车位',
-          value: matchValue(factoryEffectiveLocation, data.effectiveLocation),
+          value: matchValue(effectiveLocation, data.effectiveLocation),
           span: 12
         },
         {

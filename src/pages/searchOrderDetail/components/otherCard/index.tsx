@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
+import { getTrees } from '../method/index'
 import { toJS } from 'mobx'
 import { isEmpty } from 'lodash'
 import moment from 'moment'
@@ -15,7 +16,7 @@ import SwiperCore, {
 } from 'swiper'
 import Swiper from 'swiper'
 import { useStores, observer } from '@/utils/mobx'
-import { matchValue, matchGoodValue, matchArrayValue } from '@/utils/tool'
+import { matchValue, matchArrayValue } from '@/utils/tool'
 import { OrderCard } from '../../../searchOrder/components'
 import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
@@ -32,7 +33,7 @@ const OtherCard = props => {
   const { inquiryList } = searchOrderStore
   const {
     goodsNum = [],
-    inquiryProcessType = [],
+    processType = [],
     factoryEffectiveLocation = []
   } = toJS(dictionary)
 
@@ -59,15 +60,18 @@ const OtherCard = props => {
             },
             {
               label: '商品品类',
-              value: matchGoodValue(
+
+              value: getTrees(
+                record.categoryCodes,
                 productCategoryList,
-                record.factoryCategoryIds
-              )
+                'code',
+                'name'
+              ).join('、')
             },
             {
               label: '加工类型',
               value: matchArrayValue(
-                inquiryProcessType,
+                processType,
                 record.processTypeValues,
                 '--'
               )
@@ -179,6 +183,7 @@ const OtherCard = props => {
             styles.orderSwiper
           )}
         >
+          {console.log(cardList)}
           {cardList.length > 0 && (
             <div className="swiper-wrapper">
               {cardList.map((item, idx) => {

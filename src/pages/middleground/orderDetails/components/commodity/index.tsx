@@ -3,11 +3,11 @@ import { Col, Row, Tooltip } from 'antd'
 import styles from './index.module.less'
 import { observer, toJS, useStores } from '@/utils/mobx'
 import { getTrees } from '../../method'
-import { matchGoodValue } from '@/utils/tool'
+// import { matchGoodValue } from '@/utils/tool'
 
 function index({ initialValues }) {
   const {
-    categoryId,
+    categoryCodes,
     // plusMaterialType,
     goodsPrice,
     processTypeList,
@@ -21,7 +21,7 @@ function index({ initialValues }) {
   const {
     goodsNum = [],
     plusMaterialType = [],
-    inquiryProcessType = []
+    processType = []
   } = toJS(dictionary) //字典
 
   const [productCategoric, setProductCategoric] = useState([]) //商品品类
@@ -35,8 +35,10 @@ function index({ initialValues }) {
   useEffect(() => {
     api()
     //商品品类
-    if (categoryId) {
-      setProductCategoric(matchGoodValue(toJS(productCategoryList), categoryId))
+    if (categoryCodes) {
+      setProductCategoric(
+        getTrees(categoryCodes, toJS(productCategoryList), 'code', 'name')
+      )
     }
     //发单量
     if (initialValues.goodsNum) {
@@ -46,17 +48,21 @@ function index({ initialValues }) {
     }
     //面料
     if (plusMaterialType) {
-      let res = plusMaterialType.filter(
-        item => item.value === initialValues.plusMaterialType
-      )[0]
-      if (res) {
-        setFabric(res.label)
+      if (initialValues.materialTypeList) {
+        setFabric(
+          getTrees(
+            initialValues.materialTypeList,
+            plusMaterialType,
+            'value',
+            'label'
+          )
+        )
       }
     }
     //加工类型
     if (processTypeList) {
       setOrderReceiving(
-        getTrees(processTypeList, inquiryProcessType, 'value', 'label')
+        getTrees(processTypeList, processType, 'value', 'label')
       )
     }
   }, [initialValues])
@@ -65,10 +71,15 @@ function index({ initialValues }) {
     <div>
       <Row>
         <Col span={12}>
-          <Tooltip placement="top" title={productCategoric}>
+          <Tooltip
+            placement="top"
+            title={productCategoric ? productCategoric.join('、') : '暂无'}
+          >
             <div className={styles.title}>
               商品品类:
-              <span className={styles.content}>{productCategoric}</span>
+              <span className={styles.content}>
+                {productCategoric ? productCategoric.join('、') : '暂无'}
+              </span>
             </div>
           </Tooltip>
         </Col>
@@ -80,10 +91,14 @@ function index({ initialValues }) {
       </Row>
       <Row>
         <Col span={12}>
-          <div className={styles.title}>
-            面料类型:
-            <span className={styles.content}>{fabric ? fabric : '暂无'}</span>
-          </div>
+          <Tooltip placement="top" title={fabric ? fabric.join('、') : '暂无'}>
+            <div className={styles.title}>
+              面料类型:
+              <span className={styles.content}>
+                {fabric ? fabric.join('、') : '暂无'}
+              </span>
+            </div>
+          </Tooltip>
         </Col>
         <Col span={12}>
           <div className={styles.title}>
@@ -117,7 +132,8 @@ function index({ initialValues }) {
         </Col>
       </Row>
       <div className={styles.titles}>
-        款图:
+        <span className={styles.payment}> 款图:</span>
+
         <div className={styles.content}>
           {stylePicture !== undefined && stylePicture.length > 0 ? (
             stylePicture.map((v, i) => (

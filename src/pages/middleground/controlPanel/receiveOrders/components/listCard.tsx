@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Icon } from '@/components'
-import { Popover, Button, Modal } from 'antd'
+import { Popover, Button, Modal, Tooltip } from 'antd'
 import styles from './listCard.module.less'
-import { observer, useStores } from '@/utils/mobx'
+import { observer, toJS, useStores } from '@/utils/mobx'
 import classNames from 'classnames'
 import moment from 'moment'
-import { dateDiff, findTreeTarget } from '@/utils/tool'
-import { isEmpty } from 'lodash'
+import { dateDiff } from '@/utils/tool'
 import { useHistory } from 'react-router'
+import { getTrees } from './method'
 
 const STICK_TIPS = new Map()
 STICK_TIPS.set(1, '取消置顶')
@@ -38,10 +38,10 @@ const ListCard = props => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
 
-  const { inquiryProcessType, goodsNum } = dictionary
+  const { processType, goodsNum } = dictionary
   const { productCategoryList } = factoryStore
+  const newList = toJS(productCategoryList)
   const { changeOrderStick, factoryDelOrder } = searchOrderStore
-
   const { data, getData, refuse } = props
   const { stickType = 0 } = data
   console.log('数据', data.enterpriseName) //判断条件
@@ -56,7 +56,7 @@ const ListCard = props => {
     },
     {
       label: '商品品类:',
-      field: 'factoryCategoryIds',
+      field: 'categoryCodes ',
       value: '针织服装（薄料）'
     },
     {
@@ -99,23 +99,24 @@ const ListCard = props => {
   const getTarget = (field, value) => {
     if (field === 'processTypeValues') {
       return value.reduce((prev, item, idx) => {
-        const target = inquiryProcessType.find(i => i.value === item)?.label
+        const target = processType.find(i => i.value === item)?.label
         return prev + target + (idx === value.length - 1 ? '' : '、')
       }, '')
     }
     if (field === 'goodsNum') {
       return goodsNum.find(item => item.value === value)?.label
     }
-    if (field === 'factoryCategoryIds') {
-      return value.reduce((prev, item, idx) => {
-        const target = findTreeTarget([item], productCategoryList) || {}
+    if (field === 'categoryCodes ') {
+      console.log(field)
+      console.log(data.categoryCodes)
+      console.log(newList)
 
-        return (
-          prev +
-          (!isEmpty(target) ? target.name : '') +
-          (idx === value.length - 1 || !target.name ? '' : '、')
-        )
-      }, '')
+      const arr = getTrees(data.categoryCodes, newList, 'code', 'name')
+      if (arr) {
+        return arr.join('、')
+      } else {
+        return '--'
+      }
     }
   }
 
@@ -295,9 +296,14 @@ const ListCard = props => {
               <div key={item.field} className={styles.infoItem}>
                 <span className={styles.infoLabel}>{item.label}</span>
                 {data.enterpriseName !== null ? (
-                  <span className={styles.infoValue}>
-                    {getTarget(item.field, data[item.field])}
-                  </span>
+                  <Tooltip
+                    placement="top"
+                    title={getTarget(item.field, data[item.field])}
+                  >
+                    <span className={styles.infoValue}>
+                      {getTarget(item.field, data[item.field])}
+                    </span>
+                  </Tooltip>
                 ) : (
                   <span className={styles.infoValue}>---</span>
                 )}

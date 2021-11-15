@@ -3,7 +3,7 @@ import { Col, Row } from 'antd'
 import styles from './index.module.less'
 import { observer, toJS, useStores } from '@/utils/mobx'
 import { getTrees } from '../../method'
-
+import { isEmpty } from 'lodash'
 function index({ initialValues, enterpriseType }) {
   {
     /* 0 加工厂 1 发单商   只有加工厂才能看到form */
@@ -18,7 +18,13 @@ function index({ initialValues, enterpriseType }) {
 
   useEffect(() => {
     // 地区要求的获取
-    if (initialValues.location) {
+    if (initialValues.location && !isEmpty(toJS(allArea))) {
+      console.log('地址', initialValues.location)
+      console.log('地图', toJS(allArea))
+      console.log(
+        getTrees(initialValues.location, toJS(allArea), 'value', 'label')
+      )
+
       const res = getTrees(
         initialValues.location,
         toJS(allArea),
@@ -49,7 +55,7 @@ function index({ initialValues, enterpriseType }) {
         <Row>
           <Col span={12}>
             <div className={styles.title}>
-              发单订单联系人:
+              订单联系人:
               <span className={styles.contents}>{contactPerson}</span>
             </div>
           </Col>

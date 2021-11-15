@@ -1,68 +1,98 @@
 import React, { useState, useEffect } from 'react'
-import { Badge } from 'antd'
+import { Badge, Tooltip } from 'antd'
 import { filter, find, isEmpty } from 'lodash'
+import { toJS, useStores } from '@/utils/mobx'
+import { getTrees } from './method'
 import classNames from 'classnames'
 import axios from '@/utils/axios'
 import {
-  getTypeOptions,
-  getProductMode,
-  checkValue,
-  getProductClassMap
+  // getProductMode,
+  checkValue
 } from '@/utils/tool'
 import { Icon } from '@/components'
 import HeaderLine from '../headerLine'
 import styles from './index.module.less'
 
 const OrderInfo = props => {
+  const { commonStore, demandListStore } = useStores()
+  const { gradingOfProducts } = demandListStore
+
+  const { dictionary } = commonStore
+  const { productType = [], processType = [] } = toJS(dictionary)
   const { factoryId } = props
-  const productClassOptions = getProductClassMap()
-  const productionModeOptions = getProductMode()
+  // const productClassOptions = getProductClassMap()
+  // const productionModeOptions = getProductMode()
   const [currentFactory, setCurrentFactory] = useState<any>({})
   const [mainList, setMainList] = useState<any>([])
   const [orderType, setOrderType] = useState<any>([])
   const [grade, setGrade] = useState<string>('--')
+  const [treeData, setTreeData] = useState<any>([])
+  const [production, setProduction] = useState<any>([])
+
+  useEffect(() => {
+    getOrderReceiving()
+  }, [treeData])
+  useEffect(() => {
+    gradeS()
+  }, [])
+  const gradeS = async () => {
+    let res = await gradingOfProducts() //订单档次
+    if (res.code === 200) {
+      setTreeData(res.data)
+    }
+  }
 
   const getOrderReceiving = () => {
-    const typeOptions = getTypeOptions()
     axios
       .get('/api/factory/info/get-detail-receive-order-desc', {
         factoryId
       })
       .then(response => {
         const { success, data } = response
+
         if (success) {
-          const { factoryCategoryList, factoryProcessTypeList, clothesGrade } =
-            data
+          const {
+            factoryCategoryList,
+            factoryProcessTypeList,
+            productGradeValues
+          } = data
           setCurrentFactory({ ...data })
           if (factoryCategoryList) {
             const newLabel = factoryCategoryList.map(item => `${item.name}`)
             setMainList([...newLabel])
           }
           if (factoryProcessTypeList) {
-            const newOrderType = filter(typeOptions, function (o) {
+            const newOrderType = filter(processType, function (o) {
               return find(factoryProcessTypeList, function (item) {
                 return item.processType === o.value
               })
             })
+            console.log('加工类型newOrderType', newOrderType)
+
             setOrderType([...newOrderType])
           }
           // 产品档次
-          if (clothesGrade) {
-            const newGrade = productClassOptions.find(
-              item => item.value == clothesGrade
+          if (treeData.length > 0) {
+            setGrade(
+              getTrees(productGradeValues, treeData, 'value', 'label').join(
+                '、'
+              )
             )
-            if (newGrade) {
-              const gradeText = newGrade.label.split('').join('、')
-              setGrade(gradeText)
-            }
+          }
+          // 生产方式
+          if (data.productTypeValues) {
+            setProduction(
+              getTrees(
+                data.productTypeValues,
+                productType,
+                'value',
+                'label'
+              ).join('、')
+            )
           }
         }
       })
   }
-
-  useEffect(() => {
-    getOrderReceiving()
-  }, [])
 
   return (
     <div className={styles.companiesIntroduce}>
@@ -103,7 +133,11 @@ const OrderInfo = props => {
                   text="产品档次"
                   className={styles.classesSubtitle}
                 />
-                <span className={styles.strongText}>{grade}</span>
+                <Tooltip placement="top" title={grade}>
+                  <div className={styles.hidden}>
+                    <span className={styles.strongText}>{grade}</span>
+                  </div>
+                </Tooltip>
               </li>
             </ul>
           </div>
@@ -113,15 +147,7 @@ const OrderInfo = props => {
             <Icon type="jack-scfs" className={styles.icon} />
             <span className={styles.subTitle}>生产方式</span>
           </div>
-          <div className={styles.right}>
-            {productionModeOptions.find(
-              item => item.value == currentFactory.productionMode
-            )
-              ? productionModeOptions.find(
-                  item => item.value == currentFactory.productionMode
-                ).label
-              : '--'}
-          </div>
+          <div className={styles.right}>{production ? production : '--'}</div>
         </li>
         <li>
           <div className={styles.left}>

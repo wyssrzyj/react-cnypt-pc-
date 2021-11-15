@@ -220,12 +220,14 @@ const EnterpriseInfo = () => {
         .then(async response => {
           const { success, msg, data = {} } = response
           if (success) {
-            // message.success('请完善企业证件认证，平台将在1~3个工作日与您取得联系，请注意接听来电。')
             message.success(msg)
-            userInfo() //更新企业名称、企业id
+            const res = await userInfo() //更新企业名称、企业id
+            console.log(
+              '🚀 ~ file: index.tsx ~ line 277 ~ validateFields ~ user',
+              res.data
+            )
             localStorage.setItem('enterpriseInfo', JSON.stringify(data))
-
-            !enterpriseId && (await dealRefresh())
+            !res.data.enterpriseId && (await dealRefresh())
 
             setTimeout(() => {
               window.location.reload()
@@ -259,6 +261,9 @@ const EnterpriseInfo = () => {
             clothesGrade,
             enterpriseType
           } = data
+          data.productTypeValues = data.productTypeValues || []
+          data.productGradeValues = data.productGradeValues || []
+
           const keys = Reflect.ownKeys(data)
           if (keys.includes('roleCodes')) {
             data['roleCodes'] = data['roleCodes'] || []

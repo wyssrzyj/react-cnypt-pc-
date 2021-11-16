@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Col, Row, Input } from 'antd'
-import { toJS, useStores } from '@/utils/mobx'
+import { toJS, useStores, observer } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 import Category from './category'
 import styles from './index.module.less'
@@ -97,17 +97,17 @@ function Basics() {
       span: 12
     }
   ]
-  let map = new Map()
+  // let map = new Map()
 
-  const fangfa = item => {
-    map.set(1, [
-      {
-        pattern: /^([1-9]{1})(\d{1}(\.\d{1,2})?)$/,
-        message: '请输入正确的数量(小数点最多输入两位)'
-      }
-    ])
-    map.set(0, [{ required: item.required, message: item.message }])
-  }
+  // const fangfa = item => {
+  //   map.set(1, [
+  //     {
+  //       pattern: /^([0-9]+[\d]*(.[0-9]{1,2})?)$/,
+  //       message: '请输入正确的数量(小数点最多输入两位)'
+  //     }
+  //   ])
+  //   map.set(0, [{ required: item.required, message: item.message }])
+  // }
 
   return (
     <div>
@@ -115,7 +115,7 @@ function Basics() {
       <div className={styles.orderCon}>
         <Row>
           {orderConfigs.map(item => {
-            fangfa(item)
+            // fangfa(item)
             //orderConfigs form的数据
             const data: any = {} //定义一个空对象
             keys.forEach(i => {
@@ -130,7 +130,7 @@ function Basics() {
                 <FormItem
                   name={item.field}
                   label={item.label}
-                  rules={map.get(item.cesar)}
+                  // rules={map.get(item.cesar)}
                   {...layout}
                 >
                   <FormNode {...data}></FormNode>
@@ -161,4 +161,4 @@ function Basics() {
   )
 }
 
-export default Basics
+export default observer(Basics)

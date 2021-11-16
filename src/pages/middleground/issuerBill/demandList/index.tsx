@@ -28,7 +28,10 @@ const DemandList = () => {
   const { demandListStore, factoryStore, commonStore } = useStores()
   const { productCategoryList } = factoryStore
   const { dictionary } = commonStore
-  const { processType = [] } = toJS(dictionary)
+  const {
+    // processType = [],
+    inquiryProcessType = []
+  } = toJS(dictionary)
   const treeData = productCategoryList //商品品类
 
   const { listData, deleteDemandDoc, toppingFunction, endInterfaceInAdvance } =
@@ -68,7 +71,7 @@ const DemandList = () => {
   //   return sum
   // }
   const handle = v => {
-    return getTrees(v, processType, 'value', 'label')
+    return getTrees(v, inquiryProcessType, 'value', 'label')
   }
 
   const listsAPI = async () => {

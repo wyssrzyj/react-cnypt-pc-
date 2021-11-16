@@ -32,8 +32,9 @@ const OtherCard = props => {
   const { inquiryList } = searchOrderStore
   const {
     goodsNum = [],
-    processType = [],
-    factoryEffectiveLocation = []
+    // processType = [],
+    factoryEffectiveLocation = [],
+    inquiryProcessType = []
   } = toJS(dictionary)
 
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
@@ -67,7 +68,7 @@ const OtherCard = props => {
             {
               label: '加工类型',
               value: matchArrayValue(
-                processType,
+                inquiryProcessType,
                 record.processTypeValues,
                 '--'
               )

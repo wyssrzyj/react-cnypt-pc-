@@ -39,9 +39,9 @@ function Basics() {
   const {
     plusMaterialType = [],
     productType = [],
-    processType = []
+    // processType = [],
+    inquiryProcessType = []
   } = toJS(dictionary)
-  console.log(processType)
 
   const orderConfigs = [
     {
@@ -49,8 +49,8 @@ function Basics() {
       required: true,
       message: '请选择面料类型',
       placeholder: '请选择面料类型',
-      type: 'multipleSelect',
-      field: 'materialTypeList',
+      type: 'select',
+      field: 'plusMaterialType',
       span: 12,
       options: plusMaterialType,
       cesar: 0
@@ -73,7 +73,7 @@ function Basics() {
       mode: 'multiple',
       field: 'processTypeList',
       span: 12,
-      options: processType,
+      options: inquiryProcessType,
       cesar: 0
     },
     {
@@ -97,17 +97,17 @@ function Basics() {
       span: 12
     }
   ]
-  // let map = new Map()
+  let map = new Map()
 
-  // const fangfa = item => {
-  //   map.set(1, [
-  //     {
-  //       pattern: /^([0-9]+[\d]*(.[0-9]{1,2})?)$/,
-  //       message: '请输入正确的数量(小数点最多输入两位)'
-  //     }
-  //   ])
-  //   map.set(0, [{ required: item.required, message: item.message }])
-  // }
+  const fangfa = item => {
+    // map.set(1, [
+    //   {
+    //     pattern: /^([0-9]+[\d]*(.[0-9]{1,2})?)$/,
+    //     message: '请输入正确的数量(小数点最多输入两位)'
+    //   }
+    // ])
+    map.set(0, [{ required: item.required, message: item.message }])
+  }
 
   return (
     <div>
@@ -115,7 +115,7 @@ function Basics() {
       <div className={styles.orderCon}>
         <Row>
           {orderConfigs.map(item => {
-            // fangfa(item)
+            fangfa(item)
             //orderConfigs form的数据
             const data: any = {} //定义一个空对象
             keys.forEach(i => {
@@ -130,7 +130,7 @@ function Basics() {
                 <FormItem
                   name={item.field}
                   label={item.label}
-                  // rules={map.get(item.cesar)}
+                  rules={map.get(item.cesar)}
                   {...layout}
                 >
                   <FormNode {...data}></FormNode>

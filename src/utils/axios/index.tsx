@@ -35,7 +35,7 @@ customAxios.interceptors.response.use(
     const { code } = data
     const { expire } = getCurrentUser()
     const flag = expire - Date.now() < 1000
-    const noTokenList = ['/user/login']
+    const noTokenList = ['/user/login', '/user/register']
     const pathFlag = !noTokenList.includes(location.pathname)
 
     if (pathFlag && (flag || code === 40101)) {

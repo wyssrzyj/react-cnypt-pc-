@@ -144,8 +144,8 @@ const MultipleChoice = ({
                 src={data.pictureUrl ? data.pictureUrl : Simg}
                 alt=""
               />
-              <div>
-                <p className={styles.name}>{data.name}</p>
+              <div className={styles.infoBox}>
+                <div className={styles.name}>{data.name}</div>
                 <Tooltip placement="top" title={data.processing.join('、')}>
                   <div className={styles.hidden}>
                     加工类型：
@@ -158,7 +158,9 @@ const MultipleChoice = ({
                     {data.categoryIdList.join('、')}
                   </div>
                 </Tooltip>
-                <p className={styles.ddl}>订单量：{dingdong(data.goodsNum)}</p>
+                <div className={styles.ddl}>
+                  订单量：{dingdong(data.goodsNum)}
+                </div>
               </div>
             </div>
           </Col>

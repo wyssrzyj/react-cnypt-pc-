@@ -238,10 +238,18 @@ export const getProductClassMap = () => {
     { value: 1, label: '低' },
     { value: 2, label: '中' },
     { value: 3, label: '中低' },
+    { value: 3, label: '低中' },
     { value: 4, label: '高' },
     { value: 5, label: '高低' },
+    { value: 5, label: '低高' },
     { value: 6, label: '高中' },
-    { value: 7, label: '高中低' }
+    { value: 6, label: '中高' },
+    { value: 7, label: '高中低' },
+    { value: 7, label: '高低中' },
+    { value: 7, label: '低高中' },
+    { value: 7, label: '低中高' },
+    { value: 7, label: '中低高' },
+    { value: 7, label: '中高低' }
   ]
 }
 

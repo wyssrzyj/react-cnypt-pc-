@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Row, Col, Pagination, Empty } from 'antd'
 import { isEmpty } from 'lodash'
 import moment from 'moment'
-import { toJS } from 'mobx'
+// import { toJS } from 'mobx'
 import { useStores, observer } from '@/utils/mobx'
 import { matchValue, matchGoodValue, matchArrayValue } from '@/utils/tool'
 import { SimpleSearch, FilterList } from '@/components'
@@ -13,13 +13,14 @@ const SearchOrder = () => {
   const { searchOrderStore, commonStore } = useStores()
   const { inquiryList, orderName } = searchOrderStore
   const pageSize = 12
-  const { dictionary } = commonStore
+  const { dictionary = {} } = commonStore
 
   const {
     goodsNum = [],
-    processType = [],
+    // processType = [],
+    inquiryProcessType = [],
     factoryEffectiveLocation = []
-  } = toJS(dictionary)
+  } = dictionary
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
   const productCategoryList = JSON.parse(
     localStorage.getItem('productCategoryList')
@@ -98,7 +99,7 @@ const SearchOrder = () => {
             {
               label: '加工类型',
               value: matchArrayValue(
-                processType,
+                inquiryProcessType,
                 record.processTypeValues,
                 '--'
               )

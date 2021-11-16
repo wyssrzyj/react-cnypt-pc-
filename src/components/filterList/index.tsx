@@ -50,13 +50,16 @@ const FilterList = props => {
   const { onFilterChange } = props
   const { factoryStore, commonStore } = useStores()
   const { dictionary, allArea } = commonStore
+
+  console.log(toJS(dictionary), 'toJS(dictionary)')
   const {
     prodType = [],
     factoryEffectiveLocation = [],
-    processType = [],
+    // processType = [],
     plusMaterialType = [],
-    goodsNum = []
-  } = toJS(dictionary)
+    goodsNum = [],
+    inquiryProcessType
+  } = dictionary
   const { productCategoryList } = factoryStore
   // const [factoryType, setFactoryType] = useState('all')
   const [modalVisible, setModalVisible] = useState<boolean>(false)
@@ -78,12 +81,17 @@ const FilterList = props => {
   const [moreParams, setMoreParams] = useState<any>({})
   const [setUpTime, setSetUpTime] = useState<string>(null)
   const [updateTime, setUpdateTime] = useState<string>(null)
+  const [newTypeList, setNewTypeList] = useState<any[]>([])
 
-  const newTypeList = ['/factory-search', '/producer-search'].includes(
-    location.pathname
-  )
-    ? prodType
-    : processType
+  useEffect(() => {
+    const typeList = ['/factory-search', '/producer-search'].includes(
+      location.pathname
+    )
+      ? prodType
+      : inquiryProcessType
+    setNewTypeList(typeList || [])
+  }, [])
+
   const newTime =
     location.pathname === '/factory-search' ? '更新时间' : '发布时间'
 

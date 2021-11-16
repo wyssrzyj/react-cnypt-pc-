@@ -106,6 +106,7 @@ const EnterpriseInfo = () => {
   const [contactsId, setContactsId] = useState<string>(undefined)
   const [oldData, setOldData] = useState<any>({})
   const [enterpriseType, setEnterpriseType] = useState<any>()
+  const [loading, setLoading] = useState<boolean>(false)
 
   const uploadButton = (
     <div>
@@ -141,12 +142,8 @@ const EnterpriseInfo = () => {
   }
 
   const confirmSubmit = () => {
+    if (loading) return
     validateFields().then(values => {
-      console.log(
-        '🚀 ~ file: index.tsx ~ line 137 ~ validateFields ~ values',
-        values
-      )
-
       const {
         area = [],
         businessAddress = {},
@@ -221,9 +218,7 @@ const EnterpriseInfo = () => {
           ...item
         }))
       }
-      if (+enterpriseType === 1) {
-      }
-
+      setLoading(true)
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
         .then(async response => {
@@ -242,7 +237,11 @@ const EnterpriseInfo = () => {
             message.error(msg)
           }
         })
+        .finally(() => {
+          setLoading(false)
+        })
     })
+    setLoading(false)
   }
 
   const getEnterpriseInfo = () => {

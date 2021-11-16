@@ -21,7 +21,8 @@ function index({ initialValues }) {
   const {
     goodsNum = [],
     plusMaterialType = [],
-    processType = []
+    // processType = [],
+    inquiryProcessType = []
   } = toJS(dictionary) //字典
 
   const [productCategoric, setProductCategoric] = useState([]) //商品品类
@@ -62,7 +63,7 @@ function index({ initialValues }) {
     //加工类型
     if (processTypeList) {
       setOrderReceiving(
-        getTrees(processTypeList, processType, 'value', 'label')
+        getTrees(processTypeList, inquiryProcessType, 'value', 'label')
       )
     }
   }, [initialValues])

@@ -185,9 +185,13 @@ const MultipleChoice = ({
                   {data.address ? data.address : '暂无'}
                 </div>
               </div>
-              <p>人数：{data.staffNumber}人</p>
-              <p>联系方式: {data.contactsMobile}</p>
-              <p>电子邮箱: {data.contactsEmail}</p>
+              <p>人数：{data.staffNumber ? data.staffNumber : '0'}人</p>
+              <p>
+                联系方式: {data.contactsMobile ? data.contactsMobile : '暂无'}
+              </p>
+              <p>
+                电子邮箱: {data.contactsEmail ? data.contactsEmail : '暂无'}
+              </p>
               <div className={styles.hidden}>
                 加工类型：
                 <Tooltip

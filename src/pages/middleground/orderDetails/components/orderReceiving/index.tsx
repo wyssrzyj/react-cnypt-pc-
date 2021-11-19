@@ -33,6 +33,8 @@ function index({ stated }) {
     ;(async () => {
       if (!supplierInquiryId) return
       const res = await getInquiryQuote({ supplierInquiryId })
+      console.log('可疑', res)
+
       setInitialValues(res)
       resetFields()
     })()
@@ -42,18 +44,24 @@ function index({ stated }) {
     try {
       if (flag) {
         const values = await validateFields()
-
+        console.log(id)
         const res = await orderQuantity({
           goodsNum: values.receiveGoodsNum,
           id: id
         })
         if (res.code === 200) {
+          console.log('这id到底从哪来的1', supplierInquiryId)
+
           const submitRes = await submitRequisition({
             ...values,
             purchaserInquiryId: id,
             supplierInquiryId: supplierInquiryId,
             status: 2
           })
+          console.log('这id到底从哪来的2', supplierInquiryId)
+
+          console.log('判断的值', submitRes)
+
           if (submitRes.code === 200) {
             push({
               pathname: '/control-panel/orderManagement/receiveOrder'

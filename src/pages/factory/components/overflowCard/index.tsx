@@ -17,6 +17,7 @@ import styles from './index.module.less'
 import './style.less'
 import { getCurrentUser, getUserInfo } from '@/utils/tool'
 import { useHistory } from 'react-router'
+import { getTrees } from './method'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
@@ -55,6 +56,9 @@ const RequestCard = observer(props => {
 })
 
 const OverflowCard = props => {
+  const { factoryStore } = useStores()
+  const { productCategoryList } = factoryStore
+  const newList = toJS(productCategoryList)
   const {
     factoryId,
     factoryName,
@@ -66,6 +70,12 @@ const OverflowCard = props => {
     factoryTagList = [],
     enterpriseId
   } = props
+  console.log(newList)
+  console.log('-------------------', factoryCategoryList)
+
+  if (factoryCategoryList) {
+    console.log()
+  }
 
   const currentUserInfo = getUserInfo()
   const currentUser = getCurrentUser()
@@ -175,7 +185,7 @@ const OverflowCard = props => {
                 </span>
                 <span>
                   {isArray(factoryCategoryList)
-                    ? factoryCategoryList.join('、')
+                    ? getTrees(factoryCategoryList, newList, 'code', 'name')
                     : '待完善'}
                 </span>
               </li>

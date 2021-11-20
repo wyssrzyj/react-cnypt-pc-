@@ -17,7 +17,9 @@ const MultipleChoice = ({
   reOrder,
   demandSheetDetails
 }) => {
-  const { commonStore } = useStores()
+  const { commonStore, factoryStore } = useStores()
+  const { productCategoryList } = factoryStore
+
   const { dictionary } = commonStore
   const { processType = [] } = toJS(dictionary)
 
@@ -223,12 +225,22 @@ const MultipleChoice = ({
                   placement="top"
                   title={
                     data.factoryCategoryList
-                      ? data.factoryCategoryList.join('、')
+                      ? getTrees(
+                          data.factoryCategoryList,
+                          toJS(productCategoryList),
+                          'code',
+                          'name'
+                        ).join('、')
                       : '暂无'
                   }
                 >
                   {data.factoryCategoryList
-                    ? data.factoryCategoryList.join('、')
+                    ? getTrees(
+                        data.factoryCategoryList,
+                        toJS(productCategoryList),
+                        'code',
+                        'name'
+                      ).join('、')
                     : '暂无'}
                 </Tooltip>
               </div>

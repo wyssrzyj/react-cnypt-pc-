@@ -165,7 +165,7 @@ function DemandList() {
   }
   // 删除
   const deleteMethod = async id => {
-    const res = await deleteIssuer({ supplierInquiryId: id })
+    const res = await deleteIssuer({ purchaseQuoteId: id })
     if (res.code === 200) {
       InterfaceData()
     }

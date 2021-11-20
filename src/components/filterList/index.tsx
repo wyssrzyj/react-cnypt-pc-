@@ -203,8 +203,8 @@ const FilterList = props => {
       }
     }
     onFilterChange({
-      factoryCreateTimeStart: start,
-      factoryCreateTimeEnd: end
+      establishedTimeStart: start,
+      establishedTimeEnd: end
     })
   }
 

@@ -34,7 +34,7 @@ const SearchBar = props => {
     setMapMove,
     mapSearchFactorys
   } = factoryStore
-  const { prodType = [], factoryEffectiveLocation = [] } = toJS(dictionary)
+  const { processType = [], factoryEffectiveLocation = [] } = toJS(dictionary)
 
   const history = useHistory()
 
@@ -171,11 +171,11 @@ const SearchBar = props => {
     const newParams = cloneDeep(params)
     // 成立时间处理
     if (type === 'createTime') {
-      //  factoryCreateTimeEnd factoryCreateTimeStart
+      //  establishedTimeEndfactoryCreateTimeStart
       let start, end
       if (!value) {
-        newParams.factoryCreateTimeStart = null
-        newParams.factoryCreateTimeEnd = null
+        newParams.establishedTimeStart = null
+        newParams.establishedTimeEnd = null
       }
       if (value) {
         const newValue = value.split(',')
@@ -186,8 +186,8 @@ const SearchBar = props => {
           start = null
           end = moment().add(-Number(newValue[0]), 'y').format('x')
         }
-        newParams.factoryCreateTimeStart = start
-        newParams.factoryCreateTimeEnd = end
+        newParams.establishedTimeStart = start
+        newParams.establishedTimeEnd = end
       }
     }
     // 更新时间处理
@@ -288,8 +288,8 @@ const SearchBar = props => {
           className={styles.prodTypeSelect}
           onChange={value => valueChange(value, 'prodType')}
         >
-          {Array.isArray(prodType) &&
-            prodType.map(item => {
+          {Array.isArray(processType) &&
+            processType.map(item => {
               return (
                 <Option value={item.value} key={item.value}>
                   {item.label}

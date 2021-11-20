@@ -4,6 +4,7 @@ import styles from './index.module.less'
 import { Icon } from '@/components' //路径
 import { useHistory } from 'react-router-dom'
 import { toJS, useStores, observer } from '@/utils/mobx'
+import { getTrees } from '../../method'
 
 const MultipleChoice = ({
   data,
@@ -14,13 +15,19 @@ const MultipleChoice = ({
   DemandOrderDetail
 }) => {
   const { push } = useHistory()
-  const { commonStore } = useStores()
+  const { commonStore, factoryStore } = useStores()
+  const { productCategoryList } = factoryStore
 
   const { dictionary } = commonStore
 
   const { goodsNum = [] } = toJS(dictionary)
 
   const { id, stickType } = data
+  console.log(data.categoryCodes) //品类
+  console.log(toJS(productCategoryList))
+  console.log(
+    getTrees(data.categoryCodes, toJS(productCategoryList), 'code', 'name')
+  )
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
@@ -158,10 +165,29 @@ const MultipleChoice = ({
                     {data.processing.join('、')}
                   </div>
                 </Tooltip>
-                <Tooltip placement="top" title={data.categoryIdList.join('、')}>
+                <Tooltip
+                  placement="top"
+                  title={
+                    data.categoryCodes
+                      ? getTrees(
+                          data.categoryCodes,
+                          toJS(productCategoryList),
+                          'code',
+                          'name'
+                        ).join('、')
+                      : '暂无'
+                  }
+                >
                   <div className={styles.category}>
                     商品品类：
-                    {data.categoryIdList.join('、')}
+                    {data.categoryCodes
+                      ? getTrees(
+                          data.categoryCodes,
+                          toJS(productCategoryList),
+                          'code',
+                          'name'
+                        ).join('、')
+                      : '暂无'}
                   </div>
                 </Tooltip>
                 <p className={styles.ddl}>订单量：{dingdong(data.goodsNum)}</p>

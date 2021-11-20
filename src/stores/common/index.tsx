@@ -13,7 +13,7 @@ export default class CommonStore {
   @observable dictionary: any = {}
 
   @observable allArea = []
-  // 获取全部字典.
+  // 获取全部字典
   @action allDictionary = async params => {
     try {
       const res: ResponseProps = await axios.post(

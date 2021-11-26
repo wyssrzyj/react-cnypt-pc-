@@ -29,7 +29,7 @@ STATUS_TEXT.set(1, '新需求')
 STATUS_TEXT.set(2, '待反馈 ')
 STATUS_TEXT.set(3, '已确认')
 STATUS_TEXT.set(-1, '已取消')
-STATUS_TEXT.set(-2, '已谢绝')
+STATUS_TEXT.set(-2, '被谢绝')
 
 const ListCard = props => {
   const history = useHistory()

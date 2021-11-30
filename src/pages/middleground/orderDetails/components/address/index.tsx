@@ -41,12 +41,12 @@ function index({ initialValues, enterpriseType }) {
       <Row>
         <Col span={12}>
           <div className={styles.title}>
-            收货地址:
-            <span className={styles.content}>
+            <div className={styles.textLeft}>收货地址:</div>
+            <div className={styles.text}>
               {treeData[0] !== undefined
                 ? ` ${treeData.join('-')}-${address}`
                 : '暂无'}
-            </span>
+            </div>
           </div>
         </Col>
       </Row>

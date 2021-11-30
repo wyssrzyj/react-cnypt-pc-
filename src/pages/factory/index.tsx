@@ -96,6 +96,8 @@ const Factory = () => {
       ...factoryParams
     }
     const data = (await getFactoryPageList(params)) || {}
+    console.log(data)
+
     if (isEmpty(data)) {
       setTotal(0)
       setFactoryArray([])

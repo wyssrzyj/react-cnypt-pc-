@@ -30,7 +30,7 @@ function DemandList() {
   const { search, state } = location
   const [lists, setLists] = useState([]) //数据
   const [dataLength, setDataLength] = useState(0) //数据总数量
-  const [pageNumber, setPageNumber] = useState(1) //路由数
+  const [pageNumber, setPageNumber] = useState(1) //分页
   const [query, setQuery] = useState({}) //查询
 
   const searchURL = new URLSearchParams(search)
@@ -42,38 +42,35 @@ function DemandList() {
   })
   useEffect(() => {
     if (state !== undefined) {
-      console.log('有', state)
       Interface()
     } else {
-      console.log('没有', state)
       InterfaceData()
     }
   }, [params])
-  console.log('测试路由数据是否一直有', state)
 
   const Interface = async () => {
-    console.log('有值初始化我调用了')
+    console.log('跳转有数据')
+    console.log(state)
+
     if (state !== undefined) {
       let sum = {
         pageNum: pageNumber,
         pageSize: defaultPageSize,
         status: initialKey,
-        name: state['name'],
         purchaserInquiryId: state['id']
       }
       setQuery(sum)
-      const res = await applicationList(sum)
-      console.log('路由有数据', res)
 
+      const res = await applicationList(sum)
       if (res.code === 200) {
         setDataLength(res.data.total)
         if (res.data.records) {
+          console.log(res.data.records)
           setLists(res.data.records)
         }
       }
     } else {
       const res = await applicationList(params)
-      console.log('没有数据', res)
 
       if (res.code === 200) {
         setDataLength(res.data.total)
@@ -85,8 +82,6 @@ function DemandList() {
   }
 
   const InterfaceData = async () => {
-    console.log('没值我调用了')
-
     const res = await applicationList(params)
     if (res.code === 200) {
       setDataLength(res.data.total)
@@ -182,7 +177,7 @@ function DemandList() {
         <Tab routing={routingData} />
         <Query state={state} query={queryMethod} />
         <Sort callback={sortCallback} />
-        {dataLength > 0 ? (
+        {lists.length > 0 ? (
           <>
             {lists.map((item, index) => {
               return (

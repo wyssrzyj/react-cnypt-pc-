@@ -43,7 +43,7 @@ const SearchBar = props => {
   const [factoryName, setFactoryName] = useState()
   // 默认杭州
   const [params, setParams] = useState<any>({
-    cityIds: ['935'],
+    cityIds: ['330100'],
     pageNum: 1,
     pageSize: 9999
   })
@@ -258,7 +258,7 @@ const SearchBar = props => {
 
       <div className={styles.searchContent}>
         <TreeSelect
-          defaultValue={'935'}
+          defaultValue={'330100'}
           className={styles.searchBarTree}
           dropdownClassName={styles.searchBarTreeDrop}
           dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}

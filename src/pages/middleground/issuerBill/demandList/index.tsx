@@ -73,6 +73,7 @@ const DemandList = () => {
 
   const listsAPI = async () => {
     const res = await listData(params) //待会设置页码之类的
+    console.log(res)
 
     setNumberLength(res.total)
 
@@ -184,8 +185,6 @@ const DemandList = () => {
   }
   // 结束订单
   const deleteRecord = async value => {
-    console.log('删除需求单', { id: value })
-
     const res = await deleteDemandDoc({ id: value })
     if (res.code === 200) {
       listsAPI()

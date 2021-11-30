@@ -14,16 +14,16 @@ import { useHistory } from 'react-router'
 const { Option } = Select
 
 const areaCategory = [
-  { id: '1966', name: '广州市' },
-  { id: '1989', name: '深圳市' },
-  { id: '2092', name: '东莞市' },
-  { id: '3', name: '北京市' },
-  { id: '803', name: '上海市' },
-  { id: '935', name: '杭州市' },
-  { id: '949', name: '宁波市' },
-  { id: '994', name: '金华市' },
-  { id: '961', name: '温州市' },
-  { id: '822', name: '南京市' }
+  { id: '440100', name: '广州市' },
+  { id: '440300', name: '深圳市' },
+  { id: '441900', name: '东莞市' },
+  { id: '110100', name: '北京市' },
+  { id: '310100', name: '上海市' },
+  { id: '330100', name: '杭州市' },
+  { id: '330200', name: '宁波市' },
+  { id: '330700', name: '金华市' },
+  { id: '330300', name: '温州市' },
+  { id: '320100', name: '南京市' }
 ]
 
 export const setUpTimeMap = [

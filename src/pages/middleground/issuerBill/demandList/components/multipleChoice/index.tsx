@@ -23,12 +23,6 @@ const MultipleChoice = ({
   const { goodsNum = [] } = toJS(dictionary)
 
   const { id, stickType } = data
-  console.log(data.categoryCodes) //品类
-  console.log(toJS(productCategoryList))
-  console.log(
-    getTrees(data.categoryCodes, toJS(productCategoryList), 'code', 'name')
-  )
-
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
 

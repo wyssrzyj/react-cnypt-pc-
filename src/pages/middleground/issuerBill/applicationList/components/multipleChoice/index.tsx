@@ -119,10 +119,10 @@ const MultipleChoice = ({
       >
         <Row justify="center">
           <Col span={6}>
-            <span className={styles.name}>
+            <div className={styles.name}>
               <span className={styles.sheetName}>订单名称: </span>
               <span>{data.name}</span>
-            </span>
+            </div>
           </Col>
           <Col span={8}>
             <span>

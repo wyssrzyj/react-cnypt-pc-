@@ -28,10 +28,7 @@ const DemandList = () => {
   const { demandListStore, factoryStore, commonStore } = useStores()
   const { productCategoryList } = factoryStore
   const { dictionary } = commonStore
-  const {
-    // processType = [],
-    inquiryProcessType = []
-  } = toJS(dictionary)
+  const { processType = [] } = toJS(dictionary)
   const treeData = productCategoryList //商品品类
   const { listData, deleteDemandDoc, toppingFunction, endInterfaceInAdvance } =
     demandListStore
@@ -54,7 +51,7 @@ const DemandList = () => {
   }, [params])
 
   const handle = v => {
-    return getTrees(v, inquiryProcessType, 'value', 'label')
+    return getTrees(v, processType, 'value', 'label')
   }
 
   const listsAPI = async () => {

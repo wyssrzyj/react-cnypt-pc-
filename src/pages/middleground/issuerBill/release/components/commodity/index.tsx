@@ -39,8 +39,7 @@ function Basics() {
   const {
     plusMaterialType = [],
     productType = [],
-    // processType = [],
-    inquiryProcessType = []
+    processType = []
   } = toJS(dictionary)
 
   const orderConfigs = [
@@ -73,7 +72,7 @@ function Basics() {
       mode: 'multiple',
       field: 'processTypeList',
       span: 12,
-      options: inquiryProcessType,
+      options: processType,
       cesar: 0
     },
     {

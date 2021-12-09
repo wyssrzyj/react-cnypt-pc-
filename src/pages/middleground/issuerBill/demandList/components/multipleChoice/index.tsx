@@ -174,7 +174,9 @@ const MultipleChoice = ({
                       : '暂无'}
                   </div>
                 </Tooltip>
-                <p className={styles.ddl}>订单量：{dingdong(data.goodsNum)}</p>
+                <div className={styles.ddl}>
+                  订单量：{dingdong(data.goodsNum)}
+                </div>
               </div>
             </div>
           </Col>

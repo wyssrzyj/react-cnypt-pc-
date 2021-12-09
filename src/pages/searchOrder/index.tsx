@@ -14,7 +14,7 @@ const SearchOrder = () => {
   const { searchOrderStore, commonStore } = useStores()
   const { inquiryList, orderName } = searchOrderStore
   const pageSize = 12
-  const { dictionary } = commonStore
+  const { dictionary = {} } = commonStore
 
   const {
     goodsNum = [],

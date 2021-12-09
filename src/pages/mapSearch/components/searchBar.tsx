@@ -34,7 +34,7 @@ const SearchBar = props => {
     setMapMove,
     mapSearchFactorys
   } = factoryStore
-  const { processType = [], factoryEffectiveLocation = [] } = toJS(dictionary)
+  const { processType = [], effectiveLocation = [] } = toJS(dictionary)
 
   const history = useHistory()
 
@@ -324,7 +324,7 @@ const SearchBar = props => {
           className={styles.moreSelect}
           onChange={value => valueChange(value, 'effectiveLocation')}
         >
-          {factoryEffectiveLocation.map(item => (
+          {effectiveLocation.map(item => (
             <Option key={item.id} value={item.value}>
               {item.label}
             </Option>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Col, Row, Input } from 'antd'
-import { toJS, useStores } from '@/utils/mobx'
+import { toJS, useStores, observer } from '@/utils/mobx'
 import FormNode from '@/components/FormNode'
 import Category from './category'
 // import ImgUpload from '../imgUploadss'
@@ -39,7 +39,8 @@ function Basics() {
   const {
     plusMaterialType = [],
     productType = [],
-    processType = []
+    // processType = [],
+    inquiryProcessType = []
   } = toJS(dictionary)
 
   const orderConfigs = [
@@ -48,8 +49,8 @@ function Basics() {
       required: true,
       message: '请选择面料类型',
       placeholder: '请选择面料类型',
-      type: 'multipleSelect',
-      field: 'materialTypeList',
+      type: 'select',
+      field: 'plusMaterialType',
       span: 12,
       options: plusMaterialType,
       cesar: 0
@@ -72,7 +73,7 @@ function Basics() {
       mode: 'multiple',
       field: 'processTypeList',
       span: 12,
-      options: processType,
+      options: inquiryProcessType,
       cesar: 0
     },
     {
@@ -167,4 +168,4 @@ function Basics() {
   )
 }
 
-export default Basics
+export default observer(Basics)

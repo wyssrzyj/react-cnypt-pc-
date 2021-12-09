@@ -17,7 +17,7 @@ import {
 } from 'antd'
 
 import { PlusOutlined } from '@ant-design/icons'
-import { isEmpty, isArray } from 'lodash'
+import { isEmpty, isArray, isNil } from 'lodash'
 import { toJS } from 'mobx'
 import { get } from 'lodash'
 import Viewer from 'react-viewer'
@@ -58,10 +58,18 @@ const productClassMap = [
   { value: 1, label: '低' },
   { value: 2, label: '中' },
   { value: 3, label: '中低' },
+  { value: 3, label: '低中' },
   { value: 4, label: '高' },
   { value: 5, label: '高低' },
+  { value: 5, label: '低高' },
   { value: 6, label: '高中' },
-  { value: 7, label: '高中低' }
+  { value: 6, label: '中高' },
+  { value: 7, label: '高中低' },
+  { value: 7, label: '高低中' },
+  { value: 7, label: '低高中' },
+  { value: 7, label: '低中高' },
+  { value: 7, label: '中低高' },
+  { value: 7, label: '中高低' }
 ]
 
 const EnterpriseInfo = () => {
@@ -496,7 +504,7 @@ const EnterpriseInfo = () => {
             <Input placeholder="请输入类别说明" />
           </Form.Item>
           {/* TODO: 加工厂 */}
-          {+enterpriseType === 0 && (
+          {!isNil(enterpriseType) && +enterpriseType === 0 && (
             <>
               <Form.Item
                 label="厂房面积"
@@ -634,7 +642,7 @@ const EnterpriseInfo = () => {
           )}
 
           {/* TODO: 发单商 */}
-          {+enterpriseType === 1 && (
+          {!isNil(enterpriseType) && +enterpriseType === 1 && (
             <>
               <Form.Item
                 label="企业角色"

@@ -34,8 +34,7 @@ function Basics() {
   const { commonStore } = useStores()
   const { dictionary } = commonStore
 
-  const { factoryEffectiveLocation = [] } = toJS(dictionary)
-
+  const { effectiveLocation = [] } = toJS(dictionary)
   const orderConfigs = [
     {
       label: '订单标题',
@@ -55,7 +54,7 @@ function Basics() {
       field: 'effectiveLocation',
       span: 12,
       cesar: 0,
-      options: factoryEffectiveLocation
+      options: effectiveLocation
     },
     {
       label: '企业信息',
@@ -84,7 +83,6 @@ function Basics() {
     <div className={styles.basic}>
       <Row>
         {orderConfigs.map(item => {
-          //orderConfigs form的数据
           const data: any = {} //定义一个空对象
           keys.forEach(i => {
             if (![null, undefined].includes(item[i])) {

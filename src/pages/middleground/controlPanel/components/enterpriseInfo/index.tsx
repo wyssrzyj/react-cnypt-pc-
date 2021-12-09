@@ -12,8 +12,10 @@ import {
   Row,
   Col,
   DatePicker,
-  Select
+  Select,
+  TreeSelect
 } from 'antd'
+
 import { PlusOutlined } from '@ant-design/icons'
 import { isEmpty, isArray, isNil } from 'lodash'
 import { toJS } from 'mobx'
@@ -28,12 +30,13 @@ import Title from '../title'
 import styles from './index.module.less'
 import { cloneDeep } from 'lodash'
 import { dealRefresh } from '@/utils/axios/filterNull'
-import ProcessingTypeCom from '../processingTypeCom'
+// import ProcessingTypeCom from '../processingTypeCom'
 import MainCategoriesCom from '../mainCategoriesCom'
 import moment from 'moment'
 
 const { TextArea } = Input
 const { Option } = Select
+const { SHOW_PARENT } = TreeSelect
 
 const layout = {
   labelCol: { span: 3 },
@@ -69,28 +72,25 @@ const productClassMap = [
   { value: 7, label: '中高低' }
 ]
 
-const productClassOptions = [
-  { label: '高', value: '高' },
-  { label: '中', value: '中' },
-  { label: '低', value: '低' }
-]
-
-const productionModeOptions = [
-  { label: '流水', value: 0 },
-  { label: '整件', value: 1 },
-  { label: '流水和整件', value: 2 }
-]
-
 const EnterpriseInfo = () => {
   const [form] = Form.useForm()
   const { validateFields, setFieldsValue, getFieldValue } = form
   const currentUser = getCurrentUser() || {}
   const { mobilePhone, userId } = currentUser
-  const { factoryPageStore, commonStore, loginStore } = useStores()
+
+  const { factoryPageStore, commonStore, loginStore, demandListStore } =
+    useStores()
   const { userInfo } = loginStore
+  const { gradingOfProducts } = demandListStore
+
   const { uploadFiles } = factoryPageStore
   const { allArea, dictionary } = commonStore
-  const { plusMaterialType, purchaserRole } = dictionary
+  const {
+    plusMaterialType,
+    purchaserRole,
+    productType = [],
+    processType
+  } = dictionary
 
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imageUrlList, setImageUrlList] = useState<any[]>([])
@@ -106,6 +106,8 @@ const EnterpriseInfo = () => {
   const [contactsId, setContactsId] = useState<string>(undefined)
   const [oldData, setOldData] = useState<any>({})
   const [enterpriseType, setEnterpriseType] = useState<any>()
+  const [value, serValue] = useState([])
+  const [treeData, setTreeData] = useState([])
   const [loading, setLoading] = useState<boolean>(false)
 
   const uploadButton = (
@@ -147,8 +149,8 @@ const EnterpriseInfo = () => {
       const {
         area = [],
         businessAddress = {},
-        clothesGrade = [],
-        factoryProcessTypeList
+        clothesGrade = []
+        // factoryProcessTypeList
       } = values
 
       const { address, location } = businessAddress
@@ -210,14 +212,6 @@ const EnterpriseInfo = () => {
         enterpriseLogoId:
           imageUrl === preImageUrl ? undefined : enterpriseLogoId
       }
-      console.log(params, 'params')
-
-      if (+enterpriseType === 0) {
-        params.factoryProcessTypeList = factoryProcessTypeList.map(item => ({
-          factoryId,
-          ...item
-        }))
-      }
       setLoading(true)
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
@@ -266,8 +260,6 @@ const EnterpriseInfo = () => {
             clothesGrade,
             enterpriseType
           } = data
-          data.productTypeValues = data.productTypeValues || []
-          data.productGradeValues = data.productGradeValues || []
 
           const keys = Reflect.ownKeys(data)
           if (keys.includes('roleCodes')) {
@@ -371,6 +363,31 @@ const EnterpriseInfo = () => {
       })
     }
   }, [enterpriseType])
+  useEffect(() => {
+    grade()
+  }, [])
+  const grade = async () => {
+    let res = await gradingOfProducts() //订单档次
+    console.log(res)
+
+    setTreeData(res.data)
+  }
+
+  const onChange = value => {
+    //获取所有的父节点
+    serValue(value)
+  }
+  const tProps = {
+    treeData,
+    value: value,
+    onChange: onChange,
+    treeCheckable: true,
+    showCheckedStrategy: SHOW_PARENT,
+    placeholder: '请选择产品档次',
+    style: {
+      width: '100%'
+    }
+  }
 
   return (
     <div className={styles.enterpriseInfoContent}>
@@ -546,25 +563,32 @@ const EnterpriseInfo = () => {
               </Form.Item>
               <Form.Item
                 label="产品档次"
-                name="clothesGrade"
+                name="productGradeValues"
                 rules={[{ required: true, message: '请选择产品档次' }]}
               >
-                <Select mode="multiple" placeholder="请选择产品档次">
-                  {productClassOptions.map(option => (
+                <TreeSelect maxTagCount={5} allowClear={true} {...tProps} />
+
+                {/* <Select allowClear mode="multiple" placeholder="请选择产品档次">
+                  {productGradeHigh.map(option => (
                     <Option key={option.value + 'product'} value={option.value}>
                       {option.label}
                     </Option>
                   ))}
-                </Select>
+                </Select> */}
               </Form.Item>
 
               <Form.Item
                 label="生产方式"
-                name="productionMode"
+                name="productTypeValues"
                 rules={[{ required: true, message: '请选择生产方式！' }]}
               >
-                <Select placeholder="请选择生产方式">
-                  {productionModeOptions.map(option => (
+                <Select
+                  mode="multiple"
+                  allowClear
+                  style={{ width: '100%' }}
+                  placeholder="请选择生产方式"
+                >
+                  {toJS(productType).map(option => (
                     <Option key={option.value + 'mode'} value={option.value}>
                       {option.label}
                     </Option>
@@ -587,10 +611,19 @@ const EnterpriseInfo = () => {
               </Form.Item>
               <Form.Item
                 label="加工类型"
-                name="factoryProcessTypeList"
+                name="processTypeList"
                 rules={[{ required: true, message: '请选择加工类型！' }]}
               >
-                <ProcessingTypeCom />
+                <Select placeholder={'请选择面料类型'} mode={'multiple'}>
+                  {isArray(processType) &&
+                    processType.map(item => (
+                      <Option value={item.value} key={item.value}>
+                        {item.label}
+                      </Option>
+                    ))}
+                </Select>
+                {/* processType */}
+                {/* <ProcessingTypeCom /> */}
               </Form.Item>
               <Form.Item
                 label="起订量"

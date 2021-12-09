@@ -3,11 +3,11 @@ import { Col, Row, Tooltip } from 'antd'
 import styles from './index.module.less'
 import { observer, toJS, useStores } from '@/utils/mobx'
 import { getTrees } from '../../method'
-import { matchGoodValue } from '@/utils/tool'
+// import { matchGoodValue } from '@/utils/tool'
 
 function index({ initialValues }) {
   const {
-    categoryId,
+    categoryCodes,
     // plusMaterialType,
     goodsPrice,
     processTypeList,
@@ -36,8 +36,10 @@ function index({ initialValues }) {
   useEffect(() => {
     api()
     //商品品类
-    if (categoryId) {
-      setProductCategoric(matchGoodValue(toJS(productCategoryList), categoryId))
+    if (categoryCodes) {
+      setProductCategoric(
+        getTrees(categoryCodes, toJS(productCategoryList), 'code', 'name')
+      )
     }
     //发单量
     if (initialValues.goodsNum) {
@@ -47,8 +49,6 @@ function index({ initialValues }) {
     }
     //面料
     if (plusMaterialType) {
-      console.log(plusMaterialType)
-      console.log(initialValues.materialTypeList)
       if (initialValues.materialTypeList) {
         setFabric(
           getTrees(
@@ -72,10 +72,15 @@ function index({ initialValues }) {
     <div>
       <Row>
         <Col span={12}>
-          <Tooltip placement="top" title={productCategoric}>
+          <Tooltip
+            placement="top"
+            title={productCategoric ? productCategoric.join('、') : '暂无'}
+          >
             <div className={styles.title}>
               商品品类:
-              <span className={styles.content}>{productCategoric}</span>
+              <span className={styles.content}>
+                {productCategoric ? productCategoric.join('、') : '暂无'}
+              </span>
             </div>
           </Tooltip>
         </Col>
@@ -130,7 +135,7 @@ function index({ initialValues }) {
       <div className={styles.titles}>
         <span className={styles.payment}> 款图:</span>
 
-        <div className={styles.content}>
+        <div className={styles.contents}>
           {stylePicture !== undefined && stylePicture.length > 0 ? (
             stylePicture.map((v, i) => (
               <img key={i} className={styles.img} src={v} alt="" />

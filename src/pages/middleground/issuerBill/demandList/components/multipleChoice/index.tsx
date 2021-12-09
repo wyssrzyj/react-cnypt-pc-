@@ -4,6 +4,7 @@ import styles from './index.module.less'
 import { Icon } from '@/components' //路径
 import { useHistory } from 'react-router-dom'
 import { toJS, useStores, observer } from '@/utils/mobx'
+import { getTrees } from '../../method'
 
 const MultipleChoice = ({
   data,
@@ -14,19 +15,16 @@ const MultipleChoice = ({
   DemandOrderDetail
 }) => {
   const { push } = useHistory()
-  const { commonStore } = useStores()
+  const { commonStore, factoryStore } = useStores()
+  const { productCategoryList } = factoryStore
 
   const { dictionary } = commonStore
 
   const { goodsNum = [] } = toJS(dictionary)
 
   const { id, stickType } = data
-
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
-
-  // const [topping, setTopping] = useState() //置顶
-
   const Topping = new Map()
   Topping.set(1, 'jack-zhiding_1')
   Topping.set(0, 'jack-zhiding_2')
@@ -45,19 +43,12 @@ const MultipleChoice = ({
     toppingMethod({ id: value, stickType: ccc })
   }
 
-  // 失败原因.
-  const failureReason = e => {
-    console.log(e)
-    console.log('失败原因')
-  }
-
   const showModal = () => {
     setWindowType({ type: 'mov' })
     setIsModalVisible(true)
   }
   //  点击确认 判断是删除还是提前结束
   const handleOk = () => {
-    console.log(windowType)
     if (windowType.type === 'advance') {
       earlyEnd(id)
     }
@@ -83,6 +74,12 @@ const MultipleChoice = ({
       state: { id: e, modify: 'modify' }
     })
   }
+  const jump = () => {
+    push({
+      pathname: '/control-panel/issuerBill/demand-applicationList',
+      state: { name: data.name, id: id }
+    })
+  }
   return (
     <div className={styles.bos}>
       {/* 头部 */}
@@ -105,7 +102,7 @@ const MultipleChoice = ({
           </Col>
           <Col span={6} className={styles.examine}>
             {data.status !== -1 ? (
-              <div>
+              <>
                 <span>
                   <Icon
                     type={examine.get(data.systemApprovalStatus)}
@@ -117,7 +114,7 @@ const MultipleChoice = ({
                 ) : (
                   <span>审核不通过</span>
                 )}
-              </div>
+              </>
             ) : null}
           </Col>
           <Col span={1} className={styles.toppingFather}>
@@ -144,18 +141,37 @@ const MultipleChoice = ({
                 src={data.pictureUrl ? data.pictureUrl : Simg}
                 alt=""
               />
-              <div className={styles.infoBox}>
-                <div className={styles.name}>{data.name}</div>
+              <div className={styles.content}>
+                <p className={styles.name}>{data.name}</p>
                 <Tooltip placement="top" title={data.processing.join('、')}>
                   <div className={styles.hidden}>
                     加工类型：
                     {data.processing.join('、')}
                   </div>
                 </Tooltip>
-                <Tooltip placement="top" title={data.categoryIdList.join('、')}>
+                <Tooltip
+                  placement="top"
+                  title={
+                    data.categoryCodes
+                      ? getTrees(
+                          data.categoryCodes,
+                          toJS(productCategoryList),
+                          'code',
+                          'name'
+                        ).join('、')
+                      : '暂无'
+                  }
+                >
                   <div className={styles.category}>
                     商品品类：
-                    {data.categoryIdList.join('、')}
+                    {data.categoryCodes
+                      ? getTrees(
+                          data.categoryCodes,
+                          toJS(productCategoryList),
+                          'code',
+                          'name'
+                        ).join('、')
+                      : '暂无'}
                   </div>
                 </Tooltip>
                 <div className={styles.ddl}>
@@ -166,28 +182,30 @@ const MultipleChoice = ({
           </Col>
           <Col span={7}>
             <div className={styles.feedback}>
-              <p>
-                共
-                <span className={styles.fontColor}>
-                  {data.enterpriseNum ? data.enterpriseNum : 0}
+              <div
+                className={
+                  (styles.shout, data.enterpriseNum > 0 ? styles.shouts : null)
+                }
+                onClick={data.enterpriseNum > 0 ? jump : null}
+              >
+                <span
+                  className={
+                    (styles.shout, data.enterpriseNum > 0 ? styles.shou : null)
+                  }
+                >
+                  共
+                  <span className={styles.fontColor}>
+                    {data.enterpriseNum ? data.enterpriseNum : 0}
+                  </span>
+                  家，
+                  <span className={styles.fontColor}>
+                    {data.enterpriseRefuseTotalNum
+                      ? data.enterpriseRefuseTotalNum
+                      : 0}
+                  </span>
+                  家已谢绝
                 </span>
-                家，
-                <span className={styles.fontColor}>
-                  {data.enterpriseRefuseTotalNum
-                    ? data.enterpriseRefuseTotalNum
-                    : 0}
-                </span>
-                家已谢绝
-                {/* <span className={styles.fontColor}>1</span> 家已反馈 */}
-              </p>
-              {/* <p>
-                <span className={styles.fontColor}>{data.issuedBill}</span>
-                家已发单，已发订单量
-                <span className={styles.fontColor}>
-                  {data.issuedorderQuantity}
-                </span>
-                件
-              </p> */}
+              </div>
               <p className={styles.moreOrder}>
                 <span
                   className={styles.cursor}
@@ -244,14 +262,7 @@ const MultipleChoice = ({
             {+data.status === -2 ? (
               <div>
                 <p className={styles.end}>审核失败</p>
-                <p
-                  className={styles.cursor}
-                  onClick={() => {
-                    failureReason(data.id)
-                  }}
-                >
-                  查看失败原因
-                </p>
+                <p className={styles.cursor}>查看失败原因</p>
               </div>
             ) : null}
             {/* 草稿 */}
@@ -289,7 +300,6 @@ const MultipleChoice = ({
                     >
                       删除记录
                     </Button>
-                    {/* </Popconfirm> */}
                   </div>
                 ) : (
                   <div className={styles.btn}>
@@ -301,7 +311,6 @@ const MultipleChoice = ({
                     >
                       删除记录
                     </Button>
-                    {/* </Popconfirm> */}
                   </div>
                 )}
               </div>
@@ -313,7 +322,6 @@ const MultipleChoice = ({
             centered={true}
             footer={null}
             onCancel={onCancel}
-            // maskClosable={false}
           >
             <div className={styles.delContent}>
               {windowType.type === 'mov' ? (

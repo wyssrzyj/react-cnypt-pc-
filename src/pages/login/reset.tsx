@@ -72,9 +72,7 @@ const Reset = () => {
       if (res) {
         history.push('/user/login')
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   }
 
   const valuesChange = changedValues => {

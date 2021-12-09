@@ -52,9 +52,7 @@ const PwdModal = ({ cancel }) => {
         values.newPassword = btoa(values.newPassword)
         const res = await updatePwd(values)
         setSuccess(res)
-      } catch (error) {
-        console.log('🚀 ~ file: pwdModal.tsx ~ line 138 ~ onOk ~ error', error)
-      }
+      } catch (error) {}
     }
 
     if (phoneFlag) {
@@ -64,9 +62,7 @@ const PwdModal = ({ cancel }) => {
         values.newPassword = btoa(values.newPassword)
         const res = await codeUpdatePwd(values)
         setSuccess(res)
-      } catch (error) {
-        console.log('🚀 ~ file: pwdModal.tsx ~ line 138 ~ onOk ~ error', error)
-      }
+      } catch (error) {}
     }
   }
 

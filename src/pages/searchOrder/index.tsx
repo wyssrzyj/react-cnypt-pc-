@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { Row, Col, Pagination, Empty } from 'antd'
 import { isEmpty } from 'lodash'
 import moment from 'moment'
-// import { toJS } from 'mobx'
+import { toJS } from 'mobx'
 import { useStores, observer } from '@/utils/mobx'
 import { matchValue, matchGoodValue, matchArrayValue } from '@/utils/tool'
 import { SimpleSearch, FilterList } from '@/components'
 import { OrderSearchHeader, OrderCard } from './components'
+import { getTrees } from './method'
 import styles from './index.module.less'
 
 const SearchOrder = () => {
@@ -17,10 +18,9 @@ const SearchOrder = () => {
 
   const {
     goodsNum = [],
-    // processType = [],
-    inquiryProcessType = [],
-    factoryEffectiveLocation = []
-  } = dictionary
+    processType = [],
+    effectiveLocation = []
+  } = toJS(dictionary)
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
   const productCategoryList = JSON.parse(
     localStorage.getItem('productCategoryList')
@@ -35,6 +35,7 @@ const SearchOrder = () => {
 
   const onFilterChange = params => {
     const newFactoryParams = { ...factoryParams, ...params }
+
     setFactoryParams({ ...newFactoryParams })
     setPageNum(1)
   }
@@ -53,9 +54,11 @@ const SearchOrder = () => {
       ...sortParams
     }).then(response => {
       const { success, data } = response
+
       if (success) {
         const { total, records } = data
         setTotal(total)
+
         setDataList([...records])
       }
     })
@@ -91,15 +94,17 @@ const SearchOrder = () => {
             },
             {
               label: '商品品类',
-              value: matchGoodValue(
+              value: getTrees(
+                record.categoryCodes,
                 productCategoryList,
-                record.factoryCategoryIds
-              )
+                'code',
+                'name'
+              ).join('、')
             },
             {
               label: '加工类型',
               value: matchArrayValue(
-                inquiryProcessType,
+                processType,
                 record.processTypeValues,
                 '--'
               )
@@ -130,10 +135,7 @@ const SearchOrder = () => {
             },
             {
               label: '有效车位',
-              value: matchValue(
-                factoryEffectiveLocation,
-                record.effectiveLocation
-              )
+              value: matchValue(effectiveLocation, record.effectiveLocation)
             }
           ]
         },

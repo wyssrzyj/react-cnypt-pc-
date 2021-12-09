@@ -19,7 +19,6 @@ const InfoCard = ({ data }) => {
 const AddCrad = props => {
   const { data } = props
   const { callback } = data
-  console.log('🚀 ~ file: basicInfo.tsx ~ line 21 ~ callback', callback)
   const addClick = () => {
     callback && callback()
   }

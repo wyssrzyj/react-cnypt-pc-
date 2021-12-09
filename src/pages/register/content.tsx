@@ -75,7 +75,6 @@ const Register = () => {
   const handleSubmit = async () => {
     try {
       const values = await validateFields()
-      console.log(values)
       delete values.pwd2
 
       const encode = encodeURI(values.pwd)
@@ -88,17 +87,12 @@ const Register = () => {
         userName: values.mobilePhone
       }
       const registerRes = await register(params)
-      console.log(registerRes)
 
       if (registerRes && registerRes.success) {
         history.push('/user/login')
         localStorage.setItem('currentUser', JSON.stringify({}))
       }
-    } catch (err) {
-      console.log(err)
-      // const { errorFields } = err
-      // console.log(errorFields, '---')
-    }
+    } catch (err) {}
   }
 
   const onValuesChange = async (changedValues: any, allValues: CommonObj) => {

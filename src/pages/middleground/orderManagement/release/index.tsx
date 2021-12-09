@@ -105,7 +105,6 @@ const DemandSheet = () => {
 
     if (stated) {
       if (stated.modify) {
-        console.log('修改')
         v.id = stated.id
       }
     }

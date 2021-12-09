@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Icon } from '@/components'
-import { Popover, Button, Modal } from 'antd'
+import { Popover, Button, Modal, Tooltip } from 'antd'
 import styles from './listCard.module.less'
-import { observer, useStores } from '@/utils/mobx'
+import { observer, toJS, useStores } from '@/utils/mobx'
 import classNames from 'classnames'
 import moment from 'moment'
-import { dateDiff, findTreeTarget } from '@/utils/tool'
-import { isEmpty } from 'lodash'
+import { dateDiff } from '@/utils/tool'
 import { useHistory } from 'react-router'
+import { getTrees } from './method'
 
 const STICK_TIPS = new Map()
 STICK_TIPS.set(1, '取消置顶')
@@ -29,7 +29,7 @@ STATUS_TEXT.set(1, '新需求')
 STATUS_TEXT.set(2, '待反馈 ')
 STATUS_TEXT.set(3, '已确认')
 STATUS_TEXT.set(-1, '已取消')
-STATUS_TEXT.set(-2, '已谢绝')
+STATUS_TEXT.set(-2, '被谢绝')
 
 const ListCard = props => {
   const history = useHistory()
@@ -40,11 +40,10 @@ const ListCard = props => {
 
   const { processType, goodsNum } = dictionary
   const { productCategoryList } = factoryStore
+  const newList = toJS(productCategoryList)
   const { changeOrderStick, factoryDelOrder } = searchOrderStore
-
   const { data, getData, refuse } = props
   const { stickType = 0 } = data
-  console.log('数据', data.enterpriseName) //判断条件
 
   const diffDay = dateDiff(data.inquiryEffectiveDate)
 
@@ -56,7 +55,7 @@ const ListCard = props => {
     },
     {
       label: '商品品类:',
-      field: 'factoryCategoryIds',
+      field: 'categoryCodes ',
       value: '针织服装（薄料）'
     },
     {
@@ -106,16 +105,13 @@ const ListCard = props => {
     if (field === 'goodsNum') {
       return goodsNum.find(item => item.value === value)?.label
     }
-    if (field === 'factoryCategoryIds') {
-      return value.reduce((prev, item, idx) => {
-        const target = findTreeTarget([item], productCategoryList) || {}
-
-        return (
-          prev +
-          (!isEmpty(target) ? target.name : '') +
-          (idx === value.length - 1 || !target.name ? '' : '、')
-        )
-      }, '')
+    if (field === 'categoryCodes ') {
+      const arr = getTrees(data.categoryCodes, newList, 'code', 'name')
+      if (arr) {
+        return arr.join('、')
+      } else {
+        return '--'
+      }
     }
   }
 
@@ -178,15 +174,13 @@ const ListCard = props => {
           setWindowType({ type: 'mov' })
         }}
       >
-        删除记录
+        删除订单
       </Button>
     )
   }
 
   // 弹窗确认
   const handleOk = () => {
-    console.log(2222222222222222)
-
     if (windowType.type === 'withdraw') {
       refuse(data.supplierInquiryId)
     }
@@ -295,9 +289,14 @@ const ListCard = props => {
               <div key={item.field} className={styles.infoItem}>
                 <span className={styles.infoLabel}>{item.label}</span>
                 {data.enterpriseName !== null ? (
-                  <span className={styles.infoValue}>
-                    {getTarget(item.field, data[item.field])}
-                  </span>
+                  <Tooltip
+                    placement="top"
+                    title={getTarget(item.field, data[item.field])}
+                  >
+                    <span className={styles.infoValue}>
+                      {getTarget(item.field, data[item.field])}
+                    </span>
+                  </Tooltip>
                 ) : (
                   <span className={styles.infoValue}>---</span>
                 )}
@@ -330,15 +329,13 @@ const ListCard = props => {
             {windowType.type === 'mov' ? (
               <div className={styles.delContent}>
                 <Icon type={'jack-sptg1'} className={styles.delIcon}></Icon>
-                <div className={styles.delTitle}>删除订单</div>
-                <div className={styles.delText}>确定删除订单？</div>
+                <div className={styles.delTitle}>是否删除订单?</div>
               </div>
             ) : null}
             {windowType.type === 'withdraw' ? (
               <div className={styles.delContent}>
                 <Icon type={'jack-ts'} className={styles.delIcon}></Icon>
                 <div className={styles.delTitle}>是否拒绝接单？</div>
-                <div className={styles.delText}>确定拒绝接单？</div>
               </div>
             ) : null}
 

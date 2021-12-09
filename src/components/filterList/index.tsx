@@ -14,16 +14,16 @@ import { useHistory } from 'react-router'
 const { Option } = Select
 
 const areaCategory = [
-  { id: '1966', name: '广州市' },
-  { id: '1989', name: '深圳市' },
-  { id: '2092', name: '东莞市' },
-  { id: '3', name: '北京市' },
-  { id: '803', name: '上海市' },
-  { id: '935', name: '杭州市' },
-  { id: '949', name: '宁波市' },
-  { id: '994', name: '金华市' },
-  { id: '961', name: '温州市' },
-  { id: '822', name: '南京市' }
+  { id: '440100', name: '广州市' },
+  { id: '440300', name: '深圳市' },
+  { id: '441900', name: '东莞市' },
+  { id: '110100', name: '北京市' },
+  { id: '310100', name: '上海市' },
+  { id: '330100', name: '杭州市' },
+  { id: '330200', name: '宁波市' },
+  { id: '330700', name: '金华市' },
+  { id: '330300', name: '温州市' },
+  { id: '320100', name: '南京市' }
 ]
 
 export const setUpTimeMap = [
@@ -53,19 +53,17 @@ const FilterList = props => {
 
   console.log(toJS(dictionary), 'toJS(dictionary)')
   const {
-    prodType = [],
-    factoryEffectiveLocation = [],
-    // processType = [],
+    effectiveLocation = [],
+    processType = [],
     plusMaterialType = [],
-    goodsNum = [],
-    inquiryProcessType
+    goodsNum = []
   } = dictionary
   const { productCategoryList } = factoryStore
   // const [factoryType, setFactoryType] = useState('all')
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [activeArea, setActiveArea] = useState<any>([])
   const [activeProcessing, setActiveProcessing] = useState<any>({}) //加工类型
-  const [activeTabs, setActiveTabs] = useState<any>([])
+  const [activeTabs, setActiveTabs] = useState<any>([]) //主要数据
   const [mainCategory, setMainCategory] = useState<any>([
     { id: '', name: '全部' }
   ])
@@ -81,16 +79,14 @@ const FilterList = props => {
   const [moreParams, setMoreParams] = useState<any>({})
   const [setUpTime, setSetUpTime] = useState<string>(null)
   const [updateTime, setUpdateTime] = useState<string>(null)
-  const [newTypeList, setNewTypeList] = useState<any[]>([])
+  // const [newTypeList, setNewTypeList] = useState<any[]>([])
 
-  useEffect(() => {
-    const typeList = ['/factory-search', '/producer-search'].includes(
-      location.pathname
-    )
-      ? prodType
-      : inquiryProcessType
-    setNewTypeList(typeList || [])
-  }, [])
+  // const newTypeList = ['/factory-search', '/producer-search'].includes(
+  //   location.pathname
+  // )
+  //   ? processType
+  //   : processType
+  const newTypeList = processType
 
   const newTime =
     location.pathname === '/factory-search' ? '更新时间' : '发布时间'
@@ -107,7 +103,7 @@ const FilterList = props => {
     // 向上清空父组件的状态
     onFilterChange({
       cityIds: [],
-      prodType: '',
+      processType: '',
       mainCategoryParentId: '',
       mainCategoryChildId: ''
     })
@@ -162,7 +158,7 @@ const FilterList = props => {
 
   const selectAllProcessing = () => {
     setActiveProcessing({})
-    onFilterChange({ prodType: '' })
+    onFilterChange({ processType: '' })
   }
 
   // const onTabChange = activeKey => {
@@ -171,6 +167,7 @@ const FilterList = props => {
   // }
   const onProductChange = params => {
     setActiveDeputyCategory({ ...params })
+
     onFilterChange({
       mainCategoryChildId: params.id,
       mainCategoryParentId: activeMainCategory
@@ -178,7 +175,7 @@ const FilterList = props => {
   }
   const onProcessingChange = params => {
     setActiveProcessing({ ...params })
-    onFilterChange({ prodType: params.id })
+    onFilterChange({ processType: params.id })
   }
   const onFactorySizeChange = (value, field) => {
     setMoreParams({
@@ -206,8 +203,8 @@ const FilterList = props => {
       }
     }
     onFilterChange({
-      factoryCreateTimeStart: start,
-      factoryCreateTimeEnd: end
+      establishedTimeStart: start,
+      establishedTimeEnd: end
     })
   }
 
@@ -255,7 +252,7 @@ const FilterList = props => {
     // 加工类型
     if (activeProcessing.id === id) {
       setActiveProcessing({})
-      onFilterChange({ prodType: '' })
+      onFilterChange({ processType: '' })
     }
   }
 
@@ -467,7 +464,7 @@ const FilterList = props => {
             value={moreParams.effectiveLocation}
             onChange={value => onFactorySizeChange(value, 'effectiveLocation')}
           >
-            {factoryEffectiveLocation.map(item => (
+            {effectiveLocation.map(item => (
               <Option key={item.id} value={item.value}>
                 {item.label}
               </Option>
@@ -546,10 +543,10 @@ const FilterList = props => {
 
       {modalVisible && (
         <AreaModal
-          visible={modalVisible}
-          selectedCity={activeArea}
-          handleCancel={() => setModalVisible(false)}
-          handleOk={handleModalOk}
+          visible={modalVisible} //弹窗
+          // selectedCity={activeArea}
+          handleCancel={() => setModalVisible(false)} //点击遮罩层或右上角叉或取消按钮的回调
+          handleOk={handleModalOk} //确认的回调
         />
       )}
     </div>

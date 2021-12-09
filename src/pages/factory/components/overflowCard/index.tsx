@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { toJS } from 'mobx'
 import { Tag, Button, Modal } from 'antd'
-import { isArray, findIndex } from 'lodash'
+import { isArray } from 'lodash'
 import { useStores, observer } from '@/utils/mobx'
 import { Icon, Title } from '@/components'
 import SwiperCore, {
@@ -17,6 +17,7 @@ import styles from './index.module.less'
 import './style.less'
 import { getCurrentUser, getUserInfo } from '@/utils/tool'
 import { useHistory } from 'react-router'
+import { getTrees } from './method'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
@@ -55,13 +56,16 @@ const RequestCard = observer(props => {
 })
 
 const OverflowCard = props => {
+  const { factoryStore } = useStores()
+  const { productCategoryList } = factoryStore
+  const newList = toJS(productCategoryList)
+
   const {
     factoryId,
     factoryName,
     factoryDistrict,
     effectiveLocation = '0',
     factoryCategoryList = [],
-    prodTypeList = [],
     pictureUrl,
     factoryTagList = [],
     enterpriseId
@@ -77,6 +81,9 @@ const OverflowCard = props => {
   const { getOrderList } = searchOrderStore
   const { dictionary, updateName } = commonStore
   const allProdTypeList = toJS(dictionary).prodType || []
+  console.log(allProdTypeList)
+
+  const { processType = [] } = toJS(dictionary)
 
   const [modalFlag, setModalFlag] = useState(false)
   const [orders, setOrders] = useState([])
@@ -127,6 +134,7 @@ const OverflowCard = props => {
       const res = await getOrderList({
         enterpriseId: currentUserInfo.enterpriseId
       })
+
       setOrders(res.records || [])
     }
   }
@@ -174,7 +182,7 @@ const OverflowCard = props => {
                 </span>
                 <span>
                   {isArray(factoryCategoryList)
-                    ? factoryCategoryList.join('、')
+                    ? getTrees(factoryCategoryList, newList, 'code', 'name')
                     : '待完善'}
                 </span>
               </li>
@@ -184,17 +192,13 @@ const OverflowCard = props => {
                   加工类型：
                 </span>
                 <span>
-                  {isArray(prodTypeList)
-                    ? allProdTypeList
-                        .filter(function (val) {
-                          return (
-                            findIndex(prodTypeList, function (o) {
-                              return o.processType == val.value
-                            }) > -1
-                          )
-                        })
-                        .map(item => item.label)
-                        .join('、')
+                  {isArray(props.processTypeList)
+                    ? getTrees(
+                        props.processTypeList,
+                        processType,
+                        'value',
+                        'label'
+                      ).join('、')
                     : '待完善'}
                 </span>
               </li>

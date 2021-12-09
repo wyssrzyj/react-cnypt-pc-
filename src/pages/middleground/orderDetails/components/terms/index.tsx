@@ -10,7 +10,8 @@ function index({ initialValues }) {
       <Row>
         <Col span={12}>
           <div className={styles.title}>
-            付款信息: <span className={styles.content}>{payDetails}</span>
+            <div className={styles.textLeft}>付款信息:</div>
+            <div className={styles.text}>{payDetails}</div>
           </div>
         </Col>
       </Row>

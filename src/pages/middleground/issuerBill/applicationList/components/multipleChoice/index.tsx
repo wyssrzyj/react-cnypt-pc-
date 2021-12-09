@@ -17,11 +17,11 @@ const MultipleChoice = ({
   reOrder,
   demandSheetDetails
 }) => {
-  console.log(data)
+  const { commonStore, factoryStore } = useStores()
+  const { productCategoryList } = factoryStore
 
-  const { commonStore } = useStores()
   const { dictionary } = commonStore
-  const { prodType = [] } = toJS(dictionary)
+  const { processType = [] } = toJS(dictionary)
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
@@ -119,10 +119,10 @@ const MultipleChoice = ({
       >
         <Row justify="center">
           <Col span={6}>
-            <span className={styles.name}>
+            <div className={styles.name}>
               <span className={styles.sheetName}>订单名称: </span>
               <span>{data.name}</span>
-            </span>
+            </div>
           </Col>
           <Col span={8}>
             <span>
@@ -187,28 +187,32 @@ const MultipleChoice = ({
                   {data.address ? data.address : '暂无'}
                 </div>
               </div>
-              <p>人数：{data.staffNumber}人</p>
-              <p>联系方式: {data.contactsMobile}</p>
-              <p>电子邮箱: {data.contactsEmail}</p>
+              <p>人数：{data.staffNumber ? data.staffNumber : '0'}人</p>
+              <p>
+                联系方式: {data.contactsMobile ? data.contactsMobile : '暂无'}
+              </p>
+              <p>
+                电子邮箱: {data.contactsEmail ? data.contactsEmail : '暂无'}
+              </p>
               <div className={styles.hidden}>
                 加工类型：
                 <Tooltip
                   placement="top"
                   title={
-                    data.prodTypeValueList
+                    data.processTypeValues
                       ? getTrees(
-                          data.prodTypeValueList,
-                          prodType,
+                          data.processTypeValues,
+                          processType,
                           'value',
                           'label'
                         ).join('、')
                       : '暂无'
                   }
                 >
-                  {data.prodTypeValueList
+                  {data.processTypeValues
                     ? getTrees(
-                        data.prodTypeValueList,
-                        prodType,
+                        data.processTypeValues,
+                        processType,
                         'value',
                         'label'
                       ).join('、')
@@ -221,12 +225,22 @@ const MultipleChoice = ({
                   placement="top"
                   title={
                     data.factoryCategoryList
-                      ? data.factoryCategoryList.join('、')
+                      ? getTrees(
+                          data.factoryCategoryList,
+                          toJS(productCategoryList),
+                          'code',
+                          'name'
+                        ).join('、')
                       : '暂无'
                   }
                 >
                   {data.factoryCategoryList
-                    ? data.factoryCategoryList.join('、')
+                    ? getTrees(
+                        data.factoryCategoryList,
+                        toJS(productCategoryList),
+                        'code',
+                        'name'
+                      ).join('、')
                     : '暂无'}
                 </Tooltip>
               </div>
@@ -249,21 +263,6 @@ const MultipleChoice = ({
               <span className={styles.information}>•</span>备注：
               {data.remark ? data.remark : '暂无'}
             </p>
-            <div className={styles.tablefuls}>
-              {data.NumberOfOrders ? (
-                <div className={styles.table}>
-                  <span className={styles.numberOfOrders}>
-                    已发订单数：
-                    <span className={styles.color}>{data.NumberOfOrders}</span>
-                    单
-                  </span>
-                  <span className={styles.totalOrders}>
-                    订单总数:
-                    <span className={styles.color}>{data.TotalOrders}</span>件
-                  </span>
-                </div>
-              ) : null}
-            </div>
           </Col>
 
           <Col className={styles.stateBtnBox} span={4}>

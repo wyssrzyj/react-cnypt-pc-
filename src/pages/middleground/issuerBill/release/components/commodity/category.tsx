@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { TreeSelect, Form, Col, Row, Select } from 'antd'
+import React, { useEffect } from 'react'
+import { Form, Col, Row, Select } from 'antd'
 import { observer, toJS, useStores } from '@/utils/mobx'
 // import FormNode from '@/components/FormNode'
 const { Option } = Select
 // import Inputs from './inputs'
 import styles from './index.module.less'
-import { cloneDeep } from 'lodash'
+// import { cloneDeep } from 'lodash'
+import MainCategoriesCom from './mainCategoriesCom'
 
 const FormItem = Form.Item
-const { SHOW_PARENT } = TreeSelect
 const Category = () => {
   const { factoryStore, commonStore } = useStores()
   const { productCategoryList } = factoryStore
-  const [treeData, setTreeData] = useState([])
-  const [value, serValue] = useState([])
+  // const [treeData, setTreeData] = useState([])
+  // const [value, serValue] = useState([])
   const { dictionary } = commonStore
   const { goodsNum = [] } = toJS(dictionary)
 
@@ -37,44 +37,8 @@ const Category = () => {
     return data
   }
   useEffect(() => {
-    ;(async () => {
-      const res = cloneDeep(productCategoryList)
-      setTreeData(dealTypeData(res))
-    })()
+    ;(async () => {})()
   }, [productCategoryList])
-
-  const onChange = value => {
-    //获取所有的父节点
-    serValue(value)
-  }
-
-  const tProps = {
-    treeData,
-    value: value,
-    onChange: onChange,
-    treeCheckable: true,
-    showCheckedStrategy: SHOW_PARENT,
-    placeholder: '请选择商品品类',
-    style: {
-      width: '100%'
-    }
-  }
-
-  function onChanges(value) {
-    console.log(`selected ${value}`)
-  }
-
-  function onBlur() {
-    console.log('blur')
-  }
-
-  function onFocus() {
-    console.log('focus')
-  }
-
-  function onSearch(val) {
-    console.log('search:', val)
-  }
 
   return (
     <div className={styles.top}>
@@ -82,12 +46,14 @@ const Category = () => {
         <Col span={12}>
           <FormItem
             className={styles.categoryId}
-            name="categoryId"
+            name="categoryCodes"
             label="商品品类"
             rules={[{ required: true, message: '请选择商品品类 ' }]}
             {...layout}
           >
-            <TreeSelect maxTagCount={5} allowClear={true} {...tProps} />
+            <MainCategoriesCom />
+
+            {/* <TreeSelect maxTagCount={5} allowClear={true} {...tProps} /> */}
           </FormItem>
         </Col>
         <Col span={12} className={styles.cate}>
@@ -102,10 +68,6 @@ const Category = () => {
               style={{ width: 325 }}
               placeholder="请选择发单量"
               optionFilterProp="children"
-              onChange={onChanges}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              onSearch={onSearch}
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }

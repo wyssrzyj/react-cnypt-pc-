@@ -110,7 +110,7 @@ const MapSearch = () => {
 
     const url2 = `https://restapi.amap.com/v5/place/text?key=6d7e0822e5ed232cf706c42ff08cb66f&keywords=${value}`
     const res2 = await axios.get(url2)
-    console.log('🚀 ~ file: index.tsx ~ line 57 ~ MapSearch ~ res2', res2)
+    console.log(res2)
   }
 
   return (

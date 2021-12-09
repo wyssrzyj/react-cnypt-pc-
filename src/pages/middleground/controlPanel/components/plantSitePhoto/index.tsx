@@ -16,7 +16,6 @@ const PlantSitePhoto = () => {
     onChange(info) {
       const { status } = info.file
       if (status !== 'uploading') {
-        // console.log(info.file, info.fileList)
       }
       if (status === 'done') {
         message.success(`${info.file.name} file uploaded successfully.`)
@@ -24,9 +23,7 @@ const PlantSitePhoto = () => {
         message.error(`${info.file.name} file upload failed.`)
       }
     },
-    onDrop(_e) {
-      // console.log('Dropped files', e.dataTransfer.files)
-    }
+    onDrop(_e) {}
   }
 
   return (

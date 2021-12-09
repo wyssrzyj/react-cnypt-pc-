@@ -18,7 +18,7 @@ function index() {
   const location = useLocation()
   const [openKeys, setOpenKeys] = useState<Array<string>>([])
   const [currentMenu, setCurrentMenu] = useState<Array<string>>([])
-  // 商品品类  调取接口
+  // 商品品类  调取接口.
   useEffect(() => {
     setCurrentMenu(routingMethod.get(location.pathname))
     CommodityCategory()

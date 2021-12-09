@@ -16,6 +16,7 @@ function Query({ query }) {
   }
   const handleSelectTime = (value, dateString) => {
     console.log(value)
+
     setDateString(dateString)
   }
 

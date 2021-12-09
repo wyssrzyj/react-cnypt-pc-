@@ -17,24 +17,20 @@ const BindingSuperiorProduct = props => {
     checkedKeys,
     setCheckedKeys
   } = props
-  console.log(props)
+
   const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
-  const onSelect = (selectedKeysValue: React.Key[], info: any) => {
-    console.log('onSelect', info)
+  const onSelect = (selectedKeysValue: React.Key[]) => {
     setSelectedKeys(selectedKeysValue)
   }
   const onCheck = (checkedKeysValue, event) => {
     let sum = event.checkedNodes
     setDeselected(sum)
-    console.log(event.checkedNodes)
     setCheckedKeys(checkedKeysValue)
   }
 
   const move = item => {
-    console.log(checkedKeys)
     {
       if (item.parentId != 0) {
-        console.log('有父节点')
         setCheckedKeys(
           checkedKeys.filter(l => l !== item.deptId && l !== item.parentId)
         )
@@ -44,19 +40,10 @@ const BindingSuperiorProduct = props => {
         //   )
         // )
       } else {
-        console.log('没有父节点')
         setCheckedKeys(checkedKeys.filter(l => l !== item.deptId))
       }
       //删除名字
-
       setDeselected(deselected.filter(s => s.deptName !== item.deptName))
-
-      {
-        console.log(checkedKeys) //key
-      }
-      {
-        console.log(deselected) //所有的数据
-      }
     }
   }
 
@@ -149,8 +136,6 @@ const BindingSuperiorProduct = props => {
               })
             : null}
         </div>
-        {console.log(checkedKeys)}
-        {console.log(deselected)}
       </Modal>
     </div>
   )

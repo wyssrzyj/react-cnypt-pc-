@@ -202,16 +202,12 @@ const InfoTree = props => {
     }
   ]
 
-  const onSelect = (selectedKeys: React.Key[], info: any) => {
-    console.log('selected', selectedKeys, info)
-  }
   return (
     <div className="tree-container">
       <Tree
         showLine={{ showLeafIcon: false }}
         showIcon={false}
         defaultExpandedKeys={['0-0-0']}
-        onSelect={onSelect}
         treeData={treeData}
       />
     </div>

@@ -24,18 +24,13 @@ state.set(1, 'asc')
 const headerConfigs: Array<Partial<Config>> = [
   {
     span: 4
-    // width: 250,
-    // marginLift: 150
   },
   {
     label: '订单信息',
     span: 8
-    // width: 250,
-    // marginLift: 150
   },
   {
     label: '反馈情况',
-    // width: 200
     span: 6
   },
   {
@@ -43,8 +38,6 @@ const headerConfigs: Array<Partial<Config>> = [
     sort: -1,
     span: 4,
     field: 'status'
-
-    // width: 200
   },
   {
     label: '操作',

@@ -5,7 +5,7 @@ import styles from './index.module.less'
 import Sort from './components/sort'
 import MultipleChoice from './components/multipleChoice'
 import { Pagination } from 'antd'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isArray } from 'lodash'
 import { useStores, toJS, observer } from '@/utils/mobx'
 import { timestampToTime, remainingTime } from './components/time'
 import { getTrees } from './method'
@@ -61,15 +61,14 @@ const DemandList = () => {
     if (Array.isArray(res.records)) {
       res.records.forEach(item => {
         item.checked = false
-        item.processing = handle(item.processTypeList)
+        item.processing = isArray(item.processTypeList)
+          ? handle(item.processTypeList)
+          : []
         item.time = timestampToTime(item.inquiryEffectiveDate)
         item.releaseTime = timestampToTime(item.releaseTime)
-        item.categoryIdList = getTrees(
-          item.categoryIdList,
-          toJS(treeData),
-          'id',
-          'name'
-        )
+        item.categoryIdList = isArray(item.categoryIdList)
+          ? getTrees(item.categoryIdList, toJS(treeData), 'id', 'name')
+          : []
         item.surplus = remainingTime(item.inquiryEffectiveDate)
       })
       setNoOrders(res.records.length)
@@ -124,8 +123,6 @@ const DemandList = () => {
   }
   //置顶
   const topping = async value => {
-    // console.log('置顶', value)
-
     await toppingFunction(value)
     listsAPI()
   }
@@ -138,7 +135,6 @@ const DemandList = () => {
   }
   // 查看订单信息
   const DemandOrderDetail = e => {
-    console.log('查看订单信息')
     push({ pathname: '/control-panel/orderDetails', state: { id: e } })
   }
   //提前结束
@@ -155,7 +151,6 @@ const DemandList = () => {
       listsAPI()
     }
   }
-
   return (
     <div className={styles.demand}>
       <section>

@@ -161,7 +161,9 @@
 }
 
 .diqu_bai {
-  float: right;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100px;
 
   overflow: hidden;
@@ -170,7 +172,7 @@
   text-overflow: ellipsis;
 }
 .previous {
-  font-size: 17px;
+  font-size: 21px;
 }
 .prev {
   margin-left: 5 px;
@@ -232,7 +234,7 @@
   // margin-right: 5px;
   // margin-left: 35px;
   float: right;
-  margin-top: 10px;
+  margin-top: 12px;
   font-size: 18px;
 }
 .namest {
@@ -243,7 +245,11 @@
   font-size: 14px;
 }
 .name {
+  width: 173px;
+  overflow: hidden;
   font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .details {
   font-size: 14px;

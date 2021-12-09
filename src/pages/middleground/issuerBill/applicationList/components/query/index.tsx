@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './index.module.less'
 
 import { Form, Input, Button, Col, Space, DatePicker, Row } from 'antd'
 const { RangePicker } = DatePicker
 
-function Query({ query }) {
+function Query({ query, state }) {
+  useEffect(() => {
+    if (state) {
+      form.setFieldsValue(state)
+    }
+  }, [state])
   const [form] = Form.useForm()
 
   const [dateString, setDateString] = useState([])
@@ -15,8 +20,8 @@ function Query({ query }) {
     query && query(values)
   }
   const handleSelectTime = (value, dateString) => {
-    console.log(value)
     setDateString(dateString)
+    console.log(value)
   }
 
   return (
@@ -27,7 +32,6 @@ function Query({ query }) {
         name="basic"
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 15 }}
-        initialValues={{ remember: true }}
         onFinish={onFinish}
         autoComplete="off"
       >

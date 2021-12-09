@@ -1,0 +1,63 @@
+@import '@/css/common.less';
+
+.mainCategoriesCom {
+}
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+}
+.disable {
+  color: rgba(37, 38, 39, 0.25);
+  background-color: rgba(205, 204, 202, 0.2);
+  cursor: no-drop;
+}
+.active {
+  color: black;
+  background-color: @white;
+}
+.checkedBox {
+  margin: 4px;
+  padding: 0 8px;
+  white-space: nowrap;
+  background-color: #f0f0f0;
+}
+.arrow {
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 12px;
+}
+.checkedCategories {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px 8px;
+  background-color: rgba(250, 205, 145, 0.2);
+  border: 1px solid rgba(250, 205, 145, 1);
+}
+.allCategories {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.categoriesRow {
+  display: flex;
+  margin: 8px 0;
+  padding: 12px 0;
+  border: 1px solid #1890ff;
+  border-right: none;
+  border-left: none;
+}
+.labelName {
+  width: 120px;
+  font-weight: bold;
+}
+.labelValue {
+  flex: 1;
+}

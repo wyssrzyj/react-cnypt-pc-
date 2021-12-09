@@ -8,15 +8,10 @@ function index({ stated }) {
   const { push } = useHistory()
   const { id, supplierInquiryId } = stated
   const { demandListStore } = useStores()
-  const {
-    orderQuantity,
-    submitRequisition,
-    rejectSubmission,
-    getInquiryQuote
-  } = demandListStore
+  const { orderQuantity, submitRequisition, getInquiryQuote } = demandListStore
 
   const [form] = Form.useForm()
-  const { resetFields, validateFields, getFieldsValue } = form
+  const { resetFields, validateFields } = form
 
   const layout = {
     labelCol: {
@@ -33,45 +28,40 @@ function index({ stated }) {
     ;(async () => {
       if (!supplierInquiryId) return
       const res = await getInquiryQuote({ supplierInquiryId })
+
       setInitialValues(res)
       resetFields()
     })()
   }, [])
-
+  let timer
   const onFinish = async flag => {
-    try {
-      if (flag) {
-        const values = await validateFields()
-
-        const res = await orderQuantity({
-          goodsNum: values.receiveGoodsNum,
-          id: id
-        })
-        if (res.code === 200) {
-          const submitRes = await submitRequisition({
-            ...values,
-            purchaserInquiryId: id,
-            supplierInquiryId: supplierInquiryId,
-            status: 2
+    clearTimeout(timer)
+    timer = setTimeout(async () => {
+      try {
+        if (flag) {
+          const values = await validateFields()
+          const res = await orderQuantity({
+            goodsNum: values.receiveGoodsNum,
+            id: id
           })
-          if (submitRes.code === 200) {
-            push({
-              pathname: '/control-panel/orderManagement/receiveOrder'
+
+          if (res.code === 200) {
+            const submitRes = await submitRequisition({
+              ...values,
+              purchaserInquiryId: id,
+              supplierInquiryId: supplierInquiryId,
+              status: 2
             })
+
+            if (submitRes.code === 200) {
+              push({
+                pathname: '/control-panel/orderManagement/receiveOrder'
+              })
+            }
           }
         }
-      } else {
-        const values = await getFieldsValue()
-        const res = await rejectSubmission({
-          ...values,
-          supplierInquiryId: supplierInquiryId,
-          status: -1
-        })
-        push('/control-panel/orderManagement/receiveOrder?key=all')
-        console.log(res)
-        console.log('拒绝')
-      }
-    } catch (err) {}
+      } catch (err) {}
+    }, 1000)
   }
 
   return (

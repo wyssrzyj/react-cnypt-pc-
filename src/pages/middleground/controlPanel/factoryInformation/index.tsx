@@ -348,9 +348,7 @@ const FactoryInformation = () => {
   const submit = async _flag => {
     try {
       await validateFields()
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   }
 
   const customRequest = async ({ file }) => {

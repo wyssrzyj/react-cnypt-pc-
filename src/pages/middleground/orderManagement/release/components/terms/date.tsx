@@ -22,6 +22,7 @@ const date = ({ validity }) => {
 
   function onChange(date, dateString) {
     console.log(date)
+
     setProcessingType(dateString)
   }
   function onChanges(date, dateString) {

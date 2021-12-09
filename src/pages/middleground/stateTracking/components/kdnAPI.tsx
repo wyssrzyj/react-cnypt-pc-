@@ -43,7 +43,6 @@ const post = async (url, data) => {
 }
 
 const KDNPost = async params => {
-  console.log(params, 'params')
   const res = await post(Url, params)
   return res
 }

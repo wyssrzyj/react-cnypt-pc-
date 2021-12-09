@@ -14,6 +14,27 @@
 .requisition {
   margin-left: 20px;
 }
+
+.shout {
+  cursor: pointer;
+}
+// .shouts :hover {
+//   color: #40a9ff;
+//   cursor: pointer;
+// }
+.shouts {
+  width: 138px;
+  margin-left: 68px;
+  color: #0a0a0a;
+  border-bottom: 1px solid #f9fafa;
+  cursor: pointer;
+}
+.shouts:hover {
+  color: #40a9ff;
+  border-bottom: 1px solid #40a9ff;
+  cursor: pointer;
+}
+
 .theme {
   padding: 20px;
   border: 1px solid #efefef;
@@ -69,7 +90,7 @@
   margin-right: 20px;
 }
 .subject {
-  height: 100%;
+  display: flex;
   font-size: 14px;
   // line-height: 12px;
 }
@@ -77,13 +98,20 @@
   color: #40a9ff;
   font-size: 14px;
 }
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+}
 .font {
   font-size: 14px;
 }
 .hidden {
   width: 173px;
   // height: 10px;
-  // margin-bottom: 12px;
+  margin-bottom: 15px;
   overflow: hidden;
   color: #666666;
   font-weight: 400;
@@ -97,8 +125,7 @@
 }
 .category {
   width: 173px;
-  // margin-top: 17px;
-  // margin-bottom: 15px;
+  margin-bottom: 15px;
   overflow: hidden;
   color: #666666;
   font-weight: 400;
@@ -107,6 +134,7 @@
   text-overflow: ellipsis;
 }
 .toppingFather {
+  line-height: 45px;
   cursor: pointer;
 }
 .hui {
@@ -181,20 +209,24 @@
   font-size: 18px;
 }
 .name {
-  // margin-bottom: 14px;
+  width: 173px;
+  margin-bottom: 14px;
+  overflow: hidden;
   color: #333333;
   font-weight: 600;
   font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .subject {
   // line-height: 12px;
 }
 
 .infoBox {
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
 }
 
 .color {

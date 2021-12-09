@@ -4,8 +4,15 @@ import { Empty } from 'antd'
 import { isArray, isEmpty } from 'lodash'
 import { Icon } from '@/components'
 import styles from './index.module.less'
+import { toJS, useStores } from '@/utils/mobx'
+import { getTrees } from './method'
 
 const FactoryCard = props => {
+  const { factoryStore } = useStores()
+  const { productCategoryList } = factoryStore
+
+  const newList = toJS(productCategoryList)
+
   const history = useHistory()
   const { title, list = [] } = props
   return (
@@ -45,9 +52,15 @@ const FactoryCard = props => {
                     <Icon type="jack-zhuying_bai" className={styles.tagIcon} />
                     主要生产：
                   </span>
+
                   <span>
                     {isArray(item.factoryCategoryList)
-                      ? item.factoryCategoryList.join('，')
+                      ? getTrees(
+                          item.factoryCategoryList,
+                          newList,
+                          'code',
+                          'name'
+                        ).join('、')
                       : '待完善'}
                   </span>
                 </div>

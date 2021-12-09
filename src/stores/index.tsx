@@ -12,6 +12,7 @@ import OrderStore, { orderStore } from './middleground/order'
 import DepartmentStore, { departmentStore } from './department'
 import DemandListStore, { demandListStore } from './demandList'
 import SearchOrderStore, { searchOrderStore } from './searchOrder'
+import EnterpriseStore, { enterpriseStore } from './enterprise'
 
 export interface Stores {
   homeStore: HomeStore
@@ -27,6 +28,7 @@ export interface Stores {
   orderStore: OrderStore
   departmentStore: DepartmentStore
   demandListStore: DemandListStore
+  enterpriseStore: EnterpriseStore
   searchOrderStore: SearchOrderStore
 }
 
@@ -44,5 +46,6 @@ export const stores = {
   orderStore,
   departmentStore,
   searchOrderStore,
-  demandListStore
+  demandListStore,
+  enterpriseStore
 }

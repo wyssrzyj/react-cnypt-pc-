@@ -13,7 +13,6 @@ function showConfirm() {
 
     content: '确认取消当前订单 ',
     onOk() {
-      console.log('确认删除')
       // 删除逻辑
     },
     onCancel() {}
@@ -27,9 +26,7 @@ function Returndraft() {
     icon: <Icon type="jack-thcgx" className={styles.ulIcon} />,
 
     content: '确认将当前订单退回至草稿箱？ ',
-    onOk() {
-      console.log('确认退回')
-    },
+
     onCancel() {}
   })
 }
@@ -39,12 +36,7 @@ function reason() {
     centered: true,
     closable: true,
     icon: <Icon type="jack-thyy" className={styles.ulIcon} />,
-
-    content: '价格不合适 ',
-    onOk() {
-      console.log('确认退回')
-    },
-    onCancel() {}
+    content: '价格不合适 '
   })
 }
 function acceptance() {
@@ -53,11 +45,7 @@ function acceptance() {
     centered: true,
     closable: true,
     icon: <Icon type="jack-qrys1" className={styles.ulIcon} />,
-    content: '确定验收当前订单数据，结束订单流程？ ',
-    onOk() {
-      console.log('确认验收')
-    },
-    onCancel() {}
+    content: '确定验收当前订单数据，结束订单流程？ '
   })
 }
 
@@ -67,10 +55,7 @@ const Product = props => {
   const [buttondisplay, Buttondisplay] = useState(false) //判断已完成和草稿箱的按钮显示
   const [ompletiontime, setCompletiontime] = useState(false) //判断已完成的数据显示
   const [topping, setTopping] = useState(false) //判断置顶
-  console.log(setTopping)
   const judgeTopping = () => {
-    console.log('置顶测试')
-
     setTopping(!topping)
   }
   useEffect(() => {
@@ -177,12 +162,9 @@ const Product = props => {
   const [indeterminate, setIndeterminate] = React.useState(true) //中心点的状态全选之后为false
   const [checkAll, setCheckAll] = React.useState(false) //用来判断全选的状态
   const onChange = e => {
-    console.log('我是单选')
     setChoice(e.target.checked)
   }
   const onCheckAllChange = e => {
-    console.log('我是全选')
-    console.log(e)
     setChoice(!choice) //点击全选状态和单选一样
     setIndeterminate(false)
     setCheckAll(e.target.checked)

@@ -221,7 +221,6 @@ const GDMap = (props: any) => {
     const { feature } = ev
     const { properties } = feature
     if (adcodeRef.current === properties.adcode) return
-    // console.log(properties)
     setAddCode(properties.adcode)
     setPopShow(true)
     setPopUpShow(true)
@@ -288,17 +287,8 @@ const GDMap = (props: any) => {
     pointLayer.hide()
 
     scene.on('loaded', async () => {
-      // scene.on('zoomchange', () => {
-      //   console.log(scene.getZoom(), 'scene.getZoom()')
-      //   console.log(scene.getCenter(), 'scene.getCenter()')
-      //   initInfo()
-      // })
+      scene.on('click', _ev => {})
 
-      scene.on('click', _ev => {
-        // console.log(ev, 'ev')
-      })
-
-      // updateDistrict
       const dLayer: any = new DrillDownLayer(scene, {
         data: [],
         viewStart: 'Country',
@@ -453,9 +443,7 @@ const GDMap = (props: any) => {
     }
   }, [cRef.current, map, provinceChange])
 
-  useEffect(() => {
-    // console.log(curTarget)
-  }, [curTarget])
+  useEffect(() => {}, [curTarget])
 
   useEffect(() => {
     // 信息窗体线条动画

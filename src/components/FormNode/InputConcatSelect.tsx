@@ -30,7 +30,6 @@ const InputConcatSelect = (props: Props) => {
   const [data, setData] = useState<Data>(value)
 
   const valueChange = (event: InputEvent | SelectValue, type: string) => {
-    // console.log(date)
     const oData = cloneDeep(data)
     if (type === 'input') {
       oData[keys[0]] = (event as InputEvent).target.value

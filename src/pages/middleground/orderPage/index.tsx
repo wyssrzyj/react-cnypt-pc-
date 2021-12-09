@@ -134,7 +134,6 @@ const OrderPage = () => {
     salesMarket = [],
     orderProcessType = []
   } = toJS(dictionary)
-  console.log(toJS(dictionary))
 
   const orderConfigs = [
     {
@@ -446,7 +445,6 @@ const OrderPage = () => {
         return
       }
     } catch (err) {
-      console.log(err)
     } finally {
       setLoading(false)
     }
@@ -525,7 +523,6 @@ const OrderPage = () => {
       )
       return
     } catch (err) {
-      console.log(err)
     } finally {
       setLoading(false)
     }

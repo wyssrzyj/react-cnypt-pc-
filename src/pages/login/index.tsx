@@ -10,8 +10,6 @@ const LoginAndRegister = () => {
   const history = useHistory()
 
   const toHome = () => {
-    console.log(123)
-
     history.push('/')
   }
 

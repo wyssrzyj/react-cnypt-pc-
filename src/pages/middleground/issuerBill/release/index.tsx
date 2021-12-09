@@ -7,7 +7,7 @@ import Basics from './components/basics'
 import Commodity from './components/commodity'
 import Terms from './components/terms'
 import Address from './components/address'
-import { useStores, observer } from '@/utils/mobx'
+import { useStores, observer, toJS } from '@/utils/mobx'
 import { useHistory, useLocation } from 'react-router-dom'
 import moment from 'moment'
 
@@ -18,9 +18,9 @@ const DemandSheet = () => {
   const { state } = location
 
   const { demandListStore } = useStores()
-  const { ewDemandDoc, anotherSingleInterface } = demandListStore
+  const { ewDemandDoc, anotherSingleInterface, regionalData, popUpEcho } =
+    demandListStore
 
-  const [validity, setValidity] = useState<any>()
   const [confirm, setConfirm] = useState<any>(true)
   const [initialValues, setInitialValues] = useState<any>({
     isEnterpriseInfoPublic: 1,
@@ -28,19 +28,29 @@ const DemandSheet = () => {
   })
   const [stated, setStated] = useState<any>(state) //url 数据
   const { factoryStore } = useStores()
-
+  const [invalid, setInvalid] = useState<any>('') //时间回显判断失效时间错
   const { productCategory } = factoryStore
+  // 弹窗地区数据回显
+  useEffect(() => {
+    let arr = toJS(regionalData) //把id和name修改value和label
+    if (arr.length > 0) {
+      let sum = []
+      arr.forEach(item => {
+        sum.push(item.id)
+      })
+      form.setFieldsValue({ regionalIdList: sum })
+    }
+  }, [regionalData])
+
   useEffect(() => {
     api()
   }, [])
   let api = async () => {
     await productCategory()
-    console.log(validity)
   }
 
   useEffect(() => {
     setStated(state)
-
     if (stated) {
       echoData(stated.id)
     }
@@ -67,9 +77,12 @@ const DemandSheet = () => {
       if (data.location[0] === 0) {
         data.location = null
       }
-      data.inquiryEffectiveDate = moment(data.inquiryEffectiveDate) //时间的回显
+      data.inquiryEffectiveDate = moment(data.inquiryEffectiveDate) //订单有效期时间的回显
       data.deliveryDate = moment(data.deliveryDate)
+      setInvalid(moment(data.inquiryEffectiveDate).valueOf()) //订单有效期时间的时间戳
     }
+
+    popUpEcho(data.regionalIdList) //地区弹窗回显
 
     setInitialValues(data)
   }
@@ -78,10 +91,6 @@ const DemandSheet = () => {
       form.resetFields()
     }
   }, [initialValues])
-
-  const data = value => {
-    setValidity(value)
-  }
 
   //保存
   const draft = () => {
@@ -99,7 +108,6 @@ const DemandSheet = () => {
     if (isArray(v.annex)) {
       v.annex = v.annex.map(item => item.url)
     }
-    // ly
     // 图片
     if (isArray(v.stylePicture)) {
       v.stylePicture = v.stylePicture.map(item => item.url)
@@ -118,12 +126,9 @@ const DemandSheet = () => {
 
     if (stated) {
       if (stated.modify) {
-        console.log('修改')
         v.id = stated.id
       }
     }
-
-    console.log(v)
     const res = await ewDemandDoc(v)
     if (res.code === 200) {
       push({ pathname: '/control-panel/issuerBill/demand-list' })
@@ -134,7 +139,6 @@ const DemandSheet = () => {
     labelCol: { span: 6 },
     wrapperCol: { span: 16 }
   }
-
   return (
     <div className={styles.demand}>
       <Form
@@ -154,7 +158,7 @@ const DemandSheet = () => {
         </section>
         <section>
           <Title title={'其他'}></Title>
-          <Terms data={data} />
+          <Terms time={invalid} />
           <Address />
         </section>
 

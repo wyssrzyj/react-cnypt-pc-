@@ -90,7 +90,6 @@ const Header = () => {
 
   const { logout } = loginStore
   const { enterpriseType } = userInfo
-
   const workbenchData = [
     //加工厂
     {
@@ -178,7 +177,6 @@ const Header = () => {
         })
       }
     }
-    console.log('enterpriseTypeenterpriseType', enterpriseType)
 
     if (enterpriseType === '1') {
       if (item) {
@@ -306,6 +304,7 @@ const Header = () => {
       })}
     </div>
   )
+
   return (
     <header>
       <div className={styles.header}>
@@ -318,8 +317,23 @@ const Header = () => {
           {currentUser.userId ? (
             <Dropdown overlay={menu}>
               <span className={styles.user}>
-                <Icon type={'jack-yonghu2'} className={styles.userIcon}></Icon>
-                您好，{currentUser.nickName || currentUser.username}
+                <span>
+                  <Icon
+                    type={'jack-yonghu2'}
+                    className={styles.userIcon}
+                  ></Icon>
+                </span>
+
+                <span>
+                  您好，
+                  {currentUser.nickName || currentUser.username}
+                  {+enterpriseType === 1 && enterpriseType != null ? (
+                    <span className={styles.role}>(发单商)</span>
+                  ) : null}
+                  {+enterpriseType === 0 && enterpriseType != null ? (
+                    <span className={styles.role}>(加工厂)</span>
+                  ) : null}
+                </span>
               </span>
             </Dropdown>
           ) : (
@@ -333,7 +347,6 @@ const Header = () => {
             </>
           )}
         </div>
-
         {/* -----------------------------我的工作台----------------------------- */}
         <div className={styles.headerRight}>
           {currentUser.userId ? (

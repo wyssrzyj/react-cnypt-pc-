@@ -45,7 +45,6 @@ const EditModal = props => {
         const target = await getDepartmentDetail(modalId)
         if (target) {
           if (+modalStatus === 0) {
-            console.log(target, '222222')
             setInitValues(target)
           }
         }

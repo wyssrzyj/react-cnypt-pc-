@@ -3,6 +3,7 @@ import styles from './memorandum.module.less'
 import { Calendar, Badge, Button, Modal, Input } from 'antd'
 import { Icon } from '@/components'
 import { Title } from '../../controlPanel/accountSafe'
+import moment from 'moment'
 
 const { TextArea } = Input
 
@@ -12,15 +13,15 @@ const Memorandum = () => {
   const [visible, setVisible] = useState(false)
 
   const getlistData = value => {
+    // let sum = [5, 6, 7, 8, 9, 10, 25]
+    // console.log(sum)
+
     let listData
     switch (value.date()) {
-      case 8:
-        listData = [
-          { type: 'warning', content: 'This is warning event.' },
-          { type: 'success', content: 'This is usual event.' }
-        ]
+      case 18:
+        listData = [{ type: 'success', content: 'This is usual event.' }]
         break
-      case 10:
+      case 20:
         listData = [
           { type: 'warning', content: 'This is warning event.' },
           { type: 'success', content: 'This is usual event.' },
@@ -45,8 +46,13 @@ const Memorandum = () => {
   const dateCellRender = value => {
     const listData = getlistData(value)
     // const listData = []
+
     if (listData.length) {
+      console.log('有值的时候执行')
+
       const target = listData[0]
+      console.log(target)
+
       return (
         <div className={styles.badgeBox}>
           <Badge status={target.type} />
@@ -55,12 +61,30 @@ const Memorandum = () => {
     }
   }
 
-  const onChange = event => {
-    console.log(event)
-  }
-
   const showModal = () => {
     setVisible(f => !f)
+  }
+
+  const monthCellRender = value => {
+    console.log('monthCellRender', value)
+
+    const num = getMonthData(value)
+    return num ? (
+      <div className="notes-month">
+        <section>{num}</section>
+        <span>Backlog number</span>
+      </div>
+    ) : null
+  }
+  const getMonthData = value => {
+    console.log('getMonthData', value)
+
+    if (value.month() === 8) {
+      return 1394
+    }
+  }
+  const onSelect = e => {
+    console.log(moment(e).format('YYYY-MM-DD'))
   }
 
   return (
@@ -68,8 +92,9 @@ const Memorandum = () => {
       <Title title={'备忘录'}></Title>
       <div className={styles.content}>
         <Calendar
-          onChange={onChange}
+          onSelect={onSelect}
           dateCellRender={dateCellRender}
+          monthCellRender={monthCellRender}
           fullscreen={false}
         ></Calendar>
         {false ? (

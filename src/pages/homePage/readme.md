@@ -191,7 +191,6 @@ const setPopLocation = (scene: Scene, ev: any) => {
   const { feature } = ev
   const { properties } = feature
   if (adcodeRef.current === properties.adcode) return
-  // console.log(properties)
   setAddCode(properties.adcode)
   setPopShow(true)
   setPopUpShow(true)

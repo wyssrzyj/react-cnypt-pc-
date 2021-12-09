@@ -40,7 +40,7 @@ const headerConfigs: Array<Partial<Config>> = [
   }
 ]
 
-function Sort({ callback }) {
+function Sort() {
   const [configs, setConfigs] = useState<Array<Partial<Config>>>(headerConfigs)
 
   const changeSort = index => {
@@ -54,14 +54,6 @@ function Sort({ callback }) {
     const target = newConfigs[index]
     target.sort = target.sort > 0 ? -1 : target.sort === 0 ? 1 : 0
     setConfigs(newConfigs)
-
-    const params = {
-      pageNum: 1,
-      sortField: target.field,
-      sortType: state.get(target.sort)
-    }
-
-    callback && callback(params)
   }
 
   return (

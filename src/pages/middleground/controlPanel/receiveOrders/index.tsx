@@ -61,7 +61,14 @@ const ReceiveOrder = () => {
   const { key = 'all' } = res
   useEffect(() => {
     setActiveKey(key)
+    setParams({
+      ...params,
+      status: tabsStatus.get(key)
+    })
   }, [key])
+  useEffect(() => {
+    setActiveKey(key)
+  }, [])
 
   useEffect(() => {
     const res: any = urlGet() || {}
@@ -111,7 +118,6 @@ const ReceiveOrder = () => {
   }
 
   const tabChange = key => {
-    console.log('🚀 ~ file: index.tsx ~ line 112 ~ ReceiveOrder ~ key', key)
     // tab切换时 修改activeKey
     setActiveKey(key)
     history.replace(`${location.pathname}?key=${key}`)

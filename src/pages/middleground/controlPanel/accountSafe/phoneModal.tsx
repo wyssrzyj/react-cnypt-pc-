@@ -71,9 +71,7 @@ const PhoneModal = ({ cancel }) => {
         res && localStorage.setItem('currentUser', JSON.stringify(newUser))
         res && setStep(5)
       }
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
 
     if (step === 5) {
       onCancel()

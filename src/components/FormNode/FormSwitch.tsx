@@ -12,8 +12,6 @@ const FormSwitch = (props: Props) => {
   const [checked, setChecked] = useState<boolean>(value)
 
   const valueChange = (date: boolean) => {
-    // console.log(date)
-
     setChecked(date)
   }
 

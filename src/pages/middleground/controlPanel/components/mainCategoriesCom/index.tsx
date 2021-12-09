@@ -40,7 +40,7 @@ const MainCategoriesCom = props => {
     }, [])
     const newLabel = filter(childList, function (o) {
       return find(flat, function (item) {
-        return item === o.id
+        return item === o.code
       })
     }).map(item => item.name)
     setCheckedLabel([...newLabel])
@@ -67,7 +67,7 @@ const MainCategoriesCom = props => {
       setCheckedCategories([...value])
       const newLabel = filter(childList, function (o) {
         return find(value, function (item) {
-          return item === o.id
+          return item === o.code
         })
       }).map(item => item.name)
       setCheckedLabel([...newLabel])
@@ -113,13 +113,13 @@ const MainCategoriesCom = props => {
         </div>
         <ul className={styles.allCategories}>
           {newList.map(category => {
-            const { id, name, children } = category
+            const { code, name, children } = category
             const newChildren = children.map(item => ({
-              value: item.id,
+              value: item.code,
               label: item.name
             }))
             return (
-              <li key={id} className={styles.categoriesRow}>
+              <li key={code} className={styles.categoriesRow}>
                 <div className={styles.labelName}>{name}</div>
                 <Checkbox.Group
                   className={styles.labelValue}

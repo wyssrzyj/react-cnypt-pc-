@@ -3,17 +3,6 @@ import { Upload, Modal, message } from 'antd'
 import OSS from '@/utils/oss'
 import { cloneDeep } from 'lodash'
 
-// function getBase64(file) {
-//   console.log(file)
-
-//   return new Promise((resolve, reject) => {
-//     const reader = new FileReader()
-//     reader.readAsDataURL(file)
-//     reader.onload = () => resolve(reader.result)
-//     reader.onerror = error => reject(error)
-//   })
-// }
-
 function index() {
   const [previewVisible, setPreviewVisible] = useState(false)
   const [fileList, setFileList] = useState<any>([])
@@ -45,7 +34,6 @@ function index() {
     // /capacity-platform/platform 目标文件夹路径 __ 分割符号
     let sum = []
     sum.push(cums(file))
-    console.log(sum)
 
     const res = await OSS.put(
       `/capacity-platform/platform/${file.uid}__${file.name}`,
@@ -55,7 +43,6 @@ function index() {
     if (res) {
       const { url, name } = res
       imgs.push({ thumbUrl: url, name: name.split('__')[1], url })
-      console.log('img的值', imgs)
       setFileList(imgs)
     }
   }
@@ -70,7 +57,6 @@ function index() {
   }
 
   const handleChange = ({ file }) => {
-    console.log(file)
     let sum = []
     sum.push(file)
     return sum
@@ -82,7 +68,6 @@ function index() {
     </div>
   )
   {
-    console.log(fileList)
   }
   return (
     <>

@@ -53,12 +53,9 @@ function DemandList() {
     }
   }
   // 排序
-  const sortCallback = value => {
-    console.log(value)
-  }
+  const sortCallback = () => {}
   // 查询
   const queryMethod = value => {
-    console.log(value)
     value.releaseTimeStart = new Date(value.issuingTime[0]).getTime()
     value.releaseTimeEnd = new Date(value.issuingTime[1]).getTime()
     setParams({ ...params, ...value })
@@ -90,7 +87,6 @@ function DemandList() {
   }
   // 谢绝
   const earlyEnd = async e => {
-    console.log(e)
     const res = await declineRequisition({ id: e, status: -2 })
 
     if (res.code === 200) {
@@ -113,8 +109,6 @@ function DemandList() {
   }
   // 删除
   const deleteMethod = async id => {
-    console.log('删除', id)
-
     const res = await deleteIssuer({ supplierInquiryId: id })
     if (res.code === 200) {
       InterfaceData()
@@ -122,7 +116,6 @@ function DemandList() {
   }
   // 详情
   const demandSheetDetails = e => {
-    console.log('查看订单信息')
     push({ pathname: '/control-panel/orderDetails', state: { id: e } })
   }
 

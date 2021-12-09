@@ -46,9 +46,7 @@ const MapSearch = () => {
       }
     })
 
-    map.on('complete', () => {
-      // console.log('complete')
-    })
+    map.on('complete', () => {})
 
     map.on('moveend', () => {
       const center = map.getCenter()

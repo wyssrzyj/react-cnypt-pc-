@@ -170,7 +170,6 @@ const ReceiveManage = () => {
         setDataSource(records)
       }
     } catch (err) {
-      console.log(err)
     } finally {
       setLoading(false)
     }

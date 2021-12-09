@@ -52,9 +52,6 @@ const FactoryCard = props => {
                     <Icon type="jack-zhuying_bai" className={styles.tagIcon} />
                     主要生产：
                   </span>
-                  {console.log(item)}
-                  {console.log(item.factoryCategoryList)}
-                  {console.log(newList)}
 
                   <span>
                     {isArray(item.factoryCategoryList)

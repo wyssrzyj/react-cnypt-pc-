@@ -20,8 +20,8 @@ function Query({ query, state }) {
     query && query(values)
   }
   const handleSelectTime = (value, dateString) => {
-    console.log(value)
     setDateString(dateString)
+    console.log(value)
   }
 
   return (

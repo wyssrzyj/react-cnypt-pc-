@@ -49,9 +49,6 @@ function DemandList() {
   }, [params])
 
   const Interface = async () => {
-    console.log('跳转有数据')
-    console.log(state)
-
     if (state !== undefined) {
       let sum = {
         pageNum: pageNumber,
@@ -65,7 +62,6 @@ function DemandList() {
       if (res.code === 200) {
         setDataLength(res.data.total)
         if (res.data.records) {
-          console.log(res.data.records)
           setLists(res.data.records)
         }
       }
@@ -92,9 +88,6 @@ function DemandList() {
   }
 
   // 排序
-  const sortCallback = value => {
-    console.log(value)
-  }
   // 查询
   const queryMethod = value => {
     value.releaseTimeStart = new Date(value.issuingTime[0]).getTime()
@@ -137,9 +130,7 @@ function DemandList() {
   }
   // 谢绝
   const earlyEnd = async e => {
-    console.log(e)
     const res = await declineRequisition({ id: e, status: -2 })
-    console.log('谢绝操作', res)
     if (res.code === 200) {
       InterfaceData()
     }
@@ -167,7 +158,6 @@ function DemandList() {
   }
   // 详情
   const demandSheetDetails = e => {
-    console.log('查看订单信息')
     push({ pathname: '/control-panel/orderDetails', state: { id: e } })
   }
 
@@ -176,7 +166,7 @@ function DemandList() {
       <section>
         <Tab routing={routingData} />
         <Query state={state} query={queryMethod} />
-        <Sort callback={sortCallback} />
+        <Sort />
         {lists.length > 0 ? (
           <>
             {lists.map((item, index) => {
@@ -188,7 +178,6 @@ function DemandList() {
                   demandSheetDetails={demandSheetDetails}
                   reOrder={reOrder}
                   toppingMethod={toppingMethod}
-                  // callback={event => dataChoose(event.target.checked, index)}
                   key={index}
                   data={item}
                 />

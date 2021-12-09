@@ -15,9 +15,9 @@ const layout = {
   }
 }
 
-function Basics({ data, time }) {
+function Basics({ time }) {
   const unitPrice = value => {
-    data(value)
+    console.log(value)
   }
   return (
     <div>

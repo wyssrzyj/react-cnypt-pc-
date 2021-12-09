@@ -19,13 +19,8 @@ function imgUpload() {
     )
     if (res) {
       const { url, name } = res
-      console.log(name)
-      console.log(url)
-      //   sum.push({})
-      // setImageUrl(url)
       imgs.push({ thumbUrl: url, name: name.split('__')[1], url })
       setNodeValue(imgs)
-      //   valueChange && valueChange(imgs)
     }
   }
 

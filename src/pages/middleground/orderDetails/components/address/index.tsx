@@ -19,12 +19,6 @@ function index({ initialValues, enterpriseType }) {
   useEffect(() => {
     // 地区要求的获取
     if (initialValues.location && !isEmpty(toJS(allArea))) {
-      console.log('地址', initialValues.location)
-      console.log('地图', toJS(allArea))
-      console.log(
-        getTrees(initialValues.location, toJS(allArea), 'value', 'label')
-      )
-
       const res = getTrees(
         initialValues.location,
         toJS(allArea),

@@ -152,7 +152,6 @@ const FormNode = (props: FormNodeProps) => {
   useEffect(() => {
     if (type !== 'img') return
     if (uploadRef.current) {
-      // console.log(uploadRef.current.upload.props.onChange)
     }
   }, [uploadRef])
 
@@ -228,9 +227,7 @@ const FormNode = (props: FormNodeProps) => {
       download.download = file.name
       download.click()
       window.URL.revokeObjectURL(download.href)
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   }
 
   switch (type) {

@@ -29,7 +29,6 @@ const Footer = () => {
       value: 'uchat@chinajack.com'
     }
   ]
-  console.log()
 
   return (
     <div className={currentUser.userId ? styles.footerBox : styles.footerBoxst}>

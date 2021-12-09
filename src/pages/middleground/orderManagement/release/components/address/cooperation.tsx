@@ -4,7 +4,6 @@ import styles from './index.module.less'
 import { Icon } from '@/components'
 function cooperation() {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [value, setValue] = useState('')
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   const showModal = () => {
@@ -13,7 +12,6 @@ function cooperation() {
 
   const handleOk = () => {
     // 调取接口
-    console.log(selectedRowKeys)
     setSelectedRowKeys([])
     setIsModalVisible(false)
   }
@@ -21,9 +19,7 @@ function cooperation() {
   const handleCancel = () => {
     setIsModalVisible(false)
   }
-  const search = () => {
-    console.log(value)
-  }
+  const search = () => {}
   const dataSource = [
     {
       id: 1,
@@ -84,7 +80,6 @@ function cooperation() {
   ]
 
   const onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys)
     setSelectedRowKeys(selectedRowKeys)
   }
   const rowSelection = {
@@ -119,9 +114,6 @@ function cooperation() {
             <Input
               placeholder="可按公司名称进行搜索"
               className={styles.input}
-              onChange={e => {
-                setValue(e.target.value)
-              }}
             />
           </Col>
         </div>

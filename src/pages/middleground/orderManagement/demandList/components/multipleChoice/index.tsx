@@ -34,19 +34,12 @@ const MultipleChoice = ({
     toppingMethod({ id: value, stickType: ccc })
   }
 
-  // 失败原因
-  const failureReason = e => {
-    console.log(e)
-    console.log('失败原因')
-  }
-
   const showModal = () => {
     setWindowType({ type: 'mov' })
     setIsModalVisible(true)
   }
   //  点击确认 判断是删除还是提前结束
   const handleOk = () => {
-    console.log(windowType)
     if (windowType.type === 'advance') {
       earlyEnd(id)
     }
@@ -126,13 +119,7 @@ const MultipleChoice = ({
       {/* 主题 */}
       <div className={styles.theme}>
         <Row>
-          <Col span={1}>
-            {/* <Checkbox
-              className={styles.checked}
-              // onChange={callback}
-              checked={checked}
-            /> */}
-          </Col>
+          <Col span={1}></Col>
           <Col span={8}>
             <div className={styles.subject}>
               <img
@@ -140,7 +127,7 @@ const MultipleChoice = ({
                 src={data.pictureUrl ? data.pictureUrl : Simg}
                 alt=""
               />
-              <div>
+              <div className={styles.nameFlex}>
                 <p className={styles.name}>{data.name}</p>
                 <Tooltip placement="top" title={data.processing.join('、')}>
                   <div className={styles.hidden}>
@@ -174,16 +161,7 @@ const MultipleChoice = ({
                     : 0}
                 </span>
                 家已谢绝
-                {/* <span className={styles.fontColor}>1</span> 家已反馈 */}
               </p>
-              {/* <p>
-                <span className={styles.fontColor}>{data.issuedBill}</span>
-                家已发单，已发订单量
-                <span className={styles.fontColor}>
-                  {data.issuedorderQuantity}
-                </span>
-                件
-              </p> */}
               <p className={styles.moreOrder}>
                 <span
                   className={styles.cursor}
@@ -240,14 +218,7 @@ const MultipleChoice = ({
             {+data.status === -2 ? (
               <div>
                 <p className={styles.end}>审核失败</p>
-                <p
-                  className={styles.cursor}
-                  onClick={() => {
-                    failureReason(data.id)
-                  }}
-                >
-                  查看失败原因
-                </p>
+                <p className={styles.cursor}>查看失败原因</p>
               </div>
             ) : null}
             {/* 草稿 */}

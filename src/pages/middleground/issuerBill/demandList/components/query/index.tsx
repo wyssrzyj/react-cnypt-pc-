@@ -17,17 +17,14 @@ function Query({ query }) {
 
   const [dateString, setDateString] = useState([])
   const onFinish = (values: any) => {
-    console.log(values)
-
     {
       values.password = dateString
     }
     query && query(values)
   }
   const handleSelectTime = (value, dateString) => {
-    console.log(value)
-    console.log(dateString)
     setDateString(dateString)
+    console.log(value)
   }
   const reset = () => {
     setDateString([])

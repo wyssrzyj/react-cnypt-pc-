@@ -323,13 +323,14 @@ const Header = () => {
                     className={styles.userIcon}
                   ></Icon>
                 </span>
+
                 <span>
                   您好，
                   {currentUser.nickName || currentUser.username}
-                  {+enterpriseType === 1 ? (
+                  {+enterpriseType === 1 && enterpriseType != null ? (
                     <span className={styles.role}>(发单商)</span>
                   ) : null}
-                  {+enterpriseType === 0 ? (
+                  {+enterpriseType === 0 && enterpriseType != null ? (
                     <span className={styles.role}>(加工厂)</span>
                   ) : null}
                 </span>

@@ -5,11 +5,11 @@ import Header from './components/header'
 import Memorandum from './components/memorandum'
 import Todo from './components/todo'
 import styles from './index.module.less'
-import { useHistory } from 'react-router'
-import { message } from 'antd'
+// import { useHistory } from 'react-router'
+// import { message } from 'antd'
 
 const BusinessHome = () => {
-  const history = useHistory()
+  // const history = useHistory()
 
   const rightConfigs = [
     {
@@ -47,20 +47,6 @@ const BusinessHome = () => {
       field: '',
       count: 0,
       color: '#D7F0E2'
-    },
-    {
-      label: '新增需求',
-      type: 'add',
-      callback: () => {
-        message.warn('此功能暂未开放~')
-      }
-    },
-    {
-      label: '新增订单',
-      type: 'add',
-      callback: () => {
-        history.push('/control-panel/issuerBill/demand-sheet')
-      }
     }
   ]
 

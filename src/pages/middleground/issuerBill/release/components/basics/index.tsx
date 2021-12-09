@@ -83,7 +83,6 @@ function Basics() {
     <div className={styles.basic}>
       <Row>
         {orderConfigs.map(item => {
-          //orderConfigs form的数据
           const data: any = {} //定义一个空对象
           keys.forEach(i => {
             if (![null, undefined].includes(item[i])) {

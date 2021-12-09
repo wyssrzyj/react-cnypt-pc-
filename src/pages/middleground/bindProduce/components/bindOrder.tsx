@@ -176,10 +176,6 @@ const BindOrder = () => {
     }
   }, [totalKeysArr, dataSource])
 
-  useEffect(() => {
-    // console.log(currentKeys, 'currentKeys')
-  }, [currentKeys])
-
   const cancel = () => {
     history.goBack()
   }

@@ -25,9 +25,6 @@ const MultipleChoice = ({
   const { id, stickType } = data
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [windowType, setWindowType] = useState<any>({}) //弹窗类型
-
-  // const [topping, setTopping] = useState() //置顶
-
   const Topping = new Map()
   Topping.set(1, 'jack-zhiding_1')
   Topping.set(0, 'jack-zhiding_2')
@@ -46,19 +43,12 @@ const MultipleChoice = ({
     toppingMethod({ id: value, stickType: ccc })
   }
 
-  // 失败原因.
-  const failureReason = e => {
-    console.log(e)
-    console.log('失败原因')
-  }
-
   const showModal = () => {
     setWindowType({ type: 'mov' })
     setIsModalVisible(true)
   }
   //  点击确认 判断是删除还是提前结束
   const handleOk = () => {
-    console.log(windowType)
     if (windowType.type === 'advance') {
       earlyEnd(id)
     }
@@ -112,7 +102,7 @@ const MultipleChoice = ({
           </Col>
           <Col span={6} className={styles.examine}>
             {data.status !== -1 ? (
-              <div>
+              <>
                 <span>
                   <Icon
                     type={examine.get(data.systemApprovalStatus)}
@@ -124,7 +114,7 @@ const MultipleChoice = ({
                 ) : (
                   <span>审核不通过</span>
                 )}
-              </div>
+              </>
             ) : null}
           </Col>
           <Col span={1} className={styles.toppingFather}>
@@ -151,7 +141,7 @@ const MultipleChoice = ({
                 src={data.pictureUrl ? data.pictureUrl : Simg}
                 alt=""
               />
-              <div>
+              <div className={styles.content}>
                 <p className={styles.name}>{data.name}</p>
                 <Tooltip placement="top" title={data.processing.join('、')}>
                   <div className={styles.hidden}>
@@ -213,17 +203,7 @@ const MultipleChoice = ({
                   </span>
                   家已谢绝
                 </span>
-
-                {/* <span className={styles.fontColor}>1</span> 家已反馈 */}
               </div>
-              {/* <p>
-                <span className={styles.fontColor}>{data.issuedBill}</span>
-                家已发单，已发订单量
-                <span className={styles.fontColor}>
-                  {data.issuedorderQuantity}
-                </span>
-                件
-              </p> */}
               <p className={styles.moreOrder}>
                 <span
                   className={styles.cursor}
@@ -280,14 +260,7 @@ const MultipleChoice = ({
             {+data.status === -2 ? (
               <div>
                 <p className={styles.end}>审核失败</p>
-                <p
-                  className={styles.cursor}
-                  onClick={() => {
-                    failureReason(data.id)
-                  }}
-                >
-                  查看失败原因
-                </p>
+                <p className={styles.cursor}>查看失败原因</p>
               </div>
             ) : null}
             {/* 草稿 */}
@@ -325,7 +298,6 @@ const MultipleChoice = ({
                     >
                       删除记录
                     </Button>
-                    {/* </Popconfirm> */}
                   </div>
                 ) : (
                   <div className={styles.btn}>
@@ -337,7 +309,6 @@ const MultipleChoice = ({
                     >
                       删除记录
                     </Button>
-                    {/* </Popconfirm> */}
                   </div>
                 )}
               </div>
@@ -349,7 +320,6 @@ const MultipleChoice = ({
             centered={true}
             footer={null}
             onCancel={onCancel}
-            // maskClosable={false}
           >
             <div className={styles.delContent}>
               {windowType.type === 'mov' ? (

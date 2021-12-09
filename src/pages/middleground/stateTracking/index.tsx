@@ -105,7 +105,6 @@ const StateTracking = () => {
           setCurStep(orderMsg.currentType - 1 || 0)
         }
       } catch (err) {
-        console.log(err)
       } finally {
         setLoading(false)
       }

@@ -394,9 +394,7 @@ const ListCard = ({
       download.download = name
       download.click()
       window.URL.revokeObjectURL(download.href)
-    } catch (e) {
-      console.log(e)
-    }
+    } catch (e) {}
   }
 
   const getEditBtns = (status, type?) => {

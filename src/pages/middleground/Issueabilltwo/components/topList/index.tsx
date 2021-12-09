@@ -5,8 +5,6 @@ import styles from './todo.module.less'
 const TopList = props => {
   const { data } = props
   const { completed } = data
-  console.log(completed)
-
   return (
     <div>
       {/* 表格 */}

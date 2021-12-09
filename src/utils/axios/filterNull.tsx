@@ -89,7 +89,6 @@ export const dealRefresh = async () => {
       const { response } = err
       const { data } = response
       const { code } = data
-      console.log(code, 'code')
       if (+code === 401) {
         // 401 跳登录页
         const { pathname } = location

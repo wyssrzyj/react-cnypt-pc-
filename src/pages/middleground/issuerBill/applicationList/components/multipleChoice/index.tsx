@@ -263,21 +263,6 @@ const MultipleChoice = ({
               <span className={styles.information}>•</span>备注：
               {data.remark ? data.remark : '暂无'}
             </p>
-            <div className={styles.tablefuls}>
-              {data.NumberOfOrders ? (
-                <div className={styles.table}>
-                  <span className={styles.numberOfOrders}>
-                    已发订单数：
-                    <span className={styles.color}>{data.NumberOfOrders}</span>
-                    单
-                  </span>
-                  <span className={styles.totalOrders}>
-                    订单总数:
-                    <span className={styles.color}>{data.TotalOrders}</span>件
-                  </span>
-                </div>
-              ) : null}
-            </div>
           </Col>
 
           <Col className={styles.stateBtnBox} span={4}>

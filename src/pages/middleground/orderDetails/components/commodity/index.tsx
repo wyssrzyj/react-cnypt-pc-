@@ -134,7 +134,7 @@ function index({ initialValues }) {
       <div className={styles.titles}>
         <span className={styles.payment}> 款图:</span>
 
-        <div className={styles.content}>
+        <div className={styles.contents}>
           {stylePicture !== undefined && stylePicture.length > 0 ? (
             stylePicture.map((v, i) => (
               <img key={i} className={styles.img} src={v} alt="" />

@@ -90,7 +90,6 @@ const PutManage = () => {
   const urlParams: any = urlGet()
 
   const initStatus = tabsStatus.get(urlParams.key)
-  console.log(initStatus)
 
   const [activeKey, setActiveKey] = useState<string>('all')
   const [params, setParams] = useState<Params>({
@@ -168,7 +167,6 @@ const PutManage = () => {
         setDataSource(records)
       }
     } catch (err) {
-      console.log(err)
     } finally {
       setLoading(false)
     }
@@ -199,7 +197,6 @@ const PutManage = () => {
     keys.forEach(item => {
       newParams[item] = values[item]
     })
-    console.log(newParams)
 
     setParams(newParams)
   }
@@ -237,9 +234,6 @@ const PutManage = () => {
   }
 
   const paginationChange = (page, pageSize) => {
-    console.log(page)
-    console.log(pageSize)
-
     history.replace(
       `${pathname}?key=${activeKey}&pageNum=${page}&pageSize=${pageSize}`
     )

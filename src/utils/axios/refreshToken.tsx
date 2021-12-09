@@ -31,9 +31,7 @@ const refreshToken = async () => {
     } else {
       return Promise.reject(responseData)
     }
-  } catch (error) {
-    console.log(error)
-  }
+  } catch (error) {}
 }
 
 export default refreshToken

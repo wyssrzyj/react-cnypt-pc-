@@ -71,13 +71,6 @@ const OverflowCard = props => {
     enterpriseId
   } = props
 
-  console.log(newList)
-  console.log('-------------------', factoryCategoryList)
-
-  if (factoryCategoryList) {
-    console.log()
-  }
-
   const currentUserInfo = getUserInfo()
   const currentUser = getCurrentUser()
   const history = useHistory()
@@ -231,7 +224,6 @@ const OverflowCard = props => {
         <Title title={'选择需求单'}></Title>
         <div className={styles.totalListBox}>
           <div className={styles.totalList}>
-            {console.log(orders)}
             {orders.map((data: any, idx) => {
               return (
                 <RequestCard

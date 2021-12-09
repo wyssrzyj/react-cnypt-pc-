@@ -15,11 +15,15 @@ const UploadFile = ({ onChange }) => {
   const props = {
     action: '/api/oss/file/upload',
     data: { a: 1, b: 2 },
+
     headers: {
       authorization: getToken()
     },
+
     multiple: false,
     async customRequest({ file }) {
+      console.log(8848)
+
       const list = cloneDeep(filelist)
       const formData = new FormData()
 

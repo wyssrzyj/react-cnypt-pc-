@@ -123,8 +123,6 @@ const DemandList = () => {
   }
   //置顶
   const topping = async value => {
-    // console.log('置顶', value)
-
     await toppingFunction(value)
     listsAPI()
   }
@@ -137,7 +135,6 @@ const DemandList = () => {
   }
   // 查看订单信息
   const DemandOrderDetail = e => {
-    console.log('查看订单信息')
     push({ pathname: '/control-panel/orderDetails', state: { id: e } })
   }
   //提前结束
@@ -154,8 +151,6 @@ const DemandList = () => {
       listsAPI()
     }
   }
-  console.log(reallylists, 'reallylists')
-  console.log(noOrders, 'noOrders')
   return (
     <div className={styles.demand}>
       <section>

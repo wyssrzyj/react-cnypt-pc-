@@ -144,8 +144,6 @@ const FilterList = props => {
   }
 
   const handleModalOk = cities => {
-    console.log(cities) //选中的数据
-    console.log('999999999999999999999999')
     setActiveArea([...cities])
     onFilterChange({ cityIds: cities.map(item => item.id) })
     setModalVisible(false)
@@ -165,7 +163,6 @@ const FilterList = props => {
   //   onFilterChange({ factoryType: activeKey === 'all' ? '' : activeKey })
   // }
   const onProductChange = params => {
-    console.log('商品品类999999999999999', params.id)
     setActiveDeputyCategory({ ...params })
 
     onFilterChange({
@@ -338,7 +335,6 @@ const FilterList = props => {
           className={classNames(styles.classificationItem, styles.classesBox)}
         >
           <div>
-            {console.log('产品类别', mainCategory)}
             {mainCategory.map(item => (
               <span
                 key={item.id}
@@ -364,7 +360,6 @@ const FilterList = props => {
                   onProductChange({ id: item.id, name: item.name })
                 }
               >
-                {console.log(item)}
                 {item.name}
               </span>
             ))}

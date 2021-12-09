@@ -436,9 +436,7 @@ const ProductPage = () => {
       }
       setProductInfo(!flag ? info : {})
       back()
-    } catch (err) {
-      console.log(err)
-    }
+    } catch (err) {}
   }
 
   const dealTypeData = data => {

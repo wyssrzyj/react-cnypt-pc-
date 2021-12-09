@@ -41,7 +41,6 @@ const OrderDetails = () => {
 
   // getAllArea
   const gos = () => {
-    console.log('返回')
     go(-1)
   }
 

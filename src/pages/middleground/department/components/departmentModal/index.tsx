@@ -16,8 +16,9 @@ const DepartmentModal = props => {
   const { visible, handleOk, handleCancel, type } = props
   const handleModalOk = () => {
     refForm.current.validateFields().then(values => {
-      handleOk()
       console.log(values)
+
+      handleOk()
     })
   }
   return (

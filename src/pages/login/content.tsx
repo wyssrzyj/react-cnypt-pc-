@@ -75,9 +75,7 @@ const LoginContent = () => {
       } else {
         setError(true)
       }
-    } catch (err) {
-      console.log(err)
-    }
+    } catch (err) {}
   }
 
   const toRegister = () => {

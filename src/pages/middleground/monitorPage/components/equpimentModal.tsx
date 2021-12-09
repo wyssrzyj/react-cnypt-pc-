@@ -124,7 +124,6 @@ const EquipmentModal = props => {
       setConnectErrorText(
         '您所提交的信息有误，请确认序列号或验证码填写无误！！！'
       )
-      console.log(err)
     }
   }
 

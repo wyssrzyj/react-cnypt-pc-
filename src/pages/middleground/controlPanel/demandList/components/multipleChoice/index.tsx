@@ -34,19 +34,12 @@ const MultipleChoice = ({
     toppingMethod({ id: value, stickType: ccc })
   }
 
-  // 失败原因
-  const failureReason = e => {
-    console.log(e)
-    console.log('失败原因')
-  }
-
   const showModal = () => {
     setWindowType({ type: 'mov' })
     setIsModalVisible(true)
   }
   //  点击确认 判断是删除还是提前结束
   const handleOk = () => {
-    console.log(windowType)
     if (windowType.type === 'advance') {
       earlyEnd(id)
     }
@@ -241,12 +234,7 @@ const MultipleChoice = ({
             {+data.status === -2 ? (
               <div>
                 <p className={styles.end}>审核失败</p>
-                <p
-                  className={styles.cursor}
-                  onClick={() => {
-                    failureReason(data.id)
-                  }}
-                >
+                <p className={styles.cursor} onClick={() => {}}>
                   查看失败原因
                 </p>
               </div>

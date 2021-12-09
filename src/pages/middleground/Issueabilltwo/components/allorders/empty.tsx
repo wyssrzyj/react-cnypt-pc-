@@ -2,8 +2,6 @@ import React from 'react'
 import EMPTY from '@/static/images/empty.png'
 import styles from './todo.module.less'
 
-console.log('🚀 ~ file: Product copy.tsx ~ line 3 ~ EMPTY', EMPTY)
-
 const ListK = () => {
   return (
     <div className={styles.emptys}>

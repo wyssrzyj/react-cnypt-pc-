@@ -105,9 +105,7 @@ const Four = props => {
           player.stop()
         }
         arr.push(player)
-      } catch (err) {
-        console.log(err)
-      }
+      } catch (err) {}
     })
   }, [dataSource])
 
@@ -119,13 +117,9 @@ const Four = props => {
     setSuccessList([])
   }
 
-  useEffect(() => {
-    // console.log(successList)
-  }, [successList])
+  useEffect(() => {}, [successList])
 
-  useEffect(() => {
-    // console.log(errorList)
-  }, [errorList])
+  useEffect(() => {}, [errorList])
 
   return (
     <div className={styles.videoOutBoxFour}>

@@ -53,9 +53,7 @@ const ConfirmTable = props => {
     setCurrent(page)
   }
 
-  useEffect(() => {
-    // console.log(current)
-  }, [current, getStateTrack])
+  useEffect(() => {}, [current, getStateTrack])
 
   return (
     <div className={styles.tableBox}>

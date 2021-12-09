@@ -16,25 +16,19 @@ const layout = {
 
 const date = ({ validity, time }) => {
   console.log(validity)
+
   const [day, setDay] = useState('')
   useEffect(() => {
     if (time) {
-      console.log('回显的时间', time)
       setDay(remainingTime(time).day)
     }
   }, [time])
 
   function onChange(date) {
-    console.log(date)
-
     setDay(remainingTime(date._d.getTime()).day)
     // setProcessingType(dateString)
   }
-  function onChanges(date) {
-    console.log(date)
 
-    // setUnitPrice(dateString)
-  }
   function disabledDate(current) {
     return current && current < moment().endOf('day')
   }
@@ -72,11 +66,7 @@ const date = ({ validity, time }) => {
             rules={[{ required: true, message: '请选择日期' }]}
             {...layout}
           >
-            <DatePicker
-              style={{ width: '100%' }}
-              onChange={onChanges}
-              disabledDate={disabledDate}
-            />
+            <DatePicker style={{ width: '100%' }} disabledDate={disabledDate} />
           </FormItem>
         </Col>
       </Row>

@@ -204,14 +204,6 @@ const EnterpriseInfo = () => {
         enterpriseLogoId:
           imageUrl === preImageUrl ? undefined : enterpriseLogoId
       }
-      console.log(params, 'params')
-
-      // if (+enterpriseType === 0) {
-      //   params.factoryProcessTypeList = factoryProcessTypeList.map(item => ({
-      //     factoryId,
-      //     ...item
-      //   }))
-      // }
       setLoading(true)
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
@@ -242,7 +234,6 @@ const EnterpriseInfo = () => {
     axios
       .get('/api/factory/enterprise/get-enterprise-info', {})
       .then(response => {
-        console.log('企业信息回显接口', response)
         const { success, data = {} } = response
         if (success && !isEmpty(data)) {
           const {
@@ -276,7 +267,6 @@ const EnterpriseInfo = () => {
           const grade = productClassMap.find(
             item => item.value === clothesGrade
           ) || { label: '' }
-          console.log(cloneDeep(data))
 
           setOldData(cloneDeep(data))
           setContactsId(contactsId)
@@ -370,6 +360,8 @@ const EnterpriseInfo = () => {
   }, [])
   const grade = async () => {
     let res = await gradingOfProducts() //订单档次
+    console.log(res)
+
     setTreeData(res.data)
   }
 

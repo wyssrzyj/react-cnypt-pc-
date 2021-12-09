@@ -20,44 +20,9 @@ const MenuBox = () => {
     setCollapsed(f => !f)
   }
 
-  useEffect(() => {
-    // const target = document.getElementsByClassName('ant-menu')
-    // console.log('🚀 ~ file: menu.tsx ~ line 21 ~ useEffect ~ target', target)
-  }, [collapsed])
+  useEffect(() => {}, [collapsed])
 
   const menus = [
-    // {
-    //   label: '销售管理',
-    //   key: 'system1',
-    //   icon: 'jack-xitong',
-    //   children: [
-    //     {
-    //       label: '商品管理',
-    //       key: 'userManage1',
-    //       icon: 'jack-yonghu1',
-    //       url: '/userManage'
-    //     }
-    //   ]
-    // },
-    // {
-    //   label: '采购管理',
-    //   key: 'enterprise2',
-    //   icon: 'jack-qiye1',
-    //   children: [
-    //     {
-    //       label: '供应商管理',
-    //       key: 'audits21',
-    //       icon: 'jack-caozuo',
-    //       url: '/businessAudits'
-    //     },
-    //     {
-    //       label: '物料管理',
-    //       key: 'enterpriseManagement21',
-    //       icon: 'jack-ziyuan143',
-    //       url: '/enterprise'
-    //     }
-    //   ]
-    // },
     {
       label: '基础配置',
       key: 'basicConfiguration',

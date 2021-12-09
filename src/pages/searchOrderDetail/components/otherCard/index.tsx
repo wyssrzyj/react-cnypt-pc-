@@ -183,7 +183,6 @@ const OtherCard = props => {
             styles.orderSwiper
           )}
         >
-          {console.log(cardList)}
           {cardList.length > 0 && (
             <div className="swiper-wrapper">
               {cardList.map((item, idx) => {

@@ -67,7 +67,6 @@ const OrderInfo = props => {
                 return item.processType === o.value
               })
             })
-            console.log('加工类型newOrderType', newOrderType)
 
             setOrderType([...newOrderType])
           }

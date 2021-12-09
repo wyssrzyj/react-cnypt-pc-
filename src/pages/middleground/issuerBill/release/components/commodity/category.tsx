@@ -37,32 +37,8 @@ const Category = () => {
     return data
   }
   useEffect(() => {
-    ;(async () => {
-      // const res = cloneDeep(productCategoryList)
-      // setTreeData(dealTypeData(res))
-    })()
+    ;(async () => {})()
   }, [productCategoryList])
-
-  // const onChange = value => {
-  //   //获取所有的父节点
-  //   serValue(value)
-  // }
-
-  function onChanges(value) {
-    console.log(`selected ${value}`)
-  }
-
-  function onBlur() {
-    console.log('blur')
-  }
-
-  function onFocus() {
-    console.log('focus')
-  }
-
-  function onSearch(val) {
-    console.log('search:', val)
-  }
 
   return (
     <div className={styles.top}>
@@ -92,10 +68,6 @@ const Category = () => {
               style={{ width: 325 }}
               placeholder="请选择发单量"
               optionFilterProp="children"
-              onChange={onChanges}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              onSearch={onSearch}
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }

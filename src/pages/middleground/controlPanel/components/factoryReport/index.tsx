@@ -69,9 +69,6 @@ const FactoryReport = () => {
           setOrderType([...newOrderType])
           // 产品档次.
           if (treeData.length > 0) {
-            console.log(productGradeValues)
-            console.log(treeData)
-
             setGrade(
               getTrees(productGradeValues, treeData, 'value', 'label').join(
                 '、'

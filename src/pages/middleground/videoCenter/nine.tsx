@@ -113,9 +113,7 @@ const Nine = props => {
           player.stop()
         }
         arr.push(player)
-      } catch (err) {
-        console.log(err)
-      }
+      } catch (err) {}
     })
   }, [dataSource])
 
@@ -127,13 +125,9 @@ const Nine = props => {
     setSuccessList([])
   }
 
-  useEffect(() => {
-    // console.log(successList)
-  }, [successList])
+  useEffect(() => {}, [successList])
 
-  useEffect(() => {
-    // console.log(errorList)
-  }, [errorList])
+  useEffect(() => {}, [errorList])
 
   return (
     <div className={styles.videoOutBoxNine}>
@@ -144,10 +138,6 @@ const Nine = props => {
               return <div className={styles.videoNineItemBox} key={idx}></div>
             }
             const flag = successRef.current.includes(idx)
-            console.log(
-              '🚀 ~ file: nine.tsx ~ line 147 ~ dataSource.map ~ flag',
-              flag
-            )
             return (
               <div className={styles.videoNineItemBox} key={idx}>
                 {flag ? (

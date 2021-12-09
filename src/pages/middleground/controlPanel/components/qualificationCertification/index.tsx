@@ -159,7 +159,6 @@ const QualificationCertification = () => {
     setCurrentData({})
   }
   const onTableChange = (pagination, _filters, sorter) => {
-    // console.log({ pagination, filters, sorter })
     const { current } = pagination
     setPageNum(current)
     if (!isEmpty(sorter)) {

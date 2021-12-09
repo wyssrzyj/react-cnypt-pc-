@@ -44,7 +44,6 @@ const ListCard = props => {
   const { changeOrderStick, factoryDelOrder } = searchOrderStore
   const { data, getData, refuse } = props
   const { stickType = 0 } = data
-  console.log('数据', data.enterpriseName) //判断条件
 
   const diffDay = dateDiff(data.inquiryEffectiveDate)
 
@@ -107,10 +106,6 @@ const ListCard = props => {
       return goodsNum.find(item => item.value === value)?.label
     }
     if (field === 'categoryCodes ') {
-      console.log(field)
-      console.log(data.categoryCodes)
-      console.log(newList)
-
       const arr = getTrees(data.categoryCodes, newList, 'code', 'name')
       if (arr) {
         return arr.join('、')
@@ -179,15 +174,13 @@ const ListCard = props => {
           setWindowType({ type: 'mov' })
         }}
       >
-        删除记录
+        删除订单
       </Button>
     )
   }
 
   // 弹窗确认
   const handleOk = () => {
-    console.log(2222222222222222)
-
     if (windowType.type === 'withdraw') {
       refuse(data.supplierInquiryId)
     }
@@ -336,15 +329,13 @@ const ListCard = props => {
             {windowType.type === 'mov' ? (
               <div className={styles.delContent}>
                 <Icon type={'jack-sptg1'} className={styles.delIcon}></Icon>
-                <div className={styles.delTitle}>删除订单</div>
-                <div className={styles.delText}>确定删除订单？</div>
+                <div className={styles.delTitle}>是否删除订单?</div>
               </div>
             ) : null}
             {windowType.type === 'withdraw' ? (
               <div className={styles.delContent}>
                 <Icon type={'jack-ts'} className={styles.delIcon}></Icon>
                 <div className={styles.delTitle}>是否拒绝接单？</div>
-                <div className={styles.delText}>确定拒绝接单？</div>
               </div>
             ) : null}
 

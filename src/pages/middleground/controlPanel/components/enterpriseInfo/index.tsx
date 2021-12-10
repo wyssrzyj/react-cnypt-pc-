@@ -243,6 +243,7 @@ const EnterpriseInfo = () => {
       .get('/api/factory/enterprise/get-enterprise-info', {})
       .then(response => {
         const { success, data = {} } = response
+
         if (success && !isEmpty(data)) {
           const {
             enterpriseLogoUrl,
@@ -303,6 +304,15 @@ const EnterpriseInfo = () => {
               ]
             })
           }
+        }
+        if (data.productGradeValues === null) {
+          form.setFieldsValue({ productGradeValues: undefined })
+        }
+        if (data.productTypeValues === null) {
+          form.setFieldsValue({ productTypeValues: undefined })
+        }
+        if (data.processTypeList === null) {
+          form.setFieldsValue({ processTypeList: undefined })
         }
       })
   }

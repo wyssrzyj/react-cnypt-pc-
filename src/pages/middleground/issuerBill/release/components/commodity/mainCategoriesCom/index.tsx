@@ -11,6 +11,7 @@ const MainCategoriesCom = props => {
   const { factoryStore } = useStores()
   const { productCategoryList } = factoryStore
   const newList = toJS(productCategoryList)
+  console.log(newList)
 
   const childList = newList.reduce((prev, item) => {
     prev.push(...item.children)
@@ -92,7 +93,7 @@ const MainCategoriesCom = props => {
         <DownOutlined className={styles.arrow} />
       </div>
       <Modal
-        title="选择主营类别"
+        title="选择商品品类"
         visible={modalVisible}
         width={892}
         onOk={handleOk}

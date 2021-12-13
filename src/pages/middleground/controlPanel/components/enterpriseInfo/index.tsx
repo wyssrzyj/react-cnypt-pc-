@@ -33,6 +33,7 @@ import { dealRefresh } from '@/utils/axios/filterNull'
 // import ProcessingTypeCom from '../processingTypeCom'
 import MainCategoriesCom from '../mainCategoriesCom'
 import moment from 'moment'
+import OSS from '@/utils/oss'
 
 const { TextArea } = Input
 const { Option } = Select
@@ -78,19 +79,18 @@ const EnterpriseInfo = () => {
   const currentUser = getCurrentUser() || {}
   const { mobilePhone, userId } = currentUser
 
-  const { factoryPageStore, commonStore, loginStore, demandListStore } =
-    useStores()
+  const { commonStore, loginStore, demandListStore } = useStores()
   const { userInfo } = loginStore
   const { gradingOfProducts } = demandListStore
 
-  const { uploadFiles } = factoryPageStore
   const { allArea, dictionary } = commonStore
   const {
     plusMaterialType,
     purchaserRole,
     productType = [],
-    processType
-  } = dictionary
+    processType = []
+  } = toJS(dictionary)
+  console.log(processType)
 
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imageUrlList, setImageUrlList] = useState<any[]>([])
@@ -133,14 +133,15 @@ const EnterpriseInfo = () => {
   }
 
   const customRequest = async ({ file }) => {
-    // const list = cloneDeep(fileList)
-    const formData = new FormData()
-
-    formData.append('file', file)
-    formData.append('module', 'factory')
-    const res = await uploadFiles(formData)
-    setImageUrl(res)
-    setImageUrlList([{ thumbUrl: res }])
+    const res = await OSS.put(
+      `/capacity-platform/platform/${file.uid}__${file.name}`,
+      file
+    )
+    if (res) {
+      const { url } = res
+      setImageUrl(url)
+      setImageUrlList([{ thumbUrl: url }])
+    }
   }
 
   const confirmSubmit = () => {
@@ -212,7 +213,33 @@ const EnterpriseInfo = () => {
         enterpriseLogoId:
           imageUrl === preImageUrl ? undefined : enterpriseLogoId
       }
-      setLoading(true)
+      // 产品档次
+      const getSubData = (v, data) => {
+        // v  原始数据
+        // data 字典数据
+        let sum = []
+        v.forEach(item => {
+          sum.push(list(item, data))
+        })
+        return sum.flat(Infinity) //数组扁平化
+      }
+      const list = (item, data) => {
+        //item 原始数据
+        // data 字典数据
+        let sum = []
+        let res = data.filter(v => v.value === item)[0]
+        if (res !== undefined) {
+          res.children.forEach(item => {
+            sum.push(item.value)
+          })
+        }
+        return sum
+      }
+      ;(params.productGradeValues = getSubData(
+        params.productGradeValues,
+        treeData
+      )),
+        setLoading(true)
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
         .then(async response => {
@@ -577,14 +604,6 @@ const EnterpriseInfo = () => {
                 rules={[{ required: true, message: '请选择产品档次' }]}
               >
                 <TreeSelect maxTagCount={5} allowClear={true} {...tProps} />
-
-                {/* <Select allowClear mode="multiple" placeholder="请选择产品档次">
-                  {productGradeHigh.map(option => (
-                    <Option key={option.value + 'product'} value={option.value}>
-                      {option.label}
-                    </Option>
-                  ))}
-                </Select> */}
               </Form.Item>
 
               <Form.Item
@@ -624,16 +643,14 @@ const EnterpriseInfo = () => {
                 name="processTypeList"
                 rules={[{ required: true, message: '请选择加工类型！' }]}
               >
-                <Select placeholder={'请选择面料类型'} mode={'multiple'}>
+                <Select placeholder={'请选择加工类型'} mode={'multiple'}>
                   {isArray(processType) &&
                     processType.map(item => (
-                      <Option value={item.value} key={item.value}>
+                      <Option value={item.value} key={item.id}>
                         {item.label}
                       </Option>
                     ))}
                 </Select>
-                {/* processType */}
-                {/* <ProcessingTypeCom /> */}
               </Form.Item>
               <Form.Item
                 label="起订量"

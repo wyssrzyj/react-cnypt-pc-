@@ -3,6 +3,8 @@ import { Icon } from '@/components'
 import React from 'react'
 import { Title } from '../../controlPanel/accountSafe'
 import styles from './basic.module.less'
+import { useHistory } from 'react-router'
+import { getUserInfo } from '@/utils/tool'
 
 const InfoCard = ({ data }) => {
   return (
@@ -32,18 +34,44 @@ const AddCrad = props => {
 }
 
 const BasciInfo = ({ configs = [], title }) => {
+  const userInfo = getUserInfo() || {}
+  const { enterpriseType } = userInfo
+
+  const history = useHistory()
+  const toTarget = () => {
+    history.push('/control-panel/issuerBill/demand-sheet')
+  }
   return (
     <div className={styles.basciInfo}>
       <Title title={title}></Title>
       <div className={styles.basciContent}>
-        {configs.map((data, idx) => {
-          if (!data.type) {
-            return <InfoCard data={data} key={idx}></InfoCard>
-          }
-          if (data.type === 'add') {
-            return <AddCrad data={data} key={idx}></AddCrad>
-          }
-        })}
+        <div className={styles.top}>
+          {configs.map((data, idx) => {
+            if (!data.type) {
+              return <InfoCard data={data} key={idx}></InfoCard>
+            }
+            if (data.type === 'add') {
+              return <AddCrad data={data} key={idx}></AddCrad>
+            }
+          })}
+        </div>
+        {enterpriseType === '1' ? (
+          <div className={styles.newly}>
+            <div className={styles.tex}>
+              <Icon type={'jack-jian'} className={styles.icons}></Icon>
+              <span>新增需求</span>
+            </div>
+            <div
+              className={styles.tex}
+              onClick={() => {
+                toTarget()
+              }}
+            >
+              <Icon type={'jack-jian'} className={styles.icons}></Icon>
+              <span>新增订单</span>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   )

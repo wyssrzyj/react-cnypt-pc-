@@ -90,7 +90,6 @@ const EnterpriseInfo = () => {
     productType = [],
     processType = []
   } = toJS(dictionary)
-  console.log(processType)
 
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imageUrlList, setImageUrlList] = useState<any[]>([])
@@ -108,6 +107,7 @@ const EnterpriseInfo = () => {
   const [enterpriseType, setEnterpriseType] = useState<any>()
   const [value, serValue] = useState([])
   const [treeData, setTreeData] = useState([])
+  const [grades, setGrades] = useState([]) //用于判断档次方法是否执行
   const [loading, setLoading] = useState<boolean>(false)
 
   const uploadButton = (
@@ -213,12 +213,13 @@ const EnterpriseInfo = () => {
         enterpriseLogoId:
           imageUrl === preImageUrl ? undefined : enterpriseLogoId
       }
+
       // 产品档次
       const getSubData = (v, data) => {
         // v  原始数据
         // data 字典数据
         let sum = []
-        v.forEach(item => {
+        v.map(item => {
           sum.push(list(item, data))
         })
         return sum.flat(Infinity) //数组扁平化
@@ -235,11 +236,19 @@ const EnterpriseInfo = () => {
         }
         return sum
       }
-      ;(params.productGradeValues = getSubData(
-        params.productGradeValues,
-        treeData
-      )),
-        setLoading(true)
+      // 判断 提交的值和回显的值是否一样 一样的话就修改,
+      if (!isEmpty(grades)) {
+        if (grades[0] === params.productGradeValues[0]) {
+        } else {
+          if (params.productGradeValues) {
+            params.productGradeValues = getSubData(
+              params.productGradeValues,
+              treeData
+            )
+          }
+        }
+      }
+      setLoading(true)
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
         .then(async response => {
@@ -271,6 +280,8 @@ const EnterpriseInfo = () => {
       .then(response => {
         const { success, data = {} } = response
 
+        setGrades(data.productGradeValues)
+        console.log('产品档次接口回显数据', data.productGradeValues)
         if (success && !isEmpty(data)) {
           const {
             enterpriseLogoUrl,
@@ -288,7 +299,6 @@ const EnterpriseInfo = () => {
             clothesGrade,
             enterpriseType
           } = data
-
           const keys = Reflect.ownKeys(data)
           if (keys.includes('roleCodes')) {
             data['roleCodes'] = data['roleCodes'] || []
@@ -341,6 +351,7 @@ const EnterpriseInfo = () => {
         if (data.processTypeList === null) {
           form.setFieldsValue({ processTypeList: undefined })
         }
+        form.setFieldsValue({ productGradeValues: data.productGradeValues })
       })
   }
 
@@ -406,7 +417,6 @@ const EnterpriseInfo = () => {
   const grade = async () => {
     let res = await gradingOfProducts() //订单档次
     console.log(res)
-
     setTreeData(res.data)
   }
 

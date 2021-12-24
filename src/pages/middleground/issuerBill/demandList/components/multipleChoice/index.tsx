@@ -20,7 +20,9 @@ const MultipleChoice = ({
 
   const { dictionary } = commonStore
 
-  const { goodsNum = [] } = toJS(dictionary)
+  const { goodsNum = [], processType = [] } = toJS(dictionary)
+  console.log('加工类型', processType)
+  console.log(data)
 
   const { id, stickType } = data
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -143,10 +145,29 @@ const MultipleChoice = ({
               />
               <div className={styles.content}>
                 <p className={styles.name}>{data.name}</p>
-                <Tooltip placement="top" title={data.processing.join('、')}>
+                <Tooltip
+                  placement="top"
+                  title={
+                    data.processTypeList
+                      ? getTrees(
+                          data.processTypeList,
+                          processType,
+                          'value',
+                          'label'
+                        ).join('、')
+                      : '暂无'
+                  }
+                >
                   <div className={styles.hidden}>
                     加工类型：
-                    {data.processing.join('、')}
+                    {data.processTypeList
+                      ? getTrees(
+                          data.processTypeList,
+                          processType,
+                          'value',
+                          'label'
+                        ).join('、')
+                      : '暂无'}
                   </div>
                 </Tooltip>
                 <Tooltip

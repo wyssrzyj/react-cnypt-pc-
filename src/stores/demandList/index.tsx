@@ -73,17 +73,14 @@ export default class DemandList {
       console.log(e)
     }
   }
-  // 再来一单
-  @action anotherSingleInterface = async params => {
+
+  // 发单商我的订单数量
+  @action issuerMyOrderQuantity = async () => {
     try {
       const res: ResponseProps = await axios.get(
-        `/api/oms/inquiry-purchase/get`,
-        params
+        `/api/oms/inquiry-purchase/my-order-purchase-total`
       )
       if (res.code === 200) {
-        // runInAction(() => {
-        //   this.echo = res.data
-        // })
         return res
       } else {
         message.error(res.msg)
@@ -92,6 +89,91 @@ export default class DemandList {
       console.log(e)
     }
   }
+
+  // 加工厂接单管理订单数量
+  @action processingPlantOrderReceivingManagementOrderQuantity = async () => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/oms/inquiry-supplier/order-management-supplier-total`
+      )
+      if (res.code === 200) {
+        return res.data
+      } else {
+        message.error(res.msg)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 再来一单
+  @action anotherSingleInterface = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/oms/inquiry-purchase/get`,
+        params
+      )
+      if (res.code === 200) {
+        return res
+      } else {
+        message.error(res.msg)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 获取发单商公司信息
+  @action obtainIssuerCompanyInformation = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/purchaser-info/get-purchaser-company-info`,
+        params
+      )
+      if (res.code === 200) {
+        return res
+      } else {
+        message.error(res.msg)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 发单商前台首页订单数量统计
+  @action orderQuantityStatisticsOfTheFrontPageOfTheIssuer = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/oms/inquiry-purchase/purchase-front-page-total`,
+        params
+      )
+      if (res.code === 200) {
+        return res
+      } else {
+        message.error(res.msg)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 获取发单商首页信息
+  @action getTheIssuerHomePageInformation = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/purchaser-info/get-purchaser-front-pageinfo`,
+        params
+      )
+      if (res.code === 200) {
+        return res
+      } else {
+        message.error(res.msg)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   // 再来一单 id
   @action oneMoreOrder = async params => {
     runInAction(() => {
@@ -104,6 +186,86 @@ export default class DemandList {
     try {
       const res: ResponseProps = await axios.post(
         `/api/oms/inquiry-purchase/inquiry-list`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      return e
+    }
+  }
+
+  // 发单商需求单日志查询
+  @action issuerDemandDocLoGQuery = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/oms/inquiry-purchaser-log/inquiry-log-page`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      return e
+    }
+  }
+
+  // 发单商前台首页需求单展示
+  @action issuerHomePageData = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/oms/inquiry-purchase/front-page-purchase-inquiry-list`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      return e
+    }
+  }
+
+  // 加工厂首页需求单展示
+  @action processingFactoryData = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/oms/inquiry-supplier/front-page-supplier-inquiry-list`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      return e
+    }
+  }
+
+  // 忽略提示信息
+  @action ignorePrompt = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/factory/enterprise-message-state/update-message-state`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res
+    } catch (e) {
+      return e
+    }
+  }
+
+  // 企业提示信息
+  @action enterpriseTips = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/enterprise/enterprise-prompt-message`,
         params
       )
       if (res.code !== 200) {

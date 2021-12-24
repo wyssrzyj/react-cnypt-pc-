@@ -1,12 +1,61 @@
 // 加工厂首页
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
 import BasciInfo from './components/basicInfo'
 import Header from './components/header'
 import Memorandum from './components/memorandum'
 import Todo from './components/todo'
 import styles from './index.module.less'
+import { useStores } from '@/utils/mobx'
 
 const FactoryHome = () => {
+  const { demandListStore } = useStores()
+  const { processingPlantOrderReceivingManagementOrderQuantity } =
+    demandListStore
+  const [basicConfigs, setbasicConfigs] = useState([])
+
+  useEffect(() => {
+    api()
+  }, [])
+
+  const api = async () => {
+    let arr = await processingPlantOrderReceivingManagementOrderQuantity()
+    console.log(arr)
+
+    const data = [
+      {
+        label: '新订单',
+        icon: 'jack-dqrdd',
+        field: '',
+        count: arr.enterpriseNewOrderNum,
+        color: '#FFE9ED'
+      },
+      {
+        label: '待反馈订单',
+        icon: 'jack-dbddd',
+        field: '',
+        count: arr.enterprisePendingFeedbackTotalNum,
+        color: '#E4EEFF'
+      },
+      {
+        label: '已确认订单数',
+        icon: 'jack-jxzdd',
+        field: '',
+        count: arr.enterpriseConfirmeTotalNum,
+        color: '#EEE5FF'
+      },
+
+      {
+        label: '被谢绝订单数',
+        icon: 'jack-ywcdd',
+        field: '',
+        count: arr.enterpriseDeclineTotalNum,
+        color: '#D7F0E2'
+      }
+    ]
+
+    setbasicConfigs(data)
+  }
   const rightConfigs = [
     {
       icon: 'jack-shoucang',
@@ -28,41 +77,10 @@ const FactoryHome = () => {
     }
   ]
 
-  const basicConfigs = [
-    {
-      label: '待确认订单数',
-      icon: 'jack-dqrdd',
-      field: '',
-      count: 0,
-      color: '#FFE9ED'
-    },
-    {
-      label: '待绑定订单数',
-      icon: 'jack-dbddd',
-      field: '',
-      count: 0,
-      color: '#E4EEFF'
-    },
-    {
-      label: '进行中订单数',
-      icon: 'jack-jxzdd',
-      field: '',
-      count: 0,
-      color: '#EEE5FF'
-    },
-
-    {
-      label: '已完成订单数',
-      icon: 'jack-ywcdd',
-      field: '',
-      count: 0,
-      color: '#D7F0E2'
-    }
-  ]
-
   return (
     <div className={styles.container}>
       <Header rightConfigs={rightConfigs}></Header>
+
       <BasciInfo configs={basicConfigs} title={'订单数据'}></BasciInfo>
       <div className={styles.main}>
         <Todo></Todo>

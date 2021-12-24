@@ -45,6 +45,14 @@ const Header = ({ rightConfigs }) => {
   const dayChange = value => {
     setDayValue(value)
   }
+  const timi = value => {
+    const date = Date.now()
+    const SettledDays = date - value
+    let t = SettledDays / 1000 / 60 / 60 / 24
+    console.log('日期', t)
+
+    return parseInt(`${t}`)
+  }
 
   return (
     <header className={styles.header}>
@@ -68,7 +76,9 @@ const Header = ({ rightConfigs }) => {
               <span>管理员</span>
             </div>
           </div>
-          <div className={styles.dayInfo}>已入驻平台 0 天</div>
+          <div className={styles.dayInfo}>
+            已入驻平台 {timi(user.registerTime)} 天
+          </div>
         </div>
       </div>
       {/* 右侧 */}

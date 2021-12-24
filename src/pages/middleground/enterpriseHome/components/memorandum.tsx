@@ -48,11 +48,7 @@ const Memorandum = () => {
     // const listData = []
 
     if (listData.length) {
-      console.log('有值的时候执行')
-
       const target = listData[0]
-      console.log(target)
-
       return (
         <div className={styles.badgeBox}>
           <Badge status={target.type} />

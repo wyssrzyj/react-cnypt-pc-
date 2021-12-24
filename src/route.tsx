@@ -14,6 +14,7 @@ const Excel = React.lazy(() => import('@/pages/homePage/excel'))
 const MiddleGround = React.lazy(() => import('@/pages/middleground'))
 const SearchOrder = React.lazy(() => import('@/pages/searchOrder'))
 const SearchOrderDetail = React.lazy(() => import('@/pages/searchOrderDetail'))
+const issuerHomePage = React.lazy(() => import('@/pages/issuerHomePage'))
 
 // const ControlPanel = React.lazy(() => import('@/pages/controlPanel'))
 // const GDMap = React.lazy(() => import('@/pages/homePage/GDMap'))
@@ -33,6 +34,7 @@ const RouteList = () => {
       <Route path="/control-panel" component={MiddleGround} />
       <Route path="/order-search" exact component={SearchOrder} />
       <Route path="/order-search/:id" component={SearchOrderDetail} />
+      <Route path="/issuerHomePage" component={issuerHomePage} />
       <Route path="*" component={NotFound} />
       {/* <Route path="/GDMap" component={GDMap} /> */}
       {/* <Route path="/control-panel" component={ControlPanel} /> */}

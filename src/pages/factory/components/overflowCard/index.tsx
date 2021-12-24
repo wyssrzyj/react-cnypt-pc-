@@ -12,7 +12,6 @@ import SwiperCore, {
   Autoplay
 } from 'swiper'
 import Swiper from 'swiper'
-import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
 import { getCurrentUser, getUserInfo } from '@/utils/tool'

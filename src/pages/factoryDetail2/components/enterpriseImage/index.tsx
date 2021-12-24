@@ -11,7 +11,6 @@ import SwiperCore, {
   Thumbs
 } from 'swiper'
 import Swiper from 'swiper'
-import 'swiper/swiper-bundle.min.css'
 import { Icon, NoData } from '@/components'
 import HeaderLine from '../headerLine'
 import styles from './index.module.less'

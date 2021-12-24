@@ -22,8 +22,6 @@ const UploadFile = ({ onChange }) => {
 
     multiple: false,
     async customRequest({ file }) {
-      console.log(8848)
-
       const list = cloneDeep(filelist)
       const formData = new FormData()
 

@@ -53,6 +53,8 @@ const SearchOrderDetail = props => {
     inquiryPurchase(id).then(response => {
       const { success, data } = response
       if (success) {
+        console.log('需要的数据data', data)
+
         setDataSource({ ...data })
       }
     })
@@ -192,7 +194,6 @@ const SearchOrderDetail = props => {
   useEffect(() => {
     id && getOrderDetails()
   }, [id])
-
   return (
     <div className={styles.searchOrderDetail}>
       {/* 搜索栏 */}
@@ -201,7 +202,8 @@ const SearchOrderDetail = props => {
           title: dataSource.isEnterpriseInfoPublic
             ? dataSource.enterpriseName
             : '某某有限公司',
-          imgSrc: dataSource.enterpriseUrl
+          imgSrc: dataSource.enterpriseUrl,
+          tenantId: dataSource.tenantId
         }}
         onFilterChange={onFilterChange}
         field="order"

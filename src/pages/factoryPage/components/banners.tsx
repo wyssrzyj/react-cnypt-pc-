@@ -4,12 +4,11 @@ import SwiperCore, {
   Pagination,
   Scrollbar,
   A11y,
-  Autoplay,
+  Autoplay
 } from 'swiper'
 
 import Swiper from 'swiper'
 // Import Swiper styles
-import 'swiper/swiper-bundle.min.css'
 import './banners.less'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
@@ -19,17 +18,17 @@ const Banners = () => {
     new Swiper('.mySwiper', {
       navigation: {
         nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        prevEl: '.swiper-button-prev'
       },
       loop: true,
       autoplay: {
         delay: 1000,
-        disableOnInteraction: true,
+        disableOnInteraction: true
       },
       pagination: {
         el: '.swiper-pagination',
-        clickable: true,
-      },
+        clickable: true
+      }
     })
   }, [])
   return (

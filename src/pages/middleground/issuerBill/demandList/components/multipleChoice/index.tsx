@@ -21,8 +21,6 @@ const MultipleChoice = ({
   const { dictionary } = commonStore
 
   const { goodsNum = [], processType = [] } = toJS(dictionary)
-  console.log('加工类型', processType)
-  console.log(data)
 
   const { id, stickType } = data
   const [isModalVisible, setIsModalVisible] = useState(false)

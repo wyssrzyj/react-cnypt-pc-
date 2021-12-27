@@ -96,6 +96,7 @@ const SearchOrderDetail = () => {
         item.year = moment(item.releaseTime).format('YYYY')
         item.monthDay = moment(item.releaseTime).format('MM-DD')
         item.surplus = Math.round(sum / 1000 / 60 / 60 / 24)
+        item.key = item.id
       })
       setNewData(data)
     } else {

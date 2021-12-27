@@ -4,8 +4,6 @@ import { Icon } from '@/components'
 import { useHistory } from 'react-router-dom'
 import { Table, Carousel } from 'antd'
 function index({ NumberCooperation, newData, topName }) {
-  console.log('img', topName.publicityImagesList)
-
   const { push } = useHistory()
   const columns: any = [
     {
@@ -127,7 +125,7 @@ function index({ NumberCooperation, newData, topName }) {
         <Carousel autoplay={false}>
           {topName.publicityImagesList !== undefined
             ? topName.publicityImagesList.map(item => (
-                <div>
+                <div key={item.thumbUrl}>
                   <img className={styles.img} src={item.thumbUrl} alt="" />
                 </div>
               ))

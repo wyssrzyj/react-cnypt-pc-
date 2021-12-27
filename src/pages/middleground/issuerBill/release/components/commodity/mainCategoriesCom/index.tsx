@@ -11,8 +11,6 @@ const MainCategoriesCom = props => {
   const { factoryStore } = useStores()
   const { productCategoryList } = factoryStore
   const newList = toJS(productCategoryList)
-  console.log(newList)
-
   const childList = newList.reduce((prev, item) => {
     prev.push(...item.children)
     return prev

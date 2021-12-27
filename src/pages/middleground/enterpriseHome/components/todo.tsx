@@ -46,8 +46,6 @@ const Todo = () => {
   const arr = async () => {
     let data = await enterpriseTips({ enterpriseId: enterpriseId })
     const machining = await processingFactoryData({})
-    console.log('接口数据', machining)
-
     // 加工厂数据处理
     machining.map(item => {
       item.deliveryDate = moment(item.deliveryDate).format('YYYY-MM-DD')

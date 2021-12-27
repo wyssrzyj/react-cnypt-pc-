@@ -25,7 +25,7 @@ function machiningData({ data }) {
   return (
     <div>
       {data.map(item => (
-        <div className={styles.content}>
+        <div className={styles.content} key={item.id}>
           <div className={styles.icons}>
             <Icon type="jack-zxdd_icon" className={styles.previous} />
           </div>

@@ -49,8 +49,6 @@ const Header = ({ rightConfigs }) => {
     const date = Date.now()
     const SettledDays = date - value
     let t = SettledDays / 1000 / 60 / 60 / 24
-    console.log('日期', t)
-
     return parseInt(`${t}`)
   }
 

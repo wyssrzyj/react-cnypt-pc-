@@ -7,9 +7,7 @@ import { isNil, isEmpty } from 'lodash'
 import { useHistory } from 'react-router-dom'
 
 function IssuingData({ issuingData }) {
-  console.log('数据', issuingData)
   const history = useHistory()
-
   let map = new Map()
   map.set(-1, '草稿箱')
   map.set(1, '生效中')
@@ -27,7 +25,7 @@ function IssuingData({ issuingData }) {
         {!isNil(issuingData) && !isEmpty(issuingData) ? (
           <>
             {issuingData.map(item => (
-              <div className={styles.content}>
+              <div className={styles.content} key={item.id}>
                 <div className={styles.icons}>
                   <Icon type="jack-gcmc_icon" className={styles.previous} />
                 </div>
@@ -101,9 +99,7 @@ function IssuingData({ issuingData }) {
 
                       <div className={styles.companys}>
                         <div className={styles.subject}>
-                          <Tooltip placement="top" title="订单名称　">
-                            订单名称　&nbsp;&nbsp;<span>{item.name}</span>
-                          </Tooltip>
+                          订单名称　&nbsp;&nbsp;<span>{item.name}</span>
                         </div>
                         <div className={styles.orderStatus}>
                           订单状态　&nbsp;&nbsp;

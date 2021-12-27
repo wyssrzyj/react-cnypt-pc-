@@ -23,6 +23,7 @@ function index() {
     data.map(item => {
       item.operationTime = moment(item.operationTime).format('YYYY-MM-DD')
       item.amount = goodsNum.filter(v => v.value === item.amount)[0].label
+      item.key = item.id
     })
     setList(data)
   }

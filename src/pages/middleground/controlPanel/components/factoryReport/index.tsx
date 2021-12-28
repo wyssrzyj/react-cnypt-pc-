@@ -37,36 +37,36 @@ const FactoryReport = () => {
   const [treeData, setTreeData] = useState<any>([])
 
   const getFactoryInfo = () => {
+    setMemberText('')
     const newList = toJS(productCategoryList)
     const childList = newList.reduce((prev, item) => {
       prev.push(...item.children)
       return prev
     }, [])
     axios
-      .get('/api/factory/info/get-factory-data', { factoryId })
+      .get(
+        '/api/factory/factory-inspection-report/get-basic-info-by-factory-id',
+        { factoryId }
+      )
       .then(response => {
         const { success, data } = response
         if (success) {
-          const {
-            mainCategoriesList,
-            factoryProcessTypeList,
-            productGradeValues
-          } = data
-
+          const { mainCategoriesList, productGradeValues } = data
           setCurrentFactory({ ...data })
+          setValidationTime(data.factoryInspectionTime)
           const newLabel = filter(childList, function (o) {
             return find(mainCategoriesList, function (item) {
-              return item === o.id
+              return item === o.code
             })
           }).map(item => item.name)
-          setMainList([...newLabel])
-          const newOrderType = filter(processType, function (o) {
-            return find(factoryProcessTypeList, function (item) {
-              return item.processType === o.value
-            })
-          })
 
-          setOrderType([...newOrderType])
+          setMainList([...newLabel])
+          if (!isEmpty(data.processTypeList) && !isEmpty(processType)) {
+            setOrderType(
+              getTrees(data.processTypeList, processType, 'value', 'label')
+            )
+          }
+
           // 产品档次.
           if (treeData.length > 0) {
             setGrade(
@@ -78,23 +78,7 @@ const FactoryReport = () => {
         }
       })
   }
-  const getInspectionMember = () => {
-    axios
-      .get('/api/factory/info/get-audit-info', { factoryId })
-      .then(response => {
-        const { success, data } = response
-        if (success) {
-          const { auditPersonInfoList, factoryRealAuditTime } = data
-          // setInspectionMember([...auditPersonInfoList])
-          setValidationTime(factoryRealAuditTime)
-
-          const text = auditPersonInfoList
-            .map(item => `${item.realName}（${item.mobile}）`)
-            .join('、')
-          setMemberText(text)
-        }
-      })
-  }
+  const getInspectionMember = () => {}
   const applyInspection = () => {
     axios
       .put('/api/factory/info/update-factory-auditor-status', {
@@ -270,13 +254,15 @@ const FactoryReport = () => {
               <span className={styles.subTitle}>生产方式</span>
             </div>
             <div className={styles.right}>
-              {productType.find(
-                item => item.value == currentFactory.productTypeValues
-              )
-                ? productType.find(
-                    item => item.value == currentFactory.productTypeValues
-                  ).label
-                : '--'}
+              {!isEmpty(productType) &&
+              !isEmpty(currentFactory.productTypeValues)
+                ? getTrees(
+                    currentFactory.productTypeValues,
+                    productType || [],
+                    'value',
+                    'label'
+                  ).join('、')
+                : null}
             </div>
           </li>
           <li>
@@ -285,9 +271,7 @@ const FactoryReport = () => {
               <span className={styles.subTitle}>加工类型</span>
             </div>
             <div className={styles.right}>
-              {!isEmpty(orderType)
-                ? orderType.map(item => item.label).join('、')
-                : '--'}
+              {!isEmpty(orderType) ? orderType.join('、') : '--'}
             </div>
           </li>
           <li>

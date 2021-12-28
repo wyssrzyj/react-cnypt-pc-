@@ -153,7 +153,6 @@ const DemandSheet = () => {
         </section>
         <section className={styles.commodity}>
           <Title title={'商品信息'}></Title>
-
           <Commodity />
         </section>
         <section>

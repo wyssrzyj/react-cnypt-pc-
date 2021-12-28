@@ -197,6 +197,52 @@ export default class DemandList {
     }
   }
 
+  // 备忘录更新或新增
+  @action memorandumAdded = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/user/user-memorandum/save`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      return e
+    }
+  }
+  // 查看事件内容
+  @action memorandumContent = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/user/user-memorandum/get-info`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      return e
+    }
+  }
+  // 查看事件内容
+  @action allMemos = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/user/user-memorandum/list`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      return e
+    }
+  }
+
   // 发单商需求单日志查询
   @action issuerDemandDocLoGQuery = async params => {
     try {
@@ -339,6 +385,22 @@ export default class DemandList {
     try {
       const res: ResponseProps = await axios.get(
         `/api/oms/inquiry-purchase/delete-purchaser-record`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res
+    } catch (e) {
+      return e
+    }
+  }
+
+  // 基础资料报告
+  @action masterDataReport = async params => {
+    try {
+      const res: ResponseProps = await axios.get(
+        `/api/factory/factory-inspection-report/get-basic-info-by-factory-id`,
         params
       )
       if (res.code !== 200) {

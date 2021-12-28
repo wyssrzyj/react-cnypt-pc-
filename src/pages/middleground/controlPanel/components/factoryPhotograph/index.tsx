@@ -4,8 +4,11 @@ import Viewer from 'react-viewer'
 import axios from '@/utils/axios'
 import { getUserInfo } from '@/utils/tool'
 import styles from './index.module.less'
+import { useStores } from '@/utils/mobx'
 
 const FactoryPhotograph = () => {
+  const { demandListStore } = useStores()
+  const { masterDataReport } = demandListStore
   const currentUser = getUserInfo() || {}
   const { factoryId } = currentUser
   const [visible, setVisible] = useState(false)
@@ -16,34 +19,47 @@ const FactoryPhotograph = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  const getFactoryImage = () => {
+  const getFactoryImage = async () => {
     setIsLoading(true)
+    let arr = await masterDataReport({ factoryId: factoryId })
+    if (arr.code === 200) {
+      axios
+        .get(
+          '/api/factory/factory-inspection-report/get-inspection-images-by-report-id',
+          {
+            reportId: arr.data.id
+          }
+        )
+        .then(response => {
+          const { success, data } = response
+          console.log(data)
 
-    axios
-      .get('/api/factory/info/get-factory-images', {
-        factoryId
-      })
-      .then(response => {
-        const { success, data } = response
-        if (success) {
-          const { factoryAuditorImages, outsizeImages, workshopImages } = data
-          setNameplateFileList([...factoryAuditorImages])
-          setLocationFileList([...outsizeImages])
-          setWorkshopFileList([...workshopImages])
-          const newImages = [
-            ...factoryAuditorImages,
-            ...outsizeImages,
-            ...workshopImages
-          ].map(item => ({ src: item }))
-          setAllImages([...newImages])
-        }
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
+          if (success) {
+            const {
+              factoryAuditorImageList,
+              outsizeImageList,
+              workshopImageList
+            } = data
+            setNameplateFileList([...factoryAuditorImageList])
+            setLocationFileList([...outsizeImageList])
+            setWorkshopFileList([...workshopImageList])
+            const newImages = [
+              ...factoryAuditorImageList,
+              ...outsizeImageList,
+              ...workshopImageList
+            ].map(item => ({ src: item.thumbUrl }))
+            setAllImages([...newImages])
+          }
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    }
   }
 
   const checkImage = index => {
+    console.log('放大测试', index)
+
     setCurrentIndex(index)
     setVisible(true)
   }
@@ -66,7 +82,7 @@ const FactoryPhotograph = () => {
                 <div
                   key={index}
                   className={styles.image}
-                  style={{ backgroundImage: `url(${item})` }}
+                  style={{ backgroundImage: `url(${item.thumbUrl})` }}
                   onClick={() => checkImage(index)}
                 ></div>
               ))}
@@ -82,8 +98,12 @@ const FactoryPhotograph = () => {
                 <div
                   key={index}
                   className={styles.image}
-                  style={{ backgroundImage: `url(${item})` }}
-                  onClick={() => checkImage(nameplateFileList.length + index)}
+                  style={{ backgroundImage: `url(${item.thumbUrl})` }}
+                  onClick={() => {
+                    console.log('测试值是啥', locationFileList.length + index)
+
+                    checkImage(index + 1)
+                  }}
                 ></div>
               ))}
             </Col>
@@ -98,11 +118,9 @@ const FactoryPhotograph = () => {
                 <div
                   key={index}
                   className={styles.image}
-                  style={{ backgroundImage: `url(${item})` }}
+                  style={{ backgroundImage: `url(${item.thumbUrl})` }}
                   onClick={() =>
-                    checkImage(
-                      nameplateFileList.length + locationFileList.length + index
-                    )
+                    checkImage(index + locationFileList.length + 1)
                   }
                 ></div>
               ))}

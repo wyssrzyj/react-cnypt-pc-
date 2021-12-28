@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './memorandum.module.less'
 import { Calendar, Badge, Button, Modal, Input } from 'antd'
 import { Icon } from '@/components'
 import { Title } from '../../controlPanel/accountSafe'
 import moment from 'moment'
+import { useStores } from '@/utils/mobx'
+import { isEmpty } from 'lodash'
+import { getCurrentUser } from '@/utils/tool'
 
 const { TextArea } = Input
 
@@ -11,42 +14,47 @@ const BtnIcon = <Icon type={'jack-jian1'} className={styles.btnIcon}></Icon>
 
 const Memorandum = () => {
   const [visible, setVisible] = useState(false)
+  const [text, setText] = useState('') //输入内容||选中的内容
+  const [timeStamp, seTtimeStamp] = useState<any>() //时间戳
+  const [interfaceReturnContent, setInterfaceReturnContent] = useState<any>('') //接口返回内容
+  const [currentMonthData, setCurrentMonthData] = useState<any>([]) //当月数据
+  const [selectData, setSelectData] = useState<any>() //选中的数据
+  const { demandListStore } = useStores()
+  const currentUser = getCurrentUser() || {}
+  const { userId } = currentUser
+  const { memorandumAdded, memorandumContent, allMemos } = demandListStore
+  useEffect(() => {
+    var date = Date.now()
+    onSelect(date)
+    getCurrentMonthData(moment(moment(date).format('YYYY-MM')).valueOf())
+  }, [])
 
-  const getlistData = value => {
-    // let sum = [5, 6, 7, 8, 9, 10, 25]
-    // console.log(sum)
+  const getCurrentMonthData = async e => {
+    console.log('userId', userId)
 
-    let listData
-    switch (value.date()) {
-      case 18:
-        listData = [{ type: 'success', content: 'This is usual event.' }]
-        break
-      case 20:
-        listData = [
-          { type: 'warning', content: 'This is warning event.' },
-          { type: 'success', content: 'This is usual event.' },
-          { type: 'error', content: 'This is error event.' }
-        ]
-        break
-      case 15:
-        listData = [
-          { type: 'warning', content: 'This is warning event' },
-          { type: 'success', content: 'This is very long usual event。。....' },
-          { type: 'error', content: 'This is error event 1.' },
-          { type: 'error', content: 'This is error event 2.' },
-          { type: 'error', content: 'This is error event 3.' },
-          { type: 'error', content: 'This is error event 4.' }
-        ]
-        break
-      default:
+    let allContent = await allMemos({ eventCreateTime: e, userId: userId })
+    if (allContent || []) {
+      const data = allContent.map(item => {
+        item.state = moment(item.eventCreateTime).format('DD')
+        return item
+      })
+      setCurrentMonthData(data)
     }
+  }
+  const getlistData = value => {
+    let listData = []
+    currentMonthData.map(item => {
+      if (Number(item.state) === value.date()) {
+        listData = [{ type: 'success' }]
+      }
+    })
     return listData || []
   }
 
   const dateCellRender = value => {
     const listData = getlistData(value)
-    // const listData = []
-
+    if (!isEmpty(listData)) {
+    }
     if (listData.length) {
       const target = listData[0]
       return (
@@ -56,31 +64,49 @@ const Memorandum = () => {
       )
     }
   }
-
-  const showModal = () => {
-    setVisible(f => !f)
+  // 新增
+  const showModal = async type => {
+    if (type === 'ok' && timeStamp && text) {
+      await memorandumAdded({
+        eventCreateTime: timeStamp,
+        eventContent: text,
+        id: selectData ? selectData.id : ''
+      })
+      setInterfaceReturnContent(text) //文字显示
+      var date = Date.now()
+      getCurrentMonthData(moment(moment(date).format('YYYY-MM')).valueOf()) //图标显示
+      // setText(null) //清空文字
+      setVisible(f => !f)
+    } else {
+      setVisible(f => !f)
+    }
   }
 
   const monthCellRender = value => {
-    console.log('monthCellRender', value)
-
     const num = getMonthData(value)
-    return num ? (
-      <div className="notes-month">
-        <section>{num}</section>
-        <span>Backlog number</span>
-      </div>
-    ) : null
+    return num ? <div className="notes-month"></div> : null
   }
   const getMonthData = value => {
-    console.log('getMonthData', value)
-
     if (value.month() === 8) {
       return 1394
     }
   }
-  const onSelect = e => {
-    console.log(moment(e).format('YYYY-MM-DD'))
+  // 日期点击事件
+  const onSelect = async e => {
+    seTtimeStamp(moment(e).valueOf())
+    let arr = await memorandumContent({
+      eventCreateTime: moment(e).valueOf(),
+      userId: userId
+    })
+    setText(arr ? arr.eventContent : null)
+    setSelectData(arr)
+
+    setInterfaceReturnContent(arr !== null ? arr.eventContent : '暂无')
+    getCurrentMonthData(moment(moment(e).format('YYYY-MM')).valueOf()) //点击获取当月的数据
+  }
+
+  const btn = e => {
+    setText(e.target.value)
   }
 
   return (
@@ -98,7 +124,7 @@ const Memorandum = () => {
         ) : (
           <div className={styles.todoList}>
             <Badge status={'success'} />
-            <div>要做什么事</div>
+            <div>{interfaceReturnContent}</div>
           </div>
         )}
         <div>
@@ -124,7 +150,11 @@ const Memorandum = () => {
         >
           <div className={styles.modalContent}>
             <div className={styles.modalLabel}>事件内容</div>
-            <TextArea rows={4}></TextArea>
+            <TextArea
+              rows={4}
+              onChange={btn}
+              defaultValue={text ? text : ''}
+            ></TextArea>
           </div>
           <div className={styles.btnBox}>
             <Button className={styles.modalBtn} onClick={showModal}>
@@ -133,7 +163,9 @@ const Memorandum = () => {
             <Button
               className={styles.modalBtn}
               type={'primary'}
-              onClick={showModal}
+              onClick={() => {
+                showModal('ok')
+              }}
             >
               确认
             </Button>

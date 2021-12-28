@@ -27,7 +27,6 @@ const FactoryPhotos = () => {
   useEffect(() => {
     ;(async () => {
       if (+currentUserInfo.enterpriseType === 0) {
-        // 加工厂
         const data =
           (await getFactoryPhotos({
             factoryId: currentUserInfo.factoryId
@@ -35,6 +34,7 @@ const FactoryPhotos = () => {
         if (data.factoryId) {
           delete data.factoryId
         }
+        // console.log('接口数据', data)
         setParams(data)
       }
       if (+currentUserInfo.enterpriseType === 1) {
@@ -51,14 +51,13 @@ const FactoryPhotos = () => {
   }, [])
 
   const valuesChange = (key, value) => {
+    console.log(key)
+    console.log(value)
     const newParams = cloneDeep(params)
-    const nErrors = cloneDeep(errors)
     newParams[key] = value
+    console.log(newParams)
     setParams(newParams)
-    if (key === 'productImagesList') {
-      nErrors.productImagesList =
-        isArray(value) && value.length > 0 ? false : true
-    }
+
     const arr = [
       'sewingMachineImage',
       'overlockMachineImage',
@@ -70,13 +69,12 @@ const FactoryPhotos = () => {
     ]
     if (arr.includes(key)) {
       if (isArray(value) && value.length > 0) {
-        nErrors.equipment = false
+        // nErrors.equipment = false
       } else {
-        nErrors.equipment = true
+        // nErrors.equipment = true
       }
     }
-
-    setErrors(nErrors)
+    setErrors(null)
   }
 
   const submit = async () => {
@@ -98,7 +96,8 @@ const FactoryPhotos = () => {
     const flag = arr.some(item => params[item]?.length > 0)
     nErrors.equipment = flag ? false : true
 
-    setErrors(nErrors)
+    // setErrors(nErrors)
+    console.log(params)
 
     if (+currentUserInfo.enterpriseType === 0 && !nErrors.equipment) {
       // 加工厂 factoryId

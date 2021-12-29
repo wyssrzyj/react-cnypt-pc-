@@ -30,6 +30,7 @@ const OverviewCard = props => {
     const day = Math.floor(dateDiff / (24 * 3600 * 1000)) //计算出相差天数
     const leave1 = dateDiff % (24 * 3600 * 1000)
     const hours = Math.floor(leave1 / (3600 * 1000)) //计算出小时数
+
     setDayDiff(day)
     setHourDiff(hours)
   }

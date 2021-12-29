@@ -11,10 +11,14 @@ const MainCategoriesCom = props => {
   const { factoryStore } = useStores()
   const { productCategoryList } = factoryStore
   const newList = toJS(productCategoryList)
+
   const childList = newList.reduce((prev, item) => {
-    prev.push(...item.children)
+    if (!isEmpty(item.children)) {
+      prev.push(...item.children)
+    }
     return prev
   }, [])
+
   const [checkedCategories, setCheckedCategories] = useState<any>(
     isArray(value) ? [...value] : []
   )
@@ -41,6 +45,8 @@ const MainCategoriesCom = props => {
         return item === o.code
       })
     }).map(item => item.name)
+    console.log('名字', newLabel)
+
     setCheckedLabel([...newLabel])
     // if (flat.length > 5) {
     //   message.warning('最多可选5个')
@@ -68,6 +74,8 @@ const MainCategoriesCom = props => {
           return item === o.code
         })
       }).map(item => item.name)
+      console.log('初始', [...newLabel])
+
       setCheckedLabel([...newLabel])
     }
   }, [value, productCategoryList])
@@ -112,10 +120,12 @@ const MainCategoriesCom = props => {
         <ul className={styles.allCategories}>
           {newList.map(category => {
             const { code, name, children } = category
-            const newChildren = children.map(item => ({
-              value: item.code,
-              label: item.name
-            }))
+            const newChildren = !isEmpty(children)
+              ? children.map(item => ({
+                  value: item.code,
+                  label: item.name
+                }))
+              : []
             return (
               <li key={code} className={styles.categoriesRow}>
                 <div className={styles.labelName}>{name}</div>

@@ -13,7 +13,9 @@ const MainCategoriesCom = props => {
   const { productCategoryList } = factoryStore
   const newList = toJS(productCategoryList)
   const childList = newList.reduce((prev, item) => {
-    prev.push(...item.children)
+    if (!isEmpty(item.children)) {
+      prev.push(...item.children)
+    }
     return prev
   }, [])
   const [checkedCategories, setCheckedCategories] = useState<any>(
@@ -114,10 +116,12 @@ const MainCategoriesCom = props => {
         <ul className={styles.allCategories}>
           {newList.map(category => {
             const { code, name, children } = category
-            const newChildren = children.map(item => ({
-              value: item.code,
-              label: item.name
-            }))
+            const newChildren = !isEmpty(children)
+              ? children.map(item => ({
+                  value: item.code,
+                  label: item.name
+                }))
+              : []
             return (
               <li key={code} className={styles.categoriesRow}>
                 <div className={styles.labelName}>{name}</div>

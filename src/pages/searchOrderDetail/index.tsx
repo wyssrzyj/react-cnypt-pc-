@@ -81,7 +81,7 @@ const SearchOrderDetail = props => {
       id: data.id,
       name: data.name,
       deliveryDate: data.deliveryDate,
-      releaseTime: data.releaseTime,
+      releaseTime: data.inquiryEffectiveDate,
       details: [
         { label: '需求单编号', value: data.code, span: 24 },
         {
@@ -104,7 +104,7 @@ const SearchOrderDetail = props => {
         {
           label: '截止时间',
           value: data.releaseTime
-            ? moment(data.releaseTime).format('YYYY-MM-DD')
+            ? moment(data.inquiryEffectiveDate).format('YYYY-MM-DD')
             : '--',
           span: 12
         },

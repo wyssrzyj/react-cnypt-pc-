@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Title } from '../../controlPanel/accountSafe'
 import styles from './todo.module.less'
 import { Button } from 'antd'
-
+import { isEmpty } from 'lodash'
 import { Icon } from '@/components' //路径
 import { getUserInfo } from '@/utils/tool'
 import { useStores, toJS, observer } from '@/utils/mobx'
@@ -49,7 +49,7 @@ const Todo = () => {
     // 加工厂数据处理
     machining.map(item => {
       item.deliveryDate = moment(item.deliveryDate).format('YYYY-MM-DD')
-      if (goodsNum) {
+      if (!isEmpty(goodsNum)) {
         item.goodsNum = goodsNum.filter(i => i.value === item.goodsNum)[0].label
       }
       item.releaseTime = moment(item.releaseTime).format('YYYY-MM-DD HH:mm:ss')

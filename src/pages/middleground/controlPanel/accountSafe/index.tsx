@@ -11,7 +11,7 @@ import { getCurrentUser } from '@/utils/tool'
 import { useStores } from '@/utils/mobx'
 import moment from 'moment'
 import { cloneDeep } from 'lodash'
-import UploadFile from './upload'
+import UploadFile from './uploads'
 
 export const Title = props => {
   const { title, fontSize } = props
@@ -142,6 +142,8 @@ const AccountSafe = () => {
   }
 
   const changeAvatar = async url => {
+    console.log('传递的值', url)
+
     const params = {
       userFaceUrl: url,
       userId: currentUser.userId
@@ -174,8 +176,8 @@ const AccountSafe = () => {
         <Title title={'账号信息'} />
         <div className={styles.infoBox}>
           <div className={styles.avatarBox}>
-            <img src={imgUrl} className={styles.avatar} alt="" />
-            <UploadFile onChange={changeAvatar} />
+            {/* <img src={imgUrl} className={styles.avatar} alt="" /> */}
+            <UploadFile imgUrl={imgUrl} onChange={changeAvatar} />
           </div>
           <div className={styles.userInfo}>
             <div className={styles.changeNameItem}>

@@ -48,11 +48,13 @@ const ApprovalResult = props => {
       )
       .then(response => {
         const { success, data } = response
+        console.log('请求时间测试', data)
+
         if (success) {
           const {
             approvalStatus: approvalStatus,
             approvalDesc,
-            approvalTime
+            requestCertificateApprovalTime
           } = data
           const newCurrentUser = { ...currentUser, approvalStatus }
           localStorage.setItem('userInfo', JSON.stringify(newCurrentUser))
@@ -68,7 +70,10 @@ const ApprovalResult = props => {
                 </div>
                 <div className={styles.time}>
                   <Icon type="jack-shijian" />
-                  请求时间 {moment(approvalTime).format('YYYY-MM-DD HH:mm:ss')}
+                  请求时间
+                  {moment(requestCertificateApprovalTime).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  )}
                 </div>
               </div>
             ),

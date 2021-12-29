@@ -122,7 +122,7 @@ function index({ NumberCooperation, newData, topName }) {
   return (
     <div>
       <div className={styles.carousel}>
-        <Carousel autoplay={false}>
+        <Carousel autoplay={true}>
           {topName.publicityImagesList !== undefined
             ? topName.publicityImagesList.map(item => (
                 <div key={item.thumbUrl}>

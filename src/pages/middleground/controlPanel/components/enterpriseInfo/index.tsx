@@ -363,9 +363,9 @@ const EnterpriseInfo = () => {
       .then(response => {
         const { success, data } = response
         if (success) {
-          const { infoApprovalStatus, approvalDesc = '' } = data
+          const { approvalStatus, approvalDesc = '' } = data
 
-          setCurrentType(infoApprovalStatus)
+          setCurrentType(approvalStatus)
           setMessageMap({
             0: (
               <span>

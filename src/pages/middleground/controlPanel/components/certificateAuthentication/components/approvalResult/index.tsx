@@ -50,7 +50,7 @@ const ApprovalResult = props => {
         const { success, data } = response
         if (success) {
           const {
-            certificateApprovalStatus: approvalStatus,
+            approvalStatus: approvalStatus,
             approvalDesc,
             approvalTime
           } = data

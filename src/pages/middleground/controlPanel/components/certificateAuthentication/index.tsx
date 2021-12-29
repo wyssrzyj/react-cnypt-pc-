@@ -30,8 +30,8 @@ const CertificateAuthentication = () => {
         .then(response => {
           const { success, data } = response
           if (success) {
-            const { certificateApprovalStatus } = data
-            setCurrentStep(certificateApprovalStatus ? 1 : 0)
+            const { approvalStatus } = data
+            setCurrentStep(approvalStatus ? 1 : 0)
           }
         })
     } else {

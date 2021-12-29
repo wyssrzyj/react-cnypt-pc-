@@ -29,7 +29,7 @@ function IssuingData({ issuingData }) {
                 <div className={styles.icons}>
                   <Icon type="jack-gcmc_icon" className={styles.previous} />
                 </div>
-                <div className={styles.txt}>
+                <div className={styles.txtF}>
                   <div className={styles.test}>
                     <div className={styles.announcement}>
                       {item.enterpriseName}

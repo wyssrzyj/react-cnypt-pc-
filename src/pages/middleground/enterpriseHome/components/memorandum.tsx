@@ -30,8 +30,6 @@ const Memorandum = () => {
   }, [])
 
   const getCurrentMonthData = async e => {
-    console.log('userId', userId)
-
     let allContent = await allMemos({ eventCreateTime: e, userId: userId })
     if (allContent || []) {
       const data = allContent.map(item => {

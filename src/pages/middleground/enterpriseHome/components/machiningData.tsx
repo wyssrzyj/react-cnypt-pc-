@@ -8,8 +8,6 @@ function machiningData({ data }) {
   const history = useHistory()
 
   const findOrder = (e, value) => {
-    console.log(value)
-
     if (e === 1) {
       history.push({ pathname: '/control-panel/orderManagement/receiveOrder' })
     } else {
@@ -54,9 +52,7 @@ function machiningData({ data }) {
                 <div className={styles.company}>
                   <div>
                     【{' '}
-                    {item.enterpriseName
-                      ? item.enterpriseName
-                      : ' 此订单已失效'}
+                    {item.enterpriseName ? item.enterpriseName : '此订单已失效'}
                     】&nbsp;&nbsp;
                     <span> {item.releaseTime}</span>
                   </div>

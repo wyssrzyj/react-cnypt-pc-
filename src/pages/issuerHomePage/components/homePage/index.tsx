@@ -130,14 +130,6 @@ function index({ NumberCooperation, newData, topName }) {
                 </div>
               ))
             : null}
-
-          <div>
-            <img
-              className={styles.img}
-              src="https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/issuerhomepage.png"
-              alt=""
-            />
-          </div>
         </Carousel>
       </div>
 

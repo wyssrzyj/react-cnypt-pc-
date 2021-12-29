@@ -20,8 +20,6 @@ const FactoryHome = () => {
 
   const api = async () => {
     let arr = await processingPlantOrderReceivingManagementOrderQuantity()
-    console.log(arr)
-
     const data = [
       {
         label: '新订单',

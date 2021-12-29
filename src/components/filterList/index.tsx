@@ -46,12 +46,9 @@ export const updateTimeMap = [
 const FilterList = props => {
   const history = useHistory()
   const { location } = history
-  // const { types, onFilterChange } = props
   const { onFilterChange } = props
   const { factoryStore, commonStore } = useStores()
   const { dictionary, allArea } = commonStore
-
-  console.log(toJS(dictionary), 'toJS(dictionary)')
   const {
     effectiveLocation = [],
     processType = [],

@@ -53,8 +53,6 @@ const SearchOrderDetail = props => {
     inquiryPurchase(id).then(response => {
       const { success, data } = response
       if (success) {
-        console.log('需要的数据data', data)
-
         setDataSource({ ...data })
       }
     })

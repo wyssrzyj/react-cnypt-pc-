@@ -13,6 +13,7 @@ export default class DemandList {
   @observable zhiding = [{ name: '置顶' }]
   @observable regionalData = [] //地区弹窗返回的数据
   @observable popData = [] //弹窗回显
+  @observable enteid = ''
 
   @action changeTestData = () => {
     runInAction(() => {
@@ -22,6 +23,12 @@ export default class DemandList {
   @action popUpData = params => {
     runInAction(() => {
       this.regionalData = params
+    })
+  }
+  @action enterprisrIdData = params => {
+    console.log('是否成功', params)
+    runInAction(() => {
+      this.enteid = params
     })
   }
   @action popUpEcho = params => {

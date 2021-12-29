@@ -5,15 +5,23 @@ import axios from '@/utils/axios'
 import { checkValue } from '@/utils/tool'
 import HeaderLine from '../headerLine'
 import styles from './index.module.less'
+import { useLocation } from 'react-router-dom'
+import { isEmpty } from 'lodash'
 
 const CommercialInfo = props => {
+  const location = useLocation()
+  const { state } = location
   const { factoryId } = props
+  console.log(factoryId)
+
   const [businessInfo, setBusinessInfo] = useState<any>({})
 
   const getBusinessInfo = () => {
+    if (!isEmpty(state)) {
+    }
     axios
       .get('/api/factory/enterprise/get-enterprise-business-license-info', {
-        factoryId
+        enterpriseId: state['enterpriseId']
       })
       .then(response => {
         const { success, data } = response

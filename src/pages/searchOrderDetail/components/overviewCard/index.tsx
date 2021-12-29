@@ -26,7 +26,7 @@ const OverviewCard = props => {
   const getTimeDifference = () => {
     const date = Date.now() //当前时间
     const a = moment(releaseTime) //截止日期
-    const b = moment(date) //当前日期
+    const b = moment(date) //当前日期.
     const dateDiff = a.diff(b)
     const day = Math.floor(dateDiff / (24 * 3600 * 1000)) //计算出相差天数
     const leave1 = dateDiff % (24 * 3600 * 1000)

@@ -32,10 +32,11 @@ const OtherCard = props => {
   const { inquiryList } = searchOrderStore
   const {
     goodsNum = [],
-    // processType = [],
     factoryEffectiveLocation = [],
-    inquiryProcessType = []
+    // inquiryProcessType = [],
+    processType = []
   } = toJS(dictionary)
+  console.log(processType)
 
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
   const productCategoryList = JSON.parse(
@@ -47,6 +48,8 @@ const OtherCard = props => {
   const [cardList, setCardList] = useState<any>([])
 
   const transformData = () => {
+    console.log('数据测试', list)
+
     const newCardList = list.map(record => {
       return {
         id: record.id,
@@ -71,7 +74,7 @@ const OtherCard = props => {
             {
               label: '加工类型',
               value: matchArrayValue(
-                inquiryProcessType,
+                processType,
                 record.processTypeValues,
                 '--'
               )

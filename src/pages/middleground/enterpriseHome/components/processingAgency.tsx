@@ -38,6 +38,9 @@ function processingAgency({
   const certificates = () => {
     push({ pathname: '/control-panel/panel/certificate' })
   }
+  const fail = () => {
+    push({ pathname: '/control-panel/panel/enterprise' })
+  }
   return (
     <div>
       <div>
@@ -100,7 +103,7 @@ function processingAgency({
                 </div>
               </div>
               <div className={styles.btn}>
-                <Button type="primary" ghost>
+                <Button type="primary" ghost onClick={fail}>
                   立即前往
                 </Button>
               </div>

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react'
 import styles from './swiperFactorys.module.less'
 import classNames from 'classnames'
 import { Icon } from '@/components'
-import { observer, useStores } from '@/utils/mobx'
+import { observer } from '@/utils/mobx'
 
 // 地图工厂轮播卡片
 const SwiperCard = props => {
@@ -29,8 +29,6 @@ const SwiperCard = props => {
 
 // 顶部地图工厂轮播
 const SwiperFactorys = props => {
-  const { factoryStore } = useStores()
-  const { getFactoryList } = factoryStore
   const { SwiperCore, data } = props
   const leftRef = useRef<HTMLDivElement>()
   const rightRef = useRef<HTMLDivElement>()
@@ -38,15 +36,6 @@ const SwiperFactorys = props => {
   const [list, setList] = useState<any>([])
 
   useEffect(() => {
-    ;(async () => {
-      const params = {
-        pageSize: 10,
-        sortField: 'newest',
-        sortType: 'Desc'
-      }
-      const res = await getFactoryList(params)
-      res.records || []
-    })()
     if (data) {
       setList(data)
     }

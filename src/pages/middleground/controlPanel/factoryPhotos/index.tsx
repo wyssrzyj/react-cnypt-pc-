@@ -121,7 +121,9 @@ const FactoryPhotos = () => {
           <div className={styles.item}>
             <span className={styles.label}>企业宣传照：</span>
             <CusUpload
-              tips={'只能上传jpg/png格式文件，最多上传3张'}
+              tips={
+                '只能上传jpg/png格式文件，最多上传3张，推荐使用1200*400尺寸的图。'
+              }
               maxCount={3}
               fileList={params['publicityImagesList'] || []}
               valuesChange={value => valuesChange('publicityImagesList', value)}

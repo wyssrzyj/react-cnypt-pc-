@@ -31,16 +31,16 @@ const FactoryReport = () => {
   const [orderType, setOrderType] = useState<any>([])
   // const [inspectionMember, setInspectionMember] = useState<any>([])
   const [validationTime, setValidationTime] = useState('')
-  const [memberText, setMemberText] = useState('')
   // const [modalVisible, setModalVisible] = useState<boolean>(true)
   const [grade, setGrade] = useState<string>('--')
   const [treeData, setTreeData] = useState<any>([])
 
   const getFactoryInfo = () => {
-    setMemberText('')
     const newList = toJS(productCategoryList)
+    console.log(newList)
+
     const childList = newList.reduce((prev, item) => {
-      prev.push(...item.children)
+      !isEmpty(item.children) ? prev.push(...item.children) : []
       return prev
     }, [])
     axios
@@ -53,6 +53,8 @@ const FactoryReport = () => {
         if (success) {
           const { mainCategoriesList, productGradeValues } = data
           setCurrentFactory({ ...data })
+          console.log('任命', data)
+
           setValidationTime(data.factoryInspectionTime)
           const newLabel = filter(childList, function (o) {
             return find(mainCategoriesList, function (item) {
@@ -111,14 +113,14 @@ const FactoryReport = () => {
       <header className={styles.header}>
         <div className={styles.details}>
           工厂由
-          {memberText &&
+          {currentFactory.inspectorName &&
             autoAddTooltip(
               ref => (
                 <div ref={ref} className={styles.tooltipBpx}>
-                  {memberText}
+                  {currentFactory.inspectorName}
                 </div>
               ),
-              { title: memberText }
+              { title: currentFactory.inspectorName }
             )}
           于
           {validationTime ? moment(validationTime).format('YYYY/MM/DD') : '--'}

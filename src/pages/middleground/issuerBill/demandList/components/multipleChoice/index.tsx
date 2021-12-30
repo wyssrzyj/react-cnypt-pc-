@@ -101,15 +101,27 @@ const MultipleChoice = ({
             ) : null}
           </Col>
           <Col span={6} className={styles.examine}>
+            {console.log('测试不通过', data)}
             {data.status !== -1 ? (
               <>
-                <span>
-                  <Icon
-                    type={examine.get(data.systemApprovalStatus)}
-                    className={styles.listHeaderSortIcon}
-                  ></Icon>
-                </span>
-                {data.systemApprovalStatus ? (
+                {Number(data.systemApprovalStatus) === 1 &&
+                Number(data.manualApprovalStatus) !== 0 ? (
+                  <span>
+                    <Icon
+                      type={examine.get(1)}
+                      className={styles.listHeaderSortIcon}
+                    ></Icon>
+                  </span>
+                ) : (
+                  <span>
+                    <Icon
+                      type={examine.get(0)}
+                      className={styles.listHeaderSortIcon}
+                    ></Icon>
+                  </span>
+                )}
+                {Number(data.systemApprovalStatus) === 1 &&
+                Number(data.manualApprovalStatus) !== 0 ? (
                   <span>审核通过</span>
                 ) : (
                   <span>审核不通过</span>
@@ -249,7 +261,9 @@ const MultipleChoice = ({
           <Col className={styles.state} span={6}>
             {/* -1 草稿箱 1 提交需求单 -2审核失败 -3已结束 */}
             {/* 生效中 */}
-            {+data.status === 1 ? (
+
+            {Number(data.status) === 1 &&
+            Number(data.manualApprovalStatus) !== 0 ? (
               <div>
                 <p className={styles.effect}>生效中</p>
                 <p className={styles.validity}>
@@ -278,10 +292,14 @@ const MultipleChoice = ({
               </div>
             ) : null}
             {/* 审核失败 */}
-            {+data.status === -2 ? (
-              <div>
-                <p className={styles.end}>审核失败</p>
-                <p className={styles.cursor}>查看失败原因</p>
+            {+data.status === -2 || Number(data.manualApprovalStatus) === 0 ? (
+              <div className={styles.manualApprovalStatus}>
+                <div className={styles.end}>审核失败</div>
+                <Tooltip placement="top" title={data.approvalDesc}>
+                  <div className={styles.cursor}>
+                    不通过原因:{data.approvalDesc}
+                  </div>
+                </Tooltip>
               </div>
             ) : null}
             {/* 草稿 */}
@@ -292,7 +310,11 @@ const MultipleChoice = ({
             ) : null}
           </Col>
           <Col className={styles.state} span={2}>
-            {data.status === 1 && data.surplus.day > 0 ? (
+            {/* {Number(data.status) === 1 &&
+            Number(data.manualApprovalStatus) !== 0 &&
+            data.surplus.day > 0 ? ( */}
+            {Number(data.status) === 1 &&
+            Number(data.manualApprovalStatus) !== 0 ? (
               <div className={styles.btn}>
                 <Button type="primary" onClick={advance}>
                   提前结束

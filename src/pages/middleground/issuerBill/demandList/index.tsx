@@ -85,7 +85,8 @@ const DemandList = () => {
     let sum = {
       pageNum: 1,
       pageSize: defaultPageSize,
-      status: value
+      status: value,
+      manualApprovalStatus: value === '-2' ? 0 : ''
     }
     setParams({ ...sum, ...query })
     setPageNumber(1)

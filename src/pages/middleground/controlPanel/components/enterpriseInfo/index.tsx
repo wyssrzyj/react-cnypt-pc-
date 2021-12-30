@@ -34,6 +34,7 @@ import { dealRefresh } from '@/utils/axios/filterNull'
 import MainCategoriesCom from '../mainCategoriesCom'
 import moment from 'moment'
 import OSS from '@/utils/oss'
+import { getChild } from './getChild'
 
 const { TextArea } = Input
 const { Option } = Select
@@ -214,35 +215,19 @@ const EnterpriseInfo = () => {
           imageUrl === preImageUrl ? undefined : enterpriseLogoId
       }
 
-      // 产品档次
-      const getSubData = (v, data) => {
-        // v  原始数据
-        // data 字典数据
-        let sum = []
-        v.map(item => {
-          sum.push(list(item, data))
-        })
-        return sum.flat(Infinity) //数组扁平化
-      }
-      const list = (item, data) => {
-        //item 原始数据
-        // data 字典数据
-        let sum = []
-        let res = data.filter(v => v.value === item)[0]
-        if (res !== undefined) {
-          res.children.forEach(item => {
-            sum.push(item.value)
-          })
-        }
-        return sum
-      }
       // 判断 提交的值和回显的值是否一样 一样的话就修改,
       if (!isEmpty(grades)) {
+        let judgment = [
+          'productGradeHigh',
+          'productGradeMiddle',
+          'productGradeLow'
+        ]
         if (grades[0] === params.productGradeValues[0]) {
         } else {
           if (params.productGradeValues) {
-            params.productGradeValues = getSubData(
+            params.productGradeValues = getChild(
               params.productGradeValues,
+              judgment,
               treeData
             )
           }

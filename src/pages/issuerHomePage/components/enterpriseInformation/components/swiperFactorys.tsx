@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { Icon } from '@/components'
 import { observer } from '@/utils/mobx'
 
-// 地图工厂轮播卡片
+// 地图工厂轮播卡片.
 const SwiperCard = props => {
   const { data } = props
   const keys = Reflect.ownKeys(data)

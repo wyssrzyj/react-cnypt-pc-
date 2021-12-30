@@ -109,7 +109,7 @@ const EnterpriseInformation = props => {
         <QualificationCertificate factoryId={factoryId} />
       </div>
 
-      {/* 导航栏 */}
+      {/* 导航栏 .*/}
       <SlideBars barList={barList} domMap={domMap} activeKey={activeKey} />
     </div>
   )

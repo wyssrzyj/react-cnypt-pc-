@@ -144,7 +144,7 @@ const FactoryReport = () => {
             </div>
             <div className={styles.right}>
               {currentFactory.enterpriseName}成立于
-              {moment(currentFactory.factoryCreateTime).format('YYYY年')}
+              {moment(currentFactory.establishedTime).format('YYYY年')}
               ，厂房占地面积
               {currentFactory.factoryArea}平米
             </div>

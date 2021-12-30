@@ -39,8 +39,12 @@ const Todo = () => {
   const [issuingData, setIssuingData] = useState<any>([]) //发单处理数据
 
   useEffect(() => {
-    setEnterprise(enterpriseId) //企业id
-    arr()
+    console.log('新用户', enterpriseId)
+
+    if (enterpriseId !== null) {
+      setEnterprise(enterpriseId) //企业id
+      arr()
+    }
   }, [])
 
   const arr = async () => {

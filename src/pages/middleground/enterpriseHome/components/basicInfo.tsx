@@ -57,10 +57,6 @@ const BasciInfo = ({ configs = [], title }) => {
         </div>
         {enterpriseType === '1' ? (
           <div className={styles.newly}>
-            <div className={styles.tex}>
-              <Icon type={'jack-jian'} className={styles.icons}></Icon>
-              <span>新增需求</span>
-            </div>
             <div
               className={styles.tex}
               onClick={() => {

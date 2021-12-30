@@ -133,7 +133,7 @@ const FactoryReport = () => {
       </header>
       <div className={styles.box}>
         {/* <header className={styles.title}>
-          <span className={styles.name}>工厂基本情况</span>
+          <span className={styles.name}>工厂基本情况</span>.
         </header> */}
         <Title title={'工厂基本情况'} />
         <ul className={styles.content}>

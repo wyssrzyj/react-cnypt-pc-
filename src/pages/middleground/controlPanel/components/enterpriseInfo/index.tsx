@@ -592,7 +592,7 @@ const EnterpriseInfo = () => {
                 <Input placeholder="请输入员工总数" addonAfter="人" />
               </Form.Item>
               <Form.Item
-                label="产品档次111"
+                label="产品档次"
                 name="productGradeValues"
                 rules={[{ required: true, message: '请选择产品档次' }]}
               >

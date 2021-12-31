@@ -115,7 +115,7 @@ function index({ NumberCooperation, newData, topName }) {
       )
     }
   ]
-  // 查看订单信息
+  // 查看订单信息..
   const DemandOrderDetail = e => {
     push({ pathname: '/control-panel/orderDetails', state: { id: e } })
   }

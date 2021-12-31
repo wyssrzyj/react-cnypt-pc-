@@ -11,6 +11,7 @@ import './css/reset.css'
 import Layout from './layout'
 import 'antd/dist/antd.css'
 import { Loading } from './pages/home/renderHome'
+import 'swiper/swiper-bundle.min.css'
 
 const App = () => {
   return (

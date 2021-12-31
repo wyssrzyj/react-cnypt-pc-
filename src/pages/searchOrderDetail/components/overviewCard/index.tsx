@@ -24,8 +24,9 @@ const OverviewCard = props => {
   }
 
   const getTimeDifference = () => {
-    const a = moment(deliveryDate)
-    const b = moment(releaseTime)
+    const date = Date.now() //当前时间
+    const a = moment(releaseTime) //截止日期
+    const b = moment(date) //当前日期.
     const dateDiff = a.diff(b)
     const day = Math.floor(dateDiff / (24 * 3600 * 1000)) //计算出相差天数
     const leave1 = dateDiff % (24 * 3600 * 1000)
@@ -52,9 +53,11 @@ const OverviewCard = props => {
             </Col>
           ))}
         </Row>
+        {console.log('测试currentUser.userId', currentUser.userId)}
+        {console.log('测试998enterpriseType', enterpriseType)}
         {currentUser.userId ? (
           <>
-            {+enterpriseType === 0 && (
+            {+enterpriseType === 0 && enterpriseType !== null ? (
               <div className={styles.contentRight}>
                 <div className={styles.offer}>
                   <div>
@@ -69,7 +72,7 @@ const OverviewCard = props => {
                   </Button>
                 </div>
               </div>
-            )}
+            ) : null}
           </>
         ) : null}
       </div>

@@ -15,7 +15,6 @@ import SwiperCore, {
 import Swiper from 'swiper'
 import { isEmpty } from 'lodash'
 import HeaderLine from '../headerLine'
-import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
 

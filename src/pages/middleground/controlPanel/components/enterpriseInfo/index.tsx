@@ -33,6 +33,8 @@ import { dealRefresh } from '@/utils/axios/filterNull'
 // import ProcessingTypeCom from '../processingTypeCom'
 import MainCategoriesCom from '../mainCategoriesCom'
 import moment from 'moment'
+import OSS from '@/utils/oss'
+import { getChild } from './getChild'
 
 const { TextArea } = Input
 const { Option } = Select
@@ -78,19 +80,17 @@ const EnterpriseInfo = () => {
   const currentUser = getCurrentUser() || {}
   const { mobilePhone, userId } = currentUser
 
-  const { factoryPageStore, commonStore, loginStore, demandListStore } =
-    useStores()
+  const { commonStore, loginStore, demandListStore } = useStores()
   const { userInfo } = loginStore
   const { gradingOfProducts } = demandListStore
 
-  const { uploadFiles } = factoryPageStore
   const { allArea, dictionary } = commonStore
   const {
     plusMaterialType,
     purchaserRole,
     productType = [],
-    processType
-  } = dictionary
+    processType = []
+  } = toJS(dictionary)
 
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imageUrlList, setImageUrlList] = useState<any[]>([])
@@ -108,6 +108,7 @@ const EnterpriseInfo = () => {
   const [enterpriseType, setEnterpriseType] = useState<any>()
   const [value, serValue] = useState([])
   const [treeData, setTreeData] = useState([])
+  const [grades, setGrades] = useState([]) //用于判断档次方法是否执行
   const [loading, setLoading] = useState<boolean>(false)
 
   const uploadButton = (
@@ -133,14 +134,15 @@ const EnterpriseInfo = () => {
   }
 
   const customRequest = async ({ file }) => {
-    // const list = cloneDeep(fileList)
-    const formData = new FormData()
-
-    formData.append('file', file)
-    formData.append('module', 'factory')
-    const res = await uploadFiles(formData)
-    setImageUrl(res)
-    setImageUrlList([{ thumbUrl: res }])
+    const res = await OSS.put(
+      `/capacity-platform/platform/${file.uid}__${file.name}`,
+      file
+    )
+    if (res) {
+      const { url } = res
+      setImageUrl(url)
+      setImageUrlList([{ thumbUrl: url }])
+    }
   }
 
   const confirmSubmit = () => {
@@ -212,6 +214,25 @@ const EnterpriseInfo = () => {
         enterpriseLogoId:
           imageUrl === preImageUrl ? undefined : enterpriseLogoId
       }
+
+      // 判断 提交的值和回显的值是否一样 一样的话就修改,.
+      if (!isEmpty(grades)) {
+        let judgment = [
+          'productGradeHigh',
+          'productGradeMiddle',
+          'productGradeLow'
+        ]
+        if (grades[0] === params.productGradeValues[0]) {
+        } else {
+          if (params.productGradeValues) {
+            params.productGradeValues = getChild(
+              params.productGradeValues,
+              judgment,
+              treeData
+            )
+          }
+        }
+      }
       setLoading(true)
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
@@ -243,6 +264,8 @@ const EnterpriseInfo = () => {
       .get('/api/factory/enterprise/get-enterprise-info', {})
       .then(response => {
         const { success, data = {} } = response
+
+        setGrades(data.productGradeValues)
         if (success && !isEmpty(data)) {
           const {
             enterpriseLogoUrl,
@@ -260,7 +283,6 @@ const EnterpriseInfo = () => {
             clothesGrade,
             enterpriseType
           } = data
-
           const keys = Reflect.ownKeys(data)
           if (keys.includes('roleCodes')) {
             data['roleCodes'] = data['roleCodes'] || []
@@ -304,6 +326,16 @@ const EnterpriseInfo = () => {
             })
           }
         }
+        if (data.productGradeValues === null) {
+          form.setFieldsValue({ productGradeValues: undefined })
+        }
+        if (data.productTypeValues === null) {
+          form.setFieldsValue({ productTypeValues: undefined })
+        }
+        if (data.processTypeList === null) {
+          form.setFieldsValue({ processTypeList: undefined })
+        }
+        // form.setFieldsValue({ productGradeValues: data.productGradeValues })
       })
   }
 
@@ -315,13 +347,13 @@ const EnterpriseInfo = () => {
       .then(response => {
         const { success, data } = response
         if (success) {
-          const { infoApprovalStatus, approvalDesc = '' } = data
+          const { approvalStatus, approvalDesc = '' } = data
 
-          setCurrentType(infoApprovalStatus)
+          setCurrentType(approvalStatus)
           setMessageMap({
             0: (
               <span>
-                很抱歉通知您，您的平台入驻审批失败，失败原因：{approvalDesc}
+                很抱歉通知您，您的平台入驻审批失败，失败原因:{approvalDesc}
               </span>
             ),
             1: '恭喜您入驻信息审批通过，平台功能已为您开放，祝您上网愉快。',
@@ -368,8 +400,6 @@ const EnterpriseInfo = () => {
   }, [])
   const grade = async () => {
     let res = await gradingOfProducts() //订单档次
-    console.log(res)
-
     setTreeData(res.data)
   }
 
@@ -447,7 +477,7 @@ const EnterpriseInfo = () => {
           <Form.Item
             label="企业名称"
             name="enterpriseName"
-            rules={[{ required: true, message: '请输入企业名称！' }]}
+            rules={[{ required: true, message: '请输入企业名称!' }]}
           >
             <Input className={styles.input} placeholder="请输入企业名称" />
           </Form.Item>
@@ -456,7 +486,7 @@ const EnterpriseInfo = () => {
             <Col className="gutter-row" span={14}>
               <div className={styles.tip}>
                 <Icon type="jack-jingshi1" />
-                企业名称务必与营业执照一致，如：广州某某信息科技有限公司
+                企业名称务必与营业执照一致，如:广州某某信息科技有限公司
               </div>
             </Col>
           </Row>
@@ -464,7 +494,7 @@ const EnterpriseInfo = () => {
           <Form.Item
             label="成立时间"
             name="establishedTime"
-            rules={[{ required: true, message: '请选择成立时间！' }]}
+            rules={[{ required: true, message: '请选择成立时间!' }]}
           >
             <DatePicker
               placeholder={'请选择成立时间'}
@@ -474,7 +504,7 @@ const EnterpriseInfo = () => {
           <Form.Item
             label="企业类型"
             name="enterpriseType"
-            rules={[{ required: true, message: '请选择企业类型！' }]}
+            rules={[{ required: true, message: '请选择企业类型!' }]}
           >
             <Radio.Group>
               <Space direction="vertical">
@@ -510,14 +540,14 @@ const EnterpriseInfo = () => {
                 label="厂房面积"
                 name="factoryArea"
                 rules={[
-                  { required: true, message: '请输入厂房面积！' },
+                  { required: true, message: '请输入厂房面积!' },
                   {
                     pattern: new RegExp(/^[1-9]\d*$/, 'g'),
                     message: '请输入数字'
                   }
                 ]}
               >
-                <Input addonAfter="平米" placeholder="请输入厂房面积！" />
+                <Input addonAfter="平米" placeholder="请输入厂房面积!" />
               </Form.Item>
 
               <Form.Item
@@ -567,20 +597,12 @@ const EnterpriseInfo = () => {
                 rules={[{ required: true, message: '请选择产品档次' }]}
               >
                 <TreeSelect maxTagCount={5} allowClear={true} {...tProps} />
-
-                {/* <Select allowClear mode="multiple" placeholder="请选择产品档次">
-                  {productGradeHigh.map(option => (
-                    <Option key={option.value + 'product'} value={option.value}>
-                      {option.label}
-                    </Option>
-                  ))}
-                </Select> */}
               </Form.Item>
 
               <Form.Item
                 label="生产方式"
                 name="productTypeValues"
-                rules={[{ required: true, message: '请选择生产方式！' }]}
+                rules={[{ required: true, message: '请选择生产方式!' }]}
               >
                 <Select
                   mode="multiple"
@@ -612,18 +634,16 @@ const EnterpriseInfo = () => {
               <Form.Item
                 label="加工类型"
                 name="processTypeList"
-                rules={[{ required: true, message: '请选择加工类型！' }]}
+                rules={[{ required: true, message: '请选择加工类型!' }]}
               >
-                <Select placeholder={'请选择面料类型'} mode={'multiple'}>
+                <Select placeholder={'请选择加工类型'} mode={'multiple'}>
                   {isArray(processType) &&
                     processType.map(item => (
-                      <Option value={item.value} key={item.value}>
+                      <Option value={item.value} key={item.id}>
                         {item.label}
                       </Option>
                     ))}
                 </Select>
-                {/* processType */}
-                {/* <ProcessingTypeCom /> */}
               </Form.Item>
               <Form.Item
                 label="起订量"
@@ -701,7 +721,7 @@ const EnterpriseInfo = () => {
           >
             <Input
               className={styles.input}
-              placeholder="请输入座机号码  如：0571-8******"
+              placeholder="请输入座机号码  如:0571-8******"
             />
           </Form.Item>
           <Form.Item
@@ -722,7 +742,7 @@ const EnterpriseInfo = () => {
             label="企业地址"
             {...itemLayout}
             name="businessAddress"
-            rules={[{ required: true, message: '请选择企业地址！' }]}
+            rules={[{ required: true, message: '请选择企业地址!' }]}
           >
             <BusinessAddressCom
               className={styles.input}
@@ -734,7 +754,7 @@ const EnterpriseInfo = () => {
             label="企业简介"
             name="enterpriseDesc"
             rules={[
-              { required: true, message: '请填写企业简介！' },
+              { required: true, message: '请填写企业简介!' },
               { max: 700 }
             ]}
           >

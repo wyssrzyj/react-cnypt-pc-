@@ -8,7 +8,6 @@ import SwiperCore, {
   Thumbs
 } from 'swiper'
 import Swiper from 'swiper'
-import 'swiper/swiper-bundle.min.css'
 import './orderOverview.less'
 import u912 from '@/static/images/u912.png'
 import u1495 from '@/static/images/u1495.png'

@@ -34,6 +34,7 @@ const FactoryDetail = props => {
     match: { params = {} }
   } = props
   const { id: factoryId } = params
+
   const history = useHistory()
   const currentUser = getCurrentUser() || {}
   const { userId } = currentUser

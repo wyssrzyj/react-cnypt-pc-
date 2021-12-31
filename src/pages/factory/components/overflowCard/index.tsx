@@ -12,19 +12,18 @@ import SwiperCore, {
   Autoplay
 } from 'swiper'
 import Swiper from 'swiper'
-import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 import './style.less'
 import { getCurrentUser, getUserInfo } from '@/utils/tool'
 import { useHistory } from 'react-router'
 import { getTrees } from './method'
-
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay])
 
 const RequestCard = observer(props => {
   const { commonStore, searchOrderStore } = useStores()
   const { dictionary } = commonStore
   const { sendToFactory } = searchOrderStore
+
   const { data, enterpriseId } = props
 
   const goods =
@@ -70,7 +69,6 @@ const OverflowCard = props => {
     factoryTagList = [],
     enterpriseId
   } = props
-
   const currentUserInfo = getUserInfo()
   const currentUser = getCurrentUser()
   const history = useHistory()
@@ -88,10 +86,14 @@ const OverflowCard = props => {
   const [modalFlag, setModalFlag] = useState(false)
   const [orders, setOrders] = useState([])
 
-  const goToDetail = () => {
+  const goToDetail = async () => {
     updateName('')
-    /// history.push(`/factory-detail/${factoryId}`)
-    window.open(`/factory-detail/${factoryId}`)
+    history.push({
+      pathname: `/factory-detail/${factoryId}`,
+      state: {
+        enterpriseId: enterpriseId
+      }
+    })
   }
 
   useEffect(() => {

@@ -14,9 +14,7 @@ const layout = {
   }
 }
 
-const date = ({ validity, time }) => {
-  console.log(validity)
-
+const date = ({ time }) => {
   const [day, setDay] = useState('')
   useEffect(() => {
     if (time) {
@@ -26,9 +24,7 @@ const date = ({ validity, time }) => {
 
   function onChange(date) {
     setDay(remainingTime(date._d.getTime()).day)
-    // setProcessingType(dateString)
   }
-
   function disabledDate(current) {
     return current && current < moment().endOf('day')
   }

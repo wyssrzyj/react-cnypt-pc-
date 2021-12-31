@@ -1,0 +1,116 @@
+.swaiperContainer {
+  position: relative;
+  z-index: 99;
+  width: 1183px;
+  margin: 0 auto;
+
+  :global {
+    .swiper-wrapper {
+      // display: flex !important;
+    }
+    .swiper-button-next {
+      display: none;
+    }
+    .swiper-button-prev {
+      display: none;
+    }
+  }
+}
+
+.factorysSwiper {
+  display: flex;
+  width: 1032px !important;
+  height: 196px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.swiperCard {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px;
+  color: #333333;
+  background: #ffffff;
+  .factoryInfoIcon {
+    color: #3b80ff;
+  }
+
+  &:hover {
+    .factoryInfoIcon {
+      color: #ffffff;
+    }
+  }
+
+  .swiperImg {
+    display: inline-block;
+    min-width: 230px;
+    height: 154px;
+    background: url(http://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/20210722/107176f7b94f4d109551a68e046e2214.png)
+      center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .factoryName {
+    width: 200px;
+    width: 207px;
+    padding-bottom: 12px;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 16px;
+    white-space: nowrap;
+    text-align: left;
+    text-overflow: ellipsis;
+    // color: #FFFFFF;
+  }
+
+  .factoryInfo {
+    display: flex;
+    font-weight: 400;
+    font-size: 14px;
+    // color: #FFFFFF;
+    line-height: 32px;
+  }
+
+  .label {
+    display: inline-flex;
+    align-items: center;
+    min-width: 52px;
+    margin-right: 12px;
+  }
+
+  .factoryInfoIcon {
+    font-size: 18px;
+    // color: #FFFFFF;
+  }
+
+  .text {
+    width: 154px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: left;
+    text-overflow: ellipsis;
+  }
+}
+
+.leftIcon {
+  position: absolute;
+  top: 42%;
+  left: 8px;
+  color: #3b80ff !important;
+  font-size: 40px;
+  transform: translateY(-50%);
+}
+
+.rightIcon {
+  position: absolute;
+  top: 42%;
+  right: 16px;
+  color: #3b80ff !important;
+  font-size: 40px;
+  transform: translateY(-50%);
+}
+
+.disableIcon {
+  color: #c4c4c4 !important;
+}

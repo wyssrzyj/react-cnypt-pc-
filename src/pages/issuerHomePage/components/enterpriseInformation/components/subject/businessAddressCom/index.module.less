@@ -1,0 +1,27 @@
+.mapTemp {
+  position: relative;
+  width: 540px;
+  height: 280px;
+  // opacity: 0;
+  transition: all 0.2s ease;
+  :global {
+    .amap-copyright {
+      display: none !important;
+    }
+
+    .labelclass {
+      display: block;
+      width: 18px;
+      height: 18px;
+      background-repeat: no-repeat !important;
+      background-size: contain !important;
+    }
+  }
+}
+.businessAddressCom {
+  :global {
+    .ant-input-search-button {
+      height: 40px !important;
+    }
+  }
+}

@@ -28,16 +28,13 @@ const DemandList = () => {
   const { demandListStore, factoryStore, commonStore } = useStores()
   const { productCategoryList } = factoryStore
   const { dictionary } = commonStore
-  const {
-    // processType = [],
-    inquiryProcessType = []
-  } = toJS(dictionary)
+  const { processType = [] } = toJS(dictionary)
   const treeData = productCategoryList //商品品类
   const { listData, deleteDemandDoc, toppingFunction, endInterfaceInAdvance } =
     demandListStore
 
   const [reallylists, setReallyLists] = useState([]) //数据
-  // const [allChecked, setAllChecked] = useState(false) //全选的状态
+  // const [allChecked, setAllChecked] = useState(false) //全选的状态.
   const [numberLength, setNumberLength] = useState(1) //页码长度
   const [noOrders, setNoOrders] = useState(0) //没有订单
   const [pageNumber, setPageNumber] = useState(1) //分页
@@ -54,7 +51,7 @@ const DemandList = () => {
   }, [params])
 
   const handle = v => {
-    return getTrees(v, inquiryProcessType, 'value', 'label')
+    return getTrees(v, processType, 'value', 'label')
   }
 
   const listsAPI = async () => {
@@ -85,7 +82,8 @@ const DemandList = () => {
     let sum = {
       pageNum: 1,
       pageSize: defaultPageSize,
-      status: value
+      status: value,
+      manualApprovalStatus: value === '-2' ? 0 : ''
     }
     setParams({ ...sum, ...query })
     setPageNumber(1)

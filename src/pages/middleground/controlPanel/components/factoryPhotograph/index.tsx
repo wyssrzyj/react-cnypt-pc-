@@ -16,25 +16,33 @@ const FactoryPhotograph = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  const getFactoryImage = () => {
+  const getFactoryImage = async () => {
     setIsLoading(true)
-
     axios
-      .get('/api/factory/info/get-factory-images', {
-        factoryId
-      })
+      .get(
+        '/api/factory/factory-inspection-report/get-inspection-images-by-factory-id',
+        {
+          factoryId: factoryId
+        }
+      )
       .then(response => {
         const { success, data } = response
+        console.log(data)
+
         if (success) {
-          const { factoryAuditorImages, outsizeImages, workshopImages } = data
-          setNameplateFileList([...factoryAuditorImages])
-          setLocationFileList([...outsizeImages])
-          setWorkshopFileList([...workshopImages])
+          const {
+            factoryAuditorImageList,
+            outsizeImageList,
+            workshopImageList
+          } = data
+          setNameplateFileList([...factoryAuditorImageList])
+          setLocationFileList([...outsizeImageList])
+          setWorkshopFileList([...workshopImageList])
           const newImages = [
-            ...factoryAuditorImages,
-            ...outsizeImages,
-            ...workshopImages
-          ].map(item => ({ src: item }))
+            ...factoryAuditorImageList,
+            ...outsizeImageList,
+            ...workshopImageList
+          ].map(item => ({ src: item.thumbUrl }))
           setAllImages([...newImages])
         }
       })
@@ -44,6 +52,8 @@ const FactoryPhotograph = () => {
   }
 
   const checkImage = index => {
+    console.log('放大测试', index)
+
     setCurrentIndex(index)
     setVisible(true)
   }
@@ -66,7 +76,7 @@ const FactoryPhotograph = () => {
                 <div
                   key={index}
                   className={styles.image}
-                  style={{ backgroundImage: `url(${item})` }}
+                  style={{ backgroundImage: `url(${item.thumbUrl})` }}
                   onClick={() => checkImage(index)}
                 ></div>
               ))}
@@ -82,8 +92,12 @@ const FactoryPhotograph = () => {
                 <div
                   key={index}
                   className={styles.image}
-                  style={{ backgroundImage: `url(${item})` }}
-                  onClick={() => checkImage(nameplateFileList.length + index)}
+                  style={{ backgroundImage: `url(${item.thumbUrl})` }}
+                  onClick={() => {
+                    console.log('测试值是啥', locationFileList.length + index)
+
+                    checkImage(index + 1)
+                  }}
                 ></div>
               ))}
             </Col>
@@ -98,11 +112,9 @@ const FactoryPhotograph = () => {
                 <div
                   key={index}
                   className={styles.image}
-                  style={{ backgroundImage: `url(${item})` }}
+                  style={{ backgroundImage: `url(${item.thumbUrl})` }}
                   onClick={() =>
-                    checkImage(
-                      nameplateFileList.length + locationFileList.length + index
-                    )
+                    checkImage(index + locationFileList.length + 1)
                   }
                 ></div>
               ))}

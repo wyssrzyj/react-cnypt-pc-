@@ -151,15 +151,16 @@ const ControlPanel = () => {
                   企业证件认证
                 </Link>
               </Menu.Item>
-
-              <Menu.Item key="qualification" className={styles.items}>
-                <Link
-                  className={styles.minutest}
-                  to="/control-panel/panel/qualification"
-                >
-                  资质认证
-                </Link>
-              </Menu.Item>
+              {userInfo.purchaserId || userInfo.factoryId ? (
+                <Menu.Item key="qualification" className={styles.items}>
+                  <Link
+                    className={styles.minutest}
+                    to="/control-panel/panel/qualification"
+                  >
+                    资质认证
+                  </Link>
+                </Menu.Item>
+              ) : null}
             </Menu.ItemGroup>
             {userInfo.enterpriseType !== null &&
             +userInfo.enterpriseType === 0 ? (

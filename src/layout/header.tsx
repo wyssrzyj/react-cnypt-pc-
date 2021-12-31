@@ -177,6 +177,20 @@ const Header = () => {
         })
       }
     }
+    if (item.title == '企业认证管理') {
+      item.children = [
+        {
+          title: '企业证件认证',
+          url: '/control-panel/panel/certificate'
+        }
+      ]
+      if (userInfo.factoryId || userInfo.purchaserId) {
+        item.children.push({
+          title: '资质认证',
+          url: '/control-panel/panel/qualification'
+        })
+      }
+    }
 
     if (enterpriseType === '1') {
       if (item) {

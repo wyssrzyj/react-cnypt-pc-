@@ -77,7 +77,7 @@ module.exports = {
     open: true, // 打开浏览器
     compress: true, // 压缩
     hot: true, // 热更新
-    port: 8002, // 端口号
+    port: 8001, // 端口号
     host: 'dev.uchat.com.cn',
     allowedHosts: [
       'localhost',

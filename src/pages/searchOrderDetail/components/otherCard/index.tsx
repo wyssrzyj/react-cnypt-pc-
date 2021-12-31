@@ -18,7 +18,6 @@ import Swiper from 'swiper'
 import { useStores, observer } from '@/utils/mobx'
 import { matchValue, matchArrayValue } from '@/utils/tool'
 import { OrderCard } from '../../../searchOrder/components'
-import 'swiper/swiper-bundle.min.css'
 import styles from './index.module.less'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectFade])
@@ -33,10 +32,11 @@ const OtherCard = props => {
   const { inquiryList } = searchOrderStore
   const {
     goodsNum = [],
-    // processType = [],
     factoryEffectiveLocation = [],
-    inquiryProcessType = []
+    // inquiryProcessType = [],
+    processType = []
   } = toJS(dictionary)
+  console.log(processType)
 
   const newAllArea = JSON.parse(localStorage.getItem('allArea'))
   const productCategoryList = JSON.parse(
@@ -72,7 +72,7 @@ const OtherCard = props => {
             {
               label: '加工类型',
               value: matchArrayValue(
-                inquiryProcessType,
+                processType,
                 record.processTypeValues,
                 '--'
               )

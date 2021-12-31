@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Tag, Row, Col, Image } from 'antd'
 import moment from 'moment'
 import { toJS } from 'mobx'
-import { isEmpty, isArray } from 'lodash'
+import { isArray } from 'lodash'
 import { Icon, NoData } from '@/components'
 import { checkValue } from '@/utils/tool'
 import { useStores, observer } from '@/utils/mobx'
-import axios from '@/utils/axios'
 import HeaderLine from '../headerLine'
 import styles from './index.module.less'
 
 const CompaniesIntroduce = props => {
-  const { current = {}, factoryId } = props
+  const { current = {} } = props
   const {
     enterpriseName,
     enterpriseDesc,
@@ -28,31 +27,6 @@ const CompaniesIntroduce = props => {
   const { dictionary } = commonStore
   const { factoryYearOutputValue = [], factoryYearOutputProd = [] } =
     toJS(dictionary)
-  const [validationTime, setValidationTime] = useState('')
-  const [memberText, setMemberText] = useState('--')
-
-  const getInspectionMember = () => {
-    axios
-      .get('/api/factory/info/get-audit-info', { factoryId })
-      .then(response => {
-        const { success, data } = response
-        if (success) {
-          const { auditPersonInfoList, factoryRealAuditTime } = data
-          // setInspectionMember([...auditPersonInfoList])
-          setValidationTime(factoryRealAuditTime)
-
-          const text = isEmpty(auditPersonInfoList)
-            ? '--'
-            : auditPersonInfoList.map(item => item.realName).join('、')
-          setMemberText(text)
-        }
-      })
-  }
-
-  useEffect(() => {
-    getInspectionMember()
-  }, [])
-
   return (
     <div className={styles.companiesIntroduce}>
       <HeaderLine chinese="企业介绍" english="ENTERPRISE INTRODUCTION" />
@@ -71,17 +45,6 @@ const CompaniesIntroduce = props => {
               <Icon type="jack-ycsq" className={styles.tagIcon} />
               验厂
             </Tag>
-          </div>
-          <div className={styles.people}>
-            <Icon type="jack-ycgl" className={styles.tagIcon} />
-            <span className={styles.head}>验厂负责人</span>
-            <span>{memberText}</span>
-            <Icon type="jack-shijian" className={styles.time} />
-            <span>
-              {validationTime
-                ? moment(validationTime).format('YYYY-MM-DD')
-                : '--'}
-            </span>
           </div>
         </div>
         <div className={styles.introduce}>

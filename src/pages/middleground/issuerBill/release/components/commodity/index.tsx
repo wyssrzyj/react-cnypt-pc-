@@ -39,8 +39,7 @@ function Basics() {
   const {
     plusMaterialType = [],
     productType = [],
-    // processType = [],
-    inquiryProcessType = []
+    processType = []
   } = toJS(dictionary)
 
   const orderConfigs = [
@@ -49,8 +48,8 @@ function Basics() {
       required: true,
       message: '请选择面料类型',
       placeholder: '请选择面料类型',
-      type: 'select',
-      field: 'plusMaterialType',
+      type: 'multipleSelect',
+      field: 'materialTypeList',
       span: 12,
       options: plusMaterialType,
       cesar: 0
@@ -73,7 +72,7 @@ function Basics() {
       mode: 'multiple',
       field: 'processTypeList',
       span: 12,
-      options: inquiryProcessType,
+      options: processType,
       cesar: 0
     },
     {

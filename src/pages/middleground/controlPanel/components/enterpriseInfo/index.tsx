@@ -335,7 +335,7 @@ const EnterpriseInfo = () => {
         if (data.processTypeList === null) {
           form.setFieldsValue({ processTypeList: undefined })
         }
-        form.setFieldsValue({ productGradeValues: data.productGradeValues })
+        // form.setFieldsValue({ productGradeValues: data.productGradeValues })
       })
   }
 
@@ -353,7 +353,7 @@ const EnterpriseInfo = () => {
           setMessageMap({
             0: (
               <span>
-                很抱歉通知您，您的平台入驻审批失败，失败原因：{approvalDesc}
+                很抱歉通知您，您的平台入驻审批失败，失败原因:{approvalDesc}
               </span>
             ),
             1: '恭喜您入驻信息审批通过，平台功能已为您开放，祝您上网愉快。',
@@ -400,7 +400,6 @@ const EnterpriseInfo = () => {
   }, [])
   const grade = async () => {
     let res = await gradingOfProducts() //订单档次
-    console.log(res)
     setTreeData(res.data)
   }
 
@@ -478,7 +477,7 @@ const EnterpriseInfo = () => {
           <Form.Item
             label="企业名称"
             name="enterpriseName"
-            rules={[{ required: true, message: '请输入企业名称！' }]}
+            rules={[{ required: true, message: '请输入企业名称!' }]}
           >
             <Input className={styles.input} placeholder="请输入企业名称" />
           </Form.Item>
@@ -487,7 +486,7 @@ const EnterpriseInfo = () => {
             <Col className="gutter-row" span={14}>
               <div className={styles.tip}>
                 <Icon type="jack-jingshi1" />
-                企业名称务必与营业执照一致，如：广州某某信息科技有限公司
+                企业名称务必与营业执照一致，如:广州某某信息科技有限公司
               </div>
             </Col>
           </Row>
@@ -495,7 +494,7 @@ const EnterpriseInfo = () => {
           <Form.Item
             label="成立时间"
             name="establishedTime"
-            rules={[{ required: true, message: '请选择成立时间！' }]}
+            rules={[{ required: true, message: '请选择成立时间!' }]}
           >
             <DatePicker
               placeholder={'请选择成立时间'}
@@ -505,7 +504,7 @@ const EnterpriseInfo = () => {
           <Form.Item
             label="企业类型"
             name="enterpriseType"
-            rules={[{ required: true, message: '请选择企业类型！' }]}
+            rules={[{ required: true, message: '请选择企业类型!' }]}
           >
             <Radio.Group>
               <Space direction="vertical">
@@ -541,14 +540,14 @@ const EnterpriseInfo = () => {
                 label="厂房面积"
                 name="factoryArea"
                 rules={[
-                  { required: true, message: '请输入厂房面积！' },
+                  { required: true, message: '请输入厂房面积!' },
                   {
                     pattern: new RegExp(/^[1-9]\d*$/, 'g'),
                     message: '请输入数字'
                   }
                 ]}
               >
-                <Input addonAfter="平米" placeholder="请输入厂房面积！" />
+                <Input addonAfter="平米" placeholder="请输入厂房面积!" />
               </Form.Item>
 
               <Form.Item
@@ -593,7 +592,7 @@ const EnterpriseInfo = () => {
                 <Input placeholder="请输入员工总数" addonAfter="人" />
               </Form.Item>
               <Form.Item
-                label="产品档次"
+                label="产品档次111"
                 name="productGradeValues"
                 rules={[{ required: true, message: '请选择产品档次' }]}
               >
@@ -603,7 +602,7 @@ const EnterpriseInfo = () => {
               <Form.Item
                 label="生产方式"
                 name="productTypeValues"
-                rules={[{ required: true, message: '请选择生产方式！' }]}
+                rules={[{ required: true, message: '请选择生产方式!' }]}
               >
                 <Select
                   mode="multiple"
@@ -635,7 +634,7 @@ const EnterpriseInfo = () => {
               <Form.Item
                 label="加工类型"
                 name="processTypeList"
-                rules={[{ required: true, message: '请选择加工类型！' }]}
+                rules={[{ required: true, message: '请选择加工类型!' }]}
               >
                 <Select placeholder={'请选择加工类型'} mode={'multiple'}>
                   {isArray(processType) &&
@@ -722,7 +721,7 @@ const EnterpriseInfo = () => {
           >
             <Input
               className={styles.input}
-              placeholder="请输入座机号码  如：0571-8******"
+              placeholder="请输入座机号码  如:0571-8******"
             />
           </Form.Item>
           <Form.Item
@@ -743,7 +742,7 @@ const EnterpriseInfo = () => {
             label="企业地址"
             {...itemLayout}
             name="businessAddress"
-            rules={[{ required: true, message: '请选择企业地址！' }]}
+            rules={[{ required: true, message: '请选择企业地址!' }]}
           >
             <BusinessAddressCom
               className={styles.input}
@@ -755,7 +754,7 @@ const EnterpriseInfo = () => {
             label="企业简介"
             name="enterpriseDesc"
             rules={[
-              { required: true, message: '请填写企业简介！' },
+              { required: true, message: '请填写企业简介!' },
               { max: 700 }
             ]}
           >

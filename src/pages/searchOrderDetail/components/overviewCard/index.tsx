@@ -53,9 +53,11 @@ const OverviewCard = props => {
             </Col>
           ))}
         </Row>
+        {console.log('测试currentUser.userId', currentUser.userId)}
+        {console.log('测试998enterpriseType', enterpriseType)}
         {currentUser.userId ? (
           <>
-            {+enterpriseType === 0 && (
+            {+enterpriseType === 0 && enterpriseType !== null ? (
               <div className={styles.contentRight}>
                 <div className={styles.offer}>
                   <div>
@@ -70,7 +72,7 @@ const OverviewCard = props => {
                   </Button>
                 </div>
               </div>
-            )}
+            ) : null}
           </>
         ) : null}
       </div>

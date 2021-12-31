@@ -47,7 +47,7 @@ const BusinessHome = () => {
 
     setbasicConfigs(data)
   }
-  // const rightConfigs = [
+  /// const rightConfigs = [
   //   {
   //     icon: 'jack-shoucang',
   //     label: '收藏数',

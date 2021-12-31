@@ -79,7 +79,7 @@ const DemandSheet = () => {
       }
       data.inquiryEffectiveDate = moment(data.inquiryEffectiveDate) //订单有效期时间的回显
       data.deliveryDate = moment(data.deliveryDate)
-      setInvalid(moment(data.inquiryEffectiveDate).valueOf()) //订单有效期时间的时间戳
+      setInvalid(moment(data.inquiryEffectiveDate).valueOf()) //订单有效期时间的时间戳.
     }
 
     popUpEcho(data.regionalIdList) //地区弹窗回显

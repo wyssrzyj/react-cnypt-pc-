@@ -20,7 +20,7 @@ const EMPTY =
 const Todo = () => {
   const emptyFlag = false
   const userInfo = getUserInfo() || {}
-  const { enterpriseType, enterpriseId } = userInfo
+  const { enterpriseId } = userInfo
   const { demandListStore, commonStore, enterpriseStore } = useStores()
   const { dictionary } = toJS(commonStore)
   const { goodsNum = [], processType = [] } = toJS(dictionary)
@@ -47,6 +47,8 @@ const Todo = () => {
 
   const arr = async () => {
     let data = await enterpriseTips({ enterpriseId: enterpriseId })
+    console.log(data)
+
     const machining = await processingFactoryData({})
     // 加工厂数据处理
     machining.map(item => {
@@ -98,7 +100,7 @@ const Todo = () => {
         {enterpriseids ? (
           //企业、工厂已入驻
           <div>
-            {enterpriseType === '0' ? (
+            {enterpriseInformation['enterpriseType'] === '0' ? (
               <div>
                 {/* 加工厂待办事项 */}
                 <ProcessingAgency
@@ -111,7 +113,7 @@ const Todo = () => {
                 <MachiningData data={machiningData}></MachiningData>
               </div>
             ) : null}
-            {enterpriseType === '1' ? (
+            {enterpriseInformation['enterpriseType'] === '1' ? (
               <div>
                 <IssuingAgent
                   data={enterpriseInformation}

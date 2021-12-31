@@ -142,8 +142,6 @@ const AccountSafe = () => {
   }
 
   const changeAvatar = async url => {
-    console.log('传递的值', url)
-
     const params = {
       userFaceUrl: url,
       userId: currentUser.userId

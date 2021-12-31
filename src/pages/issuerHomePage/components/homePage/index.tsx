@@ -71,12 +71,8 @@ function index({ NumberCooperation, newData, topName }) {
       key: 'address',
       render: (_text, _v) => (
         <>
-          <div>
-            <div>
-              <span>{_v.surplus}</span> 天
-            </div>
-            <div>剩余时间</div>
-          </div>
+          <div className={styles.timeFont}>{_v.surplus}</div>
+          <div className={styles.timeColor}>{_v.surpluss}</div>
         </>
       )
     },

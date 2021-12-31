@@ -266,7 +266,6 @@ const EnterpriseInfo = () => {
         const { success, data = {} } = response
 
         setGrades(data.productGradeValues)
-        console.log('产品档次接口回显数据', data.productGradeValues)
         if (success && !isEmpty(data)) {
           const {
             enterpriseLogoUrl,

@@ -34,11 +34,11 @@ const Header = ({ rightConfigs }) => {
     })()
   }, [])
 
-  const daysOptions = [
-    { label: '今日', value: 1 },
-    { label: '本周', value: 2 },
-    { label: '本月', value: 3 }
-  ]
+  // const daysOptions = [
+  //   { label: '今日', value: 1 },
+  //   { label: '本周', value: 2 },
+  //   { label: '本月', value: 3 }
+  // ]
 
   const [dayValue, setDayValue] = useState(1)
 
@@ -81,18 +81,18 @@ const Header = ({ rightConfigs }) => {
       </div>
       {/* 右侧 */}
       <div className={styles.headerRight}>
-        <Select onChange={dayChange} value={dayValue}>
+        {/* <Select onChange={dayChange} value={dayValue}>
           {daysOptions.map(item => (
             <Option value={item.value} key={item.value}>
               {item.label}
             </Option>
           ))}
-        </Select>
+        </Select> */}
 
         <div className={styles.headerRightBtm}>
-          {rightConfigs.map((item, idx) => {
+          {/* {rightConfigs.map((item, idx) => {
             return <IconAndInfo data={item} key={idx}></IconAndInfo>
-          })}
+          })} */}
         </div>
       </div>
     </header>

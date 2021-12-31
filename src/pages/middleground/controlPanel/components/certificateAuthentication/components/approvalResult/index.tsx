@@ -16,7 +16,7 @@ const titleMap = {
 
 const iconMap = {
   pending: <Icon className={styles.statusIcon} type="jack-ddsp" />,
-  approval: <Icon className={styles.statusIcon} type="jack-sptg" />,
+  approval: <Icon className={styles.statusIcon} type="jack-chenggong" />,
   noPass: <Icon className={styles.statusIcon} type="jack-spbtg" />
 }
 
@@ -112,7 +112,7 @@ const ApprovalResult = props => {
             className={styles.perStep}
             onClick={() => submit(0)}
           >
-            上一步
+            上一步999
           </Button>
         ]}
         // extra={[

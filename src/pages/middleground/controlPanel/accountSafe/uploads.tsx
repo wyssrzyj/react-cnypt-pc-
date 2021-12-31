@@ -18,8 +18,6 @@ const UploadFile = ({ onChange, imgUrl }) => {
     const newParams = cloneDeep(params)
     newParams[key] = value
     setParams(newParams)
-    console.log('传递的值', newParams)
-
     onChange && onChange(newParams.imageUrl[0].thumbUrl)
     const arr = [
       'sewingMachineImage',

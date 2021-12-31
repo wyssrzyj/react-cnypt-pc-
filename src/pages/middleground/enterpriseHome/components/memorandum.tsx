@@ -13,20 +13,22 @@ const { TextArea } = Input
 const BtnIcon = <Icon type={'jack-jian1'} className={styles.btnIcon}></Icon>
 
 const Memorandum = () => {
+  const { demandListStore } = useStores()
+  const currentUser = getCurrentUser() || {}
+  const { userId } = currentUser
+  const { memorandumAdded, memorandumContent, allMemos } = demandListStore
+
   const [visible, setVisible] = useState(false)
   const [text, setText] = useState('') //输入内容||选中的内容
   const [timeStamp, seTtimeStamp] = useState<any>() //时间戳
   const [interfaceReturnContent, setInterfaceReturnContent] = useState<any>('') //接口返回内容
   const [currentMonthData, setCurrentMonthData] = useState<any>([]) //当月数据
   const [selectData, setSelectData] = useState<any>() //选中的数据
-  const { demandListStore } = useStores()
-  const currentUser = getCurrentUser() || {}
-  const { userId } = currentUser
-  const { memorandumAdded, memorandumContent, allMemos } = demandListStore
+
   useEffect(() => {
     var date = Date.now()
     onSelect(date)
-    getCurrentMonthData(moment(moment(date).format('YYYY-MM')).valueOf())
+    getCurrentMonthData(date)
   }, [])
 
   const getCurrentMonthData = async e => {
@@ -39,8 +41,16 @@ const Memorandum = () => {
       setCurrentMonthData(data)
     }
   }
+
   const getlistData = value => {
+    console.log(
+      '🚀 ~ file: memorandum.tsx ~ line 46 ~ Memorandum ~ value',
+      value
+    )
+    // console.log(value.date()) //1-31
     let listData = []
+    console.log(currentMonthData)
+
     currentMonthData.map(item => {
       if (Number(item.state) === value.date()) {
         listData = [{ type: 'success' }]
@@ -51,10 +61,9 @@ const Memorandum = () => {
 
   const dateCellRender = value => {
     const listData = getlistData(value)
-    if (!isEmpty(listData)) {
-    }
     if (listData.length) {
       const target = listData[0]
+
       return (
         <div className={styles.badgeBox}>
           <Badge status={target.type} />
@@ -71,8 +80,8 @@ const Memorandum = () => {
         id: selectData ? selectData.id : ''
       })
       setInterfaceReturnContent(text) //文字显示
-      var date = Date.now()
-      getCurrentMonthData(moment(moment(date).format('YYYY-MM')).valueOf()) //图标显示
+
+      getCurrentMonthData(moment(moment(timeStamp).format('YYYY-MM')).valueOf()) //图标显示
       // setText(null) //清空文字
       setVisible(f => !f)
     } else {

@@ -95,7 +95,8 @@ const SearchOrderDetail = () => {
         item.goodsNum = goodsNum.filter(v => v.value === item.goodsNum)[0].label
         item.year = moment(item.releaseTime).format('YYYY')
         item.monthDay = moment(item.releaseTime).format('MM-DD')
-        item.surplus = Math.round(sum / 1000 / 60 / 60 / 24)
+        item.surpluss = moment(item.inquiryEffectiveDate).format('YYYY')
+        item.surplus = moment(item.inquiryEffectiveDate).format('MM-DD')
         item.key = item.id
       })
       setNewData(data)
@@ -159,7 +160,7 @@ const SearchOrderDetail = () => {
                 CurrentPage(1)
               }}
             >
-              实时动态
+              最新动态
             </div>
             <div
               className={classNames(

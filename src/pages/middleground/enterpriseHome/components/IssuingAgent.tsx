@@ -46,48 +46,6 @@ function processingAgency({ enterpriseId, name, data }) {
   return (
     <div>
       <div>
-        {/* 证件 */}
-        {data.infoApprovalStatus === '1' &&
-        data.isIgnoreCertificateApproval !== 1 ? (
-          <>
-            {certificateNeglect ? (
-              <div className={styles.content}>
-                <div className={styles.icons}>
-                  <Icon type="jack-xttz_icon" className={styles.previous} />
-                </div>
-                <div className={styles.txts}>
-                  <div className={styles.test}>
-                    <div className={styles.announcement}>系统通知</div>
-                    <div className={styles.written}>
-                      尊敬的【{name}】
-                      (发单商),您好，您还可以进行企业证件认证，提高您的订单曝光度
-                    </div>
-                  </div>
-                  <div className={styles.btn}>
-                    <Button
-                      type="primary"
-                      onClick={() => {
-                        findOrder(1)
-                      }}
-                      ghost
-                    >
-                      立即前往
-                    </Button>
-                    <div
-                      className={styles.ignore}
-                      onClick={() => {
-                        ignore('certificates')
-                      }}
-                    >
-                      忽略
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-          </>
-        ) : null}
-
         {/* 信息通过 */}
         {data.infoApprovalStatus === '1' && data.isIgnoreInfoApproval !== 1 ? (
           <>
@@ -118,6 +76,47 @@ function processingAgency({ enterpriseId, name, data }) {
                       className={styles.ignore}
                       onClick={() => {
                         ignore('information')
+                      }}
+                    >
+                      忽略
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </>
+        ) : null}
+        {/* 证件不通过 */}
+        {data.certificateApprovalStatus !== '1' &&
+        data.isIgnoreCertificateApproval !== 1 ? (
+          <>
+            {certificateNeglect ? (
+              <div className={styles.content}>
+                <div className={styles.icons}>
+                  <Icon type="jack-xttz_icon" className={styles.previous} />
+                </div>
+                <div className={styles.txts}>
+                  <div className={styles.test}>
+                    <div className={styles.announcement}>系统通知</div>
+                    <div className={styles.written}>
+                      尊敬的【{name}】
+                      (发单商),您好，您还可以进行企业证件认证，提高您的订单曝光度
+                    </div>
+                  </div>
+                  <div className={styles.btn}>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        findOrder(1)
+                      }}
+                      ghost
+                    >
+                      立即前往
+                    </Button>
+                    <div
+                      className={styles.ignore}
+                      onClick={() => {
+                        ignore('certificates')
                       }}
                     >
                       忽略

@@ -103,7 +103,9 @@ const SimpleSearchTop = props => {
                   <Dropdown overlay={menu} placement="bottomCenter">
                     <div>
                       <div className={styles.company}>
-                        <img className={styles.image} src={currentImg} />
+                        <div className={styles.imgBor}>
+                          <img className={styles.image} src={currentImg} />
+                        </div>
 
                         <div className={styles.real}>
                           <div>

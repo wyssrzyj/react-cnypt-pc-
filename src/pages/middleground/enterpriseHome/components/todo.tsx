@@ -39,8 +39,6 @@ const Todo = () => {
   const [issuingData, setIssuingData] = useState<any>([]) //发单处理数据
 
   useEffect(() => {
-    console.log('新用户', enterpriseId)
-
     if (enterpriseId !== null) {
       setEnterprise(enterpriseId) //企业id
       arr()
@@ -49,8 +47,6 @@ const Todo = () => {
 
   const arr = async () => {
     let data = await enterpriseTips({ enterpriseId: enterpriseId })
-    console.log('测试99999999999', data)
-
     const machining = await processingFactoryData({})
     // 加工厂数据处理
     machining.map(item => {

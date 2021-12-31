@@ -48,8 +48,6 @@ const OtherCard = props => {
   const [cardList, setCardList] = useState<any>([])
 
   const transformData = () => {
-    console.log('数据测试', list)
-
     const newCardList = list.map(record => {
       return {
         id: record.id,

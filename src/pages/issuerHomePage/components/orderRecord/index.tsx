@@ -47,7 +47,7 @@ function index() {
             <div className={styles.yuan}></div>
             <div className={styles.commodityData}>
               <div>{_v.contentDescription}</div>
-              <div>
+              <div className={styles.test}>
                 <span>{_v.amount}</span>
               </div>
             </div>

@@ -43,14 +43,7 @@ const Memorandum = () => {
   }
 
   const getlistData = value => {
-    console.log(
-      '🚀 ~ file: memorandum.tsx ~ line 46 ~ Memorandum ~ value',
-      value
-    )
-    // console.log(value.date()) //1-31
     let listData = []
-    console.log(currentMonthData)
-
     currentMonthData.map(item => {
       if (Number(item.state) === value.date()) {
         listData = [{ type: 'success' }]

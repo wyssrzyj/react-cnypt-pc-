@@ -143,7 +143,7 @@ function index({ NumberCooperation, newData, topName }) {
           <div className={styles.bottom}>
             <div>
               <span className={styles.tex}>
-                {NumberCooperation.confirmCategoryNum}
+                {NumberCooperation.cooperationNum}
               </span>
               次
             </div>
@@ -157,7 +157,7 @@ function index({ NumberCooperation, newData, topName }) {
           <div className={styles.bottom}>
             <div>
               <span className={styles.tex}>
-                {NumberCooperation.cooperationNum}
+                {NumberCooperation.confirmCategoryNum}
               </span>
               件
             </div>

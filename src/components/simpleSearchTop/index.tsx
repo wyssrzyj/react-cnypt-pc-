@@ -35,14 +35,14 @@ const SimpleSearchTop = props => {
     {
       icon: 'jack-trust',
       name: '已合作数量',
-      content: NumberCooperation.confirmCategoryNum,
+      content: NumberCooperation.cooperationNum,
       company: '次',
       style: 'texColor'
     },
     {
       icon: 'jack-tool',
       name: '已确认商品数量',
-      content: NumberCooperation.cooperationNum,
+      content: NumberCooperation.confirmCategoryNum,
       company: '件',
       style: 'texColor'
     },

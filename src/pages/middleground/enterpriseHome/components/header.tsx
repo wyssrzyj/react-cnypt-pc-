@@ -1,25 +1,25 @@
 import { Icon } from '@/components'
 import React, { useState, useEffect } from 'react'
 import styles from './header.module.less'
-import { Select } from 'antd'
+// import { Select } from 'antd'
 import { getCurrentUser } from '@/utils/tool'
 import { useStores } from '@/utils/mobx'
 
-const { Option } = Select
+// const { Option } = Select
 
-const IconAndInfo = ({ data }) => {
-  return (
-    <div className={styles.iconAndInfo}>
-      <div className={styles.iconAndInfoLabel}>
-        <Icon type={data.icon} className={styles.iconAndInfoIcon}></Icon>
-        {data.label}
-      </div>
-      <div className={styles.iconAndInfoCount}>{data.count}</div>
-    </div>
-  )
-}
+// const IconAndInfo = ({ data }) => {
+//   return (
+//     <div className={styles.iconAndInfo}>
+//       <div className={styles.iconAndInfoLabel}>
+//         <Icon type={data.icon} className={styles.iconAndInfoIcon}></Icon>
+//         {data.label}
+//       </div>
+//       <div className={styles.iconAndInfoCount}>{data.count}</div>
+//     </div>
+//   )
+// }
 
-const Header = ({ rightConfigs }) => {
+const Header = () => {
   const { controlPanelStore } = useStores()
   const { getAccountInfo } = controlPanelStore
   const currentUser = getCurrentUser()
@@ -40,11 +40,11 @@ const Header = ({ rightConfigs }) => {
   //   { label: '本月', value: 3 }
   // ]
 
-  const [dayValue, setDayValue] = useState(1)
+  // const [dayValue, setDayValue] = useState(1)
 
-  const dayChange = value => {
-    setDayValue(value)
-  }
+  // const dayChange = value => {
+  //   setDayValue(value)
+  // }
   const timi = value => {
     const date = Date.now()
     const SettledDays = date - value

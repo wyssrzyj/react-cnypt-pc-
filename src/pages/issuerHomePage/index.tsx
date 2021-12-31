@@ -71,10 +71,8 @@ const SearchOrderDetail = () => {
   // 处理数据列表数据
   const reconstructData = () => {
     const data = cloneDeep(processingData)
-    const date = Date.now()
     if (!isEmpty(data)) {
       data.map(item => {
-        let sum = item.inquiryEffectiveDate - date
         if (productCategoryList) {
           item.categoryCodes = getTrees(
             item.categoryCodes,

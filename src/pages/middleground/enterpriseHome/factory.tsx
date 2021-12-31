@@ -60,30 +60,30 @@ const FactoryHome = () => {
       setbasicConfigs(data)
     }
   }
-  const rightConfigs = [
-    {
-      icon: 'jack-shoucang',
-      label: '收藏数',
-      count: 0,
-      field: ''
-    },
-    {
-      icon: 'jack-fangke',
-      label: '访客数',
-      count: 0,
-      field: ''
-    },
-    {
-      icon: 'jack-liulan',
-      label: '浏览量',
-      count: 0,
-      field: ''
-    }
-  ]
+  // const rightConfigs = [
+  //   {
+  //     icon: 'jack-shoucang',
+  //     label: '收藏数',
+  //     count: 0,
+  //     field: ''
+  //   },
+  //   {
+  //     icon: 'jack-fangke',
+  //     label: '访客数',
+  //     count: 0,
+  //     field: ''
+  //   },
+  //   {
+  //     icon: 'jack-liulan',
+  //     label: '浏览量',
+  //     count: 0,
+  //     field: ''
+  //   }
+  // ]
 
   return (
     <div className={styles.container}>
-      <Header rightConfigs={rightConfigs}></Header>
+      <Header></Header>
       <div> 　</div>
       {enterpriseId !== null ? (
         <BasciInfo configs={basicConfigs} title={'订单数据'}></BasciInfo>

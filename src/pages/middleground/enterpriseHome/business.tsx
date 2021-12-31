@@ -65,10 +65,8 @@ const BusinessHome = () => {
   return (
     <div className={styles.container}>
       <Header rightConfigs={rightConfigs}></Header>
-
       <BasciInfo configs={basicConfigs} title={'基本信息'}></BasciInfo>
       <div className={styles.main}>
-        {}
         <Todo></Todo>
         <Memorandum></Memorandum>
       </div>

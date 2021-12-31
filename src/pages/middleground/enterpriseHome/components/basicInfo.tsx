@@ -5,7 +5,7 @@ import { Title } from '../../controlPanel/accountSafe'
 import styles from './basic.module.less'
 import { useHistory } from 'react-router'
 import { getUserInfo } from '@/utils/tool'
-
+import classNames from 'classnames'
 const InfoCard = ({ data }) => {
   return (
     <div className={styles.infoCard} style={{ background: data.color }}>
@@ -42,7 +42,11 @@ const BasciInfo = ({ configs = [], title }) => {
     history.push('/control-panel/issuerBill/demand-sheet')
   }
   return (
-    <div className={styles.basciInfo}>
+    <div
+      className={classNames(
+        enterpriseType === '1' ? styles.basciInfos : styles.basciInfo
+      )}
+    >
       <Title title={title}></Title>
       <div className={styles.basciContent}>
         <div className={styles.top}>

@@ -84,7 +84,7 @@ const FactoryHome = () => {
   return (
     <div className={styles.container}>
       <Header rightConfigs={rightConfigs}></Header>
-
+      <div> 　</div>
       {enterpriseId !== null ? (
         <BasciInfo configs={basicConfigs} title={'订单数据'}></BasciInfo>
       ) : null}

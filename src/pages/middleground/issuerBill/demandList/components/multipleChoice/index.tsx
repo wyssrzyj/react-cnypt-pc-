@@ -101,7 +101,6 @@ const MultipleChoice = ({
             ) : null}
           </Col>
           <Col span={6} className={styles.examine}>
-            {console.log('测试不通过', data)}
             {data.status !== -1 ? (
               <>
                 {Number(data.systemApprovalStatus) === 1 &&

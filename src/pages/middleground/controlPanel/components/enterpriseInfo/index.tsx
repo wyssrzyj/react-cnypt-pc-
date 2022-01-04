@@ -5,7 +5,6 @@ import {
   Button,
   Radio,
   Cascader,
-  Upload,
   message,
   Space,
   Alert,
@@ -16,11 +15,9 @@ import {
   TreeSelect
 } from 'antd'
 
-import { PlusOutlined } from '@ant-design/icons'
 import { isEmpty, isArray, isNil } from 'lodash'
 import { toJS } from 'mobx'
 import { get } from 'lodash'
-import Viewer from 'react-viewer'
 import { Icon } from '@/components'
 import axios from '@/utils/axios'
 import { getCurrentUser } from '@/utils/tool'
@@ -33,8 +30,8 @@ import { dealRefresh } from '@/utils/axios/filterNull'
 // import ProcessingTypeCom from '../processingTypeCom'
 import MainCategoriesCom from '../mainCategoriesCom'
 import moment from 'moment'
-import OSS from '@/utils/oss'
 import { getChild } from './getChild'
+import Uploads from './Uploads'
 
 const { TextArea } = Input
 const { Option } = Select
@@ -92,17 +89,12 @@ const EnterpriseInfo = () => {
     processType = []
   } = toJS(dictionary)
 
-  const [imageUrl, setImageUrl] = useState<string>('')
-  const [imageUrlList, setImageUrlList] = useState<any[]>([])
   const [enterpriseId, setEnterpriseId] = useState(undefined)
   const [factoryId, setFactoryId] = useState(undefined)
   const [purchaserId, setPurchaserId] = useState(undefined)
-  const [enterpriseLogoId, setEnterpriseLogoId] = useState(undefined)
-  const [preImageUrl, setPreImageUrl] = useState(undefined)
+
   const [currentType, setCurrentType] = useState(undefined)
   const [messageMap, setMessageMap] = useState<any>({})
-  const [visible, setVisible] = useState<boolean>(false)
-  const [previewImage, setPreviewImage] = useState<string>('')
   const [contactsId, setContactsId] = useState<string>(undefined)
   const [oldData, setOldData] = useState<any>({})
   const [enterpriseType, setEnterpriseType] = useState<any>()
@@ -110,41 +102,21 @@ const EnterpriseInfo = () => {
   const [treeData, setTreeData] = useState([])
   const [grades, setGrades] = useState([]) //用于判断档次方法是否执行
   const [loading, setLoading] = useState<boolean>(false)
+  const [paramsurl, setParams] = useState<any>({})
 
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>上传</div>
-    </div>
-  )
-
-  const beforeUpload = file => {
-    const isJpgOrPng =
-      file.type === 'image/jpg' ||
-      file.type === 'image/png' ||
-      file.type === 'image/jpeg'
-    if (!isJpgOrPng) {
-      message.error('只能上传jpg/png格式文件!')
-    }
-    const isLt2M = file.size / 1024 < 500
-    if (!isLt2M) {
-      message.error('文件不能超过500kb!')
-    }
-    return isJpgOrPng && isLt2M
+  const valuesChange = (key, value) => {
+    const newParams = cloneDeep(paramsurl) //深拷贝
+    newParams[key] = value
+    setParams(newParams) //把新数据放到useState中
   }
-
-  const customRequest = async ({ file }) => {
-    const res = await OSS.put(
-      `/capacity-platform/platform/${file.uid}__${file.name}`,
-      file
-    )
-    if (res) {
-      const { url } = res
-      setImageUrl(url)
-      setImageUrlList([{ thumbUrl: url }])
-    }
+  const dataEcho = value => {
+    console.log('用于回显', value)
+    // 接口数据获取之后放到这里用于回显
+    setParams(value) //重点*******
+    //回显的格式
+    setParams({ enterpriseLogoUrl: [{ thumbUrl: value }] })
   }
-
+  //  提交
   const confirmSubmit = () => {
     if (loading) return
     validateFields().then(values => {
@@ -154,6 +126,8 @@ const EnterpriseInfo = () => {
         clothesGrade = []
         // factoryProcessTypeList
       } = values
+      console.log('提交的值', values)
+      // console.log('url', paramsurl.enterpriseLogoUrl[0].thumbUrl)
 
       const { address, location } = businessAddress
 
@@ -197,7 +171,6 @@ const EnterpriseInfo = () => {
       const params = {
         ...values,
         contactsId,
-        enterpriseLogoUrl: imageUrl === preImageUrl ? undefined : imageUrl,
         provinceId: area[0],
         cityId: area[1],
         districtId: area[2],
@@ -210,9 +183,7 @@ const EnterpriseInfo = () => {
         userId,
         isInfoApproval: flag ? 1 : 0,
         clothesGrade: newGrade,
-        enterpriseInfoApproveId: oldData.enterpriseInfoApproveId,
-        enterpriseLogoId:
-          imageUrl === preImageUrl ? undefined : enterpriseLogoId
+        enterpriseInfoApproveId: oldData.enterpriseInfoApproveId
       }
 
       // 判断 提交的值和回显的值是否一样 一样的话就修改,.
@@ -233,6 +204,8 @@ const EnterpriseInfo = () => {
           }
         }
       }
+      console.log('处理的值', params)
+
       setLoading(true)
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
@@ -268,7 +241,6 @@ const EnterpriseInfo = () => {
         setGrades(data.productGradeValues)
         if (success && !isEmpty(data)) {
           const {
-            enterpriseLogoUrl,
             factoryId, //加工厂
             purchaserId, //发单商
             enterpriseId,
@@ -278,7 +250,6 @@ const EnterpriseInfo = () => {
             address,
             latitude,
             longitude,
-            enterpriseLogoId,
             contactsId,
             clothesGrade,
             enterpriseType
@@ -300,22 +271,17 @@ const EnterpriseInfo = () => {
 
           setOldData(cloneDeep(data))
           setContactsId(contactsId)
-          if (enterpriseLogoUrl) {
-            setImageUrl(enterpriseLogoUrl)
-            setImageUrlList([{ thumbUrl: enterpriseLogoUrl }])
-            setPreImageUrl(enterpriseLogoUrl)
-          }
+
           setFactoryId(factoryId)
           setPurchaserId(purchaserId)
           setEnterpriseId(enterpriseId)
-          setEnterpriseLogoId(enterpriseLogoId)
           setEnterpriseType(enterpriseType)
           setFieldsValue({
             ...data,
-            enterpriseLogoUrl,
             clothesGrade: grade.label.split(''),
             businessAddress: { location: `${longitude},${latitude}`, address }
           })
+          dataEcho(data.enterpriseLogoUrl)
           if (provinceId) {
             setFieldsValue({
               area: [
@@ -362,13 +328,6 @@ const EnterpriseInfo = () => {
           })
         }
       })
-  }
-
-  const handlePreview = file => {
-    if (file.thumbUrl) {
-      setVisible(true)
-      setPreviewImage(file.thumbUrl)
-    }
   }
 
   const onValuesChange = values => {
@@ -449,20 +408,11 @@ const EnterpriseInfo = () => {
             label={<span className={styles.formLabel}>企业Logo</span>}
             name="enterpriseLogoUrl"
           >
-            <Upload
-              name="avatar"
-              listType="picture-card"
-              className="avatar-uploader"
-              showUploadList={true}
-              beforeUpload={beforeUpload}
-              customRequest={customRequest}
-              fileList={imageUrlList}
-              maxCount={1}
-              onRemove={() => setImageUrlList([])}
-              onPreview={handlePreview}
-            >
-              {isEmpty(imageUrlList) ? uploadButton : null}
-            </Upload>
+            <Uploads
+              num={1}
+              fileList={paramsurl['enterpriseLogoUrl'] || []}
+              valuesChange={value => valuesChange('enterpriseLogoUrl', value)}
+            ></Uploads>
           </Form.Item>
           <Row>
             <Col className="gutter-row" span={3}></Col>
@@ -775,17 +725,6 @@ const EnterpriseInfo = () => {
           </Button>
         </div>
       </div>
-      <Viewer
-        visible={visible}
-        noFooter={true}
-        onMaskClick={() => {
-          setVisible(false)
-        }}
-        onClose={() => {
-          setVisible(false)
-        }}
-        images={[{ src: previewImage }]}
-      />
     </div>
   )
 }

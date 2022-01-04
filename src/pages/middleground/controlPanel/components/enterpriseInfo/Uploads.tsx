@@ -61,7 +61,7 @@ const Uploads = props => {
       const { url, name } = res
       imgs.push({ thumbUrl: url, name: name.split('__')[1], url })
       valuesChange && valuesChange(imgs) //传递给外部
-      onChange(imgs) //把图片数据放到form中，且把数据处理好返回给form
+      onChange(url) //把图片数据放到form中，且把数据处理好返回给form
     }
   }
 

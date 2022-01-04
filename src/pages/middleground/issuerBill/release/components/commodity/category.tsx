@@ -73,7 +73,7 @@ const Category = () => {
               //     `${option.children}`
               //       .toLowerCase()
               //       .indexOf(input.toLowerCase()) >= 0
-              //   ).
+              //   )
               // }}
             >
               {goodsNum.map(item => (

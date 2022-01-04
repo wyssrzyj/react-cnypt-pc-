@@ -241,7 +241,7 @@ const EnterpriseInfo = () => {
         setGrades(data.productGradeValues)
         if (success && !isEmpty(data)) {
           const {
-            factoryId, //加工厂
+            factoryId, //加工厂.
             purchaserId, //发单商
             enterpriseId,
             provinceId,

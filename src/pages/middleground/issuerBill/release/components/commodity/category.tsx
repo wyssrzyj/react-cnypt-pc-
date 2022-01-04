@@ -70,7 +70,7 @@ const Category = () => {
               // optionFilterProp="children"
               // filterOption={(input, option) => {
               //   return (
-              //     `${option.children}`.
+              //     `${option.children}`
               //       .toLowerCase()
               //       .indexOf(input.toLowerCase()) >= 0
               //   )

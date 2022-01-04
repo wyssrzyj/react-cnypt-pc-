@@ -64,13 +64,17 @@ const Category = () => {
             rules={[{ required: true, message: '请选择发单量' }]}
           >
             <Select
-              showSearch
+              // showSearch
               style={{ width: 325 }}
               placeholder="请选择发单量"
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
+              // optionFilterProp="children"
+              // filterOption={(input, option) => {
+              //   return (
+              //     `${option.children}`
+              //       .toLowerCase()
+              //       .indexOf(input.toLowerCase()) >= 0
+              //   )
+              // }}
             >
               {goodsNum.map(item => (
                 <Option key={item.value} value={item.value}>

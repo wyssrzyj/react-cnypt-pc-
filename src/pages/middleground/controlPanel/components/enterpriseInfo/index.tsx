@@ -213,7 +213,7 @@ const EnterpriseInfo = () => {
           const { success, msg, data = {} } = response
           if (success) {
             message.success(msg)
-            const res = await userInfo() //更新企业名称、企业id
+            const res = await userInfo() //更新企业名称、企业id.
 
             localStorage.setItem('enterpriseInfo', JSON.stringify(data))
             !res.data.enterpriseId && (await dealRefresh())

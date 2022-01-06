@@ -50,10 +50,9 @@ const FactoryPhotograph = () => {
         setIsLoading(false)
       })
   }
-
+  //核心
   const checkImage = index => {
     console.log('放大测试', index)
-
     setCurrentIndex(index)
     setVisible(true)
   }
@@ -77,7 +76,7 @@ const FactoryPhotograph = () => {
                   key={index}
                   className={styles.image}
                   style={{ backgroundImage: `url(${item.thumbUrl})` }}
-                  onClick={() => checkImage(index)}
+                  onClick={() => checkImage(index)} //
                 ></div>
               ))}
             </Col>
@@ -94,9 +93,7 @@ const FactoryPhotograph = () => {
                   className={styles.image}
                   style={{ backgroundImage: `url(${item.thumbUrl})` }}
                   onClick={() => {
-                    console.log('测试值是啥', locationFileList.length + index)
-
-                    checkImage(index + 1)
+                    checkImage(index + 1) //这里因为上一个图片只有一个才+1
                   }}
                 ></div>
               ))}
@@ -113,8 +110,8 @@ const FactoryPhotograph = () => {
                   key={index}
                   className={styles.image}
                   style={{ backgroundImage: `url(${item.thumbUrl})` }}
-                  onClick={() =>
-                    checkImage(index + locationFileList.length + 1)
+                  onClick={
+                    () => checkImage(index + locationFileList.length + 1) //自身加上前两个的总和
                   }
                 ></div>
               ))}

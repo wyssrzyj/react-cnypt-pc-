@@ -14,7 +14,7 @@ import {
 import { isFunction, isEmpty } from 'lodash'
 import Viewer from 'react-viewer'
 import axios from '@/utils/axios'
-// import { useStores } from '@/utils/mobx'
+// import { useStores } from '@/utils/mobx'.
 import { getUserInfo } from '@/utils/tool'
 import OSS from '@/utils/oss'
 import { Icon } from '@/components'

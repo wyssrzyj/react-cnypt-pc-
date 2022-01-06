@@ -43,16 +43,25 @@ const Memorandum = () => {
   }
 
   const getlistData = value => {
+    // console.log('子方法', value)
+
     let listData = []
     currentMonthData.map(item => {
       if (Number(item.state) === value.date()) {
         listData = [{ type: 'success' }]
       }
     })
+
     return listData || []
   }
 
   const dateCellRender = value => {
+    // console.log('测试', value.date())
+    //  let arr =[1,2,3,4,5,6,7,8,9,10]
+    // const listData= arr.map(item=>{
+    //     return  getlistData(item)
+    //  })
+
     const listData = getlistData(value)
     if (listData.length) {
       const target = listData[0]

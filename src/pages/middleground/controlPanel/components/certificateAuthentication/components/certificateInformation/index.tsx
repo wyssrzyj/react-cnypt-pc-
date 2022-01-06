@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {
   Alert,
   Form,
-  Select,
+  // Select,
   Input,
   Upload,
   message,
@@ -20,7 +20,7 @@ import OSS from '@/utils/oss'
 import { Icon } from '@/components'
 import styles from './index.module.less'
 
-const { Option } = Select
+// const { Option } = Select
 
 const messageTip = '企业证件信息仅用于进行实名认证，不会泄露您的任何证件信息。'
 
@@ -28,14 +28,14 @@ const layout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 14 }
 }
-const certificateTypeMap = [
-  { label: '企业营业执照', value: 'businessLicense' },
-  { label: '组织机构代码证', value: '组织机构代码证' },
-  { label: '事业单位法人证书', value: '事业单位法人证书' },
-  { label: '社会团体法人登记证书', value: '社会团体法人登记证书' },
-  { label: '行政执法主体资格证', value: '行政执法主体资格证' },
-  { label: '其他', value: '其他' }
-]
+// const certificateTypeMap = [
+//   { label: '企业营业执照', value: 'businessLicense' },
+//   { label: '组织机构代码证', value: '组织机构代码证' },
+//   { label: '事业单位法人证书', value: '事业单位法人证书' },
+//   { label: '社会团体法人登记证书', value: '社会团体法人登记证书' },
+//   { label: '行政执法主体资格证', value: '行政执法主体资格证' },
+//   { label: '其他', value: '其他' }
+// ]
 
 const CertificateInformation = props => {
   const { submit } = props
@@ -306,7 +306,7 @@ const CertificateInformation = props => {
             <span className={styles.titleName}>请上传企业证件</span>
           </h3>
 
-          <Form.Item
+          {/* <Form.Item
             label="企业证件类型"
             name="certificateType"
             rules={[{ required: true, message: '请选择企业证件类型！' }]}
@@ -318,7 +318,7 @@ const CertificateInformation = props => {
                 </Option>
               ))}
             </Select>
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             label="上传企业证件附件"
@@ -352,7 +352,6 @@ const CertificateInformation = props => {
               </div>
             </Col>
           </Row>
-
           <Form.Item
             label="企业名称"
             name="enterpriseName"
@@ -361,7 +360,7 @@ const CertificateInformation = props => {
             <Input disabled />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             label={
               <span className={styles.codeLabel}>
                 统一社会信用代码/组织机构代码
@@ -376,20 +375,20 @@ const CertificateInformation = props => {
             ]}
           >
             <Input placeholder="请输入统一社会信用代码/组织机构代码" />
-          </Form.Item>
+          </Form.Item> */}
         </div>
         <div className={styles.enterprise}>
           <h3 className={styles.title}>
             <Icon className={styles.icon} type="jack-scfrzj" />
             <span className={styles.titleName}>请上传法定代表人证件</span>
           </h3>
-          <Form.Item
+          {/* <Form.Item
             label="证件类型"
             name="legalPersonIdType"
             rules={[{ required: true, message: '请输入证件类型！' }]}
           >
             <Input disabled placeholder="请输入证件类型" />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             label="姓名"
@@ -401,7 +400,7 @@ const CertificateInformation = props => {
             <Input placeholder="请输入中国大陆居民身份证上的姓名" />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             label="证件号码"
             name="legalPersonIdNumber"
             rules={[
@@ -412,7 +411,7 @@ const CertificateInformation = props => {
             ]}
           >
             <Input placeholder="请输入中国大陆居民身份证上的身份证号" />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             label="中国大陆居民身份证人像面"

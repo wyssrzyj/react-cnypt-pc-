@@ -112,7 +112,7 @@ const ApprovalResult = props => {
             className={styles.perStep}
             onClick={() => submit(0)}
           >
-            上一步999
+            上一步
           </Button>
         ]}
         // extra={[

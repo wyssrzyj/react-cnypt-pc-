@@ -27,8 +27,6 @@ const FactoryPhotograph = () => {
       )
       .then(response => {
         const { success, data } = response
-        console.log(data)
-
         if (success) {
           const {
             factoryAuditorImageList,

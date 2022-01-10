@@ -51,13 +51,10 @@ const CertificateInformation = props => {
   // const newEnterpriseId = isEmpty(enterpriseInfo) ? enterpriseId : enterpriseInfo.enterpriseId
   const [isCheck, setIsCheck] = useState<boolean>(false)
   const [cardId, setCardId] = useState(undefined)
-  const [cardImageUrl, setCardImageUrl] = useState<string>('')
   const [cardFileList, setCardFileList] = useState<any[]>([])
   const [positiveId, setPositiveId] = useState(undefined)
-  const [positiveImageUrl, setPositiveImageUrl] = useState<string>('')
   const [positiveFileList, setPositiveFileList] = useState<any[]>([])
   const [reverseId, setReverseId] = useState(undefined)
-  const [reverseImageUrl, setReverseImageUrl] = useState<string>('')
   const [reverseFileList, setReverseFileList] = useState<any[]>([])
   const [visible, setVisible] = useState<boolean>(false)
   const [previewImage, setPreviewImage] = useState<string>('')
@@ -110,7 +107,6 @@ const CertificateInformation = props => {
       file
     )
     const { url } = res
-    setCardImageUrl(url)
     setCardFileList([{ thumbUrl: url }])
   }
   // 中国大陆居民身份证人像面
@@ -123,7 +119,6 @@ const CertificateInformation = props => {
       file
     )
     const { url } = res
-    setPositiveImageUrl(url)
     setPositiveFileList([{ thumbUrl: url }])
   }
   //中国大陆居民身份证国徽面
@@ -136,37 +131,39 @@ const CertificateInformation = props => {
       file
     )
     const { url } = res
-    setReverseImageUrl(url)
     setReverseFileList([{ thumbUrl: url }])
   }
 
   const handleConfirm = () => {
     validateFields().then(values => {
+      console.log(values)
+
       delete values.enterpriseAdjunct
       delete values.positive
       delete values.reverse
       delete values.certificateType
-      delete values.enterpriseName
+      // delete values.enterpriseName
       const enterpriseCredentialList = [
         {
           businessId: enterpriseId,
           businessItemId: 'business_license',
-          fileUrl: cardImageUrl,
+          fileUrl: cardFileList[0].thumbUrl,
           id: cardId
         },
         {
           businessId: enterpriseId,
           businessItemId: 'legal_person_id_photo_face',
-          fileUrl: positiveImageUrl,
+          fileUrl: positiveFileList[0].thumbUrl,
           id: positiveId
         },
         {
           businessId: enterpriseId,
           businessItemId: 'legal_person_id_photo_national',
-          fileUrl: reverseImageUrl,
+          fileUrl: reverseFileList[0].thumbUrl,
           id: reverseId
         }
       ]
+      console.log(values)
       axios
         .post('/api/factory/enterprise/submit-enterprise-credential', {
           ...values,
@@ -207,7 +204,6 @@ const CertificateInformation = props => {
                 enterpriseCredentialList.find(
                   item => item.businessItemId === 'business_license'
                 ) || {}
-              setCardImageUrl(newCardUrl.fileUrl)
               setCardFileList([{ thumbUrl: newCardUrl.fileUrl }])
               setCardId(newCardUrl.id)
 
@@ -215,7 +211,6 @@ const CertificateInformation = props => {
                 enterpriseCredentialList.find(
                   item => item.businessItemId === 'legal_person_id_photo_face'
                 ) || {}
-              setPositiveImageUrl(newPositiveUrl.fileUrl)
               setPositiveFileList([{ thumbUrl: newPositiveUrl.fileUrl }])
               setPositiveId(newPositiveUrl.id)
 
@@ -224,7 +219,6 @@ const CertificateInformation = props => {
                   item =>
                     item.businessItemId === 'legal_person_id_photo_national'
                 ) || {}
-              setReverseImageUrl(newReverseUrl.fileUrl)
               setReverseFileList([{ thumbUrl: newReverseUrl.fileUrl }])
               setReverseId(newReverseUrl.id)
             }
@@ -242,6 +236,35 @@ const CertificateInformation = props => {
               enterpriseName
             })
           }
+
+          // 回显
+          const enterpriseAdjunct = [
+            { thumbUrl: data.enterpriseCredentialList[0].fileUrl }
+          ]
+          const positive = [
+            { thumbUrl: data.enterpriseCredentialList[1].fileUrl }
+          ]
+          const reverse = [
+            { thumbUrl: data.enterpriseCredentialList[2].fileUrl }
+          ]
+
+          setFieldsValue({
+            enterpriseName,
+            legalPersonName,
+            enterpriseAdjunct,
+            positive,
+            reverse
+          })
+          // 图片回显
+          setCardFileList([
+            { thumbUrl: data.enterpriseCredentialList[0].fileUrl }
+          ])
+          setPositiveFileList([
+            { thumbUrl: data.enterpriseCredentialList[1].fileUrl }
+          ])
+          setReverseFileList([
+            { thumbUrl: data.enterpriseCredentialList[2].fileUrl }
+          ])
         }
       })
   }

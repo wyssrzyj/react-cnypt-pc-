@@ -47,8 +47,6 @@ const Todo = () => {
 
   const arr = async () => {
     let data = await enterpriseTips({ enterpriseId: enterpriseId })
-    console.log(data)
-
     const machining = await processingFactoryData({})
     // 加工厂数据处理
     machining.map(item => {

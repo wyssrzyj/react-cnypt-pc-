@@ -37,8 +37,6 @@ const FactoryReport = () => {
 
   const getFactoryInfo = () => {
     const newList = toJS(productCategoryList)
-    console.log(newList)
-
     const childList = newList.reduce((prev, item) => {
       !isEmpty(item.children) ? prev.push(...item.children) : []
       return prev
@@ -53,8 +51,6 @@ const FactoryReport = () => {
         if (success) {
           const { mainCategoriesList, productGradeValues } = data
           setCurrentFactory({ ...data })
-          console.log('任命', data)
-
           setValidationTime(data.factoryInspectionTime)
           const newLabel = filter(childList, function (o) {
             return find(mainCategoriesList, function (item) {

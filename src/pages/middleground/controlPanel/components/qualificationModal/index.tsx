@@ -109,7 +109,7 @@ const QualificationModal = props => {
       }
       delete values.qualification
       axios
-        .post('/api/factory/factory-certificate/save', {
+        .post('/api/factory/enterprise-qualification-certificate/update', {
           ...values,
           neverExpire,
           factoryId,

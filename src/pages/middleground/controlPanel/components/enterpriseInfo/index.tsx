@@ -110,7 +110,6 @@ const EnterpriseInfo = () => {
     setParams(newParams) //把新数据放到useState中
   }
   const dataEcho = value => {
-    console.log('用于回显', value)
     // 接口数据获取之后放到这里用于回显
     setParams(value) //重点*******
     //回显的格式

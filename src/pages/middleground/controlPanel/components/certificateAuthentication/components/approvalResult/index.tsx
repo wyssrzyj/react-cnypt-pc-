@@ -48,7 +48,6 @@ const ApprovalResult = props => {
       )
       .then(response => {
         const { success, data } = response
-        console.log('请求时间测试', data)
 
         if (success) {
           const {

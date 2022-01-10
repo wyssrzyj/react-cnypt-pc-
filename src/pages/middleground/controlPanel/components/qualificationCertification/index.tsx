@@ -27,7 +27,7 @@ const rowKey = 'id'
 const QualificationCertification = () => {
   const pageSize = 5
   const currentUser = getUserInfo() || {}
-  const { factoryId } = currentUser
+  const { enterpriseId, factoryId } = currentUser
   // const enterpriseInfo =
   //   JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
 
@@ -47,7 +47,6 @@ const QualificationCertification = () => {
   const [currentData, setCurrentData] = useState<any>({})
   const [sortField, setSortField] = useState<string>('')
   const [sortType, setSortType] = useState<string>('')
-
   const columns = [
     {
       title: '资质名称',
@@ -133,11 +132,11 @@ const QualificationCertification = () => {
   const getQualificationList = () => {
     setLoading(true)
     axios
-      .post('/api/factory/factory-certificate/list', {
+      .post('/api/factory/enterprise-qualification-certificate/list', {
         pageNum,
         pageSize,
         status: activeTab,
-        factoryId: factoryId,
+        enterpriseId: enterpriseId,
         sortField,
         sortType
       })
@@ -172,13 +171,15 @@ const QualificationCertification = () => {
   }
   const operationCertificate = (id, type) => {
     setOperationType(type)
-    axios.get('/api/factory/factory-certificate/get', { id }).then(response => {
-      const { success, data } = response
-      if (success) {
-        setCurrentData({ ...data })
-        setIsModalVisible(true)
-      }
-    })
+    axios
+      .get('/api/factory/enterprise-qualification-certificate/get', { id })
+      .then(response => {
+        const { success, data } = response
+        if (success) {
+          setCurrentData({ ...data })
+          setIsModalVisible(true)
+        }
+      })
   }
   const deleteCertificate = (id, name) => {
     Modal.confirm({
@@ -188,7 +189,9 @@ const QualificationCertification = () => {
       cancelText: '取消',
       onOk: () => {
         axios
-          .delete('/api/factory/factory-certificate/delete', { id })
+          .delete('/api/factory/enterprise-qualification-certificate/delete', {
+            id
+          })
           .then(response => {
             const { success, msg } = response
             message[success ? 'success' : 'error'](msg)

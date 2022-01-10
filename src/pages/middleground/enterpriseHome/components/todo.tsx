@@ -58,7 +58,7 @@ const Todo = () => {
     })
     setMachiningData(machining)
     setEnterpriseInformation(data)
-    setEnterpriseStatus(data.infoApprovalStatus) //状态
+    setEnterpriseStatus(data.infoApprovalStatus) //状态.
     setName(data.enterpriseName) //企业名称
     setInformation(data)
 

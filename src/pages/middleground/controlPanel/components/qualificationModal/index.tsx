@@ -16,6 +16,7 @@ import { isFunction, get, cloneDeep } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
 import styles from './index.module.less'
+import { getUserInfo } from '@/utils/tool'
 
 const { Option } = Select
 
@@ -78,6 +79,7 @@ const QualificationModal = props => {
     neverExpire,
     certificateImageURI
   } = current
+  const info = getUserInfo()
   const newExpiryDate = neverExpire ? '1' : expiryDate
   const initialValues = {
     certificationCode,
@@ -124,6 +126,7 @@ const QualificationModal = props => {
             neverExpire,
             factoryId,
             certificateImageURI: imageUrl,
+            enterpriseId: info.enterpriseId,
             status: 1
             //  id: current.id
           })
@@ -134,6 +137,7 @@ const QualificationModal = props => {
             handleOk()
           })
       } else {
+        console.log(info.enterpriseId)
         axios
           .post('/api/factory/enterprise-qualification-certificate/save', {
             ...values,
@@ -141,6 +145,7 @@ const QualificationModal = props => {
             factoryId,
             certificateImageURI: imageUrl,
             status: 1,
+            enterpriseId: info.enterpriseId,
             id: current.id
           })
           .then(response => {

@@ -126,8 +126,6 @@ const EnterpriseInfo = () => {
         // factoryProcessTypeList
       } = values
       console.log('提交的值', values)
-      // console.log('url', paramsurl.enterpriseLogoUrl[0].thumbUrl)
-
       const { address, location } = businessAddress
 
       delete values.area
@@ -184,6 +182,10 @@ const EnterpriseInfo = () => {
         clothesGrade: newGrade,
         enterpriseInfoApproveId: oldData.enterpriseInfoApproveId
       }
+      // 图片的处理
+      params.enterpriseLogoUrl = paramsurl.enterpriseLogoUrl[0]
+        ? paramsurl.enterpriseLogoUrl[0].thumbUrl
+        : []
 
       // 判断 提交的值和回显的值是否一样 一样的话就修改,.
       if (!isEmpty(grades)) {
@@ -204,7 +206,6 @@ const EnterpriseInfo = () => {
         }
       }
       console.log('处理的值', params)
-
       setLoading(true)
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
@@ -280,7 +281,10 @@ const EnterpriseInfo = () => {
             clothesGrade: grade.label.split(''),
             businessAddress: { location: `${longitude},${latitude}`, address }
           })
-          dataEcho(data.enterpriseLogoUrl)
+          if (!isEmpty(data.enterpriseLogoUrl)) {
+            dataEcho(data.enterpriseLogoUrl)
+          }
+
           if (provinceId) {
             setFieldsValue({
               area: [

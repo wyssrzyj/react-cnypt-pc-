@@ -50,7 +50,6 @@ const FactoryPhotograph = () => {
   }
   //核心
   const checkImage = index => {
-    console.log('放大测试', index)
     setCurrentIndex(index)
     setVisible(true)
   }

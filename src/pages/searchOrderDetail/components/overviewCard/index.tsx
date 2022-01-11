@@ -53,8 +53,6 @@ const OverviewCard = props => {
             </Col>
           ))}
         </Row>
-        {console.log('测试currentUser.userId', currentUser.userId)}
-        {console.log('测试998enterpriseType', enterpriseType)}
         {currentUser.userId ? (
           <>
             {+enterpriseType === 0 && enterpriseType !== null ? (

@@ -5,7 +5,7 @@ import OSS from '@/utils/oss' //图片上传接口
 import { cloneDeep } from 'lodash'
 
 const Uploads = props => {
-  const { onChange, num, fileList = [], valuesChange, btnText } = props
+  const { num, fileList = [], valuesChange, btnText } = props
   //onChange form提交用得上
   //num 最大数量
   //fileList 数据
@@ -27,6 +27,8 @@ const Uploads = props => {
     // 过滤出不等于点击的图片
     const oldData = cloneDeep(fileList) || []
     const imgs = oldData.filter(item => item.thumbUrl !== file.thumbUrl)
+    console.log('清除', imgs)
+
     valuesChange && valuesChange(imgs) //数据传递到外部
   }
   // 文件过滤
@@ -61,7 +63,7 @@ const Uploads = props => {
       const { url, name } = res
       imgs.push({ thumbUrl: url, name: name.split('__')[1], url })
       valuesChange && valuesChange(imgs) //传递给外部
-      onChange(url) //把图片数据放到form中，且把数据处理好返回给form
+      // onChange(url) //把图片数据放到form中，且把数据处理好返回给form
     }
   }
 

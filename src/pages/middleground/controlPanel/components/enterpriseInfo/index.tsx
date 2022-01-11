@@ -187,7 +187,7 @@ const EnterpriseInfo = () => {
         ? paramsurl.enterpriseLogoUrl[0].thumbUrl
         : null
 
-      // 判断 提交的值和回显的值是否一样 一样的话就修改,.
+      // 判断 提交的值和回显的值是否一样 一样的话就修改,
       if (!isEmpty(grades)) {
         let judgment = [
           'productGradeHigh',

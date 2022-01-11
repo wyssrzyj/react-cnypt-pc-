@@ -152,10 +152,11 @@ const QualificationCertification = () => {
         setLoading(false)
       })
   }
-
+  //新增
   const addQualification = () => {
     setIsModalVisible(true)
     setCurrentData({})
+    setOperationType('add')
   }
   const onTableChange = (pagination, _filters, sorter) => {
     const { current } = pagination

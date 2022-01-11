@@ -28,6 +28,7 @@ const typeMap = { add: '新增', edit: '编辑', check: '查看' }
 
 const PeriodValidity = props => {
   const { onChange, value, type } = props
+
   const [timeType, setTimeType] = useState<string>(value === '1' ? '1' : '0')
   const [date, setDate] = useState(value === '1' ? null : moment(value))
   const onTimeChange = e => {
@@ -108,21 +109,47 @@ const QualificationModal = props => {
         neverExpire = 0
       }
       delete values.qualification
-      axios
-        .post('/api/factory/enterprise-qualification-certificate/update', {
-          ...values,
-          neverExpire,
-          factoryId,
-          certificateImageURI: imageUrl,
-          status: 1,
-          id: current.id
-        })
-        .then(response => {
-          const { success, msg } = response
-          message[success ? 'success' : 'error'](msg)
-          handleCancel()
-          handleOk()
-        })
+      console.log({
+        ...values,
+        neverExpire,
+        factoryId,
+        certificateImageURI: imageUrl,
+        status: 1,
+        id: current.id
+      })
+      if (type === 'add') {
+        axios
+          .post('/api/factory/enterprise-qualification-certificate/save', {
+            ...values,
+            neverExpire,
+            factoryId,
+            certificateImageURI: imageUrl,
+            status: 1
+            //  id: current.id
+          })
+          .then(response => {
+            const { success, msg } = response
+            message[success ? 'success' : 'error'](msg)
+            handleCancel()
+            handleOk()
+          })
+      } else {
+        axios
+          .post('/api/factory/enterprise-qualification-certificate/save', {
+            ...values,
+            neverExpire,
+            factoryId,
+            certificateImageURI: imageUrl,
+            status: 1,
+            id: current.id
+          })
+          .then(response => {
+            const { success, msg } = response
+            message[success ? 'success' : 'error'](msg)
+            handleCancel()
+            handleOk()
+          })
+      }
     })
   }
 

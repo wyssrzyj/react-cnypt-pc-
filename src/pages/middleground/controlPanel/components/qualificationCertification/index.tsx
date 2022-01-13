@@ -31,7 +31,7 @@ const QualificationCertification = () => {
   // const enterpriseInfo =
   //   JSON.parse(localStorage.getItem('enterpriseInfo')) || {}
 
-  // const newFactoryId = isEmpty(enterpriseInfo)
+  // const newFactoryId = isEmpty(enterpriseInfo).
   //   ? factoryId
   //   : enterpriseInfo.factoryId
   const { commonStore } = useStores()

@@ -19,8 +19,6 @@ const SlideBars = props => {
   const newList = barList ? barList : slideBars
 
   const moveTo = index => {
-    console.log('选中的第几个', index)
-
     const t = window || document.body
 
     if (index == 0) {

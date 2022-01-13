@@ -111,7 +111,7 @@ const EnterpriseInfo = () => {
   }
   const dataEcho = value => {
     // 接口数据获取之后放到这里用于回显
-    setParams(value) //重点*******
+    setParams(value) //重点*******.
     //回显的格式
     setParams({ enterpriseLogoUrl: [{ thumbUrl: value }] })
   }

@@ -30,17 +30,18 @@ const SearchBar = () => {
       iconActive: 'jack-dituActive',
       url: '/mapSearch'
     },
-    {
-      label: '智能找厂',
-      icon: 'jack-home_zhineng',
-      iconActive: 'jack-zhinengActive',
-      url: '/factory-search'
-    },
+    ,
     {
       label: '找订单',
       icon: 'jack-home_dingdan',
       iconActive: 'jack-dingdanActive',
       url: '/order-search'
+    },
+    {
+      label: '智能找厂',
+      icon: 'jack-home_zhineng',
+      iconActive: 'jack-zhinengActive',
+      url: '/factory-search'
     }
   ]
 

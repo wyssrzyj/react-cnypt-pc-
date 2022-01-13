@@ -100,7 +100,7 @@ const EnterpriseInfo = () => {
   const [enterpriseType, setEnterpriseType] = useState<any>()
   const [value, serValue] = useState([])
   const [treeData, setTreeData] = useState([])
-  const [grades, setGrades] = useState([]) //用于判断档次方法是否执行
+  const [grades, setGrades] = useState([{}]) //用于判断档次方法是否执行
   const [loading, setLoading] = useState<boolean>(false)
   const [paramsurl, setParams] = useState<any>({})
 
@@ -125,7 +125,7 @@ const EnterpriseInfo = () => {
         clothesGrade = []
         // factoryProcessTypeList
       } = values
-      console.log('提交的值', values)
+      // console.log('提交的值', values)
       const { address, location } = businessAddress
 
       delete values.area
@@ -183,7 +183,7 @@ const EnterpriseInfo = () => {
         enterpriseInfoApproveId: oldData.enterpriseInfoApproveId
       }
       // 图片的处理
-      params.enterpriseLogoUrl = paramsurl.enterpriseLogoUrl[0]
+      params.enterpriseLogoUrl = !isEmpty(paramsurl.enterpriseLogoUrl)
         ? paramsurl.enterpriseLogoUrl[0].thumbUrl
         : null
 
@@ -194,18 +194,24 @@ const EnterpriseInfo = () => {
           'productGradeMiddle',
           'productGradeLow'
         ]
-        if (grades[0] === params.productGradeValues[0]) {
-        } else {
-          if (params.productGradeValues) {
-            params.productGradeValues = getChild(
-              params.productGradeValues,
-              judgment,
-              treeData
-            )
+        if (params.productGradeValues !== undefined) {
+          if (
+            grades[0] === !isEmpty(params.productGradeValues[0])
+              ? params.productGradeValues[0]
+              : null
+          ) {
+          } else {
+            if (params.productGradeValues) {
+              params.productGradeValues = getChild(
+                params.productGradeValues,
+                judgment,
+                treeData
+              )
+            }
           }
         }
       }
-      console.log('处理的值', params)
+      // console.log('处理的值', params)
       setLoading(true)
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
@@ -237,6 +243,7 @@ const EnterpriseInfo = () => {
       .get('/api/factory/enterprise/get-enterprise-info', {})
       .then(response => {
         const { success, data = {} } = response
+        // console.log('设置值', data.productGradeValues)
 
         setGrades(data.productGradeValues)
         if (success && !isEmpty(data)) {

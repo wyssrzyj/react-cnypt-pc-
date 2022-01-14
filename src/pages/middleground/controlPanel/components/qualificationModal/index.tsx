@@ -124,7 +124,7 @@ const QualificationModal = props => {
             certificateImageURI: imageUrl,
             enterpriseId: info.enterpriseId,
             status: 2
-            //  id: current.id
+            //  id: current.id....
           })
           .then(response => {
             const { success, msg } = response

@@ -15,12 +15,12 @@ const { TabPane } = Tabs
 
 const tabMaps = [
   { label: '所有资质', value: '' },
-  { label: '已生效', value: 0 },
-  { label: '审核中', value: 1 },
-  { label: '审核不通过', value: 2 },
+  { label: '已生效', value: 1 },
+  { label: '审核中', value: 2 },
+  { label: '审核不通过', value: 0 },
   { label: '已失效', value: 3 }
 ]
-const statusMap = { 0: '已生效', 1: '审核中', 2: '审核不通过', 3: '已失效' }
+const statusMap = { 1: '已生效', 2: '审核中', 0: '审核不通过', 3: '已失效' }
 
 const rowKey = 'id'
 

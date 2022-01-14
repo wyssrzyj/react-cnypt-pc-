@@ -40,6 +40,9 @@ const PeriodValidity = props => {
     setDate(data)
     isFunction(onChange) && onChange(moment(data).format('x'))
   }
+  function disabledDate(current) {
+    return current && current < moment().endOf('day')
+  }
   return (
     <div>
       <Radio.Group
@@ -54,6 +57,7 @@ const PeriodValidity = props => {
         <DatePicker
           value={date}
           onChange={onDateChange}
+          disabledDate={disabledDate}
           disabled={type === 'check'}
         />
       )}
@@ -111,14 +115,6 @@ const QualificationModal = props => {
         neverExpire = 0
       }
       delete values.qualification
-      console.log({
-        ...values,
-        neverExpire,
-        factoryId,
-        certificateImageURI: imageUrl,
-        status: 1,
-        id: current.id
-      })
       if (type === 'add') {
         axios
           .post('/api/factory/enterprise-qualification-certificate/save', {
@@ -127,7 +123,7 @@ const QualificationModal = props => {
             factoryId,
             certificateImageURI: imageUrl,
             enterpriseId: info.enterpriseId,
-            status: 1
+            status: 2
             //  id: current.id
           })
           .then(response => {
@@ -144,7 +140,7 @@ const QualificationModal = props => {
             neverExpire,
             factoryId,
             certificateImageURI: imageUrl,
-            status: 1,
+            status: 2,
             enterpriseId: info.enterpriseId,
             id: current.id
           })

@@ -7,15 +7,9 @@ import HeaderLine from '../headerLine'
 import styles from './index.module.less'
 import { useLocation } from 'react-router-dom'
 import { isEmpty } from 'lodash'
-import { getUserInfo } from '@/utils/tool'
-const CommercialInfo = props => {
-  console.log(props)
-
+const CommercialInfo = () => {
   const location = useLocation()
   const { state } = location
-
-  const userInfo = getUserInfo() || {}
-  const { enterpriseId } = userInfo
 
   const [businessInfo, setBusinessInfo] = useState<any>({})
 
@@ -24,7 +18,7 @@ const CommercialInfo = props => {
     }
     axios
       .get('/api/factory/enterprise/get-enterprise-business-license-info', {
-        enterpriseId: enterpriseId
+        enterpriseId: state['enterpriseId']
       })
       .then(response => {
         const { success, data } = response

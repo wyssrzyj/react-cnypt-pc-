@@ -94,75 +94,78 @@ const Todo = () => {
     <div className={styles.todo}>
       <Title title={'待办事项'}></Title>
       <div className={styles.todoContent}>
-        {/* 判断企业、工厂是否入驻 */}
-        {enterpriseids ? (
-          //企业、工厂已入驻
-          <div>
-            {enterpriseInformation['enterpriseType'] === '0' ? (
-              <div>
-                {/* 加工厂待办事项 */}
-                <ProcessingAgency
-                  enterpriseStatus={enterpriseStatus}
-                  enterpriseId={enterpriseId}
-                  information={information}
-                  name={name}
-                ></ProcessingAgency>
-                {/* 加工厂数据 */}
-                <MachiningData data={machiningData}></MachiningData>
-              </div>
-            ) : null}
-            {enterpriseInformation['enterpriseType'] === '1' ? (
-              <div>
-                <IssuingAgent
-                  data={enterpriseInformation}
-                  enterpriseId={enterpriseId}
-                  name={name}
-                ></IssuingAgent>
-                {/* 发单商数据 */}
-                <IssuingData issuingData={issuingData}></IssuingData>
-              </div>
-            ) : null}
-          </div>
-        ) : (
-          <div>
-            {/* 企业/工厂未入住 */}
-            <div className={styles.content}>
-              <div className={styles.icons}>
-                <Icon type="jack-xttz_icon" className={styles.previous} />
-              </div>
-              <div className={styles.txt}>
-                <div className={styles.test}>
-                  <div className={styles.announcement}>系统通知</div>
-                  <div className={styles.written}>
-                    尊敬的用户您好，欢迎来到优产云平台，请您前往
-                    <span className={styles.cont}>企业信息</span>
-                    ,按您的实际情况前往完善企业信息，以方便我们为您提供更优质的服务。
-                  </div>
+        <div className={styles.body}>
+          {/* 判断企业、工厂是否入驻 */}
+          {enterpriseids ? (
+            //企业、工厂已入驻
+            <div>
+              {enterpriseInformation['enterpriseType'] === '0' ? (
+                <div>
+                  {/* 加工厂待办事项 */}
+                  <ProcessingAgency
+                    enterpriseStatus={enterpriseStatus}
+                    enterpriseId={enterpriseId}
+                    information={information}
+                    name={name}
+                  ></ProcessingAgency>
+                  {/* 加工厂数据 */}
+                  <MachiningData data={machiningData}></MachiningData>
                 </div>
-                <div className={styles.btn}>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      findOrder()
-                    }}
-                    ghost
-                  >
-                    立即前往
-                  </Button>
+              ) : null}
+              {enterpriseInformation['enterpriseType'] === '1' ? (
+                <div>
+                  <IssuingAgent
+                    data={enterpriseInformation}
+                    enterpriseId={enterpriseId}
+                    name={name}
+                  ></IssuingAgent>
+                  {/* 发单商数据 */}
+                  <IssuingData issuingData={issuingData}></IssuingData>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div>
+              {/* 企业/工厂未入住 */}
+              <div className={styles.content}>
+                <div className={styles.icons}>
+                  <Icon type="jack-xttz_icon" className={styles.previous} />
+                </div>
+                <div className={styles.txt}>
+                  <div className={styles.test}>
+                    <div className={styles.announcement}>系统通知</div>
+                    <div className={styles.written}>
+                      尊敬的用户您好，欢迎来到优产云平台，请您前往
+                      <span className={styles.cont}>企业信息</span>
+                      ,按您的实际情况前往完善企业信息，以方便我们为您提供更优质的服务。
+                    </div>
+                  </div>
+                  <div className={styles.btn}>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        findOrder()
+                      }}
+                      ghost
+                    >
+                      立即前往
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* 为空的时候展示 */}
-        {emptyFlag ? (
-          <div className={styles.emptyContent}>
-            <img src={EMPTY} alt="" className={styles.emptyImg} />
-            <div>您目前没有任何待办事项哦 ~</div>
-          </div>
-        ) : null}
+          {/* 为空的时候展示 */}
+          {emptyFlag ? (
+            <div className={styles.emptyContent}>
+              <img src={EMPTY} alt="" className={styles.emptyImg} />
+              <div>您目前没有任何待办事项哦 ~</div>
+            </div>
+          ) : null}
+        </div>
       </div>
+
       <div className={styles.testx}>
         <div className={styles.scrollbar}></div>
       </div>

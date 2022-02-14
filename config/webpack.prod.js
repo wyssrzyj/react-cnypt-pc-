@@ -122,23 +122,23 @@ const config = merge(common, {
       filename: 'css/[name].[chunkhash:8].css', // 生成的文件名
       chunkFilename: 'css/[id].[hash].css',
       ignoreOrder: true
-    }),
+    })
     // new BundleAnalyzerPlugin({
     //   analyzerMode: "disable", // 不启用展示打包报告的web服务器
     //   generateStatsFile: true // 生成报告文件
     // }),
     // new CompressionPlugin(),
-    new HappyPack({
-      //用id来标识 happypack处理那里类文件
-      id: 'babelid',
-      //配置 babel-loader
-      loaders: [
-        {
-          loader: 'babel-loader'
-        }
-      ],
-      verbose: true
-    })
+    // new HappyPack({
+    //   //用id来标识 happypack处理那里类文件
+    //   id: 'babelid',
+    //   //配置 babel-loader
+    //   loaders: [
+    //     {
+    //       loader: 'babel-loader'
+    //     }
+    //   ],
+    //   verbose: true
+    // })
   ],
   optimization: {
     sideEffects: true, // 处理副作用 代码(检查package.json文件)

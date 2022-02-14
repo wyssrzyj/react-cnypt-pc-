@@ -102,7 +102,7 @@ const EnterpriseInformation = props => {
       </div>
       {/* 营业执照 */}
       <div ref={domRef5}>
-        <CommercialInfo factoryId={factoryId} />
+        <CommercialInfo />
       </div>
       {/* 资质证件 */}
       <div ref={domRef6}>

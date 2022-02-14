@@ -10,9 +10,9 @@ const Dotenv = require('dotenv-webpack')
 const { NODE_ENV } = process.env
 
 const hosts = new Map()
-hosts.set('development', 'http://192.168.69.130:8888/')
-hosts.set('test', 'http://8.136.225.110:8888/')
-hosts.set('production', 'http://47.97.217.13:8888/')
+hosts.set('development', 'http://192.168.69.88:8888/')
+hosts.set('test', 'http://8.136.224.113:8888/')
+hosts.set('production', 'http://121.43.228.43:8888/')
 
 module.exports = {
   entry: ['@babel/polyfill', path.resolve(__dirname, '../src/index.tsx')],

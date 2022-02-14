@@ -6,24 +6,27 @@ import axios from '@/utils/axios'
 import { useStores, observer } from '@/utils/mobx'
 import HeaderLine from '../headerLine'
 import styles from './index.module.less'
-import { getUserInfo } from '@/utils/tool'
+import { useLocation } from 'react-router-dom'
 
 const QualificationCertificate = props => {
+  const location = useLocation()
+  const { state } = location
+
   const {} = props
   const { commonStore } = useStores()
   const { dictionary } = commonStore
   const { factoryCertificate = [] } = toJS(dictionary)
   const [certificate, setCertificate] = useState<any>([])
-  const userInfo = getUserInfo() || {}
-  const { enterpriseId } = userInfo
 
   // 资质证书
   const getCertificate = async () => {
+    console.log('测试', state['enterpriseId'])
+
     const response = await axios.post(
       '/api/factory/enterprise-qualification-certificate/list',
       {
-        enterpriseId: enterpriseId,
-        status: 0 //已通过
+        enterpriseId: state['enterpriseId'],
+        status: 1 //已通过
       }
     )
     const { success, data = {} } = response

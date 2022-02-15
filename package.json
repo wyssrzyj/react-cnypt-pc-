@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build:prod": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js",
-    "build:test": "cross-env NODE_ENV=test webpack --config ./config/webpack.prod.js",
+    "build:test": "cross-env NODE_ENV=test --max_old_space_size=4096 webpack --config ./config/webpack.prod.js",
     "start": "cross-env NODE_ENV=development webpack serve --config ./config/webpack.dev.js",
     "lint": "eslint src/**/*.js",
     "fix": "prettier --write src/**/*.js",

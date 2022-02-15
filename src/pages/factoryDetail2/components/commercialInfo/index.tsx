@@ -14,8 +14,7 @@ const CommercialInfo = () => {
   const [businessInfo, setBusinessInfo] = useState<any>({})
 
   const getBusinessInfo = () => {
-    if (!isEmpty(state)) {
-    }
+    if (!isEmpty(state)) return
     axios
       .get('/api/factory/enterprise/get-enterprise-business-license-info', {
         enterpriseId: state['enterpriseId']

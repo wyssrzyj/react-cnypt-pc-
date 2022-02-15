@@ -6,6 +6,7 @@ import { Icon } from '@/components'
 import moment from 'moment'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
+import { useHistory } from 'react-router'
 
 const EMPTY_IMG =
   'https://capacity-platform.oss-cn-hangzhou.aliyuncs.com/capacity-platform/platform/factoryEmpty.png'
@@ -15,7 +16,7 @@ const Factorys = props => {
 
   const { factoryStore } = useStores()
   const { getFactoryDetail } = factoryStore
-
+  const history = useHistory()
   const virtualListRef = useRef<HTMLDivElement>()
   const factorysRef = useRef<HTMLDivElement>()
 
@@ -136,6 +137,8 @@ const Factorys = props => {
   }, [throttleScrollTop])
 
   const factoryClick = data => {
+    console.log('企业id', toJS(data))
+
     const { factoryLnglat } = data
     if (
       Array.isArray(factoryLnglat) &&
@@ -151,7 +154,12 @@ const Factorys = props => {
   }
 
   const toDetail = () => {
-    window.open(`/factory-detail/${currentFactory.factoryId}`)
+    history.push({
+      pathname: `/factory-detail/${currentFactory.factoryId}`,
+      state: {
+        enterpriseId: currentFactory.enterpriseId
+      }
+    })
   }
 
   const factoryDetailConfig = [

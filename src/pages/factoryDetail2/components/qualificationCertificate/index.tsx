@@ -20,8 +20,6 @@ const QualificationCertificate = props => {
 
   // 资质证书
   const getCertificate = async () => {
-    console.log('测试', state['enterpriseId'])
-
     const response = await axios.post(
       '/api/factory/enterprise-qualification-certificate/list',
       {

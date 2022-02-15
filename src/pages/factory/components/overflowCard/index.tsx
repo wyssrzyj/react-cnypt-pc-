@@ -109,7 +109,7 @@ const OverflowCard = props => {
       loop: true
       // autoplay: {
       //   delay: 2000,
-      //   disableOnInteraction: true,.
+      //   disableOnInteraction: true,
       // },
     })
   }, [])

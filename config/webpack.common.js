@@ -18,7 +18,7 @@ module.exports = {
   entry: ['@babel/polyfill', path.resolve(__dirname, '../src/index.tsx')],
   // entry: {
   //   main: path.resolve(__dirname, '../src/index.tsx')
-  // },.
+  // },..
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'js/[name].[chunkhash:6].bundle.js',

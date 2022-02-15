@@ -3,7 +3,7 @@ import { Cascader, Row, Col, Form, Input, Radio } from 'antd'
 import { toJS } from 'mobx'
 import { useStores } from '@/utils/mobx'
 
-// import options from './cityData.js'
+// import options from './cityData.js'.
 import styles from './index.module.less'
 const layout = {
   labelCol: {

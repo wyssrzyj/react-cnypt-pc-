@@ -34,7 +34,7 @@ const SlideBars = props => {
     <div className={styles.slideBar}>
       {/* <div className={styles.slideHerder}>
         <Icon type={'jack-logo1'} className={styles.slideLogo} />
-        <span>产能云平台</span>
+        <span>产能云平台</span>.
       </div> */}
       {newList.map((item, idx) => {
         return (

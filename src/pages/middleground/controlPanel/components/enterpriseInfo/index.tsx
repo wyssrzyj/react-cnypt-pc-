@@ -115,6 +115,14 @@ const EnterpriseInfo = () => {
     //回显的格式
     setParams({ enterpriseLogoUrl: [{ thumbUrl: value }] })
   }
+  //防抖处理
+  let timer
+  const dou = () => {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      confirmSubmit()
+    }, 1000)
+  }
   //  提交
   const confirmSubmit = () => {
     if (loading) return
@@ -213,6 +221,7 @@ const EnterpriseInfo = () => {
       }
       // console.log('处理的值', params)
       setLoading(true)
+
       axios
         .post('/api/factory/enterprise/enterprise-info-save', params)
         .then(async response => {
@@ -726,11 +735,7 @@ const EnterpriseInfo = () => {
         </Form>
 
         <div className={styles.enterpriseFooter}>
-          <Button
-            className={styles.button}
-            type="primary"
-            onClick={confirmSubmit}
-          >
+          <Button className={styles.button} type="primary" onClick={dou}>
             确认{enterpriseId ? '修改' : '提交'}
           </Button>
         </div>

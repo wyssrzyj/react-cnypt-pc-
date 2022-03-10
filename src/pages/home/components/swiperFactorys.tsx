@@ -91,7 +91,7 @@ const SwiperFactorys = props => {
           enterpriseId: data.enterpriseId
         }
       })
-      // window.open(`/factory-detail/${data.factoryId}`)
+      // window.open(`/factory-detail/${data.factoryId}`)..
     }
 
     const imgUrl = useMemo(() => {

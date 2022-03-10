@@ -10,6 +10,7 @@ import { isEmpty } from 'lodash'
 const CommercialInfo = () => {
   const location = useLocation()
   const { state } = location
+  console.log('测试', state)
 
   const [businessInfo, setBusinessInfo] = useState<any>({})
 

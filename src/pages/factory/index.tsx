@@ -136,6 +136,7 @@ const Factory = () => {
     getRecommendFactory()
     getBrowsingHistory()
   }, [])
+  console.log('测试', factoryArray)
 
   return (
     <div>

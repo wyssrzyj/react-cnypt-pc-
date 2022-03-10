@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { Icon } from '@/components'
 import { observer, useStores, toJS } from '@/utils/mobx'
 import { getTrees } from './method/index'
+import { useHistory } from 'react-router'
 
 // 顶部地图工厂轮播
 const SwiperFactorys = props => {
@@ -15,7 +16,7 @@ const SwiperFactorys = props => {
   const [curKey, setCurKey] = useState(0)
 
   const [list, setList] = useState<any>([])
-
+  const history = useHistory()
   useEffect(() => {
     ;(async () => {
       const params = {
@@ -83,7 +84,14 @@ const SwiperFactorys = props => {
     ]
 
     const toFactoryDetail = () => {
-      window.open(`/factory-detail/${data.factoryId}`)
+      console.log(data)
+      history.push({
+        pathname: `/factory-detail/${data.factoryId}`,
+        state: {
+          enterpriseId: data.enterpriseId
+        }
+      })
+      // window.open(`/factory-detail/${data.factoryId}`)..
     }
 
     const imgUrl = useMemo(() => {

@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash'
 
 const Uploads = props => {
   const { onChange, num, fileList = [], valuesChange, btnText } = props
-  //onChange form提交用得上.
+  //onChange form提交用得上
   //num 最大数量
   //fileList 数据
   //valuesChange 方法传递到外部

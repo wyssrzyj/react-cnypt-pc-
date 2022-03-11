@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Modal,
-  Form,
-  Select,
-  Input,
-  Radio,
-  DatePicker,
-  Upload,
-  message
-} from 'antd'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { Modal, Form, Select, Input, Radio, DatePicker, message } from 'antd'
 import { toJS } from 'mobx'
 import moment from 'moment'
-import { isFunction, get, cloneDeep } from 'lodash'
+import { isFunction, get, cloneDeep, isEmpty } from 'lodash'
 import axios from '@/utils/axios'
 import { useStores } from '@/utils/mobx'
 import styles from './index.module.less'
 import { getUserInfo } from '@/utils/tool'
+import Uploads from './Uploads/index'
 
 const { Option } = Select
 
@@ -76,6 +67,7 @@ const QualificationModal = props => {
     current = {},
     factoryId
   } = props
+
   const {
     certificationCode,
     certificationName,
@@ -91,22 +83,26 @@ const QualificationModal = props => {
     expiryDate: newExpiryDate,
     qualification: certificateImageURI
   }
-  const { commonStore, factoryPageStore } = useStores()
+  const { commonStore } = useStores()
   const { dictionary } = commonStore
   const { factoryCertificate = [] } = toJS(dictionary)
-  const { uploadFiles } = factoryPageStore
-  const [imageUrl, setImageUrl] = useState<string>(certificateImageURI)
-  const [loading, setLoading] = useState<boolean>(false)
-  const [fileList, setFileList] = useState<any[]>([])
 
+  const [params, setParams] = useState<any>({}) //用于存放款图数据
+
+  //图片回显
   useEffect(() => {
-    if (certificateImageURI) {
-      setFileList([{ thumbUrl: certificateImageURI }])
+    if (!isEmpty(certificateImageURI)) {
+      setParams({ qualification: [{ thumbUrl: certificateImageURI }] })
     }
   }, [certificateImageURI])
+  useEffect(() => {
+    console.log('图片值', params)
+  }, [params])
 
   const handleSelfOk = () => {
     validateFields().then(values => {
+      console.log('确认', values)
+
       let neverExpire
       if (values.expiryDate === '1') {
         neverExpire = 1
@@ -121,7 +117,7 @@ const QualificationModal = props => {
             ...values,
             neverExpire,
             factoryId,
-            certificateImageURI: imageUrl,
+            certificateImageURI: params.qualification[0].thumbUrl,
             enterpriseId: info.enterpriseId,
             status: 2
             //  id: current.id
@@ -139,7 +135,7 @@ const QualificationModal = props => {
             ...values,
             neverExpire,
             factoryId,
-            certificateImageURI: imageUrl,
+            certificateImageURI: params.qualification[0].thumbUrl,
             status: 2,
             enterpriseId: info.enterpriseId,
             id: current.id
@@ -154,43 +150,10 @@ const QualificationModal = props => {
     })
   }
 
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  )
-
-  const beforeUpload = file => {
-    const isJpgOrPng =
-      file.type === 'image/jpg' ||
-      file.type === 'image/png' ||
-      file.type === 'image/jpeg'
-    if (!isJpgOrPng) {
-      message.error('只能上传jpg/png格式文件!')
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2
-    if (!isLt2M) {
-      message.error('文件不能超过2M!')
-    }
-    return isJpgOrPng && isLt2M
-  }
-
-  const customRequest = async ({ file }) => {
-    setLoading(true)
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('module', 'factory')
-    const res = await uploadFiles(formData)
-    setImageUrl(res)
-    setLoading(false)
-    setFileList([{ thumbUrl: res }])
-  }
-  const fileRemove = file => {
-    const arrList = cloneDeep(fileList)
-    const target = arrList.filter(item => item.thumbUrl !== file.thumbUrl)
-    setFileList(target)
-    setImageUrl(undefined)
+  const valuesChange = (key, value) => {
+    const newParams = cloneDeep(params) //深拷贝
+    newParams[key] = value
+    setParams(newParams) //把新数据放到useState中
   }
 
   return (
@@ -243,25 +206,11 @@ const QualificationModal = props => {
           name="qualification"
           rules={[{ required: true, message: '请输长传资质证书!' }]}
         >
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={true}
-            beforeUpload={beforeUpload}
-            customRequest={customRequest}
-            fileList={fileList}
-            maxCount={1}
-            onRemove={fileRemove}
-          >
-            {/* {imageUrl ? (
-              <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
-            ) : (
-              uploadButton
-            )} */}
-
-            {fileList.length < 1 ? uploadButton : null}
-          </Upload>
+          <Uploads
+            num={1}
+            fileList={params['qualification'] || []}
+            valuesChange={value => valuesChange('qualification', value)}
+          ></Uploads>
         </Form.Item>
       </Form>
       <div className={styles.imageInfo}>

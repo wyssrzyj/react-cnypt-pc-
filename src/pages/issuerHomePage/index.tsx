@@ -12,6 +12,7 @@ import HomePag from './components/homePage'
 import EnterpriseInformation from './components/enterpriseInformation'
 import OrderRecord from './components/orderRecord'
 import { useLocation } from 'react-router-dom'
+// import LoginHeader from '../login/header'
 const SearchOrderDetail = () => {
   const location = useLocation()
   const { state } = location
@@ -73,7 +74,10 @@ const SearchOrderDetail = () => {
     const data = cloneDeep(processingData)
     if (!isEmpty(data)) {
       data.map(item => {
-        if (productCategoryList) {
+        console.log('测试', item.regionalIdList)
+        console.log('测试', newAllArea)
+
+        if (!isEmpty(productCategoryList)) {
           item.categoryCodes = getTrees(
             item.categoryCodes,
             productCategoryList,
@@ -81,7 +85,7 @@ const SearchOrderDetail = () => {
             'name'
           )
         }
-        if (newAllArea) {
+        if (!isEmpty(newAllArea) && !isEmpty(item.regionalIdList)) {
           item.regionalIdList = getTrees(
             item.regionalIdList,
             newAllArea,
@@ -89,7 +93,6 @@ const SearchOrderDetail = () => {
             'label'
           )
         }
-
         item.goodsNum = goodsNum.filter(v => v.value === item.goodsNum)[0].label
         item.year = moment(item.releaseTime).format('YYYY')
         item.monthDay = moment(item.releaseTime).format('MM-DD')
@@ -97,7 +100,9 @@ const SearchOrderDetail = () => {
         item.surplus = moment(item.inquiryEffectiveDate).format('MM-DD')
         item.key = item.id
       })
-      setNewData(data)
+      console.log('总数据', data)
+
+      setNewData([...data])
     } else {
       setNewData([])
     }
@@ -121,7 +126,6 @@ const SearchOrderDetail = () => {
       setInformationData(date)
     }
   }
-  //
 
   const onFilterChange = () => {
     // history.push('/order-search')

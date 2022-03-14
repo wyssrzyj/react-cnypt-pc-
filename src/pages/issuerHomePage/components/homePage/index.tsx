@@ -2,6 +2,8 @@ import React from 'react'
 import styles from './index.module.less'
 import { Icon } from '@/components'
 import { useHistory } from 'react-router-dom'
+import { isEmpty } from 'lodash'
+
 import { Table, Carousel } from 'antd'
 function index({ NumberCooperation, newData, topName }) {
   const { push } = useHistory()
@@ -57,7 +59,12 @@ function index({ NumberCooperation, newData, topName }) {
             <div className={styles.commodity}>
               <div className={styles.yuan}></div>
               <div className={styles.commodityData}>
-                地区要求: <span>{_v.regionalIdList.join('、')}</span>
+                地区要求:{' '}
+                <span>
+                  {!isEmpty(_v.regionalIdList)
+                    ? _v.regionalIdList.join('、')
+                    : '全国'}
+                </span>
               </div>
             </div>
           </div>

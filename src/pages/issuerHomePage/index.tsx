@@ -12,7 +12,6 @@ import HomePag from './components/homePage'
 import EnterpriseInformation from './components/enterpriseInformation'
 import OrderRecord from './components/orderRecord'
 import { useLocation } from 'react-router-dom'
-// import LoginHeader from '../login/header'
 const SearchOrderDetail = () => {
   const location = useLocation()
   const { state } = location

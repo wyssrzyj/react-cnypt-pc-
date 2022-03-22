@@ -33,7 +33,7 @@ const AccountSafe = () => {
   const { getAccountInfo, changeUserInfo } = controlPanelStore
 
   const currentUser = getCurrentUser()
-  const nameRef = useRef<Input>()
+  const nameRef = useRef<any>()
 
   const [changeFlag, setChangeFlag] = useState(false)
   const [name, setName] = useState(currentUser.nickName)

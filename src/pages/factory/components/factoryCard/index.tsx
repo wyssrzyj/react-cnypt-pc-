@@ -33,7 +33,13 @@ const FactoryCard = props => {
               <li
                 key={item.factoryId}
                 onClick={() => {
-                  history.push(`/factory-detail/${item.factoryId}`)
+                  history.push({
+                    pathname: `/factory-detail/${item.factoryId}`,
+                    state: {
+                      enterpriseId: item.enterpriseId
+                    }
+                  })
+                  // history.push(`/factory-detail/${item.factoryId}`)
                 }}
               >
                 <img className={styles.cardImg} src={imgUrl} alt="" />

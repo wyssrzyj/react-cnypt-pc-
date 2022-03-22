@@ -204,6 +204,36 @@ export default class DemandList {
     }
   }
 
+  // 查询工厂名称
+  @action queryFactoryName = async () => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/factory/info/search-factory-name`
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      return e
+    }
+  }
+  // 发单商指定供应商发送需求单
+  @action sendRequisition = async params => {
+    try {
+      const res: ResponseProps = await axios.post(
+        `/api/oms/inquiry-quote/point-to-send`,
+        params
+      )
+      if (res.code !== 200) {
+        message.error(res.msg)
+      }
+      return res.data
+    } catch (e) {
+      return e
+    }
+  }
+
   // 备忘录更新或新增
   @action memorandumAdded = async params => {
     try {

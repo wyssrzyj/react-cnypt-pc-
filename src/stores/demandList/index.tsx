@@ -218,7 +218,7 @@ export default class DemandList {
       return e
     }
   }
-  // 发单商指定供应商发送需求单
+  // 发单商指定供应商发送需求单.
   @action sendRequisition = async params => {
     try {
       const res: ResponseProps = await axios.post(

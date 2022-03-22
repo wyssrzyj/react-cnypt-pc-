@@ -15,6 +15,8 @@ const FactoryCard = props => {
 
   const history = useHistory()
   const { title, list = [] } = props
+  console.log('找id', list)
+
   return (
     <div className={styles.factoryCard}>
       <header className={styles.cardHeader}>
@@ -33,7 +35,13 @@ const FactoryCard = props => {
               <li
                 key={item.factoryId}
                 onClick={() => {
-                  history.push(`/factory-detail/${item.factoryId}`)
+                  history.push({
+                    pathname: `/factory-detail/${item.factoryId}`,
+                    state: {
+                      enterpriseId: item.enterpriseId
+                    }
+                  })
+                  // history.push(`/factory-detail/${item.factoryId}`)
                 }}
               >
                 <img className={styles.cardImg} src={imgUrl} alt="" />

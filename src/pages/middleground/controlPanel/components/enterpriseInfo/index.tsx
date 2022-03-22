@@ -116,12 +116,16 @@ const EnterpriseInfo = () => {
     setParams({ enterpriseLogoUrl: [{ thumbUrl: value }] })
   }
   //防抖处理
-  let timer
-  const dou = () => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      confirmSubmit()
-    }, 1000)
+  let timeout
+  const debounce = (func, wait) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      func()
+    }, wait)
+  }
+
+  const antiShake = () => {
+    debounce(confirmSubmit, 1000)
   }
   //  提交
   const confirmSubmit = () => {
@@ -735,7 +739,7 @@ const EnterpriseInfo = () => {
         </Form>
 
         <div className={styles.enterpriseFooter}>
-          <Button className={styles.button} type="primary" onClick={dou}>
+          <Button className={styles.button} type="primary" onClick={antiShake}>
             确认{enterpriseId ? '修改' : '提交'}
           </Button>
         </div>

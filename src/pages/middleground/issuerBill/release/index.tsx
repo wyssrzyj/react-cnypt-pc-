@@ -136,7 +136,7 @@ const DemandSheet = () => {
       }
     }
     const res = await ewDemandDoc(v)
-    // {supplierTenantId:v.supplierTenantId, status:1,purchaseInquiryId:res.data}
+    // {supplierTenantId:v.supplierTenantId, status:1,purchaseInquiryId:res.data}.
     // sendRequisition
     console.log(res)
 

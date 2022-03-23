@@ -15,6 +15,8 @@ const FactoryCard = props => {
 
   const history = useHistory()
   const { title, list = [] } = props
+  console.log('找id', list)
+
   return (
     <div className={styles.factoryCard}>
       <header className={styles.cardHeader}>

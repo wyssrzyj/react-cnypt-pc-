@@ -136,8 +136,6 @@ const Factory = () => {
     getRecommendFactory()
     getBrowsingHistory()
   }, [])
-  console.log('测试', factoryArray)
-
   return (
     <div>
       <SimpleSearch onFilterChange={onFilterChange} field={'factoryName'} />

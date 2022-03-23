@@ -18,12 +18,18 @@ const DemandSheet = () => {
   const { state } = location
 
   const { demandListStore } = useStores()
-  const { ewDemandDoc, anotherSingleInterface, regionalData, popUpEcho } =
-    demandListStore
+  const {
+    ewDemandDoc,
+    sendRequisition,
+    anotherSingleInterface,
+    regionalData,
+    popUpEcho
+  } = demandListStore
 
   const [confirm, setConfirm] = useState<any>(true)
   const [initialValues, setInitialValues] = useState<any>({
     isEnterpriseInfoPublic: 1,
+    isPointSend: 0,
     isContactPublic: 1
   })
   const [stated, setStated] = useState<any>(state) //url 数据
@@ -130,8 +136,22 @@ const DemandSheet = () => {
       }
     }
     const res = await ewDemandDoc(v)
+    // {supplierTenantId:v.supplierTenantId, status:1,purchaseInquiryId:res.data}
+    // sendRequisition
+    console.log(res)
+
     if (res.code === 200) {
-      push({ pathname: '/control-panel/issuerBill/demand-list' })
+      if (v.isPointSend === 0) {
+        push({ pathname: '/control-panel/issuerBill/demand-list' })
+      } else {
+        await sendRequisition({
+          supplierTenantId: v.supplierTenantId,
+          status: 1,
+          purchaseInquiryId: res.data
+        })
+
+        push({ pathname: '/control-panel/issuerBill/demand-list' })
+      }
     }
   }
 
@@ -149,7 +169,7 @@ const DemandSheet = () => {
       >
         <section>
           <Title title={'基础信息'}></Title>
-          <Basics />
+          <Basics initialValues={initialValues} />
         </section>
         <section className={styles.commodity}>
           <Title title={'商品信息'}></Title>

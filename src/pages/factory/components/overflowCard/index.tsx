@@ -25,6 +25,7 @@ const RequestCard = observer(props => {
   const { sendToFactory } = searchOrderStore
 
   const { data, enterpriseId } = props
+  console.log('enterpriseId', enterpriseId)
 
   const goods =
     dictionary.goodsNum.find(item => item.value === data.goodsNum) || {}

@@ -30,7 +30,8 @@ const keys = [
   'allowClear',
   'width'
 ]
-function Basics() {
+function Basics(props) {
+  const { initialValues } = props
   const { commonStore } = useStores()
   const { dictionary } = commonStore
 
@@ -106,7 +107,7 @@ function Basics() {
           )
         })}
       </Row>
-      <Regional />
+      <Regional initialValues={initialValues} />
     </div>
   )
 }

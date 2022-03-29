@@ -3,7 +3,7 @@ import { Table } from 'antd'
 import styles from './confirmTable.module.less'
 import { ColumnType } from 'antd/lib/table'
 import { useStores, observer } from '@/utils/mobx'
-import moment from '_moment@2.29.1@moment'
+import moment from 'moment'
 
 interface Columns {
   align?: string

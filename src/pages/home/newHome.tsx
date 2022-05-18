@@ -101,7 +101,7 @@ const Home = () => {
   const { updateName } = commonStore
   const { getTotalCapacity } = homeStore
 
-  const [data, setData] = useState({})
+  const [_data, setData] = useState({})
 
   useEffect(() => {
     ;(async () => {
@@ -123,10 +123,30 @@ const Home = () => {
   const SIcon = <Icon type={'jack-search'} className={styles.searchIcon}></Icon>
 
   const cardConfigs = [
-    { label: '入驻加工厂数', field: 'totalFactoryNum', length: 5 },
-    { label: '入驻发单商数', field: 'totalOrderBillerNum', length: 5 },
-    { label: '联网设备数', field: 'totalDeviceNum', length: 6 },
-    { label: '累计生产件数', field: 'totalOutputNum', length: 9 }
+    {
+      label: '入驻加工厂数',
+      quantity: 350,
+      field: 'totalFactoryNum',
+      length: 5
+    },
+    {
+      label: '入驻发单商数',
+      quantity: 197,
+      field: 'totalOrderBillerNum',
+      length: 5
+    },
+    {
+      label: '联网设备数',
+      quantity: 24963,
+      field: 'totalDeviceNum',
+      length: 6
+    },
+    {
+      label: '累计生产件数',
+      quantity: 44513040,
+      field: 'totalOutputNum',
+      length: 9
+    }
   ]
 
   useEffect(() => {
@@ -170,7 +190,7 @@ const Home = () => {
                   <div>
                     <DealCount
                       length={item.length}
-                      count={data[item.field] || 0}
+                      count={item.quantity || 0}
                     ></DealCount>
                   </div>
                 </div>
